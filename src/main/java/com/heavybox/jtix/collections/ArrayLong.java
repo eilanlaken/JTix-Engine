@@ -114,8 +114,9 @@ public class ArrayLong {
 
     /** Reduces the size of the backing array to the size of the actual items. This is useful to release memory when many items
      * have been removed, or if it is known that more items will not be added. */
-    public void pack() {
+    public long[] pack() {
         if (items.length != size) resize(size);
+        return items;
     }
 
     private long[] resize(int newSize) {

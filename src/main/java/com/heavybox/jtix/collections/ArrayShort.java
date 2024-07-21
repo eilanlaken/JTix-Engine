@@ -133,27 +133,6 @@ public class ArrayShort {
         items[index] = value;
     }
 
-    public void incr (int index, short value) {
-        if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
-        items[index] += value;
-    }
-
-    public void incr (short value) {
-        short[] items = this.items;
-        for (int i = 0, n = size; i < n; i++)
-            items[i] += value;
-    }
-
-    public void mul (int index, short value) {
-        if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
-        items[index] *= value;
-    }
-
-    public void mul (short value) {
-        short[] items = this.items;
-        for (int i = 0, n = size; i < n; i++)
-            items[i] *= value;
-    }
 
     public void insert (int index, short value) {
         if (index > size) throw new IndexOutOfBoundsException("index can't be > size: " + index + " > " + size);
@@ -272,14 +251,22 @@ public class ArrayShort {
     }
 
     /** Returns the last item. */
-    public short peek () {
+    public short last () {
+        if (size == 0) throw new CollectionsException("Array is empty.");
         return items[size - 1];
     }
 
     /** Returns the first item. */
     public short first () {
-        if (size == 0) throw new IllegalStateException("Array is empty.");
+        if (size == 0) throw new CollectionsException("Array is empty.");
         return items[0];
+    }
+
+    /** Reduces the size of the backing array to the size of the actual items. This is useful to release memory when many items
+     * have been removed, or if it is known that more items will not be added. */
+    public short[] pack() {
+        if (items.length != size) resize(size);
+        return items;
     }
 
     /** Returns true if the array has one or more items. */

@@ -17,6 +17,7 @@ public class Vector4 implements MemoryPool.Reset {
 
     /** Constructs a vector at (0,0,0,0) */
     public Vector4() {
+        this(0.0f,0.0f,0.0f,0.0f);
     }
 
     /** Creates a vector with the given components

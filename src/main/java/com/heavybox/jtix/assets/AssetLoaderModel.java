@@ -405,7 +405,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         }
         GL30.glBindVertexArray(0);
         final short bitmask = generateBitmask(attributesCollector);
-        final int[] vbos = vbosCollector.pack().items;
+        final int[] vbos = vbosCollector.pack();
         return new ModelPartMesh(vaoId, meshData.vertexCount, bitmask,meshData.indices != null, meshData.boundingSphereCenter, meshData.boundingSphereRadius, vbos);
     }
 
