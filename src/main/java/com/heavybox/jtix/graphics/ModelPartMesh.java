@@ -2,7 +2,6 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.shape.Shape3DSphere;
 import org.lwjgl.opengl.GL30;
 
 public class ModelPartMesh implements MemoryResource {
@@ -11,7 +10,6 @@ public class ModelPartMesh implements MemoryResource {
     public final int vertexCount;
     public final short vertexAttributeBitmask;
     public final boolean indexed;
-    @Deprecated public Shape3DSphere boundingSphere;
     public final Vector3 boundingSphereCenter;
     public final float   boundingSphereRadius;
     public final int[] vbos;

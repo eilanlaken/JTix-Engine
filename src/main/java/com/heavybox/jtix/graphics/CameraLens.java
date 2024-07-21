@@ -2,7 +2,6 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.shape.Shape3DFrustum;
 
 public class CameraLens {
 
@@ -18,7 +17,6 @@ public class CameraLens {
     protected float zoom;
     protected float viewportWidth;
     protected float viewportHeight;
-    @Deprecated protected final Shape3DFrustum frustum_delete;
     protected final CameraLensFrustum frustum;
 
     public CameraLens(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
@@ -33,7 +31,6 @@ public class CameraLens {
         this.view = new Matrix4x4();
         this.combined = new Matrix4x4();
         this.invProjectionView = new Matrix4x4();
-        this.frustum_delete = new Shape3DFrustum();
         this.frustum = new CameraLensFrustum();
     }
 

@@ -4,9 +4,9 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.collections.MapObjectInt;
 import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryUtils;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.shape.Shape3DSphere;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
 import org.lwjgl.opengl.GL11;
@@ -242,29 +242,33 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         return meshData;
     }
 
-    private Shape3DSphere getBoundingAABB(final AIMesh aiMesh) {
-        AIAABB aiAABB = aiMesh.mAABB();
-        AIVector3D min = aiAABB.mMin();
-        AIVector3D max = aiAABB.mMax();
-
-        Vector3 center = new Vector3();
-        center.add(min.x(), min.y(), min.z());
-        center.add(max.x(), max.y(), max.z());
-        center.scl(0.5f);
-        float radius = Vector3.dst(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
-        return new Shape3DSphere(center, radius);
+    // TODO: implement
+    private Vector4 getBoundingAABB(final AIMesh aiMesh) {
+//        AIAABB aiAABB = aiMesh.mAABB();
+//        AIVector3D min = aiAABB.mMin();
+//        AIVector3D max = aiAABB.mMax();
+//
+//        Vector3 center = new Vector3();
+//        center.add(min.x(), min.y(), min.z());
+//        center.add(max.x(), max.y(), max.z());
+//        center.scl(0.5f);
+//        float radius = Vector3.dst(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
+//        return new Vector4(center, radius);
+        return null;
     }
 
-    private Shape3DSphere getBoundingSphere(final AIMesh aiMesh) {
-        AIAABB aiAABB = aiMesh.mAABB();
-        AIVector3D min = aiAABB.mMin();
-        AIVector3D max = aiAABB.mMax();
-        Vector3 center = new Vector3();
-        center.add(min.x(), min.y(), min.z());
-        center.add(max.x(), max.y(), max.z());
-        center.scl(0.5f);
-        float radius = Vector3.dst(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
-        return new Shape3DSphere(center, radius);
+    // TODO: implement
+    private Vector4 getBoundingSphere(final AIMesh aiMesh) {
+//        AIAABB aiAABB = aiMesh.mAABB();
+//        AIVector3D min = aiAABB.mMin();
+//        AIVector3D max = aiAABB.mMax();
+//        Vector3 center = new Vector3();
+//        center.add(min.x(), min.y(), min.z());
+//        center.add(max.x(), max.y(), max.z());
+//        center.scl(0.5f);
+//        float radius = Vector3.dst(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
+//        return new Shape3DSphere(center, radius);
+        return null;
     }
 
     private int getVertexCount(final AIMesh aiMesh) {
@@ -444,7 +448,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public int[] indices;
         public Vector3 boundingSphereCenter;
         public float   boundingSphereRadius;
-        public Shape3DSphere boundingSphere;
     }
 
     private static class ModelPartMaterialData {
