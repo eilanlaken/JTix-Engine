@@ -1,7 +1,7 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.collections.Array;
 import org.lwjgl.stb.STBRPContext;
 import org.lwjgl.stb.STBRPNode;
 import org.lwjgl.stb.STBRPRect;

@@ -23,7 +23,7 @@ public final class BodyColliderPolygon extends BodyCollider {
                         float[] polygon) throws RuntimeException {
         super(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, 0, 0, 0);
         this.vertices = new ArrayFloat(true, polygon.length);
-        this.indices = new ArrayInt(true, (this.vertices.size - 2) * 3);
+        this.indices = new ArrayInt(true, (polygon.length - 2) * 3);
         MathUtils.polygonTriangulate(polygon, vertices, indices);
         vertices.pack();
         indices.pack();

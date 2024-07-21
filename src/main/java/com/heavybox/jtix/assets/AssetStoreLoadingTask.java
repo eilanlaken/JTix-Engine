@@ -1,7 +1,7 @@
 package com.heavybox.jtix.assets;
 
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.async.AsyncTask;
+import com.heavybox.jtix.collections.Array;
 
 public class AssetStoreLoadingTask extends AsyncTask {
 

@@ -1,5 +1,6 @@
 package com.heavybox.jtix.assets;
 
+import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Queue;
 import com.heavybox.jtix.graphics.Model;
@@ -7,7 +8,6 @@ import com.heavybox.jtix.graphics.ShaderProgram;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.async.AsyncTaskRunner;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

@@ -5,16 +5,6 @@ import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
-import org.locationtech.jts.operation.union.CascadedPolygonUnion;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class MathUtilsTest {
 
@@ -653,37 +643,6 @@ class MathUtilsTest {
     }
 
     @Test
-    void subtractPolygons() throws ParseException {
-        GeometryFactory geometryFactory = new GeometryFactory();
-        WKTReader reader = new WKTReader(geometryFactory);
-        // Define polygons in set P (using WKT for simplicity)
-        List<Geometry> polygonSetP = new ArrayList<>();
-        polygonSetP.add(reader.read("POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"));
-
-        // Define polygons in set S (using WKT for simplicity)
-        List<Geometry> polygonSetS = new ArrayList<>();
-        polygonSetS.add(reader.read("POLYGON ((2 2, 6 2, 6 6, 2 6, 2 2))")); // Example polygon
-        // Add more polygons to polygonSetS as needed
-
-        // Union all polygons in set S
-        Geometry unionOfS = CascadedPolygonUnion.union(polygonSetS);
-
-        // Subtract S from each polygon in P
-        List<Geometry> resultSetA = new ArrayList<>();
-        for (Geometry p : polygonSetP) {
-            Geometry result = p.difference(unionOfS);
-            if (!result.isEmpty()) {
-                resultSetA.add(result);
-            }
-        }
-
-        // Output the resulting polygons
-        for (Geometry result : resultSetA) {
-            System.out.println(result);
-        }
-    }
-
-    @Test
     void areCollinear() {
         Vector2 v1 = new Vector2();
         Vector2 v2 = new Vector2();
@@ -1016,8 +975,6 @@ class MathUtilsTest {
         polygon.add(new Vector2(0,0), new Vector2(1,0), new Vector2(1,1), new Vector2(0,1));
         polygon.reverse();
         MathUtils.polygonTriangulate(polygon, outVertices, outIndices);
-        System.out.println(outVertices);
-        System.out.println(outIndices);
     }
 
     @Test
@@ -1026,36 +983,6 @@ class MathUtilsTest {
         ArrayFloat vertices = new ArrayFloat();
         float[] poly_1 = new float[] {0,0,  1,0,  1,1,  0,1};
         MathUtils.polygonTriangulate(poly_1, vertices, indices);
-
-//        float[] poly_2 = new float[] {0,1,  1,1,  1,0,  0,0};
-//        MathUtils.triangulatePolygon_old(poly_2, indices);
-//
-//        float[] poly_3 = new float[] {0,0,  1,0,  1,1, 0.5f,1f,  0,1};
-//        MathUtils.triangulatePolygon_old(poly_3, indices);
-//
-//        float[] poly_4 = new float[] {1,4,   -5,2,  -2,-2, 0,0,  0,1, 2,2};
-//        MathUtils.triangulatePolygon_old(poly_4, indices);
-
-        System.out.println(indices);
-    }
-
-
-    @Test
-    void triangulatePolygon() {
-        ArrayInt indices = new ArrayInt();
-        float[] poly_1 = new float[] {0,0,  1,0,  1,1,  0,1};
-        MathUtils.triangulatePolygon_old(poly_1, indices);
-
-        float[] poly_2 = new float[] {0,1,  1,1,  1,0,  0,0};
-        MathUtils.triangulatePolygon_old(poly_2, indices);
-
-        float[] poly_3 = new float[] {0,0,  1,0,  1,1, 0.5f,1f,  0,1};
-        MathUtils.triangulatePolygon_old(poly_3, indices);
-
-        float[] poly_4 = new float[] {1,4,   -5,2,  -2,-2, 0,0,  0,1, 2,2};
-        MathUtils.triangulatePolygon_old(poly_4, indices);
-
-        System.out.println(indices);
     }
 
     @Test
@@ -1069,56 +996,6 @@ class MathUtilsTest {
 
         float[] vertices_3 = new float[] {1,4,   -5,2,  -2,-2, 0,0,  0,1, 2,2};
         Assertions.assertFalse(MathUtils.polygonIsConvex(vertices_3));
-    }
-
-    // TODO: remove
-    @Test
-    void subtractPolygons2() {
-        GeometryFactory geometryFactory = new GeometryFactory();
-
-        // Define polygon P1 using arrays of coordinates
-        Coordinate[] coordinatesP1 = new Coordinate[] {
-                new Coordinate(0, 0),
-                new Coordinate(4, 0),
-                new Coordinate(4, 4),
-                new Coordinate(0, 4),
-                new Coordinate(0, 0) // Closed ring
-        };
-        Polygon polygonP1 = geometryFactory.createPolygon(coordinatesP1);
-
-        // Define polygon S1 using arrays of coordinates
-        Coordinate[] coordinatesS1 = new Coordinate[] {
-                new Coordinate(2, 2),
-                new Coordinate(6, 2),
-                new Coordinate(6, 6),
-                new Coordinate(2, 6),
-                new Coordinate(2, 2) // Closed ring
-        };
-        Polygon polygonS1 = geometryFactory.createPolygon(coordinatesS1);
-
-        // Add polygons to their respective sets
-        List<Geometry> polygonSetP = new ArrayList<>();
-        polygonSetP.add(polygonP1);
-
-        List<Geometry> polygonSetS = new ArrayList<>();
-        polygonSetS.add(polygonS1);
-
-        // Union all polygons in set S
-        Geometry unionOfS = CascadedPolygonUnion.union(polygonSetS);
-
-        // Subtract S from each polygon in P
-        List<Geometry> resultSetA = new ArrayList<>();
-        for (Geometry p : polygonSetP) {
-            Geometry result = p.difference(unionOfS);
-            if (!result.isEmpty()) {
-                resultSetA.add(result);
-            }
-        }
-
-        // Output the resulting polygons
-        for (Geometry result : resultSetA) {
-            System.out.println(result);
-        }
     }
 
 }

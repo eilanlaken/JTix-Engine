@@ -1,9 +1,9 @@
 package com.heavybox.jtix.application;
 
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.async.AsyncUtils;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;

@@ -5,7 +5,6 @@ import com.heavybox.jtix.graphics.ShaderProgram;
 import com.heavybox.jtix.graphics.TextureRegion;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 public abstract class Component {
 

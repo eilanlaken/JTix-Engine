@@ -1,7 +1,7 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.collections.CollectionsUtils;
 import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.collections.CollectionsUtils;
 import com.heavybox.jtix.math.MathUtils;
 
 import java.awt.image.BufferedImage;
