@@ -83,7 +83,7 @@ public class WorldRenderer {
                         BodyColliderPolygon polygon = (BodyColliderPolygon) collider;
                         float tint = body.motionType == Body.MotionType.STATIC ? TINT_STATIC : body.motionType == Body.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
                         renderer.setTint(tint);
-                        renderer.drawPolygonThin(polygon.vertices, true, body.x, body.y, 0, 0, body.aRad * MathUtils.radiansToDegrees, 1, 1);
+                        renderer.drawPolygonThin(polygon.vertices.items, true, body.x, body.y, 0, 0, body.aRad * MathUtils.radiansToDegrees, 1, 1);
                         continue;
                     }
                 }

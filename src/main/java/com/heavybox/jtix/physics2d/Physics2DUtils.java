@@ -29,8 +29,8 @@ public final class Physics2DUtils {
         if (collider instanceof BodyColliderPolygon) {
             BodyColliderPolygon polygon = (BodyColliderPolygon) collider;
 
-            float[] vertices = polygon.vertices;
-            int[] indices = polygon.indices;
+            float[] vertices = polygon.vertices.items;
+            int[] indices = polygon.indices.items;
             int triangles = indices.length / 3;
 
             ArrayFloat masses = new ArrayFloat(true, triangles);
