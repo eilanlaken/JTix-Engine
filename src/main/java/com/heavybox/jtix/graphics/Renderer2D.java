@@ -27,16 +27,24 @@ import java.util.stream.Collectors;
 // TODO: drawing filled curves.
 // https://www.codeproject.com/Articles/226569/Drawing-polylines-by-tessellation
 // https://math.stackexchange.com/questions/15815/how-to-union-many-polygons-efficiently
+
+/*
+Known bugs:
+    //private static final int   VERTICES_CAPACITY = 1000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
+    //private static final int   INDICES_CAPACITY  = VERTICES_CAPACITY * 2;
+
+    When the vertices capacity is small enough, for big enough number of vertices rendered, it will draw nothing.
+    When decreasing on the fly, it will draw something, then if increasing again past the bug limit, it will draw correctly
+    again.
+ */
 public class Renderer2D implements MemoryResourceHolder {
 
     /* constants */
     private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
-    // TODO: bug here. WTF. increasing this somehow defers the problem.
-    //private static final int   VERTICES_CAPACITY = 1000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
-    //private static final int   INDICES_CAPACITY  = VERTICES_CAPACITY * 2;
     private static final int   VERTICES_CAPACITY = GraphicsUtils.getMaxVerticesPerDrawCall(); // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
     private static final int   INDICES_CAPACITY  = GraphicsUtils.getMaxIndicesPerDrawCall();
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
+
 
     /* buffers */
     private final int         vao;
@@ -65,7 +73,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private int           currentMode    = GL11.GL_TRIANGLES;
     private int           currentSFactor = GL11.GL_SRC_ALPHA;
     private int           currentDFactor = GL11.GL_ONE_MINUS_SRC_ALPHA;
-    private int frameDrawCalls = 0;
+    private int           frameDrawCalls = 0;
 
     public Renderer2D() {
         this.vao = GL30.glGenVertexArrays();
@@ -289,6 +297,64 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     /* Rendering API */
+
+    /* Rendering 2D primitives - Textures */
+
+    public void drawTexture(Texture texture, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
+
+        setTexture(texture);
+        useMode_old(GL11.GL_TRIANGLES);
+
+        float widthHalf  = texture.width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
+        float heightHalf = texture.height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
+
+        Vector2 arm0 = vectorsPool.allocate();
+        Vector2 arm1 = vectorsPool.allocate();
+        Vector2 arm2 = vectorsPool.allocate();
+        Vector2 arm3 = vectorsPool.allocate();
+
+        arm0.x = -widthHalf;
+        arm0.y =  heightHalf;
+        arm0.rotateDeg(angleZ);
+
+        arm1.x = -widthHalf;
+        arm1.y = -heightHalf;
+        arm1.rotateDeg(angleZ);
+
+        arm2.x =  widthHalf;
+        arm2.y = -heightHalf;
+        arm2.rotateDeg(angleZ);
+
+        arm3.x = widthHalf;
+        arm3.y = heightHalf;
+        arm3.rotateDeg(angleZ);
+
+        /* put vertices */
+        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0).put(0); // V0
+        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0).put(1); // V1
+        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(1).put(1); // V2
+        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(1).put(0); // V3
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        indicesBuffer
+                .put(startVertex)
+                .put(startVertex + 1)
+                .put(startVertex + 3)
+                .put(startVertex + 3)
+                .put(startVertex + 1)
+                .put(startVertex + 2)
+        ;
+        vertexIndex += 4;
+
+        /* free resources */
+        vectorsPool.free(arm0);
+        vectorsPool.free(arm1);
+        vectorsPool.free(arm2);
+        vectorsPool.free(arm3);
+    }
 
     /* Rendering 2D primitives - Circles */
 

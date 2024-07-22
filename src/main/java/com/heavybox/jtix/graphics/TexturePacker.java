@@ -30,13 +30,14 @@ public class TexturePacker {
 
     public static synchronized void packTextures(final Options options, final String ...texturePaths) throws IOException {
         if (alreadyPacked(options, texturePaths)) return;
+
         Array<PackedRegionData> regionsData = new Array<>(texturePaths.length);
-        for (int i = 0; i < texturePaths.length; i++) {
-            String texturePath = texturePaths[i];
+        for (String texturePath : texturePaths) {
             File sourceImageFile = new File(texturePath);
             BufferedImage sourceImage = ImageIO.read(sourceImageFile);
-            PackedRegionData regionData = getPackedRegionData(options, texturePath, sourceImage);
-            if (regionData.packedWidth > options.maxTexturesSize || regionData.packedHeight > options.maxTexturesSize) throw new IOException("Input texture file: " + regionData.name + " cannot be packed - it's dimensions are bigger than the allowed maximum: width = " + regionData.packedWidth + ", height: " + regionData.packedHeight + ", maximum: " + options.maxTexturesSize + ".");
+            PackedRegionData regionData = getPackedRegionData(texturePath, sourceImage);
+            if (regionData.packedWidth > options.maxTexturesSize || regionData.packedHeight > options.maxTexturesSize)
+                throw new IOException("Input texture file: " + regionData.name + " cannot be packed - it's dimensions are bigger than the allowed maximum: width = " + regionData.packedWidth + ", height: " + regionData.packedHeight + ", maximum: " + options.maxTexturesSize + ".");
             regionsData.add(regionData);
         }
         regionsData.sort();
@@ -95,10 +96,11 @@ public class TexturePacker {
         return false;
     }
 
-    // TODO: use options?
-    private static synchronized PackedRegionData getPackedRegionData(final Options options, final String path, final BufferedImage sourceImage) {
+    // TODO: use options? FIXME? What about completely transparent textures?
+    private static synchronized PackedRegionData getPackedRegionData(final String path, final BufferedImage sourceImage) {
         int originalWidth = sourceImage.getWidth();
         int originalHeight = sourceImage.getHeight();
+
         int minX = originalWidth;
         int minY = originalHeight;
         int maxX = 0;
@@ -115,14 +117,17 @@ public class TexturePacker {
                 }
             }
         }
-        maxX++;
-        maxY++;
-        // TODO: FIXME?
-        int packedWidth = maxX - minX;// + options.extrude + options.padding;
-        int packedHeight = maxY - minY;// + options.extrude + options.padding;
+        maxX++; // TODO: why ++?
+        maxY++; // TODO: why ++?
+
+        /* the packed width is the width of the texture after trimming the transparent margins */
+        int packedWidth  = Math.max(0, maxX - minX);
+        int packedHeight = Math.max(0, maxY - minY);
+
         int offsetX = minX;
         int offsetY = originalHeight - packedHeight - minY;
-        return new PackedRegionData(sourceImage, path, packedWidth, packedHeight, offsetX, offsetY, minX, minY);
+
+        return new PackedRegionData(path, originalWidth, originalHeight, packedWidth, packedHeight, offsetX, offsetY, minX, minY);
     }
 
     private static synchronized void generatePackFile(final Options options, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack) {
@@ -213,8 +218,7 @@ public class TexturePacker {
                     }
                 }
             }
-            File outputFile = new File(options.outputDirectory + File.separator + options.outputName + "_" + texturePackImage.index + ".png");
-            ImageIO.write(texturePackImage, "png", outputFile);
+            AssetUtils.saveImage(options.outputDirectory, options.outputName + "_" + texturePackImage.index, texturePackImage);
             graphics.dispose();
         }
     }
@@ -306,10 +310,10 @@ public class TexturePacker {
 
         private final int area;
 
-        public PackedRegionData(BufferedImage sourceImage, String name, int packedWidth, int packedHeight, int offsetX, int offsetY, int minX, int minY) {
+        public PackedRegionData(String name, int originalWidth, int originalHeight, int packedWidth, int packedHeight, int offsetX, int offsetY, int minX, int minY) {
             this.name = name;
-            this.originalWidth = sourceImage.getWidth();
-            this.originalHeight = sourceImage.getHeight();
+            this.originalWidth = originalWidth;
+            this.originalHeight = originalHeight;
             this.packedWidth = packedWidth;
             this.packedHeight = packedHeight;
             this.area = packedWidth * packedHeight;
