@@ -135,6 +135,7 @@ public class TexturePacker {
             texturesData[i].file = outputName + "_" + img.index + ".png";
             texturesData[i].width = img.getWidth();
             texturesData[i].height = img.getHeight();
+            i++;
         }
 
         Map<String, Object> optionsData = new HashMap<>();

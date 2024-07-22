@@ -21,7 +21,6 @@ public class Application {
     private static GLFWErrorCallback errorCallback;
 
     public static void createSingleWindowApplication(final ApplicationWindowAttributes attributes) {
-        // init GLFW
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
         GLFWErrorCallback.createPrint(System.err).set();
         if (!GLFW.glfwInit()) throw new RuntimeException("Unable to initialize GLFW.");
@@ -32,7 +31,6 @@ public class Application {
         AssetUtils.init(window);
         Mouse.init(window);
         Keyboard.init(window);
-        // init OpenGL Context
         initialized = true;
     }
 

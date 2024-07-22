@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
+import com.heavybox.jtix.graphics.TexturePacker;
 
 import java.io.IOException;
 
@@ -17,17 +18,19 @@ public class Main {
 //        }
 
 
-//        try {
-//            TexturePacker.Options options = new TexturePacker.Options("assets/atlases", "physicsDebugShapes",
-//                    null, null, null, null,
-//                    0,0, TexturePacker.Options.Size.XX_LARGE_8192);
-//            //TexturePacker.packTextures(options, "assets/textures/pinkSpot.png", "assets/textures/yellowSquare.png", "assets/textures/yellowSquare2.png");
-//            TexturePacker.packTextures(options, "assets/textures/physicsCircle.png", "assets/textures/physicsSquare.png");
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            TexturePacker.Options options = new TexturePacker.Options("assets/atlases", "sph",
+                    null, null, null, null,
+                    0,0, TexturePacker.Options.Size.XX_SMALL_128);
+            //TexturePacker.packTextures(options, "assets/textures/pinkSpot.png", "assets/textures/yellowSquare.png", "assets/textures/yellowSquare2.png");
+            //TexturePacker.packTextures(options, "assets/textures/physicsCircle.png", "assets/textures/physicsSquare.png");
+            TexturePacker.packTextures(options, "assets/textures/sphere-colored.png", "assets/textures/pattern.png");
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (true) return;
 
         ApplicationWindowAttributes config = new ApplicationWindowAttributes();
         Application.createSingleWindowApplication(config);

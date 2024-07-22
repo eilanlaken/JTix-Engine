@@ -34,12 +34,7 @@ public final class AssetUtils {
     public  static Yaml              yaml        = null;
     public  static Gson              gson        = null;
 
-    private AssetUtils() {}
-
-    public static void init(final ApplicationWindow window) {
-        if (initialized) return;
-        AssetUtils.window = window;
-
+    static {
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Representer representer = new Representer(dumperOptions) {
@@ -51,7 +46,13 @@ public final class AssetUtils {
         };
         yaml = new Yaml(representer);
         gson = new Gson();
+    }
 
+    private AssetUtils() {}
+
+    public static void init(final ApplicationWindow window) {
+        if (initialized) return;
+        AssetUtils.window = window;
         initialized = true;
     }
 
