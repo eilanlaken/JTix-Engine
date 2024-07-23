@@ -51,12 +51,12 @@ public class CameraLens {
         frustum.update(invProjectionView);
     }
 
-    public Vector3 unproject(Vector3 screenCoordinates) {
-        unproject(screenCoordinates, 0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
+    public Vector3 unProject(Vector3 screenCoordinates) {
+        unProject(screenCoordinates, 0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
         return screenCoordinates;
     }
 
-    public Vector3 unproject(Vector3 screenCoordinates, float viewportX, float viewportY, float viewportWidth, float viewportHeight) {
+    public Vector3 unProject(Vector3 screenCoordinates, float viewportX, float viewportY, float viewportWidth, float viewportHeight) {
         float x = screenCoordinates.x - viewportX, y = GraphicsUtils.getWindowHeight() - screenCoordinates.y - viewportY;
         screenCoordinates.x = (2 * x) / viewportWidth - 1;
         screenCoordinates.y = (2 * y) / viewportHeight - 1;

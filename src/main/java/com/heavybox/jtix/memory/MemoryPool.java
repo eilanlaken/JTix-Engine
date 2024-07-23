@@ -1,6 +1,6 @@
 package com.heavybox.jtix.memory;
 
-import com.heavybox.jtix.collections.ArrayConcurrent;
+import com.heavybox.jtix.collections.Array;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,32 +8,29 @@ import java.lang.reflect.Modifier;
 
 public class MemoryPool<T extends MemoryPool.Reset> {
 
-    private final ArrayConcurrent<T> freeObjects;
+    private final Array<T>       freeObjects;
     private final Constructor<T> constructor;
-    private final int initialCapacity;
+    private final int            initialCapacity;
 
-    // TODO: create a dev and release
-    public MemoryPool(Class<T> type) throws RuntimeException {
-        this(type, 1000);
-    }
+    public MemoryPool(Class<T> type) throws RuntimeException { this(type, 1000); }
 
     public MemoryPool(Class<T> type, int initialCapacity) {
         if (initialCapacity <= 0) throw new IllegalArgumentException("Memory pool initial capacity must be greater than 0. Got: " + initialCapacity);
         if (Modifier.isAbstract(type.getModifiers()))  throw new IllegalArgumentException("Cannot create " + MemoryPool.class.getSimpleName() + " of an abstract class.");
         if (Modifier.isInterface(type.getModifiers())) throw new IllegalArgumentException("Cannot create " + MemoryPool.class.getSimpleName() + " of an interface.");
         this.initialCapacity = initialCapacity;
-        this.freeObjects = new ArrayConcurrent<>(initialCapacity);
+        this.freeObjects = new Array<>(initialCapacity);
         try {
             this.constructor = type.getConstructor();
             for (int i = 0; i < freeObjects.size; i++) {
                 freeObjects.add(constructor.newInstance());
             }
         } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException("Classes managed by a " + MemoryPool.class.getSimpleName() + " MUST declare a public no-args constructor.");
+            throw new RuntimeException("Classes managed by a " + MemoryPool.class.getSimpleName() + " must declare a public no-args constructor.");
         }
     }
 
-    public synchronized T allocate() throws RuntimeException {
+    public T allocate() throws MemoryException {
         try {
             if (this.freeObjects.size == 0) {
                 for (int i = 0; i < initialCapacity; i++) {
@@ -43,17 +40,17 @@ public class MemoryPool<T extends MemoryPool.Reset> {
             return this.freeObjects.pop();
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new RuntimeException("Unable to create new instance: " + this.constructor.getDeclaringClass().getName(), e);
+            throw new MemoryException("Unable to create new instance: " + this.constructor.getDeclaringClass().getName() + ". Exception: " + e);
         }
     }
 
-    public synchronized void free(T obj) {
+    public void free(T obj) {
         if (obj == null) return;
         obj.reset();
         this.freeObjects.add(obj);
     }
 
-    public synchronized void freeAll(Iterable<T> iterable) {
+    public void freeAll(Iterable<T> iterable) {
         for (T obj : iterable) {
             free(obj);
         }
@@ -64,5 +61,4 @@ public class MemoryPool<T extends MemoryPool.Reset> {
         void reset();
 
     }
-
 }

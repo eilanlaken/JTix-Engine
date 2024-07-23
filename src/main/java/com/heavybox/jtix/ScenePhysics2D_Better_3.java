@@ -46,7 +46,7 @@ public class ScenePhysics2D_Better_3 extends ApplicationScreen {
     protected void refresh() {
         world.update(GraphicsUtils.getDeltaTime());
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
-        camera.lens.unproject(screen);
+        camera.lens.unProject(screen);
 
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
             body_a = world.createBodyCircle(null, Body.MotionType.NEWTONIAN,

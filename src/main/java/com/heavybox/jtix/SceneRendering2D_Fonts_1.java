@@ -60,7 +60,7 @@ public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
     @Override
     protected void refresh() {
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
-        camera.lens.unproject(screen);
+        camera.lens.unProject(screen);
 
         if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
 

@@ -57,7 +57,7 @@ public class ScenePhysics2D_Better_1 extends ApplicationScreen {
     protected void refresh() {
         world.update(GraphicsUtils.getDeltaTime());
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
-        camera.lens.unproject(screen);
+        camera.lens.unProject(screen);
         world.castRay((intersections) -> {
 
         }, 0,0, screen.x, screen.y, Float.POSITIVE_INFINITY);

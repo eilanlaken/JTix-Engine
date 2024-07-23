@@ -76,7 +76,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
             System.out.println(baseR + dr);
-            camera.lens.unproject(screen);
+            camera.lens.unProject(screen);
             x = screen.x;
             y = screen.y;
         }

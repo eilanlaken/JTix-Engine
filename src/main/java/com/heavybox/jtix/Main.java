@@ -30,7 +30,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        if (true) return;
+        //if (true) return;
 
         ApplicationWindowAttributes config = new ApplicationWindowAttributes();
         Application.createSingleWindowApplication(config);
