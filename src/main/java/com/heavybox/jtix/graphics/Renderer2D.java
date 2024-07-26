@@ -289,7 +289,8 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void setTint(final Color color) {
-        setTint(color.toFloatBits());
+        if (color == null) setTint(Color.WHITE);
+        else setTint(color.toFloatBits());
     }
 
     public void setTint(float tintFloatBits) {
@@ -361,8 +362,7 @@ public class Renderer2D implements MemoryResourceHolder {
     public void drawTextureRegion(TextureRegion region,
                             float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 5) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-
+        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
 
@@ -377,20 +377,19 @@ public class Renderer2D implements MemoryResourceHolder {
         final float originalWidthHalf = region.originalWidthHalf;
         final float originalHeightHalf = region.originalHeightHalf;
 
+        /* put vertices */
+        float localX1 = offsetX - originalWidthHalf;
+        float localX2 = offsetX - originalWidthHalf;
+        float localX3 = offsetX - originalWidthHalf + packedWidth;
+        float localX4 = offsetX - originalWidthHalf + packedWidth;
+        float localY1 = offsetY - originalHeightHalf + packedHeight;
+        float localY4 = offsetY - originalHeightHalf + packedHeight;
+        float localY2 = offsetY - originalHeightHalf;
+        float localY3 = offsetY - originalHeightHalf;
+
+        /* apply scale */
         scaleX *= MathUtils.cosDeg(angleX);
         scaleY *= MathUtils.cosDeg(angleY);
-
-        // put vertices
-        float localX1, localY1;
-        float localX2, localY2;
-        float localX3, localY3;
-        float localX4, localY4;
-
-        localX1 = localX2 = offsetX - originalWidthHalf;
-        localX3 = localX4 = offsetX - originalWidthHalf + packedWidth;
-        localY1 = localY4 = offsetY - originalHeightHalf + packedHeight;
-        localY2 = localY3 = offsetY - originalHeightHalf;
-
         localX1 *= scaleX;
         localX2 *= scaleX;
         localX3 *= scaleX;
@@ -403,29 +402,22 @@ public class Renderer2D implements MemoryResourceHolder {
         /* apply rotation */
         final float sin = MathUtils.sinDeg(angleZ);
         final float cos = MathUtils.cosDeg(angleZ);
-
         float x1 = localX1 * cos - localY1 * sin;
         float y1 = localX1 * sin + localY1 * cos;
-
         float x2 = localX2 * cos - localY2 * sin;
         float y2 = localX2 * sin + localY2 * cos;
-
         float x3 = localX3 * cos - localY3 * sin;
         float y3 = localX3 * sin + localY3 * cos;
-
         float x4 = localX4 * cos - localY4 * sin;
         float y4 = localX4 * sin + localY4 * cos;
 
-
+        /* apply translation */
         x1 += x;
         y1 += y;
-
         x2 += x;
         y2 += y;
-
         x3 += x;
         y3 += y;
-
         x4 += x;
         y4 += y;
 
@@ -436,7 +428,7 @@ public class Renderer2D implements MemoryResourceHolder {
                 .put(x4).put(y4).put(currentTint).put(uf).put(vi) // V4
         ;
 
-        // put indices
+        /* put indices */
         int startVertex = this.vertexIndex;
         indicesBuffer
                 .put(startVertex)
@@ -446,7 +438,7 @@ public class Renderer2D implements MemoryResourceHolder {
                 .put(startVertex + 1)
                 .put(startVertex + 2)
         ;
-        vertexIndex += 5;
+        vertexIndex += 4;
     }
 
 
