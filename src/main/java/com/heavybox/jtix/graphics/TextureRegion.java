@@ -3,6 +3,7 @@ package com.heavybox.jtix.graphics;
 public class TextureRegion {
 
     public final Texture texture;
+
     public final float x;
     public final float y;
     public final float offsetX;
