@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
+public class SceneRendering2D_Shapes_6_capacity extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private Camera camera;
@@ -25,7 +25,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
     private ShaderProgram shaderYellow;
 
-    public SceneRendering2D_Shapes_6_capacity_bug() {
+    public SceneRendering2D_Shapes_6_capacity() {
         renderer2D = new Renderer2D();
     }
 
@@ -87,6 +87,9 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
         //renderer2D.drawCircleFilled(1f, 1498, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, baseR + dr, 0, 0, 0,0,0,1,1);
         renderer2D.drawCircleFilled(1f, baseR + dr, x, y, 0,0,0,1,1);
+        renderer2D.drawCircleFilled(1f, baseR + dr, -x, y, 0,0,0,1,1);
+        renderer2D.drawCircleFilled(1f, baseR + dr, -x, -y, 0,0,0,1,1);
+        renderer2D.drawCircleFilled(1f, baseR + dr, x, -y, 0,0,0,1,1);
 
         //System.out.println(baseR + dr);
 

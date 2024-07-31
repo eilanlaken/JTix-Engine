@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
-// TODO: implement init() block that will take care of configuration.
 public final class MathUtils {
 
     public static  final float   FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits
@@ -28,12 +27,8 @@ public final class MathUtils {
     private static final float   DEGREES_TO_INDEX     = SIN_COUNT / DEGREES_FULL;
     private static final Random  random               = new Random();
 
-    //private static final MemoryPool<Array> array = new MemoryPool<>(Array.class, 5); // TODO: see what's up
     private static final MemoryPool<ArrayFloat> floatArrayPool = new MemoryPool<>(ArrayFloat.class, 5);
-    private static final MemoryPool<ArrayInt>   intArrayPool   = new MemoryPool<>(ArrayInt.class, 5);
     private static final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 5);
-    private static final MemoryPool<Matrix2x2>  matrix2x2Pool  = new MemoryPool<>(Matrix2x2.class, 2);
-
 
     /* polygon triangulation */
     private static final Array<Vector2> polygonVertices = new Array<>(false, 10);
@@ -124,7 +119,7 @@ public final class MathUtils {
         } else if (y > 0)
             return x + PI_HALF;
         else if (y < 0) return x - PI_HALF;
-        return x + y; // returns 0 for 0,0 or NaN if either y or x is NaN
+        return x + y; // returns 0 for 0, 0 or NaN if either y or x is NaN
     }
 
     public static float areaTriangle(float x1, float y1, float x2, float y2, float x3, float y3) { return 0.5f * Math.abs(x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2)); }
@@ -188,7 +183,7 @@ public final class MathUtils {
     public static float tanRad(float radians) {
         radians /= PI;
         radians += 0.5f;
-        radians -= Math.floor(radians);
+        radians -= (float) Math.floor(radians);
         radians -= 0.5f;
         radians *= PI;
         final float x2 = radians * radians, x4 = x2 * x2;
@@ -198,7 +193,7 @@ public final class MathUtils {
     public static float tanDeg(float degrees) {
         degrees *= (1f / 180f);
         degrees += 0.5f;
-        degrees -= Math.floor(degrees);
+        degrees -= (float) Math.floor(degrees);
         degrees -= 0.5f;
         degrees *= PI;
         final float x2 = degrees * degrees, x4 = x2 * x2;
@@ -277,16 +272,16 @@ public final class MathUtils {
      * where S1 is the line segment between (a1, a2)
      * and   S2 is the line between (b1, b2).
      * Stores the result in out.
-     * @returns 0 if lines intersect at a unique point
-     * @returns 1 if the intersection lies on segment 1 alone
-     * @returns 2 if the intersection lies on segment 2 alone
-     * @returns 3 if the intersection lies outside both line segments
-     * @returns -1 if the lines are parallel (no intersection). {@param out} will store (NAN, NAN).
-     * @returns -2 if the lines coincide with infinitely many points of overlap. {@param out} will store the midpoint of the line overlap.
-     * @param a1
-     * @param a2
-     * @param b1
-     * @param b2
+     * @return 0 if lines intersect at a unique point
+     * 1 if the intersection lies on segment 1 alone
+     * 2 if the intersection lies on segment 2 alone
+     * 3 if the intersection lies outside both line segments
+     * -1 if the lines are parallel (no intersection). {@param out} will store (NAN, NAN).
+     * -2 if the lines coincide with infinitely many points of overlap. {@param out} will store the midpoint of the line overlap.
+     * @param a1 first point on S1 segment
+     * @param a2 second point on S1 segment
+     * @param b1 first point on S2 segment
+     * @param b2 second point on S2 segment
      * @param out the intersection is stored here.
      */
     public static int segmentsIntersection(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, @NotNull Vector2 out) {
@@ -639,7 +634,7 @@ public final class MathUtils {
         }
     }
 
-    public static void polygonRemoveDegenerateVertices(@NotNull float[] polygon, @NotNull ArrayFloat outPolygon) {
+    public static void polygonRemoveDegenerateVertices(float[] polygon, @NotNull ArrayFloat outPolygon) {
         if (polygon.length < 6) throw new MathException("A polygon requires a minimum of 3 vertices. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new MathException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even. Got: " + polygon.length);
         outPolygon.clear();
@@ -822,7 +817,7 @@ public final class MathUtils {
         vectors2Pool.free(va_to_vc);
     }
 
-    public static void polygonTriangulate(@NotNull float[] polygon, @NotNull ArrayFloat outVertices, @NotNull ArrayInt outIndices) {
+    public static void polygonTriangulate(float[] polygon, @NotNull ArrayFloat outVertices, @NotNull ArrayInt outIndices) {
         if (polygon.length < 6) throw new MathException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new MathException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even. Got: " + polygon.length);
         polygonRemoveDegenerateVertices(polygon, outVertices);
