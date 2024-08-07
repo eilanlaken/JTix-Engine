@@ -6,7 +6,10 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
 
 public final class GraphicsUtils {
 
@@ -25,6 +28,7 @@ public final class GraphicsUtils {
     private static int prevTargetFps = targetFps;
     private static int idleFps = 10;
     private static int maxTextureSize;
+    private static float maxAnisotropicFilterLevel = 0;
 
     private GraphicsUtils() {}
 
@@ -152,6 +156,22 @@ public final class GraphicsUtils {
 
     public static boolean isVSyncEnabled() {
         return window.attributes.vSyncEnabled;
+    }
+
+    public static float getMaxAnisotropicFilterLevel () {
+        if (maxAnisotropicFilterLevel > 0) return maxAnisotropicFilterLevel;
+
+        if (GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
+            FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+            buffer.position(0);
+            buffer.limit(buffer.capacity());
+            GL20.glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, buffer);
+            maxAnisotropicFilterLevel = buffer.get(0);
+        } else {
+            maxAnisotropicFilterLevel = 1.0f;
+        }
+
+        return maxAnisotropicFilterLevel;
     }
 
 }

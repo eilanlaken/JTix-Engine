@@ -27,6 +27,7 @@ public class SceneRendering2D_Shapes_6_capacity extends ApplicationScreen {
 
     public SceneRendering2D_Shapes_6_capacity() {
         renderer2D = new Renderer2D();
+
     }
 
     @Override
