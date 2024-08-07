@@ -98,10 +98,7 @@ public final class AssetUtils {
         File file = new File(filepath);
         // Get the last modified time in milliseconds since the epoch (Jan 1, 1970)
         long lastModifiedMillis = file.lastModified();
-
-        // Convert to a Date object
-        Date lastModifiedDate = new Date(lastModifiedMillis);
-        return lastModifiedDate;
+        return new Date(lastModifiedMillis);
     }
 
     public static synchronized boolean filesExist(final String ...filePaths) {
@@ -157,27 +154,19 @@ public final class AssetUtils {
         String filePath = directory + File.separator + filename;
         File file = new File(filePath);
         boolean fileExists = file.exists();
-        try {
-            FileWriter fileWriter = new FileWriter(file, false);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(content);
-            bufferedWriter.close();
-            fileWriter.close();
-            return fileExists;
-        } catch (IOException e) {
-            throw e;
-        }
+        FileWriter fileWriter = new FileWriter(file, false);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(content);
+        bufferedWriter.close();
+        fileWriter.close();
+        return fileExists;
     }
 
     public static void saveImage(final String directory, final String filename, BufferedImage image) throws IOException {
         if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename + ".png";
         File file = new File(filePath);
-        try {
-            ImageIO.write(image, "png", file);
-        } catch (IOException e) {
-            throw e;
-        }
+        ImageIO.write(image, "png", file);
     }
 
     /** Returns the file extension (without the dot) or an empty string if the file name doesn't contain a dot. */

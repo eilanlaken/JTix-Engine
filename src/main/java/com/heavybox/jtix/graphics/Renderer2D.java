@@ -41,8 +41,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* constants */
     private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
-    //private static final int   VERTICES_CAPACITY = GraphicsUtils.getMaxVerticesPerDrawCall(); // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
-    //private static final int   INDICES_CAPACITY  = GraphicsUtils.getMaxIndicesPerDrawCall();
     private static final int   VERTICES_CAPACITY = 20000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
     private static final int   INDICES_CAPACITY  = 20000;
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
@@ -1732,43 +1730,45 @@ public class Renderer2D implements MemoryResourceHolder {
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new ShaderProgram(vertexShader, fragmentShader);
         } catch (Exception e) {
-            System.err.println("Could not create shader program from resources: ");
-            e.printStackTrace();
-            String vertexShader = "#version 450\n" +
-                    "\n" +
-                    "// attributes\n" +
-                    "layout(location = 0) in vec2 a_position;\n" +
-                    "layout(location = 1) in vec4 a_color;\n" +
-                    "layout(location = 2) in vec2 a_texCoord0;\n" +
-                    "\n" +
-                    "// uniforms\n" +
-                    "uniform mat4 u_camera_combined;\n" +
-                    "\n" +
-                    "// outputs\n" +
-                    "out vec4 color;\n" +
-                    "out vec2 uv;\n" +
-                    "\n" +
-                    "void main() {\n" +
-                    "    color = a_color;\n" +
-                    "    uv = a_texCoord0;\n" +
-                    "    gl_Position = u_camera_combined * vec4(a_position.x, a_position.y, 0.0, 1.0);\n" +
-                    "};";
+            System.err.println("Could not create shader program from resources. Creating manually.");
 
-            String fragmentShader = "#version 450\n" +
-                    "\n" +
-                    "// inputs\n" +
-                    "in vec4 color;\n" +
-                    "in vec2 uv;\n" +
-                    "\n" +
-                    "// uniforms\n" +
-                    "uniform sampler2D u_texture;\n" +
-                    "\n" +
-                    "// outputs\n" +
-                    "layout (location = 0) out vec4 out_color;\n" +
-                    "\n" +
-                    "void main() {\n" +
-                    "    out_color = color * texture(u_texture, uv);\n" +
-                    "}";
+            String vertexShader = """
+                    #version 450
+
+                    // attributes
+                    layout(location = 0) in vec2 a_position;
+                    layout(location = 1) in vec4 a_color;
+                    layout(location = 2) in vec2 a_texCoord0;
+
+                    // uniforms
+                    uniform mat4 u_camera_combined;
+
+                    // outputs
+                    out vec4 color;
+                    out vec2 uv;
+
+                    void main() {
+                        color = a_color;
+                        uv = a_texCoord0;
+                        gl_Position = u_camera_combined * vec4(a_position.x, a_position.y, 0.0, 1.0);
+                    };""";
+
+            String fragmentShader = """
+                    #version 450
+
+                    // inputs
+                    in vec4 color;
+                    in vec2 uv;
+
+                    // uniforms
+                    uniform sampler2D u_texture;
+
+                    // outputs
+                    layout (location = 0) out vec4 out_color;
+
+                    void main() {
+                        out_color = color * texture(u_texture, uv);
+                    }""";
 
             return new ShaderProgram(vertexShader, fragmentShader);
         }
@@ -1779,7 +1779,6 @@ public class Renderer2D implements MemoryResourceHolder {
             return TextureBuilder.buildFromClassPath("graphics-2d-single-white-pixel.png");
         } catch (Exception e) {
             System.err.println("Could not create single white pixel texture from resource. Creating manually.");
-            e.printStackTrace();
 
             ByteBuffer buffer = ByteBuffer.allocateDirect(4);
             buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF));   // Red component
@@ -1829,189 +1828,3 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
 }
-
-/*
-public void drawCurveFilled(float stroke, int refinement, final Vector2... pointsInput) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (pointsInput.length == 0) return;
-
-        stroke = Math.abs(stroke / 2);
-        refinement = Math.max(1, refinement);
-
-        if (pointsInput.length == 1) {
-            drawCircleFilled(stroke, refinement, pointsInput[0].x, pointsInput[0].y, 0, 0, 0, 1, 1);
-            return;
-        }
-
-        if (pointsInput.length == 2) { // handle separately
-
-        }
-
-        // TODO: ensure capacity.
-
-        setMode(GL11.GL_TRIANGLES);
-
-        verts.clear();
-        Array<Vector2> points = new Array<>(); // TODO: change to ArrayFloat
-        boolean closed = false;
-        //if the path is closed
-        if (pointsInput[0].equals(pointsInput[pointsInput.length - 1])) {
-                Vector2 midPoint = vectorsPool.allocate();
-                Vector2.midPoint(pointsInput[0], pointsInput[1], midPoint);
-                points.add(midPoint);
-                for (int i = 1; i < pointsInput.length; i++) {
-        Vector2 point = vectorsPool.allocate();
-        point.set(pointsInput[i]);
-        points.add(point);
-        }
-        points.add(midPoint);
-        closed = true;
-        } else {
-        for (int i = 0; i < pointsInput.length; i++) {
-        Vector2 point = vectorsPool.allocate();
-        point.set(pointsInput[i]);
-        points.add(point);
-        }
-        }
-
-        Array<Vector2> midPoints = new Array<>(); // TODO: change to ArrayFloat
-
-        for (int i = 0; i < points.size - 1; i++) {
-        Vector2 midPoint = vectorsPool.allocate();
-        if (i == 0) {
-        midPoint.set(points.first());
-        } else if (i == points.size - 2) {
-        midPoint.set(points.last());
-        } else {
-        Vector2.midPoint(points.get(i), points.get(i + 1), midPoint);
-        }
-        midPoints.add(midPoint);
-        }
-
-        for (int i = 1; i < midPoints.size; i++) {
-        Vector2 p0 = midPoints.get(i - 1);
-        Vector2 p1 = points.get(i);
-        Vector2 p2 = midPoints.get(i);
-        float width = stroke;
-
-        Vector2 t0 = vectorsPool.allocate().set(p1).sub(p0);
-        Vector2 t2 = vectorsPool.allocate().set(p2).sub(p1);
-
-        t0.rotate90(1);
-        t2.rotate90(1);
-
-        // triangle composed by the 3 points if clockwise or couterclockwise.
-        // if counterclockwise, we must invert the line threshold points, otherwise the intersection point
-        // could be erroneous and lead to odd results.
-        if (MathUtils.areaTriangleSigned(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y) > 0) {
-        t0.flip();
-        t2.flip();
-        }
-
-        t0.nor();
-        t2.nor();
-        t0.scl(width);
-        t2.scl(width);
-
-        Vector2 pIntersect = vectorsPool.allocate();
-        int result = MathUtils.segmentsIntersection(
-        t0.x + p0.x, t0.y + p0.y,
-        t0.x + p1.x, p0.y + p1.y,
-        t2.x + p2.x, t2.y + p2.y,
-        t2.x + p1.x, t2.y + p1.y,
-        pIntersect);
-        //int pintersect = lineIntersection(Point.Add(t0, p0), Point.Add(t0, p1), Point.Add(t2, p2), Point.Add(t2, p1));
-
-        var anchor = vectorsPool.allocate();
-        var anchorLength= Float.MAX_VALUE;
-        if (result == 0  || result == 1  || result == 2  || result == 3) {
-        anchor.set(pIntersect).sub(p1);
-        anchorLength = anchor.len();
-        }
-
-        var p0p1= vectorsPool.allocate().set(p0).sub(p1);
-        var p0p1Length= p0p1.len();
-        var p1p2= vectorsPool.allocate().set(p1).sub(p2);
-        var p1p2Length= p1p2.len();
-
-
-        //the cross point exceeds any of the segments dimension.
-        //do not use cross point as reference.
-
-        if (true) {
-        //if (anchorLength > p0p1Length || anchorLength > p1p2Length) {
-        System.out.println("here");
-        verts.add(vectorsPool.allocate().set(p0).add(t0));
-        verts.add(vectorsPool.allocate().set(p0).sub(t0));
-        verts.add(vectorsPool.allocate().set(p1).add(t0));
-
-        verts.add(vectorsPool.allocate().set(p0).sub(t0));
-        verts.add(vectorsPool.allocate().set(p1).add(t0));
-        verts.add(vectorsPool.allocate().set(p1).sub(t0));
-
-        Vector2 pI = vectorsPool.allocate().set(p1).add(t0);
-        Vector2 pF = vectorsPool.allocate().set(p1).add(t2);
-        createRoundCap(p1, pI, pF, p2, refinement, verts);
-
-        verts.add(vectorsPool.allocate().set(p2).add(t2));
-        verts.add(vectorsPool.allocate().set(p1).sub(t2));
-        verts.add(vectorsPool.allocate().set(p1).add(t2));
-
-        verts.add(vectorsPool.allocate().set(p2).add(t2));
-        verts.add(vectorsPool.allocate().set(p1).sub(t2));
-        verts.add(vectorsPool.allocate().set(p2).sub(t2));
-
-        } else {
-
-        verts.add(vectorsPool.allocate().set(p0).add(t0));
-        verts.add(vectorsPool.allocate().set(p0).sub(t0));
-        verts.add(vectorsPool.allocate().set(p1).sub(anchor));
-
-        verts.add(vectorsPool.allocate().set(p0).add(t0));
-        verts.add(vectorsPool.allocate().set(p1).sub(anchor));
-        verts.add(vectorsPool.allocate().set(p1).add(t0));
-
-
-
-        Vector2 _p0 = vectorsPool.allocate().set(p1).add(t0);
-        Vector2 _p1 = vectorsPool.allocate().set(p1).add(t2);
-        Vector2 _p2 = vectorsPool.allocate().set(p1).sub(anchor);
-
-        Vector2 center = vectorsPool.allocate().set(p1);
-
-        verts.add(_p0);
-        verts.add(center);
-        verts.add(_p2);
-
-        createRoundCap(center, _p0, _p1, _p2, refinement, verts);
-
-        verts.add(center);
-        verts.add(_p1);
-        verts.add(_p2);
-
-        verts.add(vectorsPool.allocate().set(p2).add(t2));
-        verts.add(vectorsPool.allocate().set(p1).sub(anchor));
-        verts.add(vectorsPool.allocate().set(p1).add(t2));
-
-        verts.add(vectorsPool.allocate().set(p2).add(t2));
-        verts.add(vectorsPool.allocate().set(p1).sub(anchor));
-        verts.add(vectorsPool.allocate().set(p2).sub(t2));
-        }
-
-        }
-
-
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < verts.size; i++) {
-        Vector2 vertex = verts.get(i);
-        //verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
-        //indicesBuffer.put(startVertex + i);
-        }
-
-
-        //vertexIndex += verts.size;
-
-        }
-
-
- */
