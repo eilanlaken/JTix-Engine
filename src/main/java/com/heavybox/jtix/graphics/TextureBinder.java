@@ -20,7 +20,10 @@ public class TextureBinder {
         if (boundTextures[slot] != null) unbind(boundTextures[slot]);
         GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
         GL11.glBindTexture(GL20.GL_TEXTURE_2D, texture.handle);
-        updateTextureParameters(texture);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, texture.minFilter.glValue);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, texture.magFilter.glValue);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, texture.uWrap.glValue);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, texture.vWrap.glValue);
         boundTextures[slot] = texture;
         roundRobinCounter = (roundRobinCounter + 1) % AVAILABLE_TEXTURE_SLOTS;
         texture.setSlot(slot);
@@ -37,13 +40,6 @@ public class TextureBinder {
         texture.setSlot(-1);
     }
 
-    // TODO: see all texture parameters (formats: RGB, RGBA, ...; packing, compression, etc.)
-    private static void updateTextureParameters(final Texture texture) {
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, texture.minFilter.glValue);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, texture.magFilter.glValue);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, texture.uWrap.glValue);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, texture.vWrap.glValue);
-    }
     /**
      * In OpenGL, texture parameters are set using the glTexParameteri or glTexParameterf functions, which define how textures are applied and rendered. These parameters can control various aspects of texture mapping, such as wrapping, filtering, and mipmapping. Below is a list of common texture parameters and their purposes:
      *

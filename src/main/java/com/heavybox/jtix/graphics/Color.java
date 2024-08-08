@@ -377,6 +377,11 @@ public class Color {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
+    public static float toFloatBits(float r, float g, float b, float a) {
+        int color_as_int = ((int)(255 * a) << 24) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r));
+        return intToFloatColor(color_as_int);
+    }
+
     public static int alpha(float alpha) {
         return (int)(alpha * 255.0f);
     }
