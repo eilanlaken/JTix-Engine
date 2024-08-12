@@ -61,6 +61,7 @@ public final class TextureGenerator {
     public static void generateTextureWave() {}
 
     /* Maps */
+    // https://codepen.io/BJS3D/pen/YzjXZgV?editors=1010
     public static void generateTextureMapNormal() {}
     public static void generateTextureMapRoughness() {}
     public static void generateTextureMapMetallic() {}
