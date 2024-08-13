@@ -83,9 +83,9 @@ public final class TextureGenerator {
         int Y = (int) Math.floor(y) & 255;
         int Z = (int) Math.floor(z) & 255;
 
-        x -= Math.floor(x);
-        y -= Math.floor(y);
-        z -= Math.floor(z);
+        x -= (float) Math.floor(x);
+        y -= (float) Math.floor(y);
+        z -= (float) Math.floor(z);
 
         float u = fade(x);
         float v = fade(y);
