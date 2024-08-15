@@ -123,24 +123,64 @@ public class Renderer2D implements MemoryResourceHolder {
         this.drawing = true;
     }
 
-    // TODO: re-implement
-    public void pushTextureRegion(TextureRegion region, float x, float y, float angleZ, float scaleX, float scaleY) {
-        pushTextureRegion(region, null, x, y, 0, 0, angleZ, scaleX, scaleY, null, null);
+    /* State */
+
+    public void setShader(ShaderProgram shader) {
+        if (shader == null) shader = defaultShader;
+        if (currentShader != shader) {
+            flush();
+            ShaderProgramBinder.bind(shader);
+            shader.bindUniform("u_camera_combined", currentCamera.lens.combined);
+            shader.bindUniform("u_texture", currentTexture);
+        }
+        currentShader = shader;
     }
 
-    // TODO: re-implement
-    public void pushTextureRegion(TextureRegion region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
-        pushTextureRegion(region, null, x, y, angleX, angleY, angleZ, scaleX, scaleY, null, null);
+    public void setTexture(Texture texture) {
+        if (texture == null) texture = whitePixel;
+        if (currentTexture != texture) flush();
+        currentTexture = texture;
+        currentShader.bindUniform("u_texture", currentTexture);
     }
 
-    // TODO: re-implement
-    public void pushTextureRegion(TextureRegion region, Color tint, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY, ShaderProgram shader, HashMap<String, Object> customAttributes) {
+    public void setShaderAttributes(HashMap<String, Object> customAttributes) {
+        if (customAttributes != null) {
+            flush();
+            currentShader.bindUniforms(customAttributes);
+        }
+    }
+
+    private void setMode(final int mode) {
+        if (mode != this.currentMode) flush();
+        this.currentMode = mode;
+    }
+
+    public void setBlending(int sFactor, int dFactor) {
+        if (sFactor != currentSFactor || dFactor != currentDFactor) flush();
+        this.currentSFactor = sFactor;
+        this.currentDFactor = dFactor;
+    }
+
+    public void setTint(final Color color) {
+        if (color == null) setTint(Color.WHITE.toFloatBits());
+        else setTint(color.toFloatBits());
+    }
+
+    public void setTint(float tintFloatBits) {
+        this.currentTint = tintFloatBits;
+    }
+
+    /* Rendering API */
+
+    /* Rendering 2D primitives - Textures */
+
+    @Deprecated public void pushTextureRegion(TextureRegion region, Color tint, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY, ShaderProgram shader, HashMap<String, Object> customAttributes) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (vertexIndex + 20 > VERTICES_CAPACITY * 4) flush();
 
         final Texture texture = region.texture;
-        final float ui = region.u;
-        final float vi = region.v;
+        final float ui = region.u1;
+        final float vi = region.v1;
         final float uf = region.u2;
         final float vf = region.v2;
         final float offsetX = region.offsetX;
@@ -249,56 +289,6 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 20;
     }
 
-    /* State */
-
-    public void setShader(ShaderProgram shader) {
-        if (shader == null) shader = defaultShader;
-        if (currentShader != shader) {
-            flush();
-            ShaderProgramBinder.bind(shader);
-            shader.bindUniform("u_camera_combined", currentCamera.lens.combined);
-            shader.bindUniform("u_texture", currentTexture);
-        }
-        currentShader = shader;
-    }
-
-    public void setTexture(Texture texture) {
-        if (texture == null) texture = whitePixel;
-        if (currentTexture != texture) flush();
-        currentTexture = texture;
-        currentShader.bindUniform("u_texture", currentTexture);
-    }
-
-    public void setShaderAttributes(HashMap<String, Object> customAttributes) {
-        if (customAttributes != null) {
-            flush();
-            currentShader.bindUniforms(customAttributes);
-        }
-    }
-
-    private void setMode(final int mode) {
-        if (mode != this.currentMode) flush();
-        this.currentMode = mode;
-    }
-
-    public void setBlending(int sFactor, int dFactor) {
-        if (sFactor != currentSFactor || dFactor != currentDFactor) flush();
-        this.currentSFactor = sFactor;
-        this.currentDFactor = dFactor;
-    }
-
-    public void setTint(final Color color) {
-        if (color == null) setTint(Color.WHITE);
-        else setTint(color.toFloatBits());
-    }
-
-    public void setTint(float tintFloatBits) {
-        this.currentTint = tintFloatBits;
-    }
-
-    /* Rendering API */
-
-    /* Rendering 2D primitives - Textures */
 
     // TODO: test
     public void drawTexture(Texture texture, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -362,11 +352,12 @@ public class Renderer2D implements MemoryResourceHolder {
                             float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
 
-        final float ui = region.u;
-        final float vi = region.v;
+        final float ui = region.u1;
+        final float vi = region.v1;
         final float uf = region.u2;
         final float vf = region.v2;
         final float offsetX = region.offsetX;
@@ -420,23 +411,20 @@ public class Renderer2D implements MemoryResourceHolder {
         x4 += x;
         y4 += y;
 
-        verticesBuffer
-                .put(x1).put(y1).put(currentTint).put(ui).put(vi) // V1
-                .put(x2).put(y2).put(currentTint).put(ui).put(vf) // V2
-                .put(x3).put(y3).put(currentTint).put(uf).put(vf) // V3
-                .put(x4).put(y4).put(currentTint).put(uf).put(vi) // V4
-        ;
+        verticesBuffer.put(x1).put(y1).put(currentTint).put(ui).put(vi); // V1
+        verticesBuffer.put(x2).put(y2).put(currentTint).put(ui).put(vf); // V2
+        verticesBuffer.put(x3).put(y3).put(currentTint).put(uf).put(vf); // V3
+        verticesBuffer.put(x4).put(y4).put(currentTint).put(uf).put(vi); // V4
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        indicesBuffer
-                .put(startVertex)
-                .put(startVertex + 1)
-                .put(startVertex + 3)
-                .put(startVertex + 3)
-                .put(startVertex + 1)
-                .put(startVertex + 2)
-        ;
+        indicesBuffer.put(startVertex + 0);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 3);
+        indicesBuffer.put(startVertex + 3);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 2);
+
         vertexIndex += 4;
     }
 
@@ -449,6 +437,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + refinement * 2 + 2 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         // put indices
         int startVertex = this.vertexIndex;
@@ -488,6 +477,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         refinement = Math.max(3, refinement);
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         int startVertex = this.vertexIndex;
         for (int i = 0; i < refinement; i++) {
@@ -525,6 +515,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         refinement = Math.max(3, refinement);
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
@@ -563,6 +554,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + (refinement - 1) * 6 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
@@ -610,6 +602,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + (refinement - 1) * 6 + 6> indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
@@ -664,6 +657,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 8 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         // put indices
         int startVertex = this.vertexIndex;
@@ -694,6 +688,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 8> indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         // put indices
         int startVertex = this.vertexIndex;
@@ -754,6 +749,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + refinement * 8 + 2> indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         float widthHalf  = width  * 0.5f;
         float heightHalf = height * 0.5f;
@@ -826,6 +822,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 6> indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         /* put vertices */
         verticesBuffer.put(x0).put(y0).put(currentTint).put(0.5f).put(0.5f); // V0
@@ -851,6 +848,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         float widthHalf  = width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
         float heightHalf = height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
@@ -930,6 +928,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + (refinement - 1) * 12 + 12 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         float widthHalf  = width  * 0.5f;
         float heightHalf = height * 0.5f;
@@ -1039,6 +1038,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 24 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         float widthHalf     = width     * 0.5f;
         float heightHalf    = height    * 0.5f;
@@ -1123,6 +1123,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + (count + 2) * (count + 2) > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
@@ -1203,6 +1204,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
@@ -1242,6 +1244,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 2 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         verticesBuffer.put(x1).put(y1).put(currentTint).put(0.5f).put(0.5f);
         verticesBuffer.put(x2).put(y2).put(currentTint).put(0.5f).put(0.5f);
@@ -1260,6 +1263,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         Vector2 dir = vectorsPool.allocate();
         dir.x = x2 - x1;
@@ -1293,6 +1297,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + (edgeRefinement - 1) * 6 + 6 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
 
         final float r = thickness * 0.5f;
         edgeRefinement = Math.max(3, edgeRefinement);
@@ -1368,6 +1373,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + (values.length - 1) * 2 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         /* put vertices */
         for (Vector2 value : values) {
@@ -1390,6 +1396,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (indicesBuffer.limit() + refinement * 2 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
         if (minX > maxX) {
             float tmp = minX;
@@ -1448,9 +1455,11 @@ public class Renderer2D implements MemoryResourceHolder {
         // Additionally, for every anchor we have a round cap that will yield refinement * 3 vertices. We have pointInput.length + 1 corners at the maximum. So the second term is
         // refinement * 3 * (pointInput.length + 1).
         if ((vertexIndex + maxExpectedVertices) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        setMode(GL11.GL_TRIANGLES);
-        Array<Vector2> vertices = new Array<>(true, maxExpectedVertices);
 
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Array<Vector2> vertices = new Array<>(true, maxExpectedVertices);
         if (pointsInput.length == 2) { // handle separately
 
             Vector2 p0 = pointsInput[0];

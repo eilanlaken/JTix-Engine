@@ -647,8 +647,8 @@ public class BitmapFont {
             float invTexHeight = 1.0f / texture.height;
 
             float offsetX = 0, offsetY = 0;
-            float u = region.u;
-            float v = region.v;
+            float u = region.u1;
+            float v = region.v1;
             float regionWidth = region.packedWidth;
             float regionHeight = region.packedHeight;
             // Compensate for whitespace stripped from left and top edges.

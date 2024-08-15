@@ -16,8 +16,8 @@ public class TextureRegion {
     public final float packedHeightHalf;
     public final float originalWidthHalf;
     public final float originalHeightHalf;
-    public final float u;
-    public final float v;
+    public final float u1;
+    public final float v1;
     public final float u2;
     public final float v2;
 
@@ -44,20 +44,20 @@ public class TextureRegion {
         this.originalHeightHalf = originalHeight * 0.5f;
         float invTexWidth = 1.0f / (float)this.texture.width;
         float invTexHeight = 1.0f / (float)this.texture.height;
-        float u = (float)x * invTexWidth;
-        float v = (float)y * invTexHeight;
+        float u1 = (float)x * invTexWidth;
+        float v1 = (float)y * invTexHeight;
         float u2 = (float)(x + packedWidth) * invTexWidth;
         float v2 = (float)(y + packedHeight) * invTexHeight;
         if (this.packedWidth == 1 && this.packedHeight == 1) {
             float adjustX = 0.25f / (float)texture.width;
-            u += adjustX;
+            u1 += adjustX;
             u2 -= adjustX;
             float adjustY = 0.25f / (float)texture.height;
-            v += adjustY;
+            v1 += adjustY;
             v2 -= adjustY;
         }
-        this.u = u;
-        this.v = v;
+        this.u1 = u1;
+        this.v1 = v1;
         this.u2 = u2;
         this.v2 = v2;
     }
