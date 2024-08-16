@@ -364,6 +364,11 @@ public class TexturePacker {
                 this.value = value;
             }
 
+            public static Size get(int value) {
+                for (Size size : Size.values()) if (size.value == value) return size;
+                return XX_LARGE_8192;
+            }
+
         }
 
         public final String         outputDirectory;

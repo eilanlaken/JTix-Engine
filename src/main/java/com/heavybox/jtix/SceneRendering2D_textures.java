@@ -17,7 +17,6 @@ public class SceneRendering2D_textures extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private Camera camera;
-    private ShaderProgram shaderYellow;
 
     private Texture texture;
 
@@ -32,7 +31,6 @@ public class SceneRendering2D_textures extends ApplicationScreen {
     public void show() {
         camera = new Camera(640f/32,480f/32, 1);
         camera.update();
-        shaderYellow = AssetStore.get("assets/shaders/graphics-2d-shader-yellow");
         texture = AssetStore.get("assets/textures/yellowSquare.png");
     }
 
@@ -84,7 +82,6 @@ public class SceneRendering2D_textures extends ApplicationScreen {
     public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
 
-        requiredAssets.put("assets/shaders/graphics-2d-shader-yellow", ShaderProgram.class);
         requiredAssets.put("assets/textures/yellowSquare.png", Texture.class);
 
         requiredAssets.put("assets/atlases/marks.yml", TexturePack.class);

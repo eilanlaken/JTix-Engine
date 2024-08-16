@@ -137,7 +137,6 @@ public final class AssetStore {
         HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> loaders = new HashMap<>();
         loaders.put(Texture.class, AssetLoaderTexture.class);
         loaders.put(Model.class, AssetLoaderModel.class);
-        loaders.put(ShaderProgram.class, AssetLoaderShaderProgram.class);
         loaders.put(TexturePack.class, AssetLoaderTexturePack.class);
         return loaders;
     }
