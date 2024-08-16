@@ -5,13 +5,12 @@ import com.heavybox.jtix.memory.MemoryResource;
 import java.io.IOException;
 import java.util.Objects;
 
-class AssetDescriptor {
+public class AssetDescriptor {
 
     public final Class<? extends MemoryResource> type;
-    public final String path;
-    public final long size;
+    public final String                          path;
+    public final long                            size;
 
-    // TODO: error handling.
     public AssetDescriptor(Class<? extends MemoryResource> type, String path) {
         this.type = type;
         this.path = path;
@@ -19,7 +18,7 @@ class AssetDescriptor {
         try {
             s = AssetUtils.getFileSize(path);
         } catch (IOException e) {
-
+            throw new AssetsException(e.getLocalizedMessage());
         }
         this.size = s;
     }

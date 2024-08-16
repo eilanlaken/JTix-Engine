@@ -17,7 +17,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
 
     @Override
     public Array<AssetDescriptor> getDependencies() {
-        return null;
+        return dependencies;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
                 dependencies.add(new AssetDescriptor(Texture.class, file));
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new AssetsException("File not found: " + e.getMessage());
         }
     }
 
