@@ -2,7 +2,7 @@ package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
 
-public class AssetLoaderString implements AssetLoader<String> {
+public class AssetLoaderText implements AssetLoader<String> {
 
     @Override
     public Array<AssetDescriptor> getDependencies() {

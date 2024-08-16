@@ -56,7 +56,7 @@ public final class AssetUtils {
         initialized = true;
     }
 
-    public synchronized static String getFileContent(final String path) {
+    public static String getFileContent(final String path) {
         final StringBuilder builder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
@@ -94,31 +94,32 @@ public final class AssetUtils {
         return Files.size(filePath);
     }
 
-    public static synchronized Date lastModified(final String filepath) {
+    public static Date lastModified(final String filepath) {
         File file = new File(filepath);
         // Get the last modified time in milliseconds since the epoch (Jan 1, 1970)
         long lastModifiedMillis = file.lastModified();
         return new Date(lastModifiedMillis);
     }
 
-    public static synchronized boolean filesExist(final String ...filePaths) {
+    public static boolean filesExist(final String ...filePaths) {
         for (String filepath : filePaths) {
             if (!fileExists(filepath)) return false;
         }
         return true;
     }
 
-    public static synchronized boolean fileExists(final String filepath) {
+    public static boolean fileExists(final String filepath) {
         File file = new File(filepath);
         return file.exists() && file.isFile();
     }
 
-    public static synchronized boolean directoryExists(final String dirpath) {
+    public static boolean directoryExists(final String dirpath) {
         File directory = new File(dirpath);
         return directory.exists() && directory.isDirectory();
     }
 
-    public static synchronized Array<String> getDirectoryFiles(final String dirpath, final boolean recursive, final String ...extensions) {
+    // TODO: test
+    public static Array<String> getDirectoryFiles(final String dirpath, final boolean recursive, final String ...extensions) {
         if (!directoryExists(dirpath)) throw new IllegalArgumentException("Path: " + dirpath + " does not exist or is not a directory.");
         Array<String> paths = new Array<>();
         File directory = new File(dirpath);
@@ -131,7 +132,7 @@ public final class AssetUtils {
         return paths;
     }
 
-    private static synchronized void getDirectoryFiles(final String dirpath, final String[] extensions, Array<String> collector) {
+    private static void getDirectoryFiles(final String dirpath, final String[] extensions, Array<String> collector) {
         File directory = new File(dirpath);
         File[] children = directory.listFiles();
         assert children != null;

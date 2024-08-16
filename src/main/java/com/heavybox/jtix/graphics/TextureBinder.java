@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
-// REFERENCE TODO: DefaultTextureBinder (libGDX)
 public class TextureBinder {
 
     private static final int       RESERVED_OFFSET             = 0; // we will begin binding from slots OFFSET, OFFSET + 1,... leaving slots 0... OFFSET - 1 for texture loading and manipulation?
@@ -13,7 +12,7 @@ public class TextureBinder {
     private static final Texture[] boundTextures               = new Texture[MAXIMUM_BOUND_TEXTURE_UNITS];
     private static int             roundRobinCounter           = 0;
 
-    public static synchronized int bind(final Texture texture) {
+    public static int bind(final Texture texture) {
         if (texture.handle == 0) throw new GraphicsException("Trying to bind " + Texture.class.getSimpleName() + " that was already freed.");
         if (texture.getSlot() >= 0) return texture.getSlot();
         int slot = roundRobinCounter + RESERVED_OFFSET;
@@ -30,8 +29,8 @@ public class TextureBinder {
         return slot;
     }
 
-    public static synchronized void unbind(Texture texture) {
-        if (texture.handle == 0) throw new IllegalStateException("Trying to unbind " + Texture.class.getSimpleName() + " that was already freed.");
+    public static void unbind(Texture texture) {
+        if (texture.handle == 0) throw new GraphicsException("Trying to un-bind " + Texture.class.getSimpleName() + " that was already freed.");
         int slot = texture.getSlot();
         if (slot < 0) return;
         GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);

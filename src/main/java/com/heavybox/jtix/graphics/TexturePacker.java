@@ -117,8 +117,8 @@ public class TexturePacker {
                 }
             }
         }
-        maxX++; // TODO: why ++?
-        maxY++; // TODO: why ++?
+        maxX++;
+        maxY++;
 
         /* the packed width is the width of the texture after trimming the transparent margins */
         int packedWidth  = Math.max(0, maxX - minX);
@@ -181,32 +181,28 @@ public class TexturePacker {
                 // copy non-transparent region
                 for (int y = region.y; y < region.y + region.packedHeight; y++) {
                     for (int x = region.x; x < region.x + region.packedWidth; x++) {
-                        int color = 0;
-                        color = sourceImage.getRGB(region.minX + x - region.x, region.minY + y - region.y);
+                        int color = sourceImage.getRGB(region.minX + x - region.x, region.minY + y - region.y);
                         texturePackImage.setRGB(x,y,color);
                     }
                 }
                 // extrude up
                 for (int y = region.y - options.extrude; y < region.y; y++) {
                     for (int x = region.x; x < region.x + region.packedWidth; x++) {
-                        int color = 0;
-                        color = sourceImage.getRGB(region.minX + x - region.x, 0);
+                        int color = sourceImage.getRGB(region.minX + x - region.x, 0);
                         texturePackImage.setRGB(x,y,color);
                     }
                 }
                 // extrude down
                 for (int y = region.y + region.packedHeight; y < region.y + region.packedHeight + options.extrude; y++) {
                     for (int x = region.x; x < region.x + region.packedWidth; x++) {
-                        int color = 0;
-                        color = sourceImage.getRGB(region.minX + x - region.x, region.originalHeight - 1);
+                        int color = sourceImage.getRGB(region.minX + x - region.x, region.originalHeight - 1);
                         texturePackImage.setRGB(x,y,color);
                     }
                 }
                 // extrude left
                 for (int x = region.x - options.extrude; x < region.x; x++) {
                     for (int y = region.y; y < region.y + region.packedHeight; y++) {
-                        int color = 0;
-                        color = sourceImage.getRGB(0, region.minY + y - region.y);
+                        int color = sourceImage.getRGB(0, region.minY + y - region.y);
                         texturePackImage.setRGB(x,y,color);
                     }
                 }

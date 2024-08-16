@@ -21,6 +21,8 @@ public class SceneRendering2D_textures extends ApplicationScreen {
 
     private Texture texture;
 
+    private TexturePack pack;
+
     public SceneRendering2D_textures() {
         renderer2D = new Renderer2D();
 
@@ -84,6 +86,9 @@ public class SceneRendering2D_textures extends ApplicationScreen {
 
         requiredAssets.put("assets/shaders/graphics-2d-shader-yellow", ShaderProgram.class);
         requiredAssets.put("assets/textures/yellowSquare.png", Texture.class);
+
+        requiredAssets.put("assets/atlases/marks.yml", TexturePack.class);
+
 
         return requiredAssets;
     }

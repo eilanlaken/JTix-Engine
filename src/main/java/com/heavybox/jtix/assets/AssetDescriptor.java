@@ -18,7 +18,8 @@ public class AssetDescriptor {
         try {
             s = AssetUtils.getFileSize(path);
         } catch (IOException e) {
-            throw new AssetsException(e.getLocalizedMessage());
+            // TODO: see how to get the total file size for assets that are composed of multiple files.
+            //throw new AssetsException(e.getMessage());
         }
         this.size = s;
     }

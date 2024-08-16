@@ -20,12 +20,12 @@ public final class AssetStore {
 
     private static final HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> loaders = getLoadersMap();
 
-    private static final HashMap<String, Asset>            store                = new HashMap<>();
-    private static final Queue<AssetDescriptor> loadQueue            = new Queue<>();
-    private static final Set<AssetStoreLoadingTask>        completedAsyncTasks  = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask>        asyncTasks           = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask>        completedCreateTasks = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask>        createTasks          = new HashSet<>();
+    private static final HashMap<String, Asset>     store                = new HashMap<>();
+    private static final Queue<AssetDescriptor>     loadQueue            = new Queue<>();
+    private static final Set<AssetStoreLoadingTask> completedAsyncTasks  = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> asyncTasks           = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> completedCreateTasks = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> createTasks          = new HashSet<>();
 
     // TODO: loading state
 
@@ -53,11 +53,11 @@ public final class AssetStore {
         }
     }
 
-    protected static void store(final Asset asset) {
+    private static void store(final Asset asset) {
         store.put(asset.descriptor.path, asset);
     }
 
-    protected static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
+    static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
         Array<Asset> assets = new Array<>();
         if (dependencies != null) {
             for (AssetDescriptor dependency : dependencies) {
@@ -67,7 +67,7 @@ public final class AssetStore {
         return assets;
     }
 
-    protected static synchronized boolean areLoaded(final Array<AssetDescriptor> dependencies) {
+    static synchronized boolean areLoaded(final Array<AssetDescriptor> dependencies) {
         if (dependencies == null || dependencies.size == 0) return true;
         for (AssetDescriptor dependency : dependencies) {
             Asset asset = store.get(dependency.path);
@@ -98,7 +98,7 @@ public final class AssetStore {
         var t = store.get(path);
         if (t == null) throw new AssetsException("File not loaded: " + path + System.lineSeparator() + "Make sure you spelled the file path correctly. You must " +
                 "provide the full relative path.");
-        return (T) t.obj;
+        return (T) t.data;
     }
 
     public static synchronized Asset getAsset(final String path) {
@@ -121,15 +121,14 @@ public final class AssetStore {
         return !loadQueue.isEmpty() || !asyncTasks.isEmpty() || !createTasks.isEmpty();
     }
 
-    protected static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
+    static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
         Class<? extends AssetLoader<? extends MemoryResource>> loaderClass = AssetStore.loaders.get(type);
         AssetLoader<? extends MemoryResource> loaderInstance;
         try {
             Constructor<?> constructor = loaderClass.getConstructor();
             loaderInstance = (AssetLoader<? extends MemoryResource>) constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException  | InvocationTargetException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Could not get loader for type: " + type.getSimpleName());
+            throw new AssetsException("Could not get loader for type: " + type.getSimpleName());
         }
         return loaderInstance;
     }
