@@ -294,9 +294,10 @@ public class Renderer2D implements MemoryResourceHolder {
     public void drawTexture(Texture texture, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
 
         setTexture(texture);
-        useMode_old(GL11.GL_TRIANGLES);
+        setMode(GL11.GL_TRIANGLES);
 
         float widthHalf  = texture.width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
         float heightHalf = texture.height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
@@ -330,14 +331,69 @@ public class Renderer2D implements MemoryResourceHolder {
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        indicesBuffer
-                .put(startVertex)
-                .put(startVertex + 1)
-                .put(startVertex + 3)
-                .put(startVertex + 3)
-                .put(startVertex + 1)
-                .put(startVertex + 2)
-        ;
+        indicesBuffer.put(startVertex + 0);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 3);
+        indicesBuffer.put(startVertex + 3);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 2);
+        vertexIndex += 4;
+
+        /* free resources */
+        vectorsPool.free(arm0);
+        vectorsPool.free(arm1);
+        vectorsPool.free(arm2);
+        vectorsPool.free(arm3);
+    }
+
+    public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+
+        setTexture(texture);
+        setMode(GL11.GL_TRIANGLES);
+
+        float width  = texture.width  * scaleX * MathUtils.cosDeg(angleY);
+        float height = texture.height * scaleY * MathUtils.cosDeg(angleX);
+        float widthHalf  = width * 0.5f;
+        float heightHalf = height * 0.5f;
+
+        Vector2 arm0 = vectorsPool.allocate();
+        Vector2 arm1 = vectorsPool.allocate();
+        Vector2 arm2 = vectorsPool.allocate();
+        Vector2 arm3 = vectorsPool.allocate();
+
+        arm0.x = -widthHalf + width * u1;
+        arm0.y =  heightHalf - height * v1;
+        arm0.rotateDeg(angleZ);
+
+        arm1.x = -widthHalf + width * u1;
+        arm1.y = -heightHalf + height * (1 - v2);
+        arm1.rotateDeg(angleZ);
+
+        arm2.x =  widthHalf - width * (1 - u2);
+        arm2.y = -heightHalf + height * (1 - v2);
+        arm2.rotateDeg(angleZ);
+
+        arm3.x = widthHalf - width * (1 - u2);
+        arm3.y = heightHalf - height * v1;
+        arm3.rotateDeg(angleZ);
+
+        /* put vertices */
+        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(u1).put(v1); // V0
+        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(u1).put(v2); // V1
+        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(u2).put(v2); // V2
+        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(u2).put(v1); // V3
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        indicesBuffer.put(startVertex + 0);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 3);
+        indicesBuffer.put(startVertex + 3);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 2);
         vertexIndex += 4;
 
         /* free resources */
@@ -348,10 +404,10 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     // TODO: test
-    public void drawTextureRegion(TextureRegion region,
-                            float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawTextureRegion(TextureRegion region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
 
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
@@ -367,7 +423,6 @@ public class Renderer2D implements MemoryResourceHolder {
         final float originalWidthHalf = region.originalWidthHalf;
         final float originalHeightHalf = region.originalHeightHalf;
 
-        /* put vertices */
         float localX1 = offsetX - originalWidthHalf;
         float localX2 = offsetX - originalWidthHalf;
         float localX3 = offsetX - originalWidthHalf + packedWidth;
@@ -378,8 +433,8 @@ public class Renderer2D implements MemoryResourceHolder {
         float localY3 = offsetY - originalHeightHalf;
 
         /* apply scale */
-        scaleX *= MathUtils.cosDeg(angleX);
-        scaleY *= MathUtils.cosDeg(angleY);
+        scaleX *= MathUtils.cosDeg(angleY);
+        scaleY *= MathUtils.cosDeg(angleX);
         localX1 *= scaleX;
         localX2 *= scaleX;
         localX3 *= scaleX;
@@ -411,6 +466,7 @@ public class Renderer2D implements MemoryResourceHolder {
         x4 += x;
         y4 += y;
 
+        /* put vertices */
         verticesBuffer.put(x1).put(y1).put(currentTint).put(ui).put(vi); // V1
         verticesBuffer.put(x2).put(y2).put(currentTint).put(ui).put(vf); // V2
         verticesBuffer.put(x3).put(y3).put(currentTint).put(uf).put(vf); // V3
@@ -1071,7 +1127,6 @@ public class Renderer2D implements MemoryResourceHolder {
             verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
         }
 
-        // put indices (use sketch).
         int startVertex = this.vertexIndex;
 
         indicesBuffer.put(startVertex + 0);
@@ -1195,6 +1250,49 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
+    public void drawPolygonThin(float[] polygon, ArrayInt indices, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + (count + 2) * (count + 2) > indicesBuffer.capacity()) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        scaleX *= MathUtils.cosDeg(angleY);
+        scaleY *= MathUtils.cosDeg(angleX);
+        if (MathUtils.isZero(scaleX) || MathUtils.isZero(scaleY)) return;
+
+        Vector2 vertex = vectorsPool.allocate();
+        for (int i = 0; i < polygon.length; i += 2) {
+            float poly_x = polygon[i];
+            float poly_y = polygon[i + 1];
+
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(angleZ);
+            vertex.add(x, y);
+
+            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < indices.size - 2; i += 3) {
+            indicesBuffer.put(startVertex + indices.get(i + 0));
+            indicesBuffer.put(startVertex + indices.get(i + 1));
+            indicesBuffer.put(startVertex + indices.get(i + 1));
+            indicesBuffer.put(startVertex + indices.get(i + 2));
+            indicesBuffer.put(startVertex + indices.get(i + 2));
+            indicesBuffer.put(startVertex + indices.get(i + 0));
+        }
+        vertexIndex += polygon.length / 2;
+
+        vectorsPool.free(vertex);
+    }
+
     public void drawPolygonFilled(float[] polygon, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
@@ -1211,7 +1309,13 @@ public class Renderer2D implements MemoryResourceHolder {
 
         ArrayFloat vertices = arrayFloatPool.allocate();
         ArrayInt indices = arrayIntPool.allocate();
-        MathUtils.polygonTriangulate(polygon, vertices, indices);
+        try {
+            MathUtils.polygonTriangulate(polygon, vertices, indices);
+        } catch (Exception e) {
+            /* Probably the polygon has collapsed into a single point. */
+            return;
+        }
+
         Vector2 vertex = vectorsPool.allocate();
         for (int i = 0; i < vertices.size; i += 2) {
             float poly_x = vertices.get(i);
@@ -1234,6 +1338,42 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += count;
         arrayFloatPool.free(vertices);
         arrayIntPool.free(indices);
+    }
+
+    public void drawPolygonFilled(float[] polygon, ArrayInt indices, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        scaleX *= MathUtils.cosDeg(angleY);
+        scaleY *= MathUtils.cosDeg(angleX);
+
+        Vector2 vertex = vectorsPool.allocate();
+        for (int i = 0; i < polygon.length; i += 2) {
+            float poly_x = polygon[i];
+            float poly_y = polygon[i + 1];
+
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(angleZ);
+            vertex.add(x, y);
+
+            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < indices.size; i ++) {
+            indicesBuffer.put(startVertex + indices.get(i));
+        }
+        vertexIndex += count;
+
+        vectorsPool.free(vertex);
     }
 
     /* Rendering 2D primitives - Lines */

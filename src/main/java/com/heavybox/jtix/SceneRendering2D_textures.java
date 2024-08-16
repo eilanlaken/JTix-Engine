@@ -31,20 +31,22 @@ public class SceneRendering2D_textures extends ApplicationScreen {
         camera = new Camera(640f/32,480f/32, 1);
         camera.update();
         shaderYellow = AssetStore.get("assets/shaders/graphics-2d-shader-yellow");
-        texture = AssetStore.get("assets/textures/smile.png");
+        texture = AssetStore.get("assets/textures/yellowSquare.png");
     }
 
     @Override
     protected void refresh() {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0f,0f,0,1);
+        GL11.glClearColor(1f,0f,0,1);
 
         if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
 
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.F)) {
-
+            u2 += 0.001f;
+            v2 += 0.001f;
+            a += 0.1f;
         }
 
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
@@ -54,10 +56,15 @@ public class SceneRendering2D_textures extends ApplicationScreen {
 
         //renderer2D.begin(camera);
         renderer2D.begin(null);
-        renderer2D.drawTexture(texture, 0,0,0,0,0,1,1);
+        //renderer2D.drawTexture(texture, 0,0,0,0,0,1,1);
+        renderer2D.drawTexture(texture,u1,v1,u2,v2,0,-200,0,0,a,1,1);
+        renderer2D.drawTexture(texture,0,0,1f,1f,0,200,0,0,0,1,1);
         renderer2D.end();
     }
 
+
+    float u1,v1,u2 = 0.5f,v2 = 0.5f;
+    float a = 0;
 
     @Override
     public void resize(int width, int height) { }
@@ -76,7 +83,7 @@ public class SceneRendering2D_textures extends ApplicationScreen {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
 
         requiredAssets.put("assets/shaders/graphics-2d-shader-yellow", ShaderProgram.class);
-        requiredAssets.put("assets/textures/smile.png", Texture.class);
+        requiredAssets.put("assets/textures/yellowSquare.png", Texture.class);
 
         return requiredAssets;
     }
