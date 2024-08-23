@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+// use Texture generator instead
+@Deprecated
 public class TexturePacker {
 
     private TexturePacker() {}
@@ -96,7 +98,6 @@ public class TexturePacker {
         return false;
     }
 
-    // TODO: use options? FIXME? What about completely transparent textures?
     private static synchronized PackedRegionData getPackedRegionData(final String path, final BufferedImage sourceImage) {
         int originalWidth = sourceImage.getWidth();
         int originalHeight = sourceImage.getHeight();
