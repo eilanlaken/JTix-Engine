@@ -40,7 +40,7 @@ public class Texture implements MemoryResource {
     }
 
     protected final void setSlot(final int slot) { this.slot = slot; }
-    protected final int getSlot() { return slot; }
+    protected final int  getSlot() { return slot; }
 
     private void setBytes() {
         if (bytes != null) return;

@@ -60,7 +60,7 @@ public final class TextureBuilder {
         return createTexture(data, null, null, null, null);
     }
 
-    public static Data getTextureDataFromFilePath(final String path) {
+    private static Data getTextureDataFromFilePath(final String path) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
             IntBuffer heightBuffer = stack.mallocInt(1);
@@ -77,7 +77,7 @@ public final class TextureBuilder {
         }
     }
 
-    public static Texture createTexture(Data data, Texture.Filter magFilter, Texture.Filter minFilter, Texture.Wrap uWrap, Texture.Wrap vWrap) {
+    private static Texture createTexture(Data data, Texture.Filter magFilter, Texture.Filter minFilter, Texture.Wrap uWrap, Texture.Wrap vWrap) {
         if (magFilter == null) magFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         if (minFilter == null) minFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         if (uWrap == null) uWrap = Texture.Wrap.CLAMP_TO_EDGE;
@@ -111,6 +111,7 @@ public final class TextureBuilder {
             this.height = height;
             this.buffer = buffer;
         }
+
     }
 
 }

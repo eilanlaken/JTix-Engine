@@ -7,8 +7,8 @@ regions:
   packedHeight: 72
   packedWidth: 99
   textureIndex: 0
-  x: 0
-  y: 0
+  x: 2
+  y: 2
 - name: assets/textures/mark-2.png
   offsetX: 6
   offsetY: 10
@@ -17,8 +17,8 @@ regions:
   packedHeight: 61
   packedWidth: 108
   textureIndex: 0
-  x: 99
-  y: 0
+  x: 105
+  y: 2
 - name: assets/textures/mark-3.png
   offsetX: 65
   offsetY: 36
@@ -27,17 +27,13 @@ regions:
   packedHeight: 32
   packedWidth: 37
   textureIndex: 0
-  x: 207
-  y: 0
+  x: 217
+  y: 2
 textures:
 - file: marks_0.png
   height: 128
   width: 256
 options:
   padding: 0
-  minFilter: MIP_MAP_NEAREST_NEAREST
-  uWrap: CLAMP_TO_EDGE
-  extrude: 0
-  maxTexturesSize: 1024
-  vWrap: CLAMP_TO_EDGE
-  magFilter: MIP_MAP_NEAREST_NEAREST
+  extrude: 2
+  maxTexturesSize: 512
