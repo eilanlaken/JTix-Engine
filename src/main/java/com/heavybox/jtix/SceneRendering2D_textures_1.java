@@ -5,7 +5,6 @@ import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
@@ -13,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SceneRendering2D_textures extends ApplicationScreen {
+public class SceneRendering2D_textures_1 extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private Camera camera;
@@ -22,7 +21,7 @@ public class SceneRendering2D_textures extends ApplicationScreen {
 
     private TexturePack pack;
 
-    public SceneRendering2D_textures() {
+    public SceneRendering2D_textures_1() {
         renderer2D = new Renderer2D();
 
     }
