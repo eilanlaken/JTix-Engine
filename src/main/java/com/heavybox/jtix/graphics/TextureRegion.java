@@ -1,6 +1,6 @@
 package com.heavybox.jtix.graphics;
 
-public class TextureRegion {
+@Deprecated public class TextureRegion {
 
     public final Texture texture;
 

@@ -4,39 +4,123 @@ import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.CollectionsUtils;
 import com.heavybox.jtix.math.MathUtils;
-import org.lwjgl.stb.STBRPContext;
-import org.lwjgl.stb.STBRPNode;
-import org.lwjgl.stb.STBRPRect;
-import org.lwjgl.stb.STBRectPack;
+import com.heavybox.jtix.memory.MemoryUtils;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.stb.*;
+import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
 // TODO: implement
 public final class TextureGenerator {
 
-    private static boolean initialized = false;
-
-    private static final int[] PERMUTATION = new int[256];
-    private static final int[] p           = new int[512];
+    public  static final int     maxTextureSize  = GraphicsUtils.getMaxTextureSize();
+    private static       boolean initialized     = false;
+    private static final int[]   PERLIN_PERM_256 = new int[256];
+    private static final int[]   PERLIN_PERM_512 = new int[512];
 
     private TextureGenerator() {}
 
     private static void init() {
         if (initialized) return;
+
         for (int i = 0; i < 256; i++) {
-            PERMUTATION[i] = i;
+            PERLIN_PERM_256[i] = i;
         }
-        CollectionsUtils.shuffle(PERMUTATION);
+        CollectionsUtils.shuffle(PERLIN_PERM_256);
         for (int i = 0; i < 256; i++) {
-            p[i] = PERMUTATION[i];
-            p[256 + i] = PERMUTATION[i];
+            PERLIN_PERM_512[i] = PERLIN_PERM_256[i];
+            PERLIN_PERM_512[256 + i] = PERLIN_PERM_256[i];
         }
+
         initialized = true;
+    }
+
+    /* build from path */
+    public static Texture generateTextureFromFilePath(final String path) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer widthBuffer = stack.mallocInt(1);
+            IntBuffer heightBuffer = stack.mallocInt(1);
+            IntBuffer channelsBuffer = stack.mallocInt(1);
+            final ByteBuffer buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
+            if (buffer == null) throw new GraphicsException("Failed to load a texture file. Check that the path is correct: " + path
+                    + System.lineSeparator() + "STBImage error: "
+                    + STBImage.stbi_failure_reason());
+            final int width = widthBuffer.get();
+            final int height = heightBuffer.get();
+            if (width > maxTextureSize || height > maxTextureSize)
+                throw new GraphicsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+            return generateTexture(width, height, buffer, null, null, null, null);
+        }
+    }
+
+    public static Texture generateTextureFromClassPath(final String name) {
+        ByteBuffer imageBuffer;
+
+        // Load the image resource into a ByteBuffer
+        try (InputStream is = TextureGenerator.class.getClassLoader().getResourceAsStream(name);
+             ReadableByteChannel rbc = Channels.newChannel(is)) {
+            imageBuffer = BufferUtils.createByteBuffer(1024);
+
+            while (true) {
+                int bytes = rbc.read(imageBuffer);
+                if (bytes == -1) {
+                    break;
+                }
+                if (imageBuffer.remaining() == 0) {
+                    imageBuffer = MemoryUtils.resizeBuffer(imageBuffer, imageBuffer.capacity() * 2);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        imageBuffer.flip(); // Flip the buffer for reading
+        int[] width = new int[1];
+        int[] height = new int[1];
+        int[] comp = new int[1];
+
+        ByteBuffer buffer = STBImage.stbi_load_from_memory(imageBuffer, width, height, comp, 4);
+        if (buffer == null) {
+            throw new RuntimeException("Failed to load image: " + STBImage.stbi_failure_reason());
+        }
+
+        return generateTexture(width[0], height[0], buffer, null, null, null, null);
+    }
+
+    private static Texture generateTexture(int width, int height, ByteBuffer buffer, Texture.Filter magFilter, Texture.Filter minFilter, Texture.Wrap uWrap, Texture.Wrap vWrap) {
+        if (magFilter == null) magFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        if (minFilter == null) minFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        if (uWrap == null) uWrap = Texture.Wrap.CLAMP_TO_EDGE;
+        if (vWrap == null) vWrap = Texture.Wrap.CLAMP_TO_EDGE;
+
+        int glHandle = GL11.glGenTextures();
+        Texture texture = new Texture(glHandle,
+                width, height,
+                magFilter, minFilter,
+                uWrap, vWrap
+        );
+        TextureBinder.bind(texture);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        // TODO: here we need to see if we want to: generate mipmaps, use anisotropic filtering, what level of anisotropy etc
+        // TODO: For a raw Texture with no TextureMap, use defaults.
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        // TODO: we need to see if the anisotropic filtering extension is available. If yes, create that instead of mipmaps.
+        STBImage.stbi_image_free(buffer);
+        return texture;
     }
 
     /* Noise */
@@ -309,7 +393,7 @@ public final class TextureGenerator {
         return new PackedRegionData(path, originalWidth, originalHeight, packedWidth, packedHeight, offsetX, offsetY, minX, minY);
     }
 
-    private static void generateTexturePackYamlFile(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack) {
+    @Deprecated private static void generateTexturePackYamlFile(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack) {
         TextureData[] texturesData = new TextureData[texturePack.size()];
         int i = 0;
         for (IndexedBufferedImage img : texturePack.keySet()) {
@@ -343,8 +427,7 @@ public final class TextureGenerator {
             throw new GraphicsException("Could not save texture pack data file. Exception: " + e.getMessage());
         }
     }
-
-    private static void generateTexturePackImages(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack) throws IOException {
+    @Deprecated private static void generateTexturePackImages(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack) throws IOException {
         for (Map.Entry<IndexedBufferedImage, Array<PackedRegionData>> imageRegions : texturePack.entrySet()) {
             IndexedBufferedImage texturePackImage = imageRegions.getKey();
             Graphics2D graphics = texturePackImage.createGraphics();
@@ -418,14 +501,14 @@ public final class TextureGenerator {
         float v = fade(y);
         float w = fade(z);
 
-        int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
-        int B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
+        int A = PERLIN_PERM_512[X] + Y, AA = PERLIN_PERM_512[A] + Z, AB = PERLIN_PERM_512[A + 1] + Z;
+        int B = PERLIN_PERM_512[X + 1] + Y, BA = PERLIN_PERM_512[B] + Z, BB = PERLIN_PERM_512[B + 1] + Z;
 
         /* Sometimes it is beneficial to not ask questions. */
-        return MathUtils.lerp(w, MathUtils.lerp(v, MathUtils.lerp(u, grad(p[AA], x, y, z),
-                grad(p[BA], x - 1, y, z)),
-                MathUtils.lerp(u, grad(p[AB], x, y - 1, z), grad(p[BB], x - 1, y - 1, z))),
-                MathUtils.lerp(v, MathUtils.lerp(u, grad(p[AA + 1], x, y, z - 1), grad(p[BA + 1], x - 1, y, z - 1)), MathUtils.lerp(u, grad(p[AB + 1], x, y - 1, z - 1), grad(p[BB + 1], x - 1, y - 1, z - 1))));
+        return MathUtils.lerp(w, MathUtils.lerp(v, MathUtils.lerp(u, grad(PERLIN_PERM_512[AA], x, y, z),
+                grad(PERLIN_PERM_512[BA], x - 1, y, z)),
+                MathUtils.lerp(u, grad(PERLIN_PERM_512[AB], x, y - 1, z), grad(PERLIN_PERM_512[BB], x - 1, y - 1, z))),
+                MathUtils.lerp(v, MathUtils.lerp(u, grad(PERLIN_PERM_512[AA + 1], x, y, z - 1), grad(PERLIN_PERM_512[BA + 1], x - 1, y, z - 1)), MathUtils.lerp(u, grad(PERLIN_PERM_512[AB + 1], x, y - 1, z - 1), grad(PERLIN_PERM_512[BB + 1], x - 1, y - 1, z - 1))));
     }
 
     private static final class PackedRegionData implements Comparable<PackedRegionData> {

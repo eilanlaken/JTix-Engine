@@ -65,7 +65,7 @@ public final class AssetUtils {
                 builder.append('\n');
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new AssetsException("Filed to read " + String.class.getSimpleName() + " contents of file: " + path);
         }
         return builder.toString();
     }

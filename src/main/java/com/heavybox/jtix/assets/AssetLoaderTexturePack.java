@@ -15,8 +15,7 @@ import java.util.Map;
 public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
 
     private Array<AssetDescriptor> dependencies;
-    private Map<String, Object>    data;
-
+    private String                 yaml;
 
     @Override
     public Array<AssetDescriptor> getDependencies() {
@@ -24,15 +23,11 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void asyncLoad(String path) {
 
-        FileInputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        data = AssetUtils.yaml.load(inputStream);
+        yaml = AssetUtils.getFileContent(path);
+        Map<String, Object> data = AssetUtils.yaml.load(yaml);
 
         /* get dependencies */
         List<Map<String, Object>> textures = (List<Map<String, Object>>) data.get("textures");
@@ -55,33 +50,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
             textures[i] = texture;
         }
 
-        /* get options */
-        Map<String, Object> optionsMap = (Map<String, Object>) data.get("options");
-        int extrude = (int) optionsMap.get("extrude");
-        int padding = (int) optionsMap.get("padding");
-        int size = (int) optionsMap.get("maxTexturesSize");
-
-        /* get texture regions */
-        List<Map<String, Object>> regions = (List<Map<String, Object>>) data.get("regions");
-        HashMap<String, TextureRegion> namedRegions = new HashMap<>();
-        for (Map<String, Object> regionData : regions) {
-            String name = (String) regionData.get("name");
-            Texture texture = textures[(int) regionData.get("textureIndex")];
-
-            int offsetX = (int) regionData.get("offsetX");
-            int offsetY = (int) regionData.get("offsetY");
-            int originalWidth = (int) regionData.get("originalWidth");
-            int originalHeight = (int) regionData.get("originalHeight");
-            int packedWidth = (int) regionData.get("packedWidth");
-            int packedHeight = (int) regionData.get("packedHeight");
-            int x = (int) regionData.get("x");
-            int y = (int) regionData.get("y");
-
-            TextureRegion region = new TextureRegion(texture, x, y, offsetX, offsetY, packedWidth, packedHeight, originalWidth, originalHeight);
-            namedRegions.put(name, region);
-        }
-
-        return new TexturePack(textures, extrude, padding, size, namedRegions);
+        return new TexturePack(textures, yaml);
     }
 
 }
