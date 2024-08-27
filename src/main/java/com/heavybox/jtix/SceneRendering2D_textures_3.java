@@ -2,10 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
-import com.heavybox.jtix.graphics.Camera;
-import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.graphics.TexturePack;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
@@ -63,6 +60,9 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
         renderer2D.begin(null);
+        renderer2D.setTint(Color.RED);
+        renderer2D.drawCircleFilled(500, 30,0,0,0,0,0,1,1);
+        renderer2D.setTint(null);
         renderer2D.drawTextureRegion(region_blue, 0,0,0,0,0,1,1);
         renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
         renderer2D.drawTextureRegion(region_green, 0,0,0,0,0,1,1);

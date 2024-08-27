@@ -1807,22 +1807,28 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     private static Texture createWhiteSinglePixelTexture() {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
-        buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF));   // Red component
-        buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));    // Green component
-        buffer.put((byte) (0xFF));                        // Blue component
-        buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF));   // Alpha component
-        buffer.flip();
-        int glHandle = GL11.glGenTextures();
-        Texture texture = new Texture(glHandle,
-                1, 1,
-                Texture.Filter.NEAREST, Texture.Filter.NEAREST,
-                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE
-        );
-        TextureBinder.bind(texture);
-        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 1, 1, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-        return texture;
+        try {
+            return TextureGenerator.generateTextureFromClassPath("graphics-2d-single-white-pixel.png");
+        } catch (Exception e) {
+            System.err.println("Could not create single-white-pixel Texture from resource. Creating manually.");
+
+            ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+            buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF));   // Red component
+            buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));    // Green component
+            buffer.put((byte) (0xFF));                        // Blue component
+            buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF));   // Alpha component
+            buffer.flip();
+            int glHandle = GL11.glGenTextures();
+            Texture texture = new Texture(glHandle,
+                    1, 1,
+                    Texture.Filter.NEAREST, Texture.Filter.NEAREST,
+                    Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE
+            );
+            TextureBinder.bind(texture);
+            GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 1, 1, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+            return texture;
+        }
     }
 
     private static Camera createDefaultCamera() {
