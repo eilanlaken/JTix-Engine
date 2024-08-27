@@ -3,7 +3,6 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.graphics.TextureGenerator;
-import com.heavybox.jtix.graphics.TexturePacker;
 
 import java.io.IOException;
 

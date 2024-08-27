@@ -2,7 +2,7 @@ package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.ShaderProgram;
-import com.heavybox.jtix.graphics.TextureRegion;
+import com.heavybox.jtix.graphics.TexturePack;
 
 import java.util.HashMap;
 
@@ -47,13 +47,8 @@ public abstract class Component {
     }
 
     /** Graphics - Sprites **/
-    public static ComponentGraphics2DSprite createSprite(TextureRegion region, Color tint, ShaderProgram customShader, HashMap<String, Object> customAttributes) {
+    public static ComponentGraphics2DSprite createSprite(TexturePack.Region region, Color tint, ShaderProgram customShader, HashMap<String, Object> customAttributes) {
         return new ComponentGraphics2DSprite(region, tint, customShader, customAttributes);
-    }
-
-    /** Graphics - Sprite Animations **/
-    public static ComponentGraphics2DSpriteAnimations createSpriteAnimations() {
-        return null;
     }
 
     /** Graphics - Shapes **/
