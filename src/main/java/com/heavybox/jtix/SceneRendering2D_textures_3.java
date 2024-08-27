@@ -15,16 +15,18 @@ import org.lwjgl.opengl.GL11;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SceneRendering2D_textures_2 extends ApplicationScreen {
+public class SceneRendering2D_textures_3 extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private Camera camera;
 
-    private Texture texture;
-
     private TexturePack pack;
 
-    public SceneRendering2D_textures_2() {
+    TexturePack.Region region_red;
+    TexturePack.Region region_green;
+    TexturePack.Region region_blue;
+
+    public SceneRendering2D_textures_3() {
         renderer2D = new Renderer2D();
 
     }
@@ -33,14 +35,16 @@ public class SceneRendering2D_textures_2 extends ApplicationScreen {
     public void show() {
         camera = new Camera(640f/32,480f/32, 1);
         camera.update();
-        texture = AssetStore.get("assets/textures/yellowSquare.png");
+        pack = AssetStore.get("assets/atlases/spots.yml");
+        region_red = pack.getRegion("assets/textures/red30x30.png");
+        region_green = pack.getRegion("assets/textures/green25x25.png");
+        region_blue = pack.getRegion("assets/textures/blue100x100.png");
     }
 
     @Override
     protected void refresh() {
 
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1f,0f,0,1);
+
 
         if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
 
@@ -56,11 +60,12 @@ public class SceneRendering2D_textures_2 extends ApplicationScreen {
 
         }
 
-        //renderer2D.begin(camera);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClearColor(0f,0f,0,1);
         renderer2D.begin(null);
-        //renderer2D.drawTexture(texture, 0,0,0,0,0,1,1);
-        renderer2D.drawTexture(texture,u1,v1,u2,v2,0,-200,0,0,a,1,1);
-        renderer2D.drawTexture(texture,0,0,1f,1f,0,200,0,0,0,1,1);
+        renderer2D.drawTextureRegion(region_blue, 0,0,0,0,0,1,1);
+        renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
+        renderer2D.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
         renderer2D.end();
     }
 
@@ -84,7 +89,6 @@ public class SceneRendering2D_textures_2 extends ApplicationScreen {
     public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
 
-        requiredAssets.put("assets/textures/yellowSquare.png", Texture.class);
 
         requiredAssets.put("assets/atlases/spots.yml", TexturePack.class);
 

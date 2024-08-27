@@ -1,0 +1,39 @@
+regions:
+- name: assets/textures/blue100x100.png
+  offsetX: 0
+  offsetY: 0
+  originalHeight: 100
+  originalWidth: 100
+  packedHeight: 100
+  packedWidth: 100
+  textureIndex: 0
+  x: 4
+  y: 4
+- name: assets/textures/red30x30.png
+  offsetX: 0
+  offsetY: 70
+  originalHeight: 100
+  originalWidth: 100
+  packedHeight: 30
+  packedWidth: 30
+  textureIndex: 0
+  x: 112
+  y: 4
+- name: assets/textures/green25x25.png
+  offsetX: 37
+  offsetY: 38
+  originalHeight: 100
+  originalWidth: 100
+  packedHeight: 25
+  packedWidth: 25
+  textureIndex: 0
+  x: 150
+  y: 4
+textures:
+- file: spots_0.png
+  height: 128
+  width: 256
+options:
+  padding: 2
+  extrude: 2
+  maxTexturesSize: 512

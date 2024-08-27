@@ -19,13 +19,13 @@ public class Main {
 //        }
 
 
-//        try {
-//            TextureGenerator.generateTexturePack("assets/atlases", "marks", 2,0, TextureGenerator.TexturePackSize.SMALL_512,"assets/textures/mark-1.png", "assets/textures/mark-2.png", "assets/textures/mark-3.png");
-//        } catch (Exception e) {
-//            return;
-//        }
-//
-//        if (true) return;
+        try {
+            TextureGenerator.generateTexturePack("assets/atlases", "spots", 2,2, TextureGenerator.TexturePackSize.SMALL_512,"assets/textures/red30x30.png", "assets/textures/green25x25.png", "assets/textures/blue100x100.png");
+        } catch (Exception e) {
+            return;
+        }
+
+        //if (true) return;
 
         ApplicationWindowAttributes config = new ApplicationWindowAttributes();
         Application.createSingleWindowApplication(config);

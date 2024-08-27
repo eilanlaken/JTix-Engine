@@ -174,122 +174,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Textures */
 
-    @Deprecated public void pushTextureRegion(TextureRegion region, Color tint, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY, ShaderProgram shader, HashMap<String, Object> customAttributes) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (vertexIndex + 20 > VERTICES_CAPACITY * 4) flush();
-
-        final Texture texture = region.texture;
-        final float ui = region.u1;
-        final float vi = region.v1;
-        final float uf = region.u2;
-        final float vf = region.v2;
-        final float offsetX = region.offsetX;
-        final float offsetY = region.offsetY;
-        final float packedWidth = region.packedWidth;
-        final float packedHeight = region.packedHeight;
-        final float originalWidthHalf = region.originalWidthHalf;
-        final float originalHeightHalf = region.originalHeightHalf;
-
-        // TODO: make sure we apply scaling first, then rotation, then translation.
-        if (angleX != 0.0f) scaleX *= MathUtils.cosDeg(angleX);
-        if (angleY != 0.0f) scaleY *= MathUtils.cosDeg(angleY);
-
-        setShader(shader);
-        useTexture_old(texture);
-        useCustomAttributes_old(customAttributes);
-        useMode_old(GL11.GL_TRIANGLES);
-
-        // put indices
-        int startVertex = this.vertexIndex / VERTEX_SIZE;
-        indicesBuffer
-                .put(startVertex)
-                .put(startVertex + 1)
-                .put(startVertex + 3)
-                .put(startVertex + 3)
-                .put(startVertex + 1)
-                .put(startVertex + 2)
-        ;
-
-        // put vertices
-        float localX1, localY1;
-        float localX2, localY2;
-        float localX3, localY3;
-        float localX4, localY4;
-
-        localX1 = localX2 = offsetX - originalWidthHalf;
-        localX3 = localX4 = offsetX - originalWidthHalf + packedWidth;
-        localY1 = localY4 = offsetY - originalHeightHalf + packedHeight;
-        localY2 = localY3 = offsetY - originalHeightHalf;
-
-        if (scaleX != 1.0f) {
-            localX1 *= scaleX;
-            localX2 *= scaleX;
-            localX3 *= scaleX;
-            localX4 *= scaleX;
-        }
-        if (scaleY != 1.0f) {
-            localY1 *= scaleY;
-            localY2 *= scaleY;
-            localY3 *= scaleY;
-            localY4 *= scaleY;
-        }
-
-        float x1, y1;
-        float x2, y2;
-        float x3, y3;
-        float x4, y4;
-
-        if (angleZ != 0.0f) {
-            final float sin = MathUtils.sinDeg(angleZ);
-            final float cos = MathUtils.cosDeg(angleZ);
-            x1 = localX1 * cos - localY1 * sin;
-            y1 = localX1 * sin + localY1 * cos;
-
-            x2 = localX2 * cos - localY2 * sin;
-            y2 = localX2 * sin + localY2 * cos;
-
-            x3 = localX3 * cos - localY3 * sin;
-            y3 = localX3 * sin + localY3 * cos;
-
-            x4 = localX4 * cos - localY4 * sin;
-            y4 = localX4 * sin + localY4 * cos;
-        } else {
-            x1 = localX1;
-            y1 = localY1;
-
-            x2 = localX2;
-            y2 = localY2;
-
-            x3 = localX3;
-            y3 = localY3;
-
-            x4 = localX4;
-            y4 = localY4;
-        }
-
-        x1 += x;
-        y1 += y;
-
-        x2 += x;
-        y2 += y;
-
-        x3 += x;
-        y3 += y;
-
-        x4 += x;
-        y4 += y;
-
-        float t = tint == null ? WHITE_TINT : tint.toFloatBits();
-        verticesBuffer
-                .put(x1).put(y1).put(t).put(ui).put(vi) // V1
-                .put(x2).put(y2).put(t).put(ui).put(vf) // V2
-                .put(x3).put(y3).put(t).put(uf).put(vf) // V3
-                .put(x4).put(y4).put(t).put(uf).put(vi) // V4
-        ;
-        vertexIndex += 20;
-    }
-
-
     // TODO: test
     public void drawTexture(Texture texture, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
@@ -404,7 +288,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     // TODO: test
-    public void drawTextureRegion(TextureRegion region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawTextureRegion(TexturePack.Region region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
@@ -480,7 +364,6 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 3);
         indicesBuffer.put(startVertex + 1);
         indicesBuffer.put(startVertex + 2);
-
         vertexIndex += 4;
     }
 
