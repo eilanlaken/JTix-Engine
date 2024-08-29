@@ -60,7 +60,7 @@ public class SceneRendering3D_1 extends ApplicationScreen {
         float delta = GraphicsUtils.getDeltaTime();
         float angularSpeed = 200; // degrees per second
 
-        Matrix4x4 m = transform.computeMatrix();
+        Matrix4x4 m = transform.computeLocalMatrix();
         // rotate
         if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
             transform.angleX += 0.01f;

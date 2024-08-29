@@ -49,7 +49,7 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
         if (Keyboard.isKeyPressed(Keyboard.Key.F)) {
             u2 += 0.001f;
             v2 += 0.001f;
-            a += 0.1f;
+            a += 1f;
         }
 
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
@@ -61,7 +61,7 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
         GL11.glClearColor(0f,0f,0,1);
         renderer2D.begin(null);
         renderer2D.setTint(Color.RED);
-        renderer2D.drawCircleFilled(500, 30,0,0,0,0,0,1,1);
+        renderer2D.drawCircleBorder(300, 30,  50,  0, 0,  0,  a,  0,  1,  1);
         renderer2D.setTint(null);
         renderer2D.drawTextureRegion(region_blue, 0,0,0,0,0,1,1);
         renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);

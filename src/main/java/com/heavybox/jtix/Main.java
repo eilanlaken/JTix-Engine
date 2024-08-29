@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
+import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.TextureGenerator;
 
 import java.io.IOException;

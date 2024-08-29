@@ -759,7 +759,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param roll the roll in degrees
      * @return This matrix */
     public Matrix4x4 setFromEulerAngles(float yaw, float pitch, float roll) {
-        quat.setEulerAngles(yaw, pitch, roll);
+        quat.setEulerAnglesDeg(yaw, pitch, roll);
         return setToTranslationRotationScale(quat);
     }
 

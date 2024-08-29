@@ -54,7 +54,7 @@ public class Renderer3D {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_CULL_FACE);
         // todo: see when it makes sense to compute the matrix transform
-        currentShader.bindUniform("u_body_transform", transform.local);
+        currentShader.bindUniform("u_body_transform", transform.world());
         ModelPartMaterial material = modelPart.material;
         //currentShader.bindUniforms(material.materialParams);
         currentShader.bindUniform("colorDiffuse", material.uniformParams.get("colorDiffuse"));

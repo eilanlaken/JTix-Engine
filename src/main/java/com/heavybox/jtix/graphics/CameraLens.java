@@ -51,31 +51,27 @@ public class CameraLens {
         frustum.update(invProjectionView);
     }
 
-    public Vector3 unProject(Vector3 screenCoordinates) {
-        unProject(screenCoordinates, 0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
-        return screenCoordinates;
+    public void unProject(Vector3 screenCoordinates) {
+        unProject(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), screenCoordinates);
     }
 
-    public Vector3 unProject(Vector3 screenCoordinates, float viewportX, float viewportY, float viewportWidth, float viewportHeight) {
+    public void unProject(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 screenCoordinates) {
         float x = screenCoordinates.x - viewportX, y = GraphicsUtils.getWindowHeight() - screenCoordinates.y - viewportY;
         screenCoordinates.x = (2 * x) / viewportWidth - 1;
         screenCoordinates.y = (2 * y) / viewportHeight - 1;
         screenCoordinates.z = 2 * screenCoordinates.z - 1;
         screenCoordinates.prj(invProjectionView);
-        return screenCoordinates;
     }
 
-    public Vector3 project(Vector3 worldCoordinates) {
-        project(worldCoordinates, 0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
-        return worldCoordinates;
+    public void project(Vector3 worldCoordinates) {
+        project(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), worldCoordinates);
     }
 
-    public Vector3 project(Vector3 worldCoordinates, float viewportX, float viewportY, float viewportWidth, float viewportHeight) {
+    public void project(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 worldCoordinates) {
         worldCoordinates.prj(combined);
         worldCoordinates.x = viewportWidth * (worldCoordinates.x + 1) / 2 + viewportX;
         worldCoordinates.y = viewportHeight * (worldCoordinates.y + 1) / 2 + viewportY;
         worldCoordinates.z = (worldCoordinates.z + 1) / 2;
-        return worldCoordinates;
     }
 
     public float getViewportWidth() {

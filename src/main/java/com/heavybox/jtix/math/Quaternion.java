@@ -2,12 +2,10 @@ package com.heavybox.jtix.math;
 
 import com.heavybox.jtix.memory.MemoryPool;
 
-// TODO: complete and test
 public class Quaternion implements MemoryPool.Reset {
 
-    private static final long serialVersionUID = -7661875440774897168L;
-    private static Quaternion tmp1 = new Quaternion(0, 0, 0, 0);
-    private static Quaternion tmp2 = new Quaternion(0, 0, 0, 0);
+    private static final Quaternion tmp1 = new Quaternion(0, 0, 0, 0);
+    private static final Quaternion tmp2 = new Quaternion(0, 0, 0, 0);
 
     public float x;
     public float y;
@@ -31,7 +29,10 @@ public class Quaternion implements MemoryPool.Reset {
      *
      * @param quaternion The quaternion to copy. */
     public Quaternion(Quaternion quaternion) {
-        this.set(quaternion);
+        this.x = quaternion.x;
+        this.y = quaternion.y;
+        this.z = quaternion.z;
+        this.w = quaternion.w;
     }
 
     /** Constructor, sets the quaternion from the given axis vector and the angle around that axis in degrees.
@@ -97,7 +98,7 @@ public class Quaternion implements MemoryPool.Reset {
      * @param pitch the rotation around the x-axis in degrees
      * @param roll the rotation around the z axis degrees
      * @return this quaternion */
-    public Quaternion setEulerAngles(float yaw, float pitch, float roll) {
+    public Quaternion setEulerAnglesDeg(float yaw, float pitch, float roll) {
         return setEulerAnglesRad(yaw * MathUtils.degreesToRadians, pitch * MathUtils.degreesToRadians,
                 roll * MathUtils.degreesToRadians);
     }
@@ -109,14 +110,14 @@ public class Quaternion implements MemoryPool.Reset {
      * @return this quaternion */
     public Quaternion setEulerAnglesRad(float pitch, float yaw, float roll) {
         final float hr = roll * 0.5f;
-        final float shr = (float)Math.sin(hr);
-        final float chr = (float)Math.cos(hr);
+        final float shr = (float) Math.sin(hr);
+        final float chr = (float) Math.cos(hr);
         final float hp = pitch * 0.5f;
-        final float shp = (float)Math.sin(hp);
-        final float chp = (float)Math.cos(hp);
+        final float shp = (float) Math.sin(hp);
+        final float chp = (float) Math.cos(hp);
         final float hy = yaw * 0.5f;
-        final float shy = (float)Math.sin(hy);
-        final float chy = (float)Math.cos(hy);
+        final float shy = (float) Math.sin(hy);
+        final float chy = (float) Math.cos(hy);
         final float chy_shp = chy * shp;
         final float shy_chp = shy * chp;
         final float chy_chp = chy * chp;

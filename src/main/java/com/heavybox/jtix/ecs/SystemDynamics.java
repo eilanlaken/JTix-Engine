@@ -1,14 +1,14 @@
 package com.heavybox.jtix.ecs;
 
-public class SystemRendering extends System {
+public final class SystemDynamics extends System {
 
-    public SystemRendering(final EntityContainer container) {
+    SystemDynamics(final EntityContainer container) {
         super(container);
     }
 
     @Override
     protected boolean shouldProcess(Entity entity) {
-        return false;
+        return true;
     }
 
     @Override
@@ -30,4 +30,5 @@ public class SystemRendering extends System {
     protected void fixedUpdate(float delta) {
 
     }
+
 }
