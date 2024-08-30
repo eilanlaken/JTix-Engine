@@ -1,22 +1,55 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.collections.ArrayFloat;
+import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.math.Vector2;
+import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+// TODO: implement.
 public class Renderer3D implements MemoryResourceHolder {
 
+    /* constants */
+
+
+    /* defaults */
+    private final ShaderProgram defaultShader = createDefaultShaderProgram();
+
+    /* memory pools */
+    private final MemoryPool<Vector2> vectorsPool    = new MemoryPool<>(Vector2.class, 10);
+    private final MemoryPool<ArrayFloat> arrayFloatPool = new MemoryPool<>(ArrayFloat.class, 20);
+    private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
+
+    /* state */
+    private Camera        currentCamera  = null;
+    private Texture       currentTexture = null;
+    private ShaderProgram currentShader  = null;
+    private boolean       drawing        = false;
+    private int           vertexIndex    = 0;
+    private int           currentMode    = GL11.GL_TRIANGLES;
+    private int           currentSFactor = GL11.GL_SRC_ALPHA;
+    private int           currentDFactor = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    private int           frameDrawCalls = 0;
+
+    public Renderer3D() {
+
+    }
+
     private static ShaderProgram createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
@@ -26,49 +59,35 @@ public class Renderer3D implements MemoryResourceHolder {
             System.err.println("Could not create shader program from resources. Creating manually.");
 
             String vertexShader = """
-                    #version 330
+                    #version 450
                     
-                    layout(location = 0) in vec3 a_position;
-                    layout(location = 1) in vec2 a_texCoord0;
-                    layout(location = 2) in vec2 a_texCoord1;
-                    layout(location = 3) in vec3 a_normal;
-                    
-                    uniform mat4 u_body_transform;
-                    uniform vec3 u_camera_position;
-                    uniform mat4 u_camera_combined; // proj * view
-                  
-                    out vec3 unit_vertex_to_camera;
-                    out vec3 unit_world_normal;
-                    out vec3 world_vertex_position;
+                    layout(location = 0) in vec2 a_position;
+                    layout(location = 1) in vec4 a_color;
+                    layout(location = 2) in vec2 a_texCoord0;
+
+                    uniform mat4 u_camera_combined;
+
+                    out vec4 color;
                     out vec2 uv;
-                    
+
                     void main() {
-                    
-                        vec4 vertex_position = u_body_transform * vec4(a_position, 1.0);
-                        gl_Position = u_camera_combined * vertex_position;
-                    
-                    
-                        unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
-                        unit_world_normal = normalize((u_body_transform * vec4(a_normal, 1.0)).xyz);
-                        world_vertex_position = vertex_position.xyz;
+                        color = a_color;
                         uv = a_texCoord0;
-                    }""";
+                        gl_Position = u_camera_combined * vec4(a_position.x, a_position.y, 0.0, 1.0);
+                    };""";
 
             String fragmentShader = """
                     #version 450
 
-                    // inputs
                     in vec4 color;
                     in vec2 uv;
-
-                    // uniforms
+                   
                     uniform sampler2D u_texture;
-
-                    // outputs
+                    
                     layout (location = 0) out vec4 out_color;
-
+                    
                     void main() {
-                        out_color = color * texture(u_texture, uv);
+                        out_color = texture(u_texture, uv);
                     }""";
 
             return new ShaderProgram(vertexShader, fragmentShader);

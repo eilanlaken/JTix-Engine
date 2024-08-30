@@ -907,20 +907,6 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return rotation.setFromMatrix(normalizeAxes, this);
     }
 
-    // TODO: remove
-    public Matrix4x4 scaleSelf_test(float scale) {
-        Quaternion r = getRotation(new Quaternion());
-        Matrix4x4 rot = new Matrix4x4(r);
-        Matrix4x4 rotInv = new Matrix4x4(r);
-        rotInv.inv();
-        Matrix4x4 s = new Matrix4x4();
-        s.sclXYZ(scale,1,1);
-        Matrix4x4 m = new Matrix4x4(rotInv);
-        m.mul(s);
-        m.mul(rot);
-        return this.mul(m);
-    }
-
     /** Gets the rotation of this matrix.
      * @param rotation The {@link Quaternion} to receive the rotation
      * @return The provided {@link Quaternion} for chaining. */
@@ -1294,7 +1280,6 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param y Translation in the y-axis.
      * @param z Translation in the z-axis.
      * @return This matrix for the purpose of chaining methods together. */
-    // TODO: this one translates on the frame of reference that is adjacent to the matrix.
     public Matrix4x4 translateSelfAxis(float x, float y, float z) {
         val[M03] += val[M00] * x + val[M01] * y + val[M02] * z;
         val[M13] += val[M10] * x + val[M11] * y + val[M12] * z;
@@ -1303,7 +1288,6 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    // TODO: see what is up
     public Matrix4x4 translateXYZAxis(float x, float y, float z) {
         val[M03] += x;
         val[M13] += y;

@@ -131,7 +131,7 @@ public class Quaternion implements MemoryPool.Reset {
     }
 
     /** Get the pole of the gimbal lock, if any.
-     * @return positive (+1) for north pole, negative (-1) for south pole, zero (0) when no gimbal lock */
+     * @return positive (+1) for the North Pole, negative (-1) for the South Pole, zero (0) when no gimbal lock */
     public int getGimbalPole() {
         final float t = y * x + z * w;
         return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
@@ -151,26 +151,26 @@ public class Quaternion implements MemoryPool.Reset {
         return getRollRad() * MathUtils.radiansToDegrees;
     }
 
-    /** Get the pitch euler angle in radians, which is the rotation around the x axis. Requires that this quaternion is normalized.
+    /** Get the pitch euler angle in radians, which is the rotation around the x-axis. Requires that this quaternion is normalized.
      * @return the rotation around the x-axis in radians (between -(PI/2) and +(PI/2)) */
     public float getPitchRad() {
         final int pole = getGimbalPole();
         return pole == 0 ? (float)Math.asin(MathUtils.clampFloat(2f * (w * x - z * y), -1f, 1f)) : (float)pole * MathUtils.PI * 0.5f;
     }
 
-    /** Get the pitch euler angle in degrees, which is the rotation around the x axis. Requires that this quaternion is normalized.
+    /** Get the pitch euler angle in degrees, which is the rotation around the x-axis. Requires that this quaternion is normalized.
      * @return the rotation around the x-axis in degrees (between -90 and +90) */
     public float getPitch() {
         return getPitchRad() * MathUtils.radiansToDegrees;
     }
 
-    /** Get the yaw euler angle in radians, which is the rotation around the y axis. Requires that this quaternion is normalized.
+    /** Get the yaw euler angle in radians, which is the rotation around the y-axis. Requires that this quaternion is normalized.
      * @return the rotation around the y-axis in radians (between -PI and +PI) */
     public float getYawRad() {
         return getGimbalPole() == 0 ? MathUtils.atan2(2f * (y * w + x * z), 1f - 2f * (y * y + x * x)) : 0f;
     }
 
-    /** Get the yaw euler angle in degrees, which is the rotation around the y axis. Requires that this quaternion is normalized.
+    /** Get the yaw euler angle in degrees, which is the rotation around the y-axis. Requires that this quaternion is normalized.
      * @return the rotation around the y-axis in degrees (between -180 and +180) */
     public float getYaw() {
         return getYawRad() * MathUtils.radiansToDegrees;

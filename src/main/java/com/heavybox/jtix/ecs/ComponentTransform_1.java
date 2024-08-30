@@ -5,7 +5,7 @@ import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
-public class ComponentTransform_1 extends Component {
+@Deprecated public class ComponentTransform_1 extends Component {
 
     public static final Type TYPE = Type.TRANSFORM;
 
