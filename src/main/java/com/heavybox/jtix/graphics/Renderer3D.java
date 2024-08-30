@@ -1,84 +1,87 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.ecs.ComponentTransform;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-// TODO: improve to handle whatever.
-public class Renderer3D {
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
-    private boolean drawing;
-    private ShaderProgram currentShader;
-    private Camera camera;
+public class Renderer3D implements MemoryResourceHolder {
 
-    public Renderer3D() {
-        this.drawing = false;
-    }
+    private static ShaderProgram createDefaultShaderProgram() {
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
+             BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
+             BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
-    public void begin(ShaderProgram shader) {
-        this.currentShader = shader;
-        ShaderProgramBinder.bind(shader);
-    }
+            String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return new ShaderProgram(vertexShader, fragmentShader);
+        } catch (Exception e) {
+            System.err.println("Could not create shader program from resources. Creating manually.");
 
-    public void setCamera(final Camera camera) {
-        this.currentShader.bindUniform("u_camera_position", camera.position);
-        this.currentShader.bindUniform("u_camera_combined", camera.lens.combined);
-        this.camera = camera;
-    }
+            String vertexShader = """
+                    #version 330
+                    
+                    layout(location = 0) in vec3 a_position;
+                    layout(location = 1) in vec2 a_texCoord0;
+                    layout(location = 2) in vec2 a_texCoord1;
+                    layout(location = 3) in vec3 a_normal;
+                    
+                    uniform mat4 u_body_transform;
+                    uniform vec3 u_camera_position;
+                    uniform mat4 u_camera_combined; // proj * view
+                  
+                    out vec3 unit_vertex_to_camera;
+                    out vec3 unit_world_normal;
+                    out vec3 world_vertex_position;
+                    out vec2 uv;
+                    
+                    void main() {
+                    
+                        vec4 vertex_position = u_body_transform * vec4(a_position, 1.0);
+                        gl_Position = u_camera_combined * vertex_position;
+                    
+                    
+                        unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
+                        unit_world_normal = normalize((u_body_transform * vec4(a_normal, 1.0)).xyz);
+                        world_vertex_position = vertex_position.xyz;
+                        uv = a_texCoord0;
+                    }""";
 
-    // TODO: implement. Don't forget about the lights transform.
-    public void setEnvironment() {
-        // bind all lights.
-        // ambient light
-        //this.currentShader.bindUniform("ambient", environment.getTotalAmbient());
+            String fragmentShader = """
+                    #version 450
 
-    }
+                    // inputs
+                    in vec4 color;
+                    in vec2 uv;
 
-    public void draw(final ModelPart modelPart, final ComponentTransform transform) {
-        // TODO: maybe updating the bounding sphere should be somewhere else.
-        float centerX = modelPart.mesh.boundingSphereCenter.x;
-        float centerY = modelPart.mesh.boundingSphereCenter.y;
-        float centerZ = modelPart.mesh.boundingSphereCenter.z;
-        Vector3 boundingSphereCenter = new Vector3(centerX + transform.x, centerY + transform.y, centerZ + transform.z);
-        float boundingSphereRadius = MathUtils.max(transform.scaleX, transform.scaleY, transform.scaleZ) * modelPart.mesh.boundingSphereRadius;
-        if (camera.lens.frustum.intersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
-            System.out.println("intersects");
-        } else {
-            System.out.println("CULLING");
+                    // uniforms
+                    uniform sampler2D u_texture;
+
+                    // outputs
+                    layout (location = 0) out vec4 out_color;
+
+                    void main() {
+                        out_color = color * texture(u_texture, uv);
+                    }""";
+
+            return new ShaderProgram(vertexShader, fragmentShader);
         }
-
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        // todo: see when it makes sense to compute the matrix transform
-        currentShader.bindUniform("u_body_transform", transform.world());
-        ModelPartMaterial material = modelPart.material;
-        //currentShader.bindUniforms(material.materialParams);
-        currentShader.bindUniform("colorDiffuse", material.uniformParams.get("colorDiffuse"));
-        ModelPartMesh mesh = modelPart.mesh;
-        System.out.println("ddddd " + mesh.vaoId);
-        GL30.glBindVertexArray(mesh.vaoId);
-        {
-            for (ModelVertexAttribute attribute : ModelVertexAttribute.values()) {
-                System.out.println("attrib: " + attribute.slot);
-                if (mesh.hasVertexAttribute(attribute)) GL20.glEnableVertexAttribArray(attribute.slot);
-            }
-            if (mesh.indexed) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
-            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
-            for (ModelVertexAttribute attribute : ModelVertexAttribute.values()) if (mesh.hasVertexAttribute(attribute)) GL20.glDisableVertexAttribArray(attribute.slot);
-        }
-        GL30.glBindVertexArray(0);
     }
 
-    public void end() {
-        //ShaderProgramBinder.unbind();
-    }
-
-    private void sort(Array<ModelPart> modelParts) {
-        // minimize: shader switching, camera binding, lights binding, material uniform binding
+    @Override
+    public void deleteAll() {
+//        defaultShader.delete();
+//        GL30.glDeleteVertexArrays(vao);
+//        GL30.glDeleteBuffers(vbo);
+//        GL30.glDeleteBuffers(ebo);
+//        whitePixel.delete();
     }
 
 }

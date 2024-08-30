@@ -34,17 +34,17 @@ public abstract class Component {
     }
 
     /** Transforms **/
-    public static ComponentTransform createTransform() {
-        return new ComponentTransform(false, null,0,0,0,0,0,0,1,1,1);
+    public static ComponentTransform_1 createTransform() {
+        return new ComponentTransform_1(null,0,0,0,0,0,0,1,1,1);
     }
-    public static ComponentTransform createTransform(boolean isStatic, float x, float y, float z, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ) {
-        return new ComponentTransform(isStatic,null,x, y, z, angleX, angleY, angleZ, scaleX, scaleY, scaleZ);
+    public static ComponentTransform_1 createTransform(float x, float y, float z, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ) {
+        return new ComponentTransform_1(null,x, y, z, angleX, angleY, angleZ, scaleX, scaleY, scaleZ);
     }
-    public static ComponentTransform createTransform(boolean isStatic, float x, float y, float z) {
-        return new ComponentTransform(isStatic,null, x, y, z, 0, 0, 0, 1, 1, 1);
+    public static ComponentTransform_1 createTransform(float x, float y, float z) {
+        return new ComponentTransform_1(null, x, y, z, 0, 0, 0, 1, 1, 1);
     }
-    public static ComponentTransform createTransform(boolean isStatic, float x, float y, float z, float angleX, float angleY, float angleZ) {
-        return new ComponentTransform(isStatic,null, x, y, z, angleX, angleY, angleZ, 1, 1, 1);
+    public static ComponentTransform_1 createTransform(float x, float y, float z, float angleX, float angleY, float angleZ) {
+        return new ComponentTransform_1(null, x, y, z, angleX, angleY, angleZ, 1, 1, 1);
     }
 
     /** Graphics - Sprites **/

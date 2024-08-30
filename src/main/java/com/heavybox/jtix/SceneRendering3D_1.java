@@ -4,10 +4,9 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.ecs.Component;
-import com.heavybox.jtix.ecs.ComponentTransform;
+import com.heavybox.jtix.ecs.ComponentTransform_1;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
 
@@ -16,15 +15,15 @@ import java.util.Map;
 
 public class SceneRendering3D_1 extends ApplicationScreen {
 
-    private Renderer3D renderer3DOld;
+    private Renderer3D_old renderer3DOld;
     private Model model;
     private ShaderProgram shader;
-    private ComponentTransform transform;
+    private ComponentTransform_1 transform;
     private Camera camera;
 
 
     public SceneRendering3D_1() {
-        this.renderer3DOld = new Renderer3D();
+        this.renderer3DOld = new Renderer3D_old();
 
         final String vertexShaderSrc = AssetUtils.getFileContent("assets/shaders/default.vert");
         final String fragmentShaderSrc = AssetUtils.getFileContent("assets/shaders/default.frag");
@@ -60,7 +59,6 @@ public class SceneRendering3D_1 extends ApplicationScreen {
         float delta = GraphicsUtils.getDeltaTime();
         float angularSpeed = 200; // degrees per second
 
-        Matrix4x4 m = transform.computeLocalMatrix();
         // rotate
         if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
             transform.angleX += 0.01f;

@@ -1835,28 +1835,4 @@ public class Renderer2D implements MemoryResourceHolder {
         return new Camera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
     }
 
-    // TODO: delete this after taking care of textures.
-
-    @Deprecated private void useTexture_old(Texture texture) {
-        if (currentTexture != texture) {
-            flush();
-        }
-        currentTexture = texture;
-        currentShader.bindUniform("u_texture", currentTexture);
-    }
-
-    @Deprecated private void useCustomAttributes_old(HashMap<String, Object> customAttributes) {
-        if (customAttributes != null) {
-            flush();
-            currentShader.bindUniforms(customAttributes);
-        }
-    }
-
-    @Deprecated private void useMode_old(final int mode) {
-        if (mode != this.currentMode) {
-            flush();
-        }
-        this.currentMode = mode;
-    }
-
 }

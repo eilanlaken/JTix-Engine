@@ -5,12 +5,12 @@ import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
-public class ComponentTransform extends Component {
+public class ComponentTransform_2 extends Component {
 
     public static final Type TYPE = Type.TRANSFORM;
 
-    public ComponentTransform parent;
-    public boolean            isStatic;
+    /* can be null */
+    public ComponentTransform_2 parent;
 
     /* The local values of the transform */
     public float x, y, z;
@@ -18,16 +18,17 @@ public class ComponentTransform extends Component {
     public float scaleX, scaleY, scaleZ;
 
     /* The world values of the transform. These are the values that are used by other systems. Calculated every frame - either by parent or by physics 2D / 3D. */
-    protected boolean   updated;
-    protected float     worldX, worldY, worldZ;
-    protected float     worldAngleX, worldAngleY, worldAngleZ;
-    protected float     worldScaleX, worldScaleY, worldScaleZ;
-    protected Matrix4x4 world;
+    public float   worldX, worldY, worldZ;
+    public float   worldAngleX, worldAngleY, worldAngleZ;
+    public float   worldScaleX, worldScaleY, worldScaleZ;
 
-    protected ComponentTransform(boolean isStatic, ComponentTransform parent, float x, float y, float z, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ) {
+    public boolean   updated;
+    public Matrix4x4 local;
+    public Matrix4x4 world;
+
+    // TODO: change to protected
+    public ComponentTransform_2(float x, float y, float z, float angleX, float angleY, float angleZ, float scaleX, float scaleY, float scaleZ) {
         super(TYPE);
-        this.isStatic = isStatic;
-        this.parent = parent;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -37,35 +38,34 @@ public class ComponentTransform extends Component {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
         this.scaleZ = scaleZ;
-    }
 
-    // TODO: change back to protected.
-    public Matrix4x4 computeLocalMatrix() {
-        Quaternion r = new Quaternion();
-        r.setEulerAnglesDeg(angleX, angleY, angleZ);
-        return world.setToTranslationRotationScale(x, y, z, r.x, r.y, r.z, r.w, scaleX, scaleY, scaleZ);
-    }
+        this.local = new Matrix4x4(new Vector3(x, y, z), new Quaternion().setEulerAnglesDeg(angleY, angleX, angleZ), new Vector3(scaleX, scaleY, scaleZ));
 
-    public Matrix4x4 computeWorldMatrix() {
-        if (parent == null) {
-            computeLocalMatrix();
-            return world.set(world);
-        }
-        Matrix4x4 worldParent = parent.computeWorldMatrix();
-        return world.set(worldParent).mul(world);
     }
 
     protected void update() {
-        if (!isStatic) {
+        if (parent != null) {
+            parent.update();
 
+        } else {
+            this.worldX = x;
+            this.worldY = y;
+            this.worldZ = z;
+            this.worldAngleX = angleX;
+            this.worldAngleY = angleY;
+            this.worldAngleZ = angleZ;
+            this.worldScaleX = scaleX;
+            this.worldScaleY = scaleY;
+            this.worldScaleZ = scaleZ;
         }
         updated = true;
     }
 
-    protected void setWorld(@NotNull Matrix4x4 transform) {
+    protected void setToTransform(@NotNull Matrix4x4 transform) {
         Vector3    position = new Vector3();
         Quaternion rotation = new Quaternion();
         Vector3    scale    = new Vector3();
+
         transform.getRotation(rotation);
         transform.getScale(scale);
         transform.getTranslation(position);
@@ -91,8 +91,29 @@ public class ComponentTransform extends Component {
     public Matrix4x4 world() {
         if (!updated) update();
         if (this.world == null) this.world = new Matrix4x4();
-        Quaternion r = new Quaternion().setEulerAnglesDeg(worldAngleX, worldAngleY, worldAngleZ);
+        Quaternion r = new Quaternion().setEulerAnglesDeg(worldAngleY, worldAngleX, worldAngleZ);
         return world.setToTranslationRotationScale(worldX, worldY, worldZ, r.x, r.y, r.z, r.w, worldScaleX, worldScaleY, worldScaleZ);
     }
+
+    public void translate(float x, float y, float z, boolean worldSpace) {
+        updated = false;
+        if (!worldSpace) {
+
+        } else {
+            local.translateXYZAxis(x,y,z);
+        }
+    }
+
+    public void rotate() {
+        updated = false;
+
+    }
+
+    public void scale() {
+        updated = false;
+
+    }
+
+
 
 }
