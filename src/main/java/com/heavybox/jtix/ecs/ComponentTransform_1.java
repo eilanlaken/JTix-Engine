@@ -74,9 +74,9 @@ import org.jetbrains.annotations.NotNull;
         this.worldScaleY = scale.y;
         this.worldScaleZ = scale.z;
 
-        this.worldAngleX = rotation.getAngleAround(Vector3.X_UNIT);
-        this.worldAngleY = rotation.getAngleAround(Vector3.Y_UNIT);
-        this.worldAngleZ = rotation.getAngleAround(Vector3.Z_UNIT);
+        this.worldAngleX = rotation.getAngleAroundDeg(Vector3.X_UNIT);
+        this.worldAngleY = rotation.getAngleAroundDeg(Vector3.Y_UNIT);
+        this.worldAngleZ = rotation.getAngleAroundDeg(Vector3.Z_UNIT);
 
         this.worldX = position.x;
         this.worldY = position.y;

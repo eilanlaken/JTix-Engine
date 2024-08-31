@@ -137,18 +137,18 @@ public class Quaternion implements MemoryPool.Reset {
         return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
     }
 
+    /** Get the roll euler angle in degrees, which is the rotation around the z axis. Requires that this quaternion is normalized.
+     * @return the rotation around the z axis in degrees (between -180 and +180) */
+    public float getRollDeg() {
+        return getRollRad() * MathUtils.radiansToDegrees;
+    }
+
     /** Get the roll euler angle in radians, which is the rotation around the z axis. Requires that this quaternion is normalized.
      * @return the rotation around the z axis in radians (between -PI and +PI) */
     public float getRollRad() {
         final int pole = getGimbalPole();
         return pole == 0 ? MathUtils.atan2(2f * (w * z + y * x), 1f - 2f * (x * x + z * z))
                 : (float)pole * 2f * MathUtils.atan2(y, w);
-    }
-
-    /** Get the roll euler angle in degrees, which is the rotation around the z axis. Requires that this quaternion is normalized.
-     * @return the rotation around the z axis in degrees (between -180 and +180) */
-    public float getRoll() {
-        return getRollRad() * MathUtils.radiansToDegrees;
     }
 
     /** Get the pitch euler angle in radians, which is the rotation around the x-axis. Requires that this quaternion is normalized.
@@ -160,20 +160,20 @@ public class Quaternion implements MemoryPool.Reset {
 
     /** Get the pitch euler angle in degrees, which is the rotation around the x-axis. Requires that this quaternion is normalized.
      * @return the rotation around the x-axis in degrees (between -90 and +90) */
-    public float getPitch() {
+    public float getPitchDeg() {
         return getPitchRad() * MathUtils.radiansToDegrees;
+    }
+
+    /** Get the yaw euler angle in degrees, which is the rotation around the y-axis. Requires that this quaternion is normalized.
+     * @return the rotation around the y-axis in degrees (between -180 and +180) */
+    public float getYawDeg() {
+        return getYawRad() * MathUtils.radiansToDegrees;
     }
 
     /** Get the yaw euler angle in radians, which is the rotation around the y-axis. Requires that this quaternion is normalized.
      * @return the rotation around the y-axis in radians (between -PI and +PI) */
     public float getYawRad() {
         return getGimbalPole() == 0 ? MathUtils.atan2(2f * (y * w + x * z), 1f - 2f * (y * y + x * x)) : 0f;
-    }
-
-    /** Get the yaw euler angle in degrees, which is the rotation around the y-axis. Requires that this quaternion is normalized.
-     * @return the rotation around the y-axis in degrees (between -180 and +180) */
-    public float getYaw() {
-        return getYawRad() * MathUtils.radiansToDegrees;
     }
 
     public final static float len2(final float x, final float y, final float z, final float w) {
@@ -774,7 +774,7 @@ public class Quaternion implements MemoryPool.Reset {
     }
 
     /** Get the angle in degrees of the rotation this quaternion represents. Use {@link #getAxisAngle(Vector3)} to get both the
-     * axis and the angle of this rotation. Use {@link #getAngleAround(Vector3)} to get the angle around a specific axis.
+     * axis and the angle of this rotation. Use {@link #getAngleAroundDeg(Vector3)} to get the angle around a specific axis.
      * @return the angle in degrees of the rotation */
     public float getAngle() {
         return getAngleRad() * MathUtils.radiansToDegrees;
@@ -838,15 +838,15 @@ public class Quaternion implements MemoryPool.Reset {
      * @param axisY the y component of the normalized axis for which to get the angle
      * @param axisZ the z component of the normalized axis for which to get the angle
      * @return the angle in degrees of the rotation around the specified axis */
-    public float getAngleAround(final float axisX, final float axisY, final float axisZ) {
+    public float getAngleAroundDeg(final float axisX, final float axisY, final float axisZ) {
         return getAngleAroundRad(axisX, axisY, axisZ) * MathUtils.radiansToDegrees;
     }
 
     /** Get the angle in degrees of the rotation around the specified axis. The axis must be normalized.
      * @param axis the normalized axis for which to get the angle
      * @return the angle in degrees of the rotation around the specified axis */
-    public float getAngleAround(final Vector3 axis) {
-        return getAngleAround(axis.x, axis.y, axis.z);
+    public float getAngleAroundDeg(final Vector3 axis) {
+        return getAngleAroundDeg(axis.x, axis.y, axis.z);
     }
 
     @Override

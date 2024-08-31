@@ -10,8 +10,8 @@ import java.util.Map;
 
 public final class TexturePack implements MemoryResource {
 
-    final Texture[]               textures;
-    final HashMap<String, Region> namedRegions;
+    public final Texture[]               textures;
+    public final HashMap<String, Region> namedRegions;
 
     @SuppressWarnings("unchecked")
     public TexturePack(Texture[] textures, String yaml) {
@@ -52,7 +52,7 @@ public final class TexturePack implements MemoryResource {
         // TODO: see how should be implemented.
     }
 
-    public class Region {
+    public static class Region {
 
         public final Texture texture;
 
