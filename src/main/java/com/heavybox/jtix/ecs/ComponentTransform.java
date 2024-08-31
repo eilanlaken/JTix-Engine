@@ -2,12 +2,16 @@ package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
 public class ComponentTransform extends Component {
 
-    public static final Type TYPE = Type.TRANSFORM;
+    public  static final Type       TYPE = Type.TRANSFORM;
+    private static final Vector3    position = new Vector3();
+    private static final Quaternion rotation = new Quaternion();
+    private static final Vector3    scale    = new Vector3();
 
     /* can be null */
     public ComponentTransform parent = null;
@@ -54,6 +58,21 @@ public class ComponentTransform extends Component {
     }
 
     private void updateValues() {
+        matrix.getTranslation(position);
+        matrix.getRotation(rotation);
+        matrix.getScale(scale);
+
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
+
+        this.angleXDeg = rotation.getPitchDeg();
+        this.angleYDeg = rotation.getYawDeg();
+        this.angleZDeg = rotation.getRollDeg();
+
+        this.scaleX = scale.x;
+        this.scaleY = scale.y;
+        this.scaleZ = scale.z;
 
         valuesUpdated = true;
     }
