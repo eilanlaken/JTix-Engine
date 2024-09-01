@@ -80,11 +80,12 @@ public class ComponentTransform extends Component {
     // TODO: optimize by combining the rotations.
     private void updateMatrix() {
         if (matrix == null) matrix = new Matrix4x4();
-        matrix.setToScaling(scaleX, scaleY, scaleZ);
-        matrix.rotateRad(Vector3.X_UNIT, angleXDeg * MathUtils.degreesToRadians);
-        matrix.rotateRad(Vector3.Y_UNIT, angleYDeg * MathUtils.degreesToRadians);
-        matrix.rotateRad(Vector3.Z_UNIT, angleZDeg * MathUtils.degreesToRadians);
-        matrix.translateXYZAxis(x, y, z);
+        rotation.setEulerAnglesDeg(angleXDeg, angleYDeg, angleZDeg);
+        matrix.setToTranslationRotationScale(
+                x, y, z,
+                rotation.x, rotation.y, rotation.z, rotation.w,
+                scaleX, scaleY, scaleZ
+        );
         matrixUpdated = true;
     }
 
