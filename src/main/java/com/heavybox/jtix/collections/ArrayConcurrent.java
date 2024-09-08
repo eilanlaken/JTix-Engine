@@ -341,7 +341,7 @@ public class ArrayConcurrent<T> implements Iterable<T> {
     public synchronized void shuffle() {
         T[] items = this.items;
         for (int i = size - 1; i >= 0; i--) {
-            int ii = MathUtils.random(i);
+            int ii = MathUtils.randomUniformInt(0, i);
             T temp = items[i];
             items[i] = items[ii];
             items[ii] = temp;
@@ -372,7 +372,7 @@ public class ArrayConcurrent<T> implements Iterable<T> {
     /** Returns a random item from the array, or null if the array is empty. */
     public synchronized T random() {
         if (size == 0) return null;
-        return items[MathUtils.random(0, size - 1)];
+        return items[MathUtils.randomUniformInt(0, size)];
     }
 
     /** Returns the items as an array. Note the array is typed, so the {@link #ArrayConcurrent()}} constructor must have been used.

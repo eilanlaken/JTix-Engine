@@ -113,8 +113,8 @@ public class Vector4 implements MemoryPool.Reset {
         // From the documentation of Random.nextGaussian(), but using float math.
         float v1, v2, s, multiplier;
         do {
-            v1 = (MathUtils.random() - 0.5f) * 2; // between -1.0 and 1.0
-            v2 = (MathUtils.random() - 0.5f) * 2; // between -1.0 and 1.0
+            v1 = MathUtils.randomUniformFloat(-1.0f, 1.0f); // between -1.0 and 1.0
+            v2 = MathUtils.randomUniformFloat(-1.0f, 1.0f); // between -1.0 and 1.0
             s = v1 * v1 + v2 * v2;
         } while (s >= 1 || s == 0);
         multiplier = (float)Math.sqrt(-2 * Math.log(s) / s);
@@ -122,8 +122,8 @@ public class Vector4 implements MemoryPool.Reset {
         y = v2 * multiplier;
         // Each run of the Marsaglia polar method produces two normal-distributed variates.
         do {
-            v1 = (MathUtils.random() - 0.5f) * 2; // between -1.0 and 1.0
-            v2 = (MathUtils.random() - 0.5f) * 2; // between -1.0 and 1.0
+            v1 = MathUtils.randomUniformFloat(-1.0f, 1.0f); // between -1.0 and 1.0
+            v2 = MathUtils.randomUniformFloat(-1.0f, 1.0f); // between -1.0 and 1.0
             s = v1 * v1 + v2 * v2;
         } while (s >= 1 || s == 0);
         multiplier = (float)Math.sqrt(-2 * Math.log(s) / s);

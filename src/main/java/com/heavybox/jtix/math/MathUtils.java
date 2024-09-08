@@ -25,28 +25,234 @@ public final class MathUtils {
     private static final float   DEGREES_FULL         = 360.0f;
     private static final float   RADIANS_TO_INDEX     = SIN_COUNT / RADIANS_FULL;
     private static final float   DEGREES_TO_INDEX     = SIN_COUNT / DEGREES_FULL;
-    private static final Random  random               = new Random();
-
-    private static final MemoryPool<ArrayFloat> floatArrayPool = new MemoryPool<>(ArrayFloat.class, 5);
-    private static final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 5);
+    private static final Random  random               = new Random(System.currentTimeMillis());
 
     /* polygon triangulation */
-    private static final Array<Vector2> polygonVertices = new Array<>(false, 10);
-    @Deprecated private static final ArrayInt       indexList       = new ArrayInt(); // TODO: use pool
-
+    private static final MemoryPool<ArrayFloat> floatArrayPool  = new MemoryPool<>(ArrayFloat.class, 5);
+    private static final MemoryPool<Vector2>    vectors2Pool    = new MemoryPool<>(Vector2.class, 5);
+    private static final Array<Vector2>         polygonVertices = new Array<>(false, 10);
+    private static final ArrayInt               indexList       = new ArrayInt();
 
     private MathUtils() {}
 
-    public static float random() {
-        return random.nextFloat();
+    /**
+     * Returns a random integer uniformly in [a, b).
+     *
+     * @param  a the left endpoint
+     * @param  b the right endpoint
+     * @return a random integer uniformly in [a, b)
+     * @throws MathException if {@code b - a >= Integer.MAX_VALUE}
+     */
+    public static int randomUniformInt(int a, int b) {
+        if (((long) b - a >= Integer.MAX_VALUE)) throw new MathException("invalid range: [" + a + ", " + b + ")");
+        if (b <= a) {
+            int c = a;
+            a = b;
+            b = c;
+        }
+        return a + random.nextInt(b - a);
     }
 
-    public static int random(final int range) {
-        return random.nextInt(range);
+    /**
+     * Returns a random real number uniformly in [a, b).
+     *
+     * @param  a the left endpoint
+     * @param  b the right endpoint
+     * @return a random real number uniformly in [a, b)
+     * @throws MathException unless {@code a < b}
+     */
+    public static float randomUniformFloat(float a, float b) {
+        if (!(a < b)) {
+            throw new MathException("invalid range: [" + a + ", " + b + ")");
+        }
+        return a + random.nextFloat() * (b-a);
     }
 
-    public static int random(int start, int end) {
-        return start + random.nextInt(end - start + 1);
+    /**
+     * Returns a random boolean from a Bernoulli distribution with success
+     * probability <em>p</em>.
+     *
+     * @param  p the probability of returning {@code true}
+     * @return {@code true} with probability {@code p} and
+     *         {@code false} with probability {@code 1 - p}
+     * @throws IllegalArgumentException unless {@code 0} &le; {@code p} &le; {@code 1.0}
+     */
+    public static boolean randomBernoulli(float p) {
+        if (!(p >= 0.0 && p <= 1.0))
+            throw new MathException("probability p must be between 0.0 and 1.0: " + p);
+        return random.nextFloat() < p;
+    }
+
+    /**
+     * Returns a random real number from a standard Gaussian distribution.
+     *
+     * @return a random real number from a standard Gaussian distribution
+     *         (mean 0 and standard deviation 1).
+     */
+    public static float randomGaussian() {
+        // use the polar form of the Box-Muller transform
+        float r, x, y;
+        do {
+            x = randomUniformFloat(-1.0f, 1.0f);
+            y = randomUniformFloat(-1.0f, 1.0f);
+            r = x * x + y * y;
+        } while (r >= 1 || r == 0);
+        return x * (float) Math.sqrt(-2 * Math.log(r) / r);
+    }
+
+    /**
+     * Returns a random real number from a Gaussian distribution with mean &mu;
+     * and standard deviation &sigma;.
+     *
+     * @param  mu the mean
+     * @param  sigma the standard deviation
+     * @return a real number distributed according to the Gaussian distribution
+     *         with mean {@code mu} and standard deviation {@code sigma}
+     */
+    public static float randomGaussian(float mu, float sigma) {
+        return mu + sigma * randomGaussian();
+    }
+
+    /**
+     * Returns a random integer from a geometric distribution with success
+     * probability <em>p</em>.
+     * The integer represents the number of independent trials
+     * before the first success.
+     *
+     * @param  p the parameter of the geometric distribution
+     * @return a random integer from a geometric distribution with success
+     *         probability {@code p}; or {@code Integer.MAX_VALUE} if
+     *         {@code p} is (nearly) equal to {@code 1.0}.
+     * @throws MathException unless {@code p >= 0.0} and {@code p <= 1.0}
+     */
+    public static int randomGeometric(double p) {
+        if (!(p >= 0)) throw new MathException("probability p must be greater than 0: " + p);
+        if (!(p <= 1.0)) throw new MathException("probability p must not be larger than 1: " + p);
+
+        return (int) Math.ceil(Math.log(random.nextFloat()) / Math.log(1.0 - p));
+    }
+
+    /**
+     * Returns a random integer from a Poisson distribution with mean &lambda;.
+     *
+     * @param  lambda the mean of the Poisson distribution
+     * @return a random integer from a Poisson distribution with mean {@code lambda}
+     * @throws MathException unless {@code lambda > 0.0} and not infinite
+     */
+    public static int randomPoisson(float lambda) {
+        if (!(lambda > 0.0)) throw new MathException("lambda must be positive: " + lambda);
+        if (Double.isInfinite(lambda)) throw new MathException("lambda must not be infinite: " + lambda);
+
+        int k = 0;
+        double p = 1.0;
+        double expLambda = Math.exp(-lambda);
+        do {
+            k++;
+            p *= random.nextFloat();
+        } while (p >= expLambda);
+        return k-1;
+    }
+
+    /**
+     * Returns a random real number from a Pareto distribution with
+     * shape parameter &alpha;.
+     *
+     * @param  alpha shape parameter
+     * @return a random real number from a Pareto distribution with shape
+     *         parameter {@code alpha}
+     * @throws MathException unless {@code alpha > 0.0}
+     */
+    public static float randomPareto(float alpha) {
+        if (!(alpha > 0.0)) throw new MathException("alpha must be positive: " + alpha);
+        return (float) Math.pow(1 - random.nextFloat(), -1.0 / alpha) - 1.0f;
+    }
+
+    /**
+     * Returns a random real number from the Cauchy distribution.
+     *
+     * @return a random real number from the Cauchy distribution.
+     */
+    public static float randomCauchy() {
+        return (float) Math.tan(Math.PI * (random.nextFloat() - 0.5f));
+    }
+
+    /**
+     * Returns a random integer from the specified discrete distribution.
+     *
+     * @param  probabilities the probability of occurrence of each integer
+     * @return a random integer from a discrete distribution:
+     *         {@code i} with probability {@code probabilities[i]}
+     * @throws MathException if {@code probabilities} is {@code null}
+     * @throws MathException if sum of array entries is not (very nearly) equal to {@code 1.0}
+     * @throws MathException unless {@code probabilities[i] >= 0.0} for each index {@code i}
+     */
+    public static int randomDiscrete(float[] probabilities) {
+        if (probabilities == null) throw new MathException("argument array must not be null");
+        float sum = 0.0f;
+        for (int i = 0; i < probabilities.length; i++) {
+            if (!(probabilities[i] >= 0.0)) throw new MathException("array entry " + i + " must be non-negative: " + probabilities[i]);
+            sum += probabilities[i];
+        }
+        if (sum > 1.0 + FLOAT_ROUNDING_ERROR || sum < 1.0 - FLOAT_ROUNDING_ERROR) throw new IllegalArgumentException("sum of array entries does not approximately equal 1.0: " + sum);
+
+        // the for loop may not return a value when both r is (nearly) 1.0 and when the
+        // cumulative sum is less than 1.0 (as a result of floating-point roundoff error)
+        while (true) {
+            double r = random.nextFloat();
+            sum = 0.0f;
+            for (int i = 0; i < probabilities.length; i++) {
+                sum = sum + probabilities[i];
+                if (sum > r) return i;
+            }
+        }
+    }
+
+    /**
+     * Returns a random integer from the specified discrete distribution.
+     *
+     * @param  frequencies the frequency of occurrence of each integer
+     * @return a random integer from a discrete distribution:
+     *         {@code i} with probability proportional to {@code frequencies[i]}
+     * @throws MathException if {@code frequencies} is {@code null}
+     * @throws MathException if all array entries are {@code 0}
+     * @throws MathException if {@code frequencies[i]} is negative for any index {@code i}
+     * @throws MathException if sum of frequencies exceeds {@code Integer.MAX_VALUE} (2<sup>31</sup> - 1)
+     */
+    public static int randomDiscrete(int[] frequencies) {
+        if (frequencies == null) throw new MathException("argument array must not be null");
+        long sum = 0;
+        for (int i = 0; i < frequencies.length; i++) {
+            if (frequencies[i] < 0) throw new MathException("array entry " + i + " must be non-negative: " + frequencies[i]);
+            sum += frequencies[i];
+        }
+        if (sum == 0) throw new MathException("at least one array entry must be positive");
+        if (sum >= Integer.MAX_VALUE) throw new MathException("sum of frequencies overflows an int");
+
+        // pick index i with probability proportional to frequency
+        double r = random.nextInt((int) sum);
+        sum = 0;
+        for (int i = 0; i < frequencies.length; i++) {
+            sum += frequencies[i];
+            if (sum > r) return i;
+        }
+
+        // can't reach here
+        assert false;
+        return -1;
+    }
+
+    /**
+     * Returns a random real number from an exponential distribution
+     * with rate &lambda;.
+     *
+     * @param  lambda the rate of the exponential distribution
+     * @return a random real number from an exponential distribution with
+     *         rate {@code lambda}
+     * @throws MathException unless {@code lambda > 0.0}
+     */
+    public static double exponential(float lambda) {
+        if (!(lambda > 0.0)) throw new MathException("lambda must be positive: " + lambda);
+        return -Math.log(1 - random.nextFloat()) / lambda;
     }
 
     public static int clampInt(int value, int min, int max) {

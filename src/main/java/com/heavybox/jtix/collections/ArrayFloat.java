@@ -343,7 +343,7 @@ public class ArrayFloat implements MemoryPool.Reset {
     public void shuffle() {
         float[] items = this.items;
         for (int i = size - 1; i >= 0; i--) {
-            int ii = MathUtils.random(i);
+            int ii = MathUtils.randomUniformInt(0, i);
             float temp = items[i];
             items[i] = items[ii];
             items[ii] = temp;
@@ -359,7 +359,7 @@ public class ArrayFloat implements MemoryPool.Reset {
     /** Returns a random item from the array, or zero if the array is empty. */
     public float random() {
         if (size == 0) return 0;
-        return items[MathUtils.random(0, size - 1)];
+        return items[MathUtils.randomUniformInt(0, size)];
     }
 
     public float[] toArray() {

@@ -336,7 +336,7 @@ public class ArrayFloatConcurrent {
     public synchronized void shuffle() {
         float[] items = this.items;
         for (int i = size - 1; i >= 0; i--) {
-            int ii = MathUtils.random(i);
+            int ii = MathUtils.randomUniformInt(0, i);
             float temp = items[i];
             items[i] = items[ii];
             items[ii] = temp;
@@ -352,7 +352,7 @@ public class ArrayFloatConcurrent {
     /** Returns a random item from the array, or zero if the array is empty. */
     public synchronized float random() {
         if (size == 0) return 0;
-        return items[MathUtils.random(0, size - 1)];
+        return items[MathUtils.randomUniformInt(0, size)];
     }
 
     public synchronized float[] toArray() {

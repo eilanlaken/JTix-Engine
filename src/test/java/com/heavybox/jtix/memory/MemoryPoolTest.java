@@ -54,7 +54,7 @@ class MemoryPoolTest {
         Array<ClassA> array = new Array<>(true, 5);
         for (int i = 0; i < 5; i++) {
             ClassA a = aMemoryPool.allocate();
-            a.x = MathUtils.random(100);
+            a.x = MathUtils.randomUniformInt(0,100);
             array.add(a);
         }
         aMemoryPool.freeAll(array);

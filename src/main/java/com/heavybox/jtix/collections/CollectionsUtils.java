@@ -72,7 +72,7 @@ public final class CollectionsUtils {
 
     public static void shuffle(int[] array) {
         for (int i = array.length - 1; i > 0; i--) {
-            int ii = MathUtils.random(i);
+            int ii = MathUtils.randomUniformInt(0, i);
             int temp = array[i];
             array[i] = array[ii];
             array[ii] = temp;
