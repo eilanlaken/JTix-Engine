@@ -1734,6 +1734,8 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += count;
     }
 
+    /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
+
     private void flush() {
         if (verticesBuffer.position() == 0) return;
 
