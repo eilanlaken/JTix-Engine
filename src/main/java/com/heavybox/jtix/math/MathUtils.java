@@ -1106,4 +1106,8 @@ public final class MathUtils {
         vectors2Pool.free(va_to_vc);
     }
 
+    public static void polygonTriangulate(@NotNull ArrayFloat polygon, @NotNull ArrayFloat outVertices, @NotNull ArrayInt outIndices) {
+        polygonTriangulate(polygon.items, outVertices, outIndices);
+    }
+
 }

@@ -109,11 +109,29 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
             System.out.println(t.scaleX + ", " + t.scaleY + ", " + t.scaleZ);
         }
 
+        float[] mesh = {
+                -200,300,Color.RED.toFloatBits(),0.5f,0.5f,
+                -200,-300,Color.YELLOW.toFloatBits(),0.5f,0.5f,
+                200,-300,Color.GREEN.toFloatBits(),0.5f,0.5f,
+
+                200,-300,Color.BROWN.toFloatBits(),0.5f,0.5f,
+                200,300,Color.MAGENTA.toFloatBits(),0.5f,0.5f,
+                -200,300,Color.MAROON.toFloatBits(),0.5f,0.5f,
+        };
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
         renderer2D.begin(null);
         renderer2D.setTint(null);
         renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+
+        renderer2D.setTint(null);
+        renderer2D.drawTextureRegion(region_blue, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,2*t.scaleX,2*t.scaleY);
+        renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
+        renderer2D.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
+
+        renderer2D.drawMeshFilled(mesh, null, 0,0,0,0,0,1,1);
+
         renderer2D.end();
 
 
