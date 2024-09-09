@@ -132,6 +132,9 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
 
         renderer2D.drawMeshFilled(mesh, null, 0,0,0,0,0,1,1);
 
+        renderer2D.drawTexture(yellowSquare, 20, 10, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+
+
         renderer2D.end();
 
 
