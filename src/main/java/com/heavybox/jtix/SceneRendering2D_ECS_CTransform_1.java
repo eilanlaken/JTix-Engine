@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.ecs.ComponentTransform_$;
 import com.heavybox.jtix.graphics.*;
@@ -12,7 +13,13 @@ import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.stb.STBTTFontinfo;
+import org.lwjgl.stb.STBTruetype;
+import org.lwjgl.system.MemoryStack;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +52,37 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
         region_red = pack.getRegion("assets/textures/red30x30.png");
         region_green = pack.getRegion("assets/textures/green25x25.png");
         region_blue = pack.getRegion("assets/textures/blue100x100.png");
+
+
+        ByteBuffer ttf;
+        try {
+            ttf = AssetUtils.ioResourceToByteBuffer("assets/fonts/OpenSans-Italic.ttf", 512 * 1024);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        STBTTFontinfo info = STBTTFontinfo.create();
+        if (!STBTruetype.stbtt_InitFont(info, ttf)) {
+            throw new IllegalStateException("Failed to initialize font information.");
+        }
+
+        int ascent;
+        int descent;
+        int lineGap;
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer pAscent  = stack.mallocInt(1);
+            IntBuffer pDescent = stack.mallocInt(1);
+            IntBuffer pLineGap = stack.mallocInt(1);
+
+            STBTruetype.stbtt_GetFontVMetrics(info, pAscent, pDescent, pLineGap);
+
+            ascent = pAscent.get(0);
+            descent = pDescent.get(0);
+            lineGap = pLineGap.get(0);
+        }
+
+        // https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/stb/Truetype.java
+        // init
 
     }
 

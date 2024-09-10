@@ -4,8 +4,10 @@ import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.TextureGenerator;
+import org.lwjgl.stb.STBTTFontinfo;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class Main {
 
@@ -20,7 +22,7 @@ public class Main {
 
 
         try {
-            TextureGenerator.generateTexturePack("assets/atlases", "spots", 2,2, TextureGenerator.TexturePackSize.SMALL_512,"assets/textures/red30x30.png", "assets/textures/green25x25.png", "assets/textures/blue100x100.png");
+            //TextureGenerator.generateTexturePack("assets/atlases", "spots", 2,2, TextureGenerator.TexturePackSize.SMALL_512,"assets/textures/red30x30.png", "assets/textures/green25x25.png", "assets/textures/blue100x100.png");
         } catch (Exception e) {
             return;
         }

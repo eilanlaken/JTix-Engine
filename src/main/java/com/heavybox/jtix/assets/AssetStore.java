@@ -3,10 +3,7 @@ package com.heavybox.jtix.assets;
 import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Queue;
-import com.heavybox.jtix.graphics.Model;
-import com.heavybox.jtix.graphics.ShaderProgram;
-import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.graphics.TexturePack;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.memory.MemoryResource;
 
 import java.lang.reflect.Constructor;
@@ -137,6 +134,7 @@ public final class AssetStore {
     private static HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> getLoadersMap() {
         HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> loaders = new HashMap<>();
         loaders.put(Texture.class, AssetLoaderTexture.class);
+        loaders.put(Font.class, AssetLoaderFont.class);
         loaders.put(Model.class, AssetLoaderModel.class);
         loaders.put(TexturePack.class, AssetLoaderTexturePack.class);
         return loaders;

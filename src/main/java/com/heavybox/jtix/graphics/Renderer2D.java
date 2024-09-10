@@ -234,7 +234,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectorsPool.free(arm3);
     }
 
-    // TODO: fix uv mapping.
+    // TODO: FIXME. Odd bug. only works on top of other render.
     public void drawTexture(Texture texture, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
@@ -520,7 +520,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void drawCircleThin(float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + refinement) * VERTEX_SIZE > verticesBuffer.capacity()) flush(); // TODO: use floatBuffer.capacity()
+        if ((vertexIndex + refinement) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + refinement * 2 + 2 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
@@ -559,7 +559,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void drawCircleFilled(float r, int refinement, float angle, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush(); // TODO: use floatBuffer.capacity()
+        if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + refinement * 3> indicesBuffer.capacity()) flush();
 
         refinement = Math.max(3, refinement);
@@ -1876,6 +1876,13 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         vertexIndex += count;
     }
+
+    /* Rendering 2D primitives - text */
+
+    // TODO: implement text rendering
+    // https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/stb/Truetype.java
+
+
 
     /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
 

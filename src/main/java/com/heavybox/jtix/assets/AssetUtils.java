@@ -171,7 +171,7 @@ public final class AssetUtils {
     }
 
     /** Returns the file extension (without the dot) or an empty string if the file name doesn't contain a dot. */
-    public static String extension(final String name) {
+    public static String getFileExtension(final String name) {
         int dotIndex = name.lastIndexOf('.');
         if (dotIndex == -1) return "";
         return name.substring(dotIndex + 1);
@@ -182,6 +182,48 @@ public final class AssetUtils {
         int dotIndex = name.lastIndexOf('.');
         if (dotIndex == -1) return name;
         return name.substring(0, dotIndex);
+    }
+
+    /**
+     * Reads the specified resource and returns the raw data as a ByteBuffer.
+     *
+     * @param resource   the resource to read
+     * @param bufferSize the initial buffer size
+     *
+     * @return the resource data
+     *
+     * @throws IOException if an IO error occurs
+     */
+    public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+        ByteBuffer buffer;
+
+        Path path = Paths.get(resource);
+        if (Files.isReadable(path)) {
+            try (SeekableByteChannel fc = Files.newByteChannel(path)) {
+                buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
+                while (fc.read(buffer) != -1) ;
+            }
+        } else {
+            try (
+                    InputStream source = AssetUtils.class.getClassLoader().getResourceAsStream(resource);
+                    ReadableByteChannel rbc = Channels.newChannel(source)
+            ) {
+                buffer = BufferUtils.createByteBuffer(bufferSize);
+
+                while (true) {
+                    int bytes = rbc.read(buffer);
+                    if (bytes == -1) {
+                        break;
+                    }
+                    if (buffer.remaining() == 0) {
+                        buffer = MemoryUtils.resizeBuffer(buffer, buffer.capacity() * 3 / 2); // 50%
+                    }
+                }
+            }
+        }
+
+        buffer.flip();
+        return MemoryUtil.memSlice(buffer);
     }
 
     /**
