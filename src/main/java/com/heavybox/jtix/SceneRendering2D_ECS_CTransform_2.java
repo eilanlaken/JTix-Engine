@@ -18,6 +18,7 @@ import org.lwjgl.stb.STBTTFontinfo;
 import org.lwjgl.stb.STBTruetype;
 import org.lwjgl.system.MemoryStack;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -74,20 +75,25 @@ public class SceneRendering2D_ECS_CTransform_2 extends ApplicationScreen {
         float contentScaleX = GraphicsUtils.getContentScaleX();
         float contentScaleY = GraphicsUtils.getContentScaleY();
 
-        int BITMAP_W = Math.round(512 * contentScaleX);
-        int BITMAP_H = Math.round(512 * contentScaleY);
+        int BITMAP_W = Math.round(1024 * contentScaleX);
+        int BITMAP_H = Math.round(1024 * contentScaleY);
 
         int fontHeight = 24;
 
         Texture charactersTexture;
         STBTTBakedChar.Buffer cdata = STBTTBakedChar.malloc(96);
-        ByteBuffer bitmap = BufferUtils.createByteBuffer(BITMAP_W * BITMAP_H);
-        STBTruetype.stbtt_BakeFontBitmap(ttf,fontHeight * contentScaleY, bitmap, BITMAP_W, BITMAP_H, 32, cdata);
-        System.out.println("bits: " + bitmap);
-        charactersTexture = TextureBuilder.buildTextureFromByteBuffer(BITMAP_W, BITMAP_H, bitmap, null, null, null, null);
-        System.out.println("kits: " + bitmap);
+        ByteBuffer bitmap = BufferUtils.createByteBuffer(BITMAP_W * BITMAP_H * 4);
 
+        int result = STBTruetype.stbtt_BakeFontBitmap(ttf, fontHeight * contentScaleY, bitmap, BITMAP_W, BITMAP_H, 32, cdata);
+        if (result <= 0) {
+            throw new RuntimeException("Failed to bake font bitmap");
+        }
 
+        try {
+            AssetUtils.saveImage("assets/fonts", "example", bitmap, BITMAP_W, BITMAP_H);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
     }
 

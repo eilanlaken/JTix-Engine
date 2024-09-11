@@ -54,56 +54,6 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
         region_red = pack.getRegion("assets/textures/red30x30.png");
         region_green = pack.getRegion("assets/textures/green25x25.png");
         region_blue = pack.getRegion("assets/textures/blue100x100.png");
-
-
-        ByteBuffer ttf;
-        try {
-            ttf = AssetUtils.ioResourceToByteBuffer("assets/fonts/OpenSans-Italic.ttf", 512 * 1024);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        STBTTFontinfo info = STBTTFontinfo.create();
-        if (!STBTruetype.stbtt_InitFont(info, ttf)) {
-            throw new IllegalStateException("Failed to initialize font information.");
-        }
-
-        int ascent;
-        int descent;
-        int lineGap;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer pAscent  = stack.mallocInt(1);
-            IntBuffer pDescent = stack.mallocInt(1);
-            IntBuffer pLineGap = stack.mallocInt(1);
-
-            STBTruetype.stbtt_GetFontVMetrics(info, pAscent, pDescent, pLineGap);
-
-            ascent = pAscent.get(0);
-            descent = pDescent.get(0);
-            lineGap = pLineGap.get(0);
-        }
-
-        // https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/stb/Truetype.java
-        // init
-
-        float contentScaleX = GraphicsUtils.getContentScaleX();
-        float contentScaleY = GraphicsUtils.getContentScaleY();
-
-        int BITMAP_W = Math.round(512 * contentScaleX);
-        int BITMAP_H = Math.round(512 * contentScaleY);
-
-        int fontHeight = 24;
-
-        Texture charactersTexture;
-        STBTTBakedChar.Buffer cdata = STBTTBakedChar.malloc(96);
-        ByteBuffer bitmap = BufferUtils.createByteBuffer(BITMAP_W * BITMAP_H);
-        STBTruetype.stbtt_BakeFontBitmap(ttf,fontHeight * contentScaleY, bitmap, BITMAP_W, BITMAP_H, 32, cdata);
-        System.out.println("bits: " + bitmap);
-        charactersTexture = TextureBuilder.buildTextureFromByteBuffer(BITMAP_W, BITMAP_H, bitmap, null, null, null, null);
-        System.out.println("kits: " + bitmap);
-
-
-
     }
 
     @Override

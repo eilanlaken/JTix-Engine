@@ -170,6 +170,19 @@ public final class AssetUtils {
         ImageIO.write(image, "png", file);
     }
 
+    public static void saveImage(final String directory, final String filename, ByteBuffer buffer, int width, int height) throws IOException {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        int[] pixels = new int[width * height];
+        for (int i = 0; i < width * height; i++) {
+            int r = buffer.get() & 0xFF;
+            int g = buffer.get() & 0xFF;
+            int b = buffer.get() & 0xFF;
+            pixels[i] = (r << 16) | (g << 8) | b;
+        }
+        image.setRGB(0, 0, width, height, pixels, 0, width);
+        saveImage(directory, filename, image);
+    }
+
     /** Returns the file extension (without the dot) or an empty string if the file name doesn't contain a dot. */
     public static String getFileExtension(final String name) {
         int dotIndex = name.lastIndexOf('.');

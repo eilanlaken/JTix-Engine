@@ -55,14 +55,13 @@ public final class TextureBuilder {
             IntBuffer heightBuffer = stack.mallocInt(1);
             IntBuffer channelsBuffer = stack.mallocInt(1);
             final ByteBuffer buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
-            if (buffer == null) throw new GraphicsException("Failed to load a texture file. Check that the path is correct: " + path
-                    + System.lineSeparator() + "STBImage error: "
-                    + STBImage.stbi_failure_reason());
+            if (buffer == null) throw new GraphicsException("Failed to load a texture file. Check that the path is correct: " + path + System.lineSeparator() + "STBImage error: " + STBImage.stbi_failure_reason());
             final int width = widthBuffer.get();
             final int height = heightBuffer.get();
-            if (width > maxTextureSize || height > maxTextureSize)
-                throw new GraphicsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
-            return buildTextureFromByteBuffer(width, height, buffer, null, null, null, null);
+            if (width > maxTextureSize || height > maxTextureSize) throw new GraphicsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+            Texture texture = buildTextureFromByteBuffer(width, height, buffer, null, null, null, null);
+            STBImage.stbi_image_free(buffer);
+            return texture;
         }
     }
 
@@ -97,7 +96,9 @@ public final class TextureBuilder {
             throw new RuntimeException("Failed to load image: " + STBImage.stbi_failure_reason());
         }
 
-        return buildTextureFromByteBuffer(width[0], height[0], buffer, null, null, null, null);
+        Texture texture = buildTextureFromByteBuffer(width[0], height[0], buffer, null, null, null, null);
+        STBImage.stbi_image_free(buffer);
+        return texture;
     }
 
     public static Texture buildTextureFromByteBuffer(int width, int height, ByteBuffer buffer, Texture.Filter magFilter, Texture.Filter minFilter, Texture.Wrap uWrap, Texture.Wrap vWrap) {
@@ -106,24 +107,20 @@ public final class TextureBuilder {
         if (uWrap == null) uWrap = Texture.Wrap.CLAMP_TO_EDGE;
         if (vWrap == null) vWrap = Texture.Wrap.CLAMP_TO_EDGE;
 
-        System.out.println("1");
         int glHandle = GL11.glGenTextures();
-        System.out.println("2");
 
         Texture texture = new Texture(glHandle, width, height, magFilter, minFilter, uWrap, vWrap);
         TextureBinder.bind(texture);
-        System.out.println("3");
 
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        System.out.println("4");
 
         // TODO: here we need to see if we want to: generate mipmaps, use anisotropic filtering, what level of anisotropy etc
         // TODO: For a raw Texture with no TextureMap, use defaults.
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
         // TODO: we need to see if the anisotropic filtering extension is available. If yes, create that instead of mipmaps.
-        STBImage.stbi_image_free(buffer);
-        System.out.println("5");
+        //STBImage.stbi_image_free(buffer);
 
         return texture;
     }
