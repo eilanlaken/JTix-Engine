@@ -4,7 +4,6 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.ecs.ComponentTransform;
-import com.heavybox.jtix.ecs.ComponentTransform_$;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -25,22 +24,14 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
+public class SceneRendering2D_ECS_CTransform_2 extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private Camera camera;
 
-    private TexturePack pack;
-
-    TexturePack.Region region_red;
-    TexturePack.Region region_green;
-    TexturePack.Region region_blue;
-
-    Texture yellowSquare;
-
     ComponentTransform t = new ComponentTransform();
 
-    public SceneRendering2D_ECS_CTransform_1() {
+    public SceneRendering2D_ECS_CTransform_2() {
         renderer2D = new Renderer2D();
 
     }
@@ -49,12 +40,6 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
     public void show() {
         camera = new Camera(640f/32,480f/32, 1);
         camera.update();
-        yellowSquare = AssetStore.get("assets/textures/yellowSquare.png");
-        pack = AssetStore.get("assets/atlases/spots.yml");
-        region_red = pack.getRegion("assets/textures/red30x30.png");
-        region_green = pack.getRegion("assets/textures/green25x25.png");
-        region_blue = pack.getRegion("assets/textures/blue100x100.png");
-
 
         ByteBuffer ttf;
         try {
@@ -148,23 +133,12 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
 
         if (Keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
             Matrix4x4 m = t.matrix();
-            System.out.println("========================");
-            System.out.println("matrix:");
             Vector3 position = new Vector3();
             m.getTranslation(position);
             Quaternion rotation = new Quaternion();
             m.getRotation(rotation);
             Vector3 scale = new Vector3();
             m.getScale(scale);
-            System.out.println("from matrix:");
-            System.out.println(position);
-            System.out.println("rotation: x: " + rotation.getPitchDeg() + ", y: " + rotation.getYawDeg() + ", z: " + rotation.getRollDeg());
-            System.out.println(scale);
-
-            System.out.println("from vals:");
-            System.out.println(t.x + ", " + t.y + ", " + t.z);
-            System.out.println(t.angleXDeg + ", " + t.angleYDeg + ", " + t.angleZDeg);
-            System.out.println(t.scaleX + ", " + t.scaleY + ", " + t.scaleZ);
         }
 
         float[] mesh = {
@@ -181,16 +155,11 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
         GL11.glClearColor(0f,0f,0,1);
         renderer2D.begin(null);
         renderer2D.setTint(null);
-        renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
         renderer2D.setTint(null);
-        renderer2D.drawTextureRegion(region_blue, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,2*t.scaleX,2*t.scaleY);
-        renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
-        renderer2D.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
 
         renderer2D.drawMeshFilled(mesh, null, 0,0,0,0,0,1,1);
 
-        renderer2D.drawTexture(yellowSquare, 20, 10, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
         renderer2D.drawRectangleFilled(200, 300, 30, 10, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
 
@@ -219,8 +188,7 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
     @Override
     public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
-        requiredAssets.put("assets/textures/yellowSquare.png", Texture.class);
-        requiredAssets.put("assets/atlases/spots.yml", TexturePack.class);
+
         return requiredAssets;
     }
 

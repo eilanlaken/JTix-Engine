@@ -5,6 +5,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -30,12 +31,25 @@ public final class GraphicsUtils {
     private static int maxTextureSize;
     private static float maxAnisotropicFilterLevel = 0;
 
+    private static float contentScaleX;
+    private static float contentScaleY;
+
     private GraphicsUtils() {}
 
     public static void init(final ApplicationWindow window) {
         if (initialized) throw new IllegalStateException(GraphicsUtils.class.getSimpleName() + " instance already initialized.");
         GraphicsUtils.window = window;
         maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
+
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        try (MemoryStack s = MemoryStack.stackPush()) {
+            FloatBuffer px = s.mallocFloat(1);
+            FloatBuffer py = s.mallocFloat(1);
+            GLFW.glfwGetMonitorContentScale(monitor, px, py);
+            contentScaleX = px.get(0);
+            contentScaleY = py.get(0);
+        }
+
         initialized = true;
     }
 
@@ -56,6 +70,14 @@ public final class GraphicsUtils {
         }
         frames++;
         frameId++;
+    }
+
+    public static float getContentScaleX() {
+        return contentScaleX;
+    }
+
+    public static float getContentScaleY() {
+        return contentScaleY;
     }
 
     public static int getFps() {
@@ -136,6 +158,7 @@ public final class GraphicsUtils {
         setTargetFps(refreshRate);
         window.setVSync(true);
     }
+
 
     public static int getMaxFragmentShaderTextureUnits() {
         IntBuffer intBuffer = BufferUtils.createIntBuffer(1);

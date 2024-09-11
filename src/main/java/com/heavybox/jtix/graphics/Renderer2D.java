@@ -234,7 +234,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectorsPool.free(arm3);
     }
 
-    // TODO: FIXME. Odd bug. only works on top of other render.
+    // FIXME bug when rotating about the xy axis
     public void drawTexture(Texture texture, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
@@ -1989,7 +1989,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     private static Texture createWhiteSinglePixelTexture() {
         try {
-            return TextureGenerator.generateTextureFromClassPath("graphics-2d-single-white-pixel.png");
+            return TextureBuilder.buildTextureFromClassPath("graphics-2d-single-white-pixel.png");
         } catch (Exception e) {
             System.err.println("Could not create single-white-pixel Texture from resource. Creating manually.");
 

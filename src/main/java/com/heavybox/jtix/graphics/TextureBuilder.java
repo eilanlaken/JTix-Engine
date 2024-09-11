@@ -24,14 +24,14 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
 // TODO: implement
-public final class TextureGenerator {
+public final class TextureBuilder {
 
     public  static final int     maxTextureSize  = GraphicsUtils.getMaxTextureSize();
     private static       boolean initialized     = false;
     private static final int[]   PERLIN_PERM_256 = new int[256];
     private static final int[]   PERLIN_PERM_512 = new int[512];
 
-    private TextureGenerator() {}
+    private TextureBuilder() {}
 
     private static void init() {
         if (initialized) return;
@@ -49,7 +49,7 @@ public final class TextureGenerator {
     }
 
     /* build from path */
-    public static Texture generateTextureFromFilePath(final String path) {
+    public static Texture buildTextureFromFilePath(final String path) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
             IntBuffer heightBuffer = stack.mallocInt(1);
@@ -62,15 +62,15 @@ public final class TextureGenerator {
             final int height = heightBuffer.get();
             if (width > maxTextureSize || height > maxTextureSize)
                 throw new GraphicsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
-            return generateTexture(width, height, buffer, null, null, null, null);
+            return buildTextureFromByteBuffer(width, height, buffer, null, null, null, null);
         }
     }
 
-    public static Texture generateTextureFromClassPath(final String name) {
+    public static Texture buildTextureFromClassPath(final String name) {
         ByteBuffer imageBuffer;
 
         // Load the image resource into a ByteBuffer
-        try (InputStream is = TextureGenerator.class.getClassLoader().getResourceAsStream(name);
+        try (InputStream is = TextureBuilder.class.getClassLoader().getResourceAsStream(name);
              ReadableByteChannel rbc = Channels.newChannel(is)) {
             imageBuffer = BufferUtils.createByteBuffer(1024);
 
@@ -97,35 +97,40 @@ public final class TextureGenerator {
             throw new RuntimeException("Failed to load image: " + STBImage.stbi_failure_reason());
         }
 
-        return generateTexture(width[0], height[0], buffer, null, null, null, null);
+        return buildTextureFromByteBuffer(width[0], height[0], buffer, null, null, null, null);
     }
 
-    private static Texture generateTexture(int width, int height, ByteBuffer buffer, Texture.Filter magFilter, Texture.Filter minFilter, Texture.Wrap uWrap, Texture.Wrap vWrap) {
+    public static Texture buildTextureFromByteBuffer(int width, int height, ByteBuffer buffer, Texture.Filter magFilter, Texture.Filter minFilter, Texture.Wrap uWrap, Texture.Wrap vWrap) {
         if (magFilter == null) magFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         if (minFilter == null) minFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         if (uWrap == null) uWrap = Texture.Wrap.CLAMP_TO_EDGE;
         if (vWrap == null) vWrap = Texture.Wrap.CLAMP_TO_EDGE;
 
+        System.out.println("1");
         int glHandle = GL11.glGenTextures();
-        Texture texture = new Texture(glHandle,
-                width, height,
-                magFilter, minFilter,
-                uWrap, vWrap
-        );
+        System.out.println("2");
+
+        Texture texture = new Texture(glHandle, width, height, magFilter, minFilter, uWrap, vWrap);
         TextureBinder.bind(texture);
+        System.out.println("3");
+
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        System.out.println("4");
+
         // TODO: here we need to see if we want to: generate mipmaps, use anisotropic filtering, what level of anisotropy etc
         // TODO: For a raw Texture with no TextureMap, use defaults.
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         // TODO: we need to see if the anisotropic filtering extension is available. If yes, create that instead of mipmaps.
         STBImage.stbi_image_free(buffer);
+        System.out.println("5");
+
         return texture;
     }
 
     /* Noise */
 
-    public static void generateTextureNoisePerlin(int width, int height, final String directory, final String fileName, boolean overrideExistingFile) throws IOException {
+    public static void buildTextureNoisePerlin(int width, int height, final String directory, final String fileName, boolean overrideExistingFile) throws IOException {
         init();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -143,30 +148,30 @@ public final class TextureGenerator {
         AssetUtils.saveImage(directory, fileName, image);
     }
 
-    public static void generateTextureNoiseSimplex() {}
-    public static void generateTextureNoiseWhite() {}
-    public static void generateTextureNoiseValue() {}
-    public static void generateTextureNoiseVornoi() {}
+    public static void buildTextureNoiseSimplex() {}
+    public static void buildTextureNoiseWhite() {}
+    public static void buildTextureNoiseValue() {}
+    public static void buildTextureNoiseVornoi() {}
 
     /* Patterns */
-    public static void generateTextureCheckers() {}
-    public static void generateTextureGradient() {}
-    public static void generateTextureWave() {}
+    public static void buildTextureCheckers() {}
+    public static void buildTextureGradient() {}
+    public static void buildTextureWave() {}
 
     /* Maps */
     // https://codepen.io/BJS3D/pen/YzjXZgV?editors=1010
-    public static void generateTextureMapNormal() {}
-    public static void generateTextureMapRoughness() {}
-    public static void generateTextureMapMetallic() {}
+    public static void buildTextureMapNormal() {}
+    public static void buildTextureMapRoughness() {}
+    public static void buildTextureMapMetallic() {}
 
     /* Texture Packs */
-    public static void generateTexturePack(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
+    public static void buildTexturePack(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
         if (directory == null) throw new IllegalArgumentException("Must provide non-null directory name.");
         if (!AssetUtils.directoryExists(directory)) throw new IllegalArgumentException("The provided path: " + directory + " does not exist, or is not a directory");
         // TODO: ...
     }
 
-    public static void generateTexturePack(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, final String ...texturePaths) throws IOException {
+    public static void buildTexturePack(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, final String ...texturePaths) throws IOException {
         /* check if TexturePack was already generated and updated using the same options and input textures. */
         if (alreadyPacked(outputDirectory, outputName, extrude, padding, maxTexturesSize, texturePaths)) return;
 

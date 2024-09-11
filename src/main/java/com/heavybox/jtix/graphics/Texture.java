@@ -42,17 +42,15 @@ public class Texture implements MemoryResource {
     protected final void setSlot(final int slot) { this.slot = slot; }
     protected final int  getSlot() { return slot; }
 
-    private void setBytes() {
-        if (bytes != null) return;
-        bytes = BufferUtils.createByteBuffer(width * height * 4);
-        int slot = TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
-        GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-    }
-
     public Color getPixelColor(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) throw new IndexOutOfBoundsException("Trying to read out of bounds pixel: (" + x + ", " + y + ") of " + Texture.class.getSimpleName() + " with dimensions: " + "(" + width + ", " + height + ")");
-        if (bytes == null) setBytes();
+
+        if (bytes == null) {
+            bytes = BufferUtils.createByteBuffer(width * height * 4);
+            int slot = TextureBinder.bind(this);
+            GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+            GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
+        }
 
         int index = (x + y * width) * 4;
         int r = bytes.get(index + 0) & 0xFF;

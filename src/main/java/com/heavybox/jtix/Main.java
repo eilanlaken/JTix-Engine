@@ -2,12 +2,8 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
-import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.graphics.TextureGenerator;
-import org.lwjgl.stb.STBTTFontinfo;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class Main {
 
