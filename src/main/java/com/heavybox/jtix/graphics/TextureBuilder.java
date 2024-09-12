@@ -13,6 +13,8 @@ import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -123,6 +125,71 @@ public final class TextureBuilder {
         //STBImage.stbi_image_free(buffer);
 
         return texture;
+    }
+
+    /* Fonts */
+
+    public static void buildTextureFont(final String directory, final String output, final String fontPath, int size) {
+        /* get font metrics */
+        BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = img.createGraphics();
+        java.awt.Font font = new java.awt.Font(fontPath, Font.PLAIN, size);
+        g2d.setFont(font);
+        FontMetrics fontMetrics = g2d.getFontMetrics();
+
+        int estimatedWidth = (int) Math.sqrt(font.getNumGlyphs()) * font.getSize() + 1;
+        int width = 0;
+        int height = fontMetrics.getHeight();
+        int lineHeight = fontMetrics.getHeight();
+        int x = 0;
+        int y = (int) (fontMetrics.getHeight() * 1.4f);
+
+        Map<Integer, com.heavybox.jtix.graphics.Font.Glyph> glyphMap = new HashMap<>();
+        /* iterate over all the glyphs to estimate the width of the bitmap */
+        for (int i = 0; i < font.getNumGlyphs(); i++) {
+            if (font.canDisplay(i)) {
+                com.heavybox.jtix.graphics.Font.Glyph glyph = new com.heavybox.jtix.graphics.Font.Glyph(x,y,fontMetrics.charWidth(i), fontMetrics.getHeight());
+                glyphMap.put(i, glyph);
+                width = Math.max(x + fontMetrics.charWidth(i), width);
+
+                x += glyph.width;
+                if (x > estimatedWidth) {
+                    x = 0;
+                    y += fontMetrics.getHeight() * 1.4f;
+                    height += fontMetrics.getHeight() * 1.4f;
+                }
+            }
+        }
+
+        g2d.dispose();
+
+        // create the actual bitmap
+        img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        g2d = img.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setFont(font);
+        g2d.setColor(Color.WHITE);
+        for (int i = 0; i < font.getNumGlyphs(); i++) {
+            if (font.canDisplay(i)) {
+                com.heavybox.jtix.graphics.Font.Glyph glyph = glyphMap.get(i);
+                float u1 = (float) glyph.sourceX / width;
+                float v1 = (float) glyph.sourceY / height;
+                float u2 = (float) (glyph.sourceX + glyph.width) / width;
+                float v2 = (float) (glyph.sourceY + glyph.height) / height;
+                glyph.u1 = u1;
+                glyph.v1 = v1;
+                glyph.u2 = u2;
+                glyph.v2 = v2;
+                g2d.drawString("" + (char) i, glyph.sourceX, glyph.sourceY);
+            }
+        }
+        g2d.dispose();
+
+        try {
+            AssetUtils.saveImage(directory, output, img);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /* Noise */
