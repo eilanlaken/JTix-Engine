@@ -1,9 +1,11 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
+import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
@@ -18,9 +20,10 @@ import org.lwjgl.stb.STBTruetype;
 import org.lwjgl.system.MemoryStack;
 
 import java.awt.*;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
@@ -33,6 +36,8 @@ public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
 
     ComponentTransform t = new ComponentTransform();
 
+    Texture fontMap;
+
     public SceneRendering2D_Fonts_2() {
         renderer2D = new Renderer2D();
 
@@ -43,7 +48,13 @@ public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
         camera = new Camera(640f/32,480f/32, 1);
         camera.update();
 
-
+        fontMap = AssetStore.get("assets/fonts/fontBitmap.png");
+        HashMap<Integer, Font.Glyph> glyphHashMap = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("assets/fonts/fontBitmap"))) {
+            glyphHashMap = (HashMap<Integer, Font.Glyph>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -64,7 +75,7 @@ public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
         renderer2D.begin(null);
         renderer2D.setTint(null);
 
-
+        renderer2D.drawTexture(fontMap, 0,0,0,0,0,1,1);
         renderer2D.end();
 
 
@@ -88,7 +99,7 @@ public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
     @Override
     public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
-
+        requiredAssets.put("assets/fonts/fontBitmap.png", Texture.class);
         return requiredAssets;
     }
 

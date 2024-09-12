@@ -2,6 +2,9 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.memory.MemoryResource;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 public class Font implements MemoryResource {
 
     String filepath;
@@ -14,7 +17,10 @@ public class Font implements MemoryResource {
 
     }
 
-    public static final class Glyph {
+    public static final class Glyph implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = 1L; // Add a serial version ID for version control
 
         public final int sourceX;
         public final int sourceY;

@@ -16,13 +16,12 @@ import java.awt.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Paths;
 import java.util.*;
 
 // TODO: implement
@@ -37,7 +36,6 @@ public final class TextureBuilder {
 
     private static void init() {
         if (initialized) return;
-
         for (int i = 0; i < 256; i++) {
             PERLIN_PERM_256[i] = i;
         }
@@ -46,11 +44,11 @@ public final class TextureBuilder {
             PERLIN_PERM_512[i] = PERLIN_PERM_256[i];
             PERLIN_PERM_512[256 + i] = PERLIN_PERM_256[i];
         }
-
         initialized = true;
     }
 
     /* build from path */
+
     public static Texture buildTextureFromFilePath(final String path) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
@@ -122,14 +120,13 @@ public final class TextureBuilder {
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         // TODO: we need to see if the anisotropic filtering extension is available. If yes, create that instead of mipmaps.
-        //STBImage.stbi_image_free(buffer);
 
         return texture;
     }
 
     /* Fonts */
 
-    public static void buildTextureFont(final String directory, final String output, final String fontPath, int size) {
+    public static void buildTextureFont(final String directory, final String fileName, final String fontPath, int size) {
         /* get font metrics */
         BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
@@ -151,7 +148,6 @@ public final class TextureBuilder {
                 com.heavybox.jtix.graphics.Font.Glyph glyph = new com.heavybox.jtix.graphics.Font.Glyph(x,y,fontMetrics.charWidth(i), fontMetrics.getHeight());
                 glyphMap.put(i, glyph);
                 width = Math.max(x + fontMetrics.charWidth(i), width);
-
                 x += glyph.width;
                 if (x > estimatedWidth) {
                     x = 0;
@@ -160,7 +156,7 @@ public final class TextureBuilder {
                 }
             }
         }
-
+        height += fontMetrics.getHeight() * 1.4f;
         g2d.dispose();
 
         // create the actual bitmap
@@ -172,10 +168,10 @@ public final class TextureBuilder {
         for (int i = 0; i < font.getNumGlyphs(); i++) {
             if (font.canDisplay(i)) {
                 com.heavybox.jtix.graphics.Font.Glyph glyph = glyphMap.get(i);
-                float u1 = (float) glyph.sourceX / width;
-                float v1 = (float) glyph.sourceY / height;
+                float u1 = (float) (glyph.sourceX) / width;
+                float v1 = (float) (glyph.sourceY - height) / height;
                 float u2 = (float) (glyph.sourceX + glyph.width) / width;
-                float v2 = (float) (glyph.sourceY + glyph.height) / height;
+                float v2 = (float) (glyph.sourceY) / height;
                 glyph.u1 = u1;
                 glyph.v1 = v1;
                 glyph.u2 = u2;
@@ -185,8 +181,9 @@ public final class TextureBuilder {
         }
         g2d.dispose();
 
-        try {
-            AssetUtils.saveImage(directory, output, img);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(Paths.get(directory, fileName).toString()))) {
+            AssetUtils.saveImage(directory, fileName, img);
+            oos.writeObject(glyphMap);
         } catch (Exception e) {
             System.out.println(e);
         }
