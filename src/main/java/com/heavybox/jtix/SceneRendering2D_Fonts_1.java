@@ -53,6 +53,7 @@ public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
             // Set the pixel size for the font
             //FreeType.FT_Set_Pixel_Sizes(face, 0, 48); // Set font size to 48 pixels high
 
+
         }
 
     }

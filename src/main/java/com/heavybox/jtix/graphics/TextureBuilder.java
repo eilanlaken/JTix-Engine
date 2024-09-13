@@ -126,7 +126,7 @@ public final class TextureBuilder {
 
     /* Fonts */
 
-    public static void buildTextureFont(final String directory, final String fileName, final String fontPath, int size) {
+    public static void buildTextureFont(final String directory, final String fileName, final String fontPath, int size, boolean antialiasingOn) {
         /* get font metrics */
         BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
@@ -134,12 +134,14 @@ public final class TextureBuilder {
         g2d.setFont(font);
         FontMetrics fontMetrics = g2d.getFontMetrics();
 
+        float adjustment = 1.1f;
+
         int estimatedWidth = (int) Math.sqrt(font.getNumGlyphs()) * font.getSize() + 1;
         int width = 0;
         int height = fontMetrics.getHeight();
         int lineHeight = fontMetrics.getHeight();
         int x = 0;
-        int y = (int) (fontMetrics.getHeight() * 1.4f);
+        int y = (int) (fontMetrics.getHeight() * adjustment);
 
         Map<Integer, com.heavybox.jtix.graphics.Font.Glyph> glyphMap = new HashMap<>();
         /* iterate over all the glyphs to estimate the width of the bitmap */
@@ -151,18 +153,22 @@ public final class TextureBuilder {
                 x += glyph.width;
                 if (x > estimatedWidth) {
                     x = 0;
-                    y += fontMetrics.getHeight() * 1.4f;
-                    height += fontMetrics.getHeight() * 1.4f;
+                    y += fontMetrics.getHeight() * adjustment;
+                    height += fontMetrics.getHeight() * adjustment;
                 }
             }
         }
-        height += fontMetrics.getHeight() * 1.4f;
+        height += fontMetrics.getHeight() * adjustment;
+        //width = MathUtils.nextPowerOf2(width);
+        //height = MathUtils.nextPowerOf2(height);
         g2d.dispose();
 
-        // create the actual bitmap
+        System.out.println(width);
+        System.out.println(height);
+        /* rasterize the characters into a bitmap */
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         g2d = img.createGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialiasingOn ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
         g2d.setFont(font);
         g2d.setColor(Color.WHITE);
         for (int i = 0; i < font.getNumGlyphs(); i++) {

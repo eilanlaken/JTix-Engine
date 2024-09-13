@@ -445,6 +445,12 @@ public final class MathUtils {
         return (float)(Math.signum(i) * (45.0 + (57.2944766070562 * c - 19.05792099799635 * c3 + 11.089223410359068 * c5 - 6.6711120475953765 * c7 + 3.016813013351768 * c9 - 0.6715752908287405 * c11)));
     }
 
+    public static int nextPowerOf2(float n) {
+        int power = 1;
+        while (power < n) power *= 2;
+        return power;
+    }
+
     public static float normalizeAngleDeg(float degrees) {
         degrees %= 360;
         if (degrees < 0) degrees += 360;

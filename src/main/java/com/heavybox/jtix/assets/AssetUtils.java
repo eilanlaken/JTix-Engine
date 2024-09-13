@@ -170,16 +170,21 @@ public final class AssetUtils {
         ImageIO.write(image, "png", file);
     }
 
+    // TODO: FIXME?
     public static void saveImage(final String directory, final String filename, ByteBuffer buffer, int width, int height) throws IOException {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        int[] pixels = new int[width * height];
-        for (int i = 0; i < width * height; i++) {
-            int r = buffer.get() & 0xFF;
-            int g = buffer.get() & 0xFF;
-            int b = buffer.get() & 0xFF;
-            pixels[i] = (r << 16) | (g << 8) | b;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int i = (x + width * y) * 4;
+                int r = buffer.get(i) & 0xFF;
+                int g = buffer.get(i + 1) & 0xFF;
+                int b = buffer.get(i + 2) & 0xFF;
+                int a = buffer.get(i + 3) & 0xFF;
+
+                int argb = (a << 24) | (r << 16) | (g << 8) | b;
+                image.setRGB(x, y, argb);
+            }
         }
-        image.setRGB(0, 0, width, height, pixels, 0, width);
         saveImage(directory, filename, image);
     }
 
@@ -207,7 +212,7 @@ public final class AssetUtils {
      *
      * @throws IOException if an IO error occurs
      */
-    public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+    public static ByteBuffer fileToByteBuffer(String resource, int bufferSize) throws IOException {
         ByteBuffer buffer;
 
         Path path = Paths.get(resource);

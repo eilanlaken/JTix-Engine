@@ -23,6 +23,19 @@ class MathUtilsTest {
     }
 
     @Test
+    void nextPowerOf2() {
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2(1));
+        Assertions.assertEquals(2, MathUtils.nextPowerOf2(2));
+        Assertions.assertEquals(4, MathUtils.nextPowerOf2(3));
+        Assertions.assertEquals(4, MathUtils.nextPowerOf2(4));
+        Assertions.assertEquals(8, MathUtils.nextPowerOf2(5));
+        Assertions.assertEquals(16, MathUtils.nextPowerOf2(9));
+        Assertions.assertEquals(32, MathUtils.nextPowerOf2(22));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2(-1));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2(-2.4f));
+    }
+
+    @Test
     void getAreaTriangle2() {
         Vector2 A = new Vector2();
         Vector2 B = new Vector2();

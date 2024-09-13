@@ -17,7 +17,7 @@ public class Main {
 //            throw e;
 //        }
 
-        //TextureBuilder.buildTextureFont("assets/fonts", "fontBitmap", "assets/fonts/OpenSans-Italic.ttf", 64);
+        TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
 
 //        try {
 //            //TextureGenerator.generateTexturePack("assets/atlases", "spots", 2,2, TextureGenerator.TexturePackSize.SMALL_512,"assets/textures/red30x30.png", "assets/textures/green25x25.png", "assets/textures/blue100x100.png");
@@ -25,7 +25,7 @@ public class Main {
 //            return;
 //        }
 
-        //if (true) return;
+        if (true) return;
 
         ApplicationWindowAttributes config = new ApplicationWindowAttributes();
         Application.createSingleWindowApplication(config);
