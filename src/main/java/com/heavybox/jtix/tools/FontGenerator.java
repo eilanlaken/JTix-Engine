@@ -1,6 +1,7 @@
 package com.heavybox.jtix.tools;
 
 import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsException;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -26,6 +27,102 @@ public final class FontGenerator {
 
     private FontGenerator() {}
 
+    public static void generateBitmapFont(final String directory, final String fileName, final String fontPath, int size) {
+        PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
+        FreeType.FT_Init_FreeType(libPointerBuffer);
+
+        long library = libPointerBuffer.get(0);
+        ByteBuffer fontDataBuffer;
+        try {
+            fontDataBuffer = AssetUtils.fileToByteBuffer(fontPath);
+        } catch (Exception e) {
+            throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
+        }
+
+        PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
+        FreeType.FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer);
+        long face = facePointerBuffer.get(0);
+        FT_Face ftFace = FT_Face.create(face);
+        FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
+        List<Character> supportedCharacters = new ArrayList<>();
+        IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
+
+        /* get supported characters */
+        long nextChar = FreeType.FT_Get_First_Char(ftFace, intBuffer);
+        while (nextChar != 0) {
+            supportedCharacters.add((char) nextChar);
+            nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
+        }
+
+        /* get all glyphs' data: the bitmap, the bearing, the advance... from FreeType */
+        Array<GlyphData> glyphsData = new Array<>(false, supportedCharacters.size());
+        for (Character c : supportedCharacters) {
+            FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER); // TODO: set anti aliasing
+            FT_GlyphSlot glyphSlot = ftFace.glyph();
+            FT_Bitmap bitmap = glyphSlot.bitmap();
+            int glyph_width  = bitmap.width();
+            int glyph_height = bitmap.rows();
+            int glyph_pitch  = bitmap.pitch();
+
+            if (glyph_width <= 0 || glyph_height <= 0) continue;
+
+            ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
+            BufferedImage glyphImage = new BufferedImage(glyph_width, glyph_height, BufferedImage.TYPE_INT_ARGB);
+            int[] imageData = ((DataBufferInt) glyphImage.getRaster().getDataBuffer()).getData();
+
+            // Copy pixel data from the FreeType bitmap to the BufferedImage
+            for (int y = 0; y < glyph_height; y++) {
+                for (int x = 0; x < glyph_width; x++) {
+                    int srcIndex = y * Math.abs(glyph_pitch) + x;
+                    assert ftCharImageBuffer != null;
+                    int grayValue = ftCharImageBuffer.get(srcIndex) & 0xFF;
+                    int alpha = grayValue;  // Use grayscale value for transparency
+                    int rgb = (255 << 16) | (255 << 8) | 255;  // White color
+                    imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+                }
+            }
+
+            // TODO: get more data from the font file, like kerning.
+            GlyphData data = new GlyphData();
+            data.character = c;
+            data.width = glyph_width;
+            data.height = glyph_height;
+            data.bufferedImage = glyphImage;
+            glyphsData.add(data);
+
+        }
+
+        /* merge all glyphs images into a single buffered image. */
+        for (GlyphData glyphData : glyphsData) {
+            // TODO: pack everything.
+            if (glyphData.character != 'G') continue;
+            try {
+                AssetUtils.saveImage(directory, fileName, glyphData.bufferedImage);
+            } catch (Exception e) {
+                throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + fileName + ". Exception: " + e.getMessage());
+            }
+        }
+
+
+        FreeType.FT_Done_Face(ftFace);
+        FreeType.FT_Done_FreeType(library);
+    }
+
+    private static final class GlyphData {
+
+        private char character;
+
+        private float advanceX;
+        private int   width;
+        private int   height;
+
+        private BufferedImage bufferedImage;
+
+        private Map<Character, Float> kernings;
+
+    }
+
+    @Deprecated
     public static void buildTextureFontFT(final String directory, final String fileName, final String fontPath, int size) {
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
@@ -53,7 +150,6 @@ public final class FontGenerator {
             supportedCharacters.add((char) nextChar);
             nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
         }
-        System.out.println(supportedCharacters);
 
         FreeType.FT_Load_Char(ftFace,'B', FreeType.FT_LOAD_RENDER);
         FT_GlyphSlot glyphSlot = ftFace.glyph();
@@ -62,15 +158,14 @@ public final class FontGenerator {
         int height = bitmap.rows();
         int pitch = bitmap.pitch();
         ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(pitch) * height);
-
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
         int[] imageData = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
         // Copy pixel data from the FreeType bitmap to the BufferedImage
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int srcIndex = y * Math.abs(pitch) + x;
+                assert ftCharImageBuffer != null;
                 int grayValue = ftCharImageBuffer.get(srcIndex) & 0xFF;
                 int alpha = grayValue;  // Use grayscale value for transparency
                 int rgb = (255 << 16) | (255 << 8) | 255;  // White color
@@ -88,6 +183,7 @@ public final class FontGenerator {
         FreeType.FT_Done_FreeType(library);
     }
 
+    @Deprecated
     public static void buildTextureFont(final String directory, final String fileName, final String fontPath, int size, boolean antialiasingOn) {
         /* get font metrics for raster */
         BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);

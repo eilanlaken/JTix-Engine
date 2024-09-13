@@ -30,7 +30,7 @@ public final class TextureGenerator {
 
     /* Noise */
 
-    public static void buildTextureNoisePerlin(int width, int height, final String directory, final String fileName, boolean overrideExistingFile) throws IOException {
+    public static void generateTextureNoisePerlin(int width, int height, final String directory, final String fileName, boolean overrideExistingFile) throws IOException {
         init();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -49,21 +49,21 @@ public final class TextureGenerator {
     }
 
 
-    public static void buildTextureNoiseSimplex() {}
-    public static void buildTextureNoiseWhite() {}
-    public static void buildTextureNoiseValue() {}
-    public static void buildTextureNoiseVornoi() {}
+    public static void generateTextureNoiseSimplex() {}
+    public static void generateTextureNoiseWhite() {}
+    public static void generateTextureNoiseValue() {}
+    public static void generateTextureNoiseVornoi() {}
 
     /* Patterns */
-    public static void buildTextureCheckers() {}
-    public static void buildTextureGradient() {}
-    public static void buildTextureWave() {}
+    public static void generateTextureCheckers() {}
+    public static void generateTextureGradient() {}
+    public static void generateTextureWave() {}
 
     /* Maps */
     // https://codepen.io/BJS3D/pen/YzjXZgV?editors=1010
-    public static void buildTextureMapNormal() {}
-    public static void buildTextureMapRoughness() {}
-    public static void buildTextureMapMetallic() {}
+    public static void generateTextureMapNormal() {}
+    public static void generateTextureMapRoughness() {}
+    public static void generateTextureMapMetallic() {}
 
     private static float fade(float t) {
         return t * t * t * (t * (t * 6 - 15) + 10); // t^3 * (6 * t^2 - 16 * t + 10)

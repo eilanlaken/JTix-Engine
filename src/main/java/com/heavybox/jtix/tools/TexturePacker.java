@@ -22,13 +22,13 @@ public final class TexturePacker {
 
     private TexturePacker() {}
 
-    public static void buildTexturePack(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
+    public static void packTextures(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
         if (directory == null) throw new IllegalArgumentException("Must provide non-null directory name.");
         if (!AssetUtils.directoryExists(directory)) throw new IllegalArgumentException("The provided path: " + directory + " does not exist, or is not a directory");
         // TODO: ...
     }
 
-    public static void buildTexturePack(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, final String ...texturePaths) throws IOException {
+    public static void packTextures(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, final String ...texturePaths) throws IOException {
         /* check if TexturePack was already generated and updated using the same options and input textures. */
         if (alreadyPacked(outputDirectory, outputName, extrude, padding, maxTexturesSize, texturePaths)) return;
 
