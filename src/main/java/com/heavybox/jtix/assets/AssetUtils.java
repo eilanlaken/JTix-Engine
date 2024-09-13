@@ -202,85 +202,13 @@ public final class AssetUtils {
         return name.substring(0, dotIndex);
     }
 
-    /**
-     * Reads the specified resource and returns the raw data as a ByteBuffer.
-     *
-     * @param resource   the resource to read
-     * @param bufferSize the initial buffer size
-     *
-     * @return the resource data
-     *
-     * @throws IOException if an IO error occurs
-     */
-    public static ByteBuffer fileToByteBuffer(String resource, int bufferSize) throws IOException {
-        ByteBuffer buffer;
-
-        Path path = Paths.get(resource);
-        if (Files.isReadable(path)) {
-            try (SeekableByteChannel fc = Files.newByteChannel(path)) {
-                buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
-                while (fc.read(buffer) != -1) ;
-            }
-        } else {
-            try (
-                    InputStream source = AssetUtils.class.getClassLoader().getResourceAsStream(resource);
-                    ReadableByteChannel rbc = Channels.newChannel(source)
-            ) {
-                buffer = BufferUtils.createByteBuffer(bufferSize);
-
-                while (true) {
-                    int bytes = rbc.read(buffer);
-                    if (bytes == -1) {
-                        break;
-                    }
-                    if (buffer.remaining() == 0) {
-                        buffer = MemoryUtils.resizeBuffer(buffer, buffer.capacity() * 3 / 2); // 50%
-                    }
-                }
-            }
-        }
-
-        buffer.flip();
-        return MemoryUtil.memSlice(buffer);
-    }
-
-    /**
-     * Reads the specified resource and returns the raw data as a ByteBuffer.
-     *
-     * @param resource   the resource to read
-     * @param bufferSize the initial buffer size
-     *
-     * @return the resource data
-     *
-     * @throws IOException if an IO error occurs
-     */
-    public synchronized static ByteBuffer readFileToByteBuffer(String resource, int bufferSize) throws IOException {
-        ByteBuffer buffer;
-        Path path = Paths.get(resource);
-
-        if (Files.isReadable(path)) {
-            try (SeekableByteChannel fc = Files.newByteChannel(path)) {
-                buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
-                while (fc.read(buffer) != -1) ;
-            }
-        } else {
-            try (InputStream source = AssetUtils.class.getClassLoader().getResourceAsStream(resource); ReadableByteChannel rbc = Channels.newChannel(source)) {
-                buffer = BufferUtils.createByteBuffer(bufferSize);
-
-                while (true) {
-                    int bytes = rbc.read(buffer);
-                    if (bytes == -1) {
-                        break;
-                    }
-                    if (buffer.remaining() == 0) {
-                        buffer = MemoryUtils.resizeBuffer(buffer, buffer.capacity() * 3 / 2); // 50%
-                    }
-                }
-            }
-        }
-
-        buffer.flip();
-        return MemoryUtil.memSlice(buffer);
+    public static ByteBuffer fileToByteBuffer(String filePath) throws IOException {
+        Path path = Path.of(filePath);
+        byte[] fileBytes = Files.readAllBytes(path);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(fileBytes.length);
+        buffer.put(fileBytes);
+        buffer.flip(); // Prepare the buffer for reading
+        return buffer;
     }
 
 }

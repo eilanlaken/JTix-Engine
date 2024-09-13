@@ -28,8 +28,8 @@ public class Font implements MemoryResource {
         public final int height;
 
         // TODO: better to make final somehow.
-        float u1, v1;
-        float u2, v2;
+        public float u1, v1;
+        public float u2, v2;
 
         public Glyph(int sourceX, int sourceY, int width, int height) {
             this.sourceX = sourceX;
