@@ -127,7 +127,7 @@ public final class TextureBuilder {
     /* Fonts */
 
     public static void buildTextureFont(final String directory, final String fileName, final String fontPath, int size, boolean antialiasingOn) {
-        /* get font metrics */
+        /* get font metrics for raster */
         BufferedImage img = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
         java.awt.Font font = new java.awt.Font(fontPath, Font.PLAIN, size);
@@ -135,7 +135,6 @@ public final class TextureBuilder {
         FontMetrics fontMetrics = g2d.getFontMetrics();
 
         float adjustment = 1.1f;
-
         int estimatedWidth = (int) Math.sqrt(font.getNumGlyphs()) * font.getSize() + 1;
         int width = 0;
         int height = fontMetrics.getHeight();
@@ -159,8 +158,6 @@ public final class TextureBuilder {
             }
         }
         height += fontMetrics.getHeight() * adjustment;
-        //width = MathUtils.nextPowerOf2(width);
-        //height = MathUtils.nextPowerOf2(height);
         g2d.dispose();
 
         System.out.println(width);
