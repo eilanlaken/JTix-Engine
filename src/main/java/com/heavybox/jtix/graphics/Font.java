@@ -4,19 +4,28 @@ import com.heavybox.jtix.memory.MemoryResource;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 public class Font implements MemoryResource {
 
-    String filepath;
-    int size;
+    public final Texture               fontMap;
+    public final String                filepath;
+    public final int                   size;
+    public final Map<Character, Glyph> glyphMap;
 
-
+    public Font(Texture fontMap, String filepath, int size, Map<Character, Glyph> glyphMap) {
+        this.fontMap = fontMap;
+        this.filepath = filepath;
+        this.size = size;
+        this.glyphMap = glyphMap;
+    }
 
     @Override
     public void delete() {
 
     }
 
+    // TODO: include better glyph data.
     public static final class Glyph implements Serializable {
 
         @Serial

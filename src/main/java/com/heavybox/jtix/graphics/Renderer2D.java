@@ -1879,10 +1879,14 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - text */
 
-    // TODO: implement text rendering
-    // https://github.com/LWJGL/lwjgl3/blob/master/modules/samples/src/test/java/org/lwjgl/demo/stb/Truetype.java
+    public void drawText(final String text, final Font font, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
 
+    }
 
+    // TODO probably use this for ComponentText
+    public void drawCharacter(char c, final Font font, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+
+    }
 
     /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
 
