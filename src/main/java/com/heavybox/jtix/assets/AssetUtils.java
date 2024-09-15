@@ -35,15 +35,18 @@ public final class AssetUtils {
     public  static Gson              gson        = null;
 
     static {
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        Representer representer = new Representer(dumperOptions) {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setPrettyFlow(true);
+        options.setIndent(4);
+        Representer representer = new Representer(options) {
             @Override
             protected MappingNode representJavaBean(Set<Property> properties, Object obj) {
                 if (!classTags.containsKey(obj.getClass())) addClassTag(obj.getClass(), Tag.MAP);
                 return super.representJavaBean(properties, obj);
             }
         };
+        representer.getPropertyUtils().setSkipMissingProperties(true);
         yaml = new Yaml(representer);
         gson = new Gson();
     }
@@ -54,6 +57,13 @@ public final class AssetUtils {
         if (initialized) return;
         AssetUtils.window = window;
         initialized = true;
+    }
+
+    public static String removeExtension(final String filename) {
+        if (filename == null) return null;
+        int pos = filename.lastIndexOf(".");
+        if (pos == -1) return filename;
+        return filename.substring(0, pos);
     }
 
     public static String getFileContent(final String path) {

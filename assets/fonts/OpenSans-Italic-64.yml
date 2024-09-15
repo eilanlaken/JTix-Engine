@@ -1,0 +1,7836 @@
+meta:
+  name: OpenSans-Italic
+options:
+  size: 64
+  antialiasing: true
+glyphs:
+  items:
+  - advance: 17.0
+    atlasX: 0
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 46.0
+    character: '!'
+    height: 47
+    kernings: {}
+    width: 17
+  - advance: 25.0
+    atlasX: 19
+    atlasY: 70
+    bearingX: 7.0
+    bearingY: 46.0
+    character: '"'
+    height: 17
+    kernings: {}
+    width: 20
+  - advance: 41.0
+    atlasX: 41
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 46.0
+    character: '#'
+    height: 46
+    kernings: {}
+    width: 41
+  - advance: 35.0
+    atlasX: 84
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 49.0
+    character: $
+    height: 53
+    kernings: {}
+    width: 32
+  - advance: 51.0
+    atlasX: 118
+    atlasY: 70
+    bearingX: 5.0
+    bearingY: 46.0
+    character: '%'
+    height: 47
+    kernings: {}
+    width: 43
+  - advance: 43.0
+    atlasX: 163
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: '&'
+    height: 47
+    kernings: {}
+    width: 39
+  - advance: 14.0
+    atlasX: 204
+    atlasY: 70
+    bearingX: 7.0
+    bearingY: 46.0
+    character: ''''
+    height: 17
+    kernings: {}
+    width: 9
+  - advance: 18.0
+    atlasX: 215
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: (
+    height: 56
+    kernings: {}
+    width: 22
+  - advance: 18.0
+    atlasX: 239
+    atlasY: 70
+    bearingX: -5.0
+    bearingY: 46.0
+    character: )
+    height: 56
+    kernings: {}
+    width: 21
+  - advance: 35.0
+    atlasX: 262
+    atlasY: 70
+    bearingX: 6.0
+    bearingY: 49.0
+    character: '*'
+    height: 30
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 295
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 38.0
+    character: +
+    height: 30
+    kernings: {}
+    width: 30
+  - advance: 15.0
+    atlasX: 327
+    atlasY: 70
+    bearingX: -4.0
+    bearingY: 7.0
+    character: ','
+    height: 16
+    kernings: {}
+    width: 14
+  - advance: 20.0
+    atlasX: 343
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 20.0
+    character: '-'
+    height: 5
+    kernings: {}
+    width: 17
+  - advance: 16.0
+    atlasX: 362
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 8.0
+    character: .
+    height: 9
+    kernings: {}
+    width: 9
+  - advance: 22.0
+    atlasX: 373
+    atlasY: 70
+    bearingX: -3.0
+    bearingY: 46.0
+    character: /
+    height: 46
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 406
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 46.0
+    character: '0'
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 35.0
+    atlasX: 440
+    atlasY: 70
+    bearingX: 9.0
+    bearingY: 46.0
+    character: '1'
+    height: 46
+    kernings: {}
+    width: 20
+  - advance: 35.0
+    atlasX: 462
+    atlasY: 70
+    bearingX: 0.0
+    bearingY: 46.0
+    character: '2'
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 35.0
+    atlasX: 498
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 46.0
+    character: '3'
+    height: 47
+    kernings: {}
+    width: 33
+  - advance: 35.0
+    atlasX: 533
+    atlasY: 70
+    bearingX: 0.0
+    bearingY: 46.0
+    character: '4'
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 35.0
+    atlasX: 570
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: '5'
+    height: 47
+    kernings: {}
+    width: 33
+  - advance: 35.0
+    atlasX: 605
+    atlasY: 70
+    bearingX: 4.0
+    bearingY: 46.0
+    character: '6'
+    height: 47
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 638
+    atlasY: 70
+    bearingX: 5.0
+    bearingY: 46.0
+    character: '7'
+    height: 46
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 671
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 46.0
+    character: '8'
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 35.0
+    atlasX: 705
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 46.0
+    character: '9'
+    height: 47
+    kernings: {}
+    width: 31
+  - advance: 16.0
+    atlasX: 738
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ':'
+    height: 36
+    kernings: {}
+    width: 14
+  - advance: 16.0
+    atlasX: 754
+    atlasY: 70
+    bearingX: -4.0
+    bearingY: 35.0
+    character: ;
+    height: 44
+    kernings: {}
+    width: 19
+  - advance: 35.0
+    atlasX: 775
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 39.0
+    character: <
+    height: 31
+    kernings: {}
+    width: 30
+  - advance: 35.0
+    atlasX: 807
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 31.0
+    character: =
+    height: 17
+    kernings: {}
+    width: 30
+  - advance: 35.0
+    atlasX: 839
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 39.0
+    character: '>'
+    height: 31
+    kernings: {}
+    width: 30
+  - advance: 27.0
+    atlasX: 871
+    atlasY: 70
+    bearingX: 4.0
+    bearingY: 46.0
+    character: '?'
+    height: 47
+    kernings: {}
+    width: 25
+  - advance: 54.0
+    atlasX: 898
+    atlasY: 70
+    bearingX: 3.0
+    bearingY: 46.0
+    character: '@'
+    height: 51
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 950
+    atlasY: 70
+    bearingX: -4.0
+    bearingY: 46.0
+    character: A
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 38.0
+    atlasX: 989
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: B
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 37.0
+    atlasX: 1027
+    atlasY: 70
+    bearingX: 4.0
+    bearingY: 46.0
+    character: C
+    height: 47
+    kernings: {}
+    width: 37
+  - advance: 43.0
+    atlasX: 1066
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: D
+    height: 46
+    kernings: {}
+    width: 39
+  - advance: 33.0
+    atlasX: 1107
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: E
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1143
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: F
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 43.0
+    atlasX: 1179
+    atlasY: 70
+    bearingX: 4.0
+    bearingY: 46.0
+    character: G
+    height: 47
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 1220
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: H
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 17.0
+    atlasX: 1264
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: I
+    height: 46
+    kernings: {}
+    width: 16
+  - advance: 17.0
+    atlasX: 1282
+    atlasY: 70
+    bearingX: -10.0
+    bearingY: 46.0
+    character: J
+    height: 58
+    kernings: {}
+    width: 28
+  - advance: 36.0
+    atlasX: 1312
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: K
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 30.0
+    atlasX: 1354
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: L
+    height: 46
+    kernings: {}
+    width: 25
+  - advance: 54.0
+    atlasX: 1381
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: M
+    height: 46
+    kernings: {}
+    width: 52
+  - advance: 45.0
+    atlasX: 1435
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: N
+    height: 46
+    kernings: {}
+    width: 44
+  - advance: 46.0
+    atlasX: 1481
+    atlasY: 70
+    bearingX: 4.0
+    bearingY: 46.0
+    character: O
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1524
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: P
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 46.0
+    atlasX: 1561
+    atlasY: 70
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Q
+    height: 57
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1604
+    atlasY: 70
+    bearingX: 2.0
+    bearingY: 46.0
+    character: R
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 32.0
+    atlasX: 1641
+    atlasY: 70
+    bearingX: 1.0
+    bearingY: 46.0
+    character: S
+    height: 47
+    kernings: {}
+    width: 33
+  - advance: 32.0
+    atlasX: 1676
+    atlasY: 70
+    bearingX: 5.0
+    bearingY: 46.0
+    character: T
+    height: 46
+    kernings: {}
+    width: 33
+  - advance: 43.0
+    atlasX: 1711
+    atlasY: 70
+    bearingX: 5.0
+    bearingY: 46.0
+    character: U
+    height: 47
+    kernings: {}
+    width: 39
+  - advance: 35.0
+    atlasX: 1752
+    atlasY: 70
+    bearingX: 5.0
+    bearingY: 46.0
+    character: V
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 55.0
+    atlasX: 1790
+    atlasY: 70
+    bearingX: 6.0
+    bearingY: 46.0
+    character: W
+    height: 46
+    kernings: {}
+    width: 55
+  - advance: 33.0
+    atlasX: 1847
+    atlasY: 70
+    bearingX: -4.0
+    bearingY: 46.0
+    character: X
+    height: 46
+    kernings: {}
+    width: 43
+  - advance: 32.0
+    atlasX: 0
+    atlasY: 140
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Y
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 34.0
+    atlasX: 36
+    atlasY: 140
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Z
+    height: 46
+    kernings: {}
+    width: 38
+  - advance: 18.0
+    atlasX: 76
+    atlasY: 140
+    bearingX: -1.0
+    bearingY: 46.0
+    character: '['
+    height: 56
+    kernings: {}
+    width: 25
+  - advance: 22.0
+    atlasX: 103
+    atlasY: 140
+    bearingX: 6.0
+    bearingY: 46.0
+    character: \
+    height: 46
+    kernings: {}
+    width: 13
+  - advance: 18.0
+    atlasX: 118
+    atlasY: 140
+    bearingX: -5.0
+    bearingY: 46.0
+    character: ']'
+    height: 56
+    kernings: {}
+    width: 25
+  - advance: 33.0
+    atlasX: 145
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 46.0
+    character: ^
+    height: 29
+    kernings: {}
+    width: 32
+  - advance: 25.0
+    atlasX: 179
+    atlasY: 140
+    bearingX: -6.0
+    bearingY: -6.0
+    character: _
+    height: 5
+    kernings: {}
+    width: 27
+  - advance: 35.0
+    atlasX: 208
+    atlasY: 140
+    bearingX: 17.0
+    bearingY: 49.0
+    character: '`'
+    height: 10
+    kernings: {}
+    width: 12
+  - advance: 36.0
+    atlasX: 222
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 35.0
+    character: a
+    height: 36
+    kernings: {}
+    width: 32
+  - advance: 37.0
+    atlasX: 256
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 49.0
+    character: b
+    height: 50
+    kernings: {}
+    width: 33
+  - advance: 29.0
+    atlasX: 291
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 35.0
+    character: c
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 37.0
+    atlasX: 320
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 49.0
+    character: d
+    height: 50
+    kernings: {}
+    width: 36
+  - advance: 32.0
+    atlasX: 358
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 35.0
+    character: e
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 20.0
+    atlasX: 387
+    atlasY: 140
+    bearingX: -8.0
+    bearingY: 49.0
+    character: f
+    height: 64
+    kernings: {}
+    width: 37
+  - advance: 32.0
+    atlasX: 426
+    atlasY: 140
+    bearingX: -4.0
+    bearingY: 35.0
+    character: g
+    height: 50
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 467
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 49.0
+    character: h
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 16.0
+    atlasX: 502
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 47.0
+    character: i
+    height: 47
+    kernings: {}
+    width: 16
+  - advance: 16.0
+    atlasX: 520
+    atlasY: 140
+    bearingX: -9.0
+    bearingY: 47.0
+    character: j
+    height: 62
+    kernings: {}
+    width: 26
+  - advance: 31.0
+    atlasX: 548
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 49.0
+    character: k
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 16.0
+    atlasX: 583
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 49.0
+    character: l
+    height: 49
+    kernings: {}
+    width: 17
+  - advance: 56.0
+    atlasX: 602
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 35.0
+    character: m
+    height: 35
+    kernings: {}
+    width: 52
+  - advance: 37.0
+    atlasX: 656
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 35.0
+    character: n
+    height: 35
+    kernings: {}
+    width: 33
+  - advance: 36.0
+    atlasX: 691
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 35.0
+    character: o
+    height: 36
+    kernings: {}
+    width: 30
+  - advance: 37.0
+    atlasX: 723
+    atlasY: 140
+    bearingX: -2.0
+    bearingY: 35.0
+    character: p
+    height: 50
+    kernings: {}
+    width: 36
+  - advance: 37.0
+    atlasX: 761
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 35.0
+    character: q
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 25.0
+    atlasX: 795
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 35.0
+    character: r
+    height: 35
+    kernings: {}
+    width: 27
+  - advance: 27.0
+    atlasX: 824
+    atlasY: 140
+    bearingX: 0.0
+    bearingY: 35.0
+    character: s
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 21.0
+    atlasX: 853
+    atlasY: 140
+    bearingX: 2.0
+    bearingY: 42.0
+    character: t
+    height: 43
+    kernings: {}
+    width: 21
+  - advance: 37.0
+    atlasX: 876
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 34.0
+    character: u
+    height: 35
+    kernings: {}
+    width: 32
+  - advance: 30.0
+    atlasX: 910
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 34.0
+    character: v
+    height: 34
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 942
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 34.0
+    character: w
+    height: 34
+    kernings: {}
+    width: 46
+  - advance: 31.0
+    atlasX: 990
+    atlasY: 140
+    bearingX: -3.0
+    bearingY: 34.0
+    character: x
+    height: 34
+    kernings: {}
+    width: 36
+  - advance: 30.0
+    atlasX: 1028
+    atlasY: 140
+    bearingX: -7.0
+    bearingY: 34.0
+    character: y
+    height: 49
+    kernings: {}
+    width: 40
+  - advance: 28.0
+    atlasX: 1070
+    atlasY: 140
+    bearingX: -1.0
+    bearingY: 34.0
+    character: z
+    height: 34
+    kernings: {}
+    width: 29
+  - advance: 22.0
+    atlasX: 1101
+    atlasY: 140
+    bearingX: 0.0
+    bearingY: 46.0
+    character: '{'
+    height: 56
+    kernings: {}
+    width: 26
+  - advance: 35.0
+    atlasX: 1129
+    atlasY: 140
+    bearingX: 16.0
+    bearingY: 49.0
+    character: '|'
+    height: 64
+    kernings: {}
+    width: 6
+  - advance: 22.0
+    atlasX: 1137
+    atlasY: 140
+    bearingX: -3.0
+    bearingY: 46.0
+    character: '}'
+    height: 56
+    kernings: {}
+    width: 26
+  - advance: 35.0
+    atlasX: 1165
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 27.0
+    character: '~'
+    height: 8
+    kernings: {}
+    width: 31
+  - advance: 17.0
+    atlasX: 1198
+    atlasY: 140
+    bearingX: -1.0
+    bearingY: 35.0
+    character: ¡
+    height: 47
+    kernings: {}
+    width: 17
+  - advance: 35.0
+    atlasX: 1217
+    atlasY: 140
+    bearingX: 7.0
+    bearingY: 46.0
+    character: ¢
+    height: 47
+    kernings: {}
+    width: 27
+  - advance: 35.0
+    atlasX: 1246
+    atlasY: 140
+    bearingX: -1.0
+    bearingY: 46.0
+    character: £
+    height: 46
+    kernings: {}
+    width: 38
+  - advance: 35.0
+    atlasX: 1286
+    atlasY: 140
+    bearingX: 5.0
+    bearingY: 36.0
+    character: ¤
+    height: 29
+    kernings: {}
+    width: 28
+  - advance: 35.0
+    atlasX: 1316
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ¥
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 35.0
+    atlasX: 1355
+    atlasY: 140
+    bearingX: 16.0
+    bearingY: 49.0
+    character: ¦
+    height: 64
+    kernings: {}
+    width: 6
+  - advance: 31.0
+    atlasX: 1363
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 49.0
+    character: §
+    height: 49
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 1396
+    atlasY: 140
+    bearingX: 14.0
+    bearingY: 46.0
+    character: ¨
+    height: 6
+    kernings: {}
+    width: 18
+  - advance: 53.0
+    atlasX: 1416
+    atlasY: 140
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ©
+    height: 47
+    kernings: {}
+    width: 48
+  - advance: 21.0
+    atlasX: 1466
+    atlasY: 140
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ª
+    height: 22
+    kernings: {}
+    width: 20
+  - advance: 30.0
+    atlasX: 1488
+    atlasY: 140
+    bearingX: 2.0
+    bearingY: 30.0
+    character: «
+    height: 26
+    kernings: {}
+    width: 28
+  - advance: 35.0
+    atlasX: 1518
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 25.0
+    character: ¬
+    height: 17
+    kernings: {}
+    width: 30
+  - advance: 20.0
+    atlasX: 1550
+    atlasY: 140
+    bearingX: 1.0
+    bearingY: 20.0
+    character: ­
+    height: 5
+    kernings: {}
+    width: 17
+  - advance: 53.0
+    atlasX: 1569
+    atlasY: 140
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ®
+    height: 47
+    kernings: {}
+    width: 48
+  - advance: 24.0
+    atlasX: 1619
+    atlasY: 140
+    bearingX: 7.0
+    bearingY: 53.0
+    character: ¯
+    height: 5
+    kernings: {}
+    width: 26
+  - advance: 27.0
+    atlasX: 1647
+    atlasY: 140
+    bearingX: 6.0
+    bearingY: 46.0
+    character: °
+    height: 19
+    kernings: {}
+    width: 21
+  - advance: 35.0
+    atlasX: 1670
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 37.0
+    character: ±
+    height: 37
+    kernings: {}
+    width: 30
+  - advance: 22.0
+    atlasX: 1702
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ²
+    height: 28
+    kernings: {}
+    width: 21
+  - advance: 22.0
+    atlasX: 1725
+    atlasY: 140
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ³
+    height: 28
+    kernings: {}
+    width: 21
+  - advance: 35.0
+    atlasX: 1748
+    atlasY: 140
+    bearingX: 16.0
+    bearingY: 49.0
+    character: ´
+    height: 10
+    kernings: {}
+    width: 14
+  - advance: 37.0
+    atlasX: 1764
+    atlasY: 140
+    bearingX: -2.0
+    bearingY: 34.0
+    character: µ
+    height: 49
+    kernings: {}
+    width: 38
+  - advance: 42.0
+    atlasX: 1804
+    atlasY: 140
+    bearingX: 6.0
+    bearingY: 49.0
+    character: ¶
+    height: 57
+    kernings: {}
+    width: 32
+  - advance: 16.0
+    atlasX: 1838
+    atlasY: 140
+    bearingX: 5.0
+    bearingY: 27.0
+    character: ·
+    height: 9
+    kernings: {}
+    width: 9
+  - advance: 13.0
+    atlasX: 1849
+    atlasY: 140
+    bearingX: -6.0
+    bearingY: 0.0
+    character: ¸
+    height: 15
+    kernings: {}
+    width: 13
+  - advance: 22.0
+    atlasX: 0
+    atlasY: 210
+    bearingX: 8.0
+    bearingY: 46.0
+    character: ¹
+    height: 28
+    kernings: {}
+    width: 13
+  - advance: 22.0
+    atlasX: 15
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 46.0
+    character: º
+    height: 22
+    kernings: {}
+    width: 19
+  - advance: 30.0
+    atlasX: 36
+    atlasY: 210
+    bearingX: 0.0
+    bearingY: 30.0
+    character: »
+    height: 26
+    kernings: {}
+    width: 28
+  - advance: 47.0
+    atlasX: 66
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ¼
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 47.0
+    atlasX: 108
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ½
+    height: 46
+    kernings: {}
+    width: 44
+  - advance: 49.0
+    atlasX: 154
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ¾
+    height: 46
+    kernings: {}
+    width: 46
+  - advance: 27.0
+    atlasX: 202
+    atlasY: 210
+    bearingX: -1.0
+    bearingY: 35.0
+    character: ¿
+    height: 47
+    kernings: {}
+    width: 25
+  - advance: 36.0
+    atlasX: 229
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 60.0
+    character: À
+    height: 60
+    kernings: {}
+    width: 37
+  - advance: 36.0
+    atlasX: 268
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 60.0
+    character: Á
+    height: 60
+    kernings: {}
+    width: 39
+  - advance: 36.0
+    atlasX: 309
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 60.0
+    character: Â
+    height: 60
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 349
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 58.0
+    character: Ã
+    height: 58
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 392
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 57.0
+    character: Ä
+    height: 57
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 432
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 56.0
+    character: Å
+    height: 56
+    kernings: {}
+    width: 37
+  - advance: 52.0
+    atlasX: 471
+    atlasY: 210
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Æ
+    height: 46
+    kernings: {}
+    width: 59
+  - advance: 37.0
+    atlasX: 532
+    atlasY: 210
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ç
+    height: 61
+    kernings: {}
+    width: 37
+  - advance: 33.0
+    atlasX: 571
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 60.0
+    character: È
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 33.0
+    atlasX: 607
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 60.0
+    character: É
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 33.0
+    atlasX: 643
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ê
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 33.0
+    atlasX: 679
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ë
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 17.0
+    atlasX: 715
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ì
+    height: 60
+    kernings: {}
+    width: 17
+  - advance: 17.0
+    atlasX: 734
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Í
+    height: 60
+    kernings: {}
+    width: 25
+  - advance: 17.0
+    atlasX: 761
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Î
+    height: 60
+    kernings: {}
+    width: 24
+  - advance: 17.0
+    atlasX: 787
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ï
+    height: 57
+    kernings: {}
+    width: 24
+  - advance: 43.0
+    atlasX: 813
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ð
+    height: 46
+    kernings: {}
+    width: 39
+  - advance: 45.0
+    atlasX: 854
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 58.0
+    character: Ñ
+    height: 58
+    kernings: {}
+    width: 44
+  - advance: 46.0
+    atlasX: 900
+    atlasY: 210
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ò
+    height: 61
+    kernings: {}
+    width: 41
+  - advance: 46.0
+    atlasX: 943
+    atlasY: 210
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ó
+    height: 61
+    kernings: {}
+    width: 41
+  - advance: 46.0
+    atlasX: 986
+    atlasY: 210
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ô
+    height: 61
+    kernings: {}
+    width: 41
+  - advance: 46.0
+    atlasX: 1029
+    atlasY: 210
+    bearingX: 4.0
+    bearingY: 58.0
+    character: Õ
+    height: 59
+    kernings: {}
+    width: 41
+  - advance: 46.0
+    atlasX: 1072
+    atlasY: 210
+    bearingX: 4.0
+    bearingY: 57.0
+    character: Ö
+    height: 58
+    kernings: {}
+    width: 41
+  - advance: 35.0
+    atlasX: 1115
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 36.0
+    character: ×
+    height: 26
+    kernings: {}
+    width: 27
+  - advance: 46.0
+    atlasX: 1144
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 48.0
+    character: Ø
+    height: 51
+    kernings: {}
+    width: 43
+  - advance: 43.0
+    atlasX: 1189
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ù
+    height: 61
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 1230
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ú
+    height: 61
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 1271
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Û
+    height: 61
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 1312
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 57.0
+    character: Ü
+    height: 58
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 1353
+    atlasY: 210
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ý
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 1389
+    atlasY: 210
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Þ
+    height: 46
+    kernings: {}
+    width: 33
+  - advance: 37.0
+    atlasX: 1424
+    atlasY: 210
+    bearingX: -8.0
+    bearingY: 49.0
+    character: ß
+    height: 64
+    kernings: {}
+    width: 43
+  - advance: 36.0
+    atlasX: 1469
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 49.0
+    character: à
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1503
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 49.0
+    character: á
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1537
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 49.0
+    character: â
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1571
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ã
+    height: 48
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1605
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ä
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1639
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 52.0
+    character: å
+    height: 53
+    kernings: {}
+    width: 32
+  - advance: 52.0
+    atlasX: 1673
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 35.0
+    character: æ
+    height: 36
+    kernings: {}
+    width: 48
+  - advance: 29.0
+    atlasX: 1723
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ç
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 1752
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 49.0
+    character: è
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 1781
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 49.0
+    character: é
+    height: 50
+    kernings: {}
+    width: 29
+  - advance: 32.0
+    atlasX: 1812
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ê
+    height: 50
+    kernings: {}
+    width: 28
+  - advance: 32.0
+    atlasX: 1842
+    atlasY: 210
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ë
+    height: 47
+    kernings: {}
+    width: 27
+  - advance: 16.0
+    atlasX: 0
+    atlasY: 280
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ì
+    height: 49
+    kernings: {}
+    width: 15
+  - advance: 16.0
+    atlasX: 17
+    atlasY: 280
+    bearingX: 1.0
+    bearingY: 49.0
+    character: í
+    height: 49
+    kernings: {}
+    width: 23
+  - advance: 16.0
+    atlasX: 42
+    atlasY: 280
+    bearingX: 1.0
+    bearingY: 49.0
+    character: î
+    height: 49
+    kernings: {}
+    width: 22
+  - advance: 16.0
+    atlasX: 66
+    atlasY: 280
+    bearingX: 1.0
+    bearingY: 46.0
+    character: ï
+    height: 46
+    kernings: {}
+    width: 22
+  - advance: 36.0
+    atlasX: 90
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 49.0
+    character: ð
+    height: 50
+    kernings: {}
+    width: 34
+  - advance: 37.0
+    atlasX: 126
+    atlasY: 280
+    bearingX: 1.0
+    bearingY: 47.0
+    character: ñ
+    height: 47
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 162
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ò
+    height: 50
+    kernings: {}
+    width: 30
+  - advance: 36.0
+    atlasX: 194
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ó
+    height: 50
+    kernings: {}
+    width: 30
+  - advance: 36.0
+    atlasX: 226
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ô
+    height: 50
+    kernings: {}
+    width: 30
+  - advance: 36.0
+    atlasX: 258
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 47.0
+    character: õ
+    height: 48
+    kernings: {}
+    width: 31
+  - advance: 36.0
+    atlasX: 291
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ö
+    height: 47
+    kernings: {}
+    width: 30
+  - advance: 35.0
+    atlasX: 323
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 37.0
+    character: ÷
+    height: 29
+    kernings: {}
+    width: 30
+  - advance: 36.0
+    atlasX: 355
+    atlasY: 280
+    bearingX: 1.0
+    bearingY: 37.0
+    character: ø
+    height: 40
+    kernings: {}
+    width: 34
+  - advance: 37.0
+    atlasX: 391
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ù
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 37.0
+    atlasX: 425
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ú
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 37.0
+    atlasX: 459
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: û
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 37.0
+    atlasX: 493
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ü
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 30.0
+    atlasX: 527
+    atlasY: 280
+    bearingX: -7.0
+    bearingY: 49.0
+    character: ý
+    height: 64
+    kernings: {}
+    width: 40
+  - advance: 37.0
+    atlasX: 569
+    atlasY: 280
+    bearingX: -2.0
+    bearingY: 49.0
+    character: þ
+    height: 64
+    kernings: {}
+    width: 36
+  - advance: 30.0
+    atlasX: 607
+    atlasY: 280
+    bearingX: -7.0
+    bearingY: 46.0
+    character: ÿ
+    height: 61
+    kernings: {}
+    width: 40
+  - advance: 36.0
+    atlasX: 649
+    atlasY: 280
+    bearingX: -4.0
+    bearingY: 55.0
+    character: Ā
+    height: 55
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 689
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 44.0
+    character: ā
+    height: 45
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 723
+    atlasY: 280
+    bearingX: -4.0
+    bearingY: 58.0
+    character: Ă
+    height: 58
+    kernings: {}
+    width: 39
+  - advance: 36.0
+    atlasX: 764
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ă
+    height: 48
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 798
+    atlasY: 280
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ą
+    height: 60
+    kernings: {}
+    width: 37
+  - advance: 36.0
+    atlasX: 837
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ą
+    height: 49
+    kernings: {}
+    width: 32
+  - advance: 37.0
+    atlasX: 871
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ć
+    height: 61
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 910
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ć
+    height: 50
+    kernings: {}
+    width: 29
+  - advance: 37.0
+    atlasX: 941
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ĉ
+    height: 61
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 980
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ĉ
+    height: 50
+    kernings: {}
+    width: 28
+  - advance: 37.0
+    atlasX: 1010
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 58.0
+    character: Ċ
+    height: 59
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 1049
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ċ
+    height: 48
+    kernings: {}
+    width: 27
+  - advance: 37.0
+    atlasX: 1078
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Č
+    height: 61
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 1117
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: č
+    height: 50
+    kernings: {}
+    width: 29
+  - advance: 43.0
+    atlasX: 1148
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ď
+    height: 60
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 1189
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ď
+    height: 50
+    kernings: {}
+    width: 46
+  - advance: 43.0
+    atlasX: 1237
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Đ
+    height: 46
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 1278
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: đ
+    height: 50
+    kernings: {}
+    width: 39
+  - advance: 33.0
+    atlasX: 1319
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 55.0
+    character: Ē
+    height: 55
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 1355
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 44.0
+    character: ē
+    height: 45
+    kernings: {}
+    width: 28
+  - advance: 33.0
+    atlasX: 1385
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 58.0
+    character: Ĕ
+    height: 58
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 1421
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ĕ
+    height: 48
+    kernings: {}
+    width: 29
+  - advance: 33.0
+    atlasX: 1452
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ė
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 1488
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ė
+    height: 48
+    kernings: {}
+    width: 27
+  - advance: 33.0
+    atlasX: 1517
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ę
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 1553
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ę
+    height: 48
+    kernings: {}
+    width: 27
+  - advance: 33.0
+    atlasX: 1582
+    atlasY: 280
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ě
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 1618
+    atlasY: 280
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ě
+    height: 50
+    kernings: {}
+    width: 29
+  - advance: 43.0
+    atlasX: 1649
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ĝ
+    height: 61
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 1690
+    atlasY: 280
+    bearingX: -4.0
+    bearingY: 49.0
+    character: ĝ
+    height: 64
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 1731
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 58.0
+    character: Ğ
+    height: 59
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 1772
+    atlasY: 280
+    bearingX: -4.0
+    bearingY: 47.0
+    character: ğ
+    height: 62
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 1813
+    atlasY: 280
+    bearingX: 4.0
+    bearingY: 58.0
+    character: Ġ
+    height: 59
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 1854
+    atlasY: 280
+    bearingX: -4.0
+    bearingY: 47.0
+    character: ġ
+    height: 62
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 0
+    atlasY: 350
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ģ
+    height: 60
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 41
+    atlasY: 350
+    bearingX: -4.0
+    bearingY: 49.0
+    character: ģ
+    height: 64
+    kernings: {}
+    width: 39
+  - advance: 43.0
+    atlasX: 82
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ĥ
+    height: 60
+    kernings: {}
+    width: 42
+  - advance: 37.0
+    atlasX: 126
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 61.0
+    character: ĥ
+    height: 61
+    kernings: {}
+    width: 33
+  - advance: 43.0
+    atlasX: 161
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ħ
+    height: 46
+    kernings: {}
+    width: 46
+  - advance: 37.0
+    atlasX: 209
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ħ
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 17.0
+    atlasX: 244
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 58.0
+    character: Ĩ
+    height: 58
+    kernings: {}
+    width: 26
+  - advance: 16.0
+    atlasX: 272
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 47.0
+    character: ĩ
+    height: 47
+    kernings: {}
+    width: 24
+  - advance: 17.0
+    atlasX: 298
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 55.0
+    character: Ī
+    height: 55
+    kernings: {}
+    width: 23
+  - advance: 16.0
+    atlasX: 323
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 44.0
+    character: ī
+    height: 44
+    kernings: {}
+    width: 21
+  - advance: 17.0
+    atlasX: 346
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 58.0
+    character: Ĭ
+    height: 58
+    kernings: {}
+    width: 25
+  - advance: 16.0
+    atlasX: 373
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 47.0
+    character: ĭ
+    height: 47
+    kernings: {}
+    width: 22
+  - advance: 17.0
+    atlasX: 397
+    atlasY: 350
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Į
+    height: 60
+    kernings: {}
+    width: 21
+  - advance: 16.0
+    atlasX: 420
+    atlasY: 350
+    bearingX: -4.0
+    bearingY: 47.0
+    character: į
+    height: 61
+    kernings: {}
+    width: 21
+  - advance: 17.0
+    atlasX: 443
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 58.0
+    character: İ
+    height: 58
+    kernings: {}
+    width: 18
+  - advance: 16.0
+    atlasX: 463
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ı
+    height: 34
+    kernings: {}
+    width: 14
+  - advance: 35.0
+    atlasX: 479
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ĳ
+    height: 58
+    kernings: {}
+    width: 34
+  - advance: 33.0
+    atlasX: 515
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 47.0
+    character: ĳ
+    height: 62
+    kernings: {}
+    width: 33
+  - advance: 17.0
+    atlasX: 550
+    atlasY: 350
+    bearingX: -10.0
+    bearingY: 60.0
+    character: Ĵ
+    height: 72
+    kernings: {}
+    width: 35
+  - advance: 16.0
+    atlasX: 587
+    atlasY: 350
+    bearingX: -9.0
+    bearingY: 49.0
+    character: ĵ
+    height: 64
+    kernings: {}
+    width: 31
+  - advance: 36.0
+    atlasX: 620
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ķ
+    height: 60
+    kernings: {}
+    width: 40
+  - advance: 31.0
+    atlasX: 662
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ķ
+    height: 63
+    kernings: {}
+    width: 33
+  - advance: 31.0
+    atlasX: 697
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ĸ
+    height: 34
+    kernings: {}
+    width: 33
+  - advance: 30.0
+    atlasX: 732
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ĺ
+    height: 60
+    kernings: {}
+    width: 25
+  - advance: 16.0
+    atlasX: 759
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 61.0
+    character: ĺ
+    height: 61
+    kernings: {}
+    width: 25
+  - advance: 30.0
+    atlasX: 786
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ļ
+    height: 60
+    kernings: {}
+    width: 25
+  - advance: 16.0
+    atlasX: 813
+    atlasY: 350
+    bearingX: -4.0
+    bearingY: 49.0
+    character: ļ
+    height: 63
+    kernings: {}
+    width: 22
+  - advance: 30.0
+    atlasX: 837
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ľ
+    height: 46
+    kernings: {}
+    width: 32
+  - advance: 16.0
+    atlasX: 871
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ľ
+    height: 49
+    kernings: {}
+    width: 27
+  - advance: 30.0
+    atlasX: 900
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ŀ
+    height: 46
+    kernings: {}
+    width: 26
+  - advance: 18.0
+    atlasX: 928
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ŀ
+    height: 49
+    kernings: {}
+    width: 21
+  - advance: 30.0
+    atlasX: 951
+    atlasY: 350
+    bearingX: 0.0
+    bearingY: 46.0
+    character: Ł
+    height: 46
+    kernings: {}
+    width: 27
+  - advance: 16.0
+    atlasX: 980
+    atlasY: 350
+    bearingX: 0.0
+    bearingY: 49.0
+    character: ł
+    height: 49
+    kernings: {}
+    width: 19
+  - advance: 45.0
+    atlasX: 1001
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ń
+    height: 60
+    kernings: {}
+    width: 44
+  - advance: 37.0
+    atlasX: 1047
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ń
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 45.0
+    atlasX: 1082
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ņ
+    height: 60
+    kernings: {}
+    width: 44
+  - advance: 37.0
+    atlasX: 1128
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ņ
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 45.0
+    atlasX: 1163
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ň
+    height: 60
+    kernings: {}
+    width: 44
+  - advance: 37.0
+    atlasX: 1209
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ň
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 41.0
+    atlasX: 1244
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ŉ
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 45.0
+    atlasX: 1282
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ŋ
+    height: 58
+    kernings: {}
+    width: 44
+  - advance: 37.0
+    atlasX: 1328
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ŋ
+    height: 50
+    kernings: {}
+    width: 33
+  - advance: 46.0
+    atlasX: 1363
+    atlasY: 350
+    bearingX: 4.0
+    bearingY: 55.0
+    character: Ō
+    height: 56
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1406
+    atlasY: 350
+    bearingX: 3.0
+    bearingY: 44.0
+    character: ō
+    height: 45
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1438
+    atlasY: 350
+    bearingX: 4.0
+    bearingY: 58.0
+    character: Ŏ
+    height: 59
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1481
+    atlasY: 350
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ŏ
+    height: 48
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1513
+    atlasY: 350
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ő
+    height: 61
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1556
+    atlasY: 350
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ő
+    height: 50
+    kernings: {}
+    width: 34
+  - advance: 55.0
+    atlasX: 1592
+    atlasY: 350
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Œ
+    height: 47
+    kernings: {}
+    width: 54
+  - advance: 55.0
+    atlasX: 1648
+    atlasY: 350
+    bearingX: 3.0
+    bearingY: 36.0
+    character: œ
+    height: 38
+    kernings: {}
+    width: 51
+  - advance: 36.0
+    atlasX: 1701
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ŕ
+    height: 60
+    kernings: {}
+    width: 35
+  - advance: 25.0
+    atlasX: 1738
+    atlasY: 350
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ŕ
+    height: 49
+    kernings: {}
+    width: 28
+  - advance: 36.0
+    atlasX: 1768
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ŗ
+    height: 60
+    kernings: {}
+    width: 35
+  - advance: 25.0
+    atlasX: 1805
+    atlasY: 350
+    bearingX: -4.0
+    bearingY: 35.0
+    character: ŗ
+    height: 49
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1839
+    atlasY: 350
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ř
+    height: 60
+    kernings: {}
+    width: 35
+  - advance: 25.0
+    atlasX: 0
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ř
+    height: 49
+    kernings: {}
+    width: 29
+  - advance: 32.0
+    atlasX: 31
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 60.0
+    character: Ś
+    height: 61
+    kernings: {}
+    width: 33
+  - advance: 27.0
+    atlasX: 66
+    atlasY: 420
+    bearingX: 0.0
+    bearingY: 49.0
+    character: ś
+    height: 50
+    kernings: {}
+    width: 29
+  - advance: 32.0
+    atlasX: 97
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 60.0
+    character: Ŝ
+    height: 61
+    kernings: {}
+    width: 33
+  - advance: 27.0
+    atlasX: 132
+    atlasY: 420
+    bearingX: 0.0
+    bearingY: 49.0
+    character: ŝ
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 161
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 46.0
+    character: Ş
+    height: 61
+    kernings: {}
+    width: 33
+  - advance: 27.0
+    atlasX: 196
+    atlasY: 420
+    bearingX: 0.0
+    bearingY: 35.0
+    character: ş
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 225
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 60.0
+    character: Š
+    height: 61
+    kernings: {}
+    width: 33
+  - advance: 27.0
+    atlasX: 260
+    atlasY: 420
+    bearingX: 0.0
+    bearingY: 49.0
+    character: š
+    height: 50
+    kernings: {}
+    width: 29
+  - advance: 32.0
+    atlasX: 291
+    atlasY: 420
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ţ
+    height: 61
+    kernings: {}
+    width: 34
+  - advance: 21.0
+    atlasX: 327
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 42.0
+    character: ţ
+    height: 57
+    kernings: {}
+    width: 22
+  - advance: 32.0
+    atlasX: 351
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ť
+    height: 60
+    kernings: {}
+    width: 33
+  - advance: 21.0
+    atlasX: 386
+    atlasY: 420
+    bearingX: 2.0
+    bearingY: 49.0
+    character: ť
+    height: 50
+    kernings: {}
+    width: 28
+  - advance: 32.0
+    atlasX: 416
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ŧ
+    height: 46
+    kernings: {}
+    width: 33
+  - advance: 21.0
+    atlasX: 451
+    atlasY: 420
+    bearingX: 1.0
+    bearingY: 42.0
+    character: ŧ
+    height: 43
+    kernings: {}
+    width: 22
+  - advance: 43.0
+    atlasX: 475
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 58.0
+    character: Ũ
+    height: 59
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 516
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ũ
+    height: 48
+    kernings: {}
+    width: 32
+  - advance: 43.0
+    atlasX: 550
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 55.0
+    character: Ū
+    height: 56
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 591
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 44.0
+    character: ū
+    height: 45
+    kernings: {}
+    width: 32
+  - advance: 43.0
+    atlasX: 625
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 58.0
+    character: Ŭ
+    height: 59
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 666
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ŭ
+    height: 48
+    kernings: {}
+    width: 32
+  - advance: 43.0
+    atlasX: 700
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 63.0
+    character: Ů
+    height: 64
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 741
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ů
+    height: 53
+    kernings: {}
+    width: 32
+  - advance: 43.0
+    atlasX: 775
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ű
+    height: 61
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 816
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ű
+    height: 50
+    kernings: {}
+    width: 35
+  - advance: 43.0
+    atlasX: 853
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ų
+    height: 60
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 894
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ų
+    height: 48
+    kernings: {}
+    width: 32
+  - advance: 55.0
+    atlasX: 928
+    atlasY: 420
+    bearingX: 6.0
+    bearingY: 60.0
+    character: Ŵ
+    height: 60
+    kernings: {}
+    width: 55
+  - advance: 46.0
+    atlasX: 985
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ŵ
+    height: 49
+    kernings: {}
+    width: 46
+  - advance: 32.0
+    atlasX: 1033
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ŷ
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1069
+    atlasY: 420
+    bearingX: -7.0
+    bearingY: 49.0
+    character: ŷ
+    height: 64
+    kernings: {}
+    width: 40
+  - advance: 32.0
+    atlasX: 1111
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 57.0
+    character: Ÿ
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 34.0
+    atlasX: 1147
+    atlasY: 420
+    bearingX: -1.0
+    bearingY: 60.0
+    character: Ź
+    height: 60
+    kernings: {}
+    width: 38
+  - advance: 28.0
+    atlasX: 1187
+    atlasY: 420
+    bearingX: -1.0
+    bearingY: 49.0
+    character: ź
+    height: 49
+    kernings: {}
+    width: 31
+  - advance: 34.0
+    atlasX: 1220
+    atlasY: 420
+    bearingX: -1.0
+    bearingY: 58.0
+    character: Ż
+    height: 58
+    kernings: {}
+    width: 38
+  - advance: 28.0
+    atlasX: 1260
+    atlasY: 420
+    bearingX: -1.0
+    bearingY: 47.0
+    character: ż
+    height: 47
+    kernings: {}
+    width: 29
+  - advance: 34.0
+    atlasX: 1291
+    atlasY: 420
+    bearingX: -1.0
+    bearingY: 60.0
+    character: Ž
+    height: 60
+    kernings: {}
+    width: 38
+  - advance: 28.0
+    atlasX: 1331
+    atlasY: 420
+    bearingX: -1.0
+    bearingY: 49.0
+    character: ž
+    height: 49
+    kernings: {}
+    width: 31
+  - advance: 18.0
+    atlasX: 1364
+    atlasY: 420
+    bearingX: -9.0
+    bearingY: 49.0
+    character: ſ
+    height: 64
+    kernings: {}
+    width: 37
+  - advance: 35.0
+    atlasX: 1403
+    atlasY: 420
+    bearingX: 0.0
+    bearingY: 47.0
+    character: ƒ
+    height: 62
+    kernings: {}
+    width: 35
+  - advance: 46.0
+    atlasX: 1440
+    atlasY: 420
+    bearingX: 4.0
+    bearingY: 48.0
+    character: Ơ
+    height: 49
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 1492
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 40.0
+    character: ơ
+    height: 41
+    kernings: {}
+    width: 40
+  - advance: 46.0
+    atlasX: 1534
+    atlasY: 420
+    bearingX: 5.0
+    bearingY: 49.0
+    character: Ư
+    height: 50
+    kernings: {}
+    width: 51
+  - advance: 40.0
+    atlasX: 1587
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 39.0
+    character: ư
+    height: 40
+    kernings: {}
+    width: 44
+  - advance: 16.0
+    atlasX: 1633
+    atlasY: 420
+    bearingX: -9.0
+    bearingY: 49.0
+    character: ǰ
+    height: 64
+    kernings: {}
+    width: 33
+  - advance: 36.0
+    atlasX: 1668
+    atlasY: 420
+    bearingX: -4.0
+    bearingY: 61.0
+    character: Ǻ
+    height: 61
+    kernings: {}
+    width: 40
+  - advance: 36.0
+    atlasX: 1710
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 61.0
+    character: ǻ
+    height: 62
+    kernings: {}
+    width: 32
+  - advance: 52.0
+    atlasX: 1744
+    atlasY: 420
+    bearingX: -4.0
+    bearingY: 60.0
+    character: Ǽ
+    height: 60
+    kernings: {}
+    width: 59
+  - advance: 52.0
+    atlasX: 1805
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ǽ
+    height: 50
+    kernings: {}
+    width: 48
+  - advance: 46.0
+    atlasX: 1855
+    atlasY: 420
+    bearingX: 3.0
+    bearingY: 60.0
+    character: Ǿ
+    height: 63
+    kernings: {}
+    width: 43
+  - advance: 36.0
+    atlasX: 0
+    atlasY: 490
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ǿ
+    height: 52
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 36
+    atlasY: 490
+    bearingX: 1.0
+    bearingY: 46.0
+    character: Ș
+    height: 60
+    kernings: {}
+    width: 33
+  - advance: 27.0
+    atlasX: 71
+    atlasY: 490
+    bearingX: 0.0
+    bearingY: 35.0
+    character: ș
+    height: 49
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 100
+    atlasY: 490
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ț
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 21.0
+    atlasX: 136
+    atlasY: 490
+    bearingX: 1.0
+    bearingY: 42.0
+    character: ț
+    height: 56
+    kernings: {}
+    width: 22
+  - advance: 16.0
+    atlasX: 160
+    atlasY: 490
+    bearingX: -9.0
+    bearingY: 34.0
+    character: ȷ
+    height: 49
+    kernings: {}
+    width: 24
+  - advance: 11.0
+    atlasX: 186
+    atlasY: 490
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ʼ
+    height: 16
+    kernings: {}
+    width: 14
+  - advance: 35.0
+    atlasX: 202
+    atlasY: 490
+    bearingX: 12.0
+    bearingY: 49.0
+    character: ˆ
+    height: 10
+    kernings: {}
+    width: 20
+  - advance: 35.0
+    atlasX: 224
+    atlasY: 490
+    bearingX: 14.0
+    bearingY: 49.0
+    character: ˇ
+    height: 10
+    kernings: {}
+    width: 20
+  - advance: 34.0
+    atlasX: 246
+    atlasY: 490
+    bearingX: 12.0
+    bearingY: 44.0
+    character: ˉ
+    height: 5
+    kernings: {}
+    width: 19
+  - advance: 35.0
+    atlasX: 267
+    atlasY: 490
+    bearingX: 14.0
+    bearingY: 47.0
+    character: ˘
+    height: 8
+    kernings: {}
+    width: 19
+  - advance: 16.0
+    atlasX: 288
+    atlasY: 490
+    bearingX: 10.0
+    bearingY: 47.0
+    character: ˙
+    height: 7
+    kernings: {}
+    width: 7
+  - advance: 37.0
+    atlasX: 297
+    atlasY: 490
+    bearingX: 17.0
+    bearingY: 52.0
+    character: ˚
+    height: 13
+    kernings: {}
+    width: 14
+  - advance: 12.0
+    atlasX: 313
+    atlasY: 490
+    bearingX: -5.0
+    bearingY: 0.0
+    character: ˛
+    height: 14
+    kernings: {}
+    width: 11
+  - advance: 35.0
+    atlasX: 326
+    atlasY: 490
+    bearingX: 10.0
+    bearingY: 47.0
+    character: ˜
+    height: 8
+    kernings: {}
+    width: 24
+  - advance: 35.0
+    atlasX: 352
+    atlasY: 490
+    bearingX: 12.0
+    bearingY: 49.0
+    character: ˝
+    height: 10
+    kernings: {}
+    width: 24
+  - advance: 21.0
+    atlasX: 378
+    atlasY: 490
+    bearingX: -3.0
+    bearingY: -4.0
+    character: ˳
+    height: 13
+    kernings: {}
+    width: 15
+  - advance: 0.0
+    atlasX: 395
+    atlasY: 490
+    bearingX: -23.0
+    bearingY: 49.0
+    character: ̀
+    height: 10
+    kernings: {}
+    width: 11
+  - advance: 0.0
+    atlasX: 408
+    atlasY: 490
+    bearingX: -17.0
+    bearingY: 49.0
+    character: ́
+    height: 10
+    kernings: {}
+    width: 14
+  - advance: 0.0
+    atlasX: 424
+    atlasY: 490
+    bearingX: -27.0
+    bearingY: 47.0
+    character: ̃
+    height: 8
+    kernings: {}
+    width: 24
+  - advance: 0.0
+    atlasX: 450
+    atlasY: 490
+    bearingX: -19.0
+    bearingY: 53.0
+    character: ̉
+    height: 15
+    kernings: {}
+    width: 12
+  - advance: 0.0
+    atlasX: 464
+    atlasY: 490
+    bearingX: -32.0
+    bearingY: 49.0
+    character: ̏
+    height: 10
+    kernings: {}
+    width: 22
+  - advance: 0.0
+    atlasX: 488
+    atlasY: 490
+    bearingX: -27.0
+    bearingY: -4.0
+    character: ̣
+    height: 7
+    kernings: {}
+    width: 7
+  - advance: 36.0
+    atlasX: 497
+    atlasY: 490
+    bearingX: 19.0
+    bearingY: 52.0
+    character: ΄
+    height: 13
+    kernings: {}
+    width: 12
+  - advance: 36.0
+    atlasX: 511
+    atlasY: 490
+    bearingX: 14.0
+    bearingY: 53.0
+    character: ΅
+    height: 13
+    kernings: {}
+    width: 19
+  - advance: 36.0
+    atlasX: 532
+    atlasY: 490
+    bearingX: -4.0
+    bearingY: 49.0
+    character: Ά
+    height: 49
+    kernings: {}
+    width: 37
+  - advance: 16.0
+    atlasX: 571
+    atlasY: 490
+    bearingX: 5.0
+    bearingY: 27.0
+    character: ·
+    height: 9
+    kernings: {}
+    width: 9
+  - advance: 36.0
+    atlasX: 582
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 49.0
+    character: Έ
+    height: 49
+    kernings: {}
+    width: 38
+  - advance: 48.0
+    atlasX: 622
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 49.0
+    character: Ή
+    height: 49
+    kernings: {}
+    width: 47
+  - advance: 23.0
+    atlasX: 671
+    atlasY: 490
+    bearingX: 3.0
+    bearingY: 49.0
+    character: Ί
+    height: 49
+    kernings: {}
+    width: 21
+  - advance: 48.0
+    atlasX: 694
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 49.0
+    character: Ό
+    height: 50
+    kernings: {}
+    width: 45
+  - advance: 41.0
+    atlasX: 741
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 49.0
+    character: Ύ
+    height: 49
+    kernings: {}
+    width: 45
+  - advance: 50.0
+    atlasX: 788
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 49.0
+    character: Ώ
+    height: 49
+    kernings: {}
+    width: 46
+  - advance: 20.0
+    atlasX: 836
+    atlasY: 490
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ΐ
+    height: 54
+    kernings: {}
+    width: 20
+  - advance: 36.0
+    atlasX: 858
+    atlasY: 490
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Α
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 38.0
+    atlasX: 897
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Β
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 30.0
+    atlasX: 935
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Γ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 971
+    atlasY: 490
+    bearingX: -2.0
+    bearingY: 46.0
+    character: Δ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 33.0
+    atlasX: 1007
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ε
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 34.0
+    atlasX: 1043
+    atlasY: 490
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Ζ
+    height: 46
+    kernings: {}
+    width: 38
+  - advance: 43.0
+    atlasX: 1083
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Η
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 46.0
+    atlasX: 1127
+    atlasY: 490
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Θ
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 17.0
+    atlasX: 1170
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ι
+    height: 46
+    kernings: {}
+    width: 16
+  - advance: 36.0
+    atlasX: 1188
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Κ
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 36.0
+    atlasX: 1230
+    atlasY: 490
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Λ
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 54.0
+    atlasX: 1269
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Μ
+    height: 46
+    kernings: {}
+    width: 52
+  - advance: 45.0
+    atlasX: 1323
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ν
+    height: 46
+    kernings: {}
+    width: 44
+  - advance: 33.0
+    atlasX: 1369
+    atlasY: 490
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Ξ
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 46.0
+    atlasX: 1408
+    atlasY: 490
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ο
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 43.0
+    atlasX: 1451
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Π
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 36.0
+    atlasX: 1495
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ρ
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 33.0
+    atlasX: 1532
+    atlasY: 490
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Σ
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 32.0
+    atlasX: 1571
+    atlasY: 490
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Τ
+    height: 46
+    kernings: {}
+    width: 33
+  - advance: 32.0
+    atlasX: 1606
+    atlasY: 490
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Υ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 48.0
+    atlasX: 1642
+    atlasY: 490
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Φ
+    height: 47
+    kernings: {}
+    width: 42
+  - advance: 33.0
+    atlasX: 1686
+    atlasY: 490
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Χ
+    height: 46
+    kernings: {}
+    width: 43
+  - advance: 47.0
+    atlasX: 1731
+    atlasY: 490
+    bearingX: 6.0
+    bearingY: 46.0
+    character: Ψ
+    height: 46
+    kernings: {}
+    width: 45
+  - advance: 47.0
+    atlasX: 1778
+    atlasY: 490
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Ω
+    height: 46
+    kernings: {}
+    width: 46
+  - advance: 17.0
+    atlasX: 1826
+    atlasY: 490
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ϊ
+    height: 57
+    kernings: {}
+    width: 23
+  - advance: 32.0
+    atlasX: 1851
+    atlasY: 490
+    bearingX: 5.0
+    bearingY: 57.0
+    character: Ϋ
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 0
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ά
+    height: 53
+    kernings: {}
+    width: 34
+  - advance: 28.0
+    atlasX: 36
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 52.0
+    character: έ
+    height: 53
+    kernings: {}
+    width: 28
+  - advance: 37.0
+    atlasX: 66
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 52.0
+    character: ή
+    height: 67
+    kernings: {}
+    width: 33
+  - advance: 20.0
+    atlasX: 101
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ί
+    height: 53
+    kernings: {}
+    width: 19
+  - advance: 37.0
+    atlasX: 122
+    atlasY: 560
+    bearingX: 4.0
+    bearingY: 53.0
+    character: ΰ
+    height: 54
+    kernings: {}
+    width: 31
+  - advance: 36.0
+    atlasX: 155
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 35.0
+    character: α
+    height: 36
+    kernings: {}
+    width: 34
+  - advance: 37.0
+    atlasX: 191
+    atlasY: 560
+    bearingX: -2.0
+    bearingY: 49.0
+    character: β
+    height: 64
+    kernings: {}
+    width: 38
+  - advance: 29.0
+    atlasX: 231
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 34.0
+    character: γ
+    height: 49
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 264
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 49.0
+    character: δ
+    height: 50
+    kernings: {}
+    width: 34
+  - advance: 28.0
+    atlasX: 300
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ε
+    height: 36
+    kernings: {}
+    width: 28
+  - advance: 29.0
+    atlasX: 330
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ζ
+    height: 62
+    kernings: {}
+    width: 31
+  - advance: 37.0
+    atlasX: 363
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 35.0
+    character: η
+    height: 50
+    kernings: {}
+    width: 33
+  - advance: 35.0
+    atlasX: 398
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 49.0
+    character: θ
+    height: 50
+    kernings: {}
+    width: 31
+  - advance: 20.0
+    atlasX: 431
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ι
+    height: 35
+    kernings: {}
+    width: 14
+  - advance: 31.0
+    atlasX: 447
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 34.0
+    character: κ
+    height: 34
+    kernings: {}
+    width: 33
+  - advance: 31.0
+    atlasX: 482
+    atlasY: 560
+    bearingX: -4.0
+    bearingY: 49.0
+    character: λ
+    height: 50
+    kernings: {}
+    width: 33
+  - advance: 37.0
+    atlasX: 517
+    atlasY: 560
+    bearingX: -2.0
+    bearingY: 34.0
+    character: μ
+    height: 49
+    kernings: {}
+    width: 38
+  - advance: 31.0
+    atlasX: 557
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ν
+    height: 34
+    kernings: {}
+    width: 29
+  - advance: 28.0
+    atlasX: 588
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 49.0
+    character: ξ
+    height: 62
+    kernings: {}
+    width: 30
+  - advance: 36.0
+    atlasX: 620
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ο
+    height: 36
+    kernings: {}
+    width: 30
+  - advance: 38.0
+    atlasX: 652
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 34.0
+    character: π
+    height: 35
+    kernings: {}
+    width: 38
+  - advance: 37.0
+    atlasX: 692
+    atlasY: 560
+    bearingX: -2.0
+    bearingY: 35.0
+    character: ρ
+    height: 50
+    kernings: {}
+    width: 36
+  - advance: 29.0
+    atlasX: 730
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ς
+    height: 48
+    kernings: {}
+    width: 27
+  - advance: 37.0
+    atlasX: 759
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 34.0
+    character: σ
+    height: 35
+    kernings: {}
+    width: 36
+  - advance: 27.0
+    atlasX: 797
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 34.0
+    character: τ
+    height: 35
+    kernings: {}
+    width: 27
+  - advance: 37.0
+    atlasX: 826
+    atlasY: 560
+    bearingX: 4.0
+    bearingY: 34.0
+    character: υ
+    height: 35
+    kernings: {}
+    width: 31
+  - advance: 43.0
+    atlasX: 859
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 35.0
+    character: φ
+    height: 50
+    kernings: {}
+    width: 37
+  - advance: 32.0
+    atlasX: 898
+    atlasY: 560
+    bearingX: -8.0
+    bearingY: 34.0
+    character: χ
+    height: 49
+    kernings: {}
+    width: 43
+  - advance: 46.0
+    atlasX: 943
+    atlasY: 560
+    bearingX: 4.0
+    bearingY: 49.0
+    character: ψ
+    height: 64
+    kernings: {}
+    width: 40
+  - advance: 47.0
+    atlasX: 985
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ω
+    height: 35
+    kernings: {}
+    width: 41
+  - advance: 20.0
+    atlasX: 1028
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ϊ
+    height: 47
+    kernings: {}
+    width: 19
+  - advance: 37.0
+    atlasX: 1049
+    atlasY: 560
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ϋ
+    height: 47
+    kernings: {}
+    width: 31
+  - advance: 36.0
+    atlasX: 1082
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ό
+    height: 53
+    kernings: {}
+    width: 30
+  - advance: 37.0
+    atlasX: 1114
+    atlasY: 560
+    bearingX: 4.0
+    bearingY: 52.0
+    character: ύ
+    height: 53
+    kernings: {}
+    width: 31
+  - advance: 47.0
+    atlasX: 1147
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ώ
+    height: 53
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1190
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ϑ
+    height: 50
+    kernings: {}
+    width: 37
+  - advance: 33.0
+    atlasX: 1229
+    atlasY: 560
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ϒ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 51.0
+    atlasX: 1265
+    atlasY: 560
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ϖ
+    height: 35
+    kernings: {}
+    width: 50
+  - advance: 33.0
+    atlasX: 1317
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ѐ
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 33.0
+    atlasX: 1353
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ё
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 43.0
+    atlasX: 1389
+    atlasY: 560
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ђ
+    height: 47
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1425
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ѓ
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 37.0
+    atlasX: 1461
+    atlasY: 560
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Є
+    height: 47
+    kernings: {}
+    width: 37
+  - advance: 32.0
+    atlasX: 1500
+    atlasY: 560
+    bearingX: 1.0
+    bearingY: 46.0
+    character: Ѕ
+    height: 47
+    kernings: {}
+    width: 33
+  - advance: 17.0
+    atlasX: 1535
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 46.0
+    character: І
+    height: 46
+    kernings: {}
+    width: 16
+  - advance: 17.0
+    atlasX: 1553
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ї
+    height: 57
+    kernings: {}
+    width: 23
+  - advance: 17.0
+    atlasX: 1578
+    atlasY: 560
+    bearingX: -10.0
+    bearingY: 46.0
+    character: Ј
+    height: 58
+    kernings: {}
+    width: 28
+  - advance: 57.0
+    atlasX: 1608
+    atlasY: 560
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Љ
+    height: 47
+    kernings: {}
+    width: 57
+  - advance: 58.0
+    atlasX: 1667
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Њ
+    height: 46
+    kernings: {}
+    width: 52
+  - advance: 43.0
+    atlasX: 1721
+    atlasY: 560
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ћ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 1757
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ќ
+    height: 60
+    kernings: {}
+    width: 40
+  - advance: 45.0
+    atlasX: 1799
+    atlasY: 560
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ѝ
+    height: 60
+    kernings: {}
+    width: 43
+  - advance: 37.0
+    atlasX: 1844
+    atlasY: 560
+    bearingX: -1.0
+    bearingY: 60.0
+    character: Ў
+    height: 61
+    kernings: {}
+    width: 44
+  - advance: 43.0
+    atlasX: 0
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Џ
+    height: 58
+    kernings: {}
+    width: 42
+  - advance: 36.0
+    atlasX: 44
+    atlasY: 630
+    bearingX: -4.0
+    bearingY: 46.0
+    character: А
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 36.0
+    atlasX: 83
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Б
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 38.0
+    atlasX: 119
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: В
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 30.0
+    atlasX: 157
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Г
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 40.0
+    atlasX: 193
+    atlasY: 630
+    bearingX: -6.0
+    bearingY: 46.0
+    character: Д
+    height: 58
+    kernings: {}
+    width: 46
+  - advance: 33.0
+    atlasX: 241
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Е
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 50.0
+    atlasX: 277
+    atlasY: 630
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ж
+    height: 46
+    kernings: {}
+    width: 60
+  - advance: 34.0
+    atlasX: 339
+    atlasY: 630
+    bearingX: -1.0
+    bearingY: 46.0
+    character: З
+    height: 47
+    kernings: {}
+    width: 35
+  - advance: 45.0
+    atlasX: 376
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: И
+    height: 46
+    kernings: {}
+    width: 43
+  - advance: 45.0
+    atlasX: 421
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Й
+    height: 60
+    kernings: {}
+    width: 43
+  - advance: 36.0
+    atlasX: 466
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: К
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 41.0
+    atlasX: 508
+    atlasY: 630
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Л
+    height: 47
+    kernings: {}
+    width: 45
+  - advance: 54.0
+    atlasX: 555
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: М
+    height: 46
+    kernings: {}
+    width: 52
+  - advance: 43.0
+    atlasX: 609
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Н
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 46.0
+    atlasX: 653
+    atlasY: 630
+    bearingX: 4.0
+    bearingY: 46.0
+    character: О
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 43.0
+    atlasX: 696
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: П
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 36.0
+    atlasX: 740
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Р
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 37.0
+    atlasX: 777
+    atlasY: 630
+    bearingX: 4.0
+    bearingY: 46.0
+    character: С
+    height: 47
+    kernings: {}
+    width: 37
+  - advance: 32.0
+    atlasX: 816
+    atlasY: 630
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Т
+    height: 46
+    kernings: {}
+    width: 33
+  - advance: 37.0
+    atlasX: 851
+    atlasY: 630
+    bearingX: -1.0
+    bearingY: 46.0
+    character: У
+    height: 47
+    kernings: {}
+    width: 44
+  - advance: 48.0
+    atlasX: 897
+    atlasY: 630
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ф
+    height: 47
+    kernings: {}
+    width: 42
+  - advance: 33.0
+    atlasX: 941
+    atlasY: 630
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Х
+    height: 46
+    kernings: {}
+    width: 43
+  - advance: 43.0
+    atlasX: 986
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ц
+    height: 58
+    kernings: {}
+    width: 41
+  - advance: 41.0
+    atlasX: 1029
+    atlasY: 630
+    bearingX: 7.0
+    bearingY: 46.0
+    character: Ч
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 61.0
+    atlasX: 1066
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ш
+    height: 46
+    kernings: {}
+    width: 60
+  - advance: 61.0
+    atlasX: 1128
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Щ
+    height: 58
+    kernings: {}
+    width: 60
+  - advance: 40.0
+    atlasX: 1190
+    atlasY: 630
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ъ
+    height: 46
+    kernings: {}
+    width: 32
+  - advance: 50.0
+    atlasX: 1224
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ы
+    height: 46
+    kernings: {}
+    width: 49
+  - advance: 35.0
+    atlasX: 1275
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ь
+    height: 46
+    kernings: {}
+    width: 30
+  - advance: 37.0
+    atlasX: 1307
+    atlasY: 630
+    bearingX: 0.0
+    bearingY: 46.0
+    character: Э
+    height: 47
+    kernings: {}
+    width: 36
+  - advance: 63.0
+    atlasX: 1345
+    atlasY: 630
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ю
+    height: 47
+    kernings: {}
+    width: 59
+  - advance: 36.0
+    atlasX: 1406
+    atlasY: 630
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Я
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 36.0
+    atlasX: 1448
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 35.0
+    character: а
+    height: 36
+    kernings: {}
+    width: 32
+  - advance: 35.0
+    atlasX: 1482
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 49.0
+    character: б
+    height: 50
+    kernings: {}
+    width: 34
+  - advance: 34.0
+    atlasX: 1518
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 35.0
+    character: в
+    height: 36
+    kernings: {}
+    width: 30
+  - advance: 29.0
+    atlasX: 1550
+    atlasY: 630
+    bearingX: 1.0
+    bearingY: 35.0
+    character: г
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 36.0
+    atlasX: 1579
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 49.0
+    character: д
+    height: 50
+    kernings: {}
+    width: 31
+  - advance: 32.0
+    atlasX: 1612
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 35.0
+    character: е
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 53.0
+    atlasX: 1641
+    atlasY: 630
+    bearingX: -2.0
+    bearingY: 35.0
+    character: ж
+    height: 36
+    kernings: {}
+    width: 58
+  - advance: 28.0
+    atlasX: 1701
+    atlasY: 630
+    bearingX: -1.0
+    bearingY: 35.0
+    character: з
+    height: 36
+    kernings: {}
+    width: 28
+  - advance: 37.0
+    atlasX: 1731
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 34.0
+    character: и
+    height: 35
+    kernings: {}
+    width: 32
+  - advance: 37.0
+    atlasX: 1765
+    atlasY: 630
+    bearingX: 3.0
+    bearingY: 49.0
+    character: й
+    height: 50
+    kernings: {}
+    width: 33
+  - advance: 31.0
+    atlasX: 1800
+    atlasY: 630
+    bearingX: 1.0
+    bearingY: 34.0
+    character: к
+    height: 34
+    kernings: {}
+    width: 33
+  - advance: 34.0
+    atlasX: 1835
+    atlasY: 630
+    bearingX: -3.0
+    bearingY: 34.0
+    character: л
+    height: 34
+    kernings: {}
+    width: 36
+  - advance: 44.0
+    atlasX: 0
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 34.0
+    character: м
+    height: 34
+    kernings: {}
+    width: 42
+  - advance: 38.0
+    atlasX: 44
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 34.0
+    character: н
+    height: 34
+    kernings: {}
+    width: 36
+  - advance: 36.0
+    atlasX: 82
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 35.0
+    character: о
+    height: 36
+    kernings: {}
+    width: 30
+  - advance: 37.0
+    atlasX: 114
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 35.0
+    character: п
+    height: 35
+    kernings: {}
+    width: 33
+  - advance: 37.0
+    atlasX: 149
+    atlasY: 700
+    bearingX: -2.0
+    bearingY: 35.0
+    character: р
+    height: 50
+    kernings: {}
+    width: 36
+  - advance: 29.0
+    atlasX: 187
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 35.0
+    character: с
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 56.0
+    atlasX: 216
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 35.0
+    character: т
+    height: 35
+    kernings: {}
+    width: 52
+  - advance: 30.0
+    atlasX: 270
+    atlasY: 700
+    bearingX: -7.0
+    bearingY: 34.0
+    character: у
+    height: 49
+    kernings: {}
+    width: 40
+  - advance: 42.0
+    atlasX: 312
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ф
+    height: 64
+    kernings: {}
+    width: 37
+  - advance: 31.0
+    atlasX: 351
+    atlasY: 700
+    bearingX: -3.0
+    bearingY: 34.0
+    character: х
+    height: 34
+    kernings: {}
+    width: 36
+  - advance: 38.0
+    atlasX: 389
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ц
+    height: 46
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 423
+    atlasY: 700
+    bearingX: 4.0
+    bearingY: 34.0
+    character: ч
+    height: 34
+    kernings: {}
+    width: 30
+  - advance: 56.0
+    atlasX: 455
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ш
+    height: 35
+    kernings: {}
+    width: 51
+  - advance: 57.0
+    atlasX: 508
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 34.0
+    character: щ
+    height: 46
+    kernings: {}
+    width: 51
+  - advance: 38.0
+    atlasX: 561
+    atlasY: 700
+    bearingX: 2.0
+    bearingY: 34.0
+    character: ъ
+    height: 35
+    kernings: {}
+    width: 32
+  - advance: 46.0
+    atlasX: 595
+    atlasY: 700
+    bearingX: 4.0
+    bearingY: 34.0
+    character: ы
+    height: 35
+    kernings: {}
+    width: 41
+  - advance: 33.0
+    atlasX: 638
+    atlasY: 700
+    bearingX: 4.0
+    bearingY: 34.0
+    character: ь
+    height: 35
+    kernings: {}
+    width: 26
+  - advance: 29.0
+    atlasX: 666
+    atlasY: 700
+    bearingX: 0.0
+    bearingY: 35.0
+    character: э
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 50.0
+    atlasX: 695
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ю
+    height: 36
+    kernings: {}
+    width: 46
+  - advance: 34.0
+    atlasX: 743
+    atlasY: 700
+    bearingX: -2.0
+    bearingY: 34.0
+    character: я
+    height: 34
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 779
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ѐ
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 808
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ё
+    height: 47
+    kernings: {}
+    width: 27
+  - advance: 37.0
+    atlasX: 837
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ђ
+    height: 64
+    kernings: {}
+    width: 33
+  - advance: 29.0
+    atlasX: 872
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ѓ
+    height: 50
+    kernings: {}
+    width: 30
+  - advance: 29.0
+    atlasX: 904
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 35.0
+    character: є
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 27.0
+    atlasX: 933
+    atlasY: 700
+    bearingX: 0.0
+    bearingY: 35.0
+    character: ѕ
+    height: 36
+    kernings: {}
+    width: 27
+  - advance: 16.0
+    atlasX: 962
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 47.0
+    character: і
+    height: 47
+    kernings: {}
+    width: 16
+  - advance: 16.0
+    atlasX: 980
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 46.0
+    character: ї
+    height: 46
+    kernings: {}
+    width: 22
+  - advance: 16.0
+    atlasX: 1004
+    atlasY: 700
+    bearingX: -9.0
+    bearingY: 47.0
+    character: ј
+    height: 62
+    kernings: {}
+    width: 26
+  - advance: 49.0
+    atlasX: 1032
+    atlasY: 700
+    bearingX: -3.0
+    bearingY: 34.0
+    character: љ
+    height: 35
+    kernings: {}
+    width: 48
+  - advance: 52.0
+    atlasX: 1082
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 34.0
+    character: њ
+    height: 35
+    kernings: {}
+    width: 47
+  - advance: 37.0
+    atlasX: 1131
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ћ
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 31.0
+    atlasX: 1166
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ќ
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 37.0
+    atlasX: 1201
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ѝ
+    height: 50
+    kernings: {}
+    width: 32
+  - advance: 30.0
+    atlasX: 1235
+    atlasY: 700
+    bearingX: -7.0
+    bearingY: 49.0
+    character: ў
+    height: 64
+    kernings: {}
+    width: 40
+  - advance: 37.0
+    atlasX: 1277
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 34.0
+    character: џ
+    height: 49
+    kernings: {}
+    width: 32
+  - advance: 61.0
+    atlasX: 1311
+    atlasY: 700
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ѡ
+    height: 47
+    kernings: {}
+    width: 55
+  - advance: 46.0
+    atlasX: 1368
+    atlasY: 700
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ѡ
+    height: 34
+    kernings: {}
+    width: 44
+  - advance: 40.0
+    atlasX: 1414
+    atlasY: 700
+    bearingX: 4.0
+    bearingY: 49.0
+    character: Ѣ
+    height: 49
+    kernings: {}
+    width: 32
+  - advance: 35.0
+    atlasX: 1448
+    atlasY: 700
+    bearingX: 2.0
+    bearingY: 41.0
+    character: ѣ
+    height: 42
+    kernings: {}
+    width: 30
+  - advance: 55.0
+    atlasX: 1480
+    atlasY: 700
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ѥ
+    height: 47
+    kernings: {}
+    width: 57
+  - advance: 44.0
+    atlasX: 1539
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ѥ
+    height: 36
+    kernings: {}
+    width: 44
+  - advance: 38.0
+    atlasX: 1585
+    atlasY: 700
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ѧ
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 34.0
+    atlasX: 1627
+    atlasY: 700
+    bearingX: -3.0
+    bearingY: 34.0
+    character: ѧ
+    height: 34
+    kernings: {}
+    width: 33
+  - advance: 54.0
+    atlasX: 1662
+    atlasY: 700
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ѩ
+    height: 46
+    kernings: {}
+    width: 49
+  - advance: 46.0
+    atlasX: 1713
+    atlasY: 700
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ѩ
+    height: 34
+    kernings: {}
+    width: 41
+  - advance: 42.0
+    atlasX: 1756
+    atlasY: 700
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Ѫ
+    height: 46
+    kernings: {}
+    width: 47
+  - advance: 39.0
+    atlasX: 1805
+    atlasY: 700
+    bearingX: -4.0
+    bearingY: 34.0
+    character: ѫ
+    height: 34
+    kernings: {}
+    width: 42
+  - advance: 59.0
+    atlasX: 1849
+    atlasY: 700
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ѭ
+    height: 46
+    kernings: {}
+    width: 58
+  - advance: 51.0
+    atlasX: 0
+    atlasY: 770
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ѭ
+    height: 34
+    kernings: {}
+    width: 50
+  - advance: 34.0
+    atlasX: 52
+    atlasY: 770
+    bearingX: -3.0
+    bearingY: 54.0
+    character: Ѯ
+    height: 68
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 91
+    atlasY: 770
+    bearingX: -3.0
+    bearingY: 43.0
+    character: ѯ
+    height: 55
+    kernings: {}
+    width: 32
+  - advance: 47.0
+    atlasX: 125
+    atlasY: 770
+    bearingX: 6.0
+    bearingY: 46.0
+    character: Ѱ
+    height: 46
+    kernings: {}
+    width: 45
+  - advance: 46.0
+    atlasX: 172
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 49.0
+    character: ѱ
+    height: 64
+    kernings: {}
+    width: 40
+  - advance: 46.0
+    atlasX: 214
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ѳ
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 257
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ѳ
+    height: 36
+    kernings: {}
+    width: 30
+  - advance: 36.0
+    atlasX: 289
+    atlasY: 770
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ѵ
+    height: 46
+    kernings: {}
+    width: 39
+  - advance: 28.0
+    atlasX: 330
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ѵ
+    height: 34
+    kernings: {}
+    width: 31
+  - advance: 36.0
+    atlasX: 363
+    atlasY: 770
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ѷ
+    height: 60
+    kernings: {}
+    width: 39
+  - advance: 28.0
+    atlasX: 404
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ѷ
+    height: 49
+    kernings: {}
+    width: 31
+  - advance: 76.0
+    atlasX: 437
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ѹ
+    height: 61
+    kernings: {}
+    width: 75
+  - advance: 64.0
+    atlasX: 514
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ѹ
+    height: 50
+    kernings: {}
+    width: 65
+  - advance: 47.0
+    atlasX: 581
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 50.0
+    character: Ѻ
+    height: 54
+    kernings: {}
+    width: 42
+  - advance: 37.0
+    atlasX: 625
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 37.0
+    character: ѻ
+    height: 40
+    kernings: {}
+    width: 31
+  - advance: 61.0
+    atlasX: 658
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 65.0
+    character: Ѽ
+    height: 66
+    kernings: {}
+    width: 55
+  - advance: 49.0
+    atlasX: 715
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 56.0
+    character: ѽ
+    height: 57
+    kernings: {}
+    width: 43
+  - advance: 61.0
+    atlasX: 760
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 56.0
+    character: Ѿ
+    height: 57
+    kernings: {}
+    width: 55
+  - advance: 46.0
+    atlasX: 817
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 45.0
+    character: ѿ
+    height: 45
+    kernings: {}
+    width: 44
+  - advance: 37.0
+    atlasX: 863
+    atlasY: 770
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ҁ
+    height: 61
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 902
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ҁ
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 39.0
+    atlasX: 931
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 41.0
+    character: ҂
+    height: 41
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 967
+    atlasY: 770
+    bearingX: 10.0
+    bearingY: 46.0
+    character: ҃
+    height: 9
+    kernings: {}
+    width: 25
+  - advance: 37.0
+    atlasX: 994
+    atlasY: 770
+    bearingX: 11.0
+    bearingY: 46.0
+    character: ҄
+    height: 7
+    kernings: {}
+    width: 25
+  - advance: 37.0
+    atlasX: 1021
+    atlasY: 770
+    bearingX: 19.0
+    bearingY: 50.0
+    character: ҅
+    height: 11
+    kernings: {}
+    width: 9
+  - advance: 37.0
+    atlasX: 1032
+    atlasY: 770
+    bearingX: 20.0
+    bearingY: 50.0
+    character: ҆
+    height: 11
+    kernings: {}
+    width: 8
+  - advance: 63.0
+    atlasX: 1042
+    atlasY: 770
+    bearingX: 1.0
+    bearingY: 45.0
+    character: ҈
+    height: 55
+    kernings: {}
+    width: 62
+  - advance: 61.0
+    atlasX: 1106
+    atlasY: 770
+    bearingX: 1.0
+    bearingY: 47.0
+    character: ҉
+    height: 59
+    kernings: {}
+    width: 59
+  - advance: 45.0
+    atlasX: 1167
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ҋ
+    height: 72
+    kernings: {}
+    width: 43
+  - advance: 37.0
+    atlasX: 1212
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ҋ
+    height: 61
+    kernings: {}
+    width: 33
+  - advance: 35.0
+    atlasX: 1247
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҍ
+    height: 46
+    kernings: {}
+    width: 30
+  - advance: 33.0
+    atlasX: 1279
+    atlasY: 770
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ҍ
+    height: 50
+    kernings: {}
+    width: 27
+  - advance: 36.0
+    atlasX: 1308
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҏ
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 37.0
+    atlasX: 1345
+    atlasY: 770
+    bearingX: -2.0
+    bearingY: 35.0
+    character: ҏ
+    height: 50
+    kernings: {}
+    width: 36
+  - advance: 30.0
+    atlasX: 1383
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 55.0
+    character: Ґ
+    height: 55
+    kernings: {}
+    width: 36
+  - advance: 25.0
+    atlasX: 1421
+    atlasY: 770
+    bearingX: 1.0
+    bearingY: 44.0
+    character: ґ
+    height: 44
+    kernings: {}
+    width: 29
+  - advance: 30.0
+    atlasX: 1452
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ғ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 25.0
+    atlasX: 1488
+    atlasY: 770
+    bearingX: 0.0
+    bearingY: 34.0
+    character: ғ
+    height: 34
+    kernings: {}
+    width: 27
+  - advance: 39.0
+    atlasX: 1517
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҕ
+    height: 62
+    kernings: {}
+    width: 34
+  - advance: 31.0
+    atlasX: 1553
+    atlasY: 770
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ҕ
+    height: 49
+    kernings: {}
+    width: 27
+  - advance: 53.0
+    atlasX: 1582
+    atlasY: 770
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Җ
+    height: 58
+    kernings: {}
+    width: 60
+  - advance: 54.0
+    atlasX: 1644
+    atlasY: 770
+    bearingX: -2.0
+    bearingY: 35.0
+    character: җ
+    height: 47
+    kernings: {}
+    width: 58
+  - advance: 34.0
+    atlasX: 1704
+    atlasY: 770
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Ҙ
+    height: 60
+    kernings: {}
+    width: 35
+  - advance: 28.0
+    atlasX: 1741
+    atlasY: 770
+    bearingX: -1.0
+    bearingY: 35.0
+    character: ҙ
+    height: 49
+    kernings: {}
+    width: 28
+  - advance: 38.0
+    atlasX: 1771
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Қ
+    height: 58
+    kernings: {}
+    width: 40
+  - advance: 33.0
+    atlasX: 1813
+    atlasY: 770
+    bearingX: 1.0
+    bearingY: 34.0
+    character: қ
+    height: 46
+    kernings: {}
+    width: 33
+  - advance: 36.0
+    atlasX: 1848
+    atlasY: 770
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҝ
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 30.0
+    atlasX: 0
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ҝ
+    height: 34
+    kernings: {}
+    width: 33
+  - advance: 36.0
+    atlasX: 35
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҟ
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 31.0
+    atlasX: 77
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ҟ
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 40.0
+    atlasX: 112
+    atlasY: 840
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ҡ
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 36.0
+    atlasX: 156
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 34.0
+    character: ҡ
+    height: 34
+    kernings: {}
+    width: 37
+  - advance: 43.0
+    atlasX: 195
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ң
+    height: 58
+    kernings: {}
+    width: 42
+  - advance: 38.0
+    atlasX: 239
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ң
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 48.0
+    atlasX: 277
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҥ
+    height: 46
+    kernings: {}
+    width: 52
+  - advance: 44.0
+    atlasX: 331
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ҥ
+    height: 34
+    kernings: {}
+    width: 47
+  - advance: 64.0
+    atlasX: 380
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ҧ
+    height: 62
+    kernings: {}
+    width: 57
+  - advance: 52.0
+    atlasX: 439
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ҧ
+    height: 49
+    kernings: {}
+    width: 47
+  - advance: 46.0
+    atlasX: 488
+    atlasY: 840
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ҩ
+    height: 49
+    kernings: {}
+    width: 40
+  - advance: 38.0
+    atlasX: 530
+    atlasY: 840
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ҩ
+    height: 37
+    kernings: {}
+    width: 33
+  - advance: 37.0
+    atlasX: 565
+    atlasY: 840
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ҫ
+    height: 60
+    kernings: {}
+    width: 37
+  - advance: 29.0
+    atlasX: 604
+    atlasY: 840
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ҫ
+    height: 49
+    kernings: {}
+    width: 27
+  - advance: 32.0
+    atlasX: 633
+    atlasY: 840
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ҭ
+    height: 58
+    kernings: {}
+    width: 33
+  - advance: 57.0
+    atlasX: 668
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ҭ
+    height: 47
+    kernings: {}
+    width: 53
+  - advance: 32.0
+    atlasX: 723
+    atlasY: 840
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ү
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 759
+    atlasY: 840
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ү
+    height: 49
+    kernings: {}
+    width: 30
+  - advance: 32.0
+    atlasX: 791
+    atlasY: 840
+    bearingX: 3.0
+    bearingY: 46.0
+    character: Ұ
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 30.0
+    atlasX: 829
+    atlasY: 840
+    bearingX: -1.0
+    bearingY: 34.0
+    character: ұ
+    height: 49
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 865
+    atlasY: 840
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ҳ
+    height: 58
+    kernings: {}
+    width: 43
+  - advance: 33.0
+    atlasX: 910
+    atlasY: 840
+    bearingX: -1.0
+    bearingY: 34.0
+    character: ҳ
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 50.0
+    atlasX: 947
+    atlasY: 840
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ҵ
+    height: 58
+    kernings: {}
+    width: 45
+  - advance: 42.0
+    atlasX: 994
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 34.0
+    character: ҵ
+    height: 46
+    kernings: {}
+    width: 38
+  - advance: 41.0
+    atlasX: 1034
+    atlasY: 840
+    bearingX: 7.0
+    bearingY: 46.0
+    character: Ҷ
+    height: 58
+    kernings: {}
+    width: 35
+  - advance: 35.0
+    atlasX: 1071
+    atlasY: 840
+    bearingX: 4.0
+    bearingY: 34.0
+    character: ҷ
+    height: 46
+    kernings: {}
+    width: 30
+  - advance: 41.0
+    atlasX: 1103
+    atlasY: 840
+    bearingX: 7.0
+    bearingY: 46.0
+    character: Ҹ
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 35.0
+    atlasX: 1140
+    atlasY: 840
+    bearingX: 4.0
+    bearingY: 34.0
+    character: ҹ
+    height: 34
+    kernings: {}
+    width: 30
+  - advance: 41.0
+    atlasX: 1172
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Һ
+    height: 46
+    kernings: {}
+    width: 35
+  - advance: 37.0
+    atlasX: 1209
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: һ
+    height: 34
+    kernings: {}
+    width: 30
+  - advance: 49.0
+    atlasX: 1241
+    atlasY: 840
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ҽ
+    height: 47
+    kernings: {}
+    width: 45
+  - advance: 38.0
+    atlasX: 1288
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 35.0
+    character: ҽ
+    height: 36
+    kernings: {}
+    width: 35
+  - advance: 49.0
+    atlasX: 1325
+    atlasY: 840
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ҿ
+    height: 58
+    kernings: {}
+    width: 45
+  - advance: 38.0
+    atlasX: 1372
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 35.0
+    character: ҿ
+    height: 47
+    kernings: {}
+    width: 35
+  - advance: 17.0
+    atlasX: 1409
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ӏ
+    height: 46
+    kernings: {}
+    width: 16
+  - advance: 50.0
+    atlasX: 1427
+    atlasY: 840
+    bearingX: -4.0
+    bearingY: 60.0
+    character: Ӂ
+    height: 60
+    kernings: {}
+    width: 60
+  - advance: 53.0
+    atlasX: 1489
+    atlasY: 840
+    bearingX: -2.0
+    bearingY: 49.0
+    character: ӂ
+    height: 50
+    kernings: {}
+    width: 58
+  - advance: 40.0
+    atlasX: 1549
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ӄ
+    height: 62
+    kernings: {}
+    width: 40
+  - advance: 33.0
+    atlasX: 1591
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ӄ
+    height: 49
+    kernings: {}
+    width: 33
+  - advance: 42.0
+    atlasX: 1626
+    atlasY: 840
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Ӆ
+    height: 58
+    kernings: {}
+    width: 45
+  - advance: 34.0
+    atlasX: 1673
+    atlasY: 840
+    bearingX: -3.0
+    bearingY: 34.0
+    character: ӆ
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 43.0
+    atlasX: 1711
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ӈ
+    height: 62
+    kernings: {}
+    width: 42
+  - advance: 38.0
+    atlasX: 1755
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ӈ
+    height: 49
+    kernings: {}
+    width: 36
+  - advance: 44.0
+    atlasX: 1793
+    atlasY: 840
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ӊ
+    height: 58
+    kernings: {}
+    width: 42
+  - advance: 38.0
+    atlasX: 1837
+    atlasY: 840
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ӊ
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 41.0
+    atlasX: 0
+    atlasY: 910
+    bearingX: 7.0
+    bearingY: 46.0
+    character: Ӌ
+    height: 58
+    kernings: {}
+    width: 35
+  - advance: 37.0
+    atlasX: 37
+    atlasY: 910
+    bearingX: 6.0
+    bearingY: 34.0
+    character: ӌ
+    height: 46
+    kernings: {}
+    width: 29
+  - advance: 54.0
+    atlasX: 68
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ӎ
+    height: 58
+    kernings: {}
+    width: 52
+  - advance: 44.0
+    atlasX: 122
+    atlasY: 910
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ӎ
+    height: 46
+    kernings: {}
+    width: 42
+  - advance: 17.0
+    atlasX: 166
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ӏ
+    height: 46
+    kernings: {}
+    width: 16
+  - advance: 36.0
+    atlasX: 184
+    atlasY: 910
+    bearingX: -4.0
+    bearingY: 60.0
+    character: Ӑ
+    height: 60
+    kernings: {}
+    width: 42
+  - advance: 36.0
+    atlasX: 228
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ӑ
+    height: 50
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 264
+    atlasY: 910
+    bearingX: -4.0
+    bearingY: 57.0
+    character: Ӓ
+    height: 57
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 304
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ӓ
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 52.0
+    atlasX: 338
+    atlasY: 910
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ӕ
+    height: 46
+    kernings: {}
+    width: 59
+  - advance: 52.0
+    atlasX: 399
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ӕ
+    height: 36
+    kernings: {}
+    width: 48
+  - advance: 33.0
+    atlasX: 449
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ӗ
+    height: 60
+    kernings: {}
+    width: 36
+  - advance: 32.0
+    atlasX: 487
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ӗ
+    height: 50
+    kernings: {}
+    width: 31
+  - advance: 42.0
+    atlasX: 520
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ә
+    height: 47
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 561
+    atlasY: 910
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ә
+    height: 36
+    kernings: {}
+    width: 28
+  - advance: 42.0
+    atlasX: 591
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ӛ
+    height: 58
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 632
+    atlasY: 910
+    bearingX: 1.0
+    bearingY: 46.0
+    character: ӛ
+    height: 47
+    kernings: {}
+    width: 28
+  - advance: 50.0
+    atlasX: 662
+    atlasY: 910
+    bearingX: -4.0
+    bearingY: 57.0
+    character: Ӝ
+    height: 57
+    kernings: {}
+    width: 60
+  - advance: 53.0
+    atlasX: 724
+    atlasY: 910
+    bearingX: -2.0
+    bearingY: 46.0
+    character: ӝ
+    height: 47
+    kernings: {}
+    width: 58
+  - advance: 34.0
+    atlasX: 784
+    atlasY: 910
+    bearingX: -1.0
+    bearingY: 57.0
+    character: Ӟ
+    height: 58
+    kernings: {}
+    width: 35
+  - advance: 28.0
+    atlasX: 821
+    atlasY: 910
+    bearingX: -1.0
+    bearingY: 46.0
+    character: ӟ
+    height: 47
+    kernings: {}
+    width: 29
+  - advance: 34.0
+    atlasX: 852
+    atlasY: 910
+    bearingX: 0.0
+    bearingY: 46.0
+    character: Ӡ
+    height: 47
+    kernings: {}
+    width: 35
+  - advance: 29.0
+    atlasX: 889
+    atlasY: 910
+    bearingX: -5.0
+    bearingY: 34.0
+    character: ӡ
+    height: 49
+    kernings: {}
+    width: 34
+  - advance: 45.0
+    atlasX: 925
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 55.0
+    character: Ӣ
+    height: 55
+    kernings: {}
+    width: 43
+  - advance: 37.0
+    atlasX: 970
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 44.0
+    character: ӣ
+    height: 45
+    kernings: {}
+    width: 32
+  - advance: 45.0
+    atlasX: 1004
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ӥ
+    height: 57
+    kernings: {}
+    width: 43
+  - advance: 37.0
+    atlasX: 1049
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ӥ
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 46.0
+    atlasX: 1083
+    atlasY: 910
+    bearingX: 4.0
+    bearingY: 57.0
+    character: Ӧ
+    height: 58
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1126
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ӧ
+    height: 47
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1158
+    atlasY: 910
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ө
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1201
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ө
+    height: 36
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1233
+    atlasY: 910
+    bearingX: 4.0
+    bearingY: 57.0
+    character: Ӫ
+    height: 58
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1276
+    atlasY: 910
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ӫ
+    height: 47
+    kernings: {}
+    width: 30
+  - advance: 37.0
+    atlasX: 1308
+    atlasY: 910
+    bearingX: 0.0
+    bearingY: 57.0
+    character: Ӭ
+    height: 58
+    kernings: {}
+    width: 36
+  - advance: 29.0
+    atlasX: 1346
+    atlasY: 910
+    bearingX: 0.0
+    bearingY: 46.0
+    character: ӭ
+    height: 47
+    kernings: {}
+    width: 27
+  - advance: 37.0
+    atlasX: 1375
+    atlasY: 910
+    bearingX: -1.0
+    bearingY: 55.0
+    character: Ӯ
+    height: 56
+    kernings: {}
+    width: 44
+  - advance: 30.0
+    atlasX: 1421
+    atlasY: 910
+    bearingX: -7.0
+    bearingY: 44.0
+    character: ӯ
+    height: 59
+    kernings: {}
+    width: 40
+  - advance: 37.0
+    atlasX: 1463
+    atlasY: 910
+    bearingX: -1.0
+    bearingY: 57.0
+    character: Ӱ
+    height: 58
+    kernings: {}
+    width: 44
+  - advance: 30.0
+    atlasX: 1509
+    atlasY: 910
+    bearingX: -7.0
+    bearingY: 46.0
+    character: ӱ
+    height: 61
+    kernings: {}
+    width: 40
+  - advance: 37.0
+    atlasX: 1551
+    atlasY: 910
+    bearingX: -1.0
+    bearingY: 60.0
+    character: Ӳ
+    height: 61
+    kernings: {}
+    width: 44
+  - advance: 30.0
+    atlasX: 1597
+    atlasY: 910
+    bearingX: -7.0
+    bearingY: 49.0
+    character: ӳ
+    height: 64
+    kernings: {}
+    width: 41
+  - advance: 41.0
+    atlasX: 1640
+    atlasY: 910
+    bearingX: 7.0
+    bearingY: 57.0
+    character: Ӵ
+    height: 57
+    kernings: {}
+    width: 35
+  - advance: 36.0
+    atlasX: 1677
+    atlasY: 910
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ӵ
+    height: 46
+    kernings: {}
+    width: 30
+  - advance: 30.0
+    atlasX: 1709
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ӷ
+    height: 58
+    kernings: {}
+    width: 34
+  - advance: 25.0
+    atlasX: 1745
+    atlasY: 910
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ӷ
+    height: 46
+    kernings: {}
+    width: 26
+  - advance: 50.0
+    atlasX: 1773
+    atlasY: 910
+    bearingX: 2.0
+    bearingY: 57.0
+    character: Ӹ
+    height: 57
+    kernings: {}
+    width: 49
+  - advance: 46.0
+    atlasX: 1824
+    atlasY: 910
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ӹ
+    height: 47
+    kernings: {}
+    width: 41
+  - advance: 30.0
+    atlasX: 0
+    atlasY: 980
+    bearingX: 0.0
+    bearingY: 46.0
+    character: Ӻ
+    height: 58
+    kernings: {}
+    width: 36
+  - advance: 25.0
+    atlasX: 38
+    atlasY: 980
+    bearingX: -1.0
+    bearingY: 34.0
+    character: ӻ
+    height: 46
+    kernings: {}
+    width: 28
+  - advance: 33.0
+    atlasX: 68
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ӽ
+    height: 58
+    kernings: {}
+    width: 43
+  - advance: 30.0
+    atlasX: 113
+    atlasY: 980
+    bearingX: -3.0
+    bearingY: 34.0
+    character: ӽ
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 33.0
+    atlasX: 151
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ӿ
+    height: 46
+    kernings: {}
+    width: 43
+  - advance: 31.0
+    atlasX: 196
+    atlasY: 980
+    bearingX: -3.0
+    bearingY: 34.0
+    character: ӿ
+    height: 34
+    kernings: {}
+    width: 36
+  - advance: 36.0
+    atlasX: 234
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 46.0
+    character: Ԁ
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 37.0
+    atlasX: 270
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ԁ
+    height: 50
+    kernings: {}
+    width: 36
+  - advance: 53.0
+    atlasX: 308
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 46.0
+    character: Ԃ
+    height: 48
+    kernings: {}
+    width: 48
+  - advance: 54.0
+    atlasX: 358
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ԃ
+    height: 50
+    kernings: {}
+    width: 48
+  - advance: 54.0
+    atlasX: 408
+    atlasY: 980
+    bearingX: 7.0
+    bearingY: 46.0
+    character: Ԅ
+    height: 47
+    kernings: {}
+    width: 44
+  - advance: 48.0
+    atlasX: 454
+    atlasY: 980
+    bearingX: 4.0
+    bearingY: 35.0
+    character: ԅ
+    height: 36
+    kernings: {}
+    width: 40
+  - advance: 36.0
+    atlasX: 496
+    atlasY: 980
+    bearingX: 7.0
+    bearingY: 46.0
+    character: Ԇ
+    height: 58
+    kernings: {}
+    width: 27
+  - advance: 30.0
+    atlasX: 525
+    atlasY: 980
+    bearingX: 4.0
+    bearingY: 35.0
+    character: ԇ
+    height: 47
+    kernings: {}
+    width: 23
+  - advance: 57.0
+    atlasX: 550
+    atlasY: 980
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Ԉ
+    height: 47
+    kernings: {}
+    width: 57
+  - advance: 52.0
+    atlasX: 609
+    atlasY: 980
+    bearingX: -3.0
+    bearingY: 34.0
+    character: ԉ
+    height: 35
+    kernings: {}
+    width: 51
+  - advance: 61.0
+    atlasX: 662
+    atlasY: 980
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ԋ
+    height: 47
+    kernings: {}
+    width: 56
+  - advance: 56.0
+    atlasX: 720
+    atlasY: 980
+    bearingX: 1.0
+    bearingY: 34.0
+    character: ԋ
+    height: 35
+    kernings: {}
+    width: 51
+  - advance: 45.0
+    atlasX: 773
+    atlasY: 980
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ԍ
+    height: 47
+    kernings: {}
+    width: 39
+  - advance: 38.0
+    atlasX: 814
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ԍ
+    height: 36
+    kernings: {}
+    width: 32
+  - advance: 42.0
+    atlasX: 848
+    atlasY: 980
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ԏ
+    height: 47
+    kernings: {}
+    width: 34
+  - advance: 38.0
+    atlasX: 884
+    atlasY: 980
+    bearingX: 2.0
+    bearingY: 34.0
+    character: ԏ
+    height: 35
+    kernings: {}
+    width: 32
+  - advance: 35.0
+    atlasX: 918
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 46.0
+    character: Ԑ
+    height: 47
+    kernings: {}
+    width: 34
+  - advance: 28.0
+    atlasX: 954
+    atlasY: 980
+    bearingX: 1.0
+    bearingY: 35.0
+    character: ԑ
+    height: 36
+    kernings: {}
+    width: 28
+  - advance: 41.0
+    atlasX: 984
+    atlasY: 980
+    bearingX: -3.0
+    bearingY: 46.0
+    character: Ԓ
+    height: 58
+    kernings: {}
+    width: 45
+  - advance: 34.0
+    atlasX: 1031
+    atlasY: 980
+    bearingX: -3.0
+    bearingY: 34.0
+    character: ԓ
+    height: 46
+    kernings: {}
+    width: 36
+  - advance: 36.0
+    atlasX: 1069
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ḁ
+    height: 63
+    kernings: {}
+    width: 37
+  - advance: 36.0
+    atlasX: 1108
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ḁ
+    height: 52
+    kernings: {}
+    width: 32
+  - advance: 54.0
+    atlasX: 1142
+    atlasY: 980
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ḿ
+    height: 60
+    kernings: {}
+    width: 52
+  - advance: 56.0
+    atlasX: 1196
+    atlasY: 980
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ḿ
+    height: 49
+    kernings: {}
+    width: 52
+  - advance: 55.0
+    atlasX: 1250
+    atlasY: 980
+    bearingX: 6.0
+    bearingY: 60.0
+    character: Ẁ
+    height: 60
+    kernings: {}
+    width: 55
+  - advance: 46.0
+    atlasX: 1307
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ẁ
+    height: 49
+    kernings: {}
+    width: 46
+  - advance: 55.0
+    atlasX: 1355
+    atlasY: 980
+    bearingX: 6.0
+    bearingY: 60.0
+    character: Ẃ
+    height: 60
+    kernings: {}
+    width: 55
+  - advance: 46.0
+    atlasX: 1412
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ẃ
+    height: 49
+    kernings: {}
+    width: 46
+  - advance: 55.0
+    atlasX: 1460
+    atlasY: 980
+    bearingX: 6.0
+    bearingY: 57.0
+    character: Ẅ
+    height: 57
+    kernings: {}
+    width: 55
+  - advance: 46.0
+    atlasX: 1517
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ẅ
+    height: 46
+    kernings: {}
+    width: 46
+  - advance: 36.0
+    atlasX: 1565
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 46.0
+    character: Ạ
+    height: 57
+    kernings: {}
+    width: 37
+  - advance: 36.0
+    atlasX: 1604
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ạ
+    height: 46
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1638
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 64.0
+    character: Ả
+    height: 64
+    kernings: {}
+    width: 37
+  - advance: 36.0
+    atlasX: 1677
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ả
+    height: 54
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1711
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 63.0
+    character: Ấ
+    height: 63
+    kernings: {}
+    width: 47
+  - advance: 36.0
+    atlasX: 1760
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ấ
+    height: 53
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 1800
+    atlasY: 980
+    bearingX: -4.0
+    bearingY: 63.0
+    character: Ầ
+    height: 63
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 1840
+    atlasY: 980
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ầ
+    height: 53
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 0
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 66.0
+    character: Ẩ
+    height: 66
+    kernings: {}
+    width: 45
+  - advance: 36.0
+    atlasX: 47
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 55.0
+    character: ẩ
+    height: 56
+    kernings: {}
+    width: 36
+  - advance: 36.0
+    atlasX: 85
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 68.0
+    character: Ẫ
+    height: 68
+    kernings: {}
+    width: 43
+  - advance: 36.0
+    atlasX: 130
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 57.0
+    character: ẫ
+    height: 58
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 166
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 60.0
+    character: Ậ
+    height: 71
+    kernings: {}
+    width: 38
+  - advance: 36.0
+    atlasX: 206
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ậ
+    height: 60
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 240
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 65.0
+    character: Ắ
+    height: 65
+    kernings: {}
+    width: 39
+  - advance: 36.0
+    atlasX: 281
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 54.0
+    character: ắ
+    height: 55
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 315
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 65.0
+    character: Ằ
+    height: 65
+    kernings: {}
+    width: 39
+  - advance: 36.0
+    atlasX: 356
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 54.0
+    character: ằ
+    height: 55
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 390
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 67.0
+    character: Ẳ
+    height: 67
+    kernings: {}
+    width: 39
+  - advance: 36.0
+    atlasX: 431
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 56.0
+    character: ẳ
+    height: 57
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 465
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 68.0
+    character: Ẵ
+    height: 68
+    kernings: {}
+    width: 42
+  - advance: 36.0
+    atlasX: 509
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 57.0
+    character: ẵ
+    height: 58
+    kernings: {}
+    width: 34
+  - advance: 36.0
+    atlasX: 545
+    atlasY: 1050
+    bearingX: -4.0
+    bearingY: 58.0
+    character: Ặ
+    height: 69
+    kernings: {}
+    width: 39
+  - advance: 36.0
+    atlasX: 586
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ặ
+    height: 58
+    kernings: {}
+    width: 32
+  - advance: 33.0
+    atlasX: 620
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 46.0
+    character: Ẹ
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 656
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ẹ
+    height: 46
+    kernings: {}
+    width: 27
+  - advance: 33.0
+    atlasX: 685
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 64.0
+    character: Ẻ
+    height: 64
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 721
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ẻ
+    height: 54
+    kernings: {}
+    width: 27
+  - advance: 33.0
+    atlasX: 750
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 58.0
+    character: Ẽ
+    height: 58
+    kernings: {}
+    width: 35
+  - advance: 32.0
+    atlasX: 787
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ẽ
+    height: 48
+    kernings: {}
+    width: 30
+  - advance: 33.0
+    atlasX: 819
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 63.0
+    character: Ế
+    height: 63
+    kernings: {}
+    width: 41
+  - advance: 32.0
+    atlasX: 862
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ế
+    height: 53
+    kernings: {}
+    width: 37
+  - advance: 33.0
+    atlasX: 901
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 63.0
+    character: Ề
+    height: 63
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 937
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ề
+    height: 53
+    kernings: {}
+    width: 27
+  - advance: 33.0
+    atlasX: 966
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 66.0
+    character: Ể
+    height: 66
+    kernings: {}
+    width: 39
+  - advance: 32.0
+    atlasX: 1007
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 55.0
+    character: ể
+    height: 56
+    kernings: {}
+    width: 35
+  - advance: 33.0
+    atlasX: 1044
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 68.0
+    character: Ễ
+    height: 68
+    kernings: {}
+    width: 37
+  - advance: 32.0
+    atlasX: 1083
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 57.0
+    character: ễ
+    height: 58
+    kernings: {}
+    width: 33
+  - advance: 33.0
+    atlasX: 1118
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 60.0
+    character: Ệ
+    height: 71
+    kernings: {}
+    width: 34
+  - advance: 32.0
+    atlasX: 1154
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ệ
+    height: 60
+    kernings: {}
+    width: 28
+  - advance: 17.0
+    atlasX: 1184
+    atlasY: 1050
+    bearingX: 2.0
+    bearingY: 64.0
+    character: Ỉ
+    height: 64
+    kernings: {}
+    width: 23
+  - advance: 16.0
+    atlasX: 1209
+    atlasY: 1050
+    bearingX: 1.0
+    bearingY: 53.0
+    character: ỉ
+    height: 53
+    kernings: {}
+    width: 21
+  - advance: 17.0
+    atlasX: 1232
+    atlasY: 1050
+    bearingX: 0.0
+    bearingY: 46.0
+    character: Ị
+    height: 57
+    kernings: {}
+    width: 18
+  - advance: 16.0
+    atlasX: 1252
+    atlasY: 1050
+    bearingX: -1.0
+    bearingY: 47.0
+    character: ị
+    height: 58
+    kernings: {}
+    width: 18
+  - advance: 46.0
+    atlasX: 1272
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 46.0
+    character: Ọ
+    height: 57
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1315
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 35.0
+    character: ọ
+    height: 46
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1347
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 64.0
+    character: Ỏ
+    height: 65
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1390
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ỏ
+    height: 54
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1422
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 63.0
+    character: Ố
+    height: 64
+    kernings: {}
+    width: 44
+  - advance: 36.0
+    atlasX: 1468
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ố
+    height: 53
+    kernings: {}
+    width: 37
+  - advance: 46.0
+    atlasX: 1507
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 63.0
+    character: Ồ
+    height: 64
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1550
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 52.0
+    character: ồ
+    height: 53
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1582
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 66.0
+    character: Ổ
+    height: 67
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1625
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 55.0
+    character: ổ
+    height: 56
+    kernings: {}
+    width: 35
+  - advance: 46.0
+    atlasX: 1662
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 68.0
+    character: Ỗ
+    height: 69
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1705
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 57.0
+    character: ỗ
+    height: 58
+    kernings: {}
+    width: 33
+  - advance: 46.0
+    atlasX: 1740
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ộ
+    height: 71
+    kernings: {}
+    width: 41
+  - advance: 36.0
+    atlasX: 1783
+    atlasY: 1050
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ộ
+    height: 60
+    kernings: {}
+    width: 30
+  - advance: 46.0
+    atlasX: 1815
+    atlasY: 1050
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ớ
+    height: 61
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 0
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ớ
+    height: 50
+    kernings: {}
+    width: 40
+  - advance: 46.0
+    atlasX: 42
+    atlasY: 1120
+    bearingX: 4.0
+    bearingY: 60.0
+    character: Ờ
+    height: 61
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 94
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ờ
+    height: 50
+    kernings: {}
+    width: 40
+  - advance: 46.0
+    atlasX: 136
+    atlasY: 1120
+    bearingX: 4.0
+    bearingY: 64.0
+    character: Ở
+    height: 65
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 188
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ở
+    height: 54
+    kernings: {}
+    width: 40
+  - advance: 46.0
+    atlasX: 230
+    atlasY: 1120
+    bearingX: 4.0
+    bearingY: 58.0
+    character: Ỡ
+    height: 59
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 282
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ỡ
+    height: 48
+    kernings: {}
+    width: 40
+  - advance: 46.0
+    atlasX: 324
+    atlasY: 1120
+    bearingX: 4.0
+    bearingY: 48.0
+    character: Ợ
+    height: 59
+    kernings: {}
+    width: 50
+  - advance: 36.0
+    atlasX: 376
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 40.0
+    character: ợ
+    height: 51
+    kernings: {}
+    width: 40
+  - advance: 43.0
+    atlasX: 418
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ụ
+    height: 57
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 459
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ụ
+    height: 45
+    kernings: {}
+    width: 32
+  - advance: 43.0
+    atlasX: 493
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 64.0
+    character: Ủ
+    height: 65
+    kernings: {}
+    width: 39
+  - advance: 37.0
+    atlasX: 534
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ủ
+    height: 54
+    kernings: {}
+    width: 32
+  - advance: 46.0
+    atlasX: 568
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ứ
+    height: 61
+    kernings: {}
+    width: 51
+  - advance: 40.0
+    atlasX: 621
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ứ
+    height: 50
+    kernings: {}
+    width: 44
+  - advance: 46.0
+    atlasX: 667
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ừ
+    height: 61
+    kernings: {}
+    width: 51
+  - advance: 40.0
+    atlasX: 720
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 49.0
+    character: ừ
+    height: 50
+    kernings: {}
+    width: 44
+  - advance: 46.0
+    atlasX: 766
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 64.0
+    character: Ử
+    height: 65
+    kernings: {}
+    width: 51
+  - advance: 40.0
+    atlasX: 819
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 53.0
+    character: ử
+    height: 54
+    kernings: {}
+    width: 44
+  - advance: 46.0
+    atlasX: 865
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 58.0
+    character: Ữ
+    height: 59
+    kernings: {}
+    width: 51
+  - advance: 40.0
+    atlasX: 918
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 47.0
+    character: ữ
+    height: 48
+    kernings: {}
+    width: 44
+  - advance: 46.0
+    atlasX: 964
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 49.0
+    character: Ự
+    height: 60
+    kernings: {}
+    width: 51
+  - advance: 40.0
+    atlasX: 1017
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 39.0
+    character: ự
+    height: 50
+    kernings: {}
+    width: 44
+  - advance: 32.0
+    atlasX: 1063
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 60.0
+    character: Ỳ
+    height: 60
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1099
+    atlasY: 1120
+    bearingX: -7.0
+    bearingY: 49.0
+    character: ỳ
+    height: 64
+    kernings: {}
+    width: 40
+  - advance: 32.0
+    atlasX: 1141
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 46.0
+    character: Ỵ
+    height: 57
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1177
+    atlasY: 1120
+    bearingX: -7.0
+    bearingY: 34.0
+    character: ỵ
+    height: 49
+    kernings: {}
+    width: 40
+  - advance: 32.0
+    atlasX: 1219
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 64.0
+    character: Ỷ
+    height: 64
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1255
+    atlasY: 1120
+    bearingX: -7.0
+    bearingY: 53.0
+    character: ỷ
+    height: 68
+    kernings: {}
+    width: 40
+  - advance: 32.0
+    atlasX: 1297
+    atlasY: 1120
+    bearingX: 5.0
+    bearingY: 58.0
+    character: Ỹ
+    height: 58
+    kernings: {}
+    width: 34
+  - advance: 30.0
+    atlasX: 1333
+    atlasY: 1120
+    bearingX: -7.0
+    bearingY: 47.0
+    character: ỹ
+    height: 62
+    kernings: {}
+    width: 40
+  - advance: 50.0
+    atlasX: 1375
+    atlasY: 1120
+    bearingX: -5.0
+    bearingY: 46.0
+    character: Ὅ
+    height: 47
+    kernings: {}
+    width: 53
+  - advance: 31.0
+    atlasX: 1430
+    atlasY: 1120
+    bearingX: 1.0
+    bearingY: 20.0
+    character: –
+    height: 5
+    kernings: {}
+    width: 28
+  - advance: 61.0
+    atlasX: 1460
+    atlasY: 1120
+    bearingX: 1.0
+    bearingY: 20.0
+    character: —
+    height: 5
+    kernings: {}
+    width: 59
+  - advance: 61.0
+    atlasX: 1521
+    atlasY: 1120
+    bearingX: 1.0
+    bearingY: 20.0
+    character: ―
+    height: 5
+    kernings: {}
+    width: 59
+  - advance: 25.0
+    atlasX: 1582
+    atlasY: 1120
+    bearingX: -7.0
+    bearingY: -2.0
+    character: ‗
+    height: 13
+    kernings: {}
+    width: 29
+  - advance: 11.0
+    atlasX: 1613
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ‘
+    height: 16
+    kernings: {}
+    width: 14
+  - advance: 11.0
+    atlasX: 1629
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ’
+    height: 16
+    kernings: {}
+    width: 14
+  - advance: 15.0
+    atlasX: 1645
+    atlasY: 1120
+    bearingX: -4.0
+    bearingY: 7.0
+    character: ‚
+    height: 16
+    kernings: {}
+    width: 14
+  - advance: 11.0
+    atlasX: 1661
+    atlasY: 1120
+    bearingX: 7.0
+    bearingY: 46.0
+    character: ‛
+    height: 16
+    kernings: {}
+    width: 7
+  - advance: 22.0
+    atlasX: 1670
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 46.0
+    character: “
+    height: 16
+    kernings: {}
+    width: 25
+  - advance: 22.0
+    atlasX: 1697
+    atlasY: 1120
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ”
+    height: 16
+    kernings: {}
+    width: 25
+  - advance: 27.0
+    atlasX: 1724
+    atlasY: 1120
+    bearingX: -4.0
+    bearingY: 7.0
+    character: „
+    height: 16
+    kernings: {}
+    width: 25
+  - advance: 30.0
+    atlasX: 1751
+    atlasY: 1120
+    bearingX: 6.0
+    bearingY: 49.0
+    character: †
+    height: 49
+    kernings: {}
+    width: 25
+  - advance: 30.0
+    atlasX: 1778
+    atlasY: 1120
+    bearingX: 2.0
+    bearingY: 49.0
+    character: ‡
+    height: 49
+    kernings: {}
+    width: 30
+  - advance: 24.0
+    atlasX: 1810
+    atlasY: 1120
+    bearingX: 6.0
+    bearingY: 31.0
+    character: •
+    height: 16
+    kernings: {}
+    width: 15
+  - advance: 49.0
+    atlasX: 1827
+    atlasY: 1120
+    bearingX: 1.0
+    bearingY: 8.0
+    character: …
+    height: 9
+    kernings: {}
+    width: 41
+  - advance: 72.0
+    atlasX: 0
+    atlasY: 1190
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ‰
+    height: 47
+    kernings: {}
+    width: 64
+  - advance: 14.0
+    atlasX: 66
+    atlasY: 1190
+    bearingX: 7.0
+    bearingY: 46.0
+    character: ′
+    height: 17
+    kernings: {}
+    width: 9
+  - advance: 25.0
+    atlasX: 77
+    atlasY: 1190
+    bearingX: 7.0
+    bearingY: 46.0
+    character: ″
+    height: 17
+    kernings: {}
+    width: 20
+  - advance: 18.0
+    atlasX: 99
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 30.0
+    character: ‹
+    height: 26
+    kernings: {}
+    width: 16
+  - advance: 18.0
+    atlasX: 117
+    atlasY: 1190
+    bearingX: 0.0
+    bearingY: 30.0
+    character: ›
+    height: 26
+    kernings: {}
+    width: 16
+  - advance: 31.0
+    atlasX: 135
+    atlasY: 1190
+    bearingX: -1.0
+    bearingY: 46.0
+    character: ‼
+    height: 47
+    kernings: {}
+    width: 35
+  - advance: 8.0
+    atlasX: 172
+    atlasY: 1190
+    bearingX: -16.0
+    bearingY: 46.0
+    character: ⁄
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 22.0
+    atlasX: 214
+    atlasY: 1190
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ⁰
+    height: 28
+    kernings: {}
+    width: 20
+  - advance: 22.0
+    atlasX: 236
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ⁴
+    height: 28
+    kernings: {}
+    width: 21
+  - advance: 22.0
+    atlasX: 259
+    atlasY: 1190
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ⁵
+    height: 28
+    kernings: {}
+    width: 20
+  - advance: 22.0
+    atlasX: 281
+    atlasY: 1190
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ⁶
+    height: 28
+    kernings: {}
+    width: 20
+  - advance: 22.0
+    atlasX: 303
+    atlasY: 1190
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ⁷
+    height: 28
+    kernings: {}
+    width: 21
+  - advance: 22.0
+    atlasX: 326
+    atlasY: 1190
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ⁸
+    height: 28
+    kernings: {}
+    width: 21
+  - advance: 22.0
+    atlasX: 349
+    atlasY: 1190
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ⁹
+    height: 28
+    kernings: {}
+    width: 20
+  - advance: 24.0
+    atlasX: 371
+    atlasY: 1190
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ⁿ
+    height: 21
+    kernings: {}
+    width: 20
+  - advance: 35.0
+    atlasX: 393
+    atlasY: 1190
+    bearingX: 1.0
+    bearingY: 46.0
+    character: ₣
+    height: 46
+    kernings: {}
+    width: 37
+  - advance: 35.0
+    atlasX: 432
+    atlasY: 1190
+    bearingX: -1.0
+    bearingY: 46.0
+    character: ₤
+    height: 46
+    kernings: {}
+    width: 38
+  - advance: 46.0
+    atlasX: 472
+    atlasY: 1190
+    bearingX: 1.0
+    bearingY: 46.0
+    character: ₧
+    height: 47
+    kernings: {}
+    width: 45
+  - advance: 37.0
+    atlasX: 519
+    atlasY: 1190
+    bearingX: 0.0
+    bearingY: 49.0
+    character: ₫
+    height: 60
+    kernings: {}
+    width: 42
+  - advance: 35.0
+    atlasX: 563
+    atlasY: 1190
+    bearingX: 1.0
+    bearingY: 46.0
+    character: €
+    height: 47
+    kernings: {}
+    width: 38
+  - advance: 50.0
+    atlasX: 603
+    atlasY: 1190
+    bearingX: 6.0
+    bearingY: 46.0
+    character: ℅
+    height: 46
+    kernings: {}
+    width: 40
+  - advance: 32.0
+    atlasX: 645
+    atlasY: 1190
+    bearingX: 5.0
+    bearingY: 46.0
+    character: ℓ
+    height: 47
+    kernings: {}
+    width: 24
+  - advance: 61.0
+    atlasX: 671
+    atlasY: 1190
+    bearingX: 1.0
+    bearingY: 46.0
+    character: №
+    height: 46
+    kernings: {}
+    width: 58
+  - advance: 49.0
+    atlasX: 731
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ℠
+    height: 23
+    kernings: {}
+    width: 41
+  - advance: 48.0
+    atlasX: 774
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ™
+    height: 23
+    kernings: {}
+    width: 42
+  - advance: 47.0
+    atlasX: 818
+    atlasY: 1190
+    bearingX: -1.0
+    bearingY: 46.0
+    character: Ω
+    height: 46
+    kernings: {}
+    width: 46
+  - advance: 40.0
+    atlasX: 866
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 34.0
+    character: ℮
+    height: 35
+    kernings: {}
+    width: 35
+  - advance: 48.0
+    atlasX: 903
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ⅛
+    height: 46
+    kernings: {}
+    width: 44
+  - advance: 52.0
+    atlasX: 949
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ⅜
+    height: 46
+    kernings: {}
+    width: 48
+  - advance: 52.0
+    atlasX: 999
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ⅝
+    height: 46
+    kernings: {}
+    width: 49
+  - advance: 48.0
+    atlasX: 1050
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 46.0
+    character: ⅞
+    height: 46
+    kernings: {}
+    width: 44
+  - advance: 37.0
+    atlasX: 1096
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 46.0
+    character: ∂
+    height: 47
+    kernings: {}
+    width: 32
+  - advance: 36.0
+    atlasX: 1130
+    atlasY: 1190
+    bearingX: -2.0
+    bearingY: 46.0
+    character: ∆
+    height: 46
+    kernings: {}
+    width: 34
+  - advance: 47.0
+    atlasX: 1166
+    atlasY: 1190
+    bearingX: 7.0
+    bearingY: 46.0
+    character: ∏
+    height: 61
+    kernings: {}
+    width: 36
+  - advance: 40.0
+    atlasX: 1204
+    atlasY: 1190
+    bearingX: 6.0
+    bearingY: 46.0
+    character: ∑
+    height: 61
+    kernings: {}
+    width: 37
+  - advance: 35.0
+    atlasX: 1243
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 25.0
+    character: −
+    height: 5
+    kernings: {}
+    width: 30
+  - advance: 35.0
+    atlasX: 1275
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 53.0
+    character: √
+    height: 53
+    kernings: {}
+    width: 37
+  - advance: 45.0
+    atlasX: 1314
+    atlasY: 1190
+    bearingX: 4.0
+    bearingY: 32.0
+    character: ∞
+    height: 20
+    kernings: {}
+    width: 39
+  - advance: 25.0
+    atlasX: 1355
+    atlasY: 1190
+    bearingX: 1.0
+    bearingY: 49.0
+    character: ∫
+    height: 64
+    kernings: {}
+    width: 24
+  - advance: 35.0
+    atlasX: 1381
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 33.0
+    character: ≈
+    height: 21
+    kernings: {}
+    width: 31
+  - advance: 35.0
+    atlasX: 1414
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 40.0
+    character: ≠
+    height: 35
+    kernings: {}
+    width: 30
+  - advance: 35.0
+    atlasX: 1446
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 39.0
+    character: ≤
+    height: 39
+    kernings: {}
+    width: 30
+  - advance: 35.0
+    atlasX: 1478
+    atlasY: 1190
+    bearingX: 3.0
+    bearingY: 39.0
+    character: ≥
+    height: 39
+    kernings: {}
+    width: 30
+  - advance: 37.0
+    atlasX: 1510
+    atlasY: 1190
+    bearingX: 4.0
+    bearingY: 46.0
+    character: ◊
+    height: 46
+    kernings: {}
+    width: 32
+  - advance: 40.0
+    atlasX: 1544
+    atlasY: 1190
+    bearingX: -8.0
+    bearingY: 49.0
+    character: ﬀ
+    height: 64
+    kernings: {}
+    width: 57
+  - advance: 36.0
+    atlasX: 1603
+    atlasY: 1190
+    bearingX: -8.0
+    bearingY: 49.0
+    character: ﬁ
+    height: 64
+    kernings: {}
+    width: 46
+  - advance: 36.0
+    atlasX: 1651
+    atlasY: 1190
+    bearingX: -8.0
+    bearingY: 49.0
+    character: ﬂ
+    height: 64
+    kernings: {}
+    width: 46
+  - advance: 57.0
+    atlasX: 1699
+    atlasY: 1190
+    bearingX: -8.0
+    bearingY: 49.0
+    character: ﬃ
+    height: 64
+    kernings: {}
+    width: 66
+  - advance: 57.0
+    atlasX: 1767
+    atlasY: 1190
+    bearingX: -8.0
+    bearingY: 49.0
+    character: ﬄ
+    height: 64
+    kernings: {}
+    width: 66
+  - advance: 64.0
+    atlasX: 1835
+    atlasY: 1190
+    bearingX: 2.0
+    bearingY: 47.0
+    character: ￼
+    height: 59
+    kernings: {}
+    width: 61
+  - advance: 64.0
+    atlasX: 0
+    atlasY: 1260
+    bearingX: 2.0
+    bearingY: 49.0
+    character: �
+    height: 59
+    kernings: {}
+    width: 60
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  - null
+  ordered: false
+  size: 868

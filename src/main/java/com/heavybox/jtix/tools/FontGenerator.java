@@ -11,10 +11,13 @@ import org.lwjgl.util.freetype.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +28,15 @@ public final class FontGenerator {
 
     private FontGenerator() {}
 
-    public static void generateBitmapFont(final String directory, final String fileName, final String fontPath, int size) {
+    public static void generateBitmapFont(final String fontPath, int size) {
+        Path font = Paths.get(fontPath);
+        Path directory = font.getParent();
+        String filename = font.getFileName().toString();
+        String filenameNoExtension = AssetUtils.removeExtension(filename);
+        generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size);
+    }
+
+    public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size) {
         /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
@@ -73,8 +84,7 @@ public final class FontGenerator {
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
             data.bearingY = glyphSlot.bitmap_top();
-            data.advanceX = glyphSlot.advance().x();
-            data.advanceY = glyphSlot.advance().y();
+            data.advance = glyphSlot.advance().x() >> 6; // FreeType gives the advance in x64 units, so we divide by 64.
 
             data.kernings = new HashMap<>();
             FT_Vector kerningVector = FT_Vector.malloc();
@@ -138,11 +148,34 @@ public final class FontGenerator {
             pen.drawImage(glyphData.bufferedImage, glyphData.atlasX, glyphData.atlasY, null); // Draw img1 at (100, 100) in img2
         }
         try {
-            AssetUtils.saveImage(directory, fileName, fontAtlas);
+            AssetUtils.saveImage(directory, outputName, fontAtlas);
         } catch (Exception e) {
-            throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + fileName + ". Exception: " + e.getMessage());
+            throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + outputName + ". Exception: " + e.getMessage());
         }
         pen.dispose();
+
+        /* save glyphs data */
+        Map<String, Object> yamlData = new HashMap<>();
+        {
+            // meta-data
+            Map<String, Object> metaData = new HashMap<>();
+            metaData.put("name", AssetUtils.removeExtension(Paths.get(fontPath).getFileName().toString()));
+
+            // options
+            Map<String, Object> optionsData = new HashMap<>();
+            optionsData.put("size", size);
+            optionsData.put("antialiasing", true);
+
+            yamlData.put("meta", metaData);
+            yamlData.put("options", optionsData);
+            yamlData.put("glyphs", glyphsData);
+        }
+        String content = AssetUtils.yaml.dump(yamlData);
+        try {
+            AssetUtils.saveFile(directory, outputName + ".yml", content);
+        } catch (Exception e) {
+            throw new GraphicsException("Could not save texture pack data file. Exception: " + e.getMessage());
+        }
 
         /* free FreeType library and face */
         FreeType.FT_Done_Face(ftFace);
@@ -151,16 +184,14 @@ public final class FontGenerator {
 
     private static final class GlyphData {
 
-        private char character;
+        public char  character;
+        public int   width, height;
+        public float bearingX, bearingY;
+        public float advance;
+        public int   atlasX;
+        public int   atlasY;
 
-        private int   width, height;
-        private float bearingX, bearingY;
-        private float advanceX;
-        private float advanceY;
-        private int   atlasX;
-        private int   atlasY;
-
-        private Map<Character, Integer> kernings;
+        public Map<Character, Integer> kernings;
 
         private BufferedImage bufferedImage;
 
