@@ -76,9 +76,19 @@ public final class FontGenerator {
             data.advanceX = glyphSlot.advance().x();
             data.advanceY = glyphSlot.advance().y();
 
+            data.kernings = new HashMap<>();
+            FT_Vector kerningVector = FT_Vector.malloc();
+            for (char rightChar : supportedCharacters) {
+                int result = FreeType.FT_Get_Kerning(ftFace, c, rightChar, FreeType.FT_KERNING_DEFAULT, kerningVector);
+                if (result == 0) continue;
+                int kerningValue = (int) kerningVector.x() >> 6;
+                data.kernings.put(rightChar, kerningValue);
+            }
+            kerningVector.free();
+
             if (glyph_width <= 0 || glyph_height <= 0) continue;
 
-            /* set glyph image and kerning, if applicable. */
+            /* set glyph image, if applicable. */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             BufferedImage glyphImage = new BufferedImage(glyph_width, glyph_height, BufferedImage.TYPE_INT_ARGB);
             int[] imageData = ((DataBufferInt) glyphImage.getRaster().getDataBuffer()).getData();
@@ -93,16 +103,6 @@ public final class FontGenerator {
                 }
             }
             data.bufferedImage = glyphImage;
-
-            data.kernings = new HashMap<>();
-            FT_Vector kerningVector = FT_Vector.malloc();
-            for (char rightChar : supportedCharacters) {
-                int result = FreeType.FT_Get_Kerning(ftFace, c, rightChar, FreeType.FT_KERNING_DEFAULT, kerningVector);
-                if (result == 0) continue;
-                int kerningValue = (int) kerningVector.x() >> 6;
-                data.kernings.put(rightChar, kerningValue);
-            }
-            kerningVector.free();
 
             glyphsData.add(data);
         }
