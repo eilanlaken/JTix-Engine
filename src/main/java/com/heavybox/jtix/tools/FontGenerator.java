@@ -25,9 +25,11 @@ public final class FontGenerator {
     private FontGenerator() {}
 
     public static void generateBitmapFont(final String directory, final String fileName, final String fontPath, int size) {
+        /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
 
+        /* load .ttf file to bytebuffer */
         long library = libPointerBuffer.get(0);
         ByteBuffer fontDataBuffer;
         try {
@@ -36,15 +38,16 @@ public final class FontGenerator {
             throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
         }
 
+        /* create new in-memory face with face index 0 */
         PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
-        FreeType.FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer);
+        FreeType.FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
         long face = facePointerBuffer.get(0);
         FT_Face ftFace = FT_Face.create(face);
         FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
-        List<Character> supportedCharacters = new ArrayList<>();
-        IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
 
         /* get supported characters */
+        List<Character> supportedCharacters = new ArrayList<>();
+        IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
         long nextChar = FreeType.FT_Get_First_Char(ftFace, intBuffer);
         while (nextChar != 0) {
             supportedCharacters.add((char) nextChar);
@@ -54,6 +57,9 @@ public final class FontGenerator {
         /* get all glyphs' data: the bitmap, the bearing, the advance... from FreeType */
         Array<GlyphData> glyphsData = new Array<>(false, supportedCharacters.size());
         for (Character c : supportedCharacters) {
+            /* set glyph data for every character */
+            GlyphData data = new GlyphData();
+
             FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER); // TODO: set anti aliasing
             FT_GlyphSlot glyphSlot = ftFace.glyph();
             FT_Bitmap bitmap = glyphSlot.bitmap();
@@ -79,13 +85,13 @@ public final class FontGenerator {
                 }
             }
 
-            GlyphData data = new GlyphData();
             data.character = c;
             data.width = glyph_width;
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
             data.bearingY = glyphSlot.bitmap_top();
-            data.advance = glyphSlot.advance().x();
+            data.advanceX = glyphSlot.advance().x();
+            data.advanceY = glyphSlot.advance().y();
             data.bufferedImage = glyphImage;
             data.kernings = new HashMap<>();
             for (char rightChar : supportedCharacters) {
@@ -97,7 +103,6 @@ public final class FontGenerator {
             }
 
             glyphsData.add(data);
-
         }
 
         /* merge all glyphs images into a single buffered image. */
@@ -121,7 +126,8 @@ public final class FontGenerator {
 
         private int   width, height;
         private float bearingX, bearingY;
-        private float advance;
+        private float advanceX;
+        private float advanceY;
 
         private Map<Character, Integer> kernings;
 
