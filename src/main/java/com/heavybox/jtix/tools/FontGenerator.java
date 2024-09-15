@@ -11,12 +11,10 @@ import org.lwjgl.util.freetype.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,6 +26,7 @@ public final class FontGenerator {
 
     private FontGenerator() {}
 
+    // TODO: take care of options (anti aliasing)
     public static void generateBitmapFont(final String fontPath, int size) {
         Path font = Paths.get(fontPath);
         Path directory = font.getParent();
@@ -36,6 +35,7 @@ public final class FontGenerator {
         generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size);
     }
 
+    // TODO: take care of options (anti aliasing)
     public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size) {
         /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
@@ -67,10 +67,12 @@ public final class FontGenerator {
         }
 
         /* get all glyphs' data {bitmap, bearing, advance...} from FreeType */
-        Array<GlyphData> glyphsData = new Array<>(false, supportedCharacters.size());
-        for (Character c : supportedCharacters) {
+        GlyphData[] glyphsData = new GlyphData[supportedCharacters.size()];
+        for (int i = 0; i < supportedCharacters.size(); i++) {
+            char c = supportedCharacters.get(i);
             /* set glyph data for every character */
             GlyphData data = new GlyphData();
+            glyphsData[i] = data;
 
             FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER); // TODO: set anti aliasing
             FT_GlyphSlot glyphSlot = ftFace.glyph();
@@ -113,14 +115,12 @@ public final class FontGenerator {
                 }
             }
             data.bufferedImage = glyphImage;
-
-            glyphsData.add(data);
         }
 
 
         /* estimate the font image atlas width and height */
         float heightAdjustment = 1.1f;
-        int estimatedWidth = (int) Math.sqrt(glyphsData.size) * size + 1;
+        int estimatedWidth = (int) Math.sqrt(glyphsData.length) * size + 1;
         int atlasWidth = 0;
         int atlasHeight = size;
         int padding = 2;
