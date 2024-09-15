@@ -5,10 +5,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsException;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.util.freetype.FT_Bitmap;
-import org.lwjgl.util.freetype.FT_Face;
-import org.lwjgl.util.freetype.FT_GlyphSlot;
-import org.lwjgl.util.freetype.FreeType;
+import org.lwjgl.util.freetype.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -82,12 +79,23 @@ public final class FontGenerator {
                 }
             }
 
-            // TODO: get more data from the font file, like kerning.
             GlyphData data = new GlyphData();
             data.character = c;
             data.width = glyph_width;
             data.height = glyph_height;
+            data.bearingX = glyphSlot.bitmap_left();
+            data.bearingY = glyphSlot.bitmap_top();
+            data.advance = glyphSlot.advance().x();
             data.bufferedImage = glyphImage;
+            data.kernings = new HashMap<>();
+            for (char rightChar : supportedCharacters) {
+                FT_Vector kerningVector = FT_Vector.malloc();
+                FreeType.FT_Get_Kerning(ftFace, c, rightChar, FreeType.FT_KERNING_DEFAULT, kerningVector);
+                int kerningValue = (int) kerningVector.x() >> 6;
+                data.kernings.put(rightChar, kerningValue);
+                kerningVector.free();
+            }
+
             glyphsData.add(data);
 
         }
@@ -103,7 +111,6 @@ public final class FontGenerator {
             }
         }
 
-
         FreeType.FT_Done_Face(ftFace);
         FreeType.FT_Done_FreeType(library);
     }
@@ -112,13 +119,13 @@ public final class FontGenerator {
 
         private char character;
 
-        private float advanceX;
-        private int   width;
-        private int   height;
+        private int   width, height;
+        private float bearingX, bearingY;
+        private float advance;
+
+        private Map<Character, Integer> kernings;
 
         private BufferedImage bufferedImage;
-
-        private Map<Character, Float> kernings;
 
     }
 
