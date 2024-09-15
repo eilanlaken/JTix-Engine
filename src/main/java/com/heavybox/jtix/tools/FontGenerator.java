@@ -3,6 +3,7 @@ package com.heavybox.jtix.tools;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsException;
+import com.heavybox.jtix.math.MathUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.freetype.*;
@@ -54,7 +55,7 @@ public final class FontGenerator {
             nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
         }
 
-        /* get all glyphs' data: the bitmap, the bearing, the advance... from FreeType */
+        /* get all glyphs' data {bitmap, bearing, advance...} from FreeType */
         Array<GlyphData> glyphsData = new Array<>(false, supportedCharacters.size());
         for (Character c : supportedCharacters) {
             /* set glyph data for every character */
@@ -67,13 +68,20 @@ public final class FontGenerator {
             int glyph_height = bitmap.rows();
             int glyph_pitch  = bitmap.pitch();
 
+            data.character = c;
+            data.width = glyph_width;
+            data.height = glyph_height;
+            data.bearingX = glyphSlot.bitmap_left();
+            data.bearingY = glyphSlot.bitmap_top();
+            data.advanceX = glyphSlot.advance().x();
+            data.advanceY = glyphSlot.advance().y();
+
             if (glyph_width <= 0 || glyph_height <= 0) continue;
 
+            /* set glyph image and kerning, if applicable. */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             BufferedImage glyphImage = new BufferedImage(glyph_width, glyph_height, BufferedImage.TYPE_INT_ARGB);
             int[] imageData = ((DataBufferInt) glyphImage.getRaster().getDataBuffer()).getData();
-
-            // Copy pixel data from the FreeType bitmap to the BufferedImage
             for (int y = 0; y < glyph_height; y++) {
                 for (int x = 0; x < glyph_width; x++) {
                     int srcIndex = y * Math.abs(glyph_pitch) + x;
@@ -84,38 +92,59 @@ public final class FontGenerator {
                     imageData[y * glyph_width + x] = (alpha << 24) | rgb;
                 }
             }
-
-            data.character = c;
-            data.width = glyph_width;
-            data.height = glyph_height;
-            data.bearingX = glyphSlot.bitmap_left();
-            data.bearingY = glyphSlot.bitmap_top();
-            data.advanceX = glyphSlot.advance().x();
-            data.advanceY = glyphSlot.advance().y();
             data.bufferedImage = glyphImage;
+
             data.kernings = new HashMap<>();
+            FT_Vector kerningVector = FT_Vector.malloc();
             for (char rightChar : supportedCharacters) {
-                FT_Vector kerningVector = FT_Vector.malloc();
-                FreeType.FT_Get_Kerning(ftFace, c, rightChar, FreeType.FT_KERNING_DEFAULT, kerningVector);
+                int result = FreeType.FT_Get_Kerning(ftFace, c, rightChar, FreeType.FT_KERNING_DEFAULT, kerningVector);
+                if (result == 0) continue;
                 int kerningValue = (int) kerningVector.x() >> 6;
                 data.kernings.put(rightChar, kerningValue);
-                kerningVector.free();
             }
+            kerningVector.free();
 
             glyphsData.add(data);
         }
 
-        /* merge all glyphs images into a single buffered image. */
+
+        /* estimate the font image atlas width and height */
+        float heightAdjustment = 1.1f;
+        int estimatedWidth = (int) Math.sqrt(glyphsData.size) * size + 1;
+        int atlasWidth = 0;
+        int atlasHeight = size;
+        int padding = 2;
+        int x = 0;
+        int y = (int) (size * heightAdjustment);
         for (GlyphData glyphData : glyphsData) {
-            // TODO: pack everything.
-            if (glyphData.character != 'G') continue;
-            try {
-                AssetUtils.saveImage(directory, fileName, glyphData.bufferedImage);
-            } catch (Exception e) {
-                throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + fileName + ". Exception: " + e.getMessage());
+            glyphData.atlasX = x;
+            glyphData.atlasY = y;
+            atlasWidth = Math.max(x + glyphData.width, atlasWidth);
+            x += glyphData.width + padding;
+            if (x > estimatedWidth) {
+                x = 0;
+                y += size * heightAdjustment;
+                atlasHeight += size * heightAdjustment;
             }
         }
+        atlasHeight += size * heightAdjustment;
+        atlasWidth = MathUtils.nextPowerOf2(atlasWidth);
+        atlasHeight = MathUtils.nextPowerOf2(atlasHeight);
 
+        BufferedImage fontAtlas = new BufferedImage(atlasWidth, atlasHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D pen = fontAtlas.createGraphics();
+        for (GlyphData glyphData : glyphsData) {
+            if (glyphData.bufferedImage == null) continue;
+            pen.drawImage(glyphData.bufferedImage, glyphData.atlasX, glyphData.atlasY, null); // Draw img1 at (100, 100) in img2
+        }
+        try {
+            AssetUtils.saveImage(directory, fileName, fontAtlas);
+        } catch (Exception e) {
+            throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + fileName + ". Exception: " + e.getMessage());
+        }
+        pen.dispose();
+
+        /* free FreeType library and face */
         FreeType.FT_Done_Face(ftFace);
         FreeType.FT_Done_FreeType(library);
     }
@@ -128,6 +157,8 @@ public final class FontGenerator {
         private float bearingX, bearingY;
         private float advanceX;
         private float advanceY;
+        private int   atlasX;
+        private int   atlasY;
 
         private Map<Character, Integer> kernings;
 

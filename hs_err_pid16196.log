@@ -1,0 +1,2744 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffd438604df, pid=16196, tid=8656
+#
+# JRE version: OpenJDK Runtime Environment (19.0.2+7) (build 19.0.2+7-44)
+# Java VM: OpenJDK 64-Bit Server VM (19.0.2+7-44, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# Problematic frame:
+# C  [freetype.dll+0x404df]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\lib\idea_rt.jar=50401:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\bin -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 com.heavybox.jtix.Main
+
+Host: Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz, 4 cores, 7G,  Windows 10 , 64 bit Build 19041 (10.0.19041.4842)
+Time: Sun Sep 15 12:09:06 2024 Pacific Daylight Time elapsed time: 5.652310 seconds (0d 0h 0m 5s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000150dc242bc0):  JavaThread "main" [_thread_in_native, id=8656, stack(0x0000001997d00000,0x0000001997e00000)]
+
+Stack: [0x0000001997d00000,0x0000001997e00000],  sp=0x0000001997dff250,  free space=1020k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [freetype.dll+0x404df]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 1033  org.lwjgl.system.JNI.invokePPI(JIIIJJ)I (0 bytes) @ 0x00000150ebcb6683 [0x00000150ebcb6620+0x0000000000000063]
+J 1168% c2 com.heavybox.jtix.tools.FontGenerator.generateBitmapFont(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V (722 bytes) @ 0x00000150ebce4044 [0x00000150ebce33c0+0x0000000000000c84]
+j  com.heavybox.jtix.Main.main([Ljava/lang/String;)V+8
+v  ~StubRoutines::call_stub 0x00000150eb6c100e
+
+siginfo: EXCEPTION_ACCESS_VIOLATION (0xc0000005), reading address 0x00000150fedaea3e
+
+
+Registers:
+RAX=0x00007ffd439a7160, RBX=0x2aaaaaaaaaaaaaab, RCX=0x00000150fed341e0, RDX=0x00000150fedaea42
+RSP=0x0000001997dff250, RBP=0x0000001997dff370, RSI=0x00000150fedaea3c, RDI=0x00000150fed341e0
+R8 =0x0000000000001eb1, R9 =0x00000150fed341e0, R10=0x000000000000021a, R11=0x0000000000001eb1
+R12=0x0000000000000001, R13=0x00000150fedca06e, R14=0x0000000000000001, R15=0x0000000000000000
+RIP=0x00007ffd438604df, EFLAGS=0x0000000000010297
+
+
+Register to memory mapping:
+
+RIP=0x00007ffd438604df freetype.dll
+RAX=0x00007ffd439a7160 freetype.dll
+RBX=0x2aaaaaaaaaaaaaab is an unknown value
+RCX=0x00000150fed341e0 points into unknown readable memory: 0x0000000000000001 | 01 00 00 00 00 00 00 00
+RDX=0x00000150fedaea42 is an unknown value
+RSP=0x0000001997dff250 is pointing into the stack for thread: 0x00000150dc242bc0
+RBP=0x0000001997dff370 is pointing into the stack for thread: 0x00000150dc242bc0
+RSI=0x00000150fedaea3c is an unknown value
+RDI=0x00000150fed341e0 points into unknown readable memory: 0x0000000000000001 | 01 00 00 00 00 00 00 00
+R8 =0x0000000000001eb1 is an unknown value
+R9 =0x00000150fed341e0 points into unknown readable memory: 0x0000000000000001 | 01 00 00 00 00 00 00 00
+R10=0x000000000000021a is an unknown value
+R11=0x0000000000001eb1 is an unknown value
+R12=0x0000000000000001 is an unknown value
+R13=0x00000150fedca06e is an unknown value
+R14=0x0000000000000001 is an unknown value
+R15=0x0 is NULL
+
+
+Top of Stack: (sp=0x0000001997dff250)
+0x0000001997dff250:   0000001997dff360 00000000816cbf60
+0x0000001997dff260:   0000000000000000 00000150fed341e0
+0x0000001997dff270:   0000001997dff370 00000150dc242bc0
+0x0000001997dff280:   0000000000000000 00007ffd43830a11
+0x0000001997dff290:   00000150fed341e0 000000000000021a
+0x0000001997dff2a0:   0000000000001eb1 00000150dc140000
+0x0000001997dff2b0:   00000150dc140000 00007ffd43822b7c
+0x0000001997dff2c0:   0000e8e2735eb1c2 00000150ebcb40dc
+0x0000001997dff2d0:   0000000000000000 00000150ebcd0d60
+0x0000001997dff2e0:   0000000000000000 00000150ebcb6721
+0x0000001997dff2f0:   00000000816cbf60 00000150dc140000
+0x0000001997dff300:   00000000816cbdf8 00000000815722a8
+0x0000001997dff310:   00000150dc140000 0000000000000000
+0x0000001997dff320:   00000150dc140000 00007ffd43822b10
+0x0000001997dff330:   00000000816cbdf8 0000000086e3b828
+0x0000001997dff340:   0000000086e2d0a8 00000150ebcf24c0 
+
+Instructions: (pc=0x00007ffd438604df)
+0x00007ffd438603df:   02 c1 e0 08 0b c1 0f b6 4a 03 c1 e0 08 0b c1 41
+0x00007ffd438603ef:   3b c1 72 10 48 83 c2 06 44 8b c8 41 83 c0 ff 75
+0x00007ffd438603ff:   d0 41 0b eb ff c3 41 d1 c3 3b df 0f 82 f0 fe ff
+0x00007ffd4386040f:   ff 4c 8b 6c 24 68 4c 8b 74 24 20 41 8b c4 41 89
+0x00007ffd4386041f:   9f 9c 04 00 00 41 89 b7 a0 04 00 00 41 89 af a4
+0x00007ffd4386042f:   04 00 00 48 8b 7c 24 58 4c 8b 64 24 60 48 83 c4
+0x00007ffd4386043f:   28 41 5f 5e 5d 5b c3 cc cc cc cc cc cc cc cc cc
+0x00007ffd4386044f:   cc 44 89 44 24 18 89 54 24 10 48 89 4c 24 08 56
+0x00007ffd4386045f:   41 57 48 83 ec 28 48 8b b1 90 04 00 00 45 33 ff
+0x00007ffd4386046f:   45 8b d8 44 8b d2 4c 8b c9 48 85 f6 75 0a 33 c0
+0x00007ffd4386047f:   48 83 c4 28 41 5f 5e c3 4c 89 64 24 10 44 8b a1
+0x00007ffd4386048f:   9c 04 00 00 4c 89 6c 24 08 44 8b a9 98 04 00 00
+0x00007ffd4386049f:   4c 03 ee 4c 89 34 24 48 83 c6 04 41 be 01 00 00
+0x00007ffd438604af:   00 45 85 e4 0f 84 39 01 00 00 48 89 5c 24 58 48
+0x00007ffd438604bf:   bb ab aa aa aa aa aa aa 2a 48 89 7c 24 18 48 89
+0x00007ffd438604cf:   6c 24 20 48 8d 56 06 49 3b d5 0f 87 04 01 00 00
+0x00007ffd438604df:   0f b6 4e 02 0f b6 42 ff 0f b6 6a fe 48 c1 e1 08
+0x00007ffd438604ef:   c1 e5 08 0b e8 0f b6 46 03 48 0b c8 48 03 ce 49
+0x00007ffd438604ff:   3b cd 48 8b f1 49 0f 47 f5 45 85 b1 a0 04 00 00
+0x00007ffd4386050f:   0f 84 ad 00 00 00 0f b6 42 01 48 8d 4a 08 44 0f
+0x00007ffd4386051f:   b6 02 48 8b d6 41 c1 e0 08 48 2b d1 44 0b c0 43
+0x00007ffd4386052f:   8d 04 40 03 c0 48 3b d0 7d 10 48 8b c3 48 f7 ea
+0x00007ffd4386053f:   4c 8b c2 49 c1 e8 3f 4c 03 c2 81 fd 00 01 00 00
+0x00007ffd4386054f:   73 71 41 c1 e2 10 45 0b d3 45 85 b1 a4 04 00 00
+0x00007ffd4386055f:   0f 84 b7 00 00 00 33 db 45 85 c0 74 51 0f 1f 40
+0x00007ffd4386056f:   00 45 8d 1c 18 41 d1 eb 43 8d 04 5b 8d 3c 00 48
+0x00007ffd4386057f:   03 f9 0f b6 47 01 44 0f b6 0f 41 c1 e1 08 44 0b
+0x00007ffd4386058f:   c8 0f b6 47 02 41 c1 e1 08 44 0b c8 0f b6 47 03
+0x00007ffd4386059f:   41 c1 e1 08 44 0b c8 45 3b ca 74 60 41 8d 43 01
+0x00007ffd438605af:   45 0f 43 c3 0f 43 c3 8b d8 41 3b c0 72 b3 44 8b
+0x00007ffd438605bf:   54 24 48 4c 8b 4c 24 40 45 03 f6 44 8b 5c 24 50
+0x00007ffd438605cf:   48 bb ab aa aa aa aa aa aa 2a 41 83 c4 ff 0f 85 
+
+
+Stack slot to memory mapping:
+stack at sp + 0 slots: 0x0000001997dff360 is pointing into the stack for thread: 0x00000150dc242bc0
+stack at sp + 1 slots: 0x00000000816cbf60 is an oop: java.util.concurrent.locks.ReentrantLock$NonfairSync 
+{0x00000000816cbf60} - klass: 'java/util/concurrent/locks/ReentrantLock$NonfairSync'
+ - ---- fields (total size 4 words):
+ - private transient 'exclusiveOwnerThread' 'Ljava/lang/Thread;' @12  NULL (0)
+ - private volatile 'state' 'I' @16  0
+ - private volatile transient 'head' 'Ljava/util/concurrent/locks/AbstractQueuedSynchronizer$Node;' @20  NULL (0)
+ - private volatile transient 'tail' 'Ljava/util/concurrent/locks/AbstractQueuedSynchronizer$Node;' @24  NULL (0)
+stack at sp + 2 slots: 0x0 is NULL
+stack at sp + 3 slots: 0x00000150fed341e0 points into unknown readable memory: 0x0000000000000001 | 01 00 00 00 00 00 00 00
+stack at sp + 4 slots: 0x0000001997dff370 is pointing into the stack for thread: 0x00000150dc242bc0
+stack at sp + 5 slots: 0x00000150dc242bc0 is a thread
+stack at sp + 6 slots: 0x0 is NULL
+stack at sp + 7 slots: 0x00007ffd43830a11 freetype.dll
+
+
+Compiled method (n/a)    5821 1033     n 0       org.lwjgl.system.JNI::invokePPI (native)
+ total in heap  [0x00000150ebcb6490,0x00000150ebcb6878] = 1000
+ relocation     [0x00000150ebcb65f0,0x00000150ebcb6620] = 48
+ main code      [0x00000150ebcb6620,0x00000150ebcb686a] = 586
+ stub code      [0x00000150ebcb686a,0x00000150ebcb6870] = 6
+ oops           [0x00000150ebcb6870,0x00000150ebcb6878] = 8
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x00000150fa8cdf88} 'invokePPI' '(JIIIJJ)I' in 'org/lwjgl/system/JNI'
+  # parm0:    rdx:rdx   = long
+  # parm1:    r8        = int
+  # parm2:    r9        = int
+  # parm3:    rdi       = int
+  # parm4:    rsi:rsi   = long
+  # parm5:    rcx:rcx   = long
+  #           [sp+0x90]  (sp of caller)
+  0x00000150ebcb6620: 448b 5208 | 49bb 0000 | 0000 0800 | 0000 4d03 | d349 3bc2 | 0f84 0600 
+
+  0x00000150ebcb6638: ;   {runtime_call ic_miss_stub}
+  0x00000150ebcb6638: 0000 e941 | b1a6 ff90 
+[Verified Entry Point]
+  0x00000150ebcb6640: 8984 2400 | 90ff ff55 | 488b ec48 | 81ec 8000 | 0000 4889 | 4c24 3848 | 8974 2430 | 4889 7c24 
+  0x00000150ebcb6660: 284c 894c | 2420 4d8b | c84c 8bc2 
+
+  0x00000150ebcb666c: ;   {oop(a 'java/lang/Class'{0x0000000081448d58} = 'org/lwjgl/system/JNI')}
+  0x00000150ebcb666c: 49be 588d | 4481 0000 | 0000 4c89 | 7424 704c | 8d74 2470 | 498b d6c5 
+
+  0x00000150ebcb6684: ;   {internal_word}
+  0x00000150ebcb6684: f877 49ba | 8366 cbeb | 5001 0000 | 4d89 97c8 | 0200 0049 | 89a7 c002 
+
+  0x00000150ebcb669c: ;   {external_word}
+  0x00000150ebcb669c: 0000 49ba | c984 ce40 | fd7f 0000 | 4180 3a00 | 0f84 5000 | 0000 5241 
+
+  0x00000150ebcb66b4: ;   {metadata({method} {0x00000150fa8cdf88} 'invokePPI' '(JIIIJJ)I' in 'org/lwjgl/system/JNI')}
+  0x00000150ebcb66b4: 5041 5148 | ba80 df8c | fa50 0100 | 0049 8bcf | 4883 ec20 | 40f6 c40f | 0f84 1a00 | 0000 4883 
+  0x00000150ebcb66d4: ;   {runtime_call}
+  0x00000150ebcb66d4: ec08 49ba | d027 8640 | fd7f 0000 | 41ff d248 | 83c4 08e9 | 0d00 0000 
+
+  0x00000150ebcb66ec: ;   {runtime_call}
+  0x00000150ebcb66ec: 49ba d027 | 8640 fd7f | 0000 41ff | d248 83c4 | 2041 5941 | 585a 498d | 8fe0 0200 | 0041 c787 
+  0x00000150ebcb670c: 7403 0000 | 0400 0000 
+
+  0x00000150ebcb6714: ;   {runtime_call}
+  0x00000150ebcb6714: 49ba 3019 | 3f55 fd7f | 0000 41ff | d2c5 f877 | 41c7 8774 | 0300 0005 | 0000 00f0 | 8344 24c0 
+  0x00000150ebcb6734: 0049 3baf | 7803 0000 | 0f87 1100 | 0000 4181 | bf70 0300 | 0000 0000 | 000f 842c | 0000 00c5 
+  0x00000150ebcb6754: f877 4889 | 45f8 498b | cf4c 8be4 | 4883 ec20 | 4883 e4f0 
+
+  0x00000150ebcb6768: ;   {runtime_call}
+  0x00000150ebcb6768: 49ba 0015 | 9140 fd7f | 0000 41ff | d249 8be4 | 4d33 e448 | 8b45 f841 | c787 7403 | 0000 0800 
+  0x00000150ebcb6788: 0000 4181 | bfe8 0300 | 0002 0000 | 000f 84a1 
+
+  0x00000150ebcb6798: ;   {external_word}
+  0x00000150ebcb6798: 0000 0049 | bac9 84ce | 40fd 7f00 | 0041 803a | 000f 844e | 0000 0048 
+
+  0x00000150ebcb67b0: ;   {metadata({method} {0x00000150fa8cdf88} 'invokePPI' '(JIIIJJ)I' in 'org/lwjgl/system/JNI')}
+  0x00000150ebcb67b0: 8945 f848 | ba80 df8c | fa50 0100 | 0049 8bcf | 4883 ec20 | 40f6 c40f | 0f84 1a00 | 0000 4883 
+  0x00000150ebcb67d0: ;   {runtime_call}
+  0x00000150ebcb67d0: ec08 49ba | d027 8640 | fd7f 0000 | 41ff d248 | 83c4 08e9 | 0d00 0000 
+
+  0x00000150ebcb67e8: ;   {runtime_call}
+  0x00000150ebcb67e8: 49ba d027 | 8640 fd7f | 0000 41ff | d248 83c4 | 2048 8b45 | f849 c787 | c002 0000 | 0000 0000 
+  0x00000150ebcb6808: 49c7 87c8 | 0200 0000 | 0000 00c5 | f877 498b | 8f50 0300 | 00c7 8100 | 0100 0000 | 0000 00c9 
+  0x00000150ebcb6828: 4981 7f08 | 0000 0000 | 0f85 0100 
+
+  0x00000150ebcb6834: ;   {runtime_call StubRoutines (1)}
+  0x00000150ebcb6834: 0000 c3e9 | c4a6 a0ff | c5f8 7748 | 8945 f84c | 8be4 4883 | ec20 4883 
+
+  0x00000150ebcb684c: ;   {runtime_call}
+  0x00000150ebcb684c: e4f0 49ba | 305c 8640 | fd7f 0000 | 41ff d249 | 8be4 4d33 | e448 8b45 | f8e9 31ff | ffff f4f4 
+  0x00000150ebcb686c: f4f4 f4f4 
+[/MachCode]
+
+
+Compiled method (c2)    5837 1168 % !   4       com.heavybox.jtix.tools.FontGenerator::generateBitmapFont @ 323 (722 bytes)
+ total in heap  [0x00000150ebce2e90,0x00000150ebce8c78] = 24040
+ relocation     [0x00000150ebce2ff0,0x00000150ebce3398] = 936
+ constants      [0x00000150ebce33a0,0x00000150ebce33c0] = 32
+ main code      [0x00000150ebce33c0,0x00000150ebce5d20] = 10592
+ stub code      [0x00000150ebce5d20,0x00000150ebce5ff8] = 728
+ oops           [0x00000150ebce5ff8,0x00000150ebce6050] = 88
+ metadata       [0x00000150ebce6050,0x00000150ebce62c8] = 632
+ scopes data    [0x00000150ebce62c8,0x00000150ebce7da0] = 6872
+ scopes pcs     [0x00000150ebce7da0,0x00000150ebce8590] = 2032
+ dependencies   [0x00000150ebce8590,0x00000150ebce8618] = 136
+ handler table  [0x00000150ebce8618,0x00000150ebce8bd0] = 1464
+ nul chk table  [0x00000150ebce8bd0,0x00000150ebce8c78] = 168
+
+
+[Constant Pool]
+             Address          hex4                    hex8      
+  0x00000150ebce33a0:   0x3fe00000      0xf4f4f4f43fe00000      
+  0x00000150ebce33a4:   0xf4f4f4f4                              
+  0x00000150ebce33a8:   0xf4f4f4f4      0xf4f4f4f4f4f4f4f4      
+  0x00000150ebce33ac:   0xf4f4f4f4                              
+  0x00000150ebce33b0:   0xf4f4f4f4      0xf4f4f4f4f4f4f4f4      
+  0x00000150ebce33b4:   0xf4f4f4f4                              
+  0x00000150ebce33b8:   0xf4f4f4f4      0xf4f4f4f4f4f4f4f4      
+  0x00000150ebce33bc:   0xf4f4f4f4                              
+
+[MachCode]
+[Verified Entry Point]
+  # {method} {0x00000150fa80b308} 'generateBitmapFont' '(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V' in 'com/heavybox/jtix/tools/FontGenerator'
+  0x00000150ebce33c0: ;   {no_reloc}
+  0x00000150ebce33c0: cc66 6666 | 0f1f 8400 | 0000 0000 | 6666 6690 | 8984 2400 | 90ff ff55 | 4881 ecf0 | 0000 004c 
+  0x00000150ebce33e0: 8b92 0801 | 0000 4c89 | 5424 384c | 8b92 0001 | 0000 4c89 | 5424 4044 | 8b72 204c | 8b92 b000 
+  0x00000150ebce3400: 0000 4c89 | 5424 484c | 8b92 a800 | 0000 4c89 | 5424 504c | 8b92 8800 | 0000 4c89 | 5424 584c 
+  0x00000150ebce3420: 8b92 8000 | 0000 4c89 | 5424 604c | 8b52 784c | 8954 2468 | 4c8b 5270 | 4c89 5424 | 704c 8b52 
+  0x00000150ebce3440: 684c 8954 | 2478 4c8b | 5240 4c89 | 9424 8000 | 0000 488b | 5a38 4889 | 9c24 8800 | 0000 488b 
+  0x00000150ebce3460: 5a30 4889 | 9c24 9000 | 0000 4c8b | 92d8 0000 | 004c 8954 | 2430 448b | 5250 4489 | 9424 9800 
+  0x00000150ebce3480: 0000 8b5a | 4889 9c24 | d800 0000 | 448b 6a28 | 448b 5a58 | 4489 9c24 | 9c00 0000 | 488b ca90 
+  0x00000150ebce34a0: 49ba 009b | 1d40 fd7f | 0000 41ff | d24c 8b54 | 2438 4d85 | d20f 84e5 | 1a00 0045 | 8b52 0890 
+  0x00000150ebce34c0: ;   {metadata('java/lang/String')}
+  0x00000150ebce34c0: 4181 faa0 | 8900 000f | 8568 1300 | 004c 8b54 | 2438 4c89 | 5424 204c | 8b54 2440 | 0f1f 4000 
+  0x00000150ebce34e0: 4d85 d20f | 84c4 1a00 | 0045 8b5a 
+
+  0x00000150ebce34ec: ;   {metadata('java/lang/String')}
+  0x00000150ebce34ec: 0841 81fb | a089 0000 | 0f85 3b13 | 0000 4c89 | 5424 284c | 8b54 2448 | 4d85 d20f | 84ad 1a00 
+  0x00000150ebce350c: 0045 8b52 
+
+  0x00000150ebce3510: ;   {metadata('org/lwjgl/util/freetype/FT_Face')}
+  0x00000150ebce3510: 0841 81fa | 8839 0301 | 0f85 1713 | 0000 4c8b | 5424 484c | 8994 24a0 | 0000 004c | 8b54 2450 
+  0x00000150ebce3530: 4d85 d20f | 8491 1a00 | 0045 8b5a | 0866 6690 
+
+  0x00000150ebce3540: ;   {metadata('java/util/ArrayList')}
+  0x00000150ebce3540: 4181 fba0 | fa0d 000f | 85e8 1200 | 004c 8994 | 24a8 0000 | 004c 8b54 | 2458 660f | 1f44 0000 
+  0x00000150ebce3560: 4d85 d20f | 8471 1a00 | 0045 8b52 
+
+  0x00000150ebce356c: ;   {metadata('com/heavybox/jtix/collections/Array')}
+  0x00000150ebce356c: 0841 81fa | 8844 0301 | 0f85 bb12 | 0000 4c8b | 5424 584c | 8994 24d0 | 0000 004c | 8b54 2460 
+  0x00000150ebce358c: 4d85 d20f | 8455 1a00 | 0045 8b52 
+
+  0x00000150ebce3598: ;   {metadata('java/util/Iterator')}
+  0x00000150ebce3598: 0848 b8c0 | b100 0008 | 0000 0048 | be00 0000 | 0008 0000 | 0049 03f2 | 4c8b 5620 | 4c3b d00f 
+  0x00000150ebce35b8: 8558 1200 | 004c 8b54 | 2460 4c89 | 9424 b000 | 0000 4c8b | 5424 684d | 85d2 0f84 | 221a 0000 
+  0x00000150ebce35d8: 458b 5a08 | 0f1f 4000 
+
+  0x00000150ebce35e0: ;   {metadata('java/lang/Character')}
+  0x00000150ebce35e0: 4181 fb08 | 1f03 000f | 8548 1200 | 004c 8994 | 24b8 0000 | 004c 8b54 | 2470 660f | 1f44 0000 
+  0x00000150ebce3600: 4d85 d20f | 8401 1a00 | 0045 8b52 
+
+  0x00000150ebce360c: ;   {metadata('com/heavybox/jtix/tools/FontGenerator$GlyphData')}
+  0x00000150ebce360c: 0841 81fa | 1848 0301 | 0f85 1b12 | 0000 4c8b | 5424 704c | 8994 24c0 | 0000 004c | 8b54 2478 
+  0x00000150ebce362c: 4d85 d20f | 84e5 1900 | 0045 8b5a | 080f 1f80 | 0000 0000 
+
+  0x00000150ebce3640: ;   {metadata('org/lwjgl/util/freetype/FT_GlyphSlot')}
+  0x00000150ebce3640: 4181 fb10 | 4a03 010f | 85e8 1100 | 004c 8994 | 24c8 0000 | 004c 8b94 | 2480 0000 | 0066 6690 
+  0x00000150ebce3660: 4d85 d20f | 84c1 1900 | 0045 8b52 
+
+  0x00000150ebce366c: ;   {metadata('java/nio/ByteBuffer')}
+  0x00000150ebce366c: 0849 bb30 | 710e 0008 | 0000 0049 | b800 0000 | 0008 0000 | 004d 03c2 | 4d8b 5040 | 4d3b d30f 
+  0x00000150ebce368c: 85a4 1100 | 004c 8b94 | 2480 0000 | 00c4 c1f9 | 6ec2 4c8b | 9424 8800 | 0000 4d85 | d20f 8488 
+  0x00000150ebce36ac: 1900 0045 | 8b5a 0866 | 0f1f 8400 | 0000 0000 | 6666 6690 
+
+  0x00000150ebce36c0: ;   {metadata('java/awt/image/BufferedImage')}
+  0x00000150ebce36c0: 4181 fba0 | 1007 010f | 8568 1100 | 0049 8bda | 488b ac24 | 9000 0000 | 4885 ed0f | 1f44 0000 
+  0x00000150ebce36e0: 0f84 5819 | 0000 448b 
+
+  0x00000150ebce36e8: ;   {metadata({type array int})}
+  0x00000150ebce36e8: 5508 4181 | fab0 2500 | 000f 853e | 1100 004c | 8bd5 498b | f2eb 35c4 | c179 7ecd | c4e1 f97e 
+  0x00000150ebce3708: d34d 8b97 | 8003 0000 | 41ff c54c 
+
+  0x00000150ebce3714: ; ImmutableOopMap {r11=Oop rbx=Oop xmm0=Oop [32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*goto {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@411 (line 77)
+                      ;   {poll}
+  0x00000150ebce3714: 8bde 4185 | 020f 1f80 | 0000 0000 | 443b ac24 | 9800 0000 | 0f8d 2103 | 0000 498b | f345 33f6 
+  0x00000150ebce3734: 0f1f 8400 | 0000 0000 | 6666 6690 | 443b b424 | 9c00 0000 | 7dbf 448b | 9c24 d800 | 0000 458b 
+  0x00000150ebce3754: d341 c1fa | 1f41 8bd3 | 4133 d241 | 2bd2 410f | afd5 448b | d245 03d6 | c4c1 f97e | c345 8b5b 
+  0x00000150ebce3774: 0866 6666 | 0f1f 8400 | 0000 0000 
+
+  0x00000150ebce3780: ;   {metadata('java/nio/DirectByteBuffer')}
+  0x00000150ebce3780: 4181 fb50 | 511e 000f | 85e0 1b00 | 00c4 c1f9 | 7ec0 418b | 6824 85ed | 0f85 be1c | 0000 418b 
+  0x00000150ebce37a0: 481c 85c9 | 0f8c 2a1c | 0000 443b | d10f 83a6 | 1a00 0049 | 8b68 108b | 8424 9c00 | 0000 410f 
+  0x00000150ebce37c0: afc5 448b | d845 03de | 4d63 d24c | 8bcd 470f | be14 1141 | c1e2 1841 | 81ca ffff | ff00 6690 
+  0x00000150ebce37e0: ; implicit exception: dispatches to 0x00000150ebce59ac
+  0x00000150ebce37e0: 8b7e 0c44 | 3bdf 0f83 | 051b 0000 | 4689 549e | 1045 8bce | 41ff c166 | 0f1f 8400 | 0000 0000 
+  0x00000150ebce3800: 443b 8c24 | 9c00 0000 | 0f8d fbfe | ffff 897c | 243c 894c | 2438 c4c1 | f96e d8c4 | e1f9 6ed3 
+  0x00000150ebce3820: c4c1 796e | cd4c 63c2 | 4863 c84d | 8bd8 49f7 | db48 8bf9 | 48f7 df49 | 81fb ffff | ff7f 4d8b 
+  0x00000150ebce3840: d3bb ffff | ff7f 4c0f | 4fd3 4881 | ffff ffff | 7f48 8bdf | 41bd ffff | ff7f 490f | 4fdd 458b 
+  0x00000150ebce3860: d28b db41 | 83c6 024d | 63ee 4d3b | eb45 0f4c | f24d 63d6 | 4c3b d744 | 0f4c f344 | 3bb4 249c 
+  0x00000150ebce3880: 0000 0044 | 8b94 249c | 0000 0045 | 0f4f f245 | 8bd1 4403 | d244 3b54 | 2438 660f | 1f44 0000 
+  0x00000150ebce38a0: 0f83 9e19 | 0000 458b | d944 03d8 | 4d63 d248 | 8bdd 460f | be14 1341 | c1e2 1841 | 81ca ffff 
+  0x00000150ebce38c0: ff00 443b | 5c24 3c0f | 8313 1a00 | 0046 8954 | 9e10 41ff | c145 3bce | 7cb5 4c63 | 5424 3c4c 
+  0x00000150ebce38e0: 2bd1 4c63 | 9c24 9c00 | 0000 418b | ca48 637c | 2438 492b | f88b df4c | 3bdf 448b | 9c24 9c00 
+  0x00000150ebce3900: 0000 440f | 4fdb 4d63 | c34d 3bc2 | 440f 4fd9 | 418b fb83 | c7fd 443b | df41 bb00 | 0000 8041 
+  0x00000150ebce3920: 0f4c fb44 | 3bcf 0f8d | ba00 0000 | 4c8b d6c4 | c1f9 6ee2 | 448b d745 | 2bd1 4533 | db41 3bf9 
+  0x00000150ebce3940: 450f 4cd3 | 4181 faa0 | 0f00 0041 | b8a0 0f00 | 0045 0f47 | d045 03d1 | 0f1f 8400 | 0000 0000 
+  0x00000150ebce3960: 418b c903 | ca45 8bc1 | 4403 c04d | 63e8 4c63 | d94c 8bf5 | 4d03 f345 | 0fbe 5e03 
+
+  0x00000150ebce397c: ;   {no_reloc}
+  0x00000150ebce397c: 410f be5e | 0241 0fbe | 0e45 0fbe | 7601 41c1 | e318 41c1 | e618 4181 | cbff ffff | 0041 81ce 
+  0x00000150ebce399c: ffff ff00 | c1e1 18c1 | e318 81c9 | ffff ff00 | 4289 4c86 | 1046 8974 | ae14 81cb | ffff ff00 
+  0x00000150ebce39bc: 4289 5cae | 1846 895c | ae1c 4183 | c104 453b | ca7c 914d | 8b97 8003 
+
+  0x00000150ebce39d4: ; ImmutableOopMap {rsi=NarrowOop xmm0=Oop xmm2=Oop xmm3=Oop xmm4=Oop [32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*goto {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@405 (line 78)
+                      ;   {poll}
+  0x00000150ebce39d4: 0000 4185 | 0244 3bcf | 0f1f 4000 | 0f8c 4eff | ffff 443b | 8c24 9c00 | 0000 0f8d | 0bfd ffff 
+  0x00000150ebce39f4: 458b d144 | 03d2 660f | 1f44 0000 | 443b 5424 | 380f 8339 | 1800 0045 | 8bd9 4403 | d84d 63d2 
+  0x00000150ebce3a14: 4c8b c547 | 0fbe 1410 | 41c1 e218 | 4181 caff | ffff 0044 | 3b5c 243c | 0f83 ae18 | 0000 4689 
+  0x00000150ebce3a34: 549e 1041 | ffc1 660f | 1f44 0000 | 443b 8c24 | 9c00 0000 | 7caa e9b0 | fcff ff4c | 8b94 24c0 
+  0x00000150ebce3a54: 0000 004d | 85d2 660f | 1f44 0000 | 0f84 7f1c | 0000 4180 | 7f40 000f | 8594 1300 | 004c 8b94 
+  0x00000150ebce3a74: 24c0 0000 | 004c 8bc3 | 4c8b 9c24 | c000 0000 | 4589 432c | 4c8b db4d | 33da 49c1 | eb14 4d85 
+  0x00000150ebce3a94: db74 1f48 | 85db 741a | 49c1 ea09 | 48b9 0060 | 18f3 5001 | 0000 4903 | ca80 3904 | 0f85 8613 
+  0x00000150ebce3ab4: ;   {oop(a 'java/lang/Class'{0x0000000081571a30} = 'java/lang/System')}
+  0x00000150ebce3ab4: 0000 49ba | 301a 5781 | 0000 0000 | 418b 6a74 | 85ed 0f84 | 441c 0000 
+
+  0x00000150ebce3acc: ;   {oop("hi"{0x0000000088200210})}
+  0x00000150ebce3acc: 48ba 1002 | 2088 0000 
+
+  0x00000150ebce3ad4: ;   {static_call}
+  0x00000150ebce3ad4: 0000 90e8 
+
+  0x00000150ebce3ad8: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokestatic valueOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.io.PrintStream::println@11 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@426 (line 89)
+  0x00000150ebce3ad8: c4e9 0000 | 488b d54c 
+
+  0x00000150ebce3ae0: ;   {optimized virtual_call}
+  0x00000150ebce3ae0: 8bc0 90e8 
+
+  0x00000150ebce3ae4: ; ImmutableOopMap {[32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokevirtual writeln {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.io.PrintStream::println@14 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@426 (line 89)
+  0x00000150ebce3ae4: 78b3 69f8 | 4c8b 9424 | c800 0000 
+
+  0x00000150ebce3af0: ; implicit exception: dispatches to 0x00000150ebce5b28
+  0x00000150ebce3af0: 498b 5210 
+
+  0x00000150ebce3af4: ;   {static_call}
+  0x00000150ebce3af4: 6666 90e8 
+
+  0x00000150ebce3af8: ; ImmutableOopMap {[32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokestatic nbitmap_left {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FT_GlyphSlot::bitmap_left@4 (line 186)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@433 (line 90)
+  0x00000150ebce3af8: 4222 0000 | 4c8b 9424 | c800 0000 | 498b 5210 | c5fa 2ac0 | 4c8b 9424 | c000 0000 | c4c1 7a11 
+  0x00000150ebce3b18: ;   {static_call}
+  0x00000150ebce3b18: 4214 90e8 
+
+  0x00000150ebce3b1c: ; ImmutableOopMap {[32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nbitmap_top {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FT_GlyphSlot::bitmap_top@4 (line 189)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@444 (line 91)
+  0x00000150ebce3b1c: 2d22 0000 
+
+  0x00000150ebce3b20: ;   {oop(a 'java/lang/Class'{0x0000000081571a30} = 'java/lang/System')}
+  0x00000150ebce3b20: 49ba 301a | 5781 0000 | 0000 418b | 6a74 c5f2 | 2ac8 4c8b | 9424 c000 | 0000 c4c1 | 7a11 4a18 
+  0x00000150ebce3b40: 85ed 0f84 | ec1b 0000 
+
+  0x00000150ebce3b48: ;   {oop("bye"{0x0000000088200228})}
+  0x00000150ebce3b48: 48ba 2802 | 2088 0000 
+
+  0x00000150ebce3b50: ;   {static_call}
+  0x00000150ebce3b50: 0000 90e8 
+
+  0x00000150ebce3b54: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic valueOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.io.PrintStream::println@11 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@456 (line 92)
+  0x00000150ebce3b54: 48e9 0000 | 488b d54c 
+
+  0x00000150ebce3b5c: ;   {optimized virtual_call}
+  0x00000150ebce3b5c: 8bc0 90e8 
+
+  0x00000150ebce3b60: ; ImmutableOopMap {[32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual writeln {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.io.PrintStream::println@14 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@456 (line 92)
+  0x00000150ebce3b60: fcb2 69f8 | 4c8b 9424 | a800 0000 | 4d85 d20f | 84e3 1b00 | 004d 8bda | 4489 5c24 | 384c 8b94 
+  0x00000150ebce3b80: 24b8 0000 | 004c 8954 | 2460 eb23 | 448b 5424 | 6c45 85d2 | 0f8f b60c | 0000 4489 | 9424 9800 
+  0x00000150ebce3ba0: 0000 448b | 5424 6844 | 8994 249c | 0000 004c | 8b54 2460 
+
+  0x00000150ebce3bb4: ; implicit exception: dispatches to 0x00000150ebce5af8
+  0x00000150ebce3bb4: 450f b752 | 0c4c 8b9c | 24c0 0000 | 0044 8b84 | 2498 0000 | 0045 8943 | 1044 8b8c | 249c 0000 
+  0x00000150ebce3bd4: 0045 894b | 0c66 4589 | 5324 498b | 9ff8 0000 | 004c 8bd3 | 4983 c230 | 4d3b 9708 | 0100 000f 
+  0x00000150ebce3bf4: 83d3 1500 | 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 48c7 0301 
+
+  0x00000150ebce3c0c: ;   {metadata('java/util/HashMap')}
+  0x00000150ebce3c0c: 0000 00c7 | 4308 50b0 | 0a00 4489 | 630c 4c89 | 6310 4c89 | 6318 4c89 | 6328 48c7 | 4320 0000 
+  0x00000150ebce3c2c: 403f 4180 | 7f40 000f | 85ec 1000 | 004c 8b94 | 24c0 0000 | 004c 8bc3 | 4c8b 9c24 | c000 0000 
+  0x00000150ebce3c4c: 4589 4328 | 4c8b db4d | 33da 49c1 | eb14 660f | 1f44 0000 | 4d85 db74 | 1a49 c1ea | 0948 b900 
+  0x00000150ebce3c6c: 6018 f350 | 0100 0049 | 03ca 8039 | 040f 85e6 
+
+  0x00000150ebce3c7c: ;   {oop(a 'java/lang/Class'{0x0000000081571a30} = 'java/lang/System')}
+  0x00000150ebce3c7c: 1000 0049 | ba30 1a57 | 8100 0000 | 0041 8b6a 
+
+  0x00000150ebce3c8c: ;   {oop("kerning: "{0x0000000088200240})}
+  0x00000150ebce3c8c: 7448 ba40 | 0220 8800 
+
+  0x00000150ebce3c94: ;   {static_call}
+  0x00000150ebce3c94: 0000 00e8 
+
+  0x00000150ebce3c98: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic stringOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@1 (line 351)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce3c98: a46e 59f8 | 4889 4424 | 6848 8b54 
+
+  0x00000150ebce3ca4: ;   {static_call}
+  0x00000150ebce3ca4: 2460 90e8 
+
+  0x00000150ebce3ca8: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic stringOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@6 (line 352)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce3ca8: 946e 59f8 | 4889 4424 | 704c 8b54 | 2468 4d85 | d20f 8486 | 1900 0049 
+
+  0x00000150ebce3cc0: ;   {optimized virtual_call}
+  0x00000150ebce3cc0: 8bd2 90e8 
+
+  0x00000150ebce3cc4: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@11 (line 353)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce3cc4: f840 4bf8 | 85c0 0f84 | a80a 0000 | 498b 9ff8 | 0000 004c | 8bd3 4983 | c218 6690 | 4d3b 9708 
+  0x00000150ebce3ce4: 0100 000f | 830c 1500 | 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 48c7 0301 
+
+  0x00000150ebce3d00: ;   {metadata('java/lang/String')}
+  0x00000150ebce3d00: 0000 00c7 | 4308 a089 | 0000 4489 | 630c 4c89 | 6310 4c8b | 5424 7045 | 8b52 1444 | 8953 144c 
+  0x00000150ebce3d20: 8bdb 4d8b | c24d 33c3 | 49c1 e814 | 4d85 c074 | 1f45 85d2 | 741a 49c1 | eb09 48b9 | 0060 18f3 
+  0x00000150ebce3d40: 5001 0000 | 4903 cb80 | 3904 0f85 | 5c10 0000 | 4c8b 5424 | 7045 0fb6 | 5211 4488 | 5311 4c8b 
+  0x00000150ebce3d60: 5424 7045 | 8b5a 0c44 | 895b 0c45 | 0fbe 5210 | 4488 5310 | 85ed 0f84 | d418 0000 
+
+  0x00000150ebce3d7c: ;   {static_call}
+  0x00000150ebce3d7c: 488b d3e8 
+
+  0x00000150ebce3d80: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic valueOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.io.PrintStream::println@11 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@505 (line 104)
+  0x00000150ebce3d80: 1ce7 0000 | 488b d54c 
+
+  0x00000150ebce3d88: ;   {optimized virtual_call}
+  0x00000150ebce3d88: 8bc0 90e8 
+
+  0x00000150ebce3d8c: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual writeln {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.io.PrintStream::println@14 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@505 (line 104)
+  0x00000150ebce3d8c: d0b0 69f8 | 498b 87f8 | 0000 004c | 8bd0 4983 | c220 6690 | 4d3b 9708 | 0100 000f | 8338 1400 
+  0x00000150ebce3dac: 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 48c7 0001 
+
+  0x00000150ebce3dc0: ;   {metadata('java/util/ArrayList$Itr')}
+  0x00000150ebce3dc0: 0000 00c7 | 4008 f0f7 | 1a00 4489 | 600c 4c89 | 6018 41ba | ffff ffff | 4c89 5010 | 4c8b d04c 
+  0x00000150ebce3de0: 8954 2468 | 448b 5424 | 3844 8950 | 184c 8b94 | 24a8 0000 | 0045 8b5a | 0c44 8958 | 144c 8b94 
+  0x00000150ebce3e00: 24d0 0000 | 004d 85d2 | 0f84 7618 | 0000 4c8b | 9424 b000 | 0000 458b | 5a08 660f | 1f44 0000 
+  0x00000150ebce3e20: ;   {metadata('java/util/ArrayList$Itr')}
+  0x00000150ebce3e20: 4181 fbf0 | f71a 000f | 8557 1800 | 004c 8b94 | 24a0 0000 | 004d 85d2 | 0f84 6a18 | 0000 4c8b 
+  0x00000150ebce3e40: 9424 b000 | 0000 4c89 | 5424 58e9 | b600 0000 | 4d89 97f8 | 0000 0041 | 0f0d 8ac0 | 0000 0049 
+  0x00000150ebce3e60: c703 0100 
+
+  0x00000150ebce3e64: ;   {metadata('java/lang/Character')}
+  0x00000150ebce3e64: 0000 41c7 | 4308 081f | 0300 4589 | 630c 4c89 | 9c24 8800 | 0000 4d8b | d344 8b5c | 2478 6645 
+  0x00000150ebce3e84: 895a 0c44 | 8bdd 4181 | c380 0000 | 0041 81fb | 0001 0000 | 0f83 8808 | 0000 4c63 
+
+  0x00000150ebce3ea0: ;   {oop(a 'java/lang/Integer'[256] {0x0000000081571ad8})}
+  0x00000150ebce3ea0: d549 bbd8 | 1a57 8100 | 0000 0047 | 8b94 9310 | 0200 004d | 8bca 448b | 5c24 7c0f | 1f44 0000 
+  0x00000150ebce3ec0: ; implicit exception: dispatches to 0x00000150ebce592c
+  0x00000150ebce3ec0: 458b 5308 
+
+  0x00000150ebce3ec4: ;   {metadata('java/util/HashMap')}
+  0x00000150ebce3ec4: 4181 fa50 | b00a 000f | 858b 1000 | 0045 8bd3 | 498b d24c | 8b84 2488 
+
+  0x00000150ebce3edc: ;   {optimized virtual_call}
+  0x00000150ebce3edc: 0000 00e8 
+
+  0x00000150ebce3ee0: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokeinterface put {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@605 (line 112)
+  0x00000150ebce3ee0: dcfa fcff | 488b 9424 | 8000 0000 | 49b8 5090 | a642 fd7f 
+
+  0x00000150ebce3ef4: ;   {static_call}
+  0x00000150ebce3ef4: 0000 90e8 
+
+  0x00000150ebce3ef8: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic invokePV {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.system.jemalloc.JEmalloc::nje_free@6 (line 247)
+                      ; - org.lwjgl.system.jemalloc.JEmallocAllocator::free@1 (line 55)
+                      ; - org.lwjgl.system.MemoryUtil::nmemFree@4 (line 338)
+                      ; - org.lwjgl.system.Struct::free@4 (line 65)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@613 (line 113)
+  0x00000150ebce3ef8: 4423 fdff | 4d8b 9780 
+
+  0x00000150ebce3f00: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*goto {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@616 (line 114)
+                      ;   {poll}
+  0x00000150ebce3f00: 0300 0041 | 8502 4c8b | 5424 6845 
+
+  0x00000150ebce3f0c: ;   {metadata('java/util/ArrayList$Itr')}
+  0x00000150ebce3f0c: 8b52 0841 | 81fa f0f7 | 1a00 0f85 | 1010 0000 | 4c8b 5424 | 684c 8954 | 2470 418b | 5a18 448b 
+  0x00000150ebce3f2c: 5310 4c8b | 5c24 7045 | 8b5b 0c45 | 3bda 660f | 1f44 0000 | 0f84 b201 | 0000 448b | 4b0c 4c8b 
+  0x00000150ebce3f4c: 4424 7045 | 8b40 1445 | 3bc8 0f85 | 6011 0000 | 0f1f 4000 | 453b da0f | 8d97 1100 | 0044 8b4b 
+  0x00000150ebce3f6c: 1445 8b51 | 0c45 3bda | 0f8d ca11 | 0000 4c8b | 4424 7045 | 8958 1045 | 8bc3 41ff | c048 8b4c 
+  0x00000150ebce3f8c: 2470 4489 | 410c 453b | da0f 83ea | 0e00 0047 | 8b54 9910 
+
+  0x00000150ebce3fa0: ; implicit exception: dispatches to 0x00000150ebce58fc
+  0x00000150ebce3fa0: 458b 4208 
+
+  0x00000150ebce3fa4: ;   {metadata('java/lang/Character')}
+  0x00000150ebce3fa4: 4181 f808 | 1f03 000f | 85b7 1800 | 0045 0fb7 | 5a0c 4489 | 5c24 78ba | 0800 0000 | 49b8 006b 
+  0x00000150ebce3fc4: a642 fd7f 
+
+  0x00000150ebce3fc8: ;   {static_call}
+  0x00000150ebce3fc8: 0000 90e8 
+
+  0x00000150ebce3fcc: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic invokePP {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.system.jemalloc.JEmalloc::nje_malloc@6 (line 134)
+                      ; - org.lwjgl.system.jemalloc.JEmallocAllocator::malloc@1 (line 40)
+                      ; - org.lwjgl.system.MemoryUtil::nmemAlloc@4 (line 233)
+                      ; - org.lwjgl.system.MemoryUtil::nmemAllocChecked@11 (line 244)
+                      ; - org.lwjgl.util.freetype.FT_Vector::malloc@8 (line 116)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@542 (line 106)
+  0x00000150ebce3fcc: f01a fdff | 4889 8424 | 8000 0000 | 4885 c00f | 1f44 0000 | 0f84 a611 
+
+  0x00000150ebce3fe4: ;   {oop(a 'java/lang/Class'{0x0000000081571a30} = 'java/lang/System')}
+  0x00000150ebce3fe4: 0000 49ba | 301a 5781 | 0000 0000 | 458b 5a74 | 4585 db0f | 84bf 0e00 | 0049 8bd3 
+
+  0x00000150ebce4000: ;   {oop("-"{0x0000000081465450})}
+  0x00000150ebce4000: 49b8 5054 | 4681 0000 
+
+  0x00000150ebce4008: ;   {optimized virtual_call}
+  0x00000150ebce4008: 0000 90e8 
+
+  0x00000150ebce400c: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual print {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@552 (line 107)
+  0x00000150ebce400c: 70c9 feff | 4c8b 9424 | a000 0000 | 498b 5210 | 4c8b 5424 | 6045 0fb7 | 420c 448b | 4c24 7833 
+  0x00000150ebce402c: ff48 8bb4 | 2480 0000 | 0048 b910 | 2b82 43fd 
+
+  0x00000150ebce403c: ;   {static_call}
+  0x00000150ebce403c: 7f00 00e8 
+
+  0x00000150ebce4040: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic invokePPI {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FreeType::nFT_Get_Kerning@14 (line 3182)
+                      ; - org.lwjgl.util.freetype.FreeType::FT_Get_Kerning@12 (line 3187)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@567 (line 108)
+  0x00000150ebce4040: fc25 fdff 
+
+  0x00000150ebce4044: ;   {oop(a 'java/lang/Class'{0x0000000081571a30} = 'java/lang/System')}
+  0x00000150ebce4044: 49ba 301a | 5781 0000 | 0000 458b | 5a74 4585 | db0f 8499 | 0e00 0049 
+
+  0x00000150ebce405c: ;   {oop("+"{0x000000008144f998})}
+  0x00000150ebce405c: 8bd3 49b8 | 98f9 4481 | 0000 0000 
+
+  0x00000150ebce4068: ;   {optimized virtual_call}
+  0x00000150ebce4068: 6666 90e8 
+
+  0x00000150ebce406c: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual print {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@576 (line 109)
+  0x00000150ebce406c: 10c9 feff | 4c8b 9424 | c000 0000 | 458b 5228 | 4489 5424 | 7c4c 8b94 | 2480 0000 | 0041 8b2a 
+  0x00000150ebce408c: c1fd 0644 | 8b5c 2478 | 4183 fb7f | 7e32 4d8b | 9ff8 0000 | 004d 8bd3 | 4983 c210 | 4d3b 9708 
+  0x00000150ebce40ac: 0100 000f | 829b fdff 
+
+  0x00000150ebce40b4: ;   {metadata('java/lang/Character')}
+  0x00000150ebce40b4: ff48 ba08 | 1f03 0008 
+
+  0x00000150ebce40bc: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce40bc: 0000 00e8 
+
+  0x00000150ebce40c0: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [124]=NarrowOop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.Character::valueOf@12 (line 8870)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@597 (line 112)
+  0x00000150ebce40c0: bc6d a5ff | 4c8b d8e9 | a6fd ffff | 4181 fb80 | 0000 000f | 8337 1100 
+
+  0x00000150ebce40d8: ;   {oop(a 'java/lang/Character'[128] {0x00000000814676e8})}
+  0x00000150ebce40d8: 0049 bae8 | 7646 8100 | 0000 0047 | 8b5c 9a10 | 4d8b d34c | 8994 2488 | 0000 00e9 | 8ffd ffff 
+  0x00000150ebce40f8: 4c8b 9424 | d000 0000 | 458b 5214 
+
+  0x00000150ebce4104: ; implicit exception: dispatches to 0x00000150ebce59fc
+  0x00000150ebce4104: 458b 420c | 4c8b 9c24 | d000 0000 | 418b 6b0c | 413b e80f | 84db 0400 | 0044 8bc5 | 41ff c04c 
+  0x00000150ebce4124: 8b9c 24d0 | 0000 0045 | 8943 0c45 | 8b42 0c41 | 3be8 0f83 | c113 0000 | 458b 4208 
+
+  0x00000150ebce4140: ;   {metadata('java/lang/Object'[])}
+  0x00000150ebce4140: 4181 f828 | 1200 000f | 85bf 1300 
+
+  0x00000150ebce414c: ;   {metadata('java/lang/Object'[])}
+  0x00000150ebce414c: 0049 bb28 | 1200 0008 | 0000 0049 | 8b83 d000 | 0000 448b | 4014 4d63 
+
+  0x00000150ebce4164: ;   {metadata('com/heavybox/jtix/tools/FontGenerator$GlyphData')}
+  0x00000150ebce4164: d849 b918 | 4803 0108 | 0000 004f | 8b1c 1949 | 3bc3 0f85 | 2904 0000 | 498d 5caa | 1041 807f 
+  0x00000150ebce4184: 4000 0f85 | 400a 0000 | 4c8b 9424 | c000 0000 | 4c8b 9c24 | c000 0000 | 4d8b c344 | 8903 4c8b 
+  0x00000150ebce41a4: db4d 33d3 | 49c1 ea14 | 4d85 d274 | 1a49 c1eb | 0948 b900 | 6018 f350 | 0100 0049 | 03cb 8039 
+  0x00000150ebce41c4: 040f 8534 | 0a00 004c | 8b54 2458 | 458b 4a18 
+
+  0x00000150ebce41d4: ; implicit exception: dispatches to 0x00000150ebce5a2c
+  0x00000150ebce41d4: 418b 4910 | 458b 520c | 0f1f 4000 | 443b d10f | 8467 0400 | 0045 8b59 | 0c4c 8b44 | 2458 418b 
+  0x00000150ebce41f4: 6814 443b | dd0f 85d3 | 1300 0090 | 443b d10f | 8ddb 1300 | 0041 8b49 | 148b 690c | 443b d50f 
+  0x00000150ebce4214: 8dff 1300 | 0045 8950 | 1045 8bda | 41ff c345 | 8958 0c44 | 3bd5 0f83 | ec12 0000 | 468b 5c91 
+  0x00000150ebce4234: 1045 8b43 | 080f 1f80 | 0000 0000 
+
+  0x00000150ebce4240: ;   {metadata('java/lang/Character')}
+  0x00000150ebce4240: 4181 f808 | 1f03 000f | 85f3 1500 | 004d 8b87 | f800 0000 | 4d8b d049 | 83c2 304c | 895c 2460 
+  0x00000150ebce4260: 4d3b 9708 | 0100 000f | 83d9 0d00 | 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 49c7 0001 
+  0x00000150ebce4280: ;   {metadata('com/heavybox/jtix/tools/FontGenerator$GlyphData')}
+  0x00000150ebce4280: 0000 0041 | c740 0818 | 4803 0145 | 8960 0c4d | 8960 104d | 8960 184d | 8960 204d | 8960 284c 
+  0x00000150ebce42a0: 8984 24c0 | 0000 004c | 8b94 24a0 | 0000 0049 | 8b52 104c | 8b54 2460 | 4d0f b742 | 0c41 b904 
+  0x00000150ebce42c0: ;   {static_call}
+  0x00000150ebce42c0: 0000 00e8 
+
+  0x00000150ebce42c4: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nFT_Load_Char {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FreeType::FT_Load_Char@6 (line 3141)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@216 (line 63)
+  0x00000150ebce42c4: f8f3 6af8 | 4c8b 9424 | a000 0000 | 498b 5210 
+
+  0x00000150ebce42d4: ;   {static_call}
+  0x00000150ebce42d4: 6666 90e8 
+
+  0x00000150ebce42d8: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nglyph {reexecute=0 rethrow=0 return_oop=1}
+                      ; - org.lwjgl.util.freetype.FT_Face::glyph@4 (line 263)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@222 (line 64)
+  0x00000150ebce42d8: 841c 6bf8 | 4889 4424 | 5048 8b50 
+
+  0x00000150ebce42e4: ;   {static_call}
+  0x00000150ebce42e4: 1066 90e8 
+
+  0x00000150ebce42e8: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nbitmap {reexecute=0 rethrow=0 return_oop=1}
+                      ; - org.lwjgl.util.freetype.FT_GlyphSlot::bitmap@4 (line 183)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@229 (line 65)
+  0x00000150ebce42e8: d427 6bf8 | 4889 4424 | 4048 8b50 
+
+  0x00000150ebce42f4: ;   {static_call}
+  0x00000150ebce42f4: 1066 90e8 
+
+  0x00000150ebce42f8: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nwidth {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FT_Bitmap::width@4 (line 106)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@236 (line 66)
+  0x00000150ebce42f8: 501b 0000 | 8944 2468 | 4c8b 5424 | 4049 8b52 
+
+  0x00000150ebce4308: ;   {static_call}
+  0x00000150ebce4308: 1066 90e8 
+
+  0x00000150ebce430c: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nrows {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FT_Bitmap::rows@4 (line 103)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@243 (line 67)
+  0x00000150ebce430c: 4b1b 0000 | 8944 246c | 4c8b 5424 | 4049 8b52 
+
+  0x00000150ebce431c: ;   {static_call}
+  0x00000150ebce431c: 1066 90e8 
+
+  0x00000150ebce4320: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic npitch {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.util.freetype.FT_Bitmap::pitch@4 (line 108)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@250 (line 68)
+  0x00000150ebce4320: 461b 0000 | 8944 2470 | 448b 5424 | 6845 85d2 | 0f8f 56f8 | ffff 4c8b | 9424 c000 | 0000 448b 
+  0x00000150ebce4340: 4424 6c45 | 8942 1044 | 8b5c 2468 | 4589 5a0c | 4c8b 5424 | 6045 0fb7 | 5a0c 4c8b | 9424 c000 
+  0x00000150ebce4360: 0000 6645 | 895a 2449 | 8b9f f800 | 0000 4c8b | d349 83c2 | 3066 6666 | 0f1f 8400 | 0000 0000 
+  0x00000150ebce4380: 4d3b 9708 | 0100 000f | 83d8 0c00 | 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 48c7 0301 
+  0x00000150ebce43a0: ;   {metadata('java/util/HashMap')}
+  0x00000150ebce43a0: 0000 00c7 | 4308 50b0 | 0a00 4489 | 630c 4c89 | 6310 4c89 | 6318 4c89 | 6328 48c7 | 4320 0000 
+  0x00000150ebce43c0: 403f 4180 | 7f40 000f | 8578 0800 | 004c 8b94 | 24c0 0000 | 004c 8bdb | 4c8b 8424 | c000 0000 
+  0x00000150ebce43e0: 4589 5828 | 4c8b db4d | 33da 49c1 | eb14 4d85 | db74 1a49 | c1ea 0948 | b900 6018 | f350 0100 
+  0x00000150ebce4400: 0049 03ca | 8039 040f | 8578 0800 
+
+  0x00000150ebce440c: ;   {oop(a 'java/lang/Class'{0x0000000081571a30} = 'java/lang/System')}
+  0x00000150ebce440c: 0049 ba30 | 1a57 8100 | 0000 0041 
+
+  0x00000150ebce4418: ;   {oop("kerning: "{0x0000000088200240})}
+  0x00000150ebce4418: 8b6a 7448 | ba40 0220 | 8800 0000 
+
+  0x00000150ebce4424: ;   {static_call}
+  0x00000150ebce4424: 0066 90e8 
+
+  0x00000150ebce4428: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic stringOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@1 (line 351)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4428: 1467 59f8 | 4889 4424 | 6848 8b54 
+
+  0x00000150ebce4434: ;   {static_call}
+  0x00000150ebce4434: 2460 90e8 
+
+  0x00000150ebce4438: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic stringOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@6 (line 352)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4438: 0467 59f8 | 4889 4424 | 704c 8b54 | 2468 4d85 | d20f 840e | 1100 0049 
+
+  0x00000150ebce4450: ;   {optimized virtual_call}
+  0x00000150ebce4450: 8bd2 90e8 
+
+  0x00000150ebce4454: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@11 (line 353)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4454: 6839 4bf8 | 85c0 660f | 1f44 0000 | 0f84 2602 | 0000 498b | 9ff8 0000 | 004c 8bd3 | 4983 c218 
+  0x00000150ebce4474: 0f1f 8400 | 0000 0000 | 6666 6690 | 4d3b 9708 | 0100 000f | 8318 0c00 | 004d 8997 | f800 0000 
+  0x00000150ebce4494: 410f 0d8a | c000 0000 | 48c7 0301 
+
+  0x00000150ebce44a0: ;   {metadata('java/lang/String')}
+  0x00000150ebce44a0: 0000 00c7 | 4308 a089 | 0000 4489 | 630c 4c89 | 6310 4c8b | 5424 7045 | 8b52 1444 | 8953 144c 
+  0x00000150ebce44c0: 8bdb 4d8b | c24d 33c3 | 49c1 e814 | 4d85 c074 | 1f45 85d2 | 741a 49c1 | eb09 48b9 | 0060 18f3 
+  0x00000150ebce44e0: 5001 0000 | 4903 cb80 | 3904 0f85 | dc07 0000 | 4c8b 5424 | 7045 0fb6 | 5a11 4488 | 5b11 458b 
+  0x00000150ebce4500: 520c 4489 | 530c 4c8b | 5424 7045 | 0fbe 5a10 | 4488 5b10 | 85ed 0f84 | 4c10 0000 
+
+  0x00000150ebce451c: ;   {static_call}
+  0x00000150ebce451c: 488b d3e8 
+
+  0x00000150ebce4520: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic valueOf {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.io.PrintStream::println@11 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@505 (line 104)
+  0x00000150ebce4520: 9c81 63f8 | 488b d54c 
+
+  0x00000150ebce4528: ;   {optimized virtual_call}
+  0x00000150ebce4528: 8bc0 90e8 
+
+  0x00000150ebce452c: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual writeln {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.io.PrintStream::println@14 (line 1167)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@505 (line 104)
+  0x00000150ebce452c: 30a9 69f8 | 498b 87f8 | 0000 004c | 8bd0 4983 | c220 6690 | 4d3b 9708 | 0100 000f | 833f 0b00 
+  0x00000150ebce454c: 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 48c7 0001 
+
+  0x00000150ebce4560: ;   {metadata('java/util/ArrayList$Itr')}
+  0x00000150ebce4560: 0000 00c7 | 4008 f0f7 | 1a00 4489 | 600c 4c89 | 6018 41ba | ffff ffff | 4c89 5010 | 4c8b d04c 
+  0x00000150ebce4580: 8954 2468 | 448b 5c24 | 3844 8958 | 184c 8b94 | 24a8 0000 | 0045 8b52 | 0c44 8950 | 1466 6690 
+  0x00000150ebce45a0: e961 f9ff | ff41 83f8 
+
+  0x00000150ebce45a8: ;   {metadata('com/heavybox/jtix/tools/FontGenerator$GlyphData')}
+  0x00000150ebce45a8: 2075 3d49 | bb18 4803 | 0108 0000 | 0049 3bc3 | 0f84 befb 
+
+  0x00000150ebce45bc: ;   {metadata('com/heavybox/jtix/tools/FontGenerator$GlyphData')}
+  0x00000150ebce45bc: ffff 48be | 1848 0301 | 0800 0000 | 488b 7e28 | 8b0f 4883 | c708 4885 | c0f2 48af | 0f85 0400 
+  0x00000150ebce45dc: 0000 4889 | 4620 0f84 | 94fb ffff | bad6 ffff | ff4c 8954 
+
+  0x00000150ebce45f0: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce45f0: 2460 90e8 
+
+  0x00000150ebce45f4: ; ImmutableOopMap {[32]=Oop [40]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aastore {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.collections.Array::add@46 (line 64)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@623 (line 116)
+  0x00000150ebce45f4: 0827 a4ff | c5fa 2ac5 
+
+  0x00000150ebce45fc: ;   {section_word}
+  0x00000150ebce45fc: c5fa 590d | 9ced ffff | 41ba 0800 | 0000 c57a | 2cc1 4181 | f800 0000 | 8075 1048 | 83ec 08c5 
+  0x00000150ebce461c: fa11 0c24 
+
+  0x00000150ebce4620: ;   {runtime_call StubRoutines (1)}
+  0x00000150ebce4620: e8cc ca9d | ff41 5841 | 83f8 0845 | 0f4e c248 | 8b94 24d0 
+
+  0x00000150ebce4634: ;   {optimized virtual_call}
+  0x00000150ebce4634: 0000 00e8 
+
+  0x00000150ebce4638: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual resize {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.collections.Array::add@29 (line 63)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@623 (line 116)
+  0x00000150ebce4638: 44d4 a3ff | 4c8b d04c | 8b9c 24d0 | 0000 0041 | 8b6b 0ce9 | cdfa ffff | 488b 9424 | d000 0000 
+  0x00000150ebce4658: ;   {optimized virtual_call}
+  0x00000150ebce4658: 6666 90e8 
+
+  0x00000150ebce465c: ; ImmutableOopMap {[32]=Oop [40]=Oop [160]=Oop }
+                      ;*invokevirtual iterator {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@631 (line 120)
+  0x00000150ebce465c: 20d4 a3ff | 4885 c00f | 8513 1100 | 00ba f7ff | ffff 488b | 6c24 204c | 8b54 2428 | 4c89 5424 
+  0x00000150ebce467c: 204c 8b54 | 2430 4c89 
+
+  0x00000150ebce4684: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4684: 5424 28e8 
+
+  0x00000150ebce4688: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop }
+                      ;*invokeinterface hasNext {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@638 (line 120)
+  0x00000150ebce4688: 7426 a4ff | 4c8b 5424 | 704d 85d2 | 0f84 1f11 | 0000 498b 
+
+  0x00000150ebce469c: ;   {optimized virtual_call}
+  0x00000150ebce469c: d266 90e8 
+
+  0x00000150ebce46a0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@27 (line 357)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce46a0: 1c37 4bf8 | 85c0 0f84 | df02 0000 | 498b 87f8 | 0000 004c | 8bd0 4983 | c218 660f | 1f44 0000 
+  0x00000150ebce46c0: 4d3b 9708 | 0100 000f | 838b 0c00 | 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 48c7 0001 
+  0x00000150ebce46e0: ;   {metadata('java/lang/String')}
+  0x00000150ebce46e0: 0000 00c7 | 4008 a089 | 0000 4489 | 600c 4c89 | 6010 4c8b | 5424 6845 | 8b5a 1444 | 8958 1445 
+  0x00000150ebce4700: 0fb6 5211 | 4488 5011 | 4c8b 5424 | 6845 0fbe | 5a10 4488 | 5810 458b | 520c 4489 | 500c 488b 
+  0x00000150ebce4720: d8e9 eefd | ffff 4d8b | 8ff8 0000 | 004d 8bd1 | 4983 c210 | 0f1f 8400 | 0000 0000 | 6666 6690 
+  0x00000150ebce4740: 4d3b 9708 | 0100 000f | 8383 0d00 | 004d 8997 | f800 0000 | 410f 0d8a | c000 0000 | 49c7 0101 
+  0x00000150ebce4760: ;   {metadata('java/lang/Integer')}
+  0x00000150ebce4760: 0000 0041 | c741 0830 | c703 0045 | 8961 0c41 | 8969 0ce9 | 3ef7 ffff | 4c8b 5424 | 7066 6690 
+  0x00000150ebce4780: 4d85 d20f | 8450 1000 | 0049 8bd2 
+
+  0x00000150ebce478c: ;   {optimized virtual_call}
+  0x00000150ebce478c: 6666 90e8 
+
+  0x00000150ebce4790: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@27 (line 357)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4790: 2c36 4bf8 | 85c0 0f84 | 1003 0000 | 498b 87f8 | 0000 004c | 8bd0 4983 | c218 4d3b | 9708 0100 
+  0x00000150ebce47b0: 000f 8331 | 0d00 004d | 8997 f800 | 0000 410f | 0d8a c000 | 0000 48c7 | 0001 0000 
+
+  0x00000150ebce47cc: ;   {metadata('java/lang/String')}
+  0x00000150ebce47cc: 00c7 4008 | a089 0000 | 4489 600c | 4c89 6010 | 4c8b 5424 | 6845 8b52 | 1444 8950 | 144c 8b54 
+  0x00000150ebce47ec: 2468 450f | b65a 1144 | 8858 1145 | 0fbe 5210 | 4488 5010 | 4c8b 5424 | 6845 8b5a | 0c44 8958 
+  0x00000150ebce480c: 0c48 8bd8 | e95f f5ff | ff48 8b7e | 288b 0f48 | 83c7 0848 | 85c0 f248 | af0f 8504 | 0000 0048 
+  0x00000150ebce482c: 8946 200f | 8488 edff | ffba 8dff | ffff 488b | 6c24 3044 | 896c 242c | 4489 7424 
+
+  0x00000150ebce4848: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4848: 3066 90e8 
+
+  0x00000150ebce484c: ; ImmutableOopMap {[56]=Oop [64]=Oop [72]=Oop [80]=Oop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [120]=Oop [128]=Oop [136]=Oop [144]=Oop }
+                      ;*iload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@323 (line 78)
+  0x00000150ebce484c: b024 a4ff | 4c8b 5424 | 4049 8b52 | 1044 8bd8 | 41c1 fb1f | 448b c045 | 33c3 452b | c344 0faf 
+  0x00000150ebce486c: 4424 6c48 | 8bac 24c0 
+
+  0x00000150ebce4874: ;   {static_call}
+  0x00000150ebce4874: 0000 00e8 
+
+  0x00000150ebce4878: ; ImmutableOopMap {rbp=Oop [32]=Oop [40]=Oop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic nbuffer {reexecute=0 rethrow=0 return_oop=1}
+                      ; - org.lwjgl.util.freetype.FT_Bitmap::buffer@5 (line 116)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@275 (line 72)
+  0x00000150ebce4878: 842b 6bf8 | 4889 4424 | 7849 8b87 | f800 0000 | 4c8b d049 | 83c2 284d | 3b97 0801 | 0000 0f83 
+  0x00000150ebce4898: ac0c 0000 | 4d89 97f8 | 0000 0041 | 0f0d 8ac0 | 0000 0048 | c700 0100 
+
+  0x00000150ebce48b0: ;   {metadata('java/awt/image/BufferedImage')}
+  0x00000150ebce48b0: 0000 c740 | 08a0 1007 | 0144 8960 | 0c4c 8960 | 104c 8960 | 184c 8960 | 204c 8bd0 | 4c89 9424 
+  0x00000150ebce48d0: 8000 0000 | bf02 0000 | 0049 8bd2 | 448b 4424 | 6844 8b4c 
+
+  0x00000150ebce48e4: ;   {optimized virtual_call}
+  0x00000150ebce48e4: 246c 90e8 
+
+  0x00000150ebce48e8: ; ImmutableOopMap {[32]=Oop [40]=Oop [80]=Oop [88]=Oop [96]=Oop [120]=Oop [128]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@289 (line 73)
+  0x00000150ebce48e8: 943b 6bf8 | 4c8b 9424 | 8000 0000 | 458b 521c | 0f1f 8400 | 0000 0000 
+
+  0x00000150ebce4900: ; implicit exception: dispatches to 0x00000150ebce5b4c
+  0x00000150ebce4900: 458b 5a30 | 4489 5c24 | 3845 8b5b | 2045 85db | 0f84 ce0e | 0000 498b | d344 8b5c | 2438 498b 
+  0x00000150ebce4920: ;   {optimized virtual_call}
+  0x00000150ebce4920: eb66 90e8 
+
+  0x00000150ebce4924: ; ImmutableOopMap {rbp=Oop [32]=Oop [40]=Oop [56]=NarrowOop [80]=Oop [88]=Oop [96]=Oop [120]=Oop [128]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual setUntrackable {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.awt.image.DataBufferInt::getData@4 (line 198)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@305 (line 74)
+  0x00000150ebce4924: d870 6bf8 | 448b 5424 | 3841 8b72 | 244c 8b94 | 2480 0000 | 0044 8b44 | 246c 4489 | 8424 9800 
+  0x00000150ebce4944: 0000 4c8b | 5c24 504c | 899c 24c8 | 0000 0044 | 8b44 2470 | c5fb 1044 | 2478 448b | 5c24 6844 
+  0x00000150ebce4964: 899c 249c | 0000 004c | 8b5c 2460 | 4c89 9c24 | b800 0000 | 4533 ed44 | 8984 24d8 | 0000 0049 
+  0x00000150ebce4984: 8bda e9a6 
+
+  0x00000150ebce4988: ;   {static_call}
+  0x00000150ebce4988: edff ffe8 
+
+  0x00000150ebce498c: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic initialCoder {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@42 (line 363)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce498c: 1070 5cf8 | 488b d04c | 8b44 2468 
+
+  0x00000150ebce4998: ;   {static_call}
+  0x00000150ebce4998: 6666 90e8 
+
+  0x00000150ebce499c: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic mix {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@46 (line 363)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce499c: c066 59f8 | 488b d04c | 8b44 2470 
+
+  0x00000150ebce49a8: ;   {static_call}
+  0x00000150ebce49a8: 6666 90e8 
+
+  0x00000150ebce49ac: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic mix {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@54 (line 364)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce49ac: b066 59f8 | 4889 4424 | 784c 8bd0 | 49c1 fa20 | 448b d845 | 8bc2 450f | bed0 c442 | 29f7 d345 
+  0x00000150ebce49cc: 85d2 0f8c | 3c0e 0000 | 0f1f 8400 | 0000 0000 | 6666 6690 | 4181 fa00 | 0010 000f | 871b 0e00 
+  0x00000150ebce49ec: 004d 63da | 4181 fa00 | 0010 000f | 87a7 0b00 | 0049 8b87 | f800 0000 | 4983 c317 | 4983 e3f8 
+  0x00000150ebce4a0c: 4c8b c04d | 03c3 6666 | 0f1f 8400 | 0000 0000 | 6666 6690 | 4d3b 8708 | 0100 000f | 8377 0b00 
+  0x00000150ebce4a2c: 004d 8987 | f800 0000 | 410f 0d88 | c000 0000 | 48c7 0001 | 0000 0041 | 0f0d 8800 
+
+  0x00000150ebce4a48: ;   {metadata({type array byte})}
+  0x00000150ebce4a48: 0100 00c7 | 4008 f021 | 0000 4489 | 500c 410f | 0d88 4001 | 0000 410f | 0d88 8001 | 0000 4c8b 
+  0x00000150ebce4a68: d04c 8954 | 2440 488b | 5424 784d | 8bc2 4c8b 
+
+  0x00000150ebce4a78: ;   {static_call}
+  0x00000150ebce4a78: 4c24 70e8 
+
+  0x00000150ebce4a7c: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [88]=Oop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic prepend {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@71 (line 368)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4a7c: e071 59f8 | 488b d04c | 8b44 2440 | 4c8b 4c24 
+
+  0x00000150ebce4a8c: ;   {static_call}
+  0x00000150ebce4a8c: 6866 90e8 
+
+  0x00000150ebce4a90: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic prepend {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@81 (line 369)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4a90: cc71 59f8 | 488b 5424 | 404c 8bc0 
+
+  0x00000150ebce4a9c: ;   {static_call}
+  0x00000150ebce4a9c: 6666 90e8 
+
+  0x00000150ebce4aa0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic newString {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@90 (line 370)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4aa0: 5c19 5ef8 | 488b d8e9 | 68fa ffff 
+
+  0x00000150ebce4aac: ;   {static_call}
+  0x00000150ebce4aac: 6666 90e8 
+
+  0x00000150ebce4ab0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic initialCoder {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@42 (line 363)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4ab0: ec6e 5cf8 | 488b d04c | 8b44 2468 
+
+  0x00000150ebce4abc: ;   {static_call}
+  0x00000150ebce4abc: 6666 90e8 
+
+  0x00000150ebce4ac0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic mix {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@46 (line 363)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4ac0: 9c65 59f8 | 488b d04c | 8b44 2470 
+
+  0x00000150ebce4acc: ;   {static_call}
+  0x00000150ebce4acc: 6666 90e8 
+
+  0x00000150ebce4ad0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic mix {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@54 (line 364)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4ad0: 8c65 59f8 | 4889 4424 | 784c 8bd0 | 49c1 fa20 | 448b c045 | 8bd2 450f | beda c442 | 21f7 d045 
+  0x00000150ebce4af0: 8bc2 4585 | d20f 8c31 | 0d00 000f | 1f44 0000 | 4181 fa00 | 0010 000f | 8717 0d00 | 004d 63d2 
+  0x00000150ebce4b10: 4181 f800 | 0010 000f | 87af 0b00 | 0049 8b87 | f800 0000 | 4983 c217 | 4983 e2f8 | 4c8b d84d 
+  0x00000150ebce4b30: 03da 6666 | 0f1f 8400 | 0000 0000 | 6666 6690 | 4d3b 9f08 | 0100 000f | 837f 0b00 | 004d 899f 
+  0x00000150ebce4b50: f800 0000 | 410f 0d8b | c000 0000 | 48c7 0001 | 0000 0041 | 0f0d 8b00 
+
+  0x00000150ebce4b68: ;   {metadata({type array byte})}
+  0x00000150ebce4b68: 0100 00c7 | 4008 f021 | 0000 4489 | 400c 410f | 0d8b 4001 | 0000 410f | 0d8b 8001 | 0000 4c8b 
+  0x00000150ebce4b88: d04c 8954 | 2440 488b | 5424 784d | 8bc2 4c8b 
+
+  0x00000150ebce4b98: ;   {static_call}
+  0x00000150ebce4b98: 4c24 70e8 
+
+  0x00000150ebce4b9c: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic prepend {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@71 (line 368)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4b9c: c070 59f8 | 488b d04c | 8b44 2440 | 4c8b 4c24 
+
+  0x00000150ebce4bac: ;   {static_call}
+  0x00000150ebce4bac: 6866 90e8 
+
+  0x00000150ebce4bb0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [64]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic prepend {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@81 (line 369)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4bb0: ac70 59f8 | 488b 5424 | 404c 8bc0 
+
+  0x00000150ebce4bbc: ;   {static_call}
+  0x00000150ebce4bbc: 6666 90e8 
+
+  0x00000150ebce4bc0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokestatic newString {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@90 (line 370)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce4bc0: 3c18 5ef8 | 488b d8e9 | a8f1 ffff | 448b 1345 | 85d2 0f84 | b4f5 ffff | 4d8b 5f28 | 498b ca90 
+  0x00000150ebce4be0: 4d85 db0f | 84d4 0900 | 004d 8b57 | 384b 894c | 1af8 4983 | c3f8 4d89 | 5f28 e98d | f5ff ff4d 
+  0x00000150ebce4c00: 8b57 584d | 8b5f 48f0 | 8344 24c0 | 0080 3900 | 0f84 b5f5 | ffff 4488 | 214d 85db | 7515 498b 
+  0x00000150ebce4c20: d749 ba90 | 1e43 40fd | 7f00 0041 | ffd2 e998 | f5ff ff4b | 894c 1af8 | 4983 c3f8 | 4d89 5f48 
+  0x00000150ebce4c40: e986 f5ff | ff4c 8b94 | 24c0 0000 | 0045 8b5a | 2845 85db | 0f84 73f7 | ffff 4d8b | 5728 498b 
+  0x00000150ebce4c60: cb4d 85d2 | 0f84 c209 | 0000 4d8b | 5f38 4b89 | 4c13 f849 | 83c2 f84d | 8957 280f | 1f44 0000 
+  0x00000150ebce4c80: e948 f7ff | ff4d 8b57 | 484d 8b5f | 58f0 8344 | 24c0 0080 | 3900 0f84 | 71f7 ffff | 4488 2190 
+  0x00000150ebce4ca0: 4d85 d275 | 1549 8bd7 | 49ba 901e | 4340 fd7f | 0000 41ff | d2e9 53f7 | ffff 4b89 | 4c13 f849 
+  0x00000150ebce4cc0: 83c2 f84d | 8957 48e9 | 41f7 ffff | 4d8b 5748 | 4d8b 5f58 | f083 4424 | c000 660f | 1f44 0000 
+  0x00000150ebce4ce0: 8039 000f | 8407 f8ff | ff44 8821 | 4d85 d275 | 2149 8bd7 | 0f1f 8400 | 0000 0000 | 6666 6690 
+  0x00000150ebce4d00: 49ba 901e | 4340 fd7f | 0000 41ff | d2e9 def7 | ffff 4b89 | 4c13 f849 | 83c2 f84d | 8957 4890 
+  0x00000150ebce4d20: e9cb f7ff | ff4c 8b94 | 24c0 0000 | 0045 8b52 | 2845 85d2 | 0f84 ffee | ffff 4d8b | 5f28 498b 
+  0x00000150ebce4d40: ca4d 85db | 0f84 5a0a | 0000 4d8b | 5738 4b89 | 4c1a f849 | 83c3 f84d | 895f 280f | 1f44 0000 
+  0x00000150ebce4d60: e9d4 eeff | ff4d 8b57 | 484d 8b5f | 58f0 8344 | 24c0 0080 | 3900 0f84 | 03ef ffff | 4488 2190 
+  0x00000150ebce4d80: 4d85 d275 | 1549 8bd7 | 49ba 901e | 4340 fd7f | 0000 41ff | d2e9 e5ee | ffff 4b89 | 4c13 f849 
+  0x00000150ebce4da0: 83c2 f84d | 8957 48e9 | d3ee ffff | 4d8b 5748 | 4d8b 5f58 | f083 4424 | c000 660f 
+
+  0x00000150ebce4dbc: ;   {no_reloc}
+  0x00000150ebce4dbc: 1f44 0000 | 8039 000f | 8487 efff | ff44 8821 | 4d85 d275 | 2149 8bd7 | 0f1f 8400 | 0000 0000 
+  0x00000150ebce4ddc: 6666 6690 | 49ba 901e | 4340 fd7f | 0000 41ff | d2e9 5eef | ffff 4b89 | 4c13 f849 | 83c2 f84d 
+  0x00000150ebce4dfc: 8957 4890 | e94b efff | ff45 8b52 | 2c45 85d2 | 0f84 5fec | ffff 4d8b | 5f28 498b | ca4d 85db 
+  0x00000150ebce4e1c: 0f1f 4000 | 0f84 9e09 | 0000 4d8b | 5738 4b89 | 4c1a f849 | 83c3 f84d | 895f 28e9 | 35ec ffff 
+  0x00000150ebce4e3c: 4d8b 5748 | 4d8b 5f58 | f083 4424 | c000 8039 | 000f 8463 | ecff ff44 | 8821 4d85 | d275 1749 
+  0x00000150ebce4e5c: 8bd7 6690 | 49ba 901e | 4340 fd7f | 0000 41ff | d2e9 44ec | ffff 4b89 | 4c13 f849 | 83c2 f84d 
+  0x00000150ebce4e7c: 8957 4890 | e931 ecff | ffba e4ff | ffff 488b | 6c24 204c | 8b54 2428 | 4c89 5424 | 204c 8b54 
+  0x00000150ebce4e9c: 2430 4c89 | 5424 284c | 8b54 2460 | 4c89 5424 | 5044 894c | 2468 4489 
+
+  0x00000150ebce4eb4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4eb4: 5c24 6ce8 
+
+  0x00000150ebce4eb8: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [104]=NarrowOop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.ArrayList$Itr::next@64 (line 975)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@529 (line 105)
+  0x00000150ebce4eb8: 441e a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce4ed8: 2428 4c8b | 5424 604c | 8954 2450 | 4c8b 5424 | 704c 8954 
+
+  0x00000150ebce4eec: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4eec: 2460 90e8 
+
+  0x00000150ebce4ef0: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual print {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@552 (line 107)
+  0x00000150ebce4ef0: 0c1e a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce4f10: 2428 4c8b | 5424 604c | 8954 2450 | 4c8b 5424 | 704c 8954 
+
+  0x00000150ebce4f24: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4f24: 2460 90e8 
+
+  0x00000150ebce4f28: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual print {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@576 (line 109)
+  0x00000150ebce4f28: d41d a4ff | bade ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce4f48: 2428 4c8b | 5424 604c | 8954 2450 
+
+  0x00000150ebce4f54: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4f54: 6666 90e8 
+
+  0x00000150ebce4f58: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokeinterface hasNext {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@519 (line 105)
+  0x00000150ebce4f58: a41d a4ff | bade ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce4f78: 2428 4c8b | 5424 604c | 8954 2450 | 4c8b 5424 | 704c 8954 | 2460 4489 | 5c24 684c | 894c 2478 
+  0x00000150ebce4f98: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce4f98: 6666 90e8 
+
+  0x00000150ebce4f9c: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [96]=Oop [104]=NarrowOop [120]=Oop [136]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokeinterface put {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@605 (line 112)
+  0x00000150ebce4f9c: 601d a4ff | 4533 d24c | 8954 2420 | e92a e5ff | ff45 33d2 | 4c89 5424 | 28e9 45e5 | ffff 4533 
+  0x00000150ebce4fbc: d24c 8994 | 24a0 0000 | 00e9 61e5 | ffff 4533 | d24c 8994 | 24a8 0000 | 00e9 7be5 | ffff 4533 
+  0x00000150ebce4fdc: d24c 8994 | 24d0 0000 | 00e9 9de5 | ffff 4533 | d24c 8994 | 24b0 0000 | 00e9 d0e5 | ffff 4533 
+  0x00000150ebce4ffc: d24c 8994 | 24b8 0000 | 00e9 ebe5 | ffff 4533 | d24c 8994 | 24c0 0000 | 00e9 0de6 | ffff 4533 
+  0x00000150ebce501c: d24c 8994 | 24c8 0000 | 00e9 2be6 | ffff 4533 | d2c4 c1f9 | 6ec2 e967 | e6ff ff33 | dbe9 92e6 
+  0x00000150ebce503c: ffff 4533 | d2e9 b4e6 
+
+  0x00000150ebce5044: ;   {metadata('com/heavybox/jtix/tools/FontGenerator$GlyphData')}
+  0x00000150ebce5044: ffff 48ba | 1848 0301 | 0800 0000 
+
+  0x00000150ebce5050: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce5050: 6666 90e8 
+
+  0x00000150ebce5054: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@198 (line 61)
+  0x00000150ebce5054: 285e a5ff | 4c8b c00f | 1f44 0000 | e93a f2ff 
+
+  0x00000150ebce5064: ;   {metadata('java/util/HashMap')}
+  0x00000150ebce5064: ff48 ba50 | b00a 0008 | 0000 004c | 8b94 24c0 | 0000 004c | 8954 2470 
+
+  0x00000150ebce507c: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce507c: 6666 90e8 
+
+  0x00000150ebce5080: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@485 (line 103)
+  0x00000150ebce5080: fc5d a5ff | 488b d8e9 | 2ef3 ffff 
+
+  0x00000150ebce508c: ;   {metadata('java/util/ArrayList$Itr')}
+  0x00000150ebce508c: 48ba f0f7 | 1a00 0800 
+
+  0x00000150ebce5094: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce5094: 0000 90e8 
+
+  0x00000150ebce5098: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.util.ArrayList::iterator@0 (line 947)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@510 (line 105)
+  0x00000150ebce5098: e45d a5ff | 0f1f 4000 | e9cd f4ff 
+
+  0x00000150ebce50a4: ;   {metadata('java/lang/String')}
+  0x00000150ebce50a4: ff48 baa0 | 8900 0008 
+
+  0x00000150ebce50ac: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce50ac: 0000 00e8 
+
+  0x00000150ebce50b0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@17 (line 355)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce50b0: cc5d a5ff | 488b d8e9 | f6f3 ffff | ba45 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 
+  0x00000150ebce50d0: 4c8b 5424 | 304c 8954 | 2428 4c8b | 5424 604c | 8954 2450 | 4c8b 5424 | 704c 8954 | 2468 4489 
+  0x00000150ebce50f0: 4c24 7044 | 8944 2474 
+
+  0x00000150ebce50f8: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce50f8: 6666 90e8 
+
+  0x00000150ebce50fc: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*if_icmpeq {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::checkForComodification@11 (line 1012)
+                      ; - java.util.ArrayList$Itr::next@1 (line 967)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@529 (line 105)
+  0x00000150ebce50fc: 001c a4ff | ba45 ffff | ff48 8b6c | 2420 4c8b | 4424 284c | 8944 2420 | 4c8b 4424 | 304c 8944 
+  0x00000150ebce511c: 2428 4c8b | 4424 604c | 8944 2450 | 4c8b 4424 | 704c 8944 | 2468 4489 | 5c24 7444 | 8954 2478 
+  0x00000150ebce513c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce513c: 6666 90e8 
+
+  0x00000150ebce5140: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*if_icmplt {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::next@17 (line 969)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@529 (line 105)
+  0x00000150ebce5140: bc1b a4ff | ba45 ffff | ff48 8b6c | 2420 4c8b | 4424 284c | 8944 2420 | 4c8b 4424 | 304c 8944 
+  0x00000150ebce5160: 2428 4c8b | 4424 604c | 8944 2450 | 4c8b 4424 | 704c 8944 | 2468 4489 | 4c24 7444 | 895c 2478 
+  0x00000150ebce5180: 4489 5424 
+
+  0x00000150ebce5184: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5184: 7c66 90e8 
+
+  0x00000150ebce5188: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [104]=Oop [116]=NarrowOop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*if_icmplt {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::next@39 (line 972)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@529 (line 105)
+  0x00000150ebce5188: 741b a4ff | 4533 db49 | 3bc3 bdff | ffff ff7c | 0840 0f95 | c540 0fb6 | edba 45ff | ffff 4c8b 
+  0x00000150ebce51a8: 5c24 604c | 895c 2458 | 4c8b 5c24 | 704c 895c | 2468 448b | 5c24 7844 | 895c 2470 
+
+  0x00000150ebce51c4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce51c4: 6666 90e8 
+
+  0x00000150ebce51c8: ; ImmutableOopMap {[32]=Oop [40]=Oop [88]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*ifne {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) org.lwjgl.system.MemoryUtil::nmemAllocChecked@24 (line 245)
+                      ; - org.lwjgl.util.freetype.FT_Vector::malloc@8 (line 116)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@542 (line 106)
+  0x00000150ebce51c8: 341b a4ff 
+
+  0x00000150ebce51cc: ;   {metadata('java/util/HashMap')}
+  0x00000150ebce51cc: 48ba 50b0 | 0a00 0800 
+
+  0x00000150ebce51d4: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce51d4: 0000 90e8 
+
+  0x00000150ebce51d8: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@485 (line 103)
+  0x00000150ebce51d8: a45c a5ff | 488b d890 | e941 eaff 
+
+  0x00000150ebce51e4: ;   {metadata('java/util/ArrayList$Itr')}
+  0x00000150ebce51e4: ff48 baf0 | f71a 0008 
+
+  0x00000150ebce51ec: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce51ec: 0000 00e8 
+
+  0x00000150ebce51f0: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.util.ArrayList::iterator@0 (line 947)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@510 (line 105)
+  0x00000150ebce51f0: 8c5c a5ff | e9d9 ebff 
+
+  0x00000150ebce51f8: ;   {metadata('java/lang/String')}
+  0x00000150ebce51f8: ff48 baa0 | 8900 0008 
+
+  0x00000150ebce5200: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce5200: 0000 00e8 
+
+  0x00000150ebce5204: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@17 (line 355)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce5204: 785c a5ff | 488b d8e9 | 02eb ffff | bae4 ffff | ff4c 8b54 | 2460 4c89 | 5424 584c | 8b54 2470 
+  0x00000150ebce5224: 4c89 5424 | 6844 8b5c | 247c 4489 | 5c24 7044 | 8b54 2478 | 4489 5424 
+
+  0x00000150ebce523c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce523c: 7466 90e8 
+
+  0x00000150ebce5240: ; ImmutableOopMap {[32]=Oop [40]=Oop [88]=Oop [104]=Oop [112]=NarrowOop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.Character::valueOf@10 (line 8868)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@597 (line 112)
+  0x00000150ebce5240: bc1a a4ff | c4c1 797e | cdc4 e1f9 | 7ed3 c4c1 | f97e d88b | 4c24 38eb | 0345 8bce | bae4 ffff 
+  0x00000150ebce5260: ff48 8b6c | 2420 4c8b | 5c24 284c | 895c 2420 | 4c8b 5c24 | 304c 895c | 2428 4c8b | 9c24 a000 
+  0x00000150ebce5280: 0000 4c89 | 5c24 3044 | 8b9c 249c | 0000 0044 | 895c 2468 | 8bbc 2498 | 0000 0089 | 7c24 6c48 
+  0x00000150ebce52a0: 899c 2480 | 0000 0089 | 7424 7444 | 89ac 2488 | 0000 0044 | 898c 248c | 0000 004c | 8984 2490 
+  0x00000150ebce52c0: 0000 004c | 8984 2498 | 0000 0044 | 8994 24a0 | 0000 0089 | 8c24 a400 
+
+  0x00000150ebce52d8: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce52d8: 0000 90e8 
+
+  0x00000150ebce52dc: ; ImmutableOopMap {rbp=Oop [32]=Oop [48]=Oop [116]=NarrowOop [128]=Oop [144]=Oop [152]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokestatic checkIndex {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.Objects::checkIndex@3 (line 385)
+                      ; - java.nio.Buffer::checkIndex@5 (line 744)
+                      ; - java.nio.DirectByteBuffer::get@11 (line 335)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@366 (line 81)
+  0x00000150ebce52dc: 201a a4ff | c4c1 797e | cdc4 e1f9 | 7ed3 c4c1 | f97e d8eb | 0345 8bce | bae4 ffff | ff48 8b6c 
+  0x00000150ebce52fc: 2420 488b | 4c24 2848 | 894c 2420 | 488b 4c24 | 3048 894c | 2428 8bbc | 2498 0000 | 0089 7c24 
+  0x00000150ebce531c: 6c4c 8944 | 2478 4889 | 9c24 8000 | 0000 4489 | ac24 8800 | 0000 4489 | 8c24 8c00 | 0000 89b4 
+  0x00000150ebce533c: 2490 0000 | 0044 899c | 2494 0000 | 0044 8994 | 2498 0000 
+
+  0x00000150ebce5350: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5350: 0066 90e8 
+
+  0x00000150ebce5354: ; ImmutableOopMap {rbp=Oop [32]=Oop [120]=Oop [128]=Oop [144]=NarrowOop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*iastore {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@401 (line 84)
+  0x00000150ebce5354: a819 a4ff 
+
+  0x00000150ebce5358: ;   {metadata('java/lang/String')}
+  0x00000150ebce5358: 48ba a089 | 0000 0800 
+
+  0x00000150ebce5360: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce5360: 0000 90e8 
+
+  0x00000150ebce5364: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@33 (line 359)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce5364: 185b a5ff | e985 f3ff | ffba deff | ffff 488b | 6c24 204c | 8b5c 2428 | 4c89 5c24 | 204c 8b5c 
+  0x00000150ebce5384: 2430 4c89 | 5c24 2844 | 8b84 249c | 0000 0044 | 8944 2468 | 448b 9c24 | 9800 0000 | 4489 5c24 
+  0x00000150ebce53a4: 6c48 895c | 2478 8974 | 2474 4489 | ac24 8000 | 0000 4489 | b424 8400 | 0000 4489 | 9424 8800 
+  0x00000150ebce53c4: 0000 c5fb | 1184 2498 
+
+  0x00000150ebce53cc: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce53cc: 0000 00e8 
+
+  0x00000150ebce53d0: ; ImmutableOopMap {rbp=Oop [32]=Oop [116]=NarrowOop [120]=Oop [152]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokevirtual get {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@366 (line 81)
+  0x00000150ebce53d0: 2c19 a4ff | bacc ffff | ff48 8b6c | 2420 4c8b | 5c24 284c | 895c 2420 | 4c8b 5c24 | 304c 895c 
+  0x00000150ebce53f0: 2428 4c8b | 9c24 a000 | 0000 4c89 | 5c24 3044 | 8b9c 249c | 0000 0044 | 895c 2468 | 448b 8c24 
+  0x00000150ebce5410: 9800 0000 | 4489 4c24 | 6c48 899c | 2480 0000 | 0089 7424 | 7444 89ac | 2488 0000 | 0044 89b4 
+  0x00000150ebce5430: 248c 0000 | 004c 8984 | 2490 0000 | 004c 8984 | 2498 0000 | 0044 8994 | 24a0 0000 | 0089 8c24 
+  0x00000150ebce5450: a400 0000 
+
+  0x00000150ebce5454: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5454: 6666 90e8 
+
+  0x00000150ebce5458: ; ImmutableOopMap {rbp=Oop [32]=Oop [48]=Oop [116]=NarrowOop [128]=Oop [144]=Oop [152]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokestatic checkIndex {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.Objects::checkIndex@3 (line 385)
+                      ; - java.nio.Buffer::checkIndex@5 (line 744)
+                      ; - java.nio.DirectByteBuffer::get@11 (line 335)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@366 (line 81)
+  0x00000150ebce5458: a418 a4ff | ba45 ffff | ff4c 8b9c | 24a0 0000 | 004c 895c | 2438 4c8b | 9c24 a800 | 0000 4c89 
+  0x00000150ebce5478: 5c24 4044 | 8b8c 249c | 0000 0044 | 894c 2470 | 448b 9c24 | 9800 0000 | 4489 5c24 | 7448 899c 
+  0x00000150ebce5498: 2488 0000 | 0089 7424 | 7c44 89ac | 2490 0000 | 0044 89b4 | 2494 0000 | 004c 8984 | 2498 0000 
+  0x00000150ebce54b8: 0044 8994 | 24a0 0000 | 004c 8984 | 24a8 0000 
+
+  0x00000150ebce54c8: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce54c8: 0066 90e8 
+
+  0x00000150ebce54cc: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=Oop [64]=Oop [124]=NarrowOop [136]=Oop [152]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*ifnull {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.nio.Buffer::session@4 (line 763)
+                      ; - java.nio.DirectByteBuffer::get@4 (line 335)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@366 (line 81)
+  0x00000150ebce54cc: 3018 a4ff 
+
+  0x00000150ebce54d0: ;   {metadata('java/lang/Integer')}
+  0x00000150ebce54d0: 48ba 30c7 | 0300 0800 
+
+  0x00000150ebce54d8: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce54d8: 0000 90e8 
+
+  0x00000150ebce54dc: ; ImmutableOopMap {[32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [124]=NarrowOop [136]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.Integer::valueOf@23 (line 1074)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@602 (line 112)
+  0x00000150ebce54dc: a059 a5ff | 4c8b c8e9 | 87f2 ffff 
+
+  0x00000150ebce54e8: ;   {metadata('java/lang/String')}
+  0x00000150ebce54e8: 48ba a089 | 0000 0800 
+
+  0x00000150ebce54f0: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce54f0: 0000 90e8 
+
+  0x00000150ebce54f4: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.StringConcatHelper::simpleConcat@33 (line 359)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce54f4: 8859 a5ff | e9df f2ff | ffba e4ff | ffff 4c89 
+
+  0x00000150ebce5504: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5504: 5424 60e8 
+
+  0x00000150ebce5508: ; ImmutableOopMap {[32]=Oop [40]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aastore {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.collections.Array::add@46 (line 64)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@623 (line 116)
+  0x00000150ebce5508: f417 a4ff | bad6 ffff | ff4c 8954 
+
+  0x00000150ebce5514: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5514: 2460 90e8 
+
+  0x00000150ebce5518: ; ImmutableOopMap {[32]=Oop [40]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aastore {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.collections.Array::add@46 (line 64)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@623 (line 116)
+  0x00000150ebce5518: e417 a4ff | bae4 ffff | ff48 8b6c | 2420 4c8b | 5c24 284c | 895c 2420 | 4c8b 5c24 | 304c 895c 
+  0x00000150ebce5538: 2428 894c | 2450 4489 
+
+  0x00000150ebce5540: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5540: 5424 54e8 
+
+  0x00000150ebce5544: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=NarrowOop [88]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.ArrayList$Itr::next@64 (line 975)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@188 (line 59)
+  0x00000150ebce5544: b817 a4ff 
+
+  0x00000150ebce5548: ;   {metadata('java/awt/image/BufferedImage')}
+  0x00000150ebce5548: 48ba a010 | 0701 0800 
+
+  0x00000150ebce5550: ;   {runtime_call _new_instance_Java}
+  0x00000150ebce5550: 0000 90e8 
+
+  0x00000150ebce5554: ; ImmutableOopMap {[32]=Oop [40]=Oop [80]=Oop [88]=Oop [96]=Oop [120]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*new {reexecute=0 rethrow=0 return_oop=1}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@280 (line 73)
+  0x00000150ebce5554: 2859 a5ff | e96c f3ff | ffba f6ff 
+
+  0x00000150ebce5560: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5560: ffff 90e8 
+
+  0x00000150ebce5564: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@11 (line 353)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce5564: 9817 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5584: 2428 4c8b | 5424 584c | 8954 2450 | 4c8b 5424 | 604c 8954 | 2458 4889 
+
+  0x00000150ebce559c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce559c: 5c24 60e8 
+
+  0x00000150ebce55a0: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual println {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@505 (line 104)
+  0x00000150ebce55a0: 5c17 a4ff 
+
+  0x00000150ebce55a4: ;   {metadata({type array byte})}
+  0x00000150ebce55a4: 48ba f021 | 0000 0800 | 0000 458b 
+
+  0x00000150ebce55b0: ;   {runtime_call _new_array_Java}
+  0x00000150ebce55b0: c266 90e8 
+
+  0x00000150ebce55b4: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual allocateUninitializedArray0 {reexecute=0 rethrow=0 return_oop=1}
+                      ; - jdk.internal.misc.Unsafe::allocateUninitializedArray@51 (line 1380)
+                      ; - java.lang.StringConcatHelper::newArray@19 (line 438)
+                      ; - java.lang.StringConcatHelper::simpleConcat@61 (line 365)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce55b4: c855 a5ff | e9a9 f4ff | ff49 8bd7 | 49ba b01e | 4340 fd7f | 0000 41ff | d2e9 baeb | ffff ba45 
+  0x00000150ebce55d4: ffff ff44 | 895c 2460 
+
+  0x00000150ebce55dc: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce55dc: 6666 90e8 
+
+  0x00000150ebce55e0: ; ImmutableOopMap {[32]=Oop [40]=Oop [88]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*if_icmpeq {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::checkForComodification@11 (line 1012)
+                      ; - java.util.ArrayList$Itr::next@1 (line 967)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@188 (line 59)
+  0x00000150ebce55e0: 1c17 a4ff | ba45 ffff | ff48 8b6c | 2420 4c8b | 5c24 284c | 895c 2420 | 4c8b 5c24 | 304c 895c 
+  0x00000150ebce5600: 2428 4c89 | 4424 5044 | 8954 245c | 894c 2460 
+
+  0x00000150ebce5610: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5610: 6666 90e8 
+
+  0x00000150ebce5614: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*if_icmplt {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::next@17 (line 969)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@188 (line 59)
+  0x00000150ebce5614: e816 a4ff | ba45 ffff | ff89 4c24 | 6444 8954 
+
+  0x00000150ebce5624: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5624: 2468 90e8 
+
+  0x00000150ebce5628: ; ImmutableOopMap {[32]=Oop [40]=Oop [88]=Oop [100]=NarrowOop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*if_icmplt {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::next@39 (line 972)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@188 (line 59)
+  0x00000150ebce5628: d416 a4ff | 498b d749 | bab0 1e43 | 40fd 7f00 | 0041 ffd2 | 0f1f 4000 | e988 edff | ffba f6ff 
+  0x00000150ebce5648: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5648: ffff 90e8 
+
+  0x00000150ebce564c: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@11 (line 353)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce564c: b016 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce566c: 2428 4c8b | 5424 604c | 8954 2458 | 4889 5c24 
+
+  0x00000150ebce567c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce567c: 6066 90e8 
+
+  0x00000150ebce5680: ; ImmutableOopMap {rbp=Oop [32]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual println {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@505 (line 104)
+  0x00000150ebce5680: 7c16 a4ff | ba76 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce56a0: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce56a0: 2428 90e8 
+
+  0x00000150ebce56a4: ; ImmutableOopMap {rbp=Oop [32]=Oop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@517 (line 105)
+  0x00000150ebce56a4: 5816 a4ff | babe ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce56c4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce56c4: 2428 90e8 
+
+  0x00000150ebce56c8: ; ImmutableOopMap {rbp=Oop [32]=Oop [96]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@517 (line 105)
+  0x00000150ebce56c8: 3416 a4ff 
+
+  0x00000150ebce56cc: ;   {metadata({type array byte})}
+  0x00000150ebce56cc: 48ba f021 | 0000 0800 
+
+  0x00000150ebce56d4: ;   {runtime_call _new_array_Java}
+  0x00000150ebce56d4: 0000 90e8 
+
+  0x00000150ebce56d8: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [56]=NarrowOop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual allocateUninitializedArray0 {reexecute=0 rethrow=0 return_oop=1}
+                      ; - jdk.internal.misc.Unsafe::allocateUninitializedArray@51 (line 1380)
+                      ; - java.lang.StringConcatHelper::newArray@19 (line 438)
+                      ; - java.lang.StringConcatHelper::simpleConcat@61 (line 365)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce56d8: a454 a5ff | 0f1f 4000 | e9a1 f4ff | ffba f6ff | ffff 488b | 6c24 204c | 8b54 2428 | 4c89 5424 
+  0x00000150ebce56f8: 204c 8b54 | 2430 4c89 | 5424 2848 | 895c 2468 
+
+  0x00000150ebce5708: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5708: 6666 90e8 
+
+  0x00000150ebce570c: ; ImmutableOopMap {rbp=Oop [32]=Oop [104]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [200]=Oop [208]=Oop }
+                      ;*putfield bufferedImage {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@418 (line 88)
+  0x00000150ebce570c: f015 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce572c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce572c: 2428 90e8 
+
+  0x00000150ebce5730: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokevirtual println {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@426 (line 89)
+  0x00000150ebce5730: cc15 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5750: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5750: 2428 90e8 
+
+  0x00000150ebce5754: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual println {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@456 (line 92)
+  0x00000150ebce5754: a815 a4ff | ba76 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5774: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5774: 2428 90e8 
+
+  0x00000150ebce5778: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [208]=Oop }
+                      ;*aload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@459 (line 98)
+  0x00000150ebce5778: 8415 a4ff | baec ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5798: 2428 4889 
+
+  0x00000150ebce579c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce579c: 4424 38e8 
+
+  0x00000150ebce57a0: ; ImmutableOopMap {rbp=Oop [32]=Oop [56]=Oop [160]=Oop }
+                      ;*astore {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@634 (line 120)
+  0x00000150ebce57a0: 5c15 a4ff | 498b d749 | bab0 1e43 | 40fd 7f00 | 0041 ffd2 | e980 e4ff | ffba f6ff 
+
+  0x00000150ebce57bc: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce57bc: ffff 90e8 
+
+  0x00000150ebce57c0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@27 (line 357)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce57c0: 3c15 a4ff | 498b d749 | bab0 1e43 | 40fd 7f00 | 0041 ffd2 | e998 e2ff | ffba f6ff 
+
+  0x00000150ebce57dc: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce57dc: ffff 90e8 
+
+  0x00000150ebce57e0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.StringConcatHelper::simpleConcat@27 (line 357)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce57e0: 1c15 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5800: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5800: 2428 90e8 
+
+  0x00000150ebce5804: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [88]=Oop [96]=Oop [120]=Oop [128]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual setUntrackable {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.awt.image.DataBufferInt::getData@4 (line 198)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@305 (line 74)
+  0x00000150ebce5804: f814 a4ff | 4d63 dae9 | e0f1 ffff | ba45 ffff | ff44 8994 | 2484 0000 
+
+  0x00000150ebce581c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce581c: 0066 90e8 
+
+  0x00000150ebce5820: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [88]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*ifge {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) jdk.internal.misc.Unsafe::allocateUninitializedArray@34 (line 1377)
+                      ; - java.lang.StringConcatHelper::newArray@19 (line 438)
+                      ; - java.lang.StringConcatHelper::simpleConcat@61 (line 365)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce5820: dc14 a4ff | 4d63 d2e9 | e4f2 ffff | ba45 ffff | ff44 8984 | 2484 0000 
+
+  0x00000150ebce5838: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5838: 0066 90e8 
+
+  0x00000150ebce583c: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [96]=Oop [104]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*ifge {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) jdk.internal.misc.Unsafe::allocateUninitializedArray@34 (line 1377)
+                      ; - java.lang.StringConcatHelper::newArray@19 (line 438)
+                      ; - java.lang.StringConcatHelper::simpleConcat@61 (line 365)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce583c: c014 a4ff | bade ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce585c: 2428 4489 
+
+  0x00000150ebce5860: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5860: 5c24 50e8 
+
+  0x00000150ebce5864: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=NarrowOop [88]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@193 (line 59)
+  0x00000150ebce5864: 9814 a4ff | bade ffff | ff48 8b6c | 2420 4c8b | 5c24 284c | 895c 2420 | 4c8b 5c24 | 304c 895c 
+  0x00000150ebce5884: 2428 4c8b | 5c24 604c | 895c 2450 | 4489 5424 
+
+  0x00000150ebce5894: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5894: 6866 90e8 
+
+  0x00000150ebce5898: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [104]=NarrowOop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@534 (line 105)
+  0x00000150ebce5898: 6414 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce58b8: 2428 4c8b | 5424 604c | 8954 2450 
+
+  0x00000150ebce58c4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce58c4: 6666 90e8 
+
+  0x00000150ebce58c8: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*getfield size {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::hasNext@8 (line 962)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@519 (line 105)
+  0x00000150ebce58c8: 3414 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce58e8: 2428 4c8b | 5424 604c | 8954 2450 
+
+  0x00000150ebce58f4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce58f4: 6666 90e8 
+
+  0x00000150ebce58f8: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*arraylength {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.ArrayList$Itr::next@38 (line 972)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@529 (line 105)
+  0x00000150ebce58f8: 0414 a4ff | baf4 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5918: 2428 4c8b | 5424 604c | 8954 2450 
+
+  0x00000150ebce5924: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5924: 6666 90e8 
+
+  0x00000150ebce5928: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [112]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@534 (line 105)
+  0x00000150ebce5928: d413 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5948: 2428 4c8b | 5424 604c | 8954 2450 | 4c8b 5424 | 704c 8954 | 2460 4c89 
+
+  0x00000150ebce5960: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5960: 4c24 70e8 
+
+  0x00000150ebce5964: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [96]=Oop [112]=Oop [136]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokeinterface put {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@605 (line 112)
+  0x00000150ebce5964: 9813 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5c24 284c | 895c 2420 | 4c8b 5c24 | 304c 895c 
+  0x00000150ebce5984: 2428 4889 | 5c24 7889 | 7424 7444 | 89ac 2480 | 0000 0044 | 89b4 2484 | 0000 0044 | 8994 2488 
+  0x00000150ebce59a4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce59a4: 0000 00e8 
+
+  0x00000150ebce59a8: ; ImmutableOopMap {rbp=Oop [32]=Oop [116]=NarrowOop [120]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*invokevirtual get {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@366 (line 81)
+  0x00000150ebce59a8: 5413 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 4c24 284c | 894c 2420 | 4c8b 4c24 | 304c 894c 
+  0x00000150ebce59c8: 2428 4c89 | 4424 7848 | 899c 2480 | 0000 0044 | 896c 2474 | 4489 b424 | 8800 0000 | 4489 9c24 
+  0x00000150ebce59e8: 8c00 0000 | 4489 9424 | 9000 0000 
+
+  0x00000150ebce59f4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce59f4: 6666 90e8 
+
+  0x00000150ebce59f8: ; ImmutableOopMap {rbp=Oop [32]=Oop [120]=Oop [128]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [200]=Oop [208]=Oop }
+                      ;*iastore {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@401 (line 84)
+  0x00000150ebce59f8: 0413 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5a18: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5a18: 2428 90e8 
+
+  0x00000150ebce5a1c: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop [168]=Oop [176]=Oop [208]=Oop }
+                      ;*arraylength {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.collections.Array::add@10 (line 63)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@623 (line 116)
+  0x00000150ebce5a1c: e012 a4ff | baf6 ffff 
+
+  0x00000150ebce5a24: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5a24: ff66 90e8 
+
+  0x00000150ebce5a28: ; ImmutableOopMap {[32]=Oop [40]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*aastore {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.heavybox.jtix.collections.Array::add@46 (line 64)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@623 (line 116)
+  0x00000150ebce5a28: d412 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5a48: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5a48: 2428 90e8 
+
+  0x00000150ebce5a4c: ; ImmutableOopMap {rbp=Oop [32]=Oop [88]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*getfield size {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList$Itr::hasNext@8 (line 962)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@178 (line 59)
+  0x00000150ebce5a4c: b012 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5a6c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5a6c: 2428 90e8 
+
+  0x00000150ebce5a70: ; ImmutableOopMap {rbp=Oop [32]=Oop [88]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*arraylength {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.ArrayList$Itr::next@38 (line 972)
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@188 (line 59)
+  0x00000150ebce5a70: 8c12 a4ff | baf4 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5a90: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5a90: 2428 90e8 
+
+  0x00000150ebce5a94: ; ImmutableOopMap {rbp=Oop [32]=Oop [88]=Oop [160]=Oop [168]=Oop [208]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@193 (line 59)
+  0x00000150ebce5a94: 6812 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5ab4: 2428 4c8b | 5424 584c | 8954 2450 
+
+  0x00000150ebce5ac0: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5ac0: 6666 90e8 
+
+  0x00000150ebce5ac4: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [96]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual bitmap {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@229 (line 65)
+  0x00000150ebce5ac4: 3812 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5ae4: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5ae4: 2428 90e8 
+
+  0x00000150ebce5ae8: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual width {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@236 (line 66)
+  0x00000150ebce5ae8: 1412 a4ff | baf6 ffff 
+
+  0x00000150ebce5af0: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5af0: ff66 90e8 
+
+  0x00000150ebce5af4: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [88]=Oop [96]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*getfield value {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.lang.String::<init>@6 (line 261)
+                      ; - java.lang.StringConcatHelper::simpleConcat@22 (line 355)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce5af4: 0812 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5b14: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5b14: 2428 90e8 
+
+  0x00000150ebce5b18: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual charValue {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@463 (line 98)
+  0x00000150ebce5b18: e411 a4ff | baf6 ffff 
+
+  0x00000150ebce5b20: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5b20: ff66 90e8 
+
+  0x00000150ebce5b24: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=Oop [96]=Oop [160]=Oop [168]=Oop [176]=Oop [192]=Oop [208]=Oop }
+                      ;*getfield value {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.lang.String::<init>@6 (line 261)
+                      ; - java.lang.StringConcatHelper::simpleConcat@22 (line 355)
+                      ; - java.lang.invoke.DirectMethodHandle$Holder::invokeStatic@11
+                      ; - java.lang.invoke.LambdaForm$MH/0x0000000801001800::invoke@21
+                      ; - java.lang.invoke.Invokers$Holder::linkToTargetMethod@5
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@500 (line 104)
+  0x00000150ebce5b24: d811 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5b44: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5b44: 2428 90e8 
+
+  0x00000150ebce5b48: ; ImmutableOopMap {rbp=Oop [32]=Oop [160]=Oop [168]=Oop [176]=Oop [184]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual bitmap_left {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@433 (line 90)
+  0x00000150ebce5b48: b411 a4ff | baf6 ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5b68: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5b68: 2428 90e8 
+
+  0x00000150ebce5b6c: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [88]=Oop [96]=Oop [120]=Oop [128]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual getDataBuffer {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@299 (line 74)
+  0x00000150ebce5b6c: 9011 a4ff | ba5e ffff | ff48 8b6c | 2420 4c8b | 5424 284c | 8954 2420 | 4c8b 5424 | 304c 8954 
+  0x00000150ebce5b8c: ;   {runtime_call UncommonTrapBlob}
+  0x00000150ebce5b8c: 2428 90e8 
+
+  0x00000150ebce5b90: ; ImmutableOopMap {rbp=Oop [32]=Oop [80]=Oop [88]=Oop [96]=Oop [120]=Oop [128]=Oop [160]=Oop [168]=Oop [192]=Oop [208]=Oop }
+                      ;*invokevirtual getData {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.heavybox.jtix.tools.FontGenerator::generateBitmapFont@305 (line 74)
+  0x00000150ebce5b90: 6c11 a4ff | e906 0100 | 00e9 4b01 | 0000 488b | d0e9 6901 | 0000 e9f4 | 0000 0048 | 8bd0 e95c 
+  0x00000150ebce5bb0: 0100 00e9 | 3101 0000 | e9e2 0000 | 0048 8bd0 | e94a 0100 | 0048 8bd0 | e942 0100 | 00e9 1701 
+  0x00000150ebce5bd0: 0000 488b | d0e9 3501 | 0000 488b | d066 6690 | e92a 0100 | 0048 8bd0 | e922 0100 | 00e9 ad00 
+  0x00000150ebce5bf0: 0000 e9a8 | 0000 00e9 | a300 0000 | 0f1f 4000 | e99a 0000 | 00e9 9500 | 0000 e990 | 0000 00e9 
+  0x00000150ebce5c10: d500 0000 | e9d0 0000 | 00e9 cb00 | 0000 6690 | e9c4 0000 | 00e9 bf00 | 0000 e9ba | 0000 0048 
+  0x00000150ebce5c30: 8bd0 e9d8 | 0000 0048 | 8bd0 e9d0 | 0000 0048 | 8bd0 e9c8 | 0000 0048 | 8bd0 e9c0 | 0000 00e9 
+  0x00000150ebce5c50: 4b00 0000 | e990 0000 | 0048 8bd0 | 0f1f 4000 | e9aa 0000 | 0048 8bd0 | e9a2 0000 | 0048 8bd0 
+  0x00000150ebce5c70: e99a 0000 | 0048 8bd0 | e992 0000 | 00eb 0048 | 8bd0 e988 | 0000 00eb | 0048 8bd0 | e97e 0000 
+  0x00000150ebce5c90: 00eb 0048 | 8bd0 e974 | 0000 00eb | 02eb 0048 | 8bd0 e968 | 0000 0048 | 8bd0 e960 | 0000 0048 
+  0x00000150ebce5cb0: 8bd0 e958 | 0000 0048 | 8bd0 e950 | 0000 0048 | 8bd0 e948 | 0000 0048 | 8bd0 e940 | 0000 0048 
+  0x00000150ebce5cd0: 8bd0 e938 | 0000 00eb | 0048 8bd0 | 0f1f 4000 | e92a 0000 | 00eb 02eb | 0048 8bd0 | e91e 0000 
+  0x00000150ebce5cf0: 0048 8bd0 | eb19 488b | d0eb 1448 | 8bd0 6690 | eb0d 488b | d0eb 0848 | 8bd0 eb03 | 488b d048 
+  0x00000150ebce5d10: 81c4 f000 
+
+  0x00000150ebce5d14: ;   {runtime_call _rethrow_Java}
+  0x00000150ebce5d14: 0000 5de9 | e472 a5ff | f4f4 f4f4 
+[Stub Code]
+  0x00000150ebce5d20: ;   {no_reloc}
+  0x00000150ebce5d20: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5d28: ;   {runtime_call}
+  0x00000150ebce5d28: 0000 e9fb 
+
+  0x00000150ebce5d2c: ;   {static_stub}
+  0x00000150ebce5d2c: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5d38: ;   {runtime_call}
+  0x00000150ebce5d38: 00e9 fbff 
+
+  0x00000150ebce5d3c: ;   {static_stub}
+  0x00000150ebce5d3c: ffff 48bb | 2064 9efa | 5001 0000 
+
+  0x00000150ebce5d48: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5d48: e90c a4a1 
+
+  0x00000150ebce5d4c: ;   {static_stub}
+  0x00000150ebce5d4c: ff48 bbd8 | 649e fa50 
+
+  0x00000150ebce5d54: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5d54: 0100 00e9 | fda3 a1ff 
+
+  0x00000150ebce5d5c: ;   {static_stub}
+  0x00000150ebce5d5c: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5d64: ;   {runtime_call}
+  0x00000150ebce5d64: 0000 e9fb 
+
+  0x00000150ebce5d68: ;   {static_stub}
+  0x00000150ebce5d68: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5d74: ;   {runtime_call}
+  0x00000150ebce5d74: 00e9 fbff 
+
+  0x00000150ebce5d78: ;   {static_stub}
+  0x00000150ebce5d78: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5d84: ;   {runtime_call}
+  0x00000150ebce5d84: e9fb ffff 
+
+  0x00000150ebce5d88: ;   {static_stub}
+  0x00000150ebce5d88: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5d90: ;   {runtime_call}
+  0x00000150ebce5d90: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5d98: ;   {static_stub}
+  0x00000150ebce5d98: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5da0: ;   {runtime_call}
+  0x00000150ebce5da0: 0000 e9fb 
+
+  0x00000150ebce5da4: ;   {static_stub}
+  0x00000150ebce5da4: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5db0: ;   {runtime_call}
+  0x00000150ebce5db0: 00e9 fbff 
+
+  0x00000150ebce5db4: ;   {static_stub}
+  0x00000150ebce5db4: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5dc0: ;   {runtime_call}
+  0x00000150ebce5dc0: e9fb ffff 
+
+  0x00000150ebce5dc4: ;   {static_stub}
+  0x00000150ebce5dc4: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5dcc: ;   {runtime_call}
+  0x00000150ebce5dcc: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5dd4: ;   {static_stub}
+  0x00000150ebce5dd4: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5ddc: ;   {runtime_call}
+  0x00000150ebce5ddc: 0000 e9fb 
+
+  0x00000150ebce5de0: ;   {static_stub}
+  0x00000150ebce5de0: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5dec: ;   {runtime_call}
+  0x00000150ebce5dec: 00e9 fbff 
+
+  0x00000150ebce5df0: ;   {static_stub}
+  0x00000150ebce5df0: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5dfc: ;   {runtime_call}
+  0x00000150ebce5dfc: e9fb ffff 
+
+  0x00000150ebce5e00: ;   {static_stub}
+  0x00000150ebce5e00: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5e08: ;   {runtime_call}
+  0x00000150ebce5e08: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5e10: ;   {static_stub}
+  0x00000150ebce5e10: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5e18: ;   {runtime_call}
+  0x00000150ebce5e18: 0000 e9fb 
+
+  0x00000150ebce5e1c: ;   {static_stub}
+  0x00000150ebce5e1c: ffff ff48 | bba0 da87 | fa50 0100 
+
+  0x00000150ebce5e28: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5e28: 00e9 3320 
+
+  0x00000150ebce5e2c: ;   {static_stub}
+  0x00000150ebce5e2c: b0ff 48bb | 3053 9dfa | 5001 0000 
+
+  0x00000150ebce5e38: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5e38: e91c a3a1 
+
+  0x00000150ebce5e3c: ;   {static_stub}
+  0x00000150ebce5e3c: ff48 bb68 | 639e fa50 
+
+  0x00000150ebce5e44: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5e44: 0100 00e9 | 0da3 a1ff 
+
+  0x00000150ebce5e4c: ;   {static_stub}
+  0x00000150ebce5e4c: 48bb c8de | 9efa 5001 
+
+  0x00000150ebce5e54: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5e54: 0000 e9fe 
+
+  0x00000150ebce5e58: ;   {static_stub}
+  0x00000150ebce5e58: a2a1 ff48 | bb10 de9e | fa50 0100 
+
+  0x00000150ebce5e64: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5e64: 00e9 efa2 
+
+  0x00000150ebce5e68: ;   {static_stub}
+  0x00000150ebce5e68: a1ff 48bb | 80df 9efa | 5001 0000 
+
+  0x00000150ebce5e74: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5e74: e9e0 a2a1 
+
+  0x00000150ebce5e78: ;   {static_stub}
+  0x00000150ebce5e78: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5e80: ;   {runtime_call}
+  0x00000150ebce5e80: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5e88: ;   {static_stub}
+  0x00000150ebce5e88: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5e90: ;   {runtime_call}
+  0x00000150ebce5e90: 0000 e9fb 
+
+  0x00000150ebce5e94: ;   {static_stub}
+  0x00000150ebce5e94: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5ea0: ;   {runtime_call}
+  0x00000150ebce5ea0: 00e9 fbff 
+
+  0x00000150ebce5ea4: ;   {static_stub}
+  0x00000150ebce5ea4: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5eb0: ;   {runtime_call}
+  0x00000150ebce5eb0: e9fb ffff 
+
+  0x00000150ebce5eb4: ;   {static_stub}
+  0x00000150ebce5eb4: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5ebc: ;   {runtime_call}
+  0x00000150ebce5ebc: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5ec4: ;   {static_stub}
+  0x00000150ebce5ec4: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5ecc: ;   {runtime_call}
+  0x00000150ebce5ecc: 0000 e9fb 
+
+  0x00000150ebce5ed0: ;   {static_stub}
+  0x00000150ebce5ed0: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5edc: ;   {runtime_call}
+  0x00000150ebce5edc: 00e9 fbff 
+
+  0x00000150ebce5ee0: ;   {static_stub}
+  0x00000150ebce5ee0: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5eec: ;   {runtime_call}
+  0x00000150ebce5eec: e9fb ffff 
+
+  0x00000150ebce5ef0: ;   {static_stub}
+  0x00000150ebce5ef0: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5ef8: ;   {runtime_call}
+  0x00000150ebce5ef8: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5f00: ;   {static_stub}
+  0x00000150ebce5f00: 48bb 48e0 | 9efa 5001 
+
+  0x00000150ebce5f08: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5f08: 0000 e94e 
+
+  0x00000150ebce5f0c: ;   {static_stub}
+  0x00000150ebce5f0c: 05a1 ff48 | bbe8 5967 | fa50 0100 
+
+  0x00000150ebce5f18: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5f18: 00e9 4641 
+
+  0x00000150ebce5f1c: ;   {static_stub}
+  0x00000150ebce5f1c: a4ff 48bb | 3840 6afa | 5001 0000 
+
+  0x00000150ebce5f28: ;   {runtime_call I2C/C2I adapters}
+  0x00000150ebce5f28: e92c afa3 
+
+  0x00000150ebce5f2c: ;   {static_stub}
+  0x00000150ebce5f2c: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5f34: ;   {runtime_call}
+  0x00000150ebce5f34: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5f3c: ;   {static_stub}
+  0x00000150ebce5f3c: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5f44: ;   {runtime_call}
+  0x00000150ebce5f44: 0000 e9fb 
+
+  0x00000150ebce5f48: ;   {static_stub}
+  0x00000150ebce5f48: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5f54: ;   {runtime_call}
+  0x00000150ebce5f54: 00e9 fbff 
+
+  0x00000150ebce5f58: ;   {static_stub}
+  0x00000150ebce5f58: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5f64: ;   {runtime_call}
+  0x00000150ebce5f64: e9fb ffff 
+
+  0x00000150ebce5f68: ;   {static_stub}
+  0x00000150ebce5f68: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5f70: ;   {runtime_call}
+  0x00000150ebce5f70: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5f78: ;   {static_stub}
+  0x00000150ebce5f78: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5f80: ;   {runtime_call}
+  0x00000150ebce5f80: 0000 e9fb 
+
+  0x00000150ebce5f84: ;   {static_stub}
+  0x00000150ebce5f84: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5f90: ;   {runtime_call}
+  0x00000150ebce5f90: 00e9 fbff 
+
+  0x00000150ebce5f94: ;   {static_stub}
+  0x00000150ebce5f94: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5fa0: ;   {runtime_call}
+  0x00000150ebce5fa0: e9fb ffff 
+
+  0x00000150ebce5fa4: ;   {static_stub}
+  0x00000150ebce5fa4: ff48 bb00 | 0000 0000 
+
+  0x00000150ebce5fac: ;   {runtime_call}
+  0x00000150ebce5fac: 0000 00e9 | fbff ffff 
+
+  0x00000150ebce5fb4: ;   {static_stub}
+  0x00000150ebce5fb4: 48bb 0000 | 0000 0000 
+
+  0x00000150ebce5fbc: ;   {runtime_call}
+  0x00000150ebce5fbc: 0000 e9fb 
+
+  0x00000150ebce5fc0: ;   {static_stub}
+  0x00000150ebce5fc0: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x00000150ebce5fcc: ;   {runtime_call}
+  0x00000150ebce5fcc: 00e9 fbff 
+
+  0x00000150ebce5fd0: ;   {static_stub}
+  0x00000150ebce5fd0: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x00000150ebce5fdc: ;   {runtime_call}
+  0x00000150ebce5fdc: e9fb ffff 
+
+  0x00000150ebce5fe0: ;   {runtime_call ExceptionBlob}
+  0x00000150ebce5fe0: ffe9 9a51 | a5ff e800 | 0000 0048 | 832c 2405 
+
+  0x00000150ebce5ff0: ;   {runtime_call DeoptimizationBlob}
+  0x00000150ebce5ff0: e9ab 10a4 | fff4 f4f4 
+[/MachCode]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00000150fed587c0, length=13, elements={
+0x00000150dc242bc0, 0x00000150fa1b8240, 0x00000150fa1b91d0, 0x00000150fa1ba160,
+0x00000150fa1bdbb0, 0x00000150fa1be4e0, 0x00000150fa1bee10, 0x00000150fa1bfa70,
+0x00000150fa1c2350, 0x00000150fe410060, 0x00000150fa185a20, 0x00000150fe7612d0,
+0x00000150fe7a34e0
+}
+
+Java Threads: ( => current thread )
+=>0x00000150dc242bc0 JavaThread "main" [_thread_in_native, id=8656, stack(0x0000001997d00000,0x0000001997e00000)]
+  0x00000150fa1b8240 JavaThread "Reference Handler" daemon [_thread_blocked, id=8292, stack(0x0000001998400000,0x0000001998500000)]
+  0x00000150fa1b91d0 JavaThread "Finalizer" daemon [_thread_blocked, id=16192, stack(0x0000001998500000,0x0000001998600000)]
+  0x00000150fa1ba160 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=18212, stack(0x0000001998600000,0x0000001998700000)]
+  0x00000150fa1bdbb0 JavaThread "Attach Listener" daemon [_thread_blocked, id=15852, stack(0x0000001998700000,0x0000001998800000)]
+  0x00000150fa1be4e0 JavaThread "Service Thread" daemon [_thread_blocked, id=10828, stack(0x0000001998800000,0x0000001998900000)]
+  0x00000150fa1bee10 JavaThread "Monitor Deflation Thread" daemon [_thread_blocked, id=6400, stack(0x0000001998900000,0x0000001998a00000)]
+  0x00000150fa1bfa70 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=12772, stack(0x0000001998a00000,0x0000001998b00000)]
+  0x00000150fa1c2350 JavaThread "C1 CompilerThread0" daemon [_thread_blocked, id=13388, stack(0x0000001998b00000,0x0000001998c00000)]
+  0x00000150fe410060 JavaThread "Sweeper thread" daemon [_thread_blocked, id=7228, stack(0x0000001998c00000,0x0000001998d00000)]
+  0x00000150fa185a20 JavaThread "Common-Cleaner" daemon [_thread_blocked, id=14516, stack(0x0000001998d00000,0x0000001998e00000)]
+  0x00000150fe7612d0 JavaThread "Monitor Ctrl-Break" daemon [_thread_in_native, id=10524, stack(0x0000001998f00000,0x0000001999000000)]
+  0x00000150fe7a34e0 JavaThread "Notification Thread" daemon [_thread_blocked, id=16444, stack(0x0000001999000000,0x0000001999100000)]
+
+Other Threads:
+  0x00000150fa19ad40 VMThread "VM Thread" [stack: 0x0000001998300000,0x0000001998400000] [id=18252]
+  0x00000150fe7fe240 WatcherThread "VM Periodic Task Thread" [stack: 0x0000001999100000,0x0000001999200000] [id=11788]
+  0x00000150dc29f980 WorkerThread "GC Thread#0" [stack: 0x0000001997e00000,0x0000001997f00000] [id=18240]
+  0x00000150fecd1730 WorkerThread "GC Thread#1" [stack: 0x0000001999200000,0x0000001999300000] [id=6184]
+  0x00000150fecd1a00 WorkerThread "GC Thread#2" [stack: 0x0000001999300000,0x0000001999400000] [id=6480]
+  0x00000150fed35770 WorkerThread "GC Thread#3" [stack: 0x0000001999400000,0x0000001999500000] [id=13612]
+  0x00000150dc2b2590 ConcurrentGCThread "G1 Main Marker" [stack: 0x0000001997f00000,0x0000001998000000] [id=8844]
+  0x00000150dc2b3070 WorkerThread "G1 Conc#0" [stack: 0x0000001998000000,0x0000001998100000] [id=15556]
+  0x00000150fa0550e0 ConcurrentGCThread "G1 Refine#0" [stack: 0x0000001998100000,0x0000001998200000] [id=6164]
+  0x00000150fa055bd0 ConcurrentGCThread "G1 Service" [stack: 0x0000001998200000,0x0000001998300000] [id=16956]
+
+Threads with active compile tasks:
+
+VM state: not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x0000000081400000, size: 2028 MB, Compressed Oops mode: 32-bit
+
+CDS archive(s) mapped at: [0x0000000800000000-0x0000000800c40000-0x0000000800c40000), size 12845056, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 0.
+Compressed class space mapped at: 0x0000000801000000-0x0000000841000000, reserved size: 1073741824
+Narrow klass base: 0x0000000800000000, Narrow klass shift: 0, Narrow klass range: 0x100000000
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 5 size 8 Array Of Cards #cards 12 size 40 Howl #buckets 4 coarsen threshold 1843 Howl Bitmap #cards 512 size 80 coarsen threshold 460 Card regions per heap region 1 cards per card region 2048
+ CPUs: 4 total, 4 available
+ Memory: 8109M
+ Large Page Support: Disabled
+ NUMA Support: Disabled
+ Compressed Oops: Enabled (32-bit)
+ Heap Region Size: 1M
+ Heap Min Capacity: 8M
+ Heap Initial Capacity: 128M
+ Heap Max Capacity: 2028M
+ Pre-touch: Disabled
+ Parallel Workers: 4
+ Concurrent Workers: 1
+ Concurrent Refinement Workers: 4
+ Periodic GC: Disabled
+
+Heap:
+ garbage-first heap   total 131072K, used 44506K [0x0000000081400000, 0x0000000100000000)
+  region size 1024K, 38 young (38912K), 3 survivors (3072K)
+ Metaspace       used 5457K, committed 5632K, reserved 1114112K
+  class space    used 440K, committed 512K, reserved 1048576K
+
+Heap Regions: E=young(eden), S=young(survivor), O=old, HS=humongous(starts), HC=humongous(continues), CS=collection set, F=free, OA=open archive, CA=closed archive, TAMS=top-at-mark-start (previous, next)
+|   0|0x0000000081400000, 0x0000000081500000, 0x0000000081500000|100%| O|  |TAMS 0x0000000081400000, 0x0000000081400000| Untracked 
+|   1|0x0000000081500000, 0x0000000081600000, 0x0000000081600000|100%| O|  |TAMS 0x0000000081500000, 0x0000000081500000| Untracked 
+|   2|0x0000000081600000, 0x0000000081700000, 0x0000000081700000|100%| O|  |TAMS 0x0000000081600000, 0x0000000081600000| Untracked 
+|   3|0x0000000081700000, 0x0000000081800000, 0x0000000081800000|100%| O|  |TAMS 0x0000000081700000, 0x0000000081700000| Untracked 
+|   4|0x0000000081800000, 0x0000000081900000, 0x0000000081900000|100%| O|  |TAMS 0x0000000081800000, 0x0000000081800000| Untracked 
+|   5|0x0000000081900000, 0x0000000081a00000, 0x0000000081a00000|100%| O|  |TAMS 0x0000000081900000, 0x0000000081900000| Untracked 
+|   6|0x0000000081a00000, 0x0000000081a76a00, 0x0000000081b00000| 46%| O|  |TAMS 0x0000000081a00000, 0x0000000081a00000| Untracked 
+|   7|0x0000000081b00000, 0x0000000081b00000, 0x0000000081c00000|  0%| F|  |TAMS 0x0000000081b00000, 0x0000000081b00000| Untracked 
+|   8|0x0000000081c00000, 0x0000000081c00000, 0x0000000081d00000|  0%| F|  |TAMS 0x0000000081c00000, 0x0000000081c00000| Untracked 
+|   9|0x0000000081d00000, 0x0000000081d00000, 0x0000000081e00000|  0%| F|  |TAMS 0x0000000081d00000, 0x0000000081d00000| Untracked 
+|  10|0x0000000081e00000, 0x0000000081e00000, 0x0000000081f00000|  0%| F|  |TAMS 0x0000000081e00000, 0x0000000081e00000| Untracked 
+|  11|0x0000000081f00000, 0x0000000081f00000, 0x0000000082000000|  0%| F|  |TAMS 0x0000000081f00000, 0x0000000081f00000| Untracked 
+|  12|0x0000000082000000, 0x0000000082000000, 0x0000000082100000|  0%| F|  |TAMS 0x0000000082000000, 0x0000000082000000| Untracked 
+|  13|0x0000000082100000, 0x0000000082100000, 0x0000000082200000|  0%| F|  |TAMS 0x0000000082100000, 0x0000000082100000| Untracked 
+|  14|0x0000000082200000, 0x0000000082200000, 0x0000000082300000|  0%| F|  |TAMS 0x0000000082200000, 0x0000000082200000| Untracked 
+|  15|0x0000000082300000, 0x0000000082300000, 0x0000000082400000|  0%| F|  |TAMS 0x0000000082300000, 0x0000000082300000| Untracked 
+|  16|0x0000000082400000, 0x0000000082400000, 0x0000000082500000|  0%| F|  |TAMS 0x0000000082400000, 0x0000000082400000| Untracked 
+|  17|0x0000000082500000, 0x0000000082500000, 0x0000000082600000|  0%| F|  |TAMS 0x0000000082500000, 0x0000000082500000| Untracked 
+|  18|0x0000000082600000, 0x0000000082600000, 0x0000000082700000|  0%| F|  |TAMS 0x0000000082600000, 0x0000000082600000| Untracked 
+|  19|0x0000000082700000, 0x0000000082700000, 0x0000000082800000|  0%| F|  |TAMS 0x0000000082700000, 0x0000000082700000| Untracked 
+|  20|0x0000000082800000, 0x0000000082800000, 0x0000000082900000|  0%| F|  |TAMS 0x0000000082800000, 0x0000000082800000| Untracked 
+|  21|0x0000000082900000, 0x0000000082900000, 0x0000000082a00000|  0%| F|  |TAMS 0x0000000082900000, 0x0000000082900000| Untracked 
+|  22|0x0000000082a00000, 0x0000000082a00000, 0x0000000082b00000|  0%| F|  |TAMS 0x0000000082a00000, 0x0000000082a00000| Untracked 
+|  23|0x0000000082b00000, 0x0000000082b00000, 0x0000000082c00000|  0%| F|  |TAMS 0x0000000082b00000, 0x0000000082b00000| Untracked 
+|  24|0x0000000082c00000, 0x0000000082c00000, 0x0000000082d00000|  0%| F|  |TAMS 0x0000000082c00000, 0x0000000082c00000| Untracked 
+|  25|0x0000000082d00000, 0x0000000082d00000, 0x0000000082e00000|  0%| F|  |TAMS 0x0000000082d00000, 0x0000000082d00000| Untracked 
+|  26|0x0000000082e00000, 0x0000000082e00000, 0x0000000082f00000|  0%| F|  |TAMS 0x0000000082e00000, 0x0000000082e00000| Untracked 
+|  27|0x0000000082f00000, 0x0000000082f00000, 0x0000000083000000|  0%| F|  |TAMS 0x0000000082f00000, 0x0000000082f00000| Untracked 
+|  28|0x0000000083000000, 0x0000000083000000, 0x0000000083100000|  0%| F|  |TAMS 0x0000000083000000, 0x0000000083000000| Untracked 
+|  29|0x0000000083100000, 0x0000000083100000, 0x0000000083200000|  0%| F|  |TAMS 0x0000000083100000, 0x0000000083100000| Untracked 
+|  30|0x0000000083200000, 0x0000000083200000, 0x0000000083300000|  0%| F|  |TAMS 0x0000000083200000, 0x0000000083200000| Untracked 
+|  31|0x0000000083300000, 0x0000000083300000, 0x0000000083400000|  0%| F|  |TAMS 0x0000000083300000, 0x0000000083300000| Untracked 
+|  32|0x0000000083400000, 0x0000000083400000, 0x0000000083500000|  0%| F|  |TAMS 0x0000000083400000, 0x0000000083400000| Untracked 
+|  33|0x0000000083500000, 0x0000000083500000, 0x0000000083600000|  0%| F|  |TAMS 0x0000000083500000, 0x0000000083500000| Untracked 
+|  34|0x0000000083600000, 0x0000000083600000, 0x0000000083700000|  0%| F|  |TAMS 0x0000000083600000, 0x0000000083600000| Untracked 
+|  35|0x0000000083700000, 0x0000000083700000, 0x0000000083800000|  0%| F|  |TAMS 0x0000000083700000, 0x0000000083700000| Untracked 
+|  36|0x0000000083800000, 0x0000000083800000, 0x0000000083900000|  0%| F|  |TAMS 0x0000000083800000, 0x0000000083800000| Untracked 
+|  37|0x0000000083900000, 0x0000000083900000, 0x0000000083a00000|  0%| F|  |TAMS 0x0000000083900000, 0x0000000083900000| Untracked 
+|  38|0x0000000083a00000, 0x0000000083a00000, 0x0000000083b00000|  0%| F|  |TAMS 0x0000000083a00000, 0x0000000083a00000| Untracked 
+|  39|0x0000000083b00000, 0x0000000083b00000, 0x0000000083c00000|  0%| F|  |TAMS 0x0000000083b00000, 0x0000000083b00000| Untracked 
+|  40|0x0000000083c00000, 0x0000000083c00000, 0x0000000083d00000|  0%| F|  |TAMS 0x0000000083c00000, 0x0000000083c00000| Untracked 
+|  41|0x0000000083d00000, 0x0000000083d00000, 0x0000000083e00000|  0%| F|  |TAMS 0x0000000083d00000, 0x0000000083d00000| Untracked 
+|  42|0x0000000083e00000, 0x0000000083e00000, 0x0000000083f00000|  0%| F|  |TAMS 0x0000000083e00000, 0x0000000083e00000| Untracked 
+|  43|0x0000000083f00000, 0x0000000083f00000, 0x0000000084000000|  0%| F|  |TAMS 0x0000000083f00000, 0x0000000083f00000| Untracked 
+|  44|0x0000000084000000, 0x0000000084000000, 0x0000000084100000|  0%| F|  |TAMS 0x0000000084000000, 0x0000000084000000| Untracked 
+|  45|0x0000000084100000, 0x0000000084100000, 0x0000000084200000|  0%| F|  |TAMS 0x0000000084100000, 0x0000000084100000| Untracked 
+|  46|0x0000000084200000, 0x0000000084200000, 0x0000000084300000|  0%| F|  |TAMS 0x0000000084200000, 0x0000000084200000| Untracked 
+|  47|0x0000000084300000, 0x0000000084300000, 0x0000000084400000|  0%| F|  |TAMS 0x0000000084300000, 0x0000000084300000| Untracked 
+|  48|0x0000000084400000, 0x0000000084400000, 0x0000000084500000|  0%| F|  |TAMS 0x0000000084400000, 0x0000000084400000| Untracked 
+|  49|0x0000000084500000, 0x0000000084500000, 0x0000000084600000|  0%| F|  |TAMS 0x0000000084500000, 0x0000000084500000| Untracked 
+|  50|0x0000000084600000, 0x0000000084600000, 0x0000000084700000|  0%| F|  |TAMS 0x0000000084600000, 0x0000000084600000| Untracked 
+|  51|0x0000000084700000, 0x0000000084700000, 0x0000000084800000|  0%| F|  |TAMS 0x0000000084700000, 0x0000000084700000| Untracked 
+|  52|0x0000000084800000, 0x0000000084800000, 0x0000000084900000|  0%| F|  |TAMS 0x0000000084800000, 0x0000000084800000| Untracked 
+|  53|0x0000000084900000, 0x0000000084900000, 0x0000000084a00000|  0%| F|  |TAMS 0x0000000084900000, 0x0000000084900000| Untracked 
+|  54|0x0000000084a00000, 0x0000000084a00000, 0x0000000084b00000|  0%| F|  |TAMS 0x0000000084a00000, 0x0000000084a00000| Untracked 
+|  55|0x0000000084b00000, 0x0000000084b00000, 0x0000000084c00000|  0%| F|  |TAMS 0x0000000084b00000, 0x0000000084b00000| Untracked 
+|  56|0x0000000084c00000, 0x0000000084c00000, 0x0000000084d00000|  0%| F|  |TAMS 0x0000000084c00000, 0x0000000084c00000| Untracked 
+|  57|0x0000000084d00000, 0x0000000084d00000, 0x0000000084e00000|  0%| F|  |TAMS 0x0000000084d00000, 0x0000000084d00000| Untracked 
+|  58|0x0000000084e00000, 0x0000000084e00000, 0x0000000084f00000|  0%| F|  |TAMS 0x0000000084e00000, 0x0000000084e00000| Untracked 
+|  59|0x0000000084f00000, 0x0000000084f00000, 0x0000000085000000|  0%| F|  |TAMS 0x0000000084f00000, 0x0000000084f00000| Untracked 
+|  60|0x0000000085000000, 0x0000000085000000, 0x0000000085100000|  0%| F|  |TAMS 0x0000000085000000, 0x0000000085000000| Untracked 
+|  61|0x0000000085100000, 0x0000000085100000, 0x0000000085200000|  0%| F|  |TAMS 0x0000000085100000, 0x0000000085100000| Untracked 
+|  62|0x0000000085200000, 0x0000000085200000, 0x0000000085300000|  0%| F|  |TAMS 0x0000000085200000, 0x0000000085200000| Untracked 
+|  63|0x0000000085300000, 0x0000000085300000, 0x0000000085400000|  0%| F|  |TAMS 0x0000000085300000, 0x0000000085300000| Untracked 
+|  64|0x0000000085400000, 0x0000000085400000, 0x0000000085500000|  0%| F|  |TAMS 0x0000000085400000, 0x0000000085400000| Untracked 
+|  65|0x0000000085500000, 0x0000000085500000, 0x0000000085600000|  0%| F|  |TAMS 0x0000000085500000, 0x0000000085500000| Untracked 
+|  66|0x0000000085600000, 0x0000000085600000, 0x0000000085700000|  0%| F|  |TAMS 0x0000000085600000, 0x0000000085600000| Untracked 
+|  67|0x0000000085700000, 0x0000000085700000, 0x0000000085800000|  0%| F|  |TAMS 0x0000000085700000, 0x0000000085700000| Untracked 
+|  68|0x0000000085800000, 0x0000000085800000, 0x0000000085900000|  0%| F|  |TAMS 0x0000000085800000, 0x0000000085800000| Untracked 
+|  69|0x0000000085900000, 0x0000000085900000, 0x0000000085a00000|  0%| F|  |TAMS 0x0000000085900000, 0x0000000085900000| Untracked 
+|  70|0x0000000085a00000, 0x0000000085a00000, 0x0000000085b00000|  0%| F|  |TAMS 0x0000000085a00000, 0x0000000085a00000| Untracked 
+|  71|0x0000000085b00000, 0x0000000085b00000, 0x0000000085c00000|  0%| F|  |TAMS 0x0000000085b00000, 0x0000000085b00000| Untracked 
+|  72|0x0000000085c00000, 0x0000000085c00000, 0x0000000085d00000|  0%| F|  |TAMS 0x0000000085c00000, 0x0000000085c00000| Untracked 
+|  73|0x0000000085d00000, 0x0000000085d00000, 0x0000000085e00000|  0%| F|  |TAMS 0x0000000085d00000, 0x0000000085d00000| Untracked 
+|  74|0x0000000085e00000, 0x0000000085e00000, 0x0000000085f00000|  0%| F|  |TAMS 0x0000000085e00000, 0x0000000085e00000| Untracked 
+|  75|0x0000000085f00000, 0x0000000085f00000, 0x0000000086000000|  0%| F|  |TAMS 0x0000000085f00000, 0x0000000085f00000| Untracked 
+|  76|0x0000000086000000, 0x0000000086000000, 0x0000000086100000|  0%| F|  |TAMS 0x0000000086000000, 0x0000000086000000| Untracked 
+|  77|0x0000000086100000, 0x0000000086100000, 0x0000000086200000|  0%| F|  |TAMS 0x0000000086100000, 0x0000000086100000| Untracked 
+|  78|0x0000000086200000, 0x0000000086200000, 0x0000000086300000|  0%| F|  |TAMS 0x0000000086200000, 0x0000000086200000| Untracked 
+|  79|0x0000000086300000, 0x0000000086300000, 0x0000000086400000|  0%| F|  |TAMS 0x0000000086300000, 0x0000000086300000| Untracked 
+|  80|0x0000000086400000, 0x0000000086400000, 0x0000000086500000|  0%| F|  |TAMS 0x0000000086400000, 0x0000000086400000| Untracked 
+|  81|0x0000000086500000, 0x0000000086500000, 0x0000000086600000|  0%| F|  |TAMS 0x0000000086500000, 0x0000000086500000| Untracked 
+|  82|0x0000000086600000, 0x0000000086600000, 0x0000000086700000|  0%| F|  |TAMS 0x0000000086600000, 0x0000000086600000| Untracked 
+|  83|0x0000000086700000, 0x0000000086700000, 0x0000000086800000|  0%| F|  |TAMS 0x0000000086700000, 0x0000000086700000| Untracked 
+|  84|0x0000000086800000, 0x0000000086800000, 0x0000000086900000|  0%| F|  |TAMS 0x0000000086800000, 0x0000000086800000| Untracked 
+|  85|0x0000000086900000, 0x0000000086900000, 0x0000000086a00000|  0%| F|  |TAMS 0x0000000086900000, 0x0000000086900000| Untracked 
+|  86|0x0000000086a00000, 0x0000000086a00000, 0x0000000086b00000|  0%| F|  |TAMS 0x0000000086a00000, 0x0000000086a00000| Untracked 
+|  87|0x0000000086b00000, 0x0000000086b00000, 0x0000000086c00000|  0%| F|  |TAMS 0x0000000086b00000, 0x0000000086b00000| Untracked 
+|  88|0x0000000086c00000, 0x0000000086c00000, 0x0000000086d00000|  0%| F|  |TAMS 0x0000000086c00000, 0x0000000086c00000| Untracked 
+|  89|0x0000000086d00000, 0x0000000086d00000, 0x0000000086e00000|  0%| F|  |TAMS 0x0000000086d00000, 0x0000000086d00000| Untracked 
+|  90|0x0000000086e00000, 0x0000000086e43f30, 0x0000000086f00000| 26%| E|  |TAMS 0x0000000086e00000, 0x0000000086e00000| Complete 
+|  91|0x0000000086f00000, 0x0000000087000000, 0x0000000087000000|100%| E|CS|TAMS 0x0000000086f00000, 0x0000000086f00000| Complete 
+|  92|0x0000000087000000, 0x0000000087100000, 0x0000000087100000|100%| E|CS|TAMS 0x0000000087000000, 0x0000000087000000| Complete 
+|  93|0x0000000087100000, 0x0000000087200000, 0x0000000087200000|100%| E|CS|TAMS 0x0000000087100000, 0x0000000087100000| Complete 
+|  94|0x0000000087200000, 0x0000000087300000, 0x0000000087300000|100%| E|CS|TAMS 0x0000000087200000, 0x0000000087200000| Complete 
+|  95|0x0000000087300000, 0x0000000087400000, 0x0000000087400000|100%| E|CS|TAMS 0x0000000087300000, 0x0000000087300000| Complete 
+|  96|0x0000000087400000, 0x0000000087500000, 0x0000000087500000|100%| E|CS|TAMS 0x0000000087400000, 0x0000000087400000| Complete 
+|  97|0x0000000087500000, 0x0000000087600000, 0x0000000087600000|100%| E|CS|TAMS 0x0000000087500000, 0x0000000087500000| Complete 
+|  98|0x0000000087600000, 0x0000000087700000, 0x0000000087700000|100%| E|CS|TAMS 0x0000000087600000, 0x0000000087600000| Complete 
+|  99|0x0000000087700000, 0x0000000087800000, 0x0000000087800000|100%| E|CS|TAMS 0x0000000087700000, 0x0000000087700000| Complete 
+| 100|0x0000000087800000, 0x0000000087900000, 0x0000000087900000|100%| E|CS|TAMS 0x0000000087800000, 0x0000000087800000| Complete 
+| 101|0x0000000087900000, 0x0000000087a00000, 0x0000000087a00000|100%| E|CS|TAMS 0x0000000087900000, 0x0000000087900000| Complete 
+| 102|0x0000000087a00000, 0x0000000087b00000, 0x0000000087b00000|100%| E|CS|TAMS 0x0000000087a00000, 0x0000000087a00000| Complete 
+| 103|0x0000000087b00000, 0x0000000087c00000, 0x0000000087c00000|100%| E|CS|TAMS 0x0000000087b00000, 0x0000000087b00000| Complete 
+| 104|0x0000000087c00000, 0x0000000087d00000, 0x0000000087d00000|100%| E|CS|TAMS 0x0000000087c00000, 0x0000000087c00000| Complete 
+| 105|0x0000000087d00000, 0x0000000087e00000, 0x0000000087e00000|100%| E|CS|TAMS 0x0000000087d00000, 0x0000000087d00000| Complete 
+| 106|0x0000000087e00000, 0x0000000087f00000, 0x0000000087f00000|100%| E|CS|TAMS 0x0000000087e00000, 0x0000000087e00000| Complete 
+| 107|0x0000000087f00000, 0x0000000088000000, 0x0000000088000000|100%| E|CS|TAMS 0x0000000087f00000, 0x0000000087f00000| Complete 
+| 108|0x0000000088000000, 0x0000000088100000, 0x0000000088100000|100%| S|CS|TAMS 0x0000000088000000, 0x0000000088000000| Complete 
+| 109|0x0000000088100000, 0x0000000088200000, 0x0000000088200000|100%| S|CS|TAMS 0x0000000088100000, 0x0000000088100000| Complete 
+| 110|0x0000000088200000, 0x0000000088300000, 0x0000000088300000|100%| S|CS|TAMS 0x0000000088200000, 0x0000000088200000| Complete 
+| 111|0x0000000088300000, 0x0000000088400000, 0x0000000088400000|100%| E|CS|TAMS 0x0000000088300000, 0x0000000088300000| Complete 
+| 112|0x0000000088400000, 0x0000000088500000, 0x0000000088500000|100%| E|CS|TAMS 0x0000000088400000, 0x0000000088400000| Complete 
+| 113|0x0000000088500000, 0x0000000088600000, 0x0000000088600000|100%| E|CS|TAMS 0x0000000088500000, 0x0000000088500000| Complete 
+| 114|0x0000000088600000, 0x0000000088700000, 0x0000000088700000|100%| E|CS|TAMS 0x0000000088600000, 0x0000000088600000| Complete 
+| 115|0x0000000088700000, 0x0000000088800000, 0x0000000088800000|100%| E|CS|TAMS 0x0000000088700000, 0x0000000088700000| Complete 
+| 116|0x0000000088800000, 0x0000000088900000, 0x0000000088900000|100%| E|CS|TAMS 0x0000000088800000, 0x0000000088800000| Complete 
+| 117|0x0000000088900000, 0x0000000088a00000, 0x0000000088a00000|100%| E|CS|TAMS 0x0000000088900000, 0x0000000088900000| Complete 
+| 118|0x0000000088a00000, 0x0000000088b00000, 0x0000000088b00000|100%| E|CS|TAMS 0x0000000088a00000, 0x0000000088a00000| Complete 
+| 119|0x0000000088b00000, 0x0000000088c00000, 0x0000000088c00000|100%| E|CS|TAMS 0x0000000088b00000, 0x0000000088b00000| Complete 
+| 120|0x0000000088c00000, 0x0000000088d00000, 0x0000000088d00000|100%| E|CS|TAMS 0x0000000088c00000, 0x0000000088c00000| Complete 
+| 121|0x0000000088d00000, 0x0000000088e00000, 0x0000000088e00000|100%| E|CS|TAMS 0x0000000088d00000, 0x0000000088d00000| Complete 
+| 122|0x0000000088e00000, 0x0000000088f00000, 0x0000000088f00000|100%| E|CS|TAMS 0x0000000088e00000, 0x0000000088e00000| Complete 
+| 123|0x0000000088f00000, 0x0000000089000000, 0x0000000089000000|100%| E|CS|TAMS 0x0000000088f00000, 0x0000000088f00000| Complete 
+| 124|0x0000000089000000, 0x0000000089100000, 0x0000000089100000|100%| E|CS|TAMS 0x0000000089000000, 0x0000000089000000| Complete 
+| 125|0x0000000089100000, 0x0000000089200000, 0x0000000089200000|100%| E|CS|TAMS 0x0000000089100000, 0x0000000089100000| Complete 
+| 126|0x0000000089200000, 0x0000000089300000, 0x0000000089300000|100%| E|CS|TAMS 0x0000000089200000, 0x0000000089200000| Complete 
+| 127|0x0000000089300000, 0x0000000089400000, 0x0000000089400000|100%| E|CS|TAMS 0x0000000089300000, 0x0000000089300000| Complete 
+
+Card table byte_map: [0x00000150f3590000,0x00000150f3990000] _byte_map_base: 0x00000150f3186000
+
+Marking Bits (Prev, Next): (CMBitMap*) 0x00000150dc2a1ee0, (CMBitMap*) 0x00000150dc2a1f20
+ Prev Bits: [0x00000150f3d90000, 0x00000150f5d40000)
+ Next Bits: [0x00000150f5d40000, 0x00000150f7cf0000)
+
+Polling page: 0x00000150da1a0000
+
+Metaspace:
+
+Usage:
+  Non-class:      4.90 MB used.
+      Class:    440.61 KB used.
+       Both:      5.33 MB used.
+
+Virtual space:
+  Non-class space:       64.00 MB reserved,       5.00 MB (  8%) committed,  1 nodes.
+      Class space:        1.00 GB reserved,     512.00 KB ( <1%) committed,  1 nodes.
+             Both:        1.06 GB reserved,       5.50 MB ( <1%) committed. 
+
+Chunk freelists:
+   Non-Class:  1.97 MB
+       Class:  3.51 MB
+        Both:  5.48 MB
+
+MaxMetaspaceSize: unlimited
+CompressedClassSpaceSize: 1.00 GB
+Initial GC threshold: 21.00 MB
+Current GC threshold: 21.00 MB
+CDS: on
+MetaspaceReclaimPolicy: balanced
+ - commit_granule_bytes: 65536.
+ - commit_granule_words: 8192.
+ - virtual_space_node_default_size: 8388608.
+ - enlarge_chunks_in_place: 1.
+ - new_chunks_are_fully_committed: 0.
+ - uncommit_free_chunks: 1.
+ - use_allocation_guard: 0.
+
+
+Internal statistics:
+
+num_allocs_failed_limit: 0.
+num_arena_births: 132.
+num_arena_deaths: 0.
+num_vsnodes_births: 2.
+num_vsnodes_deaths: 0.
+num_space_committed: 88.
+num_space_uncommitted: 0.
+num_chunks_returned_to_freelist: 0.
+num_chunks_taken_from_freelist: 241.
+num_chunk_merges: 0.
+num_chunk_splits: 158.
+num_chunks_enlarged: 110.
+num_inconsistent_stats: 0.
+
+CodeHeap 'non-profiled nmethods': size=120000Kb used=588Kb max_used=588Kb free=119411Kb
+ bounds [0x00000150ebc60000, 0x00000150ebed0000, 0x00000150f3190000]
+CodeHeap 'profiled nmethods': size=120000Kb used=2098Kb max_used=2098Kb free=117901Kb
+ bounds [0x00000150e4190000, 0x00000150e4400000, 0x00000150eb6c0000]
+CodeHeap 'non-nmethods': size=5760Kb used=1694Kb max_used=1724Kb free=4065Kb
+ bounds [0x00000150eb6c0000, 0x00000150eb930000, 0x00000150ebc60000]
+ total_blobs=2276 nmethods=1232 adapters=955
+ compilation: enabled
+              stopped_count=0, restarted_count=0
+ full_count=0
+
+Compilation events (20 events):
+Event: 4.914 Thread 0x00000150fa1c2350 1224       3       org.lwjgl.util.freetype.FT_Face::nglyph (13 bytes)
+Event: 4.915 Thread 0x00000150fa1c2350 nmethod 1224 0x00000150e4395d90 code [0x00000150e4395f60, 0x00000150e43961e8]
+Event: 4.915 Thread 0x00000150fa1c2350 1225       3       org.lwjgl.util.freetype.FT_GlyphSlot::createSafe (20 bytes)
+Event: 4.915 Thread 0x00000150fa1c2350 nmethod 1225 0x00000150e4396310 code [0x00000150e43964e0, 0x00000150e43967c8]
+Event: 4.915 Thread 0x00000150fa1c2350 1226       3       org.lwjgl.util.freetype.FT_GlyphSlot::nbitmap (10 bytes)
+Event: 4.915 Thread 0x00000150fa1c2350 nmethod 1226 0x00000150e4396910 code [0x00000150e4396ac0, 0x00000150e4396be8]
+Event: 4.915 Thread 0x00000150fa1c2350 1227       3       org.lwjgl.util.freetype.FT_Bitmap::create (10 bytes)
+Event: 4.916 Thread 0x00000150fa1c2350 nmethod 1227 0x00000150e4396c90 code [0x00000150e4396e40, 0x00000150e43970c8]
+Event: 4.924 Thread 0x00000150fa1c2350 1228       3       org.lwjgl.util.freetype.FT_Bitmap::nbuffer (14 bytes)
+Event: 4.924 Thread 0x00000150fa1c2350 nmethod 1228 0x00000150e4397210 code [0x00000150e4397400, 0x00000150e4397898]
+Event: 4.924 Thread 0x00000150fa1c2350 1229       3       org.lwjgl.system.MemoryUtil::memByteBufferSafe (28 bytes)
+Event: 4.925 Thread 0x00000150fa1c2350 nmethod 1229 0x00000150e4397a10 code [0x00000150e4397be0, 0x00000150e4397eb8]
+Event: 4.925 Thread 0x00000150fa1c2350 1230       3       java.awt.image.BufferedImage::<init> (913 bytes)
+Event: 4.929 Thread 0x00000150fa1c2350 nmethod 1230 0x00000150e4397f90 code [0x00000150e4398460, 0x00000150e439ad78]
+Event: 4.929 Thread 0x00000150fa1c2350 1231  s    3       sun.java2d.StateTrackableDelegate::setUntrackable (33 bytes)
+Event: 4.929 Thread 0x00000150fa1c2350 nmethod 1231 0x00000150e439b810 code [0x00000150e439b9e0, 0x00000150e439bd68]
+Event: 5.438 Thread 0x00000150fa1c2350 1232       3       java.lang.StringUTF16::length (5 bytes)
+Event: 5.438 Thread 0x00000150fa1c2350 nmethod 1232 0x00000150e439be90 code [0x00000150e439c020, 0x00000150e439c118]
+Event: 5.448 Thread 0x00000150fa1c2350 1233       3       java.lang.StringUTF16::checkBoundsOffCount (10 bytes)
+Event: 5.449 Thread 0x00000150fa1c2350 nmethod 1233 0x00000150e439c210 code [0x00000150e439c3e0, 0x00000150e439c6e8]
+
+GC Heap History (4 events):
+Event: 1.258 GC heap before
+{Heap before GC invocations=0 (full 0):
+ garbage-first heap   total 131072K, used 12288K [0x0000000081400000, 0x0000000100000000)
+  region size 1024K, 13 young (13312K), 0 survivors (0K)
+ Metaspace       used 4128K, committed 4288K, reserved 1114112K
+  class space    used 313K, committed 384K, reserved 1048576K
+}
+Event: 1.266 GC heap after
+{Heap after GC invocations=1 (full 0):
+ garbage-first heap   total 131072K, used 3371K [0x0000000081400000, 0x0000000100000000)
+  region size 1024K, 2 young (2048K), 2 survivors (2048K)
+ Metaspace       used 4128K, committed 4288K, reserved 1114112K
+  class space    used 313K, committed 384K, reserved 1048576K
+}
+Event: 3.011 GC heap before
+{Heap before GC invocations=1 (full 0):
+ garbage-first heap   total 131072K, used 18731K [0x0000000081400000, 0x0000000100000000)
+  region size 1024K, 17 young (17408K), 2 survivors (2048K)
+ Metaspace       used 5444K, committed 5632K, reserved 1114112K
+  class space    used 440K, committed 512K, reserved 1048576K
+}
+Event: 3.026 GC heap after
+{Heap after GC invocations=2 (full 0):
+ garbage-first heap   total 131072K, used 9690K [0x0000000081400000, 0x0000000100000000)
+  region size 1024K, 3 young (3072K), 3 survivors (3072K)
+ Metaspace       used 5444K, committed 5632K, reserved 1114112K
+  class space    used 440K, committed 512K, reserved 1048576K
+}
+
+Dll operation events (12 events):
+Event: 0.020 Loaded shared library C:\Java\jdk-19.0.2\bin\java.dll
+Event: 0.055 Loaded shared library C:\Java\jdk-19.0.2\bin\jsvml.dll
+Event: 0.380 Loaded shared library C:\Java\jdk-19.0.2\bin\zip.dll
+Event: 0.385 Loaded shared library C:\Java\jdk-19.0.2\bin\instrument.dll
+Event: 0.396 Loaded shared library C:\Java\jdk-19.0.2\bin\net.dll
+Event: 0.400 Loaded shared library C:\Java\jdk-19.0.2\bin\nio.dll
+Event: 0.410 Loaded shared library C:\Java\jdk-19.0.2\bin\zip.dll
+Event: 0.575 Loaded shared library C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\bin\breakgen64.dll
+Event: 0.591 Loaded shared library C:\Java\jdk-19.0.2\bin\extnet.dll
+Event: 0.708 Loaded shared library C:\Java\jdk-19.0.2\bin\jimage.dll
+Event: 0.754 Loaded shared library C:\Users\eilan\AppData\Local\Temp\lwjgl_eilan\3.3.3+5\x64\lwjgl.dll
+Event: 1.475 Loaded shared library C:\Java\jdk-19.0.2\bin\awt.dll
+
+Deoptimization events (20 events):
+Event: 3.833 Thread 0x00000150dc242bc0 Uncommon trap: trap_request=0xffffff45 fr.pc=0x00000150ebc70fb8 relative=0x0000000000000038
+Event: 3.833 Thread 0x00000150dc242bc0 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000150ebc70fb8 method=java.lang.StringLatin1.canEncode(I)Z @ 4 c2
+Event: 3.833 Thread 0x00000150dc242bc0 DEOPT PACKING pc=0x00000150ebc70fb8 sp=0x0000001997dff250
+Event: 3.833 Thread 0x00000150dc242bc0 DEOPT UNPACKING pc=0x00000150eb726da3 sp=0x0000001997dff1e0 mode 2
+Event: 3.833 Thread 0x00000150dc242bc0 Uncommon trap: trap_request=0xffffff45 fr.pc=0x00000150ebc8f904 relative=0x00000000000000e4
+Event: 3.833 Thread 0x00000150dc242bc0 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000150ebc8f904 method=java.lang.String.getBytes([BIB)V @ 5 c2
+Event: 3.833 Thread 0x00000150dc242bc0 DEOPT PACKING pc=0x00000150ebc8f904 sp=0x0000001997dff2b0
+Event: 3.833 Thread 0x00000150dc242bc0 DEOPT UNPACKING pc=0x00000150eb726da3 sp=0x0000001997dff258 mode 2
+Event: 3.833 Thread 0x00000150dc242bc0 Uncommon trap: trap_request=0xffffff45 fr.pc=0x00000150ebcc2b54 relative=0x00000000000006f4
+Event: 3.833 Thread 0x00000150dc242bc0 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000150ebcc2b54 method=java.lang.String.getChars(II[CI)V @ 23 c2
+Event: 3.833 Thread 0x00000150dc242bc0 DEOPT PACKING pc=0x00000150ebcc2b54 sp=0x0000001997dff190
+Event: 3.833 Thread 0x00000150dc242bc0 DEOPT UNPACKING pc=0x00000150eb726da3 sp=0x0000001997dff040 mode 2
+Event: 3.843 Thread 0x00000150dc242bc0 Uncommon trap: trap_request=0xffffff45 fr.pc=0x00000150ebcc0c1c relative=0x000000000000037c
+Event: 3.843 Thread 0x00000150dc242bc0 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000150ebcc0c1c method=java.lang.String.getChars(II[CI)V @ 23 c2
+Event: 3.843 Thread 0x00000150dc242bc0 DEOPT PACKING pc=0x00000150ebcc0c1c sp=0x0000001997dff0e0
+Event: 3.843 Thread 0x00000150dc242bc0 DEOPT UNPACKING pc=0x00000150eb726da3 sp=0x0000001997dff028 mode 2
+Event: 3.851 Thread 0x00000150dc242bc0 Uncommon trap: trap_request=0xffffff45 fr.pc=0x00000150ebcbd870 relative=0x0000000000000250
+Event: 3.851 Thread 0x00000150dc242bc0 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000150ebcbd870 method=java.lang.String.getChars(II[CI)V @ 23 c2
+Event: 3.851 Thread 0x00000150dc242bc0 DEOPT PACKING pc=0x00000150ebcbd870 sp=0x0000001997dff070
+Event: 3.852 Thread 0x00000150dc242bc0 DEOPT UNPACKING pc=0x00000150eb726da3 sp=0x0000001997dff030 mode 2
+
+Classes loaded (20 events):
+Event: 1.487 Loading class sun/awt/resources/awt_en_CA
+Event: 1.487 Loading class sun/awt/resources/awt_en_CA done
+Event: 1.487 Loading class java/awt/Toolkit$2
+Event: 1.487 Loading class java/awt/Toolkit$2 done
+Event: 1.488 Loading class java/awt/Toolkit$1
+Event: 1.488 Loading class java/awt/Toolkit$1 done
+Event: 1.503 Loading class java/io/FileNotFoundException
+Event: 1.504 Loading class java/io/FileNotFoundException done
+Event: 1.515 Loading class java/awt/Insets
+Event: 1.515 Loading class java/awt/Insets done
+Event: 1.515 Loading class java/awt/GraphicsEnvironment
+Event: 1.515 Loading class java/awt/GraphicsEnvironment done
+Event: 1.516 Loading class sun/awt/PlatformGraphicsInfo
+Event: 1.516 Loading class sun/awt/PlatformGraphicsInfo done
+Event: 1.549 Loading class jdk/internal/foreign/MemorySessionImpl
+Event: 1.549 Loading class java/lang/foreign/MemorySession
+Event: 1.549 Loading class java/lang/foreign/SegmentAllocator
+Event: 1.549 Loading class java/lang/foreign/SegmentAllocator done
+Event: 1.549 Loading class java/lang/foreign/MemorySession done
+Event: 1.549 Loading class jdk/internal/foreign/MemorySessionImpl done
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (20 events):
+Event: 0.692 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088d327c8}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(java.lang.Object, java.lang.Object, int)'> (0x0000000088d327c8) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.695 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088d3e548}: 'void java.lang.invoke.DelegatingMethodHandle$Holder.delegate(java.lang.Object, java.lang.Object, int, java.lang.Object)'> (0x0000000088d3e548) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.696 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088d42598}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeSpecial(java.lang.Object, java.lang.Object, java.lang.Object)'> (0x0000000088d42598) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.704 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088d5d190}: 'void java.lang.System.loadLibrary(java.lang.String, java.lang.Class)'> (0x0000000088d5d190) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.750 Thread 0x00000150dc242bc0 Exception <a 'sun/nio/fs/WindowsException'{0x0000000088d8e118}> (0x0000000088d8e118) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 0.751 Thread 0x00000150dc242bc0 Exception <a 'sun/nio/fs/WindowsException'{0x0000000088d8e668}> (0x0000000088d8e668) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 0.844 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088c14770}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, int, long)'> (0x0000000088c14770) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.845 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088c1a040}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.newInvokeSpecial(java.lang.Object, java.lang.Object, int)'> (0x0000000088c1a040) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.849 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088c28690}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, long, long)'> (0x0000000088c28690) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.851 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088c2e7a8}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.newInvokeSpecial(java.lang.Object, java.lang.Object, long)'> (0x0000000088c2e7a8) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.852 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088c32808}: 'java.lang.Object java.lang.invoke.Invokers$Holder.linkToTargetMethod(java.lang.Object, long, java.lang.Object)'> (0x0000000088c32808) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.853 Thread 0x00000150dc242bc0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088c39d90}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, java.lang.Object, long)'> (0x0000000088c39d90) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 0.907 Thread 0x00000150dc242bc0 Exception <a 'sun/nio/fs/WindowsException'{0x0000000088cc7258}> (0x0000000088cc7258) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 0.907 Thread 0x00000150dc242bc0 Exception <a 'sun/nio/fs/WindowsException'{0x0000000088cc75e8}> (0x0000000088cc75e8) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 1.036 Thread 0x00000150dc242bc0 Exception <a 'sun/nio/fs/WindowsException'{0x0000000088b3e348}> (0x0000000088b3e348) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 1.036 Thread 0x00000150dc242bc0 Exception <a 'sun/nio/fs/WindowsException'{0x0000000088b3e6d8}> (0x0000000088b3e6d8) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 1.088 Thread 0x00000150fa1bdbb0 Exception <a 'java/lang/NoSuchMethodError'{0x0000000088a99de8}: 'java.lang.Object java.lang.invoke.Invokers$Holder.invokeExact_MT(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x0000000088a99de8) 
+thrown [s\open\src\hotspot\share\interpreter\linkResolver.cpp, line 774]
+Event: 1.484 Thread 0x00000150dc242bc0 Exception <a 'java/lang/ClassNotFoundException'{0x0000000089024b68}: sun/awt/resources/spi/awtProvider> (0x0000000089024b68) 
+thrown [s\open\src\hotspot\share\classfile\systemDictionary.cpp, line 255]
+Event: 1.504 Thread 0x00000150dc242bc0 Exception <a 'java/io/FileNotFoundException'{0x000000008906f878}> (0x000000008906f878) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+Event: 1.514 Thread 0x00000150dc242bc0 Exception <a 'java/io/FileNotFoundException'{0x000000008909bf78}> (0x000000008909bf78) 
+thrown [s\open\src\hotspot\share\prims\jni.cpp, line 517]
+
+VM Operations (16 events):
+Event: 0.349 Executing VM operation: HandshakeAllThreads
+Event: 0.349 Executing VM operation: HandshakeAllThreads done
+Event: 0.581 Executing VM operation: HandshakeAllThreads
+Event: 0.581 Executing VM operation: HandshakeAllThreads done
+Event: 0.692 Executing VM operation: HandshakeAllThreads
+Event: 0.692 Executing VM operation: HandshakeAllThreads done
+Event: 1.161 Executing VM operation: HandshakeAllThreads
+Event: 1.161 Executing VM operation: HandshakeAllThreads done
+Event: 1.161 Executing VM operation: Cleanup
+Event: 1.161 Executing VM operation: Cleanup done
+Event: 1.258 Executing VM operation: G1CollectForAllocation
+Event: 1.266 Executing VM operation: G1CollectForAllocation done
+Event: 2.278 Executing VM operation: Cleanup
+Event: 2.278 Executing VM operation: Cleanup done
+Event: 3.011 Executing VM operation: G1CollectForAllocation
+Event: 3.026 Executing VM operation: G1CollectForAllocation done
+
+Events (19 events):
+Event: 0.055 Thread 0x00000150dc242bc0 Thread added: 0x00000150dc242bc0
+Event: 0.096 Thread 0x00000150fa1b8240 Thread added: 0x00000150fa1b8240
+Event: 0.096 Thread 0x00000150fa1b91d0 Thread added: 0x00000150fa1b91d0
+Event: 0.098 Thread 0x00000150fa1ba160 Thread added: 0x00000150fa1ba160
+Event: 0.098 Thread 0x00000150fa1bdbb0 Thread added: 0x00000150fa1bdbb0
+Event: 0.098 Thread 0x00000150fa1be4e0 Thread added: 0x00000150fa1be4e0
+Event: 0.098 Thread 0x00000150fa1bee10 Thread added: 0x00000150fa1bee10
+Event: 0.099 Thread 0x00000150fa1bfa70 Thread added: 0x00000150fa1bfa70
+Event: 0.102 Thread 0x00000150fa1c2350 Thread added: 0x00000150fa1c2350
+Event: 0.109 Thread 0x00000150fe410060 Thread added: 0x00000150fe410060
+Event: 0.330 Thread 0x00000150fa185a20 Thread added: 0x00000150fa185a20
+Event: 0.489 Thread 0x00000150fe5fee50 Thread added: 0x00000150fe5fee50
+Event: 0.576 Thread 0x00000150fe7612d0 Thread added: 0x00000150fe7612d0
+Event: 0.576 Thread 0x00000150fe7a34e0 Thread added: 0x00000150fe7a34e0
+Event: 0.638 Thread 0x00000150fe5fee50 Thread exited: 0x00000150fe5fee50
+Event: 1.117 Thread 0x00000150fed06f40 Thread added: 0x00000150fed06f40
+Event: 1.982 Thread 0x00000150fed06f40 Thread exited: 0x00000150fed06f40
+Event: 2.822 Thread 0x00000150fec3b830 Thread added: 0x00000150fec3b830
+Event: 3.156 Thread 0x00000150fec3b830 Thread exited: 0x00000150fec3b830
+
+
+Dynamic libraries:
+0x00007ff7401f0000 - 0x00007ff7401fe000 	C:\Java\jdk-19.0.2\bin\java.exe
+0x00007ffd729d0000 - 0x00007ffd72bc8000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffd72180000 - 0x00007ffd72241000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffd70180000 - 0x00007ffd7047d000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffd707b0000 - 0x00007ffd708b0000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffd698a0000 - 0x00007ffd698b7000 	C:\Java\jdk-19.0.2\bin\jli.dll
+0x00007ffd6d060000 - 0x00007ffd6d07b000 	C:\Java\jdk-19.0.2\bin\VCRUNTIME140.dll
+0x00007ffd70aa0000 - 0x00007ffd70c3d000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffd560d0000 - 0x00007ffd5636a000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16\COMCTL32.dll
+0x00007ffd70480000 - 0x00007ffd704a2000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffd71ab0000 - 0x00007ffd71b4e000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffd71d20000 - 0x00007ffd71d4b000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffd708e0000 - 0x00007ffd709f7000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffd70710000 - 0x00007ffd707ad000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffd71260000 - 0x00007ffd7128f000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ffd6e850000 - 0x00007ffd6e85c000 	C:\Java\jdk-19.0.2\bin\vcruntime140_1.dll
+0x00007ffd589b0000 - 0x00007ffd58a3e000 	C:\Java\jdk-19.0.2\bin\msvcp140.dll
+0x00007ffd40110000 - 0x00007ffd40dd0000 	C:\Java\jdk-19.0.2\bin\server\jvm.dll
+0x00007ffd72880000 - 0x00007ffd72930000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffd70a00000 - 0x00007ffd70aa0000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffd724f0000 - 0x00007ffd72613000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffd708b0000 - 0x00007ffd708d7000 	C:\WINDOWS\System32\bcrypt.dll
+0x00007ffd5b540000 - 0x00007ffd5b549000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffd50240000 - 0x00007ffd50267000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffd72480000 - 0x00007ffd724eb000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffd5da70000 - 0x00007ffd5da7a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffd6e890000 - 0x00007ffd6e8a2000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ffd6d050000 - 0x00007ffd6d05a000 	C:\Java\jdk-19.0.2\bin\jimage.dll
+0x00007ffd6e5e0000 - 0x00007ffd6e7c4000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ffd61180000 - 0x00007ffd611b4000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ffd704b0000 - 0x00007ffd70532000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ffd6ce40000 - 0x00007ffd6ce4e000 	C:\Java\jdk-19.0.2\bin\instrument.dll
+0x00007ffd61810000 - 0x00007ffd61836000 	C:\Java\jdk-19.0.2\bin\java.dll
+0x00007ffd588d0000 - 0x00007ffd589a7000 	C:\Java\jdk-19.0.2\bin\jsvml.dll
+0x00007ffd71340000 - 0x00007ffd71aaf000 	C:\WINDOWS\System32\SHELL32.dll
+0x00007ffd6dd70000 - 0x00007ffd6e513000 	C:\WINDOWS\SYSTEM32\windows.storage.dll
+0x00007ffd71d50000 - 0x00007ffd720a3000 	C:\WINDOWS\System32\combase.dll
+0x00007ffd6f900000 - 0x00007ffd6f92e000 	C:\WINDOWS\SYSTEM32\Wldp.dll
+0x00007ffd720b0000 - 0x00007ffd7217d000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ffd72620000 - 0x00007ffd726cd000 	C:\WINDOWS\System32\SHCORE.dll
+0x00007ffd72820000 - 0x00007ffd72875000 	C:\WINDOWS\System32\shlwapi.dll
+0x00007ffd6ffb0000 - 0x00007ffd6ffd4000 	C:\WINDOWS\SYSTEM32\profapi.dll
+0x00007ffd692b0000 - 0x00007ffd692c8000 	C:\Java\jdk-19.0.2\bin\zip.dll
+0x00007ffd688a0000 - 0x00007ffd688b3000 	C:\Java\jdk-19.0.2\bin\net.dll
+0x00007ffd6a390000 - 0x00007ffd6a49d000 	C:\WINDOWS\SYSTEM32\WINHTTP.dll
+0x00007ffd6f6e0000 - 0x00007ffd6f74a000 	C:\WINDOWS\system32\mswsock.dll
+0x00007ffd68860000 - 0x00007ffd68876000 	C:\Java\jdk-19.0.2\bin\nio.dll
+0x00007ffd61740000 - 0x00007ffd6175a000 	C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\bin\breakgen64.dll
+0x00007ffd6c110000 - 0x00007ffd6c118000 	C:\Java\jdk-19.0.2\bin\extnet.dll
+0x00007ffd553f0000 - 0x00007ffd5546b000 	C:\Users\eilan\AppData\Local\Temp\lwjgl_eilan\3.3.3+5\x64\lwjgl.dll
+0x00007ffd43820000 - 0x00007ffd43a25000 	C:\Users\eilan\AppData\Local\Temp\lwjgl_eilan\3.3.3+5\x64\freetype.dll
+0x00007ffd60e20000 - 0x00007ffd60e39000 	C:\WINDOWS\SYSTEM32\USP10.dll
+0x00007ffd42a60000 - 0x00007ffd42cd0000 	C:\Users\eilan\AppData\Local\Temp\lwjgl_eilan\3.3.3+5\x64\jemalloc.dll
+0x00007ffd4b590000 - 0x00007ffd4b720000 	C:\Java\jdk-19.0.2\bin\awt.dll
+0x00007ffd6c8c0000 - 0x00007ffd6c954000 	C:\WINDOWS\SYSTEM32\apphelp.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Java\jdk-19.0.2\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16;C:\Java\jdk-19.0.2\bin\server;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\bin;C:\Users\eilan\AppData\Local\Temp\lwjgl_eilan\3.3.3+5\x64
+
+VM Arguments:
+jvm_args: -javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\lib\idea_rt.jar=50401:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.3.2\bin -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 
+java_command: com.heavybox.jtix.Main
+java_class_path (initial): C:\Users\eilan\Desktop\JTix-Engine\target\classes;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl\3.3.3\lwjgl-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-assimp\3.3.3\lwjgl-assimp-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-bgfx\3.3.3\lwjgl-bgfx-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-cuda\3.3.3\lwjgl-cuda-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-egl\3.3.3\lwjgl-egl-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-fmod\3.3.3\lwjgl-fmod-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-freetype\3.3.3\lwjgl-freetype-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-glfw\3.3.3\lwjgl-glfw-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-harfbuzz\3.3.3\lwjgl-harfbuzz-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-hwloc\3.3.3\lwjgl-hwloc-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-jawt\3.3.3\lwjgl-jawt-3.3.3.jar;C:\Users\eilan\.m2\repository\org\joml\joml\1.10.8\joml-1.10.8.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-jemalloc\3.3.3\lwjgl-jemalloc-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-ktx\3.3.3\lwjgl-ktx-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-libdivide\3.3.3\lwjgl-libdivide-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-llvm\3.3.3\lwjgl-llvm-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-lmdb\3.3.3\lwjgl-lmdb-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-lz4\3.3.3\lwjgl-lz4-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-meow\3.3.3\lwjgl-meow-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-meshoptimizer\3.3.3\lwjgl-meshoptimizer-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-nanovg\3.3.3\lwjgl-nanovg-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-nfd\3.3.3\lwjgl-nfd-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-nuklear\3.3.3\lwjgl-nuklear-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-odbc\3.3.3\lwjgl-odbc-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-openal\3.3.3\lwjgl-openal-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opencl\3.3.3\lwjgl-opencl-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opengl\3.3.3\lwjgl-opengl-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opengles\3.3.3\lwjgl-opengles-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-openvr\3.3.3\lwjgl-openvr-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-openxr\3.3.3\lwjgl-openxr-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opus\3.3.3\lwjgl-opus-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-ovr\3.3.3\lwjgl-ovr-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-par\3.3.3\lwjgl-par-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-remotery\3.3.3\lwjgl-remotery-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-rpmalloc\3.3.3\lwjgl-rpmalloc-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-shaderc\3.3.3\lwjgl-shaderc-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-spvc\3.3.3\lwjgl-spvc-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-sse\3.3.3\lwjgl-sse-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-stb\3.3.3\lwjgl-stb-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-tinyexr\3.3.3\lwjgl-tinyexr-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-tinyfd\3.3.3\lwjgl-tinyfd-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-tootle\3.3.3\lwjgl-tootle-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-vma\3.3.3\lwjgl-vma-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-vulkan\3.3.3\lwjgl-vulkan-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-xxhash\3.3.3\lwjgl-xxhash-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-yoga\3.3.3\lwjgl-yoga-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-zstd\3.3.3\lwjgl-zstd-3.3.3.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl\3.3.3\lwjgl-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-assimp\3.3.3\lwjgl-assimp-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-bgfx\3.3.3\lwjgl-bgfx-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-freetype\3.3.3\lwjgl-freetype-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-glfw\3.3.3\lwjgl-glfw-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-harfbuzz\3.3.3\lwjgl-harfbuzz-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-hwloc\3.3.3\lwjgl-hwloc-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-jemalloc\3.3.3\lwjgl-jemalloc-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-ktx\3.3.3\lwjgl-ktx-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-libdivide\3.3.3\lwjgl-libdivide-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-llvm\3.3.3\lwjgl-llvm-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-lmdb\3.3.3\lwjgl-lmdb-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-lz4\3.3.3\lwjgl-lz4-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-meow\3.3.3\lwjgl-meow-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-meshoptimizer\3.3.3\lwjgl-meshoptimizer-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-nanovg\3.3.3\lwjgl-nanovg-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-nfd\3.3.3\lwjgl-nfd-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-nuklear\3.3.3\lwjgl-nuklear-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-openal\3.3.3\lwjgl-openal-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opengl\3.3.3\lwjgl-opengl-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opengles\3.3.3\lwjgl-opengles-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-openvr\3.3.3\lwjgl-openvr-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-openxr\3.3.3\lwjgl-openxr-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-opus\3.3.3\lwjgl-opus-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-ovr\3.3.3\lwjgl-ovr-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-par\3.3.3\lwjgl-par-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-remotery\3.3.3\lwjgl-remotery-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-rpmalloc\3.3.3\lwjgl-rpmalloc-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-shaderc\3.3.3\lwjgl-shaderc-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-spvc\3.3.3\lwjgl-spvc-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-sse\3.3.3\lwjgl-sse-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-stb\3.3.3\lwjgl-stb-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-tinyexr\3.3.3\lwjgl-tinyexr-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-tinyfd\3.3.3\lwjgl-tinyfd-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-tootle\3.3.3\lwjgl-tootle-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-vma\3.3.3\lwjgl-vma-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-xxhash\3.3.3\lwjgl-xxhash-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-yoga\3.3.3\lwjgl-yoga-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjgl\lwjgl-zstd\3.3.3\lwjgl-zstd-3.3.3-natives-windows.jar;C:\Users\eilan\.m2\repository\org\lwjglx\lwjgl3-awt\0.1.8\lwjgl3-awt-0.1.8.jar;C:\Users\eilan\.m2\repository\com\code-disaster\steamworks4j\steamworks4j\1.9.0\steamworks4j-1.9.0.jar;C:\Users\eilan\.m2\repository\com\code-disaster\steamworks4j\steamworks4j-server\1.9.0\steamworks4j-server-1.9.0.jar;C:\Users\eilan\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\eilan\.m2\repository\org\yaml\snakeyaml\2.2\snakeyaml-2.2.jar;C:\Users\eilan\.m2\repository\org\jetbrains\annotations\20.1.0\annotations-20.1.0.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 4                                         {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 1048576                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 134217728                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 2126512128                                {product} {ergonomic}
+   size_t MaxNewSize                               = 1275068416                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 1048576                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5832780                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122912730                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122912730                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 2126512128                             {manageable} {ergonomic}
+     bool UseCompressedClassPointers               = true                           {product lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+JAVA_HOME=C:\Java\jdk-19.0.2
+PATH=C:\Python310\Scripts\;C:\Python310\;C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Users\eilan\Desktop\Support\tools\gradle\gradle-5.4.1\bin;C:\Users\eilan\Desktop\Support\Thonny;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Users\eilan\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Java\jdk-19.0.2\bin;C:\Program Files\PostgreSQL\15\bin;C:\Program Files\PuTTY\;C:\Users\eilan\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\eilan\AppData\Local\Programs\Python\Python312\;C:\Users\eilan\AppData\Local\Microsoft\WindowsApps;C:\Users\eilan\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\eilan\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\eilan\AppData\Local\Android\Sdk\platform-tools;C:\Users\eilan\AppData\Local\GitHubDesktop\bin;C:\Users\eilan\Maven\apache-maven-3.8.4\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2022.3.2\bin;;C:\Users\eilan\AppData\Roaming\npm;C:\MinGW\bin;%IntelliJ IDEA Community Edition%;C:\Java\jdk-19.0.2\bin;C:\Program Files\gradle-8.0.2\bin;
+USERNAME=eilan
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 78 Stepping 3, GenuineIntel
+TMP=C:\Users\eilan\AppData\Local\Temp
+TEMP=C:\Users\eilan\AppData\Local\Temp
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 10 , 64 bit Build 19041 (10.0.19041.4842)
+OS uptime: 4 days 11:39 hours
+Hyper-V role detected
+
+CPU: total 4 (initial active 4) (2 cores per cpu, 2 threads per core) family 6 model 78 stepping 3 microcode 0xea, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, rtm, adx, fma, vzeroupper, clflush, clflushopt, hv, rdtscp
+
+Memory: 4k page, system-wide physical 8109M (1350M free)
+TotalPageFile size 19234M (AvailPageFile size 6910M)
+current process WorkingSet (physical memory assigned to process): 92M, peak: 98M
+current process commit charge ("private bytes"): 223M, peak: 230M
+
+vm_info: OpenJDK 64-Bit Server VM (19.0.2+7-44) for windows-amd64 JRE (19.0.2+7-44), built on 2022-11-30T18:02:09Z by "mach5one" with MS VC++ 17.1 (VS2022)
+
+END.
