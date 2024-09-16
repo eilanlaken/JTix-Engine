@@ -1,7 +1,6 @@
 package com.heavybox.jtix.tools;
 
 import com.heavybox.jtix.assets.AssetUtils;
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsException;
 import com.heavybox.jtix.math.MathUtils;
 import org.lwjgl.BufferUtils;
@@ -86,7 +85,8 @@ public final class FontGenerator {
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
             data.bearingY = glyphSlot.bitmap_top();
-            data.advance = glyphSlot.advance().x() >> 6; // FreeType gives the advance in x64 units, so we divide by 64.
+            data.advanceX = glyphSlot.advance().x() >> 6; // FreeType gives the advance in x64 units, so we divide by 64.
+            data.advanceY = glyphSlot.advance().y() >> 6; // FreeType gives the advance in x64 units, so we divide by 64.
 
             data.kernings = new HashMap<>();
             FT_Vector kerningVector = FT_Vector.malloc();
@@ -187,7 +187,8 @@ public final class FontGenerator {
         public char  character;
         public int   width, height;
         public float bearingX, bearingY;
-        public float advance;
+        public float advanceX;
+        public float advanceY;
         public int   atlasX;
         public int   atlasY;
 
