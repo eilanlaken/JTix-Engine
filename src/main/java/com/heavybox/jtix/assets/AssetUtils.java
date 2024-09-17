@@ -31,8 +31,8 @@ public final class AssetUtils {
 
     private static boolean           initialized = false;
     private static ApplicationWindow window      = null;
-    public  static Yaml              yaml        = null;
-    public  static Gson              gson        = null;
+    @Deprecated public  static Yaml              yaml        = null;
+    @Deprecated public  static Gson              gson        = null;
 
     static {
         DumperOptions options = new DumperOptions();
@@ -57,6 +57,26 @@ public final class AssetUtils {
         if (initialized) return;
         AssetUtils.window = window;
         initialized = true;
+    }
+
+    public static Yaml yaml() {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setPrettyFlow(true);
+        options.setIndent(4);
+        Representer representer = new Representer(options) {
+            @Override
+            protected MappingNode representJavaBean(Set<Property> properties, Object obj) {
+                if (!classTags.containsKey(obj.getClass())) addClassTag(obj.getClass(), Tag.MAP);
+                return super.representJavaBean(properties, obj);
+            }
+        };
+        representer.getPropertyUtils().setSkipMissingProperties(true);
+        return new Yaml(representer);
+    }
+
+    public static Gson gson() {
+        return new Gson();
     }
 
     public static String removeExtension(final String filename) {
@@ -180,7 +200,7 @@ public final class AssetUtils {
         ImageIO.write(image, "png", file);
     }
 
-    // TODO: FIXME?
+    // TODO: test
     public static void saveImage(final String directory, final String filename, ByteBuffer buffer, int width, int height) throws IOException {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for (int y = 0; y < height; y++) {

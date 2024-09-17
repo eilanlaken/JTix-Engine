@@ -24,7 +24,7 @@ public class Main {
         AsyncTask italic = new AsyncTask() {
             @Override
             public void task() {
-                FontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, false, null);
+                FontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
             }
         };
 

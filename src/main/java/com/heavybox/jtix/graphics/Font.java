@@ -9,20 +9,22 @@ import java.util.Map;
 public class Font implements MemoryResource {
 
     public final Texture fontAtlas;
+    public final String  charset;
     public final float   invAtlasWidth;
     public final float   invAtlasHeight;
     public final int     size;
     public final boolean antialiasing;
 
-    public final Map<Integer, Glyph> glyphMap;
+    public final Map<Integer, Glyph> glyphs;
 
-    public Font(Texture fontAtlas, int size, boolean antialiasing, Map<Integer, Glyph> glyphMap) {
+    public Font(Texture fontAtlas, final String charset, int size, boolean antialiasing, Map<Integer, Glyph> glyphs) {
         this.fontAtlas = fontAtlas;
         this.invAtlasWidth = 1.0f / fontAtlas.width;
         this.invAtlasHeight = 1.0f / fontAtlas.height;
+        this.charset = charset;
         this.size = size;
         this.antialiasing = antialiasing;
-        this.glyphMap = glyphMap;
+        this.glyphs = glyphs;
     }
 
     @Override

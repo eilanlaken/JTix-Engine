@@ -35,7 +35,7 @@ public final class FontGenerator {
         generateFontBitmap(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing, charset);
     }
 
-    public synchronized static void generateFontBitmap(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
+    private synchronized static void generateFontBitmap(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
         if (alreadyGenerated(directory, outputName, fontPath, size, antialiasing, charset)) return;
 
         /* init font library */
@@ -193,7 +193,7 @@ public final class FontGenerator {
             yamlData.put("options", optionsData);
             yamlData.put("glyphs", glyphsData);
         }
-        String content = AssetUtils.yaml.dump(yamlData);
+        String content = AssetUtils.yaml().dump(yamlData);
         try {
             AssetUtils.saveFile(directory, outputName + ".yml", content);
         } catch (Exception e) {
@@ -208,7 +208,6 @@ public final class FontGenerator {
     private static synchronized boolean alreadyGenerated(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
         try {
             String texturePath = Paths.get(directory, outputName + ".png").toString();
-            System.out.println(texturePath);
             if (!AssetUtils.fileExists(texturePath)) return false;
 
             String dataPath = Paths.get(directory, outputName + ".yml").toString();
@@ -219,7 +218,7 @@ public final class FontGenerator {
             if (lastModified.after(lastGenerated)) return false;
 
             String fontDataContent = AssetUtils.getFileContent(dataPath);
-            Map<String, Object> data = AssetUtils.yaml.load(fontDataContent);
+            Map<String, Object> data = AssetUtils.yaml().load(fontDataContent);
 
             // compare 'meta' section
             Map<String, Object> meta = (Map<String, Object>) data.get("meta");
