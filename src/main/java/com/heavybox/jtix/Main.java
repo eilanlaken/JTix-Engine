@@ -20,7 +20,7 @@ public class Main {
 
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
         //FontGenerator.generateBitmapFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 64);
-        FontGenerator.generateBitmapFont("assets/fonts/OpenSans-Italic.ttf", 64, false);
+        FontGenerator.generateBitmapFont("assets/fonts/OpenSans-Italic.ttf", 64, false, null);
 
 
 //        try {

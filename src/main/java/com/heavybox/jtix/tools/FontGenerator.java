@@ -26,17 +26,15 @@ public final class FontGenerator {
 
     private FontGenerator() {}
 
-    // TODO: take care of options (anti aliasing)
-    public static void generateBitmapFont(final String fontPath, int size, boolean antialiasing) {
+    public static void generateBitmapFont(final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
         Path font = Paths.get(fontPath);
         Path directory = font.getParent();
         String filename = font.getFileName().toString();
         String filenameNoExtension = AssetUtils.removeExtension(filename);
-        generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing);
+        generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing, charset);
     }
 
-    // TODO: take care of options (anti aliasing)
-    public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing) {
+    public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
         /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
@@ -57,12 +55,13 @@ public final class FontGenerator {
         FT_Face ftFace = FT_Face.create(face);
         FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
 
-        /* get supported characters */
+        /* get font supported characters && charset */
         List<Character> supportedCharacters = new ArrayList<>();
         IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
         long nextChar = FreeType.FT_Get_First_Char(ftFace, intBuffer);
         while (nextChar != 0) {
-            supportedCharacters.add((char) nextChar);
+            if (charset == null) supportedCharacters.add((char) nextChar);
+            else if (charset.indexOf((char) nextChar) != -1) supportedCharacters.add((char) nextChar);
             nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
         }
 
@@ -134,10 +133,8 @@ public final class FontGenerator {
                 }
             }
 
-
             data.bufferedImage = glyphImage;
         }
-
 
         /* estimate the font image atlas width and height */
         float heightAdjustment = 1.1f;
