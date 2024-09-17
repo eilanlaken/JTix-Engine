@@ -3,6 +3,7 @@ package com.heavybox.jtix.tools;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.graphics.GraphicsException;
 import com.heavybox.jtix.math.MathUtils;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.util.freetype.*;
@@ -26,16 +27,16 @@ public final class FontGenerator {
     private FontGenerator() {}
 
     // TODO: take care of options (anti aliasing)
-    public static void generateBitmapFont(final String fontPath, int size) {
+    public static void generateBitmapFont(final String fontPath, int size, boolean antialiasing) {
         Path font = Paths.get(fontPath);
         Path directory = font.getParent();
         String filename = font.getFileName().toString();
         String filenameNoExtension = AssetUtils.removeExtension(filename);
-        generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size);
+        generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing);
     }
 
     // TODO: take care of options (anti aliasing)
-    public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size) {
+    public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing) {
         /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
@@ -73,7 +74,10 @@ public final class FontGenerator {
             GlyphData data = new GlyphData();
             glyphsData[i] = data;
 
-            FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER); // TODO: set anti aliasing
+            if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER);
+            else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
+
+
             FT_GlyphSlot glyphSlot = ftFace.glyph();
             FT_Bitmap bitmap = glyphSlot.bitmap();
             int glyph_width  = bitmap.width();
@@ -104,16 +108,33 @@ public final class FontGenerator {
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             BufferedImage glyphImage = new BufferedImage(glyph_width, glyph_height, BufferedImage.TYPE_INT_ARGB);
             int[] imageData = ((DataBufferInt) glyphImage.getRaster().getDataBuffer()).getData();
-            for (int y = 0; y < glyph_height; y++) {
-                for (int x = 0; x < glyph_width; x++) {
-                    int srcIndex = y * Math.abs(glyph_pitch) + x;
-                    assert ftCharImageBuffer != null;
-                    int grayValue = ftCharImageBuffer.get(srcIndex) & 0xFF;
-                    int alpha = grayValue;  // Use grayscale value for transparency
-                    int rgb = (255 << 16) | (255 << 8) | 255;  // White color
-                    imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+
+            if (antialiasing) {
+                for (int y = 0; y < glyph_height; y++) {
+                    for (int x = 0; x < glyph_width; x++) {
+                        int srcIndex = y * Math.abs(glyph_pitch) + x;
+                        assert ftCharImageBuffer != null;
+                        int grayValue = ftCharImageBuffer.get(srcIndex) & 0xFF;
+                        int alpha = grayValue;  // Use grayscale value for transparency
+                        int rgb = (255 << 16) | (255 << 8) | 255;  // White color
+                        imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+                    }
+                }
+            } else {
+                for (int y = 0; y < glyph_height; y++) {
+                    for (int x = 0; x < glyph_width; x++) {
+                        int byteIndex = y * Math.abs(glyph_pitch) + (x / 8);  // Get the byte that holds this pixel
+                        int bitIndex = 7 - (x % 8);  // Get the specific bit for this pixel (most significant bit first)
+                        byte pixelByte = ftCharImageBuffer.get(byteIndex);
+                        int pixelValue = (pixelByte >> bitIndex) & 1;  // Get the bit for the current pixel
+                        int alpha = pixelValue == 1 ? 255 : 0;  // Fully opaque if 1, fully transparent if 0
+                        int rgb = (255 << 16) | (255 << 8) | 255;  // White color
+                        imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+                    }
                 }
             }
+
+
             data.bufferedImage = glyphImage;
         }
 
@@ -160,11 +181,12 @@ public final class FontGenerator {
             // meta-data
             Map<String, Object> metaData = new HashMap<>();
             metaData.put("name", AssetUtils.removeExtension(Paths.get(fontPath).getFileName().toString()));
+            metaData.put("atlas", outputName + ".png");
 
             // options
             Map<String, Object> optionsData = new HashMap<>();
             optionsData.put("size", size);
-            optionsData.put("antialiasing", true);
+            optionsData.put("antialiasing", antialiasing);
 
             yamlData.put("meta", metaData);
             yamlData.put("options", optionsData);
@@ -184,7 +206,7 @@ public final class FontGenerator {
 
     private static final class GlyphData {
 
-        public char  character;
+        public int   character;
         public int   width, height;
         public float bearingX, bearingY;
         public float advanceX;
