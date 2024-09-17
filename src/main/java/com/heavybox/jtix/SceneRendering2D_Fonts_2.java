@@ -49,10 +49,9 @@ public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
         camera.update();
 
         fontMap = AssetStore.get("assets/fonts/fontBitmap.png");
-        HashMap<Integer, Font.Glyph> glyphHashMap = null;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("assets/fonts/fontBitmap"))) {
-            glyphHashMap = (HashMap<Integer, Font.Glyph>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

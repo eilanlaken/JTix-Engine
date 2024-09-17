@@ -8,15 +8,20 @@ import java.util.Map;
 
 public class Font implements MemoryResource {
 
-    public final Texture               fontMap;
-    public final String                filepath;
-    public final int                   size;
-    public final Map<Character, Glyph> glyphMap;
+    public final Texture fontAtlas;
+    public final float   invAtlasWidth;
+    public final float   invAtlasHeight;
+    public final int     size;
+    public final boolean antialiasing;
 
-    public Font(Texture fontMap, String filepath, int size, Map<Character, Glyph> glyphMap) {
-        this.fontMap = fontMap;
-        this.filepath = filepath;
+    public final Map<Integer, Glyph> glyphMap;
+
+    public Font(Texture fontAtlas, int size, boolean antialiasing, Map<Integer, Glyph> glyphMap) {
+        this.fontAtlas = fontAtlas;
+        this.invAtlasWidth = 1.0f / fontAtlas.width;
+        this.invAtlasHeight = 1.0f / fontAtlas.height;
         this.size = size;
+        this.antialiasing = antialiasing;
         this.glyphMap = glyphMap;
     }
 
@@ -25,26 +30,30 @@ public class Font implements MemoryResource {
 
     }
 
-    // TODO: include better glyph data.
     public static final class Glyph implements Serializable {
 
         @Serial
         private static final long serialVersionUID = 1L; // Add a serial version ID for version control
 
-        public final int sourceX;
-        public final int sourceY;
-        public final int width;
-        public final int height;
+        public final int   width, height;
+        public final float bearingX, bearingY;
+        public final float advanceX;
+        public final float advanceY;
+        public final int   atlasX;
+        public final int   atlasY;
 
-        // TODO: better to make final somehow.
-        public float u1, v1;
-        public float u2, v2;
+        public final Map<Character, Integer> kernings;
 
-        public Glyph(int sourceX, int sourceY, int width, int height) {
-            this.sourceX = sourceX;
-            this.sourceY = sourceY;
+        public Glyph(int width, int height, float bearingX, float bearingY, float advanceX, float advanceY, int atlasX, int atlasY, Map<Character, Integer> kernings) {
             this.width = width;
             this.height = height;
+            this.bearingX = bearingX;
+            this.bearingY = bearingY;
+            this.advanceX = advanceX;
+            this.advanceY = advanceY;
+            this.atlasX = atlasX;
+            this.atlasY = atlasY;
+            this.kernings = kernings;
         }
 
     }
