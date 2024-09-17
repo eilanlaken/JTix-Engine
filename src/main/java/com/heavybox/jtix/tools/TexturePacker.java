@@ -73,7 +73,7 @@ public final class TexturePacker {
         yamlData.put("regions", allRegions.items);
         yamlData.put("options", optionsData);
         yamlData.put("textures", texturesData);
-        String content = AssetUtils.yaml.dump(yamlData);
+        String content = AssetUtils.yaml().dump(yamlData);
         try {
             AssetUtils.saveFile(outputDirectory, outputName + ".yml", content);
         } catch (Exception e) {
@@ -137,7 +137,7 @@ public final class TexturePacker {
 
         // if we did find the map file, check for the presence of all required textures
         String contents = AssetUtils.getFileContent(mapPath);
-        Map<String, Object> yamlData = AssetUtils.yaml.load(contents);
+        Map<String, Object> yamlData = AssetUtils.yaml().load(contents);
 
         try {
             ArrayList<LinkedHashMap<String, Object>> regionsData = (ArrayList<LinkedHashMap<String, Object>>) yamlData.get("regions");

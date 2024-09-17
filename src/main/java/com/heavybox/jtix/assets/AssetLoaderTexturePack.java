@@ -2,12 +2,10 @@ package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
+import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +13,7 @@ import java.util.Map;
 public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
 
     private Array<AssetDescriptor> dependencies;
-    private String                 yaml;
+    private String                 yamlString;
 
     @Override
     public Array<AssetDescriptor> getDependencies() {
@@ -26,8 +24,9 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
     @SuppressWarnings("unchecked")
     public void asyncLoad(String path) {
 
-        yaml = AssetUtils.getFileContent(path);
-        Map<String, Object> data = AssetUtils.yaml.load(yaml);
+        yamlString = AssetUtils.getFileContent(path);
+        Yaml yaml = AssetUtils.yaml();
+        Map<String, Object> data = yaml.load(yamlString);
 
         /* get dependencies */
         List<Map<String, Object>> textures = (List<Map<String, Object>>) data.get("textures");
@@ -50,7 +49,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
             textures[i] = texture;
         }
 
-        return new TexturePack(textures, yaml);
+        return new TexturePack(textures, yamlString);
     }
 
 }

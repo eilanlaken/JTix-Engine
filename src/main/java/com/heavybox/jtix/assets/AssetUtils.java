@@ -31,25 +31,6 @@ public final class AssetUtils {
 
     private static boolean           initialized = false;
     private static ApplicationWindow window      = null;
-    @Deprecated public  static Yaml              yaml        = null;
-    @Deprecated public  static Gson              gson        = null;
-
-    static {
-        DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        options.setPrettyFlow(true);
-        options.setIndent(4);
-        Representer representer = new Representer(options) {
-            @Override
-            protected MappingNode representJavaBean(Set<Property> properties, Object obj) {
-                if (!classTags.containsKey(obj.getClass())) addClassTag(obj.getClass(), Tag.MAP);
-                return super.representJavaBean(properties, obj);
-            }
-        };
-        representer.getPropertyUtils().setSkipMissingProperties(true);
-        yaml = new Yaml(representer);
-        gson = new Gson();
-    }
 
     private AssetUtils() {}
 

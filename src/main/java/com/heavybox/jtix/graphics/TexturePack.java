@@ -2,6 +2,7 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.memory.MemoryResource;
+import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.HashMap;
@@ -14,11 +15,12 @@ public final class TexturePack implements MemoryResource {
     public final HashMap<String, Region> namedRegions;
 
     @SuppressWarnings("unchecked")
-    public TexturePack(Texture[] textures, String yaml) {
+    public TexturePack(Texture[] textures, String yamlString) {
         this.textures = textures;
         this.namedRegions = new HashMap<>();
         try {
-            Map<String, Object> data = AssetUtils.yaml.load(yaml);
+            Yaml yaml = AssetUtils.yaml();
+            Map<String, Object> data = yaml.load(yamlString);
             List<Map<String, Object>> regions = (List<Map<String, Object>>) data.get("regions");
             for (Map<String, Object> regionData : regions) {
                 String name = (String) regionData.get("name");
@@ -35,7 +37,7 @@ public final class TexturePack implements MemoryResource {
                 namedRegions.put(name, region);
             }
         } catch (YAMLException e) {
-            throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName() + " from invalid yaml: " + yaml);
+            throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName() + " from invalid yaml: " + yamlString);
         } catch (Exception e) {
             throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName());
         }
