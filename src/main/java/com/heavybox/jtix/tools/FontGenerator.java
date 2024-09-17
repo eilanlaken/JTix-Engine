@@ -11,30 +11,33 @@ import org.lwjgl.util.freetype.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public final class FontGenerator {
 
     private FontGenerator() {}
 
-    public static void generateBitmapFont(final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
+    // TODO: implement.
+    public synchronized static void generateFontSDF() {
+
+    }
+
+    public synchronized static void generateFontBitmap(final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
         Path font = Paths.get(fontPath);
         Path directory = font.getParent();
         String filename = font.getFileName().toString();
         String filenameNoExtension = AssetUtils.removeExtension(filename);
-        generateBitmapFont(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing, charset);
+        generateFontBitmap(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing, charset);
     }
 
-    public static void generateBitmapFont(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
+    public synchronized static void generateFontBitmap(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
+        if (alreadyGenerated(directory, outputName, fontPath, size, antialiasing, charset)) return;
+
         /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
@@ -76,7 +79,6 @@ public final class FontGenerator {
             if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER);
             else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
 
-
             FT_GlyphSlot glyphSlot = ftFace.glyph();
             FT_Bitmap bitmap = glyphSlot.bitmap();
             int glyph_width  = bitmap.width();
@@ -84,6 +86,8 @@ public final class FontGenerator {
             int glyph_pitch  = bitmap.pitch();
 
             data.character = c;
+            data.atlasX = -1;
+            data.atlasY = -1;
             data.width = glyph_width;
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
@@ -101,20 +105,19 @@ public final class FontGenerator {
             }
             kerningVector.free();
 
+            /* set glyph image, if applicable (for non-space characters, like ABC...). */
             if (glyph_width <= 0 || glyph_height <= 0) continue;
 
-            /* set glyph image, if applicable. */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             BufferedImage glyphImage = new BufferedImage(glyph_width, glyph_height, BufferedImage.TYPE_INT_ARGB);
             int[] imageData = ((DataBufferInt) glyphImage.getRaster().getDataBuffer()).getData();
 
+            assert ftCharImageBuffer != null;
             if (antialiasing) {
                 for (int y = 0; y < glyph_height; y++) {
                     for (int x = 0; x < glyph_width; x++) {
                         int srcIndex = y * Math.abs(glyph_pitch) + x;
-                        assert ftCharImageBuffer != null;
-                        int grayValue = ftCharImageBuffer.get(srcIndex) & 0xFF;
-                        int alpha = grayValue;  // Use grayscale value for transparency
+                        int alpha = ftCharImageBuffer.get(srcIndex) & 0xFF;  // Use grayscale value for transparency
                         int rgb = (255 << 16) | (255 << 8) | 255;  // White color
                         imageData[y * glyph_width + x] = (alpha << 24) | rgb;
                     }
@@ -144,11 +147,11 @@ public final class FontGenerator {
         int padding = 2;
         int x = 0;
         int y = (int) (size * heightAdjustment);
-        for (GlyphData glyphData : glyphsData) {
-            glyphData.atlasX = x;
-            glyphData.atlasY = y;
-            atlasWidth = Math.max(x + glyphData.width, atlasWidth);
-            x += glyphData.width + padding;
+        for (GlyphData data : glyphsData) {
+            data.atlasX = x;
+            data.atlasY = y;
+            atlasWidth = Math.max(x + data.width, atlasWidth);
+            x += data.width + padding;
             if (x > estimatedWidth) {
                 x = 0;
                 y += size * heightAdjustment;
@@ -184,6 +187,7 @@ public final class FontGenerator {
             Map<String, Object> optionsData = new HashMap<>();
             optionsData.put("size", size);
             optionsData.put("antialiasing", antialiasing);
+            optionsData.put("charset", charset);
 
             yamlData.put("meta", metaData);
             yamlData.put("options", optionsData);
@@ -199,6 +203,45 @@ public final class FontGenerator {
         /* free FreeType library and face */
         FreeType.FT_Done_Face(ftFace);
         FreeType.FT_Done_FreeType(library);
+    }
+
+    private static synchronized boolean alreadyGenerated(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
+        try {
+            String texturePath = Paths.get(directory, outputName + ".png").toString();
+            System.out.println(texturePath);
+            if (!AssetUtils.fileExists(texturePath)) return false;
+
+            String dataPath = Paths.get(directory, outputName + ".yml").toString();
+            if (!AssetUtils.fileExists(dataPath)) return false;
+
+            Date lastGenerated = AssetUtils.lastModified(dataPath);
+            Date lastModified = AssetUtils.lastModified(fontPath);
+            if (lastModified.after(lastGenerated)) return false;
+
+            String fontDataContent = AssetUtils.getFileContent(dataPath);
+            Map<String, Object> data = AssetUtils.yaml.load(fontDataContent);
+
+            // compare 'meta' section
+            Map<String, Object> meta = (Map<String, Object>) data.get("meta");
+            String name = (String) meta.get("name");
+            Path font = Paths.get(fontPath);
+            String filename = font.getFileName().toString();
+            String filenameNoExtension = AssetUtils.removeExtension(filename);
+            if (!Objects.equals(filenameNoExtension, name)) return false;
+
+            // Extract 'options' section
+            Map<String, Object> options = (Map<String, Object>) data.get("options");
+            String charsetData = (String) options.get("charset");
+            int sizeData = (int) options.get("size");
+            boolean antialiasingData = (boolean) options.get("antialiasing");
+            if (!Objects.equals(charset, charsetData)) return false;
+            if (!Objects.equals(size, sizeData)) return false;
+            if (!Objects.equals(antialiasing, antialiasingData)) return false;
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static final class GlyphData {

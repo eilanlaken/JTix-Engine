@@ -2,7 +2,8 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
-import com.heavybox.jtix.graphics.TextureBuilder;
+import com.heavybox.jtix.async.AsyncTask;
+import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.tools.FontGenerator;
 
 import java.io.IOException;
@@ -20,7 +21,21 @@ public class Main {
 
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
         //FontGenerator.generateBitmapFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 64);
-        FontGenerator.generateBitmapFont("assets/fonts/OpenSans-Italic.ttf", 64, false, null);
+        AsyncTask italic = new AsyncTask() {
+            @Override
+            public void task() {
+                FontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, false, null);
+            }
+        };
+
+//        AsyncTask regular = new AsyncTask() {
+//            @Override
+//            public void task() {
+//                FontGenerator.generateBitmapFont("assets/fonts/OpenSans-Regular.ttf", 64, false, null);
+//            }
+//        };
+
+        AsyncTaskRunner.await(AsyncTaskRunner.async(italic));
 
 
 //        try {

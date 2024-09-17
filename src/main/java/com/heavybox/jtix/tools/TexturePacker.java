@@ -153,10 +153,10 @@ public final class TexturePacker {
 
             /* if we are packing the same textures, but one or more of the source textures was modified after our last
             packing, we need to pack again. */
-            Date created = AssetUtils.lastModified(mapPath);
+            Date lastPacked = AssetUtils.lastModified(mapPath);
             for (String texturePath : packingNow) {
                 Date lastModified = AssetUtils.lastModified(texturePath);
-                if (lastModified.after(created)) return false;
+                if (lastModified.after(lastPacked)) return false;
             }
         } catch (Exception any) {
             return false;
