@@ -16,11 +16,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public final class TexturePacker {
+public final class ToolsTexturePacker {
 
     public static final int maxTextureSize = GraphicsUtils.getMaxTextureSize();
 
-    private TexturePacker() {}
+    private ToolsTexturePacker() {}
 
     public static void packTextures(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
         if (directory == null) throw new IllegalArgumentException("Must provide non-null directory name.");

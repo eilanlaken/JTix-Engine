@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
-public final class FontGenerator {
+public final class ToolsFontGenerator {
 
-    private FontGenerator() {}
+    private ToolsFontGenerator() {}
 
     // TODO: implement.
     public synchronized static void generateFontSDF() {

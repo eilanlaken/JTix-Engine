@@ -3,8 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.async.AsyncTask;
-import com.heavybox.jtix.async.AsyncTaskRunner;
-import com.heavybox.jtix.tools.FontGenerator;
+import com.heavybox.jtix.tools.ToolsFontGenerator;
 
 import java.io.IOException;
 
@@ -24,7 +23,7 @@ public class Main {
         AsyncTask italic = new AsyncTask() {
             @Override
             public void task() {
-                FontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
+                ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
             }
         };
 

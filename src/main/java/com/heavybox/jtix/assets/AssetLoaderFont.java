@@ -3,16 +3,11 @@ package com.heavybox.jtix.assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.tools.FontGenerator;
-import org.lwjgl.util.freetype.FreeType;
-import org.lwjgl.util.freetype.FT_Face;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class AssetLoaderFont implements AssetLoader<Font> {
 

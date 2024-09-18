@@ -7,13 +7,13 @@ import com.heavybox.jtix.math.MathUtils;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public final class TextureGenerator {
+public final class ToolsTextureGenerator {
 
     private static       boolean initialized     = false;
     private static final int[]   PERLIN_PERM_256 = new int[256];
     private static final int[]   PERLIN_PERM_512 = new int[512];
 
-    private TextureGenerator() {}
+    private ToolsTextureGenerator() {}
 
     private static void init() {
         if (initialized) return;
