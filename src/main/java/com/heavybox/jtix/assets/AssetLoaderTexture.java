@@ -12,10 +12,7 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-// TODO: use TextureBuilder instead
 public class AssetLoaderTexture implements AssetLoader<Texture> {
-
-    public static final int maxTextureSize = GraphicsUtils.getMaxTextureSize();
 
     private int width;
     private int height;
@@ -33,6 +30,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
                     + STBImage.stbi_failure_reason());
             width = widthBuffer.get();
             height = heightBuffer.get();
+            int maxTextureSize = GraphicsUtils.getMaxTextureSize();
             if (width > maxTextureSize || height > maxTextureSize)
                 throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
         }
