@@ -6,13 +6,12 @@ import com.heavybox.jtix.math.Vector3;
 
 public class Camera {
 
-    private final Vector3 tmp       = new Vector3();
-    public  final Vector3 position  = new Vector3(0,0,0);
-    public  final Vector3 direction = new Vector3(0,0,-1);
-    public  final Vector3 up        = new Vector3(0,1,0);
-    public  final Vector3 left      = new Vector3();
-
-    public final CameraLens lens;
+    private final Vector3    tmp       = new Vector3();
+    public  final Vector3    position  = new Vector3(0,0,0);
+    public  final Vector3    direction = new Vector3(0,0,-1);
+    public  final Vector3    up        = new Vector3(0,1,0);
+    public  final Vector3    left      = new Vector3();
+    public  final CameraLens lens;
 
     public Camera(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.lens = new CameraLens(CameraLens.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, zoom, near, far, fov);

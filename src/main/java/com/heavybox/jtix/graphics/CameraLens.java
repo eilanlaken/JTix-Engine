@@ -5,7 +5,7 @@ import com.heavybox.jtix.math.Vector3;
 
 public class CameraLens {
 
-    private static final Vector3 tmp = new Vector3();
+    private final Vector3 tmp = new Vector3();
 
     protected Mode      mode;
     protected Matrix4x4 projection;
