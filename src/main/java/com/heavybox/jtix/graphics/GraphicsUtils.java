@@ -29,7 +29,8 @@ public final class GraphicsUtils {
     private static int prevTargetFps = targetFps;
     private static int idleFps = 10;
     private static int maxTextureSize;
-    private static float maxAnisotropicFilterLevel = 0;
+    private static int maxAnisotropicFilterLevel = 0;
+    private static boolean anisotropicFilteringSupported = false;
 
     private static float contentScaleX;
     private static float contentScaleY;
@@ -181,7 +182,11 @@ public final class GraphicsUtils {
         return window.attributes.vSyncEnabled;
     }
 
-    public static float getMaxAnisotropicFilterLevel () {
+    public static boolean isAnisotropicFilteringSupported() {
+        return GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic");
+    }
+
+    public static int getMaxAnisotropicFilterLevel() {
         if (maxAnisotropicFilterLevel > 0) return maxAnisotropicFilterLevel;
 
         if (GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
@@ -189,9 +194,9 @@ public final class GraphicsUtils {
             buffer.position(0);
             buffer.limit(buffer.capacity());
             GL20.glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, buffer);
-            maxAnisotropicFilterLevel = buffer.get(0);
+            maxAnisotropicFilterLevel = (int) buffer.get(0);
         } else {
-            maxAnisotropicFilterLevel = 1.0f;
+            maxAnisotropicFilterLevel = 1;
         }
 
         return maxAnisotropicFilterLevel;

@@ -46,7 +46,7 @@ public final class TexturePacker {
         int index = 0;
         while (regionsData.size > 0) {
             int last = regionsData.size - 1;
-            while (!pack(outputDirectory, outputName, extrude, padding, maxTexturesSize, texturePack, regionsData, last, index)) last--;
+            while (!pack(extrude, padding, maxTexturesSize, texturePack, regionsData, last, index)) last--;
             index++;
         }
 
@@ -180,7 +180,7 @@ public final class TexturePacker {
         return true;
     }
 
-    private static boolean pack(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack, Array<PackedRegionData> remaining, int last, int currentImageIndex) {
+    private static boolean pack(int extrude, int padding, TexturePackSize maxTexturesSize, Map<IndexedBufferedImage, Array<PackedRegionData>> texturePack, Array<PackedRegionData> remaining, int last, int currentImageIndex) {
         if (last < 0) return true;
         int width = 1;
         int height = 1;

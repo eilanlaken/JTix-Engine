@@ -35,7 +35,7 @@ public class Main {
 //            }
 //        };
 
-        AsyncTaskRunner.await(AsyncTaskRunner.async(italic));
+        //AsyncTaskRunner.await(AsyncTaskRunner.async(italic));
 
 
 //        try {
@@ -44,7 +44,7 @@ public class Main {
 //            return;
 //        }
 
-        if (true) return;
+        //if (true) return;
 
         ApplicationWindowAttributes config = new ApplicationWindowAttributes();
         Application.createSingleWindowApplication(config);

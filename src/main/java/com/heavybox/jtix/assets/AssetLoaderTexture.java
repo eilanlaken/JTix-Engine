@@ -38,8 +38,24 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
         }
     }
 
-    // TODO: use Texture Builder
     @Override
+    public Texture create() {
+        Texture texture = new Texture(width, height, buffer, null, null, null, null, 16);
+        STBImage.stbi_image_free(buffer);
+        return texture;
+    }
+
+    @Override
+    public Array<AssetDescriptor> getDependencies() {
+        return null;
+    }
+
+}
+
+/*
+old create() code:
+
+@Override
     public Texture create() {
         int glHandle = GL11.glGenTextures();
         Texture texture = new Texture(glHandle,
@@ -58,9 +74,4 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
         return texture;
     }
 
-    @Override
-    public Array<AssetDescriptor> getDependencies() {
-        return null;
-    }
-
-}
+ */

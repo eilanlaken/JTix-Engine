@@ -32,7 +32,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
-public final class TextureBuilder {
+@Deprecated public final class TextureBuilder {
 
     public static final int maxTextureSize = GraphicsUtils.getMaxTextureSize();
 
@@ -80,7 +80,7 @@ public final class TextureBuilder {
         int[] height = new int[1];
         int[] comp = new int[1];
 
-        ByteBuffer buffer = STBImage.stbi_load_from_memory(imageBuffer, width, height, comp, 4);
+        ByteBuffer buffer = STBImage.stbi_load_from_memory(imageBuffer, width, height, comp,4);
         if (buffer == null) {
             throw new RuntimeException("Failed to load image: " + STBImage.stbi_failure_reason());
         }

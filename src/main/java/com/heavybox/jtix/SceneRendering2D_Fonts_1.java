@@ -1,38 +1,31 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.graphics.Camera;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.GraphicsException;
-import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.ecs.ComponentTransform;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import org.lwjgl.PointerBuffer;
+import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.stb.STBTTFontinfo;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.util.freetype.FreeType;
 
-import java.nio.ByteBuffer;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private Camera camera;
-    private float red = new Color(1,0,0,1).toFloatBits();
-    private float blue = new Color(0,0,1,1).toFloatBits();
 
-    private String text = "render me!";
+    ComponentTransform t = new ComponentTransform();
 
-    private STBTTFontinfo info;
-    private ByteBuffer ttf;
-    private int ascent;
-    private int descent;
-    private int lineGap;
+    Texture fontMap;
 
     public SceneRendering2D_Fonts_1() {
         renderer2D = new Renderer2D();
+
     }
 
     @Override
@@ -40,60 +33,43 @@ public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
         camera = new Camera(640f/32,480f/32, 1);
         camera.update();
 
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            PointerBuffer libraryPointer = stack.mallocPointer(1);
-            int errorInit = FreeType.FT_Init_FreeType(libraryPointer);
-            if (errorInit != 0) throw new GraphicsException("Failed to load font face. Error code: " + errorInit);
-            long library = libraryPointer.get(0);
+        fontMap = AssetStore.get("assets/fonts/fontBitmap.png");
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("assets/fonts/fontBitmap"))) {
 
-            PointerBuffer facePointer = stack.mallocPointer(1);
-            int errorFace = FreeType.FT_New_Face(library, "path/to/your/font.ttf", 0, facePointer);
-            if (errorFace != 0) throw new GraphicsException("Failed to load font face. Error code: " + errorFace);
-            long face = facePointer.get(0);
-            // Set the pixel size for the font
-            //FreeType.FT_Set_Pixel_Sizes(face, 0, 48); // Set font size to 48 pixels high
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
+
+
 
     @Override
     protected void refresh() {
+
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
-        camera.lens.unProject(screen);
-
-        if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
+        if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
 
         }
 
-        if (Mouse.isButtonClicked(Mouse.Button.RIGHT)) {
 
-        }
 
-        if (Keyboard.isKeyJustPressed(Keyboard.Key.S)) {
-
-        }
-
-        if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
-            //body_a.applyForce(1,0, body_a.shape.x(), body_a.shape.y() + 0.2f);
-        }
-
-        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE)) {
-            //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
-        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0,0,0,1);
+        GL11.glClearColor(0f,0f,0,1);
+        renderer2D.begin(null);
+        renderer2D.setTint(null);
 
-        renderer2D.begin(camera);
-
+        renderer2D.drawTexture(fontMap, 0,0,0,0,0,1,1);
         renderer2D.end();
+
+
+
     }
+
+
 
     @Override
     public void resize(int width, int height) { }
-
     @Override
     public void hide() {
         renderer2D.deleteAll();
@@ -102,6 +78,13 @@ public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
     @Override
     public void deleteAll() {
 
+    }
+
+    @Override
+    public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
+        Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
+        requiredAssets.put("assets/fonts/fontBitmap.png", Texture.class);
+        return requiredAssets;
     }
 
 }

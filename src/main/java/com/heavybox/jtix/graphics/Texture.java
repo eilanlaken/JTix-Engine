@@ -1,10 +1,9 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.*;
 
 import java.nio.ByteBuffer;
 
@@ -20,10 +19,36 @@ public class Texture implements MemoryResource {
     public final Filter minFilter;
     public final Wrap   uWrap;
     public final Wrap   vWrap;
+    public final int    anisotropicFilteringLevel;
 
     private ByteBuffer bytes;
 
-    public Texture(int handle,
+    public Texture(int width, int height, ByteBuffer bytes, Filter magFilter, Filter minFilter, Wrap uWrap, Wrap vWrap, int anisotropicFilteringLevel) {
+        this.handle = GL11.glGenTextures();
+        this.slot = -1;
+
+        this.width = width;
+        this.height = height;
+        this.invWidth = 1.0f / width;
+        this.invHeight = 1.0f / height;
+
+        this.magFilter = magFilter != null ? magFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.anisotropicFilteringLevel = MathUtils.clampInt(anisotropicFilteringLevel,1, GraphicsUtils.getMaxAnisotropicFilterLevel());
+
+        TextureBinder.bind(this);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        if (GraphicsUtils.isAnisotropicFilteringSupported()) {
+            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropicFilteringLevel);
+        }
+    }
+
+    @Deprecated public Texture(int handle,
                    final int width, final int height,
                    Filter magFilter, Filter minFilter,
                    Wrap uWrap, Wrap vWrap) {
@@ -37,6 +62,7 @@ public class Texture implements MemoryResource {
         this.magFilter = magFilter;
         this.uWrap = uWrap;
         this.vWrap = vWrap;
+        this.anisotropicFilteringLevel = GraphicsUtils.getMaxAnisotropicFilterLevel();
     }
 
     protected final void setSlot(final int slot) { this.slot = slot; }
