@@ -1999,8 +1999,9 @@ public class Renderer2D implements MemoryResourceHolder {
         buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF)); // Alpha component
         buffer.flip();
 
-        return new Texture(1, 1, buffer, Texture.Filter.NEAREST, Texture.Filter.NEAREST,
-                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        return new Texture(1, 1, buffer,
+                Texture.Filter.NEAREST, Texture.Filter.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
     private static Camera createDefaultCamera() {

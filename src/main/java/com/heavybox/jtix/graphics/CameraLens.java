@@ -5,19 +5,20 @@ import com.heavybox.jtix.math.Vector3;
 
 public class CameraLens {
 
-    private final Vector3 tmp = new Vector3();
-    protected Mode mode;
+    private static final Vector3 tmp = new Vector3();
+
+    protected Mode      mode;
     protected Matrix4x4 projection;
     protected Matrix4x4 view;
     protected Matrix4x4 combined;
     protected Matrix4x4 invProjectionView;
-    protected float near;
-    protected float far;
-    protected float fov;
-    protected float zoom;
-    protected float viewportWidth;
-    protected float viewportHeight;
-    protected final CameraLensFrustum frustum;
+    protected float     near;
+    protected float     far;
+    protected float     fov;
+    protected float     zoom;
+    protected float     viewportWidth;
+    protected float     viewportHeight;
+    protected final     CameraLensFrustum frustum;
 
     public CameraLens(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.mode = mode;
