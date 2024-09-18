@@ -85,8 +85,12 @@ public class SceneRendering2D_Textures_4 extends ApplicationScreen {
         renderer2D.setTint(null);
 
         renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+        renderer2D.setTint(Color.BLUE);
+        renderer2D.drawRectangleFilled(400,200, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+
 
         renderer2D.end();
+
 
 
     }

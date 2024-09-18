@@ -14,31 +14,29 @@ import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_AN
 
 public final class GraphicsUtils {
 
-    private static boolean initialized = false;
-    private static ApplicationWindow window;
+    private static ApplicationWindow window = null;
+    private static boolean           initialized = false;
 
-    private static volatile boolean isContinuous = true;
-    private static long lastFrameTime = -1;
-    private static float deltaTime;
+    private static boolean isContinuous = true;
+    private static long    lastFrameTime = -1;
+    private static float   deltaTime;
     private static boolean resetDeltaTime = false;
-    private static long frameId = 0;
-    private static long frameCounterStart = 0;
-    private static int frames = 0;
-    private static int fps;
-    private static int targetFps = 120;
-    private static int prevTargetFps = targetFps;
-    private static int idleFps = 10;
-    private static int maxTextureSize;
-    private static int maxAnisotropicFilterLevel = 0;
-    private static boolean anisotropicFilteringSupported = false;
-
-    private static float contentScaleX;
-    private static float contentScaleY;
+    private static long    frameId = 0;
+    private static long    frameCounterStart = 0;
+    private static int     frames = 0;
+    private static int     fps;
+    private static int     targetFps = 120;
+    private static int     prevTargetFps = targetFps;
+    private static int     idleFps = 10;
+    private static int     maxTextureSize;
+    private static int     maxAnisotropicFilterLevel = 0;
+    private static float   contentScaleX;
+    private static float   contentScaleY;
 
     private GraphicsUtils() {}
 
     public static void init(final ApplicationWindow window) {
-        if (initialized) throw new IllegalStateException(GraphicsUtils.class.getSimpleName() + " instance already initialized.");
+        if (initialized) return;
         GraphicsUtils.window = window;
         maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
 

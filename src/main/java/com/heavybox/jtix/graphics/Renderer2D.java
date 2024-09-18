@@ -1992,24 +1992,15 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     private static Texture createWhiteSinglePixelTexture() {
-        try {
-            return TextureBuilder.buildTextureFromClassPath("graphics-2d-single-white-pixel.png");
-        } catch (Exception e) {
-            System.err.println("Could not create single-white-pixel Texture from resource. Creating manually.");
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF)); // Red component
+        buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));  // Green component
+        buffer.put((byte) (0xFF));                      // Blue component
+        buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF)); // Alpha component
+        buffer.flip();
 
-            ByteBuffer buffer = ByteBuffer.allocateDirect(4);
-            buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF)); // Red component
-            buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));  // Green component
-            buffer.put((byte) (0xFF));                      // Blue component
-            buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF)); // Alpha component
-            buffer.flip();
-
-            return TextureBuilder.buildTextureFromByteBuffer(
-                    1,1, buffer,
-                    Texture.Filter.NEAREST, Texture.Filter.NEAREST,
-                    Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE
-            );
-        }
+        return new Texture(1, 1, buffer, Texture.Filter.NEAREST, Texture.Filter.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
     }
 
     private static Camera createDefaultCamera() {
