@@ -48,23 +48,6 @@ public class Texture implements MemoryResource {
         }
     }
 
-    @Deprecated public Texture(int handle,
-                   final int width, final int height,
-                   Filter magFilter, Filter minFilter,
-                   Wrap uWrap, Wrap vWrap) {
-        this.handle = handle;
-        this.slot = -1;
-        this.width = width;
-        this.height = height;
-        this.invWidth = 1.0f / width;
-        this.invHeight = 1.0f / height;
-        this.minFilter = minFilter;
-        this.magFilter = magFilter;
-        this.uWrap = uWrap;
-        this.vWrap = vWrap;
-        this.anisotropicFilteringLevel = GraphicsUtils.getMaxAnisotropicFilterLevel();
-    }
-
     protected final void setSlot(final int slot) { this.slot = slot; }
     protected final int  getSlot() { return slot; }
 
