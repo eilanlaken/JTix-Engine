@@ -5,15 +5,15 @@ import java.util.Set;
 
 public abstract class UIElementContainer extends UIElement {
 
-    public Set<UIElement> children;
+    protected Set<UIElement> children;
 
-    // TODO: implement
     private void addChild(UIElement element) {
         if (element == null) throw new UIException(UIElement.class.getSimpleName() + " element cannot be null");
         if (element == this) throw new UIException("Trying to parent a " + UIElement.class.getSimpleName() + " to itself.");
-        if (element.parent != null) throw new UIException(UIElement.class.getSimpleName() + " element already has a parent.");
-        // .. conduct more tests: this cannot be a descendant of element etc
+        if (element.descendantOf(this)) throw new UIException(UIElement.class.getSimpleName() + " element is already a descendant of parent.");
+        if (this.descendantOf(element)) throw new UIException("Trying to create circular dependency in UI elements tree");
 
+        if (element.parent != null) element.parent.removeChild(element);
         if (children == null) children = new HashSet<>();
         children.add(element);
         element.parent = this;
@@ -24,5 +24,7 @@ public abstract class UIElementContainer extends UIElement {
         element.parent = null;
         children.remove(element);
     }
+
+
 
 }
