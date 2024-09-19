@@ -40,12 +40,10 @@ public class Color {
     public static final Color VIOLET      = new Color(0xee82eeff);
     public static final Color MAROON      = new Color(0xb03060ff);
 
-
     public float r, g, b, a;
 
     /** Constructs a new Color with all components set to 0. */
     public Color() {
-
     }
 
     /** @see #rgba8888ToColor(Color, int) */

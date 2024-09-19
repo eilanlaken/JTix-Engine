@@ -55,6 +55,7 @@ public class Texture implements MemoryResource {
         }
     }
 
+    // TODO: test
     public Texture(final String path, Filter magFilter, Filter minFilter, Wrap uWrap, Wrap vWrap, int anisotropicFilteringLevel) {
         this.handle = GL11.glGenTextures();
         this.slot = -1;
