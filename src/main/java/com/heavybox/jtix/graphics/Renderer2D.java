@@ -7,6 +7,7 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -250,148 +251,8 @@ public class Renderer2D implements MemoryResourceHolder {
         vectorsPool.free(arm3);
     }
 
-    // FIXME bug when rotating about the xy axis
     public void drawTexture(Texture texture, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        refinement = Math.max(3, refinement);
-        if ((vertexIndex + 1 + refinement * 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (refinement - 1) * 12 + 12 > indicesBuffer.capacity()) flush();
-
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
-
-        float widthHalf  = texture.width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
-        float heightHalf = texture.height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
-        float da = 90.0f / refinement;
-
-        // we store the vertices in this array and apply the transform after, then put them in the buffer
-        Array<Vector2> xy = new Array<>(true, 1 + refinement * 4);
-        Array<Vector2> uv = new Array<>(true, 1 + refinement * 4);
-
-        // add center vertex
-        Vector2 center_xy = vectorsPool.allocate().set(0, 0);
-        Vector2 center_uv = vectorsPool.allocate().set(0.5f, 0.5f);
-        xy.add(center_xy); // center xy
-        uv.add(center_uv); // center uv
-
-        // add upper left corner vertices
-        for (int i = 0; i < refinement; i++) {
-            Vector2 corner_xy = vectorsPool.allocate();
-            corner_xy.set(-r, 0);
-            corner_xy.rotateDeg(-da * i); // rotate clockwise
-            corner_xy.add(-widthHalf + r, heightHalf - r);
-            xy.add(corner_xy);
-
-            Vector2 corner_uv = vectorsPool.allocate();
-//            corner_uv.rotateDeg(-da * i); // rotate clockwise
-//            corner_uv.add(0.5f, 0);
-            corner_uv.set(0, 1);
-            uv.add(corner_uv);
-        }
-
-        // add upper right corner vertices
-        for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
-            corner.set(0, r);
-            corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - r, heightHalf - r);
-            xy.add(corner);
-
-            Vector2 corner_uv = vectorsPool.allocate();
-//            corner_uv.set(0, 0.5f);
-//            corner_uv.rotateDeg(-da * i); // rotate clockwise
-//            corner_uv.add(0, -0.5f);
-            corner_uv.set(1, 1);
-            uv.add(corner_uv);
-        }
-
-        // add lower right corner vertices
-        for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
-            corner.set(r, 0);
-            corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - r, -heightHalf + r);
-            xy.add(corner);
-
-            Vector2 corner_uv = vectorsPool.allocate();
-//            corner_uv.set(0.5f, 0);
-//            corner_uv.rotateDeg(-da * i); // rotate clockwise
-//            corner_uv.add(-0.5f, 0);
-            corner_uv.set(1, 0);
-            uv.add(corner_uv);
-        }
-
-        // add lower left corner vertices
-        for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
-            corner.set(0, -r);
-            corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + r, -heightHalf + r);
-            xy.add(corner);
-
-            Vector2 corner_uv = vectorsPool.allocate();
-//            corner_uv.rotateDeg(-da * i); // rotate clockwise
-//            corner_uv.add(0, 0.5f);
-//            corner_uv.set(0, -0.5f);
-            corner_uv.set(0, 0);
-            uv.add(corner_uv);
-        }
-
-        // transform each vertex, then put it in the buffer + tint + uv
-        scaleX *= MathUtils.cosDeg(angleY);
-        scaleY *= MathUtils.cosDeg(angleX);
-        for (int i = 0; i < xy.size; i++) {
-            Vector2 vertex_xy = xy.get(i).scl(scaleX, scaleY).rotateDeg(angleZ).add(x, y);
-            Vector2 vertex_uv = uv.get(i);
-            verticesBuffer.put(vertex_xy.x).put(vertex_xy.y).put(currentTint).put(vertex_uv.x).put(vertex_uv.y);
-        }
-
-        // put indices
-        int startVertex = this.vertexIndex;
-        // upper left corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 0 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 0 + i + 2);
-        }
-        // upper triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 1 + 0);
-        indicesBuffer.put(startVertex + refinement * 1 + 1);
-        // upper right corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 1 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 1 + i + 2);
-        }
-        // right triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 2 + 0);
-        indicesBuffer.put(startVertex + refinement * 2 + 1);
-        // lower right corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 2 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 2 + i + 2);
-        }
-        // bottom triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 3 + 0);
-        indicesBuffer.put(startVertex + refinement * 3 + 1);
-        // lower left corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 3 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 3 + i + 2);
-        }
-        // right triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 4 + 0);
-        indicesBuffer.put(startVertex + refinement * 0 + 1);
-        vertexIndex += 1 + refinement * 4;
-
-        vectorsPool.freeAll(xy);
-        vectorsPool.freeAll(uv);
+        drawRectangleFilled(texture, texture.width, texture.height, r, refinement, x, y, angleX, angleY, angleZ, scaleX, scaleY);
     }
 
     public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -1017,14 +878,14 @@ public class Renderer2D implements MemoryResourceHolder {
      * @param scaleX the scale around the x-axis (before transform is applied)
      * @param scaleY the scale around the y-axis (before transform is applied)
      */
-    public void drawRectangleFilled(float width, float height, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
         if ((vertexIndex + 1 + refinement * 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + (refinement - 1) * 12 + 12 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(texture);
 
         float widthHalf  = width  * 0.5f;
         float heightHalf = height * 0.5f;
@@ -1032,18 +893,25 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // we store the vertices in this array and apply the transform after, then put them in the buffer
         Array<Vector2> vertices = new Array<>(true, 1 + refinement * 4);
+        Array<Vector2> uvs      = new Array<>(true, 1 + refinement * 4);
 
         // add center vertex
-        Vector2 center = vectorsPool.allocate().set(0, 0);
-        vertices.add(center); // center vertex
+        vertices.add(vectorsPool.allocate().set(0, 0)); // center vertex
+        uvs.add(vectorsPool.allocate().set(0.5f, 0.5f));
 
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
             Vector2 corner = vectorsPool.allocate();
             corner.set(-r, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + r, heightHalf - r);
+            corner.add(-widthHalf + r,heightHalf - r);
             vertices.add(corner);
+
+            // UV: 0,0
+            float u = (corner.x + widthHalf) / width;
+            float v = 1 - (corner.y + heightHalf) / height;
+            Vector2 uv = vectorsPool.allocate().set(u,v);
+            uvs.add(uv);
         }
 
         // add upper right corner vertices
@@ -1053,6 +921,12 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, heightHalf - r);
             vertices.add(corner);
+
+            // UV: 0,1
+            float u = (corner.x + widthHalf) / width;
+            float v = 1 - (corner.y + heightHalf) / height;
+            Vector2 uv = vectorsPool.allocate().set(u,v);
+            uvs.add(uv);
         }
 
         // add lower right corner vertices
@@ -1062,6 +936,12 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, -heightHalf + r);
             vertices.add(corner);
+
+            // UV: 1,1
+            float u = (corner.x + widthHalf) / width;
+            float v = 1 - (corner.y + heightHalf) / height;
+            Vector2 uv = vectorsPool.allocate().set(u,v);
+            uvs.add(uv);
         }
 
         // add lower left corner vertices
@@ -1071,6 +951,12 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r, -heightHalf + r);
             vertices.add(corner);
+
+            // UV: 1,0
+            float u = (corner.x + widthHalf) / width;
+            float v = 1 - (corner.y + heightHalf) / height;
+            Vector2 uv = vectorsPool.allocate().set(u,v);
+            uvs.add(uv);
         }
 
         // transform each vertex, then put it in the buffer + tint + uv
@@ -1078,7 +964,8 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleY *= MathUtils.cosDeg(angleX);
         for (int i = 0; i < vertices.size; i++) {
             Vector2 vertex = vertices.get(i).scl(scaleX, scaleY).rotateDeg(angleZ).add(x, y);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+            Vector2 uv = uvs.get(i);
+            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(uv.x).put(uv.y);
         }
 
         // put indices
