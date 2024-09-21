@@ -11,6 +11,17 @@ public abstract class UIElement {
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
     protected float[] boundsTransformed;
 
+    protected UIElement(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.degX = degX;
+        this.degZ = degZ;
+        this.degY = degY;
+        this.sclX = sclX;
+        this.sclY = sclY;
+    }
+
     public boolean descendantOf(UIElement ancestor) {
         if (!(ancestor instanceof UIElementContainer)) return false;
         UIElementContainer container = (UIElementContainer) ancestor;

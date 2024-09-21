@@ -7,6 +7,10 @@ public abstract class UIElementContainer extends UIElement {
 
     protected Set<UIElement> children;
 
+    public UIElementContainer(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY) {
+        super(x, y, z, degX, degY, degZ, sclX, sclY);
+    }
+
     private void addChild(UIElement element) {
         if (element == null) throw new UIException(UIElement.class.getSimpleName() + " element cannot be null");
         if (element == this) throw new UIException("Trying to parent a " + UIElement.class.getSimpleName() + " to itself.");

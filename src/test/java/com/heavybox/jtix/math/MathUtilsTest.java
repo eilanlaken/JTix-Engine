@@ -78,6 +78,37 @@ class MathUtilsTest {
     }
 
     @Test
+    void polygonContainsPoint() {
+        // Square polygon
+        float[] p1 = new float[] {
+                0.0f, 0.0f, // Bottom left
+                0.0f, 1.0f, // Top left
+                1.0f, 1.0f, // Top right
+                1.0f, 0.0f  // Bottom right
+        };
+
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p1,0.5f,0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p1,0.2f,0.9f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p1,0.9f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p1,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p1,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p1,-1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p1,Float.POSITIVE_INFINITY,0.1f));
+
+        // Triangle polygon
+        float[] trianglePolygon = new float[] {
+                0.0f, 0.0f, // Left corner
+                1.0f, 0.0f, // Right corner
+                0.5f, 1.0f  // Top corner
+        };
+
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(trianglePolygon, 0.5f, 0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(trianglePolygon, 0.5f, 0.0f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(trianglePolygon, 0.0f, 0.0f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(trianglePolygon, 1.0f, 1.0f));
+    }
+
+    @Test
     public void clampFloat() {
         float v1 = MathUtils.clampFloat(0.0f, -1.0f, 1.0f);
         Assertions.assertEquals(0.0f, v1, MathUtils.FLOAT_ROUNDING_ERROR);
