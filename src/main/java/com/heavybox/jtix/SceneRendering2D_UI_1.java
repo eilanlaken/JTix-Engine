@@ -78,12 +78,13 @@ public class SceneRendering2D_UI_1 extends ApplicationScreen {
         GL11.glClearColor(0f,0f,0,1);
         renderer2D.begin(null);
         renderer2D.setTint(null);
-        renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+        //renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
         renderer2D.setTint(null);
 
-        renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+        renderer2D.drawTexture(yellowSquare, t.x,t.y + 200,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
+        renderer2D.drawRectangleFilled(null,200,200, t.x,t.y - 300,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
         renderer2D.end();
 

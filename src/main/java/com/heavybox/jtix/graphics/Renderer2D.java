@@ -940,14 +940,13 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
     }
 
-    // TODO: add Texture parameter
-    public void drawRectangleFilled(float width, float height, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawRectangleFilled(Texture texture, float width, float height, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(texture);
 
         float widthHalf  = width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
         float heightHalf = height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
@@ -973,12 +972,10 @@ public class Renderer2D implements MemoryResourceHolder {
         arm3.y = heightHalf;
         arm3.rotateDeg(angleZ);
 
-        verticesBuffer
-                .put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0.5f).put(0.5f) // V0
-                .put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0.5f).put(0.5f) // V1
-                .put(arm2.x + x).put(arm2.y + y).put(currentTint).put(0.5f).put(0.5f) // V2
-                .put(arm3.x + x).put(arm3.y + y).put(currentTint).put(0.5f).put(0.5f) // V3
-        ;
+        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0).put(0); // V0
+        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0).put(1); // V1
+        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(1).put(1); // V2
+        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(1).put(0); // V3
 
         /* put indices */
         int startVertex = this.vertexIndex;
