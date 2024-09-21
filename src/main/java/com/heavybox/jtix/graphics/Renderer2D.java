@@ -79,6 +79,9 @@ public class Renderer2D implements MemoryResourceHolder {
     private int           currentDFactor = GL11.GL_ONE_MINUS_SRC_ALPHA;
     private int           frameDrawCalls = 0;
 
+    // TODO: scissor
+    private boolean clippingRectangle = false;
+
     public Renderer2D() {
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
@@ -164,6 +167,19 @@ public class Renderer2D implements MemoryResourceHolder {
         if (sFactor != currentSFactor || dFactor != currentDFactor) flush();
         this.currentSFactor = sFactor;
         this.currentDFactor = dFactor;
+    }
+
+    public void setClippingRectangleOn(int x, int y, int width, int height) {
+        if (!clippingRectangle) flush();
+        GL20.glEnable(GL11.GL_SCISSOR_TEST);
+        GL20.glScissor(x, y, width, height);
+        clippingRectangle = true;
+    }
+
+    public void setClippingRectangleOff() {
+        if (clippingRectangle) flush();
+        GL20.glDisable(GL11.GL_SCISSOR_TEST);
+        clippingRectangle = false;
     }
 
     public void setTint(final Color color) {
@@ -924,6 +940,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
     }
 
+    // TODO: add Texture parameter
     public void drawRectangleFilled(float width, float height, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
