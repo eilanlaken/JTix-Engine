@@ -3,6 +3,7 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 
+// TODO: this should be camera
 public class CameraLens {
 
     private final Vector3 tmp = new Vector3();

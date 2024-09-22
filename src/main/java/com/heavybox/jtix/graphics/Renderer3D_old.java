@@ -45,7 +45,7 @@ import org.lwjgl.opengl.GL30;
         float centerZ = modelPart.mesh.boundingSphereCenter.z;
         Vector3 boundingSphereCenter = new Vector3(centerX + transform.x, centerY + transform.y, centerZ + transform.z);
         float boundingSphereRadius = MathUtils.max(transform.scaleX, transform.scaleY, transform.scaleZ) * modelPart.mesh.boundingSphereRadius;
-        if (camera.lens.frustum.intersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
+        if (camera.lens.frustum.frustumIntersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
             System.out.println("intersects");
         } else {
             System.out.println("CULLING");

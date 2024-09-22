@@ -4,7 +4,8 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 
-public class Camera {
+// TODO: this should be ComponentCamera
+@Deprecated public class Camera {
 
     private final Vector3    tmp       = new Vector3();
     public  final Vector3    position  = new Vector3(0,0,0);
@@ -34,11 +35,11 @@ public class Camera {
         return update();
     }
 
-    public void switchToOrthographicMode() {
+    public void setModeOrthographic() {
         lens.mode = CameraLens.Mode.ORTHOGRAPHIC;
     }
 
-    public void switchToPerspectiveMode() {
+    public void setModePerspective() {
         lens.mode = CameraLens.Mode.PERSPECTIVE;
     }
 
