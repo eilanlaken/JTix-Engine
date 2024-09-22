@@ -906,8 +906,6 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r,heightHalf - r);
             vertices.add(corner);
-
-            // UV: 0,0
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
             Vector2 uv = vectorsPool.allocate().set(u,v);
@@ -921,8 +919,6 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, heightHalf - r);
             vertices.add(corner);
-
-            // UV: 0,1
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
             Vector2 uv = vectorsPool.allocate().set(u,v);
@@ -936,8 +932,6 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, -heightHalf + r);
             vertices.add(corner);
-
-            // UV: 1,1
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
             Vector2 uv = vectorsPool.allocate().set(u,v);
@@ -951,8 +945,6 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r, -heightHalf + r);
             vertices.add(corner);
-
-            // UV: 1,0
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
             Vector2 uv = vectorsPool.allocate().set(u,v);
