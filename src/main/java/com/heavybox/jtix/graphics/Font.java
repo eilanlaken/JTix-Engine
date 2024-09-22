@@ -29,7 +29,7 @@ public class Font implements MemoryResource {
 
     @Override
     public void delete() {
-
+        fontAtlas.delete();
     }
 
     public static final class Glyph implements Serializable {

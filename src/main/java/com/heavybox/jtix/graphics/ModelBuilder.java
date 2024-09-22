@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL30;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public final class ModelBuilder {
+@Deprecated public final class ModelBuilder {
 
     // TODO: implement.
     public static ModelPartMesh buildMesh(float[] positions,

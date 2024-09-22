@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_AN
 
 public final class GraphicsUtils {
 
-    private static ApplicationWindow window = null;
+    private static ApplicationWindow window      = null;
     private static boolean           initialized = false;
 
     private static boolean isContinuous = true;
@@ -37,17 +37,16 @@ public final class GraphicsUtils {
 
     public static void init(final ApplicationWindow window) {
         if (initialized) return;
+
         GraphicsUtils.window = window;
         maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
-
         long monitor = GLFW.glfwGetPrimaryMonitor();
-        try (MemoryStack s = MemoryStack.stackPush()) {
-            FloatBuffer px = s.mallocFloat(1);
-            FloatBuffer py = s.mallocFloat(1);
-            GLFW.glfwGetMonitorContentScale(monitor, px, py);
-            contentScaleX = px.get(0);
-            contentScaleY = py.get(0);
-        }
+        /* set content scale */
+        FloatBuffer px = BufferUtils.createFloatBuffer(1);
+        FloatBuffer py = BufferUtils.createFloatBuffer(1);
+        GLFW.glfwGetMonitorContentScale(monitor, px, py);
+        contentScaleX = px.get(0);
+        contentScaleY = py.get(0);
 
         initialized = true;
     }
@@ -152,12 +151,19 @@ public final class GraphicsUtils {
         return getWindowWidth() / (float) getWindowHeight();
     }
 
+    public static int getWindowPositionX() {
+        return window.getPositionX();
+    }
+
+    public static int getWindowPositionY() {
+        return window.getPositionY();
+    }
+
     public static void enableVSync() {
         int refreshRate = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).refreshRate();
         setTargetFps(refreshRate);
         window.setVSync(true);
     }
-
 
     public static int getMaxFragmentShaderTextureUnits() {
         IntBuffer intBuffer = BufferUtils.createIntBuffer(1);

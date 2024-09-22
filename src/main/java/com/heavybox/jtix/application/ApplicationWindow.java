@@ -8,9 +8,11 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryUtil;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -18,13 +20,13 @@ import static org.lwjgl.glfw.GLFW.*;
 public class ApplicationWindow implements MemoryResource {
 
     // compute and auxiliary buffers
-    private final IntBuffer tmpBuffer = BufferUtils.createIntBuffer(1);
-    private final IntBuffer tmpBuffer2 = BufferUtils.createIntBuffer(1);
-    private final long primaryMonitor = GLFW.glfwGetPrimaryMonitor();
-    private final GLFWVidMode videoMode = GLFW.glfwGetVideoMode(primaryMonitor);
+    private final IntBuffer   tmpBuffer  = BufferUtils.createIntBuffer(1);
+    private final IntBuffer   tmpBuffer2 = BufferUtils.createIntBuffer(1);
+    private final long        monitor    = GLFW.glfwGetPrimaryMonitor();
+    private final GLFWVidMode videoMode  = GLFW.glfwGetVideoMode(monitor);
 
     // window attributes
-    private long handle;
+    protected final long handle;
     public ApplicationWindowAttributes attributes;
 
     private boolean focused = false;
@@ -36,9 +38,9 @@ public class ApplicationWindow implements MemoryResource {
     private volatile int logicalHeight;
 
     // state management
-    private Array<Runnable> tasks = new Array<>();
-    private boolean requestRendering = false;
-    private ApplicationScreen screen;
+    private final Array<Runnable>   tasks            = new Array<>();
+    private       boolean           requestRendering = false;
+    private       ApplicationScreen screen;
 
     GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;
@@ -127,7 +129,6 @@ public class ApplicationWindow implements MemoryResource {
         }
     };
 
-    // TODO: set icon
     public ApplicationWindow(ApplicationWindowAttributes attributes) {
         GLFW.glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -225,7 +226,7 @@ public class ApplicationWindow implements MemoryResource {
         return GLFW.glfwWindowShouldClose(handle);
     }
 
-    public void setDecorated(boolean decorated) {
+    protected void setDecorated(boolean decorated) {
         this.attributes.decorated = decorated;
         GLFW.glfwSetWindowAttrib(handle, GLFW.GLFW_DECORATED, decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
     }
@@ -235,18 +236,31 @@ public class ApplicationWindow implements MemoryResource {
         GLFW.glfwSetWindowTitle(handle, title);
     }
 
+    protected void setIcon(final String path) {
+        this.attributes.iconPath = path;
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
+        ByteBuffer imageData = STBImage.stbi_load(path, width, height, channels, 4);
+        if (imageData == null) throw new ApplicationException("Failed to load icon image: " + STBImage.stbi_failure_reason());
+        GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
+        iconBuffer.position(0).width(width.get(0)).height(height.get(0)).pixels(imageData);
+        GLFW.glfwSetWindowIcon(handle, iconBuffer);
+        STBImage.stbi_image_free(imageData);
+    }
+
     protected void setPosition(int x, int y) {
         GLFW.glfwSetWindowPos(handle, x, y);
         attributes.posX = x;
         attributes.posY = y;
     }
 
-    protected int getPositionX() {
+    public int getPositionX() {
         GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
         return tmpBuffer.get(0);
     }
 
-    protected int getPositionY() {
+    public int getPositionY() {
         GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
         return tmpBuffer2.get(0);
     }
@@ -264,7 +278,7 @@ public class ApplicationWindow implements MemoryResource {
         attributes.vSyncEnabled = enabled;
     }
 
-    protected void closeWindow() {
+    protected void close() {
         GLFW.glfwSetWindowShouldClose(handle, true);
     }
 
@@ -286,11 +300,11 @@ public class ApplicationWindow implements MemoryResource {
         GLFW.glfwRequestWindowAttention(handle);
     }
 
-    protected void restoreWindow() {
+    protected void restore() {
         GLFW.glfwRestoreWindow(handle);
     }
 
-    protected void focusWindow() {
+    protected void focus() {
         GLFW.glfwFocusWindow(handle);
     }
 
@@ -314,11 +328,6 @@ public class ApplicationWindow implements MemoryResource {
         this.screen = screen;
         this.screen.show();
         this.screen.window = this;
-    }
-
-    // TODO: implement.
-    public void setIcon() {
-
     }
 
     public void setSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {

@@ -30,7 +30,7 @@ public class TextureBinder {
     }
 
     public static void unbind(Texture texture) {
-        if (texture.handle == 0) throw new GraphicsException("Trying to un-bind " + Texture.class.getSimpleName() + " that was already freed.");
+        if (texture.handle == 0) return;
         int slot = texture.getSlot();
         if (slot < 0) return;
         GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);

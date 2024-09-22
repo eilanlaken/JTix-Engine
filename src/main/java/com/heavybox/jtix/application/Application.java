@@ -27,6 +27,7 @@ public class Application {
         window = new ApplicationWindow(attributes);
         GL.createCapabilities();
         AsyncUtils.init();
+        ApplicationUtils.init(window);
         GraphicsUtils.init(window);
         AssetUtils.init(window);
         Mouse.init(window);
