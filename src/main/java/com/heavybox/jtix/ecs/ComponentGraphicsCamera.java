@@ -5,6 +5,7 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 
+// TODO: add render target, post processing effects, bitmask, extend component, layers, etc.
 public class ComponentGraphicsCamera {
 
     private final Vector3 tmp       = new Vector3();
@@ -12,7 +13,7 @@ public class ComponentGraphicsCamera {
     public  final Vector3 direction = new Vector3(0,0,-1);
     public  final Vector3 up        = new Vector3(0,1,0);
     public  final Vector3 left      = new Vector3();
-    public  final Camera lens;
+    public  final Camera  lens;
 
     public ComponentGraphicsCamera(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, zoom, near, far, fov);

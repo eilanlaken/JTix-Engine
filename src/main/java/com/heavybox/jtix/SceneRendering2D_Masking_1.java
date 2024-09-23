@@ -42,7 +42,6 @@ public class SceneRendering2D_Masking_1 extends ApplicationScreen {
             transforms[i] = new ComponentTransform();
             transforms[i].x = MathUtils.randomUniformFloat(-GraphicsUtils.getWindowWidth() / 2.0f, GraphicsUtils.getWindowWidth() / 2.0f);
             transforms[i].y = MathUtils.randomUniformFloat(-GraphicsUtils.getWindowHeight() / 2.0f, GraphicsUtils.getWindowHeight() / 2.0f);
-
         }
     }
 
