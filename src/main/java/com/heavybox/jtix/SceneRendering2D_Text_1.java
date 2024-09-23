@@ -4,7 +4,7 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.application.ApplicationUtils;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.ecs.ComponentTransform;
-import com.heavybox.jtix.graphics.Camera;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.graphics.Texture;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class SceneRendering2D_Text_1 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private Camera camera;
+    private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
 
@@ -33,8 +33,8 @@ public class SceneRendering2D_Text_1 extends ApplicationScreen {
 
     @Override
     public void show() {
-        camera = new Camera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
-        camera.update();
+        componentGraphicsCamera = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+        componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
     }
 

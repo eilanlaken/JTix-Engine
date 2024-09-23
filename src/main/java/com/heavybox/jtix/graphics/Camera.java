@@ -1,104 +1,138 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 
-// TODO: this should be ComponentCamera
-@Deprecated public class Camera {
+public class Camera {
 
-    private final Vector3    tmp       = new Vector3();
-    public  final Vector3    position  = new Vector3(0,0,0);
-    public  final Vector3    direction = new Vector3(0,0,-1);
-    public  final Vector3    up        = new Vector3(0,1,0);
-    public  final Vector3    left      = new Vector3();
-    public  final CameraLens lens;
+    private final Vector3 tmp = new Vector3();
 
-    public Camera(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
-        this.lens = new CameraLens(CameraLens.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, zoom, near, far, fov);
-        update();
+    public Mode      mode;
+    public Matrix4x4 projection;
+    public Matrix4x4 view;
+    public Matrix4x4 combined;
+    public Matrix4x4 invProjectionView;
+    public float     near;
+    public float     far;
+    public float     fov;
+    public float     zoom;
+    public float     viewportWidth;
+    public float     viewportHeight;
+
+    /* frustum */
+    private final Vector3[] frustumCorners;
+    private final Vector3[] frustumNormals;
+    private final float[]   frustumPlaneDs;
+
+    public Camera(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
+        this.mode = mode;
+        this.viewportWidth = viewportWidth;
+        this.viewportHeight = viewportHeight;
+        this.zoom = zoom;
+        this.near = near;
+        this.far = far;
+        this.fov = fov;
+        this.projection = new Matrix4x4();
+        this.view = new Matrix4x4();
+        this.combined = new Matrix4x4();
+        this.invProjectionView = new Matrix4x4();
+
+        this.frustumCorners = new Vector3[8];
+        for (int i = 0; i < 8; i++) {
+            this.frustumCorners[i] = new Vector3();
+        }
+        this.frustumNormals = new Vector3[6];
+        for (int i = 0; i < 6; i++) {
+            this.frustumNormals[i] = new Vector3();
+        }
+        this.frustumPlaneDs = new float[6];
     }
 
-    public Camera(float viewportWidth, float viewportHeight, float zoom) {
-        this(viewportWidth, viewportHeight, zoom, 0.1f, 100, 70);
+    public void update(Vector3 position, Vector3 direction, Vector3 up) {
+        switch (mode) {
+            case ORTHOGRAPHIC:
+                projection.setToOrthographicProjection(zoom * -viewportWidth / 2.0f, zoom * (viewportWidth / 2.0f), zoom * -(viewportHeight / 2.0f), zoom * viewportHeight / 2.0f, 0, far);
+                break;
+            case PERSPECTIVE:
+                this.projection.setToPerspectiveProjection(Math.abs(near), Math.abs(far), fov, viewportWidth / viewportHeight);
+                break;
+        }
+        view.setToLookAt(position, tmp.set(position).add(direction), up);
+        combined.set(projection);
+        Matrix4x4.mul(combined.val, view.val);
+        invProjectionView.set(combined);
+        Matrix4x4.inv(invProjectionView.val);
+
+        /* Update frustum corners by taking the canonical cube and un-projecting it. */
+        /* The canonical cube is a cube, centered at the origin, with 8 corners: (+-1, +-1, +-1). Also known as OpenGL "clipping volume".*/
+        frustumCorners[0].set(-1,-1,-1).prj(invProjectionView);
+        frustumCorners[1].set( 1,-1,-1).prj(invProjectionView);
+        frustumCorners[2].set( 1, 1,-1).prj(invProjectionView);
+        frustumCorners[3].set(-1, 1,-1).prj(invProjectionView);
+        frustumCorners[4].set(-1,-1, 1).prj(invProjectionView);
+        frustumCorners[5].set( 1,-1, 1).prj(invProjectionView);
+        frustumCorners[6].set( 1, 1, 1).prj(invProjectionView);
+        frustumCorners[7].set(-1, 1, 1).prj(invProjectionView);
+
+        /* Update the frustum's clipping plane normal and d values. */
+        frustumSetClippingPlane(0, frustumCorners[1], frustumCorners[0], frustumCorners[2]); // near
+        frustumSetClippingPlane(1, frustumCorners[4], frustumCorners[5], frustumCorners[7]); // far
+        frustumSetClippingPlane(2, frustumCorners[0], frustumCorners[4], frustumCorners[3]); // left
+        frustumSetClippingPlane(3, frustumCorners[5], frustumCorners[1], frustumCorners[6]); // right
+        frustumSetClippingPlane(4, frustumCorners[2], frustumCorners[3], frustumCorners[6]); // top
+        frustumSetClippingPlane(5, frustumCorners[4], frustumCorners[0], frustumCorners[1]); // bottom
     }
 
-    public Camera update() {
-        left.set(up).crs(direction);
-        lens.update(position, direction, up);
-        return this;
+    private void frustumSetClippingPlane(int i, Vector3 point1, Vector3 point2, Vector3 point3) {
+        this.frustumNormals[i].set(point1).sub(point2).crs(point2.x - point3.x, point2.y - point3.y, point2.z - point3.z).nor();
+        this.frustumPlaneDs[i] = -1 * Vector3.dot(point1, this.frustumNormals[i]);
     }
 
-    public Camera update(float viewportWidth, float viewportHeight) {
-        lens.viewportWidth  = viewportWidth;
-        lens.viewportHeight = viewportHeight;
-        return update();
+    public void unProject(Vector3 screenCoordinates) {
+        unProject(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), screenCoordinates);
     }
 
-    public void setModeOrthographic() {
-        lens.mode = CameraLens.Mode.ORTHOGRAPHIC;
+    public boolean frustumIntersectsSphere(final Vector3 center, final float r) {
+        for (int i = 0; i < 6; i++) {
+            float signedDistance = frustumNormals[i].x * center.x + frustumNormals[i].y * center.y + frustumNormals[i].z * center.z + frustumPlaneDs[i];
+            float diff = signedDistance + r;
+            if (diff < 0) return false;
+        }
+        return true;
     }
 
-    public void setModePerspective() {
-        lens.mode = CameraLens.Mode.PERSPECTIVE;
+    public void unProject(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 screenCoordinates) {
+        float x = screenCoordinates.x - viewportX, y = GraphicsUtils.getWindowHeight() - screenCoordinates.y - viewportY;
+        screenCoordinates.x = (2 * x) / viewportWidth - 1;
+        screenCoordinates.y = (2 * y) / viewportHeight - 1;
+        screenCoordinates.z = 2 * screenCoordinates.z - 1;
+        screenCoordinates.prj(invProjectionView);
     }
 
-    public void lookAt(float x, float y, float z) {
-        tmp.set(x, y, z).sub(position).nor();
-        if (tmp.isZero()) return;
-        float dot = Vector3.dot(tmp, up);
-        if (Math.abs(dot - 1) < 0.000000001f) up.set(direction).scl(-1);
-        else if (Math.abs(dot + 1) < 0.000000001f) up.set(direction);
-        direction.set(tmp);
-        normalizeUp();
-        left.set(up).crs(direction);
+    public void project(Vector3 worldCoordinates) {
+        project(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), worldCoordinates);
     }
 
-    public void normalizeUp() {
-        tmp.set(direction).crs(up);
-        up.set(tmp).crs(direction).nor();
+    public void project(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 worldCoordinates) {
+        worldCoordinates.prj(combined);
+        worldCoordinates.x = viewportWidth * (worldCoordinates.x + 1) / 2 + viewportX;
+        worldCoordinates.y = viewportHeight * (worldCoordinates.y + 1) / 2 + viewportY;
+        worldCoordinates.z = (worldCoordinates.z + 1) / 2;
     }
 
-    public void rotate(float angle, float axisX, float axisY, float axisZ) {
-        direction.rotate(angle, axisX, axisY, axisZ);
-        up.rotate(angle, axisX, axisY, axisZ);
+    public float getViewportWidth() {
+        return viewportWidth;
     }
 
-    public void rotate(Vector3 axis, float angle) {
-        direction.rotate(axis, angle);
-        up.rotate(axis, angle);
+    public float getViewportHeight() {
+        return viewportHeight;
     }
 
-    public void rotate(final Matrix4x4 transform) {
-        direction.rot(transform);
-        up.rot(transform);
-    }
+    public enum Mode {
 
-    public void rotate(final Quaternion q) {
-        q.transform(direction);
-        q.transform(up);
-    }
+        ORTHOGRAPHIC,
+        PERSPECTIVE,
+        ;
 
-    public void rotateAround(Vector3 point, Vector3 axis, float angle) {
-        tmp.set(point);
-        tmp.sub(position);
-        translate(tmp);
-        rotate(axis, angle);
-        tmp.rotate(axis, angle);
-        translate(-tmp.x, -tmp.y, -tmp.z);
     }
-
-    public void transform(final Matrix4x4 transform) {
-        position.mul(transform);
-        rotate(transform);
-    }
-
-    public void translate(float x, float y, float z) {
-        position.add(x, y, z);
-    }
-
-    public void translate(Vector3 vec) {
-        position.add(vec);
-    }
-
 }

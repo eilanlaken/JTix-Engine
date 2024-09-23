@@ -1,6 +1,7 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.ecs.ComponentTransform_1;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector3;
@@ -13,7 +14,7 @@ import org.lwjgl.opengl.GL30;
 
     private boolean drawing;
     private ShaderProgram currentShader;
-    private Camera camera;
+    private ComponentGraphicsCamera componentGraphicsCamera;
 
     public Renderer3D_old() {
         this.drawing = false;
@@ -24,10 +25,10 @@ import org.lwjgl.opengl.GL30;
         ShaderProgramBinder.bind(shader);
     }
 
-    public void setCamera(final Camera camera) {
-        this.currentShader.bindUniform("u_camera_position", camera.position);
-        this.currentShader.bindUniform("u_camera_combined", camera.lens.combined);
-        this.camera = camera;
+    public void setCamera(final ComponentGraphicsCamera componentGraphicsCamera) {
+        this.currentShader.bindUniform("u_camera_position", componentGraphicsCamera.position);
+        this.currentShader.bindUniform("u_camera_combined", componentGraphicsCamera.lens.combined);
+        this.componentGraphicsCamera = componentGraphicsCamera;
     }
 
     // TODO: implement. Don't forget about the lights transform.
@@ -45,7 +46,7 @@ import org.lwjgl.opengl.GL30;
         float centerZ = modelPart.mesh.boundingSphereCenter.z;
         Vector3 boundingSphereCenter = new Vector3(centerX + transform.x, centerY + transform.y, centerZ + transform.z);
         float boundingSphereRadius = MathUtils.max(transform.scaleX, transform.scaleY, transform.scaleZ) * modelPart.mesh.boundingSphereRadius;
-        if (camera.lens.frustumIntersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
+        if (componentGraphicsCamera.lens.frustumIntersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
             System.out.println("intersects");
         } else {
             System.out.println("CULLING");

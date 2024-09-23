@@ -3,6 +3,7 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
@@ -61,7 +62,7 @@ Known bugs:
     /* defaults */
     private final ShaderProgram defaultShader = createDefaultShaderProgram();
     private final Texture       whitePixel    = createWhiteSinglePixelTexture();
-    private final Camera        defaultCamera = createDefaultCamera();
+    private final ComponentGraphicsCamera defaultComponentGraphicsCamera = createDefaultCamera();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectorsPool    = new MemoryPool<>(Vector2.class, 10);
@@ -69,7 +70,7 @@ Known bugs:
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private Camera        currentCamera  = null;
+    private ComponentGraphicsCamera currentComponentGraphicsCamera = null;
     private Texture       currentTexture = null;
     private ShaderProgram currentShader  = null;
     private float         currentTint    = WHITE_TINT;
@@ -104,8 +105,8 @@ Known bugs:
         GL30.glBindVertexArray(0);
     }
 
-    public Camera getCurrentCamera() {
-        return currentCamera;
+    public ComponentGraphicsCamera getCurrentCamera() {
+        return currentComponentGraphicsCamera;
     }
 
     public boolean isDrawing() {
@@ -116,14 +117,14 @@ Known bugs:
         begin(null);
     }
 
-    public void begin(Camera camera) {
+    public void begin(ComponentGraphicsCamera componentGraphicsCamera) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D_old.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.frameDrawCalls = 0;
-        this.currentCamera = camera != null ? camera : defaultCamera.update(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
+        this.currentComponentGraphicsCamera = componentGraphicsCamera != null ? componentGraphicsCamera : defaultComponentGraphicsCamera.update(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
         setShader(defaultShader);
         setShaderAttributes(null);
         setTexture(whitePixel);
@@ -139,7 +140,7 @@ Known bugs:
         if (currentShader != shader) {
             flush();
             ShaderProgramBinder.bind(shader);
-            shader.bindUniform("u_camera_combined", currentCamera.lens.combined);
+            shader.bindUniform("u_camera_combined", currentComponentGraphicsCamera.lens.combined);
             shader.bindUniform("u_texture", currentTexture);
         }
         currentShader = shader;
@@ -1814,7 +1815,7 @@ Known bugs:
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        currentCamera = null;
+        currentComponentGraphicsCamera = null;
         currentShader = null;
         drawing = false;
     }
@@ -1897,8 +1898,8 @@ Known bugs:
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
-    private static Camera createDefaultCamera() {
-        Camera c = new Camera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+    private static ComponentGraphicsCamera createDefaultCamera() {
+        ComponentGraphicsCamera c = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
         c.update();
         System.out.println(GraphicsUtils.getWindowWidth());
         System.out.println(GraphicsUtils.getWindowHeight());

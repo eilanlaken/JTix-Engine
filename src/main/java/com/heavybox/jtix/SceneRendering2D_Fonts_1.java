@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Mouse;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private Camera camera;
+    private ComponentGraphicsCamera componentGraphicsCamera;
 
     ComponentTransform t = new ComponentTransform();
 
@@ -30,8 +31,8 @@ public class SceneRendering2D_Fonts_1 extends ApplicationScreen {
 
     @Override
     public void show() {
-        camera = new Camera(640f/32,480f/32, 1);
-        camera.update();
+        componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
+        componentGraphicsCamera.update();
 
         fontMap = AssetStore.get("assets/fonts/fontBitmap.png");
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("assets/fonts/fontBitmap"))) {

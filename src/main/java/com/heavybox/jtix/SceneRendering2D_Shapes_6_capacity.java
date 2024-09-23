@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class SceneRendering2D_Shapes_6_capacity extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private Camera camera;
+    private ComponentGraphicsCamera componentGraphicsCamera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
     private float blue = new Color(0,0,1,0.4f).toFloatBits();
@@ -32,8 +33,8 @@ public class SceneRendering2D_Shapes_6_capacity extends ApplicationScreen {
 
     @Override
     public void show() {
-        camera = new Camera(640f/32,480f/32, 1);
-        camera.update();
+        componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
+        componentGraphicsCamera.update();
         shaderYellow = AssetStore.get("assets/shaders/graphics-2d-shader-yellow");
 
     }
@@ -77,12 +78,12 @@ public class SceneRendering2D_Shapes_6_capacity extends ApplicationScreen {
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
             System.out.println(baseR + dr);
-            camera.lens.unProject(screen);
+            componentGraphicsCamera.lens.unProject(screen);
             x = screen.x;
             y = screen.y;
         }
 
-        renderer2DOld.begin(camera);
+        renderer2DOld.begin(componentGraphicsCamera);
         renderer2DOld.setTint(red);
         //renderer2D.drawCircleFilled(1f, 1400, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, 1498, 0, 0, 0,0,0,1,1);

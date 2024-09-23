@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.ecs.Component;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.ecs.ComponentTransform_1;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
@@ -19,7 +20,7 @@ public class SceneRendering3D_1 extends ApplicationScreen {
     private Model model;
     private ShaderProgram shader;
     private ComponentTransform_1 transform;
-    private Camera camera;
+    private ComponentGraphicsCamera componentGraphicsCamera;
 
 
     public SceneRendering3D_1() {
@@ -30,7 +31,7 @@ public class SceneRendering3D_1 extends ApplicationScreen {
         this.shader = new ShaderProgram(vertexShaderSrc, fragmentShaderSrc);
 
 
-        this.camera = new Camera(100, 100, 1, 0.1f, 100, 70);
+        this.componentGraphicsCamera = new ComponentGraphicsCamera(100, 100, 1, 0.1f, 100, 70);
 
     }
 
@@ -99,7 +100,7 @@ public class SceneRendering3D_1 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0,0,0,1);
         renderer3DOld.begin(shader);
-        renderer3DOld.setCamera(camera);
+        renderer3DOld.setCamera(componentGraphicsCamera);
         renderer3DOld.draw(model.parts[0], transform);
         //renderer3DOld.draw(model.parts[1], transform3D.matrix4);
         renderer3DOld.end();

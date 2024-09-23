@@ -2,6 +2,7 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
@@ -28,7 +29,7 @@ public class Renderer3D implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private Camera        currentCamera  = null;
+    private ComponentGraphicsCamera currentComponentGraphicsCamera = null;
     private Texture       currentTexture = null;
     private ShaderProgram currentShader  = null;
     private boolean       drawing        = false;

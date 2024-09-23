@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.graphics.Camera;
+import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.input.Keyboard;
@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 public class ScenePhysics2D_Better_1 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private Camera camera;
+    private ComponentGraphicsCamera componentGraphicsCamera;
     private World world = new World();
 
     private Body body_a;
@@ -28,8 +28,8 @@ public class ScenePhysics2D_Better_1 extends ApplicationScreen {
 
     @Override
     public void show() {
-        camera = new Camera(640f/32,480f/32, 1);
-        camera.update();
+        componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
+        componentGraphicsCamera.update();
 
         world.createBodyRectangle(null, Body.MotionType.STATIC,
                 -2.5f, 4,-30,
@@ -57,7 +57,7 @@ public class ScenePhysics2D_Better_1 extends ApplicationScreen {
     protected void refresh() {
         world.update(GraphicsUtils.getDeltaTime());
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
-        camera.lens.unProject(screen);
+        componentGraphicsCamera.lens.unProject(screen);
         world.castRay((intersections) -> {
 
         }, 0,0, screen.x, screen.y, Float.POSITIVE_INFINITY);
@@ -89,7 +89,7 @@ public class ScenePhysics2D_Better_1 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0,0,0,1);
 
-        renderer2DOld.begin(camera);
+        renderer2DOld.begin(componentGraphicsCamera);
         world.render(renderer2DOld);
         renderer2DOld.end();
     }
