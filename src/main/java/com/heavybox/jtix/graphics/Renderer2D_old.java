@@ -1898,7 +1898,14 @@ Known bugs:
     }
 
     private static Camera createDefaultCamera() {
-        return new Camera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+        Camera c = new Camera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+        c.update();
+        System.out.println(GraphicsUtils.getWindowWidth());
+        System.out.println(GraphicsUtils.getWindowHeight());
+        System.out.println("prj: " + c.lens.projection);
+        System.out.println("view: " + c.lens.view);
+        System.out.println("combined: " + c.lens.combined);
+        return c;
     }
 
 }

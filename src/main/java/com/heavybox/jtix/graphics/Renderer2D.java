@@ -4,7 +4,9 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
+import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +45,7 @@ public class Renderer2D implements MemoryResourceHolder {
     /* defaults */
     private final ShaderProgram defaultShader = createDefaultShaderProgram();
     private final Texture       whitePixel    = createWhiteSinglePixelTexture();
-    private final Camera        defaultCamera = createDefaultCamera();
+    private final Matrix4x4     defaultMatrix = createDefaultMatrix();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectorsPool    = new MemoryPool<>(Vector2.class, 10);
@@ -51,7 +53,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private Camera        currentCamera  = null;
+    private Matrix4x4     currentMatrix  = null;
     private Texture       currentTexture = null;
     private ShaderProgram currentShader  = null;
     private float         currentTint    = WHITE_TINT;
@@ -86,8 +88,8 @@ public class Renderer2D implements MemoryResourceHolder {
         GL30.glBindVertexArray(0);
     }
 
-    public Camera getCurrentCamera() {
-        return currentCamera;
+    public Matrix4x4 getCurrentCamera() {
+        return currentMatrix;
     }
 
     public boolean isDrawing() {
@@ -98,14 +100,14 @@ public class Renderer2D implements MemoryResourceHolder {
         begin(null);
     }
 
-    public void begin(Camera camera) {
+    public void begin(Matrix4x4 combined) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.frameDrawCalls = 0;
-        this.currentCamera = camera != null ? camera : defaultCamera.update(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
+        this.currentMatrix = combined != null ? combined : defaultMatrix.setToOrthographicProjection(-GraphicsUtils.getWindowWidth() / 2.0f, GraphicsUtils.getWindowWidth() / 2.0f, -GraphicsUtils.getWindowHeight() / 2.0f, GraphicsUtils.getWindowHeight() / 2.0f, 0, 100);
         setShader(defaultShader);
         setShaderAttributes(null);
         setTexture(whitePixel);
@@ -121,7 +123,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (currentShader != shader) {
             flush();
             ShaderProgramBinder.bind(shader);
-            shader.bindUniform("u_camera_combined", currentCamera.lens.combined);
+            shader.bindUniform("u_camera_combined", currentMatrix);
             shader.bindUniform("u_texture", currentTexture);
         }
         currentShader = shader;
@@ -294,7 +296,6 @@ public class Renderer2D implements MemoryResourceHolder {
         vectorsPool.free(arm3);
     }
 
-    // TODO: test
     public void drawTextureRegion(TexturePack.Region region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
@@ -1796,7 +1797,7 @@ public class Renderer2D implements MemoryResourceHolder {
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        currentCamera = null;
+        currentMatrix = null;
         currentShader = null;
         drawing = false;
     }
@@ -1879,8 +1880,8 @@ public class Renderer2D implements MemoryResourceHolder {
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
-    private static Camera createDefaultCamera() {
-        return new Camera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+    private static Matrix4x4 createDefaultMatrix() {
+        return new Matrix4x4().setToOrthographicProjection(-GraphicsUtils.getWindowWidth() / 2.0f, GraphicsUtils.getWindowWidth() / 2.0f, -GraphicsUtils.getWindowHeight() / 2.0f, GraphicsUtils.getWindowHeight() / 2.0f, 0, 100);
     }
 
 }
