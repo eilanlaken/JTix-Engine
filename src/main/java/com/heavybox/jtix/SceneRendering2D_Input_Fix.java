@@ -4,7 +4,7 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.graphics.ShaderProgram;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.memory.MemoryResource;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Input_Fix extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
@@ -26,7 +26,7 @@ public class SceneRendering2D_Input_Fix extends ApplicationScreen {
     private ShaderProgram shaderYellow;
 
     public SceneRendering2D_Input_Fix() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
     }
 
     @Override
@@ -57,15 +57,15 @@ public class SceneRendering2D_Input_Fix extends ApplicationScreen {
         }
 
 
-        renderer2D.begin(camera);
-        renderer2D.setTint(red);
+        renderer2DOld.begin(camera);
+        renderer2DOld.setTint(red);
         //renderer2D.drawCircleFilled(1f, 1400, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, 1498, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, baseR + dr, 0, 0, 0,0,0,1,1);
-        renderer2D.drawCircleFilled(1f, baseR + dr, x, y, 0,0,0,1,1);
+        renderer2DOld.drawCircleFilled(1f, baseR + dr, x, y, 0,0,0,1,1);
 
         //renderer2D.drawCircleFilled(1f, 1498, -2, 0, 0,0,0,1,1);
-        renderer2D.end();
+        renderer2DOld.end();
     }
 
     float dx = 0;
@@ -79,7 +79,7 @@ public class SceneRendering2D_Input_Fix extends ApplicationScreen {
     public void resize(int width, int height) { }
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

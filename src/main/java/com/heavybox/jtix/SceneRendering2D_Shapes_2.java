@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
@@ -26,7 +26,7 @@ public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
     private ShaderProgram shaderYellow;
 
     public SceneRendering2D_Shapes_2() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
     }
 
     @Override
@@ -61,8 +61,8 @@ public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1f,1f,0,1);
 
-        renderer2D.begin(camera);
-        renderer2D.setTint(blue);
+        renderer2DOld.begin(camera);
+        renderer2DOld.setTint(blue);
         //renderer2D.drawCurveFilled(0.6f, 10, vs);
 
         // TODO: FIX HERE
@@ -73,7 +73,7 @@ public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
 
 
 
-        renderer2D.end();
+        renderer2DOld.end();
     }
 
     float dy = 0;
@@ -83,7 +83,7 @@ public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
 
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

@@ -5,11 +5,7 @@ import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -47,9 +43,9 @@ public class Renderer3D implements MemoryResourceHolder {
     }
 
     private static ShaderProgram createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D_old.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D_old.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

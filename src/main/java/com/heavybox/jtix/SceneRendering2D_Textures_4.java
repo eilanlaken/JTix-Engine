@@ -6,8 +6,6 @@ import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
@@ -17,7 +15,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Textures_4 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
 
     Texture yellowSquare;
@@ -25,7 +23,7 @@ public class SceneRendering2D_Textures_4 extends ApplicationScreen {
     ComponentTransform t = new ComponentTransform();
 
     public SceneRendering2D_Textures_4() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
 
     }
 
@@ -78,18 +76,18 @@ public class SceneRendering2D_Textures_4 extends ApplicationScreen {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
-        renderer2D.begin(null);
-        renderer2D.setTint(null);
-        renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+        renderer2DOld.begin(null);
+        renderer2DOld.setTint(null);
+        renderer2DOld.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
-        renderer2D.setTint(null);
+        renderer2DOld.setTint(null);
 
-        renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
-        renderer2D.setTint(Color.BLUE);
+        renderer2DOld.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+        renderer2DOld.setTint(Color.BLUE);
         //renderer2D.drawRectangleFilled(400,200, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
 
-        renderer2D.end();
+        renderer2DOld.end();
 
 
 
@@ -103,7 +101,7 @@ public class SceneRendering2D_Textures_4 extends ApplicationScreen {
     public void resize(int width, int height) { }
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

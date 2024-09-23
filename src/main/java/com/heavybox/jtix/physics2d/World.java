@@ -1,7 +1,7 @@
 package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
@@ -321,7 +321,7 @@ public class World {
 
     }
 
-    public void render(Renderer2D renderer) {
+    public void render(Renderer2D_old renderer) {
         debugRenderer.render(renderer);
     }
 

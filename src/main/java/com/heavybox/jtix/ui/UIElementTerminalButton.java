@@ -2,7 +2,7 @@ package com.heavybox.jtix.ui;
 
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.graphics.Texture;
 
 public class UIElementTerminalButton extends UIElementTerminal {
@@ -93,7 +93,7 @@ public class UIElementTerminalButton extends UIElementTerminal {
     }
 
     @Override
-    public void draw(Renderer2D renderer) {
+    public void draw(Renderer2D_old renderer) {
         if (mesh != null) {
             renderer.drawMeshFilled(mesh, texture, x, y, degX, degY, degZ, sclX, sclY);
         }

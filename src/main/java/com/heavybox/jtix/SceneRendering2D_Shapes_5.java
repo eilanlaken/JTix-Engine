@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_5 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
@@ -26,7 +26,7 @@ public class SceneRendering2D_Shapes_5 extends ApplicationScreen {
     private ShaderProgram shaderYellow;
 
     public SceneRendering2D_Shapes_5() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
     }
 
     @Override
@@ -67,8 +67,8 @@ public class SceneRendering2D_Shapes_5 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
 
-        renderer2D.begin(camera);
-        renderer2D.setTint(blue);
+        renderer2DOld.begin(camera);
+        renderer2DOld.setTint(blue);
 
 
 
@@ -86,11 +86,11 @@ public class SceneRendering2D_Shapes_5 extends ApplicationScreen {
 
         //renderer2D.drawCurveFilled(2f, 33, first, new Vector2(0,0), last); // works but only for small refinement values?!?!?!
         //renderer2D.drawCurveFilled(2f, 5, first, new Vector2(0,0), last); // works but only for small refinement values?!?!?!
-        renderer2D.drawCurveFilled(2f, 5, first, new Vector2(0,0)); // works but only for small refinement values?!?!?!
+        renderer2DOld.drawCurveFilled(2f, 5, first, new Vector2(0,0)); // works but only for small refinement values?!?!?!
 
 
 
-        renderer2D.end();
+        renderer2DOld.end();
     }
 
     float dx = 0;
@@ -101,7 +101,7 @@ public class SceneRendering2D_Shapes_5 extends ApplicationScreen {
     public void resize(int width, int height) { }
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

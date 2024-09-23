@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ui;
 
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
@@ -73,6 +73,6 @@ public abstract class UIElement {
     public abstract void onMouseRightUp();
     public abstract void onMouseScroll();
 
-    public abstract void draw(Renderer2D renderer);
+    public abstract void draw(Renderer2D_old renderer);
 
 }

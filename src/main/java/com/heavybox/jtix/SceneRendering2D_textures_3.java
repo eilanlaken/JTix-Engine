@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SceneRendering2D_textures_3 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
 
     private TexturePack pack;
@@ -24,7 +24,7 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
     TexturePack.Region region_blue;
 
     public SceneRendering2D_textures_3() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
 
     }
 
@@ -59,14 +59,14 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
-        renderer2D.begin(null);
-        renderer2D.setTint(Color.RED);
-        renderer2D.drawCircleBorder(300, 30,  50,  0, 0,  0,  a,  0,  1,  1);
-        renderer2D.setTint(null);
-        renderer2D.drawTextureRegion(region_blue, 0,0,0,0,0,1,1);
-        renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
-        renderer2D.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
-        renderer2D.end();
+        renderer2DOld.begin(null);
+        renderer2DOld.setTint(Color.RED);
+        renderer2DOld.drawCircleBorder(300, 30,  50,  0, 0,  0,  a,  0,  1,  1);
+        renderer2DOld.setTint(null);
+        renderer2DOld.drawTextureRegion(region_blue, 0,0,0,0,0,1,1);
+        renderer2DOld.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
+        renderer2DOld.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
+        renderer2DOld.end();
     }
 
 
@@ -77,7 +77,7 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
     public void resize(int width, int height) { }
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

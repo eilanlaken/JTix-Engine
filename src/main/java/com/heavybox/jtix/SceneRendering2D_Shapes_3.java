@@ -4,7 +4,7 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.graphics.ShaderProgram;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_3 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
@@ -29,7 +29,7 @@ public class SceneRendering2D_Shapes_3 extends ApplicationScreen {
     private ShaderProgram shaderYellow;
 
     public SceneRendering2D_Shapes_3() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
     }
 
     @Override
@@ -69,15 +69,15 @@ public class SceneRendering2D_Shapes_3 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0f,1);
 
-        renderer2D.begin(camera);
-        renderer2D.setTint(blue);
+        renderer2DOld.begin(camera);
+        renderer2DOld.setTint(blue);
 
         //renderer2D.drawCurveFilled(1f, new Vector2(-4,0), new Vector2(0,0), new Vector2(4,4));
 
         if (Keyboard.isKeyPressed(Keyboard.Key.W)) dy += 1f;
         if (Keyboard.isKeyPressed(Keyboard.Key.S)) dy -= 1f;
 
-        renderer2D.setTint(new Color(1,0,0,0.2f));
+        renderer2DOld.setTint(new Color(1,0,0,0.2f));
 
         Vector2 last = new Vector2(1f,0);
         last.rotateDeg(dy);
@@ -92,17 +92,17 @@ public class SceneRendering2D_Shapes_3 extends ApplicationScreen {
             for (int i = 0; i < verts.length - 1; i += 2) {
                 Vector2 v_up = verts[i];
                 Vector2 v_down = verts[i + 1];
-                renderer2D.setTint(Color.RED);
-                renderer2D.drawCircleFilled(0.05f, 10, v_up.x, v_up.y, 0,0,0,1,1);
-                renderer2D.setTint(Color.BLUE);
-                renderer2D.drawCircleFilled(0.05f, 10, v_down.x, v_down.y, 0,0,0,1,1);
+                renderer2DOld.setTint(Color.RED);
+                renderer2DOld.drawCircleFilled(0.05f, 10, v_up.x, v_up.y, 0,0,0,1,1);
+                renderer2DOld.setTint(Color.BLUE);
+                renderer2DOld.drawCircleFilled(0.05f, 10, v_down.x, v_down.y, 0,0,0,1,1);
             }
 
         } else {
             //renderer2D.drawCurveFilled_final(1f, 2, new Vector2(-3,0), new Vector2(0,0), new Vector2(-3,0));
         }
 
-        renderer2D.end();
+        renderer2DOld.end();
     }
 
     float dy = 0;
@@ -112,7 +112,7 @@ public class SceneRendering2D_Shapes_3 extends ApplicationScreen {
 
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

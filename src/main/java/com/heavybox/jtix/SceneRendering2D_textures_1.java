@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SceneRendering2D_textures_1 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
 
     private Texture texture;
@@ -22,7 +22,7 @@ public class SceneRendering2D_textures_1 extends ApplicationScreen {
     private TexturePack pack;
 
     public SceneRendering2D_textures_1() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
 
     }
 
@@ -54,11 +54,11 @@ public class SceneRendering2D_textures_1 extends ApplicationScreen {
         }
 
         //renderer2D.begin(camera);
-        renderer2D.begin(null);
+        renderer2DOld.begin(null);
         //renderer2D.drawTexture(texture, 0,0,0,0,0,1,1);
-        renderer2D.drawTexture(texture,u1,v1,u2,v2,0,-200,0,0,a,1,1);
-        renderer2D.drawTexture(texture,0,0,1f,1f,0,200,0,0,0,1,1);
-        renderer2D.end();
+        renderer2DOld.drawTexture(texture,u1,v1,u2,v2,0,-200,0,0,a,1,1);
+        renderer2DOld.drawTexture(texture,0,0,1f,1f,0,200,0,0,0,1,1);
+        renderer2DOld.end();
     }
 
 
@@ -69,7 +69,7 @@ public class SceneRendering2D_textures_1 extends ApplicationScreen {
     public void resize(int width, int height) { }
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

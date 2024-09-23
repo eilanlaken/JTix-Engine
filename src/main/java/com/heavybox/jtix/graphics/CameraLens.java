@@ -19,7 +19,10 @@ public class CameraLens {
     protected float     zoom;
     protected float     viewportWidth;
     protected float     viewportHeight;
-    protected final     CameraLensFrustum frustum;
+
+    private   final Vector3[] frustumCorners;
+    private   final Vector3[] frustumNormals;
+    private   final float[]   frustumPlaneDs;
 
     public CameraLens(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.mode = mode;
@@ -33,7 +36,16 @@ public class CameraLens {
         this.view = new Matrix4x4();
         this.combined = new Matrix4x4();
         this.invProjectionView = new Matrix4x4();
-        this.frustum = new CameraLensFrustum();
+
+        this.frustumCorners = new Vector3[8];
+        for (int i = 0; i < 8; i++) {
+            this.frustumCorners[i] = new Vector3();
+        }
+        this.frustumNormals = new Vector3[6];
+        for (int i = 0; i < 6; i++) {
+            this.frustumNormals[i] = new Vector3();
+        }
+        this.frustumPlaneDs = new float[6];
     }
 
     public void update(Vector3 position, Vector3 direction, Vector3 up) {
@@ -50,11 +62,43 @@ public class CameraLens {
         Matrix4x4.mul(combined.val, view.val);
         invProjectionView.set(combined);
         Matrix4x4.inv(invProjectionView.val);
-        frustum.update(invProjectionView);
+
+        /* Update frustum corners by taking the canonical cube and un-projecting it. */
+        /* The canonical cube is a cube, centered at the origin, with 8 corners: (+-1, +-1, +-1). Also known as OpenGL "clipping volume".*/
+        frustumCorners[0].set(-1,-1,-1).prj(invProjectionView);
+        frustumCorners[1].set( 1,-1,-1).prj(invProjectionView);
+        frustumCorners[2].set( 1, 1,-1).prj(invProjectionView);
+        frustumCorners[3].set(-1, 1,-1).prj(invProjectionView);
+        frustumCorners[4].set(-1,-1, 1).prj(invProjectionView);
+        frustumCorners[5].set( 1,-1, 1).prj(invProjectionView);
+        frustumCorners[6].set( 1, 1, 1).prj(invProjectionView);
+        frustumCorners[7].set(-1, 1, 1).prj(invProjectionView);
+
+        /* Update the frustum's clipping plane normal and d values. */
+        frustumSetClippingPlane(0, frustumCorners[1], frustumCorners[0], frustumCorners[2]); // near
+        frustumSetClippingPlane(1, frustumCorners[4], frustumCorners[5], frustumCorners[7]); // far
+        frustumSetClippingPlane(2, frustumCorners[0], frustumCorners[4], frustumCorners[3]); // left
+        frustumSetClippingPlane(3, frustumCorners[5], frustumCorners[1], frustumCorners[6]); // right
+        frustumSetClippingPlane(4, frustumCorners[2], frustumCorners[3], frustumCorners[6]); // top
+        frustumSetClippingPlane(5, frustumCorners[4], frustumCorners[0], frustumCorners[1]); // bottom
+    }
+
+    private void frustumSetClippingPlane(int i, Vector3 point1, Vector3 point2, Vector3 point3) {
+        this.frustumNormals[i].set(point1).sub(point2).crs(point2.x - point3.x, point2.y - point3.y, point2.z - point3.z).nor();
+        this.frustumPlaneDs[i] = -1 * Vector3.dot(point1, this.frustumNormals[i]);
     }
 
     public void unProject(Vector3 screenCoordinates) {
         unProject(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), screenCoordinates);
+    }
+
+    public boolean frustumIntersectsSphere(final Vector3 center, final float r) {
+        for (int i = 0; i < 6; i++) {
+            float signedDistance = frustumNormals[i].x * center.x + frustumNormals[i].y * center.y + frustumNormals[i].z * center.z + frustumPlaneDs[i];
+            float diff = signedDistance + r;
+            if (diff < 0) return false;
+        }
+        return true;
     }
 
     public void unProject(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 screenCoordinates) {

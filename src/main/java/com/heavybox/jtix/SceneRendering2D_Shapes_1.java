@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_1 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
@@ -25,7 +25,7 @@ public class SceneRendering2D_Shapes_1 extends ApplicationScreen {
     private ShaderProgram shaderYellow;
 
     public SceneRendering2D_Shapes_1() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
     }
 
     @Override
@@ -65,8 +65,8 @@ public class SceneRendering2D_Shapes_1 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1f,1f,0,1);
 
-        renderer2D.begin(camera);
-        renderer2D.setTint(blue);
+        renderer2DOld.begin(camera);
+        renderer2DOld.setTint(blue);
 //        renderer2D.drawCircleFilled(3, 3, 0, 8, 0, 0, 0, 1, 1);
 //        renderer2D.drawCircleFilled(3, -3, 0, 8, 0, 0, 0, 1, 1);
 //        renderer2D.drawCircleBorder(1, 0.2f,60, 0,-3, ay,0,0,1, 1);
@@ -127,24 +127,24 @@ public class SceneRendering2D_Shapes_1 extends ApplicationScreen {
             //renderer2D.drawCurveFilled(1f, new Vector2(-4, 0), new Vector2(0, 0), new Vector2(4, -4 + dy * 2));
 
             // V
-            renderer2D.setTint(red);
+            renderer2DOld.setTint(red);
 //            renderer2D.drawCircleFilled(0.1f, 10, -1.7316718f, 4.134164f, 0, 0, 0, 1,1);
 //            renderer2D.drawCircleFilled(0.1f, 10, -1.9820062f, 4.29946f, 0, 0, 0, 1,1);
 //            renderer2D.drawCircleFilled(0.1f, 10, -2.250364f, 4.165281f, 0, 0, 0, 1,1);
 //            renderer2D.drawCircleFilled(0.1f, 10, -2.2683282f, 3.865836f, 0, 0, 0, 1,1);
 
-            renderer2D.setTint(Color.WHITE);
+            renderer2DOld.setTint(Color.WHITE);
             //renderer2D.drawCircleFilled(0.1f, 10, -2.0f, 4.0f, 0, 0, 0, 1,1);
 
 
 
             //renderer2D.drawCurveFilled(0.6f, new Vector2(-2,4), new Vector2(0,0), new Vector2(2,4));
-            renderer2D.setTint(new Color(0,0,0,0.2f));
+            renderer2DOld.setTint(new Color(0,0,0,0.2f));
             //renderer2D.drawCurveFilled(0.6f, 3,  new Vector2(-2,4 + dy), new Vector2(0,0), new Vector2(2,4 + dy));
             //renderer2D.drawCurveFilled(0.6f, 12,  new Vector2(-2,4 + dy - 3), new Vector2(0,0 - 3), new Vector2(2,4 + dy - 3));
 
         }
-        renderer2D.end();
+        renderer2DOld.end();
     }
 
     float dy = 0;
@@ -154,7 +154,7 @@ public class SceneRendering2D_Shapes_1 extends ApplicationScreen {
 
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

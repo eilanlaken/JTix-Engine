@@ -25,7 +25,25 @@ import java.util.HashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Renderer2D implements MemoryResourceHolder {
+// TODO: drawing filled curves.
+// https://www.codeproject.com/Articles/226569/Drawing-polylines-by-tessellation
+// https://math.stackexchange.com/questions/15815/how-to-union-many-polygons-efficiently
+// https://github.com/CrushedPixel/Polyline2D
+// https://github.com/tyt2y3/vaserenderer
+// https://www.codeproject.com/Articles/226569/Drawing-polylines-by-tessellation
+// https://hypertolosana.github.io/efficient-webgl-stroking/index.html
+// https://hypertolosana.github.io/efficient-webgl-stroking/stroking.js
+
+/*
+Known bugs:
+    //private static final int   VERTICES_CAPACITY = 1000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
+    //private static final int   INDICES_CAPACITY  = VERTICES_CAPACITY * 2;
+
+    When the vertices capacity is small enough, for big enough number of vertices rendered, it will draw nothing.
+    When decreasing on the fly, it will draw something, then if increasing again past the bug limit, it will draw correctly
+    again.
+ */
+@Deprecated public class Renderer2D_old implements MemoryResourceHolder {
 
     /* constants */
     private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
@@ -65,7 +83,7 @@ public class Renderer2D implements MemoryResourceHolder {
     // TODO: scissor
     private boolean clippingRectangle = false;
 
-    public Renderer2D() {
+    public Renderer2D_old() {
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
         {
@@ -99,7 +117,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void begin(Camera camera) {
-        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
+        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D_old.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
@@ -1792,7 +1810,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void end() {
-        if (!drawing) throw new GraphicsException("Called " + Renderer2D.class.getSimpleName() + ".end() without calling " + Renderer2D.class.getSimpleName() + ".begin() first.");
+        if (!drawing) throw new GraphicsException("Called " + Renderer2D_old.class.getSimpleName() + ".end() without calling " + Renderer2D_old.class.getSimpleName() + ".begin() first.");
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -1813,9 +1831,9 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Create defaults: shader, texture (single white pixel), camera */
 
     private static ShaderProgram createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D_old.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D_old.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

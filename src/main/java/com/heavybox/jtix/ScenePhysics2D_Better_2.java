@@ -3,7 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.GraphicsUtils;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
@@ -15,14 +15,14 @@ import org.lwjgl.opengl.GL11;
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
 public class ScenePhysics2D_Better_2 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
     private World world = new World();
 
     private Body body_a;
 
     public ScenePhysics2D_Better_2() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
     }
 
     @Override
@@ -69,9 +69,9 @@ public class ScenePhysics2D_Better_2 extends ApplicationScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0,0,0,1);
 
-        renderer2D.begin(camera);
-        world.render(renderer2D);
-        renderer2D.end();
+        renderer2DOld.begin(camera);
+        world.render(renderer2DOld);
+        renderer2DOld.end();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ScenePhysics2D_Better_2 extends ApplicationScreen {
 
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override

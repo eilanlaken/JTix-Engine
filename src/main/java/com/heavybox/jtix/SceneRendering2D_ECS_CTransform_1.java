@@ -2,9 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
-import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.ecs.ComponentTransform;
-import com.heavybox.jtix.ecs.ComponentTransform_$;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -12,22 +10,14 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.stb.STBTTBakedChar;
-import org.lwjgl.stb.STBTTFontinfo;
-import org.lwjgl.stb.STBTruetype;
-import org.lwjgl.system.MemoryStack;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old renderer2DOld;
     private Camera camera;
 
     private TexturePack pack;
@@ -41,7 +31,7 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
     ComponentTransform t = new ComponentTransform();
 
     public SceneRendering2D_ECS_CTransform_1() {
-        renderer2D = new Renderer2D();
+        renderer2DOld = new Renderer2D_old();
 
     }
 
@@ -129,19 +119,19 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
-        renderer2D.begin(null);
-        renderer2D.setTint(null);
-        renderer2D.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
+        renderer2DOld.begin(null);
+        renderer2DOld.setTint(null);
+        renderer2DOld.drawTexture(yellowSquare, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,t.scaleX,t.scaleY);
 
-        renderer2D.setTint(null);
-        renderer2D.drawTextureRegion(region_blue, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,2*t.scaleX,2*t.scaleY);
-        renderer2D.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
-        renderer2D.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
+        renderer2DOld.setTint(null);
+        renderer2DOld.drawTextureRegion(region_blue, t.x,t.y,t.angleXDeg,t.angleYDeg,t.angleZDeg,2*t.scaleX,2*t.scaleY);
+        renderer2DOld.drawTextureRegion(region_red, 0,0,0,0,0,1,1);
+        renderer2DOld.drawTextureRegion(region_green, 0,0,0,0,0,1,1);
 
-        renderer2D.drawMeshFilled(mesh, null, 0,0,0,0,0,1,1);
+        renderer2DOld.drawMeshFilled(mesh, null, 0,0,0,0,0,1,1);
 
 
-        renderer2D.end();
+        renderer2DOld.end();
 
 
 
@@ -155,7 +145,7 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
     public void resize(int width, int height) { }
     @Override
     public void hide() {
-        renderer2D.deleteAll();
+        renderer2DOld.deleteAll();
     }
 
     @Override
