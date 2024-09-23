@@ -1457,8 +1457,11 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    // TODO: bug here when step is small
     public void drawCurveFilled(float min, float max, float step, float stroke, int refinement, Function<Float, Float> f) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        step = Math.abs(step);
+        if (MathUtils.isZero(step)) return; // TODO: maybe set a default value.
         if (min > max) {
             float tmp = min;
             min = max;
@@ -1479,6 +1482,10 @@ public class Renderer2D implements MemoryResourceHolder {
         vectorsPool.freeAll(points);
     }
 
+    // TODO: bug here when rendering many points.
+    // TODO: bug here: truncating unexpectedly
+    // speculation: probably the buffer is too small to contain the curve.
+    // so it tries to flush
     public void drawCurveFilled(float stroke, int refinement, final Vector2... pointsInput) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (pointsInput.length == 0) return;
@@ -1676,15 +1683,20 @@ public class Renderer2D implements MemoryResourceHolder {
             vectorsPool.freeAll(midPoints);
         }
 
-
         /* put vertices and indices. */
         int startVertex = this.vertexIndex;
+        int advance = 0;
         for (int i = 0; i < vertices.size; i++) {
             Vector2 vertex = vertices.get(i);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
-            indicesBuffer.put(startVertex + i);
+            advance = i;
+            try {
+                verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+                indicesBuffer.put(startVertex + i);
+            } catch (Exception e) {
+                break;
+            }
         }
-        vertexIndex += vertices.size;
+        vertexIndex += advance;
 
         /* free resources */
         vectorsPool.freeAll(vertices);

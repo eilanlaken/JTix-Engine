@@ -63,9 +63,11 @@ public class SceneRendering2D_Masking_1 extends ApplicationScreen {
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
             t.y += 10f;
+            step++;
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
             t.y -= 10f;
+            step--;
         }
 
 
@@ -106,7 +108,7 @@ public class SceneRendering2D_Masking_1 extends ApplicationScreen {
                 new Vector2(200,-200), new Vector2(400,-400));
 
         renderer2D.setTint(Color.BLUE);
-        renderer2D.drawCurveFilled(-400,400,40,40,20, x -> 400 * MathUtils.sinDeg(x));
+        renderer2D.drawCurveFilled(-400,400,step,40,20, x -> 400 * MathUtils.sinDeg(x));
 
         renderer2D.end();
 
@@ -117,6 +119,7 @@ public class SceneRendering2D_Masking_1 extends ApplicationScreen {
 
     float u1,v1,u2 = 0.5f,v2 = 0.5f;
     float a = 0;
+    float step = 20;
 
     @Override
     public void resize(int width, int height) { }
