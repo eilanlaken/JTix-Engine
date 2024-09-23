@@ -45,7 +45,7 @@ public final class MathUtils {
      */
     public static int randomUniformInt(int a, int b) {
         if (((long) b - a >= Integer.MAX_VALUE)) throw new MathException("invalid range: [" + a + ", " + b + ")");
-        if (b <= a) {
+        if (b < a) {
             int c = a;
             a = b;
             b = c;
@@ -62,8 +62,10 @@ public final class MathUtils {
      * @throws MathException unless {@code a < b}
      */
     public static float randomUniformFloat(float a, float b) {
-        if (!(a < b)) {
-            throw new MathException("invalid range: [" + a + ", " + b + ")");
+        if (b < a) {
+            float c = a;
+            a = b;
+            b = c;
         }
         return a + random.nextFloat() * (b-a);
     }

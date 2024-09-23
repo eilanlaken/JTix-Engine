@@ -56,6 +56,12 @@ public class MemoryPool<T extends MemoryPool.Reset> {
         }
     }
 
+    public void freeAll(T[] array) {
+        for (T obj : array) {
+            free(obj);
+        }
+    }
+
     public interface Reset {
 
         void reset();

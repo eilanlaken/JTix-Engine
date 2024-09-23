@@ -1457,6 +1457,28 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    public void drawCurveFilled(float min, float max, float step, float stroke, int refinement, Function<Float, Float> f) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (min > max) {
+            float tmp = min;
+            min = max;
+            max = tmp;
+        }
+        int pointCount = (int) ((max - min) / step) + 1;
+        Vector2[] points = new Vector2[pointCount];
+        for (int i = 0; i < pointCount; i++) {
+            Vector2 point = vectorsPool.allocate();
+            float x = min + i * step;
+            float y = f.apply(x);
+            point.x = x;
+            point.y = y;
+            points[i] = point;
+        }
+
+        drawCurveFilled(stroke, refinement, points);
+        vectorsPool.freeAll(points);
+    }
+
     public void drawCurveFilled(float stroke, int refinement, final Vector2... pointsInput) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (pointsInput.length == 0) return;
