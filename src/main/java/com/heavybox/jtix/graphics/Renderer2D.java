@@ -64,8 +64,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private int           currentDFactor = GL11.GL_ONE_MINUS_SRC_ALPHA;
     private int           frameDrawCalls = 0;
 
-    // TODO: scissor
-    private boolean clippingRectangle = false;
+    // TODO: masking
+
 
     public Renderer2D() {
         this.vao = GL30.glGenVertexArrays();
@@ -120,51 +120,38 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void setShader(ShaderProgram shader) {
         if (shader == null) shader = defaultShader;
-        if (currentShader != shader) {
-            flush();
-            ShaderProgramBinder.bind(shader);
-            shader.bindUniform("u_camera_combined", currentMatrix);
-            shader.bindUniform("u_texture", currentTexture);
-        }
+        if (currentShader == shader) return;
+        flush();
+        ShaderProgramBinder.bind(shader);
+        shader.bindUniform("u_camera_combined", currentMatrix);
+        shader.bindUniform("u_texture", currentTexture);
         currentShader = shader;
     }
 
     public void setTexture(Texture texture) {
         if (texture == null) texture = whitePixel;
-        if (currentTexture != texture) flush();
+        if (currentTexture == texture) return;
+        flush();
         currentTexture = texture;
         currentShader.bindUniform("u_texture", currentTexture);
     }
 
     public void setShaderAttributes(HashMap<String, Object> customAttributes) {
-        if (customAttributes != null) {
-            flush();
-            currentShader.bindUniforms(customAttributes);
-        }
+        flush();
+        currentShader.bindUniforms(customAttributes);
     }
 
     private void setMode(final int mode) {
-        if (mode != this.currentMode) flush();
+        if (currentMode == mode) return;
+        flush();
         this.currentMode = mode;
     }
 
     public void setBlending(int sFactor, int dFactor) {
-        if (sFactor != currentSFactor || dFactor != currentDFactor) flush();
+        if (currentSFactor == sFactor && currentDFactor == dFactor) return;
+        flush();
         this.currentSFactor = sFactor;
         this.currentDFactor = dFactor;
-    }
-
-    public void setClippingRectangleOn(int x, int y, int width, int height) {
-        if (!clippingRectangle) flush();
-        GL20.glEnable(GL11.GL_SCISSOR_TEST);
-        GL20.glScissor(x, y, width, height);
-        clippingRectangle = true;
-    }
-
-    public void setClippingRectangleOff() {
-        if (clippingRectangle) flush();
-        GL20.glDisable(GL11.GL_SCISSOR_TEST);
-        clippingRectangle = false;
     }
 
     public void setTint(final Color color) {
