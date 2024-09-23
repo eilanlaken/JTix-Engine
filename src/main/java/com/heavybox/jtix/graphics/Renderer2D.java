@@ -11,10 +11,7 @@ import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -64,9 +61,6 @@ public class Renderer2D implements MemoryResourceHolder {
     private int           currentDFactor = GL11.GL_ONE_MINUS_SRC_ALPHA;
     private int           frameDrawCalls = 0;
 
-    // TODO: masking
-
-
     public Renderer2D() {
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
@@ -114,6 +108,31 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTint(WHITE_TINT);
         this.drawing = true;
+    }
+
+    // TODO: masking
+    /* Masking */
+    //TODO: test
+    public void beginStencil(Matrix4x4 combined) {
+        // Enable stencil testing
+        GL11C.glEnable(GL11.GL_STENCIL_TEST);
+
+        // Configure the stencil function to always pass, and replace stencil values with 1
+        GL11C.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);  // Always pass the test
+        GL11C.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // Replace stencil buffer with 1 where drawn
+        GL11C.glStencilMask(0xFF);                // Enable writing to the stencil buffer
+        GL11C.glClear(GL11.GL_STENCIL_BUFFER_BIT);     // Clear the stencil buffer
+
+        // Disable writing to the color buffer (only stencil buffer should be affected)
+        GL11C.glColorMask(false, false, false, false);
+    }
+
+    //TODO: test
+    public void endStencil() {
+        // Re-enable writing to the color buffer
+        GL11.glColorMask(true, true, true, true);
+        // Disable further modifications to the stencil buffer (only use the stencil test)
+        GL20.glStencilMask(0x00);
     }
 
     /* State */
