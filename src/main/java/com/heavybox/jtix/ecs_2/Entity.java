@@ -6,15 +6,54 @@ public abstract class Entity {
     protected int handle;
     protected int bitmask;
 
+    private final ComponentTransform transform;
+
     protected Entity(float x, float y, float z,
                      float degX, float degY, float degZ,
                      float sclX, float sclY, float sclZ) {
-
+        this.transform = new ComponentTransform(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
     }
 
-    protected abstract ComponentAudio    createComponentAudio();
-    protected abstract ComponentGraphics createComponentGraphics();
-    protected abstract ComponentPhysics  createComponentPhysics();
-    protected abstract ComponentLogicsScript createComponentScripts();
+    final              ComponentTransform createComponentTransform() { return transform;}
+    protected abstract ComponentAudio     createComponentAudio();
+    protected abstract ComponentGraphics  createComponentGraphics();
+    protected abstract ComponentPhysics   createComponentPhysics();
+    protected abstract ComponentLogics    createComponentLogics();
+    protected abstract ComponentSignals   createComponentSignals();
+    protected abstract ComponentRegion    createComponentRegion();
+
+    public final ComponentTransform getComponentTransform() {
+        return transform;
+    }
+
+    public final ComponentAudio getComponentAudio() {
+        if (handle == -1) return null;
+        return container.audios.get(handle);
+    }
+
+    public final ComponentGraphics getComponentGraphics() {
+        if (handle == -1) return null;
+        return container.graphics.get(handle);
+    }
+
+    public final ComponentPhysics getComponentPhysics() {
+        if (handle == -1) return null;
+        return container.physics.get(handle);
+    }
+
+    public final ComponentLogics getComponentLogics() {
+        if (handle == -1) return null;
+        return container.logics.get(handle);
+    }
+
+    public final ComponentSignals getComponentSignals() {
+        if (handle == -1) return null;
+        return container.signals.get(handle);
+    }
+
+    public final ComponentRegion getComponentRegion() {
+        if (handle == -1) return null;
+        return container.regions.get(handle);
+    }
 
 }
