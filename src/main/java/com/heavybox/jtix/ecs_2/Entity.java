@@ -15,6 +15,6 @@ public abstract class Entity {
     protected abstract ComponentAudio    createComponentAudio();
     protected abstract ComponentGraphics createComponentGraphics();
     protected abstract ComponentPhysics  createComponentPhysics();
-    protected abstract ComponentScripts  createComponentScripts();
+    protected abstract ComponentLogicsScript createComponentScripts();
 
 }

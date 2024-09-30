@@ -1,8 +1,8 @@
 package com.heavybox.jtix.ecs_2;
 
-public class SystemScripting extends System {
+public class SystemLogic extends System {
 
-    SystemScripting(final EntityContainer container) {
+    SystemLogic(final EntityContainer container) {
         super(container);
     }
 
