@@ -4,13 +4,26 @@ public abstract class Entity {
 
     protected EntityContainer container;
     protected int handle;
-    protected int bitmask;
+    protected int componentsBitmask;
 
     private final ComponentTransform transform;
+    protected final Enum category;
+    protected final int categoryBitmask;
 
-    protected Entity(float x, float y, float z,
+    protected Entity(Enum category) {
+        this(category,0,0,0,0,0,0,1,1,1);
+    }
+
+    protected Entity(Enum category, float x, float y, float z, float degZ) {
+        this(category, x, y, z, 0, 0, degZ, 1, 1, 1);
+    }
+
+    protected Entity(Enum category,
+                     float x, float y, float z,
                      float degX, float degY, float degZ,
                      float sclX, float sclY, float sclZ) {
+        this.category = category;
+        this.categoryBitmask = ECSUtils.getCategoryBitmask(category);
         this.transform = new ComponentTransform(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
     }
 

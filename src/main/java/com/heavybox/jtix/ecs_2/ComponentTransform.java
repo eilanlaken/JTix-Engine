@@ -5,7 +5,7 @@ import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
-public class ComponentTransform extends Component {
+public class ComponentTransform implements Component {
 
     private static final Vector3    position = new Vector3();
     private static final Quaternion rotation = new Quaternion();
@@ -78,6 +78,11 @@ public class ComponentTransform extends Component {
     public Matrix4x4 matrix() {
         if (!matrixUpdated) updateMatrix();
         return matrix;
+    }
+
+    @Override
+    public final int getBitmask() {
+        return Type.TRANSFORM.bitmask;
     }
 
 }

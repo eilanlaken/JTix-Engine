@@ -1,4 +1,4 @@
 package com.heavybox.jtix.ecs_2;
 
-public class ComponentRegionTexture extends Component implements ComponentRegion {
+public class ComponentRegionTexture implements ComponentRegion {
 }

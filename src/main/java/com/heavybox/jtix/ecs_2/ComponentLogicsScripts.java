@@ -2,7 +2,7 @@ package com.heavybox.jtix.ecs_2;
 
 import com.heavybox.jtix.collections.Array;
 
-public class ComponentLogicsScripts extends Component implements ComponentLogics {
+public class ComponentLogicsScripts implements ComponentLogics {
 
     public Array<ComponentLogicsScript> scripts;
 
