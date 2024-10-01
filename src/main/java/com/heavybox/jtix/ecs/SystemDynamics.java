@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ecs;
 
-public final class SystemDynamics extends System {
+public class SystemDynamics extends System {
 
     SystemDynamics(final EntityContainer container) {
         super(container);
@@ -8,7 +8,7 @@ public final class SystemDynamics extends System {
 
     @Override
     protected boolean shouldProcess(Entity entity) {
-        return true;
+        return false;
     }
 
     @Override
@@ -30,5 +30,4 @@ public final class SystemDynamics extends System {
     protected void fixedUpdate(float delta) {
 
     }
-
 }

@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.ecs.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.input.Keyboard;
