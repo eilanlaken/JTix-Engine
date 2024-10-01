@@ -3,10 +3,7 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Vector2;
-import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.math.*;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +26,7 @@ import java.util.stream.Collectors;
 // TODO: - creating the transform matrix
 // TODO: - applying it to all the vertices
 // TODO: only this way perspective rendering is possible.
-public class Renderer2D implements MemoryResourceHolder {
+@Deprecated public class Renderer2D_old_2 implements MemoryResourceHolder {
 
     /* constants */
     private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
@@ -67,7 +64,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private int           currentDFactor = GL11.GL_ONE_MINUS_SRC_ALPHA;
     private int           frameDrawCalls = 0;
 
-    public Renderer2D() {
+    public Renderer2D_old_2() {
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
         {
@@ -101,7 +98,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void begin(Matrix4x4 combined) {
-        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
+        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D_old_2.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
@@ -191,63 +188,6 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Rendering API */
 
     /* Rendering 2D primitives - Textures */
-
-    // TODO: test. using different cameras etc.
-    public void drawTexture(Texture texture, final Matrix4x4 transform) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
-
-        setTexture(texture);
-        setMode(GL11.GL_TRIANGLES);
-
-        float widthHalf  = texture.width  * 0.5f;
-        float heightHalf = texture.height * 0.5f;
-
-        Vector3 arm0 = vectors3Pool.allocate();
-        Vector3 arm1 = vectors3Pool.allocate();
-        Vector3 arm2 = vectors3Pool.allocate();
-        Vector3 arm3 = vectors3Pool.allocate();
-
-        arm0.x = -widthHalf;
-        arm0.y =  heightHalf;
-
-        arm1.x = -widthHalf;
-        arm1.y = -heightHalf;
-
-        arm2.x =  widthHalf;
-        arm2.y = -heightHalf;
-
-        arm3.x = widthHalf;
-        arm3.y = heightHalf;
-
-        arm0.mul(transform);
-        arm1.mul(transform);
-        arm2.mul(transform);
-        arm3.mul(transform);
-
-        /* put vertices */
-        verticesBuffer.put(arm0.x).put(arm0.y).put(currentTint).put(0).put(0); // V0
-        verticesBuffer.put(arm1.x).put(arm1.y).put(currentTint).put(0).put(1); // V1
-        verticesBuffer.put(arm2.x).put(arm2.y).put(currentTint).put(1).put(1); // V2
-        verticesBuffer.put(arm3.x).put(arm3.y).put(currentTint).put(1).put(0); // V3
-
-        /* put indices */
-        int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        vertexIndex += 4;
-
-        /* free resources */
-        vectors3Pool.free(arm0);
-        vectors3Pool.free(arm1);
-        vectors3Pool.free(arm2);
-        vectors3Pool.free(arm3);
-    }
 
     public void drawTexture(Texture texture, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
@@ -1896,7 +1836,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void end() {
-        if (!drawing) throw new GraphicsException("Called " + Renderer2D.class.getSimpleName() + ".end() without calling " + Renderer2D.class.getSimpleName() + ".begin() first.");
+        if (!drawing) throw new GraphicsException("Called " + Renderer2D_old_2.class.getSimpleName() + ".end() without calling " + Renderer2D_old_2.class.getSimpleName() + ".begin() first.");
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -1917,9 +1857,9 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Create defaults: shader, texture (single white pixel), camera */
 
     private static ShaderProgram createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D_old_2.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D_old_2.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

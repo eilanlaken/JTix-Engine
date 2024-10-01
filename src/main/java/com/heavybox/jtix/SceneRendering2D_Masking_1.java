@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Masking_1 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old_2 renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
@@ -29,7 +29,7 @@ public class SceneRendering2D_Masking_1 extends ApplicationScreen {
     ComponentTransform[] transforms = new ComponentTransform[10];
 
     public SceneRendering2D_Masking_1() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer2D_old_2();
         System.out.println(GraphicsUtils.getContentScaleX());
     }
 
