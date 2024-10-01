@@ -75,8 +75,10 @@ public class ComponentTransform implements Component {
         matrixUpdated = true;
     }
 
+    // TODO
     public Matrix4x4 matrix() {
-        if (!matrixUpdated) updateMatrix();
+        //if (!matrixUpdated) updateMatrix();
+        updateMatrix();
         return matrix;
     }
 

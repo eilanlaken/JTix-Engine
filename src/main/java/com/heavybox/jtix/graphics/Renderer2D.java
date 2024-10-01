@@ -3,10 +3,8 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Vector2;
-import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.math.*;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.jetbrains.annotations.Nullable;
@@ -209,6 +207,8 @@ public class Renderer2D implements MemoryResourceHolder {
         Vector3 arm2 = vectors3Pool.allocate();
         Vector3 arm3 = vectors3Pool.allocate();
 
+
+
         arm0.x = -widthHalf;
         arm0.y =  heightHalf;
 
@@ -221,10 +221,26 @@ public class Renderer2D implements MemoryResourceHolder {
         arm3.x = widthHalf;
         arm3.y = heightHalf;
 
+        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
+            System.out.println("Before:");
+            System.out.println(arm0);
+        }
+
+        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
+            System.out.println("Transform:");
+            System.out.println(transform);
+        }
+
         arm0.mul(transform);
         arm1.mul(transform);
         arm2.mul(transform);
         arm3.mul(transform);
+
+        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
+            System.out.println("After:");
+            System.out.println(arm0);
+        }
+
 
         /* put vertices */
         verticesBuffer.put(arm0.x).put(arm0.y).put(currentTint).put(0).put(0); // V0
