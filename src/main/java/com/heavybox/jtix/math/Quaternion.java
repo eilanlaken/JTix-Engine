@@ -40,7 +40,7 @@ public class Quaternion implements MemoryPool.Reset {
      * @param axis The axis
      * @param angle The angle in degrees. */
     public Quaternion(Vector3 axis, float angle) {
-        this.set(axis, angle);
+        this.setDeg(axis, angle);
     }
 
     /** Sets the components of the quaternion
@@ -69,8 +69,8 @@ public class Quaternion implements MemoryPool.Reset {
      * @param axis The axis
      * @param angle The angle in degrees
      * @return This quaternion for chaining. */
-    public Quaternion set(Vector3 axis, float angle) {
-        return setFromAxis(axis.x, axis.y, axis.z, angle);
+    public Quaternion setDeg(Vector3 axis, float angle) {
+        return setFromAxisDeg(axis.x, axis.y, axis.z, angle);
     }
 
     /** @return a copy of this quaternion */
@@ -79,7 +79,7 @@ public class Quaternion implements MemoryPool.Reset {
     }
 
     /** @return the euclidean length of the specified quaternion */
-    public final static float len (final float x, final float y, final float z, final float w) {
+    public final static float len(final float x, final float y, final float z, final float w) {
         return (float)Math.sqrt(x * x + y * y + z * z + w * w);
     }
 
@@ -370,8 +370,8 @@ public class Quaternion implements MemoryPool.Reset {
      * @param axis The axis
      * @param degrees The angle in degrees
      * @return This quaternion for chaining. */
-    public Quaternion setFromAxis(final Vector3 axis, final float degrees) {
-        return setFromAxis(axis.x, axis.y, axis.z, degrees);
+    public Quaternion setFromAxisDeg(final Vector3 axis, final float degrees) {
+        return setFromAxisDeg(axis.x, axis.y, axis.z, degrees);
     }
 
     /** Sets the quaternion components from the given axis and angle around that axis.
@@ -389,7 +389,7 @@ public class Quaternion implements MemoryPool.Reset {
      * @param z Z direction of the axis
      * @param degrees The angle in degrees
      * @return This quaternion for chaining. */
-    public Quaternion setFromAxis(final float x, final float y, final float z, final float degrees) {
+    public Quaternion setFromAxisDeg(final float x, final float y, final float z, final float degrees) {
         return setFromAxisRad(x, y, z, degrees * MathUtils.degreesToRadians);
     }
 

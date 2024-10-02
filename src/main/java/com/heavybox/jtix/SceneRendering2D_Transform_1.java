@@ -3,14 +3,13 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.application.ApplicationUtils;
 import com.heavybox.jtix.assets.AssetStore;
-import com.heavybox.jtix.graphics.Color;
+import com.heavybox.jtix.ecs.ComponentTransform2;
+import com.heavybox.jtix.ecs.ComponentTransform3;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
@@ -27,7 +26,9 @@ public class SceneRendering2D_Transform_1 extends ApplicationScreen {
 
     Texture yellowSquare;
 
-    ComponentTransform t = new ComponentTransform();
+    ComponentTransform t1 = new ComponentTransform();
+    ComponentTransform2 t2 = new ComponentTransform2();
+    ComponentTransform3 t3 = new ComponentTransform3();
 
     public SceneRendering2D_Transform_1() {
         renderer2D = new Renderer2D();
@@ -51,44 +52,57 @@ public class SceneRendering2D_Transform_1 extends ApplicationScreen {
             System.out.println(GraphicsUtils.getWindowPositionY());
         }
 
-        if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
-            t.x -= 10f;
+        if (Keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            t1.x -= 10f;
+            t3.translateXYZGlobal(10,0,0);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
-            t.x += 10f;
+        if (Keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            t1.x += 10f;
+            t3.translateXYZGlobal(-10,0,0);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-            t.y += 10f;
+        if (Keyboard.isKeyPressed(Keyboard.Key.UP)) {
+            t1.y += 10f;
+            t3.translateXYZGlobal(0,-10,0);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-            t.y -= 10f;
+        if (Keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+            t1.y -= 10f;
+            t3.translateXYZGlobal(0,10,0);
         }
 
 
         if (Keyboard.isKeyPressed(Keyboard.Key.X)) {
-            t.degX += 0.5f;
+            t1.degX += 1f;
+            t2.matrix.rotateDeg(Vector3.X_UNIT, 1f);
+            t3.rotateDeg(Vector3.X_UNIT, 1f);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            t.degY += 0.5f;
+            t1.degY += 1f;
+            t2.matrix.rotateDeg(Vector3.Y_UNIT, 1f);
+            t3.rotateDeg(Vector3.Y_UNIT, 1f);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.Z)) {
-            t.degZ += 0.5f;
+            t1.degZ += 1f;
+            t2.matrix.rotateDeg(Vector3.Z_UNIT, 1f);
+            t3.rotateDeg(Vector3.Z_UNIT, 1f);
         }
-
         if (Keyboard.isKeyPressed(Keyboard.Key.P)) {
-            t.sclX *= 1.01f;
+            t1.sclX *= 1.01f;
+            t2.matrix.scale(1.01f, 1, 1);
+            t3.scale(1.01f, 1, 1);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.O)) {
-            t.sclZ *= 0.99f;
+            t1.sclY *= 0.99f;
+            t3.scale(1, 0.99f, 1);
         }
+
 
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
-        if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
-
+        if (Keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT)) {
+            t3.translateRotateDeg2D(0,0, 1);
         }
 
-        if (Keyboard.isKeyJustPressed(Keyboard.Key.J)) {
-            System.out.println(t.x);
+        if (Keyboard.isKeyPressed(Keyboard.Key.J)) {
+            t3.rotateDegZ(1);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -100,7 +114,9 @@ public class SceneRendering2D_Transform_1 extends ApplicationScreen {
         renderer2D.setTint(null);
 
         //renderer2D.drawTexture(yellowSquare, t.x, t.y, t.degX, t.degY, t.degZ, t.sclX, t.sclY);
-        renderer2D.drawTexture(yellowSquare, t.matrix());
+        renderer2D.drawTexture(yellowSquare, t1.matrix());
+        //renderer2D.drawTexture(yellowSquare, t2.matrix);
+        renderer2D.drawTexture(yellowSquare, t3);
 
 
         renderer2D.end();
