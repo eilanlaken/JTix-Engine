@@ -1323,28 +1323,6 @@ public class Matrix4x4 implements MemoryPool.Reset {
     }
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
-     * glTranslate/glRotate/glScale.
-     * @param axis The vector axis to rotate around.
-     * @param radians The angle in radians.
-     * @return This matrix for the purpose of chaining methods together. */
-    @Deprecated public Matrix4x4 rotateRad(Vector3 axis, float radians) {
-        if (radians == 0) return this;
-        quaternion.setFromAxisRad(axis, radians);
-        return rotateLocalAxis(quaternion);
-    }
-
-    /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
-     * glTranslate/glRotate/glScale.
-     * @param axis The vector axis to rotate around.
-     * @param degrees The angle in degrees.
-     * @return This matrix for the purpose of chaining methods together. */
-    @Deprecated public Matrix4x4 rotateDeg(Vector3 axis, float degrees) {
-        if (degrees == 0) return this;
-        quaternion.setFromAxisRad(axis,degrees * MathUtils.degreesToRadians);
-        return rotateLocalAxis(quaternion);
-    }
-
-    /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
      * glTranslate/glRotate/glScale
      * @param axisX The x-axis component of the vector to rotate around.
      * @param axisY The y-axis component of the vector to rotate around.
