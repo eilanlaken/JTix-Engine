@@ -41,7 +41,7 @@ public class ComponentTransform_$ extends Component {
         matrix.rotateRad(Vector3.X_UNIT, angleXDeg * MathUtils.degreesToRadians);
         matrix.rotateRad(Vector3.Y_UNIT, angleYDeg * MathUtils.degreesToRadians);
         matrix.rotateRad(Vector3.Z_UNIT, angleZDeg * MathUtils.degreesToRadians);
-        matrix.translateXYZGlobal(x,y,z);
+        matrix.translateGlobalAxisXYZ(x,y,z);
 
         matrixUpdated = true;
         return matrix;

@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.ecs.ComponentTransform3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
@@ -16,25 +16,20 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
-    private Renderer2D_old renderer2DOld;
+    private Renderer2D renderer2DOld;
     private ComponentGraphicsCamera componentGraphicsCamera;
     private float red = new Color(1,0,0,1).toFloatBits();
-    private float green = new Color(0,1,0,1f).toFloatBits();
-    private float blue = new Color(0,0,1,0.4f).toFloatBits();
-    private float white = new Color(1,1,1,0.5f).toFloatBits();
-    private float yellow = new Color(1,1,0,0.3f).toFloatBits();
 
-    private ShaderProgram shaderYellow;
+    ComponentTransform3 t = new ComponentTransform3();
 
     public SceneRendering2D_Shapes_6_capacity_bug() {
-        renderer2DOld = new Renderer2D_old();
+        renderer2DOld = new Renderer2D();
     }
 
     @Override
     public void show() {
         componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
         componentGraphicsCamera.update();
-        shaderYellow = AssetStore.get("assets/shaders/graphics-2d-shader-yellow");
 
     }
 
@@ -59,6 +54,16 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             dy -= GraphicsUtils.getDeltaTime();
         }
 
+        if (Keyboard.isKeyPressed(Keyboard.Key.X)) {
+            t.rotateLocalAxisDeg(1,0,0,1);
+        }
+        if (Keyboard.isKeyPressed(Keyboard.Key.Y)) {
+            t.rotateLocalAxisDeg(0,1,0,1);
+        }
+        if (Keyboard.isKeyPressed(Keyboard.Key.Z)) {
+            t.rotateLocalAxisDeg(0,0,1,1);
+        }
+
         if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
             ay++;
         }
@@ -69,9 +74,11 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
         if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
             dr++;
+            System.out.println(baseR + dr);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.F)) {
             dr--;
+            System.out.println(baseR + dr);
         }
 
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
@@ -82,11 +89,12 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             y = screen.y;
         }
 
-        renderer2DOld.begin(componentGraphicsCamera);
+        renderer2DOld.begin(componentGraphicsCamera.lens.combined);
         renderer2DOld.setTint(red);
         //renderer2D.drawCircleFilled(1f, 1400, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, 1498, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, baseR + dr, 0, 0, 0,0,0,1,1);
+        renderer2DOld.drawCircleFilled(1f, baseR + dr, x, y, 0,0,0,1,1);
         renderer2DOld.drawCircleFilled(1f, baseR + dr, x, y, 0,0,0,1,1);
 
         //System.out.println(baseR + dr);
@@ -98,7 +106,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
     float dx = 0;
     float dy = 0;
     int dr = 0;
-    int baseR = 274;
+    int baseR = 4980;
     float x, y;
 
     @Override
@@ -117,8 +125,6 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
     @Override
     public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
-
-        requiredAssets.put("assets/shaders/graphics-2d-shader-yellow", ShaderProgram.class);
 
         return requiredAssets;
     }

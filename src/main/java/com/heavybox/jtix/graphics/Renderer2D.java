@@ -540,6 +540,41 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement + 2;
     }
 
+    public void drawCircleFilled(float r, int refinement, Matrix4x4 transform) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + refinement * 3 + 3 > indicesBuffer.capacity()) flush();
+
+        refinement = Math.max(3, refinement);
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Vector3 arm = vectors3Pool.allocate();
+        float da = 360f / refinement;
+
+        /* put vertices */
+        verticesBuffer.put(transform.getX()).put(transform.getY()).put(currentTint).put(0.5f).put(0.5f); // center point
+        for (int i = 0; i < refinement + 1; i++) {
+            arm.x = r * MathUtils.cosDeg(da * i);
+            arm.y = r * MathUtils.sinDeg(da * i);
+            arm.mul(transform);
+            verticesBuffer.put(arm.x).put(arm.y).put(currentTint).put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement; i++) {
+            indicesBuffer.put(startVertex);
+            indicesBuffer.put(startVertex + i + 1);
+            indicesBuffer.put(startVertex + i + 2);
+        }
+        indicesBuffer.put(startVertex);
+        indicesBuffer.put(startVertex + refinement + 1);
+        indicesBuffer.put(startVertex + 1);
+        vertexIndex += refinement + 2;
+
+        vectors3Pool.free(arm);
+    }
+
     public void drawCircleFilled(float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
@@ -554,8 +589,8 @@ public class Renderer2D implements MemoryResourceHolder {
         Vector2 arm = vectorsPool.allocate();
         float da = 360f / refinement;
 
-        // put vertices
-        verticesBuffer.put(x).put(y).put(currentTint).put(0.5f).put(0.5f);
+        /* put vertices */
+        verticesBuffer.put(x).put(y).put(currentTint).put(0.5f).put(0.5f); // center point
         for (int i = 0; i < refinement + 1; i++) {
             arm.x = r * scaleX * MathUtils.cosDeg(da * i);
             arm.y = r * scaleY * MathUtils.sinDeg(da * i);

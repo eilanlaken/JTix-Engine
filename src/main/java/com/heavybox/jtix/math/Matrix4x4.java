@@ -253,42 +253,6 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    public Matrix4x4 translateRotateDeg2D(float dx, float dy, float deltaDegZ) {
-        translateXYZGlobal(dx, dy, 0);
-
-        // Step 2: Extract the current X and Y axis vectors from the matrix (without scale)
-        currentX.set(val[Matrix4x4.M00], val[Matrix4x4.M10], val[Matrix4x4.M20]);
-        currentY.set(val[Matrix4x4.M01], val[Matrix4x4.M11], val[Matrix4x4.M21]);
-
-        // Step 3: Compute the sine and cosine of the rotation around Z
-        float cosZ = MathUtils.cosRad(-deltaDegZ * MathUtils.degreesToRadians);
-        float sinZ = MathUtils.sinRad(-deltaDegZ * MathUtils.degreesToRadians);
-
-        // Step 4: Rotate the X and Y axes around the Z axis
-        newX.set(
-                cosZ * currentX.x - sinZ * currentY.x,
-                cosZ * currentX.y - sinZ * currentY.y,
-                cosZ * currentX.z - sinZ * currentY.z
-        );
-
-        newY.set(
-                sinZ * currentX.x + cosZ * currentY.x,
-                sinZ * currentX.y + cosZ * currentY.y,
-                sinZ * currentX.z + cosZ * currentY.z
-        );
-
-        // Step 5: Set the new X and Y axes back into the matrix
-        val[Matrix4x4.M00] = newX.x;
-        val[Matrix4x4.M10] = newX.y;
-        val[Matrix4x4.M20] = newX.z;
-
-        val[Matrix4x4.M01] = newY.x;
-        val[Matrix4x4.M11] = newY.y;
-        val[Matrix4x4.M21] = newY.z;
-
-        return this;
-    }
-
     /** Sets the four columns of the matrix which correspond to the x-, y- and z-axis of the vector space this matrix creates as
      * well as the 4th column representing the translation of any point that is multiplied by this matrix.
      * @param xAxis The x-axis.
@@ -945,6 +909,18 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return position;
     }
 
+    public float getX() {
+        return val[M03];
+    }
+
+    public float getY() {
+        return val[M13];
+    }
+
+    public float getZ() {
+        return val[M23];
+    }
+
     /** Gets the rotation of this matrix.
      * @param rotation The {@link Quaternion} to receive the rotation
      * @param normalizeAxes True to normalize the axes, necessary when the matrix might also include scaling.
@@ -1243,8 +1219,8 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * glTranslate/glRotate/glScale
      * @param translation
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 translateSelfAxis(Vector3 translation) {
-        return translateSelfAxis(translation.x, translation.y, translation.z);
+    public Matrix4x4 translateLocalAxis(Vector3 translation) {
+        return translateLocalAxis(translation.x, translation.y, translation.z);
     }
 
     /** Postmultiplies this matrix by a translation matrix. Postmultiplication is also used by OpenGL ES' 1.x
@@ -1253,7 +1229,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param y Translation in the y-axis.
      * @param z Translation in the z-axis.
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 translateSelfAxis(float x, float y, float z) {
+    public Matrix4x4 translateLocalAxis(float x, float y, float z) {
         val[M03] += val[M00] * x + val[M01] * y + val[M02] * z;
         val[M13] += val[M10] * x + val[M11] * y + val[M12] * z;
         val[M23] += val[M20] * x + val[M21] * y + val[M22] * z;
@@ -1261,69 +1237,69 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    public Matrix4x4 translateXYZGlobal(float dx, float dy, float dz) {
+    public Matrix4x4 translateGlobalAxisXYZ(float dx, float dy, float dz) {
         val[M03] += dx;
         val[M13] += dy;
         val[M23] += dz;
         return this;
     }
 
-    public Matrix4x4 translateXGlobal(float x) {
+    public Matrix4x4 translateGlobalAxisX(float x) {
         val[M03] += x;
         return this;
     }
 
-    public Matrix4x4 translateYGlobal(float y) {
+    public Matrix4x4 translateGlobalAxisY(float y) {
         val[M13] += y;
         return this;
     }
 
-    public Matrix4x4 translateZGlobal(float z) {
+    public Matrix4x4 translateGlobalAxisZ(float z) {
         val[M23] += z;
         return this;
     }
 
-    public Matrix4x4 rotateDegX(float degX) {
+    public Matrix4x4 rotateGlobalAxisX(float degX) {
         float x = val[M03];
         float y = val[M13];
         float z = val[M23];
-        translateXYZGlobal(-x, -y, -z);
+        translateGlobalAxisXYZ(-x, -y, -z);
         rotation.setToRotation(1, 0, 0, degX);
         mulLeft(rotation);
-        translateXYZGlobal(x, y, z);
+        translateGlobalAxisXYZ(x, y, z);
         return this;
     }
 
-    public Matrix4x4 rotateDegY(float degY) {
+    public Matrix4x4 rotateGlobalAxisY(float degY) {
         float x = val[M03];
         float y = val[M13];
         float z = val[M23];
-        translateXYZGlobal(-x, -y, -z);
+        translateGlobalAxisXYZ(-x, -y, -z);
         rotation.setToRotation(0, 1, 0, degY);
         mulLeft(rotation);
-        translateXYZGlobal(x, y, z);
+        translateGlobalAxisXYZ(x, y, z);
         return this;
     }
 
-    public Matrix4x4 rotateDegZ(float degZ) {
+    public Matrix4x4 rotateGlobalAxisZ(float degZ) {
         float x = val[M03];
         float y = val[M13];
         float z = val[M23];
-        translateXYZGlobal(-x, -y, -z);
+        translateGlobalAxisXYZ(-x, -y, -z);
         rotation.setToRotation(0, 0, 1, degZ);
         mulLeft(rotation);
-        translateXYZGlobal(x, y, z);
+        translateGlobalAxisXYZ(x, y, z);
         return this;
     }
 
     public Matrix4x4 spin(float degrees) {
-        return rotateSelfAxisDeg(Vector3.X_UNIT, degrees);
+        return rotateLocalAxisDeg(Vector3.X_UNIT, degrees);
     }
 
-    public Matrix4x4 roll(float degrees) { return rotateSelfAxisDeg(Vector3.Y_UNIT, degrees); }
+    public Matrix4x4 roll(float degrees) { return rotateLocalAxisDeg(Vector3.Y_UNIT, degrees); }
 
     public Matrix4x4 turn(float degrees) {
-        return rotateSelfAxisDeg(Vector3.Z_UNIT, degrees);
+        return rotateLocalAxisDeg(Vector3.Z_UNIT, degrees);
     }
 
 
@@ -1333,10 +1309,10 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param axis The vector axis to rotate around.
      * @param degrees The angle in degrees.
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 rotateSelfAxisDeg(Vector3 axis, float degrees) {
+    public Matrix4x4 rotateLocalAxisDeg(Vector3 axis, float degrees) {
         if (degrees == 0) return this;
         quaternion.setDeg(axis, degrees);
-        return rotateSelfAxis(quaternion);
+        return rotateLocalAxis(quaternion);
     }
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
@@ -1344,10 +1320,10 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param axis The vector axis to rotate around.
      * @param radians The angle in radians.
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 rotateRad(Vector3 axis, float radians) {
+    @Deprecated public Matrix4x4 rotateRad(Vector3 axis, float radians) {
         if (radians == 0) return this;
         quaternion.setFromAxisRad(axis, radians);
-        return rotateSelfAxis(quaternion);
+        return rotateLocalAxis(quaternion);
     }
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
@@ -1355,11 +1331,10 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param axis The vector axis to rotate around.
      * @param degrees The angle in degrees.
      * @return This matrix for the purpose of chaining methods together. */
-    // TODO: use more explicit rotateSelfAxisDeg
     @Deprecated public Matrix4x4 rotateDeg(Vector3 axis, float degrees) {
         if (degrees == 0) return this;
         quaternion.setFromAxisRad(axis,degrees * MathUtils.degreesToRadians);
-        return rotateSelfAxis(quaternion);
+        return rotateLocalAxis(quaternion);
     }
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
@@ -1369,10 +1344,10 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param axisZ The z-axis component of the vector to rotate around.
      * @param degrees The angle in degrees
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 rotateSelfAxisDeg(float axisX, float axisY, float axisZ, float degrees) {
+    public Matrix4x4 rotateLocalAxisDeg(float axisX, float axisY, float axisZ, float degrees) {
         if (degrees == 0) return this;
         quaternion.setFromAxisDeg(axisX, axisY, axisZ, degrees);
-        return rotateSelfAxis(quaternion);
+        return rotateLocalAxis(quaternion);
     }
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
@@ -1386,14 +1361,14 @@ public class Matrix4x4 implements MemoryPool.Reset {
     @Deprecated public Matrix4x4 rotateRad(float axisX, float axisY, float axisZ, float radians) {
         if (radians == 0) return this;
         quaternion.setFromAxisRad(axisX, axisY, axisZ, radians);
-        return rotateSelfAxis(quaternion);
+        return rotateLocalAxis(quaternion);
     }
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
      * glTranslate/glRotate/glScale.
      * @param rotation
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 rotateSelfAxis(Quaternion rotation) {
+    public Matrix4x4 rotateLocalAxis(Quaternion rotation) {
         float x = rotation.x, y = rotation.y, z = rotation.z, w = rotation.w;
         float xx = x * x;
         float xy = x * y;
@@ -1445,8 +1420,8 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param v1 The base vector
      * @param v2 The target vector
      * @return This matrix for the purpose of chaining methods together */
-    public Matrix4x4 rotateSelfAxis(final Vector3 v1, final Vector3 v2) {
-        return rotateSelfAxis(quaternion.setFromCross(v1, v2));
+    public Matrix4x4 rotateLocalAxis(final Vector3 v1, final Vector3 v2) {
+        return rotateLocalAxis(quaternion.setFromCross(v1, v2));
     }
 
     /** Post-multiplies this matrix by a rotation toward a direction.

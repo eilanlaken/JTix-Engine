@@ -54,19 +54,19 @@ public class SceneRendering2D_Transform_1 extends ApplicationScreen {
 
         if (Keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
             t1.x -= 10f;
-            t3.translateXYZGlobal(10,0,0);
+            t3.translateGlobalAxisXYZ(10,0,0);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
             t1.x += 10f;
-            t3.translateXYZGlobal(-10,0,0);
+            t3.translateGlobalAxisXYZ(-10,0,0);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.UP)) {
             t1.y += 10f;
-            t3.translateXYZGlobal(0,-10,0);
+            t3.translateGlobalAxisXYZ(0,-10,0);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
             t1.y -= 10f;
-            t3.translateXYZGlobal(0,10,0);
+            t3.translateGlobalAxisXYZ(0,10,0);
         }
 
 
@@ -98,11 +98,11 @@ public class SceneRendering2D_Transform_1 extends ApplicationScreen {
 
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         if (Keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT)) {
-            t3.translateRotateDeg2D(0,0, 1);
+
         }
 
         if (Keyboard.isKeyPressed(Keyboard.Key.J)) {
-            t3.rotateDegZ(1);
+            t3.rotateGlobalAxisZ(1);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
