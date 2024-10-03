@@ -207,7 +207,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
                 scale.z);
     }
 
-    public Matrix4x4 setToTranslationEulerRotationDegScale(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
+    public Matrix4x4 setToPositionEulerScale(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
         quaternion.setEulerAnglesDeg(degX, degY, degZ);
         return setToTranslationRotationScale(x, y, z, quaternion.x, quaternion.y, quaternion.z, quaternion.w, sclX, sclY, sclZ);
     }
@@ -1237,6 +1237,13 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
+    public Matrix4x4 translateGlobalAxisXYZ(final Vector3 dr) {
+        val[M03] += dr.x;
+        val[M13] += dr.y;
+        val[M23] += dr.z;
+        return this;
+    }
+
     public Matrix4x4 translateGlobalAxisXYZ(float dx, float dy, float dz) {
         val[M03] += dx;
         val[M13] += dy;
@@ -1466,6 +1473,10 @@ public class Matrix4x4 implements MemoryPool.Reset {
     public Matrix4x4 rotateTowardTarget(final Vector3 target, final Vector3 up) {
         tmpVec.set(target.x - val[M03], target.y - val[M13], target.z - val[M23]);
         return rotateTowardDirection(tmpVec, up);
+    }
+
+    public Matrix4x4 scale(final Vector3 scale) {
+        return this.scale(scale.x, scale.y, scale.z);
     }
 
     /** Postmultiplies this matrix with a scale matrix. Postmultiplication is also used by OpenGL ES' 1.x

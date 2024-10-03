@@ -3,6 +3,7 @@ package com.heavybox.jtix.ecs;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
+import com.heavybox.jtix.math.Vector3;
 
 public class ComponentTransform extends Matrix4x4 implements Component {
 
@@ -10,9 +11,12 @@ public class ComponentTransform extends Matrix4x4 implements Component {
         super();
     }
 
-    protected ComponentTransform(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
-        Quaternion rotation = new Quaternion().setEulerAnglesDeg(degX, degY, degZ);
-        setToTranslationRotationScale(x, y, z, rotation.x, rotation.y, rotation.z, rotation.w, sclX, sclY, sclZ);
+    public ComponentTransform(final ComponentTransform other) {
+        super(other);
+    }
+
+    public ComponentTransform(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
+        setToPositionEulerScale(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
     }
 
     /* intended to be used by the physics 2d system */

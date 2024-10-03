@@ -18,7 +18,7 @@ import com.heavybox.jtix.math.Quaternion;
     }
 
     public Matrix4x4 set(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
-        return matrix.setToTranslationEulerRotationDegScale(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
+        return null;
     }
 
     // TODO; implement

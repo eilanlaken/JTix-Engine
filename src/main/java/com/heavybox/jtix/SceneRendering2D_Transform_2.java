@@ -3,21 +3,23 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.ecs.ComponentTransform;
-import com.heavybox.jtix.math.Quaternion;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Color;
+import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
+public class SceneRendering2D_Transform_2 extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
@@ -27,8 +29,9 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
     ComponentTransform t = new ComponentTransform();
     ComponentTransform t2 = new ComponentTransform();
+    ComponentTransform t3 = new ComponentTransform();
 
-    public SceneRendering2D_Shapes_6_capacity_bug() {
+    public SceneRendering2D_Transform_2() {
         renderer2D = new Renderer2D();
     }
 
@@ -95,13 +98,20 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             t.getTranslation(position);
             t.getRotation(rotation);
             t.getScale(scale);
-            System.out.println(position);
-            System.out.println(rotation);
-            System.out.println(scale);
 
             System.out.println(rotation.getPitchDeg());
             System.out.println(rotation.getYawDeg());
             System.out.println(rotation.getRollDeg());
+
+            t2.idt();
+            t2.scale(scale);
+            t2.rotateLocalAxis(rotation);
+            t2.translateGlobalAxisXYZ(position);
+
+            t3.setToPositionEulerScale(
+                    position.x, position.y, position.z,
+                    rotation.getPitchDeg(), rotation.getYawDeg(), rotation.getRollDeg(),
+                    scale.x, scale.y, scale.z);
         }
 
 
@@ -136,6 +146,9 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
         renderer2D.drawCircleFilled(50f, baseR + dr, t);
         renderer2D.setTint(Color.BLUE);
         renderer2D.drawCircleFilled(50f, baseR + dr, t2);
+
+        renderer2D.setTint(Color.MAGENTA);
+        renderer2D.drawCircleFilled(50f, baseR + dr, t3);
 
 
         //System.out.println(baseR + dr);
