@@ -81,6 +81,10 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             t.translateGlobalAxisX(10);
         }
 
+        if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
+            t.scale(1.01f, 1, 1);
+        }
+
 
         if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
             ay++;
