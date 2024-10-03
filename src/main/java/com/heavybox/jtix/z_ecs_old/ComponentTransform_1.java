@@ -89,7 +89,7 @@ import org.jetbrains.annotations.NotNull;
         if (!updated) update();
         if (this.world == null) this.world = new Matrix4x4();
         Quaternion r = new Quaternion().setEulerAnglesDeg(worldAngleY, worldAngleX, worldAngleZ);
-        return world.setToTranslationRotationScale(worldX, worldY, worldZ, r.x, r.y, r.z, r.w, worldScaleX, worldScaleY, worldScaleZ);
+        return world.setToPositionRotationScaling(worldX, worldY, worldZ, r.x, r.y, r.z, r.w, worldScaleX, worldScaleY, worldScaleZ);
     }
 
 }

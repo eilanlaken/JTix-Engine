@@ -108,7 +108,7 @@ public class SceneRendering2D_Transform_2 extends ApplicationScreen {
             t2.rotateLocalAxis(rotation);
             t2.translateGlobalAxisXYZ(position);
 
-            t3.setToPositionEulerScale(
+            t3.setToPositionEulerScaling(
                     position.x, position.y, position.z,
                     rotation.getPitchDeg(), rotation.getYawDeg(), rotation.getRollDeg(),
                     scale.x, scale.y, scale.z);

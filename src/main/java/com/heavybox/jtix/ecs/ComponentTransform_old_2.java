@@ -14,7 +14,7 @@ import com.heavybox.jtix.math.Quaternion;
     protected ComponentTransform_old_2(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
         matrix = new Matrix4x4();
         Quaternion rotation = new Quaternion().setEulerAnglesDeg(degX, degY, degZ);
-        matrix.setToTranslationRotationScale(x, y, z, rotation.x, rotation.y, rotation.z, rotation.w, sclX, sclY, sclZ);
+        matrix.setToPositionRotationScaling(x, y, z, rotation.x, rotation.y, rotation.z, rotation.w, sclX, sclY, sclZ);
     }
 
     public Matrix4x4 set(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {

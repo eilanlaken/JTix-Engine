@@ -66,7 +66,7 @@ import org.jetbrains.annotations.NotNull;
         if (matrix == null) matrix = new Matrix4x4();
 
         rotation.setEulerAnglesDeg(degX, degY, degZ);
-        matrix.setToTranslationRotationScale(x, y, z, rotation.x, rotation.y, rotation.z, rotation.w, sclX, sclY, sclZ);
+        matrix.setToPositionRotationScaling(x, y, z, rotation.x, rotation.y, rotation.z, rotation.w, sclX, sclY, sclZ);
 
 //        matrix.idt();
 //        matrix.scale(sclX, sclY, sclZ);

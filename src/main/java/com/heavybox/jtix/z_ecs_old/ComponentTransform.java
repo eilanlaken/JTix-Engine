@@ -80,7 +80,7 @@ public class ComponentTransform extends Component {
     private void updateMatrix() {
         if (matrix == null) matrix = new Matrix4x4();
         rotation.setEulerAnglesDeg(angleXDeg, angleYDeg, angleZDeg);
-        matrix.setToTranslationRotationScale(
+        matrix.setToPositionRotationScaling(
                 x, y, z,
                 rotation.x, rotation.y, rotation.z, rotation.w,
                 scaleX, scaleY, scaleZ
