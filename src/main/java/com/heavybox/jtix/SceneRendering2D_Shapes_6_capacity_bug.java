@@ -68,6 +68,20 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             t.rotateLocalAxisDeg(0,0,1,1);
         }
 
+        if (Keyboard.isKeyPressed(Keyboard.Key.UP)) {
+            t.translateGlobalAxisY(10);
+        }
+        if (Keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+            t.translateGlobalAxisY(-10);
+        }
+        if (Keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            t.translateGlobalAxisX(-10);
+        }
+        if (Keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            t.translateGlobalAxisX(10);
+        }
+
+
         if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
             ay++;
         }
