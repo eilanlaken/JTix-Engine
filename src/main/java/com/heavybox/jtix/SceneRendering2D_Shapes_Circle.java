@@ -3,19 +3,22 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.ecs.ComponentTransform;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Color;
+import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
+public class SceneRendering2D_Shapes_Circle extends ApplicationScreen {
 
     private Renderer2D renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
@@ -26,7 +29,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
     ComponentTransform t = new ComponentTransform();
 
-    public SceneRendering2D_Shapes_6_capacity_bug() {
+    public SceneRendering2D_Shapes_Circle() {
         renderer2D = new Renderer2D();
     }
 
@@ -93,14 +96,14 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             y = screen.y;
         }
 
-        renderer2D.begin(null);
+        renderer2D.begin(componentGraphicsCamera.lens.combined);
         //renderer2D.setTint(red);
         //renderer2D.drawCircleFilled(1f, 1400, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, 1498, 0, 0, 0,0,0,1,1);
         //renderer2D.drawCircleFilled(1f, baseR + dr, 0, 0, 0,0,0,1,1);
         //renderer2DOld.drawCircleFilled(1f, baseR + dr, x, y, 0,0,0,1,1);
         renderer2D.drawTexture(yellowSquare, t);
-        renderer2D.drawCircleFilled(50f, baseR + dr, t);
+        renderer2D.drawCircleFilled(1, baseR + dr, t);
 
 
         //System.out.println(baseR + dr);

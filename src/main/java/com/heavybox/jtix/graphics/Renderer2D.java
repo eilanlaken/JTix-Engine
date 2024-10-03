@@ -27,6 +27,10 @@ import java.util.stream.Collectors;
 // TODO: - creating the transform matrix
 // TODO: - applying it to all the vertices
 // TODO: only this way perspective rendering is possible.
+
+// TODO: RENDERING BUG S-O-L-V-E-D:
+// for a circle with high refinement for example, we don't do if (current > capacity) ... every time we
+// write to the buffer.
 public class Renderer2D implements MemoryResourceHolder {
 
     /* constants */
@@ -48,8 +52,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private final Matrix4x4     defaultMatrix = createDefaultMatrix();
 
     /* memory pools */
-    private final MemoryPool<Vector2>    vectorsPool    = new MemoryPool<>(Vector2.class, 10);
-    private final MemoryPool<Vector3>    vectors3Pool   = new MemoryPool<>(Vector3.class, 10);
+    private final MemoryPool<Vector2>    vectors2Pool = new MemoryPool<>(Vector2.class, 10);
+    @Deprecated private final MemoryPool<Vector3>    vectors3Pool   = new MemoryPool<>(Vector3.class, 10);
     private final MemoryPool<ArrayFloat> arrayFloatPool = new MemoryPool<>(ArrayFloat.class, 20);
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
@@ -202,12 +206,10 @@ public class Renderer2D implements MemoryResourceHolder {
         float widthHalf  = texture.width  * 0.5f;
         float heightHalf = texture.height * 0.5f;
 
-        Vector3 arm0 = vectors3Pool.allocate();
-        Vector3 arm1 = vectors3Pool.allocate();
-        Vector3 arm2 = vectors3Pool.allocate();
-        Vector3 arm3 = vectors3Pool.allocate();
-
-
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
 
         arm0.x = -widthHalf;
         arm0.y =  heightHalf;
@@ -221,26 +223,10 @@ public class Renderer2D implements MemoryResourceHolder {
         arm3.x = widthHalf;
         arm3.y = heightHalf;
 
-        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
-            System.out.println("Before:");
-            System.out.println(arm0);
-        }
-
-        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
-            System.out.println("Transform:");
-            System.out.println(transform);
-        }
-
         arm0.mul(transform);
         arm1.mul(transform);
         arm2.mul(transform);
         arm3.mul(transform);
-
-        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
-            System.out.println("After:");
-            System.out.println(arm0);
-        }
-
 
         /* put vertices */
         verticesBuffer.put(arm0.x).put(arm0.y).put(currentTint).put(0).put(0); // V0
@@ -259,10 +245,10 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
 
         /* free resources */
-        vectors3Pool.free(arm0);
-        vectors3Pool.free(arm1);
-        vectors3Pool.free(arm2);
-        vectors3Pool.free(arm3);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
     }
 
     public void drawTexture(Texture texture, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -276,10 +262,10 @@ public class Renderer2D implements MemoryResourceHolder {
         float widthHalf  = texture.width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
         float heightHalf = texture.height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
 
-        Vector2 arm0 = vectorsPool.allocate();
-        Vector2 arm1 = vectorsPool.allocate();
-        Vector2 arm2 = vectorsPool.allocate();
-        Vector2 arm3 = vectorsPool.allocate();
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
 
         arm0.x = -widthHalf;
         arm0.y =  heightHalf;
@@ -314,10 +300,10 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
 
         /* free resources */
-        vectorsPool.free(arm0);
-        vectorsPool.free(arm1);
-        vectorsPool.free(arm2);
-        vectorsPool.free(arm3);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
     }
 
     public void drawTexture(Texture texture, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -337,10 +323,10 @@ public class Renderer2D implements MemoryResourceHolder {
         float widthHalf  = width * 0.5f;
         float heightHalf = height * 0.5f;
 
-        Vector2 arm0 = vectorsPool.allocate();
-        Vector2 arm1 = vectorsPool.allocate();
-        Vector2 arm2 = vectorsPool.allocate();
-        Vector2 arm3 = vectorsPool.allocate();
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
 
         arm0.x = -widthHalf + width * u1;
         arm0.y =  heightHalf - height * v1;
@@ -375,10 +361,10 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
 
         /* free resources */
-        vectorsPool.free(arm0);
-        vectorsPool.free(arm1);
-        vectorsPool.free(arm2);
-        vectorsPool.free(arm3);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
     }
 
     public void drawTextureRegion(TexturePack.Region region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -483,7 +469,7 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
 
-        Vector2 arm = vectorsPool.allocate();
+        Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
         for (int i = 0; i < refinement; i++) {
             arm.x = r * scaleX * MathUtils.cosDeg(da * i);
@@ -497,7 +483,7 @@ public class Renderer2D implements MemoryResourceHolder {
                     .put(0.5f)
             ;
         }
-        vectorsPool.free(arm);
+        vectors2Pool.free(arm);
 
         vertexIndex += refinement;
     }
@@ -520,7 +506,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
-        Vector2 arm = vectorsPool.allocate();
+        Vector2 arm = vectors2Pool.allocate();
         float da = angle / refinement;
 
         // put vertices
@@ -536,29 +522,39 @@ public class Renderer2D implements MemoryResourceHolder {
             i++;
         }
 
-        vectorsPool.free(arm);
+        vectors2Pool.free(arm);
         vertexIndex += refinement + 2;
     }
 
     public void drawCircleFilled(float r, int refinement, Matrix4x4 transform) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+
+        refinement = MathUtils.clampInt(refinement, 3, VERTICES_CAPACITY / VERTEX_SIZE);
         if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + refinement * 3 + 3 > indicesBuffer.capacity()) flush();
 
-        refinement = Math.max(3, refinement);
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
-        Vector3 arm = vectors3Pool.allocate();
+        //Vector2 point = vectors2Pool.allocate();
+        //point.mul(transform);
+
         float da = 360f / refinement;
 
-        /* put vertices */
-        verticesBuffer.put(transform.getX()).put(transform.getY()).put(currentTint).put(0.5f).put(0.5f); // center point
+        Array<Vector2> vertices = new Array<>();
+        vertices.add(new Vector2().mul(transform)); // center
         for (int i = 0; i < refinement + 1; i++) {
-            arm.x = r * MathUtils.cosDeg(da * i);
-            arm.y = r * MathUtils.sinDeg(da * i);
-            arm.mul(transform);
-            verticesBuffer.put(arm.x).put(arm.y).put(currentTint).put(0.5f).put(0.5f);
+            Vector2 point = new Vector2();
+            point.x = r * MathUtils.cosDeg(da * i);
+            point.y = r * MathUtils.sinDeg(da * i);
+            point.mul(transform);
+            vertices.add(point);
+        }
+
+        /* put vertices */
+        for (int i = 0; i < vertices.size; i++) {
+            Vector2 v = vertices.get(i);
+            verticesBuffer.put(v.x).put(v.y).put(currentTint).put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
@@ -572,7 +568,7 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 1);
         vertexIndex += refinement + 2;
 
-        vectors3Pool.free(arm);
+        //vectors2Pool.free(arm);
     }
 
     public void drawCircleFilled(float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -586,7 +582,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
-        Vector2 arm = vectorsPool.allocate();
+        Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
 
         /* put vertices */
@@ -611,7 +607,7 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 1);
         vertexIndex += refinement + 2;
 
-        vectorsPool.free(arm);
+        vectors2Pool.free(arm);
     }
 
     public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -626,8 +622,8 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
 
-        Vector2 arm0 = vectorsPool.allocate();
-        Vector2 arm1 = vectorsPool.allocate();
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
         float da = angle / refinement;
         float halfBorder = thickness * 0.5f;
         // render arc segments.
@@ -658,8 +654,8 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         vertexIndex += refinement * 2;
 
-        vectorsPool.free(arm0);
-        vectorsPool.free(arm1);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
     }
 
     public void drawCircleBorder(float r, float thickness, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -674,8 +670,8 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
 
-        Vector2 arm0 = vectorsPool.allocate();
-        Vector2 arm1 = vectorsPool.allocate();
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
         float da = 360f / refinement;
         float halfBorder = thickness * 0.5f;
         // render arc segments.
@@ -712,8 +708,8 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 1);
         vertexIndex += refinement * 2;
 
-        vectorsPool.free(arm0);
-        vectorsPool.free(arm1);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
     }
 
     /* Rendering 2D primitives - Rectangles */
@@ -757,10 +753,10 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
-        Vector2 arm0 = vectorsPool.allocate();
-        Vector2 arm1 = vectorsPool.allocate();
-        Vector2 arm2 = vectorsPool.allocate();
-        Vector2 arm3 = vectorsPool.allocate();
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
 
         float widthHalf  = width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
         float heightHalf = height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
@@ -798,10 +794,10 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 0);
         vertexIndex += 4;
 
-        vectorsPool.free(arm0);
-        vectorsPool.free(arm1);
-        vectorsPool.free(arm2);
-        vectorsPool.free(arm3);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
     }
 
     public void drawRectangleThin(float width, float height, float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -822,7 +818,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(-r, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r, heightHalf - r);
@@ -831,7 +827,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add upper right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(0, r);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, heightHalf - r);
@@ -840,7 +836,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add lower right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(r, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, -heightHalf + r);
@@ -849,7 +845,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add lower left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(0, -r);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r, -heightHalf + r);
@@ -874,7 +870,7 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         indicesBuffer.put(startVertex + 0);
 
-        vectorsPool.freeAll(vertices);
+        vectors2Pool.freeAll(vertices);
         vertexIndex += refinement * 4;
     }
 
@@ -915,10 +911,10 @@ public class Renderer2D implements MemoryResourceHolder {
         float widthHalf  = width  * scaleX * MathUtils.cosDeg(angleY) * 0.5f;
         float heightHalf = height * scaleY * MathUtils.cosDeg(angleX) * 0.5f;
 
-        Vector2 arm0 = vectorsPool.allocate();
-        Vector2 arm1 = vectorsPool.allocate();
-        Vector2 arm2 = vectorsPool.allocate();
-        Vector2 arm3 = vectorsPool.allocate();
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
 
         arm0.x = -widthHalf;
         arm0.y =  heightHalf;
@@ -954,10 +950,10 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
 
         /* free resources */
-        vectorsPool.free(arm0);
-        vectorsPool.free(arm1);
-        vectorsPool.free(arm2);
-        vectorsPool.free(arm3);
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
     }
 
     /**
@@ -999,58 +995,58 @@ public class Renderer2D implements MemoryResourceHolder {
         Array<Vector2> uvs      = new Array<>(true, 1 + refinement * 4);
 
         // add center vertex
-        vertices.add(vectorsPool.allocate().set(0, 0)); // center vertex
-        uvs.add(vectorsPool.allocate().set(0.5f, 0.5f));
+        vertices.add(vectors2Pool.allocate().set(0, 0)); // center vertex
+        uvs.add(vectors2Pool.allocate().set(0.5f, 0.5f));
 
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(-r, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r,heightHalf - r);
             vertices.add(corner);
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectorsPool.allocate().set(u,v);
+            Vector2 uv = vectors2Pool.allocate().set(u,v);
             uvs.add(uv);
         }
 
         // add upper right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(0, r);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, heightHalf - r);
             vertices.add(corner);
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectorsPool.allocate().set(u,v);
+            Vector2 uv = vectors2Pool.allocate().set(u,v);
             uvs.add(uv);
         }
 
         // add lower right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(r, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - r, -heightHalf + r);
             vertices.add(corner);
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectorsPool.allocate().set(u,v);
+            Vector2 uv = vectors2Pool.allocate().set(u,v);
             uvs.add(uv);
         }
 
         // add lower left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectorsPool.allocate();
+            Vector2 corner = vectors2Pool.allocate();
             corner.set(0, -r);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + r, -heightHalf + r);
             vertices.add(corner);
             float u = (corner.x + widthHalf) / width;
             float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectorsPool.allocate().set(u,v);
+            Vector2 uv = vectors2Pool.allocate().set(u,v);
             uvs.add(uv);
         }
 
@@ -1106,7 +1102,7 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + refinement * 4 + 0);
         indicesBuffer.put(startVertex + refinement * 0 + 1);
 
-        vectorsPool.freeAll(vertices);
+        vectors2Pool.freeAll(vertices);
         vertexIndex += 1 + refinement * 4;
     }
 
@@ -1127,15 +1123,15 @@ public class Renderer2D implements MemoryResourceHolder {
 
         Array<Vector2> vertices = new Array<>(true, 8);
         // inner vertices
-        Vector2 inner_vertex_0 = vectorsPool.allocate().set(-widthHalf + thicknessHalf, heightHalf - thicknessHalf);
-        Vector2 inner_vertex_1 = vectorsPool.allocate().set(-widthHalf + thicknessHalf, -heightHalf + thicknessHalf);
-        Vector2 inner_vertex_2 = vectorsPool.allocate().set(widthHalf - thicknessHalf, -heightHalf + thicknessHalf);
-        Vector2 inner_vertex_3 = vectorsPool.allocate().set(widthHalf - thicknessHalf, heightHalf - thicknessHalf);
+        Vector2 inner_vertex_0 = vectors2Pool.allocate().set(-widthHalf + thicknessHalf, heightHalf - thicknessHalf);
+        Vector2 inner_vertex_1 = vectors2Pool.allocate().set(-widthHalf + thicknessHalf, -heightHalf + thicknessHalf);
+        Vector2 inner_vertex_2 = vectors2Pool.allocate().set(widthHalf - thicknessHalf, -heightHalf + thicknessHalf);
+        Vector2 inner_vertex_3 = vectors2Pool.allocate().set(widthHalf - thicknessHalf, heightHalf - thicknessHalf);
         // outer vertices
-        Vector2 outer_vertex_0 = vectorsPool.allocate().set(-widthHalf - thicknessHalf, heightHalf + thicknessHalf);
-        Vector2 outer_vertex_1 = vectorsPool.allocate().set(-widthHalf - thicknessHalf, -heightHalf - thicknessHalf);
-        Vector2 outer_vertex_2 = vectorsPool.allocate().set(widthHalf + thicknessHalf, -heightHalf - thicknessHalf);
-        Vector2 outer_vertex_3 = vectorsPool.allocate().set(widthHalf + thicknessHalf, heightHalf + thicknessHalf);
+        Vector2 outer_vertex_0 = vectors2Pool.allocate().set(-widthHalf - thicknessHalf, heightHalf + thicknessHalf);
+        Vector2 outer_vertex_1 = vectors2Pool.allocate().set(-widthHalf - thicknessHalf, -heightHalf - thicknessHalf);
+        Vector2 outer_vertex_2 = vectors2Pool.allocate().set(widthHalf + thicknessHalf, -heightHalf - thicknessHalf);
+        Vector2 outer_vertex_3 = vectors2Pool.allocate().set(widthHalf + thicknessHalf, heightHalf + thicknessHalf);
 
         vertices.add(inner_vertex_0, inner_vertex_1, inner_vertex_2, inner_vertex_3);
         vertices.add(outer_vertex_0, outer_vertex_1, outer_vertex_2, outer_vertex_3);
@@ -1185,7 +1181,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         vertexIndex += 8;
 
-        vectorsPool.freeAll(vertices);
+        vectors2Pool.freeAll(vertices);
     }
 
     /* Rendering 2D primitives - Polygons */
@@ -1208,7 +1204,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         int startVertex = this.vertexIndex;
         if (!triangulated) {
-            Vector2 vertex = vectorsPool.allocate();
+            Vector2 vertex = vectors2Pool.allocate();
             for (int i = 0; i < polygon.length; i += 2) {
                 float poly_x = polygon[i];
                 float poly_y = polygon[i + 1];
@@ -1220,7 +1216,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
                 verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
             }
-            vectorsPool.free(vertex);
+            vectors2Pool.free(vertex);
 
             for (int i = 0; i < count - 1; i++) {
                 indicesBuffer.put(startVertex + i);
@@ -1240,7 +1236,7 @@ public class Renderer2D implements MemoryResourceHolder {
                 return;
             }
 
-            Vector2 vertex = vectorsPool.allocate();
+            Vector2 vertex = vectors2Pool.allocate();
             for (int i = 0; i < vertices.size; i += 2) {
                 float poly_x = vertices.get(i);
                 float poly_y = vertices.get(i + 1);
@@ -1252,7 +1248,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
                 verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
             }
-            vectorsPool.free(vertex);
+            vectors2Pool.free(vertex);
 
             for (int i = 0; i < indices.size - 2; i += 3) {
                 indicesBuffer.put(startVertex + indices.get(i));
@@ -1288,7 +1284,7 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleY *= MathUtils.cosDeg(angleX);
         if (MathUtils.isZero(scaleX) || MathUtils.isZero(scaleY)) return;
 
-        Vector2 vertex = vectorsPool.allocate();
+        Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
             float poly_x = polygon[i];
             float poly_y = polygon[i + 1];
@@ -1312,7 +1308,7 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         vertexIndex += polygon.length / 2;
 
-        vectorsPool.free(vertex);
+        vectors2Pool.free(vertex);
     }
 
     public void drawPolygonFilled(float[] polygon, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
@@ -1337,7 +1333,7 @@ public class Renderer2D implements MemoryResourceHolder {
             return;
         }
 
-        Vector2 vertex = vectorsPool.allocate();
+        Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < vertices.size; i += 2) {
             float poly_x = vertices.get(i);
             float poly_y = vertices.get(i + 1);
@@ -1349,7 +1345,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
             verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
         }
-        vectorsPool.free(vertex);
+        vectors2Pool.free(vertex);
 
         int startVertex = this.vertexIndex;
         for (int i = 0; i < indices.size; i ++) {
@@ -1375,7 +1371,7 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
 
-        Vector2 vertex = vectorsPool.allocate();
+        Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
             float poly_x = polygon[i];
             float poly_y = polygon[i + 1];
@@ -1394,7 +1390,7 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         vertexIndex += count;
 
-        vectorsPool.free(vertex);
+        vectors2Pool.free(vertex);
     }
 
     /* Rendering 2D primitives - Lines */
@@ -1426,7 +1422,7 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
-        Vector2 dir = vectorsPool.allocate();
+        Vector2 dir = vectors2Pool.allocate();
         dir.x = x2 - x1;
         dir.y = y2 - y1;
         dir.nor();
@@ -1448,7 +1444,7 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 2);
         indicesBuffer.put(startVertex + 3);
 
-        vectorsPool.free(dir);
+        vectors2Pool.free(dir);
         vertexIndex += 4;
     }
 
@@ -1462,7 +1458,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         final float r = thickness * 0.5f;
         edgeRefinement = Math.max(3, edgeRefinement);
-        Vector2 p = vectorsPool.allocate();
+        Vector2 p = vectors2Pool.allocate();
         p.x = x2 - x1;
         p.y = y2 - y1;
         p.nor();
@@ -1477,7 +1473,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         /* put edge circles */
         final float da = 180.0f / (edgeRefinement - 1);
-        Vector2 vertex = vectorsPool.allocate();
+        Vector2 vertex = vectors2Pool.allocate();
         /* circle 1: */
         verticesBuffer.put(x1).put(y1).put(currentTint).put(0.5f).put(0.5f); // center point
         /* put arc vertices */
@@ -1494,7 +1490,7 @@ public class Renderer2D implements MemoryResourceHolder {
             vertex.rotateDeg(-da * i);
             verticesBuffer.put(x2 + vertex.x).put(y2 + vertex.y).put(currentTint).put(0.5f).put(0.5f);
         }
-        vectorsPool.free(vertex);
+        vectors2Pool.free(vertex);
 
         int startVertex = this.vertexIndex;
 
@@ -1520,7 +1516,7 @@ public class Renderer2D implements MemoryResourceHolder {
             indicesBuffer.put(startVertex + 4 + edgeRefinement + 1 + i + 2);
         }
 
-        vectorsPool.free(p);
+        vectors2Pool.free(p);
         vertexIndex += 4 + (1 + edgeRefinement) + (1 + edgeRefinement); // 4 vertices for the line segment, (1 + edgeRefinement) for each half-circle.
     }
 
@@ -1568,7 +1564,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         Array<Vector2> vertices = new Array<>(true, refinement);
         for (int i = 0; i < refinement; i++) {
-            Vector2 vertex = vectorsPool.allocate();
+            Vector2 vertex = vectors2Pool.allocate();
             vertex.x = minX + i * step;
             vertex.y = f.apply(vertex.x);
             vertices.add(vertex);
@@ -1586,7 +1582,7 @@ public class Renderer2D implements MemoryResourceHolder {
             indicesBuffer.put(startVertex + i + 1);
         }
 
-        vectorsPool.freeAll(vertices);
+        vectors2Pool.freeAll(vertices);
         vertexIndex += refinement;
     }
 
@@ -1603,7 +1599,7 @@ public class Renderer2D implements MemoryResourceHolder {
         int pointCount = (int) ((max - min) / step) + 1;
         Vector2[] points = new Vector2[pointCount];
         for (int i = 0; i < pointCount; i++) {
-            Vector2 point = vectorsPool.allocate();
+            Vector2 point = vectors2Pool.allocate();
             float x = min + i * step;
             float y = f.apply(x);
             point.x = x;
@@ -1612,7 +1608,7 @@ public class Renderer2D implements MemoryResourceHolder {
         }
 
         drawCurveFilled(stroke, refinement, points);
-        vectorsPool.freeAll(points);
+        vectors2Pool.freeAll(points);
     }
 
     // TODO: bug here when rendering many points.
@@ -1650,18 +1646,18 @@ public class Renderer2D implements MemoryResourceHolder {
             Vector2 p0 = pointsInput[0];
             Vector2 p2 = pointsInput[1];
 
-            Vector2 t = vectorsPool.allocate();
+            Vector2 t = vectors2Pool.allocate();
             t.set(p2).sub(p0);
             t.rotate90(1);
             t.nor();
             t.scl(width);
 
-            vertices.add(vectorsPool.allocate().set(pointsInput[0]).add(t));
-            vertices.add(vectorsPool.allocate().set(pointsInput[0]).sub(t));
-            vertices.add(vectorsPool.allocate().set(pointsInput[1]).sub(t));
-            vertices.add(vectorsPool.allocate().set(pointsInput[1]).sub(t));
-            vertices.add(vectorsPool.allocate().set(pointsInput[1]).add(t));
-            vertices.add(vectorsPool.allocate().set(pointsInput[0]).add(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).add(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).sub(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).sub(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).sub(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).add(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).add(t));
 
             var p00 = vertices.get(0);
             var p01 = vertices.get(1);
@@ -1673,7 +1669,7 @@ public class Renderer2D implements MemoryResourceHolder {
             createRoundCap(pointsInput[0], p00, p01, p02, refinement, vertices);
             createRoundCap(pointsInput[1], p10, p11, p12, refinement, vertices);
 
-            vectorsPool.free(t);
+            vectors2Pool.free(t);
 
         } else {
             Array<Vector2> points    = new Array<>(true, pointsInput.length + 2);
@@ -1681,11 +1677,11 @@ public class Renderer2D implements MemoryResourceHolder {
             /* handle closed path scenario */
             boolean closed = false;
             if (pointsInput[0].equals(pointsInput[pointsInput.length - 1])) { // closed path
-                Vector2 midPoint = vectorsPool.allocate();
+                Vector2 midPoint = vectors2Pool.allocate();
                 Vector2.midPoint(pointsInput[0], pointsInput[1], midPoint);
                 points.add(midPoint);
                 for (int i = 1; i < pointsInput.length; i++) {
-                    Vector2 point = vectorsPool.allocate();
+                    Vector2 point = vectors2Pool.allocate();
                     point.set(pointsInput[i]);
                     points.add(point);
                 }
@@ -1693,7 +1689,7 @@ public class Renderer2D implements MemoryResourceHolder {
                 closed = true;
             } else { // open path
                 for (Vector2 vector2 : pointsInput) {
-                    Vector2 point = vectorsPool.allocate();
+                    Vector2 point = vectors2Pool.allocate();
                     point.set(vector2);
                     points.add(point);
                 }
@@ -1701,7 +1697,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
             /* calculate mid-points of the path (between corner to corner) */
             for (int i = 0; i < points.size - 1; i++) {
-                Vector2 midPoint = vectorsPool.allocate();
+                Vector2 midPoint = vectors2Pool.allocate();
                 if (i == 0) {
                     midPoint.set(points.first());
                 } else if (i == points.size - 2) {
@@ -1712,12 +1708,12 @@ public class Renderer2D implements MemoryResourceHolder {
                 midPoints.add(midPoint);
             }
 
-            Vector2 intersection_1 = vectorsPool.allocate();
-            Vector2 intersection_2 = vectorsPool.allocate();
-            Vector2 intersection_3 = vectorsPool.allocate();
-            Vector2 intersection_4 = vectorsPool.allocate();
-            Vector2 t0 = vectorsPool.allocate();
-            Vector2 t2 = vectorsPool.allocate();
+            Vector2 intersection_1 = vectors2Pool.allocate();
+            Vector2 intersection_2 = vectors2Pool.allocate();
+            Vector2 intersection_3 = vectors2Pool.allocate();
+            Vector2 intersection_4 = vectors2Pool.allocate();
+            Vector2 t0 = vectors2Pool.allocate();
+            Vector2 t2 = vectors2Pool.allocate();
 
             /* iterate over all the anchors. Anchor = <Midpoint L, Corner, Midpoint R> */
             for (int i = 1; i < midPoints.size; i++) {
@@ -1765,32 +1761,32 @@ public class Renderer2D implements MemoryResourceHolder {
                         intersection_4);
 
                 /* Store the unique intersection in "intersection" */
-                Vector2 intersection = vectorsPool.allocate();
+                Vector2 intersection = vectors2Pool.allocate();
                 if      (result_1 == 0) intersection.set(intersection_1);
                 else if (result_2 == 0) intersection.set(intersection_2);
                 else if (result_3 == 0) intersection.set(intersection_3);
                 else if (result_4 == 0) intersection.set(intersection_4);
 
                 /* add the vertices for the current anchor. */
-                vertices.add(vectorsPool.allocate().set(p0).add(t0));
-                vertices.add(vectorsPool.allocate().set(p0).sub(t0));
-                vertices.add(vectorsPool.allocate().set(p1).add(t0));
+                vertices.add(vectors2Pool.allocate().set(p0).add(t0));
+                vertices.add(vectors2Pool.allocate().set(p0).sub(t0));
+                vertices.add(vectors2Pool.allocate().set(p1).add(t0));
 
-                vertices.add(vectorsPool.allocate().set(p0).sub(t0));
-                vertices.add(vectorsPool.allocate().set(p1).add(t0));
-                vertices.add(vectorsPool.allocate().set(p1).sub(t0));
+                vertices.add(vectors2Pool.allocate().set(p0).sub(t0));
+                vertices.add(vectors2Pool.allocate().set(p1).add(t0));
+                vertices.add(vectors2Pool.allocate().set(p1).sub(t0));
 
-                Vector2 pI = vectorsPool.allocate().set(p1).add(t0);
-                Vector2 pF = vectorsPool.allocate().set(p1).add(t2);
+                Vector2 pI = vectors2Pool.allocate().set(p1).add(t0);
+                Vector2 pF = vectors2Pool.allocate().set(p1).add(t2);
                 createRoundCap(p1, pI, pF, p2, refinement, vertices);
 
-                vertices.add(vectorsPool.allocate().set(p2).add(t2));
-                vertices.add(vectorsPool.allocate().set(p1).sub(t2));
-                vertices.add(vectorsPool.allocate().set(p1).add(t2));
+                vertices.add(vectors2Pool.allocate().set(p2).add(t2));
+                vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
+                vertices.add(vectors2Pool.allocate().set(p1).add(t2));
 
-                vertices.add(vectorsPool.allocate().set(p2).add(t2));
-                vertices.add(vectorsPool.allocate().set(p1).sub(t2));
-                vertices.add(vectorsPool.allocate().set(p2).sub(t2));
+                vertices.add(vectors2Pool.allocate().set(p2).add(t2));
+                vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
+                vertices.add(vectors2Pool.allocate().set(p2).sub(t2));
             }
 
             /* handle the case of closed paths */
@@ -1806,14 +1802,14 @@ public class Renderer2D implements MemoryResourceHolder {
             }
 
             /* free resources allocated in this scope */
-            vectorsPool.free(intersection_1);
-            vectorsPool.free(intersection_2);
-            vectorsPool.free(intersection_3);
-            vectorsPool.free(intersection_4);
-            vectorsPool.free(t0);
-            vectorsPool.free(t2);
-            vectorsPool.freeAll(points);
-            vectorsPool.freeAll(midPoints);
+            vectors2Pool.free(intersection_1);
+            vectors2Pool.free(intersection_2);
+            vectors2Pool.free(intersection_3);
+            vectors2Pool.free(intersection_4);
+            vectors2Pool.free(t0);
+            vectors2Pool.free(t2);
+            vectors2Pool.freeAll(points);
+            vectors2Pool.freeAll(midPoints);
         }
 
         /* put vertices and indices. */
@@ -1832,7 +1828,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += advance;
 
         /* free resources */
-        vectorsPool.freeAll(vertices);
+        vectors2Pool.freeAll(vertices);
     }
 
     private void createRoundCap(Vector2 center, Vector2 pI, Vector2 pF, Vector2 pNext, int refinement, Array<Vector2> vertices) {
@@ -1860,12 +1856,12 @@ public class Renderer2D implements MemoryResourceHolder {
 
         float da = angleDiff / refinement;
         for (var i = 0; i < refinement; i++) {
-            vertices.add(vectorsPool.allocate().set(center.x, center.y));
-            vertices.add(vectorsPool.allocate().set(
+            vertices.add(vectors2Pool.allocate().set(center.x, center.y));
+            vertices.add(vectors2Pool.allocate().set(
                     center.x + radius * MathUtils.cosRad(orgAngle0 + da * i),
                     center.y + radius * MathUtils.sinRad(orgAngle0 + da * i)
             ));
-            vertices.add(vectorsPool.allocate().set(
+            vertices.add(vectors2Pool.allocate().set(
                     center.x + radius * MathUtils.cosRad(orgAngle0 + da * (1 + i)),
                     center.y + radius * MathUtils.sinRad(orgAngle0 + da * (1 + i))
             ));
@@ -1888,7 +1884,7 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleX *= MathUtils.cosDeg(angleY);
         scaleY *= MathUtils.cosDeg(angleX);
 
-        Vector2 vertex = vectorsPool.allocate();
+        Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < mesh.length; i += VERTEX_SIZE) {
             float poly_x = mesh[i];
             float poly_y = mesh[i + 1];
@@ -1898,7 +1894,7 @@ public class Renderer2D implements MemoryResourceHolder {
             vertex.add(x, y);
             verticesBuffer.put(vertex.x).put(vertex.y).put(mesh[i + 2]).put(mesh[i + 3]).put(mesh[i + 4]);
         }
-        vectorsPool.free(vertex);
+        vectors2Pool.free(vertex);
 
         int startVertex = this.vertexIndex;
         for (int i = 0; i < count; i ++) {

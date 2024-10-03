@@ -347,6 +347,15 @@ public class Vector2 implements MemoryPool.Reset {
         return this.sub(refX, refY).rotateRad(radians).add(refX, refY);
     }
 
+    /** Left-multiplies the vector by the given matrix, assuming the fourth (w) component of the vector is 1.
+     * @param matrix The matrix
+     * @return This vector for chaining */
+    public Vector2 mul (final Matrix4x4 matrix) {
+        final float[] l_mat = matrix.val;
+        return this.set(x * l_mat[Matrix4x4.M00] + y * l_mat[Matrix4x4.M01] + l_mat[Matrix4x4.M03],
+                x * l_mat[Matrix4x4.M10] + y * l_mat[Matrix4x4.M11] + l_mat[Matrix4x4.M13]);
+    }
+
     public Vector2 rotate90(int dir) {
         float x = this.x;
         if (dir >= 0) {

@@ -1,20 +1,17 @@
 package com.heavybox.jtix.ecs;
 
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
-import com.heavybox.jtix.math.Vector3;
-import org.jetbrains.annotations.NotNull;
 
-@Deprecated public class ComponentTransform2 implements Component {
+@Deprecated public class ComponentTransform_old_2 implements Component {
 
     public final Matrix4x4 matrix;
 
-    public ComponentTransform2() {
+    public ComponentTransform_old_2() {
         this(0,0,0,0,0,0,1,1,1);
     }
 
-    protected ComponentTransform2(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
+    protected ComponentTransform_old_2(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
         matrix = new Matrix4x4();
         Quaternion rotation = new Quaternion().setEulerAnglesDeg(degX, degY, degZ);
         matrix.setToTranslationRotationScale(x, y, z, rotation.x, rotation.y, rotation.z, rotation.w, sclX, sclY, sclZ);

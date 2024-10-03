@@ -3,8 +3,8 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.application.ApplicationUtils;
 import com.heavybox.jtix.assets.AssetStore;
-import com.heavybox.jtix.ecs.ComponentTransform2;
-import com.heavybox.jtix.ecs.ComponentTransform3;
+import com.heavybox.jtix.ecs.ComponentTransform_old_2;
+import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
@@ -13,7 +13,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.ecs.ComponentTransform;
+import com.heavybox.jtix.ecs.ComponentTransform_old_1;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -26,9 +26,9 @@ public class SceneRendering2D_Transform_1 extends ApplicationScreen {
 
     Texture yellowSquare;
 
-    ComponentTransform t1 = new ComponentTransform();
-    ComponentTransform2 t2 = new ComponentTransform2();
-    ComponentTransform3 t3 = new ComponentTransform3();
+    ComponentTransform_old_1 t1 = new ComponentTransform_old_1();
+    ComponentTransform_old_2 t2 = new ComponentTransform_old_2();
+    ComponentTransform t3 = new ComponentTransform();
 
     public SceneRendering2D_Transform_1() {
         renderer2D = new Renderer2D();
