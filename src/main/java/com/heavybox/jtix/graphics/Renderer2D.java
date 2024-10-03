@@ -536,25 +536,17 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
-        //Vector2 point = vectors2Pool.allocate();
-        //point.mul(transform);
+        Vector2 point = vectors2Pool.allocate();
+        point.mul(transform);
+        verticesBuffer.put(point.x).put(point.y).put(currentTint).put(0.5f).put(0.5f);
 
+        /* put vertices */
         float da = 360f / refinement;
-
-        Array<Vector2> vertices = new Array<>();
-        vertices.add(new Vector2().mul(transform)); // center
         for (int i = 0; i < refinement + 1; i++) {
-            Vector2 point = new Vector2();
             point.x = r * MathUtils.cosDeg(da * i);
             point.y = r * MathUtils.sinDeg(da * i);
             point.mul(transform);
-            vertices.add(point);
-        }
-
-        /* put vertices */
-        for (int i = 0; i < vertices.size; i++) {
-            Vector2 v = vertices.get(i);
-            verticesBuffer.put(v.x).put(v.y).put(currentTint).put(0.5f).put(0.5f);
+            verticesBuffer.put(point.x).put(point.y).put(currentTint).put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
@@ -568,7 +560,7 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 1);
         vertexIndex += refinement + 2;
 
-        //vectors2Pool.free(arm);
+        vectors2Pool.free(point);
     }
 
     public void drawCircleFilled(float r, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
