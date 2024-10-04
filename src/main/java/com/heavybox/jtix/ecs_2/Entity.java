@@ -5,31 +5,30 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Entity {
 
     protected EntityContainer container;
+
     protected int handle;
     protected int componentsBitmask;
 
     private final ComponentTransform transform;
-    protected final Enum category;
-    protected final int categoryBitmask;
+    public final int categoryBitmask;
 
-    protected Entity(Enum category) {
-        this(category,0,0,0,0,0,0,1,1,1);
+    protected Entity() {
+        this(0,0,0,0,0,0,1,1,1);
     }
 
-    protected Entity(Enum category, float x, float y, float z, float degZ) {
-        this(category, x, y, z, 0, 0, degZ, 1, 1, 1);
+    protected Entity(float x, float y, float z, float degZ) {
+        this(x, y, z, 0, 0, degZ, 1, 1, 1);
     }
 
-    protected Entity(Enum category, float x, float y, float z, float degZ, float sclX, float sclY) {
-        this(category, x, y, z, 0, 0, degZ, 1, sclX, sclY);
+    protected Entity(float x, float y, float z, float degZ, float sclX, float sclY) {
+        this(x, y, z, 0, 0, degZ, 1, sclX, sclY);
     }
 
-    protected Entity(Enum category,
+    protected Entity(
                      float x, float y, float z,
                      float degX, float degY, float degZ,
                      float sclX, float sclY, float sclZ) {
-        this.category = category;
-        this.categoryBitmask = ECSUtils.getCategoryBitmask(category);
+        this.categoryBitmask = ECSUtils.getCategoryBitmask(this.getCategory());
         this.transform = new ComponentTransform(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
     }
 
@@ -41,6 +40,8 @@ public abstract class Entity {
     protected abstract ComponentLogics    createComponentLogics();
     protected abstract ComponentSignals   createComponentSignals();
     protected abstract ComponentRegion    createComponentRegion();
+
+    public abstract @NotNull Enum getCategory();
 
     public final ComponentTransform getComponentTransform() {
         return transform;

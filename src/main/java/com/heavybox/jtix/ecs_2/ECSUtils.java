@@ -4,19 +4,18 @@ public final class ECSUtils {
 
     private ECSUtils() {}
 
-    public static int getComponentsBitmask(final Entity entity) {
+    static int getComponentsBitmask(final Entity entity) {
         int mask = 0;
-
         Component component;
         for (Component.Type type : Component.Type.values()) {
             component = entity.getComponent(type);
             if (component != null) mask |= component.getBitmask();
         }
-
         return mask;
     }
 
-    public static int getCategoryBitmask(final Enum category) {
+    static int getCategoryBitmask(final Enum category) {
+        if (category == null) return 0b000001;
         return 0b000001 << category.ordinal();
     }
 
