@@ -1299,24 +1299,22 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    public Matrix4x4 spin(float degrees) {
-        return rotateLocalAxisDeg(Vector3.X_UNIT, degrees);
+    public Matrix4x4 rotateLocalAxisX(float degrees) {
+        return rotateLocalAxis(Vector3.X_UNIT, degrees);
     }
 
-    public Matrix4x4 roll(float degrees) { return rotateLocalAxisDeg(Vector3.Y_UNIT, degrees); }
+    public Matrix4x4 rotateLocalAxisY(float degrees) { return rotateLocalAxis(Vector3.Y_UNIT, degrees); }
 
-    public Matrix4x4 turn(float degrees) {
-        return rotateLocalAxisDeg(Vector3.Z_UNIT, degrees);
+    public Matrix4x4 rotateLocalAxisZ(float degrees) {
+        return rotateLocalAxis(Vector3.Z_UNIT, degrees);
     }
-
-
 
     /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
      * glTranslate/glRotate/glScale.
      * @param axis The vector axis to rotate around.
      * @param degrees The angle in degrees.
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 rotateLocalAxisDeg(Vector3 axis, float degrees) {
+    public Matrix4x4 rotateLocalAxis(Vector3 axis, float degrees) {
         if (degrees == 0) return this;
         quaternion.setDeg(axis, degrees);
         return rotateLocalAxis(quaternion);
@@ -1329,23 +1327,9 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param axisZ The z-axis component of the vector to rotate around.
      * @param degrees The angle in degrees
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 rotateLocalAxisDeg(float axisX, float axisY, float axisZ, float degrees) {
+    public Matrix4x4 rotateLocalAxis(float axisX, float axisY, float axisZ, float degrees) {
         if (degrees == 0) return this;
         quaternion.setFromAxisDeg(axisX, axisY, axisZ, degrees);
-        return rotateLocalAxis(quaternion);
-    }
-
-    /** Postmultiplies this matrix with a (counter-clockwise) rotation matrix. Postmultiplication is also used by OpenGL ES' 1.x
-     * glTranslate/glRotate/glScale
-     * @param axisX The x-axis component of the vector to rotate around.
-     * @param axisY The y-axis component of the vector to rotate around.
-     * @param axisZ The z-axis component of the vector to rotate around.
-     * @param radians The angle in radians
-     * @return This matrix for the purpose of chaining methods together. */
-    // TODO: delete. use explicit rotateSelfAxis().
-    @Deprecated public Matrix4x4 rotateRad(float axisX, float axisY, float axisZ, float radians) {
-        if (radians == 0) return this;
-        quaternion.setFromAxisRad(axisX, axisY, axisZ, radians);
         return rotateLocalAxis(quaternion);
     }
 

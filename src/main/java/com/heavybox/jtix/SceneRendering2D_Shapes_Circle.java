@@ -62,13 +62,13 @@ public class SceneRendering2D_Shapes_Circle extends ApplicationScreen {
         }
 
         if (Keyboard.isKeyPressed(Keyboard.Key.X)) {
-            t.rotateLocalAxisDeg(1,0,0,1);
+            t.rotateLocalAxis(1,0,0,1);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            t.rotateLocalAxisDeg(0,1,0,1);
+            t.rotateLocalAxis(0,1,0,1);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.Z)) {
-            t.rotateLocalAxisDeg(0,0,1,1);
+            t.rotateLocalAxis(0,0,1,1);
         }
 
         if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
