@@ -7,7 +7,27 @@ public final class ECSUtils {
     public static int getComponentsBitmask(final Entity entity) {
         int mask = 0;
 
-        Component audio = entity.getComponentAudio();
+        Component component;
+        for (Component.Type type : Component.Type.values()) {
+            component = entity.getComponent(type);
+            if (component != null) mask |= component.getBitmask();
+        }
+
+        return mask;
+    }
+
+    public static int getCategoryBitmask(final Enum category) {
+        return 0b000001 << category.ordinal();
+    }
+
+}
+
+/*
+public static int getComponentsBitmask(final Entity entity) {
+    Component audio = entity.getComponentAudio();
+        int mask = 0;
+
+        Component audio = entity.getComponentRender();
         if (audio != null) mask |= audio.getBitmask();
 
         Component render = entity.getComponentRender();
@@ -32,10 +52,5 @@ public final class ECSUtils {
         if (transform != null) mask |= transform.getBitmask();
 
         return mask;
-    }
-
-    public static int getCategoryBitmask(final Enum category) {
-        return 0b000001 << category.ordinal();
-    }
-
 }
+ */
