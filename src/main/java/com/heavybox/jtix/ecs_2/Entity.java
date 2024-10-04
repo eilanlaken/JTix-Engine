@@ -1,5 +1,7 @@
 package com.heavybox.jtix.ecs_2;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class Entity {
 
     protected EntityContainer container;
@@ -18,6 +20,10 @@ public abstract class Entity {
         this(category, x, y, z, 0, 0, degZ, 1, 1, 1);
     }
 
+    protected Entity(Enum category, float x, float y, float z, float degZ, float sclX, float sclY) {
+        this(category, x, y, z, 0, 0, degZ, 1, sclX, sclY);
+    }
+
     protected Entity(Enum category,
                      float x, float y, float z,
                      float degX, float degY, float degZ,
@@ -28,10 +34,10 @@ public abstract class Entity {
     }
 
     final              ComponentTransform createComponentTransform() { return transform;}
-    protected abstract ComponentAudio createComponentAudio();
-    protected abstract ComponentRender createComponentRender();
-    protected abstract ComponentCamera createComponentCamera();
-    protected abstract ComponentPhysics createComponentPhysics();
+    protected abstract ComponentAudio     createComponentAudio();
+    protected abstract ComponentRender    createComponentRender();
+    protected abstract ComponentCamera    createComponentCamera();
+    protected abstract ComponentPhysics   createComponentPhysics();
     protected abstract ComponentLogics    createComponentLogics();
     protected abstract ComponentSignals   createComponentSignals();
     protected abstract ComponentRegion    createComponentRegion();
@@ -73,6 +79,21 @@ public abstract class Entity {
     public final ComponentRegion getComponentRegion() {
         if (handle == -1) return null;
         return container.regions.get(handle);
+    }
+
+    public final Component getComponent(@NotNull Component.Type type) {
+        if (handle == -1) return null;
+
+        return switch (type) {
+            case AUDIO     -> container.audios.get(handle);
+            case RENDER    -> container.renders.get(handle);
+            case CAMERA    -> container.cameras.get(handle);
+            case LOGICS    -> container.logics.get(handle);
+            case PHYSICS   -> container.physics.get(handle);
+            case REGION    -> container.regions.get(handle);
+            case SIGNALS   -> container.signals.get(handle);
+            case TRANSFORM -> container.transforms.get(handle);
+        };
     }
 
 }
