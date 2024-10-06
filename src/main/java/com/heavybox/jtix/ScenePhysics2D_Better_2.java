@@ -1,7 +1,6 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.input.Keyboard;
@@ -9,6 +8,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.physics2d.Body;
 import com.heavybox.jtix.physics2d.World;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:

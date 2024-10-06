@@ -1,6 +1,5 @@
 package com.heavybox.jtix.ecs_3;
 
-import com.heavybox.jtix.ecs_3.ComponentTransform;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Entity {

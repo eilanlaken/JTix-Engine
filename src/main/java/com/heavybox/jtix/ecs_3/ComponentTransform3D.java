@@ -1,6 +1,5 @@
 package com.heavybox.jtix.ecs_3;
 
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 
 public class ComponentTransform3D extends Matrix4x4 implements ComponentTransform {

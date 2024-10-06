@@ -1,7 +1,5 @@
 package com.heavybox.jtix.ecs_3;
 
-import org.jetbrains.annotations.NotNull;
-
 public abstract class Entity3D extends Entity {
 
     protected Entity3D() {

@@ -1,7 +1,8 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.graphics.TexturePack;
 import org.yaml.snakeyaml.Yaml;
 
 import java.nio.file.Path;

@@ -3,12 +3,15 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Model;
+import com.heavybox.jtix.graphics.Renderer3D_old;
+import com.heavybox.jtix.graphics.ShaderProgram;
+import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.Component;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import com.heavybox.jtix.z_ecs_old.ComponentTransform_1;
-import com.heavybox.jtix.graphics.*;
-import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;

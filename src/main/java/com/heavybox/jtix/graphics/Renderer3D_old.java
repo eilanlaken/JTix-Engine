@@ -1,10 +1,10 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_ecs_old.ComponentTransform_1;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_ecs_old.ComponentTransform_1;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;

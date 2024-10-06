@@ -1,7 +1,5 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.collections.MapObjectObject;
-
 public class Color {
 
     public static final Color WHITE       = new Color(1, 1, 1, 1);
