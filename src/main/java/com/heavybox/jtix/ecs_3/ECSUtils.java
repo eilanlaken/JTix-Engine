@@ -1,4 +1,4 @@
-package com.heavybox.jtix.ecs_2;
+package com.heavybox.jtix.ecs_3;
 
 public final class ECSUtils {
 

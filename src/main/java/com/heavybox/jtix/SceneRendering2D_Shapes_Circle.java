@@ -5,7 +5,7 @@ import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.GraphicsUtils;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_Circle extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
     private float red = new Color(1,0,0,1).toFloatBits();
 
@@ -30,7 +30,7 @@ public class SceneRendering2D_Shapes_Circle extends ApplicationScreen {
     ComponentTransform t = new ComponentTransform();
 
     public SceneRendering2D_Shapes_Circle() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer();
     }
 
     @Override

@@ -1,9 +1,9 @@
-package com.heavybox.jtix.ecs_2;
+package com.heavybox.jtix.ecs_3;
 
 import com.heavybox.jtix.graphics.Renderer;
 
 public abstract class ComponentRender2D implements ComponentRender {
 
-    public abstract void draw(Renderer renderer2D);
+    public abstract void render(Renderer renderer2D, ComponentTransform2D transform2D);
 
 }

@@ -1,5 +1,6 @@
-package com.heavybox.jtix.ecs_2;
+package com.heavybox.jtix.ecs_3;
 
+import com.heavybox.jtix.ecs_3.ComponentTransform;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Entity {
@@ -8,41 +9,26 @@ public abstract class Entity {
 
     protected int handle;
     protected int componentsBitmask;
-
-    private final ComponentTransform transform;
     public final int categoryBitmask;
 
-    protected Entity() {
-        this(0,0,0,0,0,0,1,1,1);
-    }
+    protected final ComponentTransform transform;
 
-    protected Entity(float x, float y, float z, float degZ) {
-        this(x, y, z, 0, 0, degZ, 1, 1, 1);
-    }
-
-    protected Entity(float x, float y, float z, float degZ, float sclX, float sclY) {
-        this(x, y, z, 0, 0, degZ, 1, sclX, sclY);
-    }
-
-    protected Entity(
-                     float x, float y, float z,
-                     float degX, float degY, float degZ,
-                     float sclX, float sclY, float sclZ) {
+    protected Entity(final ComponentTransform transform) {
         this.categoryBitmask = getLayer().categoryBitmask;
-        this.transform = new ComponentTransform(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
+        this.transform = transform;
     }
-
-    final              ComponentTransform createComponentTransform() { return transform;}
-    protected abstract ComponentAudio     createComponentAudio();
-    protected abstract ComponentRender    createComponentRender();
-    protected abstract ComponentCamera    createComponentCamera();
-    protected abstract ComponentPhysics   createComponentPhysics();
-    protected abstract ComponentLogics    createComponentLogics();
-    protected abstract ComponentSignals   createComponentSignals();
-    protected abstract ComponentRegion    createComponentRegion();
 
     public abstract @NotNull EntityLayer getLayer();
 
+    protected abstract ComponentAudio   createComponentAudio();
+    protected abstract ComponentRender  createComponentRender();
+    protected abstract ComponentCamera  createComponentCamera();
+    protected abstract ComponentPhysics createComponentPhysics();
+    protected abstract ComponentLogics  createComponentLogics();
+    protected abstract ComponentSignals createComponentSignals();
+    protected abstract ComponentRegion  createComponentRegion();
+
+    public final ComponentTransform createComponentTransform() { return transform;}
     public final ComponentTransform getComponentTransform() {
         return transform;
     }

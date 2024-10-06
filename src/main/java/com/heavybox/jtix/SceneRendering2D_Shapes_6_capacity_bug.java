@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
@@ -28,7 +28,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
     ComponentTransform t2 = new ComponentTransform();
 
     public SceneRendering2D_Shapes_6_capacity_bug() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer();
     }
 
     @Override

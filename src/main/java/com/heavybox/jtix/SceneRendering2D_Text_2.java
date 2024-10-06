@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Text_2 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
@@ -25,7 +25,7 @@ public class SceneRendering2D_Text_2 extends ApplicationScreen {
     ComponentTransform t = new ComponentTransform();
 
     public SceneRendering2D_Text_2() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer();
         System.out.println(GraphicsUtils.getContentScaleX());
     }
 

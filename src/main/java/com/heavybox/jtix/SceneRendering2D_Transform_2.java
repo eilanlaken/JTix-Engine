@@ -5,7 +5,7 @@ import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.ecs.ComponentTransform;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.GraphicsUtils;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Transform_2 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
@@ -32,7 +32,7 @@ public class SceneRendering2D_Transform_2 extends ApplicationScreen {
     ComponentTransform t3 = new ComponentTransform();
 
     public SceneRendering2D_Transform_2() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer();
     }
 
     @Override
