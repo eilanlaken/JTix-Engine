@@ -57,7 +57,7 @@ public class ComponentTransform extends Component {
     }
 
     private void updateValues() {
-        matrix.getTranslation(position);
+        matrix.getPosition(position);
         matrix.getRotation(rotation);
         matrix.getScale(scale);
 

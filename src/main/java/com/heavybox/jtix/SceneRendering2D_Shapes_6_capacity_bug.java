@@ -91,7 +91,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
         Quaternion rotation = new Quaternion();
         Vector3 scale = new Vector3();
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            t.getTranslation(position);
+            t.getPosition(position);
             t.getRotation(rotation);
             t.getScale(scale);
             System.out.println(position);

@@ -902,22 +902,22 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    public Vector3 getTranslation(Vector3 position) {
+    public Vector3 getPosition(Vector3 position) {
         position.x = val[M03];
         position.y = val[M13];
         position.z = val[M23];
         return position;
     }
 
-    public float getX() {
+    public float getPositionX() {
         return val[M03];
     }
 
-    public float getY() {
+    public float getPositionY() {
         return val[M13];
     }
 
-    public float getZ() {
+    public float getPositionZ() {
         return val[M23];
     }
 
@@ -979,11 +979,6 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return scale.set(getScaleXSquared(), getScaleYSquared(), getScaleZSquared());
     }
 
-    // TODO: be careful
-    public float getMaxScale() {
-        return MathUtils.max(val[M00], val[M11], val[M22]);
-    }
-
     /** removes the translational part and transposes the matrix. */
     public Matrix4x4 toNormalMatrix() {
         val[M03] = 0;
@@ -1034,6 +1029,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
         }
     }
 
+    // TODO: implement unit tests.
     /** Multiplies the matrix mata with matrix matb, storing the result in mata. The arrays are assumed to hold 4x4 column major
      * matrices as you can get from {@link Matrix4x4#val}. This is the same as {@link Matrix4x4#mul(Matrix4x4)}.
      *

@@ -7,4 +7,8 @@ public interface ComponentTransform extends Component {
         return Type.TRANSFORM.bitmask;
     }
 
+    float getPositionX();
+    float getPositionY();
+    float getPositionZ();
+
 }

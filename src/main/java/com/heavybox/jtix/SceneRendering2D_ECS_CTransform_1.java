@@ -92,7 +92,7 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
             System.out.println("========================");
             System.out.println("matrix:");
             Vector3 position = new Vector3();
-            m.getTranslation(position);
+            m.getPosition(position);
             Quaternion rotation = new Quaternion();
             m.getRotation(rotation);
             Vector3 scale = new Vector3();

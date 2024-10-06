@@ -95,7 +95,7 @@ public class SceneRendering2D_Transform_2 extends ApplicationScreen {
         Quaternion rotation = new Quaternion();
         Vector3 scale = new Vector3();
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            t.getTranslation(position);
+            t.getPosition(position);
             t.getRotation(rotation);
             t.getScale(scale);
 

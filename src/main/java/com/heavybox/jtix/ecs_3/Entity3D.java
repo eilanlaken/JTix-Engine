@@ -12,14 +12,12 @@ public abstract class Entity3D extends Entity {
         super(new ComponentTransform3D(x, y, z, degX, degY, degZ, sclX, sclY, sclZ));
     }
 
-    @Override protected abstract ComponentAudio       createComponentAudio();
-    @Override protected abstract ComponentRender3D    createComponentRender();
-    @Override protected abstract ComponentCamera      createComponentCamera();
-    @Override protected abstract ComponentPhysics3D   createComponentPhysics();
-    @Override protected abstract ComponentLogics      createComponentLogics();
-    @Override protected abstract ComponentSignals     createComponentSignals();
-    @Override protected abstract ComponentRegion      createComponentRegion();
-
-    public abstract @NotNull Enum getCategory();
+    @Override protected abstract ComponentAudio     createComponentAudio();
+    @Override protected abstract ComponentRender3D  createComponentRender();
+    @Override protected abstract ComponentCamera    createComponentCamera();
+    @Override protected abstract ComponentPhysics3D createComponentPhysics();
+    @Override protected abstract ComponentLogics    createComponentLogics();
+    @Override protected abstract ComponentSignals   createComponentSignals();
+    @Override protected abstract ComponentRegion    createComponentRegion();
 
 }

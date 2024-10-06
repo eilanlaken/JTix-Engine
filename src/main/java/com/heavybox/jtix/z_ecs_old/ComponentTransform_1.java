@@ -65,7 +65,7 @@ import org.jetbrains.annotations.NotNull;
 
         transform.getRotation(rotation);
         transform.getScale(scale);
-        transform.getTranslation(position);
+        transform.getPosition(position);
 
         if (this.world == null) this.world = new Matrix4x4();
         this.world.set(transform);
