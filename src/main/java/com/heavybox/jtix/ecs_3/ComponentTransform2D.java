@@ -8,6 +8,8 @@ public class ComponentTransform2D implements ComponentTransform {
     public float sclX  = 1;
     public float sclY  = 1;
 
+    public ComponentTransform2D() { }
+
     public ComponentTransform2D(float x, float y, float angle, float sclX, float sclY) {
         this.x = x;
         this.y = y;
@@ -16,8 +18,8 @@ public class ComponentTransform2D implements ComponentTransform {
         this.sclY = sclY;
     }
 
-    public ComponentTransform2D(float x, float y, float z, float angle) {
-        this(x, y, angle, 1, 1);
+    public ComponentTransform2D(float x, float y, float angle) {
+        this(x, y, angle,1,1);
     }
 
     @Override
@@ -34,4 +36,5 @@ public class ComponentTransform2D implements ComponentTransform {
     public float getPositionZ() {
         return 0;
     }
+
 }

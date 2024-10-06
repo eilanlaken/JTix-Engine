@@ -4,33 +4,22 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Entity {
 
-    protected EntityContainer container;
-
-    protected int handle;
-    protected int componentsBitmask;
-    public final int categoryBitmask;
-
-    protected final ComponentTransform transform;
-
-    protected Entity(final ComponentTransform transform) {
-        this.categoryBitmask = getLayer().categoryBitmask;
-        this.transform = transform;
-    }
+    protected EntityContainer container = null;
+    protected int             handle    = -1;
+    protected int             bitmask   = 0;
 
     public abstract @NotNull EntityLayer getLayer();
 
-    protected abstract ComponentAudio   createComponentAudio();
-    protected abstract ComponentRender  createComponentRender();
-    protected abstract ComponentCamera  createComponentCamera();
-    protected abstract ComponentPhysics createComponentPhysics();
-    protected abstract ComponentLogics  createComponentLogics();
-    protected abstract ComponentSignals createComponentSignals();
-    protected abstract ComponentRegion  createComponentRegion();
+    protected abstract ComponentTransform createComponentTransform();
+    protected abstract ComponentAudio     createComponentAudio();
+    protected abstract ComponentRender    createComponentRender();
+    protected abstract ComponentCamera    createComponentCamera();
+    protected abstract ComponentPhysics   createComponentPhysics();
+    protected abstract ComponentLogics    createComponentLogics();
+    protected abstract ComponentSignals   createComponentSignals();
+    protected abstract ComponentRegion    createComponentRegion();
 
-    public final ComponentTransform createComponentTransform() { return transform;}
-    public final ComponentTransform getComponentTransform() {
-        return transform;
-    }
+    protected abstract ComponentTransform getComponentTransform();
 
     public final ComponentAudio getComponentAudio() {
         if (handle == -1) return null;
