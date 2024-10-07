@@ -22,7 +22,6 @@ public abstract class Entity2D extends Entity {
     @Override protected abstract ComponentCamera      createComponentCamera();
     @Override protected abstract ComponentPhysics2D   createComponentPhysics();
     @Override protected abstract ComponentLogics      createComponentLogics();
-    @Override protected abstract ComponentSignals     createComponentSignals();
     @Override protected abstract ComponentRegion      createComponentRegion();
 
     @Override public final ComponentTransform2D getComponentTransform() {

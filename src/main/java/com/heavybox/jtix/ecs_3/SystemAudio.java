@@ -2,6 +2,12 @@ package com.heavybox.jtix.ecs_3;
 
 public class SystemAudio implements System {
 
+    private final EntityContainer container;
+
+    SystemAudio(final EntityContainer container) {
+        this.container = container;
+    }
+
     @Override
     public boolean shouldProcess(Entity entity) {
         return false;

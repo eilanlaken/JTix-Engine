@@ -10,7 +10,6 @@ public interface Component {
         LOGICS,
         PHYSICS,
         REGION,
-        SIGNALS,
         TRANSFORM,
         ;
 

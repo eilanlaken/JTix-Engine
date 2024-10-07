@@ -2,8 +2,6 @@ package com.heavybox.jtix.ecs_3;
 
 public interface System {
 
-    boolean active = true;
-
     boolean shouldProcess(final Entity entity);
 
     void add(Entity entity);

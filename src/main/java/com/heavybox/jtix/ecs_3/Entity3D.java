@@ -18,7 +18,6 @@ public abstract class Entity3D extends Entity {
     @Override protected abstract ComponentCamera      createComponentCamera();
     @Override protected abstract ComponentPhysics3D   createComponentPhysics();
     @Override protected abstract ComponentLogics      createComponentLogics();
-    @Override protected abstract ComponentSignals     createComponentSignals();
     @Override protected abstract ComponentRegion      createComponentRegion();
 
     @Override public final ComponentTransform3D getComponentTransform() {
