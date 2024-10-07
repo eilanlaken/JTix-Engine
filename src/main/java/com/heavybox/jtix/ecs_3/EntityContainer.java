@@ -15,7 +15,7 @@ public class EntityContainer {
     private float lag              = 0;
 
     /* Systems */
-    protected final Array<System>   systems         = new Array<>(true, 6);
+    protected final Array<System>   systems         = new Array<>(true, 5);
     protected final SystemDynamics  systemDynamics  = new SystemDynamics(this);
     protected final SystemGUI       systemGUI       = new SystemGUI(this);
     protected final SystemAudio     systemAudio     = new SystemAudio(this);
