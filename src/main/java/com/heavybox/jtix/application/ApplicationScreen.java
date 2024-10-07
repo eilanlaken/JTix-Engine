@@ -18,7 +18,8 @@ public abstract class ApplicationScreen implements MemoryResourceHolder {
 
     protected abstract void resize(int width, int height);
 
-    public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
+    // TODO: find a better way of doing background required tasks before show()ing the scene.
+    @Deprecated public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         return new HashMap<>();
     }
 

@@ -30,7 +30,7 @@ public class ApplicationWindow implements MemoryResource {
     public ApplicationWindowAttributes attributes;
 
     private boolean focused = false;
-    private Array<String> filesDraggedAndDropped = new Array<>();
+    private final Array<String> filesDraggedAndDropped = new Array<>();
     private int latestFilesDraggedAndDroppedCount = 0;
     private volatile int backBufferWidth;
     private volatile int backBufferHeight;
@@ -42,7 +42,7 @@ public class ApplicationWindow implements MemoryResource {
     private       boolean           requestRendering = false;
     private       ApplicationScreen screen;
 
-    GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
+    private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;
 
         @Override
@@ -68,48 +68,28 @@ public class ApplicationWindow implements MemoryResource {
     private final GLFWWindowFocusCallback defaultFocusChangeCallback = new GLFWWindowFocusCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean focused) {
-            tasks.add(new Runnable() {
-                @Override
-                public void run() {
-                    ApplicationWindow.this.focused = focused;
-                }
-            });
+            tasks.add(() -> ApplicationWindow.this.focused = focused);
         }
     };
 
     private final GLFWWindowIconifyCallback defaultMinimizedCallback = new GLFWWindowIconifyCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean minimized) {
-            tasks.add(new Runnable() {
-                @Override
-                public void run() {
-                    ApplicationWindow.this.attributes.minimized = minimized;
-                }
-            });
+            tasks.add(() -> ApplicationWindow.this.attributes.minimized = minimized);
         }
     };
 
     private final GLFWWindowMaximizeCallback defaultMaximizedCallback = new GLFWWindowMaximizeCallback() {
         @Override
         public synchronized void invoke(long windowHandle, final boolean maximized) {
-            tasks.add(new Runnable() {
-                @Override
-                public void run() {
-                    ApplicationWindow.this.attributes.maximized = maximized;
-                }
-            });
+            tasks.add(() -> ApplicationWindow.this.attributes.maximized = maximized);
         }
     };
 
     private final GLFWWindowCloseCallback defaultCloseCallback = new GLFWWindowCloseCallback() {
         @Override
         public synchronized void invoke(final long handle) {
-            tasks.add(new Runnable() {
-                @Override
-                public void run() {
-                    GLFW.glfwSetWindowShouldClose(handle, false);
-                }
-            });
+            tasks.add(() -> GLFW.glfwSetWindowShouldClose(handle, false));
 
         }
     };
@@ -117,13 +97,10 @@ public class ApplicationWindow implements MemoryResource {
     private final GLFWDropCallback filesDroppedCallback = new GLFWDropCallback() {
         @Override
         public synchronized void invoke(final long windowHandle, final int count, final long names) {
-            tasks.add(new Runnable() {
-                @Override
-                public void run() {
-                    latestFilesDraggedAndDroppedCount = count;
-                    for (int i = 0; i < count; i++) {
-                        filesDraggedAndDropped.add(GLFWDropCallback.getName(names, i));
-                    }
+            tasks.add(() -> {
+                latestFilesDraggedAndDroppedCount = count;
+                for (int i = 0; i < count; i++) {
+                    filesDraggedAndDropped.add(GLFWDropCallback.getName(names, i));
                 }
             });
         }
@@ -160,9 +137,8 @@ public class ApplicationWindow implements MemoryResource {
             if (attributes.maximized) maximize();
         }
 
-        // TODO
         if (attributes.iconPath != null) {
-
+            setIcon(attributes.iconPath);
         }
 
         // register callbacks

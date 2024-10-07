@@ -133,4 +133,55 @@ public class EntityContainer {
         systems.add(system);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        // Print the size of the entities array
+        sb.append("Entities size: ").append(entities.size).append("\n");
+        // Print the transforms as 0s and 1s
+        sb.append("Transforms: ");
+        for (ComponentTransform c : componentTransforms) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the renders as 0s and 1s
+        sb.append("Renders: ");
+        for (ComponentRender c : componentRenders) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the cameras as 0s and 1s
+        sb.append("Cameras: ");
+        for (ComponentCamera c : componentCameras) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the audios as 0s and 1s
+        sb.append("Audios: ");
+        for (ComponentAudio c : componentAudios) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the physics as 0s and 1s
+        sb.append("Physics: ");
+        for (ComponentPhysics c : componentPhysics) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the logics as 0s and 1s
+        sb.append("Scripts: ");
+        for (ComponentLogics c : componentScripts) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the regions as 0s and 1s
+        sb.append("Regions: ");
+        for (ComponentRegion c : componentRegions) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+
+        return sb.toString();
+    }
+
 }
