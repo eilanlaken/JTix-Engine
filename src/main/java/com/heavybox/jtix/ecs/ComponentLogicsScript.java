@@ -1,17 +1,22 @@
 package com.heavybox.jtix.ecs;
 
-public class ComponentLogicsScript implements ComponentLogics {
+public abstract class ComponentLogicsScript implements ComponentLogics {
 
-    protected Entity entity;
+    protected Entity  entity = null;
+    protected boolean active = true;
 
-    public final void setEntity(final Entity entity) {
-        if (this.entity != null) throw new IllegalStateException(Entity.class.getSimpleName() + " " + this.entity + " is already set for " + ComponentLogicsScript.class.getSimpleName() + " " + this);
+    final void setEntity(final Entity entity) {
+        if (this.entity != null) throw new ECSException(Entity.class.getSimpleName() + " " + this.entity + " is already set for " + ComponentLogicsScript.class.getSimpleName() + " " + this);
         else this.entity = entity;
     }
 
-    public void start() {}
-    public void frameUpdate(float delta) {}
-    public void fixedUpdate(float delta) {}
-    public void onDestroy() {}
+    public abstract void start();
+    public abstract void frameUpdate(float delta);
+    public abstract void fixedUpdate(float delta);
+    public abstract void onDestroy();
+
+    public boolean handleSignal(final Object signal) {
+        return false;
+    }
 
 }

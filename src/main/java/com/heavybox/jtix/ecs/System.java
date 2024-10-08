@@ -1,19 +1,13 @@
 package com.heavybox.jtix.ecs;
 
-public abstract class System {
+public interface System {
 
-    protected final EntityContainer container;
+    boolean shouldProcess(final Entity entity);
 
-    public boolean active = true;
+    void add(Entity entity);
+    void remove(Entity entity);
 
-    protected System(final EntityContainer container) {
-        this.container = container;
-    }
-
-    protected abstract boolean shouldProcess(final Entity entity);
-    protected abstract void add(Entity entity);
-    protected abstract void remove(Entity entity);
-    protected abstract void frameUpdate(float delta);
-    protected abstract void fixedUpdate(float delta);
+    void frameUpdate(float delta);
+    void fixedUpdate(float delta);
 
 }

@@ -1,72 +1,69 @@
 package com.heavybox.jtix.ecs;
 
-public abstract class Entity {
+import org.jetbrains.annotations.NotNull;
 
-    protected EntityContainer container;
-    protected int handle;
-    protected int componentsBitmask;
+abstract class Entity {
 
-    private final ComponentTransform transform;
-    protected final Enum category;
-    protected final int categoryBitmask;
+    protected EntityContainer container = null;
+    protected int             handle    = -1;
+    protected int             bitmask   = 0;
 
-    protected Entity(Enum category) {
-        this(category,0,0,0,0,0,0,1,1,1);
-    }
+    Entity() {} // default package-private constructor to prevent directly extending Entity.
 
-    protected Entity(Enum category, float x, float y, float z, float degZ) {
-        this(category, x, y, z, 0, 0, degZ, 1, 1, 1);
-    }
+    public abstract @NotNull EntityLayer getLayer();
 
-    protected Entity(Enum category,
-                     float x, float y, float z,
-                     float degX, float degY, float degZ,
-                     float sclX, float sclY, float sclZ) {
-        this.category = category;
-        this.categoryBitmask = ECSUtils.getCategoryBitmask(category);
-        this.transform = new ComponentTransform(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
-    }
-
-    final              ComponentTransform createComponentTransform() { return transform;}
+    protected abstract ComponentTransform createComponentTransform();
     protected abstract ComponentAudio     createComponentAudio();
-    protected abstract ComponentGraphics  createComponentGraphics();
+    protected abstract ComponentRender    createComponentRender();
+    protected abstract ComponentCamera    createComponentCamera();
     protected abstract ComponentPhysics   createComponentPhysics();
     protected abstract ComponentLogics    createComponentLogics();
-    protected abstract ComponentSignals   createComponentSignals();
     protected abstract ComponentRegion    createComponentRegion();
 
-    public final ComponentTransform getComponentTransform() {
-        return transform;
-    }
+    protected abstract ComponentTransform getComponentTransform();
 
     public final ComponentAudio getComponentAudio() {
         if (handle == -1) return null;
-        return container.audios.get(handle);
+        return container.componentAudios.get(handle);
     }
 
-    public final ComponentGraphics getComponentGraphics() {
+    public final ComponentRender getComponentRender() {
         if (handle == -1) return null;
-        return container.graphics.get(handle);
+        return container.componentRenders.get(handle);
+    }
+
+    public final ComponentCamera getComponentCamera() {
+        if (handle == -1) return null;
+        return container.componentCameras.get(handle);
     }
 
     public final ComponentPhysics getComponentPhysics() {
         if (handle == -1) return null;
-        return container.physics.get(handle);
+        return container.componentPhysics.get(handle);
     }
 
     public final ComponentLogics getComponentLogics() {
         if (handle == -1) return null;
-        return container.logics.get(handle);
-    }
-
-    public final ComponentSignals getComponentSignals() {
-        if (handle == -1) return null;
-        return container.signals.get(handle);
+        return container.componentScripts.get(handle);
     }
 
     public final ComponentRegion getComponentRegion() {
         if (handle == -1) return null;
-        return container.regions.get(handle);
+        return container.componentRegions.get(handle);
+    }
+
+    public final Component getComponent(@NotNull Component.Type type) {
+        if (handle == -1) return null;
+
+        return switch (type) {
+            case AUDIO     -> container.componentAudios.get(handle);
+            case RENDER    -> container.componentRenders.get(handle);
+            case CAMERA    -> container.componentCameras.get(handle);
+            case LOGICS    -> container.componentScripts.get(handle);
+            case PHYSICS   -> container.componentPhysics.get(handle);
+            case REGION    -> container.componentRegions.get(handle);
+            case TRANSFORM -> container.componentTransforms.get(handle);
+        };
     }
 
 }

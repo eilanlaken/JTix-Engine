@@ -5,11 +5,11 @@ public interface Component {
     enum Type {
 
         AUDIO,
-        GRAPHICS,
+        RENDER,
+        CAMERA,
         LOGICS,
         PHYSICS,
         REGION,
-        SIGNALS,
         TRANSFORM,
         ;
 

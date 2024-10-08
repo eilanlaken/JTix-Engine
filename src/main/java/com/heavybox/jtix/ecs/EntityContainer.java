@@ -15,30 +15,28 @@ public class EntityContainer {
     private float lag              = 0;
 
     /* Systems */
-    protected final Array<System>   systems   = new Array<>(true, 6);
-    protected final SystemDynamics  dynamics  = new SystemDynamics(this);
-    protected final SystemGUI       gui       = new SystemGUI(this);
-    protected final SystemAudio     audio     = new SystemAudio(this);
-    protected final SystemRendering rendering = new SystemRendering(this);
-    protected final SystemLogic     scripting = new SystemLogic(this);
-    protected final SystemSignaling signaling = new SystemSignaling(this);
+    protected final Array<System>   systems         = new Array<>(true, 5);
+    protected final SystemDynamics  systemDynamics  = new SystemDynamics(this);
+    protected final SystemGUI       systemGUI       = new SystemGUI(this);
+    protected final SystemAudio     systemAudio     = new SystemAudio(this);
+    protected final SystemRendering systemRendering = new SystemRendering(this);
+    protected final SystemLogics    systemLogics    = new SystemLogics(this);
 
     /* Component Store */
-    protected Array<ComponentTransform> transforms = new Array<>(false, 200);
-    protected Array<ComponentGraphics>  graphics   = new Array<>(false, 200);
-    protected Array<ComponentAudio>     audios     = new Array<>(false, 200);
-    protected Array<ComponentPhysics>   physics    = new Array<>(false, 200);
-    protected Array<ComponentLogics>    logics     = new Array<>(false, 200);
-    protected Array<ComponentSignals>   signals    = new Array<>(false, 200);
-    protected Array<ComponentRegion>    regions    = new Array<>(false, 200);
+    protected Array<ComponentTransform> componentTransforms = new Array<>(false, 200);
+    protected Array<ComponentRender>    componentRenders    = new Array<>(false, 200);
+    protected Array<ComponentCamera>    componentCameras    = new Array<>(false, 200);
+    protected Array<ComponentAudio>     componentAudios     = new Array<>(false, 200);
+    protected Array<ComponentPhysics>   componentPhysics    = new Array<>(false, 200);
+    protected Array<ComponentLogics>    componentScripts    = new Array<>(false, 200);
+    protected Array<ComponentRegion>    componentRegions    = new Array<>(false, 200);
 
     public EntityContainer() {
-        systems.add(dynamics);
-        systems.add(audio);
-        systems.add(gui);
-        systems.add(rendering);
-        systems.add(scripting);
-        systems.add(signaling);
+        systems.add(systemDynamics);
+        systems.add(systemAudio);
+        systems.add(systemGUI);
+        systems.add(systemRendering);
+        systems.add(systemLogics);
     }
 
     public void update() {
@@ -50,7 +48,6 @@ public class EntityContainer {
             removeEntities();
             addEntities();
             for (System system : systems) {
-                if (!system.active) continue;
                 system.fixedUpdate(this.secondsPerUpdate);
             }
             this.lag -= this.secondsPerUpdate;
@@ -58,7 +55,6 @@ public class EntityContainer {
 
         /* call the frameUpdate() of every system */
         for (System system : systems) {
-            if (!system.active) continue;
             system.frameUpdate(elapsedTime);
         }
     }
@@ -74,13 +70,13 @@ public class EntityContainer {
 
             int handle = entity.handle;
             /* remove from components store */
-            transforms.removeIndex(handle);
-            graphics.removeIndex(handle);
-            audios.removeIndex(handle);
-            physics.removeIndex(handle);
-            logics.removeIndex(handle);
-            signals.removeIndex(handle);
-            regions.removeIndex(handle);
+            componentTransforms.removeIndex(handle);
+            componentRenders.removeIndex(handle);
+            componentCameras.removeIndex(handle);
+            componentAudios.removeIndex(handle);
+            componentPhysics.removeIndex(handle);
+            componentScripts.removeIndex(handle);
+            componentRegions.removeIndex(handle);
             /* remove from entities array and update the handles of the affected Entities */
             entities.removeIndex(handle);
             entity.handle = -1;
@@ -100,18 +96,18 @@ public class EntityContainer {
             entities.add(entity);
             ComponentTransform cTransform = entity.createComponentTransform();
             ComponentAudio cAudio = entity.createComponentAudio();
-            ComponentGraphics cGraphics = entity.createComponentGraphics();
+            ComponentRender cRender = entity.createComponentRender();
+            ComponentCamera cCamera = entity.createComponentCamera();
             ComponentPhysics cPhysics = entity.createComponentPhysics();
             ComponentLogics cLogics = entity.createComponentLogics();
-            ComponentSignals cSignals = entity.createComponentSignals();
             ComponentRegion cRegion = entity.createComponentRegion();
-            transforms.add(cTransform);
-            audios.add(cAudio);
-            graphics.add(cGraphics);
-            physics.add(cPhysics);
-            logics.add(cLogics);
-            signals.add(cSignals);
-            regions.add(cRegion);
+            componentTransforms.add(cTransform);
+            componentAudios.add(cAudio);
+            componentRenders.add(cRender);
+            componentCameras.add(cCamera);
+            componentPhysics.add(cPhysics);
+            componentScripts.add(cLogics);
+            componentRegions.add(cRegion);
 
             // TODO: compute the entity's bitmask
         }
@@ -135,6 +131,57 @@ public class EntityContainer {
     public void registerSystem(System system) {
         if (systems.contains(system, true)) return;
         systems.add(system);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        // Print the size of the entities array
+        sb.append("Entities size: ").append(entities.size).append("\n");
+        // Print the transforms as 0s and 1s
+        sb.append("Transforms: ");
+        for (ComponentTransform c : componentTransforms) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the renders as 0s and 1s
+        sb.append("Renders: ");
+        for (ComponentRender c : componentRenders) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the cameras as 0s and 1s
+        sb.append("Cameras: ");
+        for (ComponentCamera c : componentCameras) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the audios as 0s and 1s
+        sb.append("Audios: ");
+        for (ComponentAudio c : componentAudios) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the physics as 0s and 1s
+        sb.append("Physics: ");
+        for (ComponentPhysics c : componentPhysics) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the logics as 0s and 1s
+        sb.append("Scripts: ");
+        for (ComponentLogics c : componentScripts) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+        // Print the regions as 0s and 1s
+        sb.append("Regions: ");
+        for (ComponentRegion c : componentRegions) {
+            sb.append(c == null ? "0 " : "1 ");
+        }
+        sb.append("\n");
+
+        return sb.toString();
     }
 
 }

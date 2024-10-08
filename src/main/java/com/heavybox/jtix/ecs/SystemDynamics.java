@@ -1,33 +1,35 @@
 package com.heavybox.jtix.ecs;
 
-public class SystemDynamics extends System {
+public class SystemDynamics implements System {
+
+    private final EntityContainer container;
 
     SystemDynamics(final EntityContainer container) {
-        super(container);
+        this.container = container;
     }
 
     @Override
-    protected boolean shouldProcess(Entity entity) {
+    public boolean shouldProcess(Entity entity) {
         return false;
     }
 
     @Override
-    protected void add(Entity entity) {
+    public void add(Entity entity) {
 
     }
 
     @Override
-    protected void remove(Entity entity) {
+    public void remove(Entity entity) {
 
     }
 
     @Override
-    protected void frameUpdate(float delta) {
+    public void frameUpdate(float delta) {
 
     }
 
     @Override
-    protected void fixedUpdate(float delta) {
+    public void fixedUpdate(float delta) {
 
     }
 }
