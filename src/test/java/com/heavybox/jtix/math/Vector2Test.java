@@ -20,6 +20,13 @@ class Vector2Test {
     }
 
     @Test
+    void rotateVector3() {
+        Vector3 a = new Vector3(0,1,0);
+        Vector2.rotateDeg(a, 90);
+        Assertions.assertEquals(-1, a.x, MathUtils.FLOAT_ROUNDING_ERROR);
+    }
+
+    @Test
     void cpy() {
     }
 

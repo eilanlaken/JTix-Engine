@@ -53,7 +53,7 @@ public class Camera {
             case ORTHOGRAPHIC:
                 projection.setToOrthographicProjection(zoom * -viewportWidth / 2.0f, zoom * (viewportWidth / 2.0f), zoom * -(viewportHeight / 2.0f), zoom * viewportHeight / 2.0f, 0, far);
                 break;
-            case PERSPECTIVE:
+            case PERSPECTIVE: // TODO: consider zoom here: fov -> fov / zoom?
                 this.projection.setToPerspectiveProjection(Math.abs(near), Math.abs(far), fov, viewportWidth / viewportHeight);
                 break;
         }

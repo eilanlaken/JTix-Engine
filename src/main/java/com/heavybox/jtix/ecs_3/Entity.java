@@ -2,11 +2,13 @@ package com.heavybox.jtix.ecs_3;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Entity {
+abstract class Entity {
 
     protected EntityContainer container = null;
     protected int             handle    = -1;
     protected int             bitmask   = 0;
+
+    Entity() {} // default package-private constructor to prevent directly extending Entity.
 
     public abstract @NotNull EntityLayer getLayer();
 

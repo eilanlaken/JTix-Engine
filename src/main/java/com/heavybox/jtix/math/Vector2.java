@@ -350,7 +350,7 @@ public class Vector2 implements MemoryPool.Reset {
     /** Left-multiplies the vector by the given matrix, assuming the fourth (w) component of the vector is 1.
      * @param matrix The matrix
      * @return This vector for chaining */
-    public Vector2 mul (final Matrix4x4 matrix) {
+    @Deprecated public Vector2 mul (final Matrix4x4 matrix) {
         final float[] l_mat = matrix.val;
         return this.set(x * l_mat[Matrix4x4.M00] + y * l_mat[Matrix4x4.M01] + l_mat[Matrix4x4.M03],
                 x * l_mat[Matrix4x4.M10] + y * l_mat[Matrix4x4.M11] + l_mat[Matrix4x4.M13]);
@@ -528,6 +528,25 @@ public class Vector2 implements MemoryPool.Reset {
         float aL = a.len();
         float bL = b.len();
         return 0;//Math.acos(Vector2.dot(a, b) / (aL * bL));
+    }
+
+    public static Vector3 rotateDeg(Vector3 a, float degrees) {
+        return rotateRad(a, degrees * MathUtils.degreesToRadians);
+    }
+
+    public static Vector3 rotateRad(Vector3 a, float radians) {
+        if (MathUtils.isZero(radians)) return a;
+
+        float cos = MathUtils.cosRad(radians);
+        float sin = MathUtils.sinRad(radians);
+
+        float newX = a.x * cos - a.y * sin;
+        float newY = a.x * sin + a.y * cos;
+
+        a.x = newX;
+        a.y = newY;
+
+        return a;
     }
 
 }
