@@ -86,7 +86,7 @@ public final class AssetStore {
             asset.refCount++;
             return;
         }
-        if (!AssetUtils.fileExists(path)) throw new AssetsException("File not found: " + path);
+        if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
         AssetDescriptor descriptor = new AssetDescriptor(type, path);
         loadQueue.addFirst(descriptor);
     }
@@ -97,7 +97,7 @@ public final class AssetStore {
 
     public static synchronized <T extends MemoryResource> T get(final String path) {
         var t = store.get(path);
-        if (t == null) throw new AssetsException("File not loaded: " + path + System.lineSeparator() + "Make sure you spelled the file path correctly. You must " +
+        if (t == null) throw new AssetException("File not loaded: " + path + System.lineSeparator() + "Make sure you spelled the file path correctly. You must " +
                 "provide the full relative path.");
         return (T) t.data;
     }
@@ -129,7 +129,7 @@ public final class AssetStore {
             Constructor<?> constructor = loaderClass.getConstructor();
             loaderInstance = (AssetLoader<? extends MemoryResource>) constructor.newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException  | InvocationTargetException e) {
-            throw new AssetsException("Could not get loader for type: " + type.getSimpleName());
+            throw new AssetException("Could not get loader for type: " + type.getSimpleName());
         }
         return loaderInstance;
     }

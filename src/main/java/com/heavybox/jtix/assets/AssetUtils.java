@@ -70,7 +70,7 @@ public final class AssetUtils {
                 builder.append('\n');
             }
         } catch (IOException e) {
-            throw new AssetsException("Filed to read " + String.class.getSimpleName() + " contents of file: " + path);
+            throw new AssetException("Filed to read " + String.class.getSimpleName() + " contents of file: " + path);
         }
         return builder.toString();
     }
@@ -156,7 +156,7 @@ public final class AssetUtils {
     }
 
     public static boolean saveFile(final String directory, final String filename, final String content) throws IOException {
-        if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
+        if (!directoryExists(directory)) throw new AssetException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename;
         File file = new File(filePath);
         boolean fileExists = file.exists();
@@ -169,7 +169,7 @@ public final class AssetUtils {
     }
 
     public static void saveImage(final String directory, final String filename, BufferedImage image) throws IOException {
-        if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
+        if (!directoryExists(directory)) throw new AssetException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename + ".png";
         File file = new File(filePath);
         ImageIO.write(image, "png", file);
