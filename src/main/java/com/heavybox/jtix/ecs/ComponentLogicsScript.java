@@ -6,17 +6,10 @@ public abstract class ComponentLogicsScript implements ComponentLogics {
     protected boolean active = true;
 
     final void setEntity(final Entity entity) {
-        if (this.entity != null) throw new ECSException(Entity.class.getSimpleName() + " " + this.entity + " is already set for " + ComponentLogicsScript.class.getSimpleName() + " " + this);
+        if (this.entity != null) throw new ECSException(Entity.class.getSimpleName() + " " + this.entity + " is already set for this" + ComponentLogicsScript.class.getSimpleName());
         else this.entity = entity;
     }
 
-    public abstract void start();
-    public abstract void frameUpdate(float delta);
-    public abstract void fixedUpdate(float delta);
-    public abstract void onDestroy();
-
-    public boolean handleSignal(final Object signal) {
-        return false;
-    }
-
+    @Override
+    public void handleSignal(Object signal) { }
 }
