@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ecs;
 
-public enum EntityLayer {
+public enum EntityLayer2D {
 
     LAYER_0,
     LAYER_1,
@@ -38,7 +38,7 @@ public enum EntityLayer {
 
     public final int categoryBitmask;
 
-    EntityLayer() {
+    EntityLayer2D() {
         this.categoryBitmask = 0b000001 << ordinal();
     }
 

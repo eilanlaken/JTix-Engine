@@ -1,5 +1,7 @@
 package com.heavybox.jtix.ecs;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class Entity3D extends Entity {
 
     public final ComponentTransform3D transform;
@@ -23,5 +25,7 @@ public abstract class Entity3D extends Entity {
     @Override public final ComponentTransform3D getComponentTransform() {
         return transform;
     }
+
+    public abstract @NotNull EntityLayer3D getLayer();
 
 }

@@ -5,6 +5,7 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 
+// TODO: add render layers 2d
 public class ComponentCamera2D implements ComponentCamera {
 
     private final Vector3 tmp       = new Vector3();

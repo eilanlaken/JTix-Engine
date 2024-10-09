@@ -10,8 +10,6 @@ abstract class Entity {
 
     Entity() {} // default package-private constructor to prevent directly extending Entity.
 
-    public abstract @NotNull EntityLayer getLayer();
-
     protected abstract ComponentTransform createComponentTransform();
     protected abstract ComponentAudio     createComponentAudio();
     protected abstract ComponentRender    createComponentRender();
