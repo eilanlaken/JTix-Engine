@@ -36,10 +36,10 @@ public enum EntityLayer2D {
     LAYER_31,
     ;
 
-    public final int categoryBitmask;
+    public final int bitmask;
 
     EntityLayer2D() {
-        this.categoryBitmask = 0b000001 << ordinal();
+        this.bitmask = 0b000001 << ordinal();
     }
 
 }

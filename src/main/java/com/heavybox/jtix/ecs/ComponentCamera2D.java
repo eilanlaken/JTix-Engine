@@ -13,16 +13,14 @@ public class ComponentCamera2D implements ComponentCamera {
     public  final Vector3 direction = new Vector3(0,0,-1);
     public  final Vector3 up        = new Vector3(0,1,0);
     public  final Vector3 left      = new Vector3();
-
     public  final Camera  lens;
 
-    public ComponentCamera2D(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
-        this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, zoom, near, far, fov);
-        update();
-    }
+    public int layersBitmask;
 
-    public ComponentCamera2D(float viewportWidth, float viewportHeight, float zoom) {
-        this(viewportWidth, viewportHeight, zoom, 0.1f, 100, 70);
+    public ComponentCamera2D(float viewportWidth, float viewportHeight, EntityLayer2D layers) {
+        this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, 1, 0, 100, 70);
+        this.layersBitmask = ECSUtils.getLayersBitmask(layers);
+        update();
     }
 
     @Deprecated public ComponentCamera2D update() {

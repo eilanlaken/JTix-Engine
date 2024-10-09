@@ -14,4 +14,20 @@ public final class ECSUtils {
         return mask;
     }
 
+    public static int getLayersBitmask(EntityLayer2D... layers) {
+        int layerBitmask = 0;
+        for (EntityLayer2D layer : layers) {
+            layerBitmask |= layer.bitmask;
+        }
+        return layerBitmask;
+    }
+
+    public static int getLayersBitmask(EntityLayer3D... layers) {
+        int layerBitmask = 0;
+        for (EntityLayer3D layer : layers) {
+            layerBitmask |= layer.bitmask;
+        }
+        return layerBitmask;
+    }
+
 }

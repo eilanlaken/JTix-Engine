@@ -13,28 +13,18 @@ public class ComponentCamera3D implements ComponentCamera {
     public  final Vector3 direction = new Vector3(0,0,-1);
     public  final Vector3 up        = new Vector3(0,1,0);
     public  final Vector3 left      = new Vector3();
-
     public  final Camera  lens;
 
-    public ComponentCamera3D(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
+    public int layersBitmask;
+
+    public ComponentCamera3D(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov, EntityLayer3D... layers) {
         this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, zoom, near, far, fov);
+        this.layersBitmask = ECSUtils.getLayersBitmask(layers);
         update();
     }
 
     public ComponentCamera3D(float viewportWidth, float viewportHeight, float zoom) {
         this(viewportWidth, viewportHeight, zoom, 0.1f, 100, 70);
-    }
-
-    public ComponentCamera3D update() {
-        left.set(up).crs(direction);
-        lens.update(position, direction, up);
-        return this;
-    }
-
-    public ComponentCamera3D update(float viewportWidth, float viewportHeight) {
-        lens.viewportWidth  = viewportWidth;
-        lens.viewportHeight = viewportHeight;
-        return update();
     }
 
     public void setModeOrthographic() {
@@ -53,6 +43,18 @@ public class ComponentCamera3D implements ComponentCamera {
         up.rot(transform);
         left.set(up).crs(direction);
         lens.update(position, direction, up);
+    }
+
+    @Deprecated public ComponentCamera3D update() {
+        left.set(up).crs(direction);
+        lens.update(position, direction, up);
+        return this;
+    }
+
+    @Deprecated public ComponentCamera3D update(float viewportWidth, float viewportHeight) {
+        lens.viewportWidth  = viewportWidth;
+        lens.viewportHeight = viewportHeight;
+        return update();
     }
 
     @Deprecated public void lookAt(float x, float y, float z) {
