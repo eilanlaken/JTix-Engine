@@ -1,5 +1,10 @@
 package com.heavybox.jtix.ecs;
 
+/*
+The system responsible for updating the transforms (2d and 3d).
+Updating is done according to: physics and parent-child relationships.
+Note that a transform may also be manipulated from a ComponentLogics.
+ */
 public class SystemDynamics implements System {
 
     private final EntityContainer container;
