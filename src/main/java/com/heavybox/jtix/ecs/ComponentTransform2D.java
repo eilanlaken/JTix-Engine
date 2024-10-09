@@ -41,4 +41,9 @@ public class ComponentTransform2D implements ComponentTransform {
         return 0;
     }
 
+    @Override
+    public ComponentTransform2D getWorld() {
+        return world == null ? this : world;
+    }
+
 }

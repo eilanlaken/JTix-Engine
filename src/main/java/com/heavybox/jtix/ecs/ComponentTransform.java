@@ -11,4 +11,6 @@ public interface ComponentTransform extends Component {
     float getPositionY();
     float getPositionZ();
 
+    ComponentTransform getWorld();
+
 }

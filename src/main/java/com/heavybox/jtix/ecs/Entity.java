@@ -6,7 +6,7 @@ abstract class Entity {
 
     protected EntityContainer container = null;
     protected int             handle    = -1;
-    protected int             bitmask   = 0;
+    protected int             bitmask   =  0;
 
     Entity() {} // default package-private constructor to prevent directly extending Entity.
 

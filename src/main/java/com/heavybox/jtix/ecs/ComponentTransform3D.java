@@ -20,4 +20,9 @@ public class ComponentTransform3D extends Matrix4x4 implements ComponentTransfor
         setToPositionEulerScaling(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
     }
 
+    @Override
+    public ComponentTransform3D getWorld() {
+        return world == null ? this : world;
+    }
+
 }
