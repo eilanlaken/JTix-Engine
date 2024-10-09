@@ -26,6 +26,22 @@ public class ComponentTransform2D implements ComponentTransform {
         this(x, y, degrees,1,1);
     }
 
+    public void set(float x, float y, float degrees, float sclX, float sclY) {
+        this.x = x;
+        this.y = y;
+        this.degrees = degrees;
+        this.sclX = sclX;
+        this.sclY = sclY;
+    }
+
+    public void set(final ComponentTransform2D transform2D) {
+        this.x = transform2D.x;
+        this.y = transform2D.y;
+        this.degrees = transform2D.degrees;
+        this.sclX = transform2D.sclX;
+        this.sclY = transform2D.sclY;
+    }
+
     @Override
     public float getPositionX() {
         return x;
