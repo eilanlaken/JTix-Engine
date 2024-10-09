@@ -3,7 +3,7 @@ package com.heavybox.jtix.physics2d;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
-public final class BodyColliderCircle extends BodyCollider {
+public final class Body2DColliderCircle extends Body2DCollider {
 
     //public final Vector2 center;
     public final Vector2 worldCenter;
@@ -11,20 +11,20 @@ public final class BodyColliderCircle extends BodyCollider {
     public final float   r;
     public final float   r2;
 
-    public BodyColliderCircle(Data data, float r, float offsetX, float offsetY, float offsetAngleRad) {
+    public Body2DColliderCircle(Data data, float r, float offsetX, float offsetY, float offsetAngleRad) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, r, offsetX, offsetY, offsetAngleRad);
     }
 
-    public BodyColliderCircle(Data data, float r) {
+    public Body2DColliderCircle(Data data, float r) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, r, 0, 0, 0);
     }
 
-    public BodyColliderCircle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask, float r) {
+    public Body2DColliderCircle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask, float r) {
         this(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, r, 0, 0, 0);
     }
 
-    public BodyColliderCircle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
-                              float r, float offsetX, float offsetY, float offsetAngleRad) {
+    public Body2DColliderCircle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
+                                float r, float offsetX, float offsetY, float offsetAngleRad) {
         super(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, offsetX, offsetY,0);
         if (r <= 0) throw new Physics2DException("Radius of circle collider must be positive. Got: " + r);
         this.worldCenter = new Vector2(offset());
@@ -36,7 +36,7 @@ public final class BodyColliderCircle extends BodyCollider {
     @Override
     protected void update() {
         worldCenter.set(offset);
-        worldCenter.rotateAroundRad(body.lcmX, body.lcmY, body.aRad);
+        worldCenter.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
         worldCenter.add(body.x, body.y);
     }
 

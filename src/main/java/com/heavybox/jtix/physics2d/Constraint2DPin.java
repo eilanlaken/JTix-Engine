@@ -1,8 +1,8 @@
 package com.heavybox.jtix.physics2d;
 
-public class ConstraintPin extends Constraint {
+public class Constraint2DPin extends Constraint2D {
 
-    public ConstraintPin(final Body body) {
+    public Constraint2DPin(final Body2D body) {
         super(body);
     }
 

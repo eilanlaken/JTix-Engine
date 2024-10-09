@@ -3,17 +3,17 @@ package com.heavybox.jtix.physics2d;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 
-public final class CollisionManifold implements MemoryPool.Reset {
+public final class Collision2DManifold implements MemoryPool.Reset {
 
-    public BodyCollider collider_a = null;
-    public BodyCollider collider_b = null;
+    public Body2DCollider collider_a = null;
+    public Body2DCollider collider_b = null;
     public float        depth     = 0;
     public Vector2      normal    = new Vector2();
     public int          contacts  = 0;
     public Vector2      contact_a = new Vector2();
     public Vector2      contact_b = new Vector2();
 
-    public CollisionManifold() {}
+    public Collision2DManifold() {}
 
     @Override
     public void reset() {

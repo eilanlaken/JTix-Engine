@@ -7,7 +7,7 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import org.jetbrains.annotations.NotNull;
 
-public final class BodyColliderPolygon extends BodyCollider {
+public final class Body2DColliderPolygon extends Body2DCollider {
 
     public final int            vertexCount;
     public final ArrayFloat     vertices;
@@ -15,12 +15,12 @@ public final class BodyColliderPolygon extends BodyCollider {
     public final Array<Vector2> worldVertices;
 
 
-    public BodyColliderPolygon(Data data, float[] polygon) {
+    public Body2DColliderPolygon(Data data, float[] polygon) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, polygon);
     }
 
-    public BodyColliderPolygon(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
-                        float[] polygon) throws RuntimeException {
+    public Body2DColliderPolygon(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
+                                 float[] polygon) throws RuntimeException {
         super(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, 0, 0, 0);
         this.vertices = new ArrayFloat(true, polygon.length);
         this.indices = new ArrayInt(true, (polygon.length - 2) * 3);
@@ -70,7 +70,7 @@ public final class BodyColliderPolygon extends BodyCollider {
         for (int i = 0; i < vertexCount; i++) {
             worldVertices.get(i)
                     .set(vertices.get(i * 2), vertices.get(i * 2 + 1))
-                    .rotateAroundRad(body.lcmX, body.lcmY, body.aRad)
+                    .rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad)
                     .add(body.x, body.y);
         }
     }

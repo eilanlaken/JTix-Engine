@@ -6,8 +6,8 @@ import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.physics2d.Body;
-import com.heavybox.jtix.physics2d.World;
+import com.heavybox.jtix.physics2d.Body2D;
+import com.heavybox.jtix.physics2d.World2D;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
@@ -17,10 +17,10 @@ public class ScenePhysics2D_Better_3 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
     private ComponentGraphicsCamera componentGraphicsCamera;
-    private World world = new World();
+    private World2D world = new World2D();
 
-    private Body body_a;
-    private Body body_b;
+    private Body2D body_a;
+    private Body2D body_b;
 
     public ScenePhysics2D_Better_3() {
         renderer2DOld = new Renderer2D_old();
@@ -31,7 +31,7 @@ public class ScenePhysics2D_Better_3 extends ApplicationScreen {
         componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
         componentGraphicsCamera.update();
 
-        world.createBodyRectangle(null, Body.MotionType.STATIC,
+        world.createBodyRectangle(null, Body2D.MotionType.STATIC,
                 0, -5,0,
                 0f,0f,0,
                 1000, 1, 1, 0.8f, false, 1,
@@ -49,7 +49,7 @@ public class ScenePhysics2D_Better_3 extends ApplicationScreen {
         componentGraphicsCamera.lens.unProject(screen);
 
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            body_a = world.createBodyCircle(null, Body.MotionType.NEWTONIAN,
+            body_a = world.createBodyCircle(null, Body2D.MotionType.NEWTONIAN,
                     screen.x, screen.y, 0,
                     0f, 0f, 0,
                     1, 1, 1,0.2f, false, 1,
@@ -57,7 +57,7 @@ public class ScenePhysics2D_Better_3 extends ApplicationScreen {
         }
 
         if (Mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-            body_b = world.createBodyCircle(null, Body.MotionType.NEWTONIAN,
+            body_b = world.createBodyCircle(null, Body2D.MotionType.NEWTONIAN,
                     screen.x, screen.y, 0,
                     0f, 0f, 0,
                     1, 1, 1,0.2f, false, 1,

@@ -4,21 +4,21 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.math.Vector2;
 
-public class CollisionSolver {
+public class Collision2DSolver {
 
-    protected void beginContact(CollisionManifold manifold) {
+    protected void beginContact(Collision2DManifold manifold) {
 
     }
 
-    protected void resolve(CollisionManifold manifold) {
+    protected void resolve(Collision2DManifold manifold) {
         // separate bodies
-        BodyCollider collider_a = manifold.collider_a;
-        BodyCollider collider_b = manifold.collider_b;
-        Body body_a = collider_a.body;
-        Body body_b = collider_b.body;
+        Body2DCollider collider_a = manifold.collider_a;
+        Body2DCollider collider_b = manifold.collider_b;
+        Body2D body_a = collider_a.body;
+        Body2D body_b = collider_b.body;
 
-        final float aMassInv   = body_a.motionType == Body.MotionType.STATIC ? 0 : body_a.invM;
-        final float bMassInv   = body_b.motionType == Body.MotionType.STATIC ? 0 : body_b.invM;
+        final float aMassInv   = body_a.motionType == Body2D.MotionType.STATIC ? 0 : body_a.invM;
+        final float bMassInv   = body_b.motionType == Body2D.MotionType.STATIC ? 0 : body_b.invM;
         final float percent    = 0.4f;
         final float threshold  = 0.005f;
         final float invMassSum = aMassInv + bMassInv;
@@ -34,8 +34,8 @@ public class CollisionSolver {
         final float e           = Math.min(collider_a.restitution, collider_b.restitution);
         final float sf          = (collider_a.staticFriction + collider_b.staticFriction) * 0.5f;
         final float df          = (collider_a.dynamicFriction + collider_b.dynamicFriction) * 0.5f;
-        final float aInertiaInv = body_a.motionType == Body.MotionType.STATIC ? 0 : body_a.invI;
-        final float bInertiaInv = body_b.motionType == Body.MotionType.STATIC ? 0 : body_b.invI;
+        final float aInertiaInv = body_a.motionType == Body2D.MotionType.STATIC ? 0 : body_a.invI;
+        final float bInertiaInv = body_b.motionType == Body2D.MotionType.STATIC ? 0 : body_b.invI;
 
         Array<Vector2> contacts  = new Array<>();
         Array<Vector2> impulses  = new Array<>();
@@ -142,7 +142,7 @@ public class CollisionSolver {
 
     }
 
-    protected void endContact(CollisionManifold manifold) {
+    protected void endContact(Collision2DManifold manifold) {
 
     }
 

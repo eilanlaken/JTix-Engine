@@ -2,7 +2,7 @@ package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.memory.MemoryPool;
 
-public final class RayCastingRay implements MemoryPool.Reset {
+public final class RayCasting2DRay implements MemoryPool.Reset {
 
     public float originX;
     public float originY;
@@ -11,7 +11,7 @@ public final class RayCastingRay implements MemoryPool.Reset {
     public float dst;
     public int   bitmask;
 
-    public RayCastingRay() {}
+    public RayCasting2DRay() {}
 
     @Override
     public void reset() {

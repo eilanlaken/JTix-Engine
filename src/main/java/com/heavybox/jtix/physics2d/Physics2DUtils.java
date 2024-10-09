@@ -10,24 +10,24 @@ public final class Physics2DUtils {
 
     private Physics2DUtils() {}
 
-    public static float calculateMomentOfInertia(BodyCollider collider) {
+    public static float calculateMomentOfInertia(Body2DCollider collider) {
 
-        if (collider instanceof BodyColliderCircle) {
+        if (collider instanceof Body2DColliderCircle) {
             float mass = collider.density * collider.area();
-            BodyColliderCircle circle = (BodyColliderCircle) collider;
+            Body2DColliderCircle circle = (Body2DColliderCircle) collider;
             return 0.5f * mass * circle.r * circle.r;
         }
 
-        if (collider instanceof BodyColliderRectangle) {
-            BodyColliderRectangle rectangle = (BodyColliderRectangle) collider;
+        if (collider instanceof Body2DColliderRectangle) {
+            Body2DColliderRectangle rectangle = (Body2DColliderRectangle) collider;
             float mass = collider.density * collider.area();
             float w = rectangle.width;
             float h = rectangle.height;
             return (1f / 12.0f) * mass * (w * w + h * h);
         }
 
-        if (collider instanceof BodyColliderPolygon) {
-            BodyColliderPolygon polygon = (BodyColliderPolygon) collider;
+        if (collider instanceof Body2DColliderPolygon) {
+            Body2DColliderPolygon polygon = (Body2DColliderPolygon) collider;
 
             float[] vertices = polygon.vertices.items;
             int[] indices = polygon.indices.items;
@@ -93,7 +93,7 @@ public final class Physics2DUtils {
      * Returns the relative angle between the two bodies given the reference angle.
      * @return double
      */
-    public static float getRelativeRotationRad(Body body_1, Body body_2, float referenceAngleRad) {
+    public static float getRelativeRotationRad(Body2D body_1, Body2D body_2, float referenceAngleRad) {
         float rr = (body_1.aRad - body_2.aRad) - referenceAngleRad;
         if (rr < -MathUtils.PI) rr += MathUtils.PI_TWO;
         if (rr >  MathUtils.PI) rr -= MathUtils.PI_TWO;

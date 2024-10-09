@@ -3,7 +3,7 @@ package com.heavybox.jtix.physics2d;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
-public class ConstraintDistance extends Constraint {
+public class Constraint2DDistance extends Constraint2D {
 
     private float m_frequencyHz;
     private float m_dampingRatio;
@@ -42,7 +42,7 @@ public class ConstraintDistance extends Constraint {
     private Vector2 vB = new Vector2();
     private float wB;
 
-    public ConstraintDistance(final Body body_a, final Body body_b, Vector2 m_localAnchorA, Vector2 m_localAnchorB, float length, float frequencyHz, float dampingRatio) {
+    public Constraint2DDistance(final Body2D body_a, final Body2D body_b, Vector2 m_localAnchorA, Vector2 m_localAnchorB, float length, float frequencyHz, float dampingRatio) {
         super(body_a, body_b);
         this.m_localAnchorA.set(m_localAnchorA);
         this.m_localAnchorB.set(m_localAnchorB);
@@ -56,8 +56,8 @@ public class ConstraintDistance extends Constraint {
 
     @Override
     void prepare(float delta) {
-        m_localCenterA.set(body1.lcmX, body1.lcmY);
-        m_localCenterB.set(body2.lcmX, body2.lcmY);
+        m_localCenterA.set(body1.local_cmX, body1.local_cmY);
+        m_localCenterB.set(body2.local_cmX, body2.local_cmY);
         m_invMassA = body1.invM;
         m_invMassB = body2.invM;
         m_invIA = body1.invI;

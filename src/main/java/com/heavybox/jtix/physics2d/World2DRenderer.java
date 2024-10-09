@@ -9,7 +9,7 @@ import com.heavybox.jtix.math.Vector2;
 
 import java.util.Set;
 
-public class WorldRenderer {
+public class World2DRenderer {
 
     private static final float TINT_STATIC     = new Color(1,1,0,1).toFloatBits();
     private static final float TINT_KINEMATIC  = new Color(1,0,1,1).toFloatBits();
@@ -19,9 +19,9 @@ public class WorldRenderer {
     private static final float TINT_RAY_HIT    = new Color(0.2f,1,1,1).toFloatBits();
     private static final float TINT_RAY        = new Color(0.4f, 0.2f, 0.8f, 1).toFloatBits();
 
-    private final World world;
+    private final World2D world;
 
-    WorldRenderer(final World world) {
+    World2DRenderer(final World2D world) {
         this.world = world;
     }
 
@@ -32,16 +32,16 @@ public class WorldRenderer {
 
         // render bodies
         if (world.renderBodies) {
-            Array<Body> bodies = world.allBodies;
-            for (Body body : bodies) {
+            Array<Body2D> bodies = world.allBodies;
+            for (Body2D body : bodies) {
                 // render center of mass
 
-                Array<BodyCollider> colliders = body.colliders;
-                for (BodyCollider collider : colliders) {
+                Array<Body2DCollider> colliders = body.colliders;
+                for (Body2DCollider collider : colliders) {
                     /* render a circle */
-                    if (collider instanceof BodyColliderCircle) {
-                        BodyColliderCircle circle = (BodyColliderCircle) collider;
-                        float tint = body.motionType == Body.MotionType.STATIC ? TINT_STATIC : body.motionType == Body.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
+                    if (collider instanceof Body2DColliderCircle) {
+                        Body2DColliderCircle circle = (Body2DColliderCircle) collider;
+                        float tint = body.motionType == Body2D.MotionType.STATIC ? TINT_STATIC : body.motionType == Body2D.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
                         Vector2 worldCenter = circle.worldCenter();
                         float r = circle.r;
                         float angleRad = body.aRad;
@@ -56,9 +56,9 @@ public class WorldRenderer {
                     }
 
                     /* render a rectangle */
-                    if (collider instanceof BodyColliderRectangle) {
-                        BodyColliderRectangle rectangle = (BodyColliderRectangle) collider;
-                        float tint = body.motionType == Body.MotionType.STATIC ? TINT_STATIC : body.motionType == Body.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
+                    if (collider instanceof Body2DColliderRectangle) {
+                        Body2DColliderRectangle rectangle = (Body2DColliderRectangle) collider;
+                        float tint = body.motionType == Body2D.MotionType.STATIC ? TINT_STATIC : body.motionType == Body2D.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
                         float angleRad = body.aRad;
                         float x0 = rectangle.c0.x;
                         float y0 = rectangle.c0.y;
@@ -79,9 +79,9 @@ public class WorldRenderer {
                     }
 
                     /* render a polygon */
-                    if (collider instanceof BodyColliderPolygon) {
-                        BodyColliderPolygon polygon = (BodyColliderPolygon) collider;
-                        float tint = body.motionType == Body.MotionType.STATIC ? TINT_STATIC : body.motionType == Body.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
+                    if (collider instanceof Body2DColliderPolygon) {
+                        Body2DColliderPolygon polygon = (Body2DColliderPolygon) collider;
+                        float tint = body.motionType == Body2D.MotionType.STATIC ? TINT_STATIC : body.motionType == Body2D.MotionType.KINEMATIC ? TINT_KINEMATIC : TINT_NEWTONIAN;
                         renderer.setTint(tint);
                         renderer.drawPolygonThin(polygon.vertices.items, true, body.x, body.y, 0, 0, body.aRad * MathUtils.radiansToDegrees, 1, 1);
                         continue;
@@ -109,15 +109,15 @@ public class WorldRenderer {
 
         // TODO: render rays and ray casting results
         if (world.renderRays) {
-            Set<RayCastingRay> rays = world.allRays.keySet();
-            for (RayCastingRay ray : rays) {
+            Set<RayCasting2DRay> rays = world.allRays.keySet();
+            for (RayCasting2DRay ray : rays) {
                 float scl = ray.dst == Float.POSITIVE_INFINITY || Float.isNaN(ray.dst) ? 100 : ray.dst;
                 renderer.setTint(TINT_RAY);
                 renderer.drawLineThin(ray.originX, ray.originY, ray.originX + scl * ray.dirX, ray.originY + scl * ray.dirY);
             }
 
-            Array<RayCastingIntersection> intersections = world.intersections;
-            for (RayCastingIntersection intersection : intersections) {
+            Array<RayCasting2DIntersection> intersections = world.intersections;
+            for (RayCasting2DIntersection intersection : intersections) {
                 Vector2 point = intersection.point;
                 renderer.setTint(TINT_RAY_HIT);
                 renderer.drawCircleFilled(1, 10, point.x, point.y, 0,0, 0, scaleX, scaleY);

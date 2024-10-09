@@ -2,10 +2,10 @@ package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.math.Vector2;
 
-public abstract class BodyCollider {
+public abstract class Body2DCollider {
 
     // TODO: see if possible and better to replace with index or something.
-    public Body body = null;
+    public Body2D body = null;
 
     public float   density         = 1;
     public float   staticFriction  = 1;
@@ -24,19 +24,19 @@ public abstract class BodyCollider {
     protected float   offsetAngleRad;
     protected Vector2 worldCenter = new Vector2();
 
-    BodyCollider(Data data) {
+    Body2DCollider(Data data) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, 0, 0, 0);
     }
 
-    BodyCollider(float offsetX, float offsetY, float offsetAngleRad, Data data) {
+    Body2DCollider(float offsetX, float offsetY, float offsetAngleRad, Data data) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, offsetX, offsetY, offsetAngleRad);
     }
 
-    BodyCollider(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask) {
+    Body2DCollider(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask) {
         this(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, 0,0,0);
     }
 
-    BodyCollider(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask, float offsetX, float offsetY, float offsetAngleRad) {
+    Body2DCollider(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask, float offsetX, float offsetY, float offsetAngleRad) {
         this.density = density;
         this.staticFriction = staticFriction;
         this.dynamicFriction = dynamicFriction;

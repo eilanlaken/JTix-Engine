@@ -8,8 +8,8 @@ class Physics2DUtilsTest {
 
     @Test
     void calculateMomentOfInertia() {
-        BodyColliderPolygon poly = new BodyColliderPolygon(1,0,0,0,false,0, new float[] {0,1, 1,1, 1,0, 0,0});
-        BodyColliderRectangle rect = new BodyColliderRectangle(1,0,0,0,false,0,1,1,0,0,0);
+        Body2DColliderPolygon poly = new Body2DColliderPolygon(1,0,0,0,false,0, new float[] {0,1, 1,1, 1,0, 0,0});
+        Body2DColliderRectangle rect = new Body2DColliderRectangle(1,0,0,0,false,0,1,1,0,0,0);
 
         float polyInertia = Physics2DUtils.calculateMomentOfInertia(poly);
         float rectInertia = Physics2DUtils.calculateMomentOfInertia(rect);

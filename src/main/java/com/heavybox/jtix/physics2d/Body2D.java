@@ -5,9 +5,9 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.jetbrains.annotations.NotNull;
 
-public final class Body implements MemoryPool.Reset, Comparable<Body> {
+public final class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
 
-    public final Array<BodyCollider> colliders = new Array<>();
+    public final Array<Body2DCollider> colliders = new Array<>();
 
     public    Object     owner       = null;
     protected boolean    initialized = false; // if the body is currently in the world
@@ -16,13 +16,13 @@ public final class Body implements MemoryPool.Reset, Comparable<Body> {
     public    MotionType motionType  = null;
 
     // transform
-    protected float x      = 0; // x of the origin
-    protected float y      = 0; // y of the origin
-    protected float lcmX   = 0;
-    protected float lcmY   = 0;
-    protected float cmX    = 0;
-    protected float cmY    = 0;
-    protected float aRad   = 0; // the angle around the center of mass
+    protected float x         = 0; // x of the origin
+    protected float y         = 0; // y of the origin
+    protected float local_cmX = 0;
+    protected float local_cmY = 0;
+    protected float cmX       = 0;
+    protected float cmY       = 0;
+    protected float aRad      = 0; // the angle around the center of mass
     // velocity
     protected float vx     = 0;
     protected float vy     = 0;
@@ -32,46 +32,46 @@ public final class Body implements MemoryPool.Reset, Comparable<Body> {
     public float netForceY = 0;
     public float netTorque = 0; // the torque about the center of mass
 
-    public Array<Body> touching      = new Array<>(false, 2);
-    public Array<Body> justCollided  = new Array<>(false, 2);
-    public Array<Body> justSeparated = new Array<>(false, 2);
+    public Array<Body2D> touching      = new Array<>(false, 2);
+    public Array<Body2D> justCollided  = new Array<>(false, 2);
+    public Array<Body2D> justSeparated = new Array<>(false, 2);
 
-    public Array<Constraint> constraints = new Array<>(false, 2);
+    public Array<Constraint2D> constraints = new Array<>(false, 2);
 
     public float M;
     public float invM;
     public float I;
     public float invI;
 
-    public Body() {}
+    public Body2D() {}
 
     /**
-     * This method is called whenever a {@link Body} is inserted into the world.
+     * This method is called whenever a {@link Body2D} is inserted into the world.
      * It does 3 very important things:
      * - calculate the total mass (and its inverse)
      * - calculate the local center of mass
      * - calculates the moment of inertia relative to the center of mass (and its inverse)
      */
-    final void init() {
+    void init() {
         float totalMass = 0;
 
-        for (BodyCollider collider : colliders) {
+        for (Body2DCollider collider : colliders) {
             float shapeMass = collider.area() * collider.density;
             totalMass += shapeMass;
             final Vector2 shapeCenter = collider.localCenter();
-            this.lcmX += shapeCenter.x * shapeMass;
-            this.lcmY += shapeCenter.y * shapeMass;
+            this.local_cmX += shapeCenter.x * shapeMass;
+            this.local_cmY += shapeCenter.y * shapeMass;
         }
-        this.lcmX /= totalMass;
-        this.lcmY /= totalMass;
+        this.local_cmX /= totalMass;
+        this.local_cmY /= totalMass;
         this.M = totalMass;
         this.invM = 1.0f / totalMass;
 
         // calculate moment of inertia
         float totalInertia = 0;
-        for (BodyCollider collider : colliders) {
+        for (Body2DCollider collider : colliders) {
             float shapeMass = collider.area() * collider.density;
-            float d2 = Vector2.dst2(collider.localCenter().x, collider.localCenter().y, lcmX, lcmY);
+            float d2 = Vector2.dst2(collider.localCenter().x, collider.localCenter().y, local_cmX, local_cmY);
             float I = Physics2DUtils.calculateMomentOfInertia(collider) + shapeMass * d2;
             totalInertia += I;
         }
@@ -83,22 +83,22 @@ public final class Body implements MemoryPool.Reset, Comparable<Body> {
         this.initialized = true;
     }
 
-    final void syncTransform() {
-        cmX = x + lcmX;
-        cmY = y + lcmY;
-        for (BodyCollider collider : colliders) {
+    void syncTransform() {
+        cmX = x + local_cmX;
+        cmY = y + local_cmY;
+        for (Body2DCollider collider : colliders) {
             collider.update();
         }
     }
 
-    public final void setTransform(float x, float y, float angleRad) {
+    public void setTransform(float x, float y, float angleRad) {
         this.x = x;
         this.y = y;
         this.aRad = angleRad;
         syncTransform();
     }
 
-    public final void setVelocity(float vx, float vy, float wRad) {
+    public void setVelocity(float vx, float vy, float wRad) {
         this.vx = vx;
         this.vy = vy;
         this.wRad = wRad;
@@ -116,8 +116,8 @@ public final class Body implements MemoryPool.Reset, Comparable<Body> {
 
         this.x = 0;
         this.y = 0;
-        this.lcmX = 0;
-        this.lcmY = 0;
+        this.local_cmX = 0;
+        this.local_cmY = 0;
         this.aRad = 0;
 
         this.vx = 0;
@@ -135,7 +135,7 @@ public final class Body implements MemoryPool.Reset, Comparable<Body> {
     }
 
     @Override
-    public int compareTo(@NotNull Body o) {
+    public int compareTo(@NotNull Body2D o) {
         return Integer.compare(index, o.index);
     }
 

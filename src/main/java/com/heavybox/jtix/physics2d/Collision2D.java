@@ -8,33 +8,33 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public final class Collision {
+public final class Collision2D {
 
     private final MemoryPool<Projection> projectionsPool = new MemoryPool<>(Projection.class, 200);
-    private final World                  world;
+    private final World2D world;
 
-    Collision(final World world) {
+    Collision2D(final World2D world) {
         this.world = world;
     }
 
-    protected CollisionManifold detectCollision(BodyCollider collider_a, BodyCollider collider_b) {
+    protected Collision2DManifold detectCollision(Body2DCollider collider_a, Body2DCollider collider_b) {
 
-        if (collider_a instanceof BodyColliderCircle) {
-            if (collider_b instanceof BodyColliderCircle) return circleVsCircle(collider_a, collider_b);
-            if (collider_b instanceof BodyColliderRectangle) return circleVsRectangle(collider_a, collider_b);
+        if (collider_a instanceof Body2DColliderCircle) {
+            if (collider_b instanceof Body2DColliderCircle) return circleVsCircle(collider_a, collider_b);
+            if (collider_b instanceof Body2DColliderRectangle) return circleVsRectangle(collider_a, collider_b);
         }
 
-        if (collider_a instanceof BodyColliderRectangle) {
-            if (collider_b instanceof BodyColliderCircle) return circleVsRectangle(collider_b, collider_a);
-            if (collider_b instanceof BodyColliderRectangle) return rectangleVsRectangle(collider_b, collider_a);
+        if (collider_a instanceof Body2DColliderRectangle) {
+            if (collider_b instanceof Body2DColliderCircle) return circleVsRectangle(collider_b, collider_a);
+            if (collider_b instanceof Body2DColliderRectangle) return rectangleVsRectangle(collider_b, collider_a);
         }
 
         return null;
     }
 
-    private CollisionManifold circleVsCircle(BodyCollider collider_a, BodyCollider collider_b) {
-        final BodyColliderCircle c1 = (BodyColliderCircle) collider_a;
-        final BodyColliderCircle c2 = (BodyColliderCircle) collider_b;
+    private Collision2DManifold circleVsCircle(Body2DCollider collider_a, Body2DCollider collider_b) {
+        final Body2DColliderCircle c1 = (Body2DColliderCircle) collider_a;
+        final Body2DColliderCircle c2 = (Body2DColliderCircle) collider_b;
 
         Vector2 c2Center = c2.worldCenter;
         Vector2 c1Center = c1.worldCenter;
@@ -46,7 +46,7 @@ public final class Collision {
 
         if (distanceSquared > radiusSum * radiusSum) return null;
 
-        CollisionManifold manifold = world.manifoldsPool.allocate();
+        Collision2DManifold manifold = world.manifoldsPool.allocate();
         manifold.contacts = 1;
         final float distance = (float) Math.sqrt(distanceSquared);
         if (distance != 0) {
@@ -68,9 +68,9 @@ public final class Collision {
         return manifold;
     }
 
-    private CollisionManifold circleVsRectangle(BodyCollider collider_a, BodyCollider collider_b) {
-        BodyColliderCircle    circle = (BodyColliderCircle)    collider_a;
-        BodyColliderRectangle rect   = (BodyColliderRectangle) collider_b;
+    private Collision2DManifold circleVsRectangle(Body2DCollider collider_a, Body2DCollider collider_b) {
+        Body2DColliderCircle circle = (Body2DColliderCircle)    collider_a;
+        Body2DColliderRectangle rect   = (Body2DColliderRectangle) collider_b;
 
         Vector2 circleWorldCenter = circle.worldCenter;
         Vector2 c1 = rect.c0;
@@ -135,7 +135,7 @@ public final class Collision {
             projection = projection4;
         }
 
-        CollisionManifold manifold = world.manifoldsPool.allocate();
+        Collision2DManifold manifold = world.manifoldsPool.allocate();
         manifold.contacts = 1;
         manifold.contact_a.set(projection);
         manifold.collider_a = collider_a;
@@ -157,9 +157,9 @@ public final class Collision {
         return manifold;
     }
 
-    private CollisionManifold rectangleVsRectangle(BodyCollider collider_a, BodyCollider collider_b) {
-        BodyColliderRectangle rect_1 = (BodyColliderRectangle) collider_a;
-        BodyColliderRectangle rect_2 = (BodyColliderRectangle) collider_b;
+    private Collision2DManifold rectangleVsRectangle(Body2DCollider collider_a, Body2DCollider collider_b) {
+        Body2DColliderRectangle rect_1 = (Body2DColliderRectangle) collider_a;
+        Body2DColliderRectangle rect_2 = (Body2DColliderRectangle) collider_b;
 
         Vector2 rect_1_center = rect_1.worldCenter;
         Vector2 rect_2_center = rect_2.worldCenter;
@@ -246,7 +246,7 @@ public final class Collision {
             }
         }
 
-        CollisionManifold manifold = world.manifoldsPool.allocate();
+        Collision2DManifold manifold = world.manifoldsPool.allocate();
         setContactPoints(rect_1.worldVertices, rect_2.worldVertices, manifold);
         manifold.normal.set(nx, ny);
         manifold.depth = minOverlap;
@@ -261,7 +261,7 @@ public final class Collision {
         return manifold;
     }
 
-    private void setContactPoints(Array<Vector2> verticesA, Array<Vector2> verticesB, CollisionManifold manifold) {
+    private void setContactPoints(Array<Vector2> verticesA, Array<Vector2> verticesB, Collision2DManifold manifold) {
         Array<Projection> projections = new Array<>();
 
         // first polygon vs second
@@ -342,7 +342,7 @@ public final class Collision {
 
     public static final class GridCell implements MemoryPool.Reset {
 
-        public Array<BodyCollider> colliders = new Array<>(false, 2);
+        public Array<Body2DCollider> colliders = new Array<>(false, 2);
         public boolean             active    = false;
 
         public GridCell() {}
@@ -357,12 +357,12 @@ public final class Collision {
 
     public static final class Pair implements MemoryPool.Reset {
 
-        private BodyCollider a;
-        private BodyCollider b;
+        private Body2DCollider a;
+        private Body2DCollider b;
 
         public Pair() {}
 
-        void set(BodyCollider a, BodyCollider b) {
+        void set(Body2DCollider a, Body2DCollider b) {
             if (a.body.index < b.body.index) {
                 this.a = a;
                 this.b = b;
@@ -372,11 +372,11 @@ public final class Collision {
             }
         }
 
-        BodyCollider getA() {
+        Body2DCollider getA() {
             return a;
         }
 
-        BodyCollider getB() {
+        Body2DCollider getB() {
             return b;
         }
 

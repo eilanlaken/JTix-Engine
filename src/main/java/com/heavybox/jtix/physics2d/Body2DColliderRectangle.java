@@ -13,7 +13,7 @@ Represent a rectangular body collider:
        c1 --------------c2
 
  **/
-public final class BodyColliderRectangle extends BodyCollider {
+public final class Body2DColliderRectangle extends Body2DCollider {
 
     public final float width;
     public final float widthHalf;
@@ -28,21 +28,21 @@ public final class BodyColliderRectangle extends BodyCollider {
 
     public final Array<Vector2> worldVertices = new Array<>(true, 4);
 
-    public BodyColliderRectangle(Data data, float width, float height, float offsetX, float offsetY, float offsetAngleRad) {
+    public Body2DColliderRectangle(Data data, float width, float height, float offsetX, float offsetY, float offsetAngleRad) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, width, height, offsetX, offsetY, offsetAngleRad);
     }
 
-    public BodyColliderRectangle(Data data, float width, float height) {
+    public Body2DColliderRectangle(Data data, float width, float height) {
         this(data.density, data.staticFriction, data.dynamicFriction, data.restitution, data.ghost, data.bitmask, width, height, 0, 0, 0);
     }
 
-    public BodyColliderRectangle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
-                                 float width, float height) {
+    public Body2DColliderRectangle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
+                                   float width, float height) {
         this(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, width, height, 0, 0, 0);
     }
 
-    public BodyColliderRectangle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
-                                 float width, float height, float offsetX, float offsetY, float offsetAngleRad) {
+    public Body2DColliderRectangle(float density, float staticFriction, float dynamicFriction, float restitution, boolean ghost, int bitmask,
+                                   float width, float height, float offsetX, float offsetY, float offsetAngleRad) {
         super(density, staticFriction, dynamicFriction, restitution, ghost, bitmask, offsetX, offsetY, offsetAngleRad);
         this.width = width;
         this.widthHalf = width * 0.5f;
@@ -86,10 +86,10 @@ public final class BodyColliderRectangle extends BodyCollider {
         c2.set(+widthHalf, -heightHalf).rotateRad(offsetAngleRad).add(offset);
         c3.set(+widthHalf, +heightHalf).rotateRad(offsetAngleRad).add(offset);
 
-        c0.rotateAroundRad(body.lcmX, body.lcmY, body.aRad);
-        c1.rotateAroundRad(body.lcmX, body.lcmY, body.aRad);
-        c2.rotateAroundRad(body.lcmX, body.lcmY, body.aRad);
-        c3.rotateAroundRad(body.lcmX, body.lcmY, body.aRad);
+        c0.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
+        c1.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
+        c2.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
+        c3.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
 
         // translate
         c0.add(body.x, body.y);

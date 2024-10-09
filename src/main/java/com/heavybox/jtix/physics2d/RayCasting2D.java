@@ -6,24 +6,24 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.jetbrains.annotations.NotNull;
 
-public final class RayCasting {
+public final class RayCasting2D {
 
-    private final World world;
-    private final MemoryPool<RayCastingIntersection> intersectionsPool;
+    private final World2D world;
+    private final MemoryPool<RayCasting2DIntersection> intersectionsPool;
 
-    RayCasting(final World world) {
+    RayCasting2D(final World2D world) {
         this.world = world;
         this.intersectionsPool = world.intersectionsPool;
     }
 
-    void calculateIntersections(RayCastingRay ray, Array<Body> bodies, @NotNull Array<RayCastingIntersection> intersections) {
-        for (Body body : bodies) {
-            for (BodyCollider collider : body.colliders) {
-                if (collider instanceof BodyColliderCircle) {
-                    rayVsCircle(ray, (BodyColliderCircle) collider, intersections);
+    void calculateIntersections(RayCasting2DRay ray, Array<Body2D> bodies, @NotNull Array<RayCasting2DIntersection> intersections) {
+        for (Body2D body : bodies) {
+            for (Body2DCollider collider : body.colliders) {
+                if (collider instanceof Body2DColliderCircle) {
+                    rayVsCircle(ray, (Body2DColliderCircle) collider, intersections);
                 }
-                if (collider instanceof BodyColliderRectangle) {
-                    rayVsRectangle(ray, (BodyColliderRectangle) collider, intersections);
+                if (collider instanceof Body2DColliderRectangle) {
+                    rayVsRectangle(ray, (Body2DColliderRectangle) collider, intersections);
                 }
                 // TODO: implement polygon
             }
@@ -31,7 +31,7 @@ public final class RayCasting {
         }
     }
 
-    private void rayVsCircle(RayCastingRay ray, BodyColliderCircle circle, @NotNull Array<RayCastingIntersection> intersections) {
+    private void rayVsCircle(RayCasting2DRay ray, Body2DColliderCircle circle, @NotNull Array<RayCasting2DIntersection> intersections) {
         Vector2 m = new Vector2(ray.originX, ray.originY).sub(circle.worldCenter.x, circle.worldCenter.y);
         float b = 2 * m.dot(ray.dirX, ray.dirY);
         float c = m.len2() - circle.r * circle.r;
@@ -41,7 +41,7 @@ public final class RayCasting {
         if (MathUtils.isZero(det)) {
             float t = -b / 2.0f;
             if (t < 0 || t > ray.dst) return;
-            RayCastingIntersection result = intersectionsPool.allocate();
+            RayCasting2DIntersection result = intersectionsPool.allocate();
             result.collider = circle;
             result.point.set(ray.originX, ray.originY).add(t * ray.dirX, t * ray.dirY);
             result.direction.set(result.point).sub(circle.worldCenter.x, circle.worldCenter.y);
@@ -51,7 +51,7 @@ public final class RayCasting {
 
         float t1 = (-b + (float) Math.sqrt(det)) / 2.0f;
         if (t1 > 0 && t1 < ray.dst) {
-            RayCastingIntersection result1 = intersectionsPool.allocate();
+            RayCasting2DIntersection result1 = intersectionsPool.allocate();
             result1.collider = circle;
             result1.point.set(ray.originX, ray.originY).add(t1 * ray.dirX, t1 * ray.dirY);
             result1.direction.set(result1.point).sub(circle.worldCenter.x, circle.worldCenter.y);
@@ -60,7 +60,7 @@ public final class RayCasting {
 
         float t2 = (-b - (float) Math.sqrt(det)) / 2.0f;
         if (t2 > 0 && t2 < ray.dst) {
-            RayCastingIntersection result2 = intersectionsPool.allocate();
+            RayCasting2DIntersection result2 = intersectionsPool.allocate();
             result2.collider = circle;
             result2.point.set(ray.originX, ray.originY).add(t2 * ray.dirX, t2 * ray.dirY);
             result2.direction.set(result2.point).sub(circle.worldCenter.x, circle.worldCenter.y);
@@ -68,7 +68,7 @@ public final class RayCasting {
         }
     }
 
-    private void rayVsRectangle(RayCastingRay ray, BodyColliderRectangle rectangle, @NotNull Array<RayCastingIntersection> intersections) {
+    private void rayVsRectangle(RayCasting2DRay ray, Body2DColliderRectangle rectangle, @NotNull Array<RayCasting2DIntersection> intersections) {
         // broad phase
         float boundingRadius = rectangle.boundingRadius();
         Vector2 m = new Vector2(ray.originX, ray.originY).sub(rectangle.worldCenter.x, rectangle.worldCenter.y);
@@ -109,14 +109,14 @@ public final class RayCasting {
 
             if (ray.dst == Float.POSITIVE_INFINITY) {
                 if (t > 0 && t < 1 && u > 0) {
-                    RayCastingIntersection result = intersectionsPool.allocate();
+                    RayCasting2DIntersection result = intersectionsPool.allocate();
                     result.collider = rectangle;
                     result.point.set(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
                     result.direction.set(x4 - x3, y4 - y3);
                     intersections.add(result);
                 }
             } else if (t > 0 && t < 1 && u > 0 && u < 1) {
-                RayCastingIntersection result = intersectionsPool.allocate();
+                RayCasting2DIntersection result = intersectionsPool.allocate();
                 result.collider = rectangle;
                 result.point.set(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
                 result.direction.set(x4 - x3, y4 - y3);
