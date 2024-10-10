@@ -90,7 +90,7 @@ public class Renderer2D implements MemoryResourceHolder {
         GL30.glBindVertexArray(0);
     }
 
-    public Matrix4x4 getCurrentCamera() {
+    public Matrix4x4 getCurrentMatrix() {
         return currentMatrix;
     }
 
@@ -597,7 +597,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     /* Rendering 2D primitives - Rectangles */
-
+    // TODO: keep it. Used for physics renderer.
     public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
@@ -1241,6 +1241,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Lines */
 
+    // TODO: create versions with transform 2d
     public void drawLineThin(float x1, float y1, float x2, float y2) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
@@ -1260,6 +1261,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 2;
     }
 
+    // TODO: create versions with transform 2d
     public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
@@ -1294,6 +1296,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
     }
 
+    // TODO: create versions with transform 2d
     public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, int edgeRefinement) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4 + (1 + edgeRefinement) + (1 + edgeRefinement)) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
@@ -1369,6 +1372,7 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Rendering 2D primitives - Curves */
     /* TODO: implement a version of these methods with a transform. */
 
+    // TODO: create versions with transform 2d
     public void drawCurveThin(final Vector2... values) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
@@ -1392,6 +1396,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += values.length;
     }
 
+    // TODO: create versions with transform 2d
     public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);

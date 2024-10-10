@@ -4,11 +4,17 @@ import org.jetbrains.annotations.NotNull;
 
 abstract class Entity {
 
-    protected EntityContainer container = null;
-    protected int             handle    = -1;
-    protected int             bitmask   =  0;
+    public static final int PHASE_BEFORE_CREATED  = -1;
+    public static final int PHASE_AFTER_DESTROYED = -2;
+
+    EntityContainer container = null;
+    int             handle    = PHASE_BEFORE_CREATED;
+    int             bitmask   = 0;
 
     Entity() {} // default package-private constructor to prevent directly extending Entity.
+
+    public EntityContainer getContainer() { return container; }
+    void setContainer(final EntityContainer container) { this.container = container; }
 
     protected abstract ComponentTransform createComponentTransform();
     protected abstract ComponentAudio     createComponentAudio();
@@ -21,7 +27,7 @@ abstract class Entity {
     protected abstract ComponentTransform getComponentTransform();
 
     public final ComponentAudio getComponentAudio() {
-        if (handle == -1) return null;
+        if (handle == PHASE_BEFORE_CREATED) return null;
         return container.componentAudios.get(handle);
     }
 

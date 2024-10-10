@@ -61,13 +61,13 @@ public class EntityContainer {
 
     private void removeEntities() {
         for (Entity entity : toRemove) {
-            for (System system : systems) {
-                if (system.shouldProcess(entity) && entity.handle != -1) system.remove(entity);
-            }
-        }
-        for (Entity entity : toRemove) {
-            if (entity.handle == -1) throw new ECSException("Trying to remove an " + Entity.class.getSimpleName() + " that was not inserted");
+            if (entity.handle == Entity.PHASE_AFTER_DESTROYED) continue;
+            if (entity.handle == Entity.PHASE_BEFORE_CREATED)  continue;
 
+            //throw new ECSException("Trying to remove an " + Entity.class.getSimpleName() + " that was not inserted");
+            for (System system : systems) {
+                if (system.shouldProcess(entity)) system.remove(entity);
+            }
             int handle = entity.handle;
             /* remove from components store */
             componentTransforms.removeIndex(handle);
@@ -79,20 +79,22 @@ public class EntityContainer {
             componentRegions.removeIndex(handle);
             /* remove from entities array and update the handles of the affected Entities */
             entities.removeIndex(handle);
-            entity.handle = -1;
-            entity.container = null;
+            entity.handle = Entity.PHASE_AFTER_DESTROYED;
+            entity.setContainer(null);
             if (entities.isEmpty()) continue;
             entities.get(handle).handle = handle;
         }
+
         toRemove.clear();
     }
 
     private void addEntities() {
         for (Entity entity : toAdd) {
-            if (entity.handle != -1) throw new ECSException("Trying to add an already present " + Entity.class.getSimpleName());
+            if (entity.handle == Entity.PHASE_AFTER_DESTROYED) throw new ECSException("Cannot create " + Entity.class.getSimpleName() + " after it was destroyed.");
+            if (entity.handle != Entity.PHASE_BEFORE_CREATED)  continue;
 
             entity.handle = entities.size;
-            entity.container = this;
+            entity.setContainer(this);
             entities.add(entity);
             ComponentTransform cTransform = entity.createComponentTransform();
             ComponentAudio cAudio = entity.createComponentAudio();
@@ -109,7 +111,7 @@ public class EntityContainer {
             componentScripts.add(cLogics);
             componentRegions.add(cRegion);
 
-            // TODO: compute the entity's bitmask
+            entity.bitmask = ECSUtils.getComponentsBitmask(entity);
         }
         for (Entity entity : toAdd) {
             for (System system : systems) {
@@ -118,6 +120,34 @@ public class EntityContainer {
         }
         toAdd.clear();
     }
+
+    public void createEntity(Entity2D entity) {
+        this.toAdd.add(entity);
+        if (entity.children == null) return;
+        for (Entity2D child : entity.children) {
+            createEntity(child);
+        }
+    }
+
+    public void destroyEntity(Entity2D entity) {
+        entity.clearParent(false);
+        this.toRemove.add(entity);
+        entity.getDescendants(this.toRemove);
+    }
+
+//    public void createEntity(Entity3D entity) {
+//        this.toAdd.add(entity);
+//        if (entity.children == null) return;
+//        for (Entity2D child : entity.children) {
+//            createEntity(child);
+//        }
+//    }
+//
+//    public void destroyEntity(Entity3D entity) {
+//        entity.clearParent(false);
+//        this.toRemove.add(entity);
+//        entity.getDescendants(this.toRemove);
+//    }
 
     public void setSecondsPerUpdate(float secondsPerUpdate) {
         if (secondsPerUpdate <= 0) return;

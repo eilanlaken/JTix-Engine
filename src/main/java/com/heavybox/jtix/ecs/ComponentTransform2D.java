@@ -3,8 +3,8 @@ package com.heavybox.jtix.ecs;
 public class ComponentTransform2D implements ComponentTransform {
 
     // TODO
-    private ComponentTransform2D parent;
-    private ComponentTransform2D world;
+    ComponentTransform2D parent;
+    ComponentTransform2D world;
 
     public float x       = 0;
     public float y       = 0;

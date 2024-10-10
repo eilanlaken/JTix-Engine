@@ -5,8 +5,8 @@ import com.heavybox.jtix.math.Matrix4x4;
 public class ComponentTransform3D extends Matrix4x4 implements ComponentTransform {
 
     // TODO
-    private ComponentTransform3D parent;
-    private ComponentTransform3D world;
+    ComponentTransform3D parent;
+    ComponentTransform3D world;
 
     public ComponentTransform3D() {
         super();
