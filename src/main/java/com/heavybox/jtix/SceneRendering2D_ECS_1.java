@@ -30,15 +30,13 @@ public class SceneRendering2D_ECS_1 extends ApplicationScreen {
 
 
     ComponentTransform t = new ComponentTransform();
-    ComponentTransform t2 = new ComponentTransform();
-    ComponentTransform t3 = new ComponentTransform();
 
     private EntityContainer container;
+    Entity2D child5;
 
     public SceneRendering2D_ECS_1() {
         container = new EntityContainer();
         renderer2D = new Renderer();
-        System.out.println(container);
     }
 
     @Override
@@ -46,27 +44,34 @@ public class SceneRendering2D_ECS_1 extends ApplicationScreen {
         componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
+
+        Entity2D parent = ECSUtils.createDebugEntity();
+        for (int i = 0; i < 10; i++) {
+            Entity2D e = ECSUtils.createDebugEntity();
+            parent.addChild(e,false);
+            if (i == 4) child5 = e;
+        }
+
+        Entity2D x = ECSUtils.createDebugEntity();
+        child5.addChild(x, false);
+
+
+
+        container.createEntity(parent);
+
     }
 
-    float ay = 0;
     @Override
     protected void refresh() {
 
+        container.update();
 
-        Vector2[] vs = new Vector2[3];
-        vs[0] = new Vector2(-2,-2);
-        vs[1] = new Vector2(0,0);
-        vs[2] = new Vector2(2,0);
-        for (Vector2 v : vs) {
-            v.rotateRad(dy);
+        if (Keyboard.isKeyJustPressed(Keyboard.Key.U)) {
+            System.out.println(container);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-            dy += GraphicsUtils.getDeltaTime();
-            dx += GraphicsUtils.getDeltaTime();
-        }
-        if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-            dx -= GraphicsUtils.getDeltaTime();
-            dy -= GraphicsUtils.getDeltaTime();
+
+        if (Keyboard.isKeyJustPressed(Keyboard.Key.N)) {
+            container.destroyEntity(child5);
         }
 
         if (Keyboard.isKeyPressed(Keyboard.Key.X)) {
@@ -97,41 +102,8 @@ public class SceneRendering2D_ECS_1 extends ApplicationScreen {
         }
 
 
-        Vector3 position = new Vector3();
-        Quaternion rotation = new Quaternion();
-        Vector3 scale = new Vector3();
-        if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            t.getPosition(position);
-            t.getRotation(rotation);
-            t.getScale(scale);
-
-            System.out.println(rotation.getPitchDeg());
-            System.out.println(rotation.getYawDeg());
-            System.out.println(rotation.getRollDeg());
-
-            t2.idt();
-            t2.scale(scale);
-            t2.rotateLocalAxis(rotation);
-            t2.translateGlobalAxisXYZ(position);
-
-            t3.setToPositionEulerScaling(
-                    position.x, position.y, position.z,
-                    rotation.getPitchDeg(), rotation.getYawDeg(), rotation.getRollDeg(),
-                    scale.x, scale.y, scale.z);
-        }
-
-
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0,1);
-
-        if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
-            dr++;
-            System.out.println(baseR + dr);
-        }
-        if (Keyboard.isKeyPressed(Keyboard.Key.F)) {
-            dr--;
-            System.out.println(baseR + dr);
-        }
 
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         if (Mouse.isButtonClicked(Mouse.Button.LEFT)) {

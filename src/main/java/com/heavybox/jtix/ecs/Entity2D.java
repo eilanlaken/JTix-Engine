@@ -7,8 +7,8 @@ public abstract class Entity2D extends Entity {
 
     public final ComponentTransform2D transform;
 
-    Entity2D parent;
-    Array<Entity2D> children;
+    protected Entity2D        parent   = null;
+    protected Array<Entity2D> children = null;
 
     protected Entity2D() {
         this(0,0,0,1,1);
@@ -22,14 +22,6 @@ public abstract class Entity2D extends Entity {
         this.transform = new ComponentTransform2D(x, y, deg, sclX, sclY);
     }
 
-    public final void getDescendants(Array<Entity> entities) {
-        if (children == null) return;
-        for (Entity2D child : children) {
-            entities.add(child);
-            child.getDescendants(entities);
-        }
-    }
-
     // TODO
     public final void setParent(Entity2D newParent, boolean keepTransform) {
         if (newParent == null) {
@@ -37,9 +29,10 @@ public abstract class Entity2D extends Entity {
             return;
         }
         if (newParent == this) throw new ECSException("Cannot parent an " + Entity2D.class.getSimpleName() + " to itself.");
+        if (ECSUtils.isDescendant(this, newParent)) throw new ECSException("Trying to create circular dependency between entities.");
         if (this.parent == newParent) return;
-        if (this.parent != null) clearParent(keepTransform); // clear old parent first
 
+        if (this.parent != null) clearParent(keepTransform); // clear old parent first
         this.parent = newParent;
         if (newParent.children == null) newParent.children = new Array<>(false, 1);
         newParent.children.add(this);
@@ -53,30 +46,23 @@ public abstract class Entity2D extends Entity {
         }
     }
 
-    // TODO
     public final void clearParent(boolean keepTransform) {
         if (this.parent == null) return;
 
         this.parent.children.removeValue(this, true);
         this.transform.parent = null;
         if (keepTransform) {
-            this.transform.x = this.transform.world.x;
-            this.transform.y = this.transform.world.y;
-            this.transform.degrees = this.transform.world.degrees;
-            this.transform.sclX = this.transform.world.sclX;
-            this.transform.sclY = this.transform.world.sclY;
+            this.transform.set(this.transform.world);
         }
         this.transform.world = null;
         this.parent = null;
     }
 
-    // TODO
     public final void addChild(Entity2D child, boolean keepTransform) {
         if (child == null) return;
         child.setParent(this, keepTransform);
     }
 
-    // TODO
     public final void removeChild(Entity2D child, boolean keepTransform) {
         if (child == null) return;
         if (children == null) return;
@@ -106,6 +92,8 @@ public abstract class Entity2D extends Entity {
         return transform;
     }
 
-    public abstract @NotNull EntityLayer2D getLayer();
+    public @NotNull EntityLayer2D getLayer() {
+        return EntityLayer2D.DEFAULT;
+    }
 
 }

@@ -26,6 +26,8 @@ public abstract class Entity3D extends Entity {
         return transform;
     }
 
-    public abstract @NotNull EntityLayer3D getLayer();
+    public @NotNull EntityLayer3D getLayer() {
+        return EntityLayer3D.DEFAULT;
+    }
 
 }

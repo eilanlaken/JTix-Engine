@@ -2,7 +2,7 @@ package com.heavybox.jtix.ecs;
 
 public enum EntityLayer3D {
 
-    LAYER_0,
+    DEFAULT,
     LAYER_1,
     LAYER_2,
     LAYER_3,
