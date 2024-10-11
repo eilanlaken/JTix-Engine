@@ -7,12 +7,7 @@ import java.util.Map;
 
 public final class ComponentRender2DSprite extends ComponentRender2D {
 
-    public boolean             active;
-    public int                 zIndex;
-    public ShaderProgram       shader;
-    public Map<String, Object> shaderAttributes;
-    public float               tint;
-    public int                 pixelsPerUnit;
+
 
 
     @Override
