@@ -13,4 +13,6 @@ public interface ComponentTransform extends Component {
 
     ComponentTransform getWorld();
 
+    boolean isStatic();
+
 }

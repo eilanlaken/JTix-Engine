@@ -11,15 +11,15 @@ public abstract class Entity2D extends Entity {
     protected Array<Entity2D> children = null;
 
     protected Entity2D() {
-        this(0,0,0,1,1);
+        this(false,0,0,0,1,1);
     }
 
-    protected Entity2D(float x, float y, float deg) {
-        this(x, y, deg, 1, 1);
+    protected Entity2D(boolean isStatic, float x, float y, float deg) {
+        this(isStatic, x, y, deg, 1, 1);
     }
 
-    protected Entity2D(float x, float y, float deg, float sclX, float sclY) {
-        this.transform = new ComponentTransform2D(x, y, deg, sclX, sclY);
+    protected Entity2D(boolean isStatic, float x, float y, float deg, float sclX, float sclY) {
+        this.transform = new ComponentTransform2D(isStatic, x, y, deg, sclX, sclY);
     }
 
     // TODO

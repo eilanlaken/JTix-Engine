@@ -7,11 +7,15 @@ public abstract class Entity3D extends Entity {
     public final ComponentTransform3D transform;
 
     protected Entity3D() {
-        this(0,0,0,0,0,0,1,1,1);
+        this(false,0,0,0,0,0,0,1,1,1);
     }
 
     protected Entity3D(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
-        this.transform = new ComponentTransform3D(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
+        this(false, x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
+    }
+
+    protected Entity3D(boolean isStatic, float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
+        this.transform = new ComponentTransform3D(isStatic, x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
     }
 
     @Override protected          ComponentTransform3D createComponentTransform() { return transform; }
