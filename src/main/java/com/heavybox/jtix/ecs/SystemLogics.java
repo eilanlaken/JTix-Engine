@@ -4,6 +4,8 @@ import com.heavybox.jtix.collections.Array;
 
 public class SystemLogics implements System {
 
+    public static final int SYSTEM_BITMASK = Component.Type.LOGICS.bitmask;
+
     private final EntityContainer container;
 
     private Array<Entity> entities = new Array<>(false, 10);
@@ -17,7 +19,7 @@ public class SystemLogics implements System {
 
     @Override
     public boolean shouldProcess(Entity entity) {
-        return false;
+        return (entity.bitmask & SYSTEM_BITMASK) > 0;
     }
 
     @Override
@@ -43,6 +45,11 @@ public class SystemLogics implements System {
     public void sendSignal(final Object signal, final Entity target) {
         signalsToSend.add(signal);
         signalsTargets.add(target);
+    }
+
+    @Override
+    public String toString() {
+        return "System Logics Entities   : " + entities.size;
     }
 
 }

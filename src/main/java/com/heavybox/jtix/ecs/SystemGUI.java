@@ -1,8 +1,14 @@
 package com.heavybox.jtix.ecs;
 
+import com.heavybox.jtix.collections.Array;
+
 public class SystemGUI implements System {
 
+    public static final int SYSTEM_BITMASK = Component.Type.REGION.bitmask | Component.Type.RENDER.bitmask;
+
     private final EntityContainer container;
+
+    private final Array<Entity> entities = new Array<>(false, 10);
 
     SystemGUI(final EntityContainer container) {
         this.container = container;
@@ -10,7 +16,7 @@ public class SystemGUI implements System {
 
     @Override
     public boolean shouldProcess(Entity entity) {
-        return false;
+        return (entity.bitmask & SYSTEM_BITMASK) > 0;
     }
 
     @Override
@@ -32,4 +38,10 @@ public class SystemGUI implements System {
     public void fixedUpdate(float delta) {
 
     }
+
+    @Override
+    public String toString() {
+        return "System GUI Entities      : " + entities.size;
+    }
+
 }

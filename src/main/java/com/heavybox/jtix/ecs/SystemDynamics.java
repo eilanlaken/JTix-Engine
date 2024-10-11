@@ -51,4 +51,10 @@ public class SystemDynamics implements System {
     public void fixedUpdate(float delta) {
 
     }
+
+    @Override
+    public String toString() {
+        return "System Dynamics Entities : " + (entities_2d.size + entities_3d.size);
+    }
+
 }
