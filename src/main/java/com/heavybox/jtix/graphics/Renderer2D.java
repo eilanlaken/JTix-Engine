@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 // for a circle with high refinement for example, we don't do if (current > capacity) ... every time we
 // write to the buffer.
 
+// Lights: https://github.com/simondevyoutube/Shaders_RadianceCascades
 // https://tmpvar.com/poc/radiance-cascades/
 // https://tmpvar.com/poc/radiance-cascades/ssprobes-wsintervals/ssprobes-wsintervals.js
 // https://www.shadertoy.com/view/mlSfRD
