@@ -3,3 +3,12 @@ Graphics 2D
 Rendering curves with stroke:
 https://www.codeproject.com/Articles/226569/Drawing-polylines-by-tessellation
 https://stackoverflow.com/questions/1109536/an-algorithm-for-inflating-deflating-offsetting-buffering-polygons
+
+Lights
+Radiance Cascades:
+https://tmpvar.com/poc/radiance-cascades/
+https://tmpvar.com/poc/radiance-cascades/ssprobes-wsintervals/ssprobes-wsintervals.js
+https://www.shadertoy.com/view/mlSfRD
+https://tmpvar.com/poc/radiance-cascades/
+Lights 1: https://mini.gmshaders.com/p/radiance-cascades
+Lights 2: https://mini.gmshaders.com/p/radiance-cascades2

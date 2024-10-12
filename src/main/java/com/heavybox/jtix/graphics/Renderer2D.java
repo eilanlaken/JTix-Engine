@@ -33,6 +33,10 @@ import java.util.stream.Collectors;
 // for a circle with high refinement for example, we don't do if (current > capacity) ... every time we
 // write to the buffer.
 
+// https://tmpvar.com/poc/radiance-cascades/
+// https://tmpvar.com/poc/radiance-cascades/ssprobes-wsintervals/ssprobes-wsintervals.js
+// https://www.shadertoy.com/view/mlSfRD
+// https://tmpvar.com/poc/radiance-cascades/
 // Lights 1: https://mini.gmshaders.com/p/radiance-cascades
 // Lights 2: https://mini.gmshaders.com/p/radiance-cascades2
 public class Renderer2D implements MemoryResourceHolder {
