@@ -403,8 +403,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
-    // TODO: take care of uv mapping scaling.
-    public void drawCircleFilled(@Nullable Texture texture, float r, int refinement, float angle, float x, float y, float deg, float scaleX, float scaleY) {
+    public final void drawCircleFilled(@Nullable Texture texture, float r, int refinement, float angle, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + refinement * 3> indicesBuffer.capacity()) flush();
@@ -426,7 +425,7 @@ public class Renderer2D implements MemoryResourceHolder {
             float pointX = x + arm.x;
             float pointY = y + arm.y;
             float u = arm.x / (2 * r * scaleX) + 0.5f;
-            float v = arm.y / (2 * r * scaleY) + 0.5f;
+            float v = 1 - (arm.y / (2 * r * scaleY) + 0.5f);
             verticesBuffer.put(pointX).put(pointY).put(currentTint).put(u).put(v);
             i++;
         }
@@ -441,92 +440,16 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement + 2;
     }
 
-    public void drawCircleFilled(float r, int refinement, float angle, float x, float y, float deg, float scaleX, float scaleY) {
+    public final void drawCircleFilled(float r, int refinement, float angle, float x, float y, float deg, float scaleX, float scaleY) {
         drawCircleFilled(null, r, refinement, angle, x, y, deg, scaleX, scaleY);
     }
 
-    public void drawCircleFilled(@Nullable Texture texture, float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
+    public final void drawCircleFilled(@Nullable Texture texture, float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
         drawCircleFilled(texture, r, refinement, 360, x, y, deg, scaleX, scaleY);
     }
 
-    public void drawCircleFilled(float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
+    public final void drawCircleFilled(float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
         drawCircleFilled(null, r, refinement, 360, x, y, deg, scaleX, scaleY);
-    }
-
-    // TODO
-    public void drawCircleFilled_old(@Nullable Texture texture, float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + refinement * 3 + 3 > indicesBuffer.capacity()) flush();
-
-        refinement = Math.max(3, refinement);
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
-
-        Vector2 arm = vectors2Pool.allocate();
-        float da = 360f / refinement;
-
-        /* put vertices */
-        verticesBuffer.put(x).put(y).put(currentTint).put(0.5f).put(0.5f); // center point
-        for (int i = 0; i < refinement + 1; i++) {
-            arm.x = r * scaleX * MathUtils.cosDeg(da * i);
-            arm.y = r * scaleY * MathUtils.sinDeg(da * i);
-            arm.rotateDeg(deg);
-            float pointX = x + arm.x;
-            float pointY = y + arm.y;
-            float u = (arm.x + currentTexture.width * 0.5f) / currentTexture.width;
-            float v = 1 - (arm.y + currentTexture.height * 0.5f) / currentTexture.height;
-            verticesBuffer.put(pointX).put(pointY).put(currentTint).put(u).put(v);
-        }
-
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < refinement; i++) {
-            indicesBuffer.put(startVertex);
-            indicesBuffer.put(startVertex + i + 1);
-            indicesBuffer.put(startVertex + i + 2);
-        }
-        indicesBuffer.put(startVertex);
-        indicesBuffer.put(startVertex + refinement + 1);
-        indicesBuffer.put(startVertex + 1);
-        vertexIndex += refinement + 2;
-
-        vectors2Pool.free(arm);
-    }
-    public void drawCircleFilled_old(float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + refinement * 3 + 3 > indicesBuffer.capacity()) flush();
-
-        refinement = Math.max(3, refinement);
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
-
-        Vector2 arm = vectors2Pool.allocate();
-        float da = 360f / refinement;
-
-        /* put vertices */
-        verticesBuffer.put(x).put(y).put(currentTint).put(0.5f).put(0.5f); // center point
-        for (int i = 0; i < refinement + 1; i++) {
-            arm.x = r * scaleX * MathUtils.cosDeg(da * i);
-            arm.y = r * scaleY * MathUtils.sinDeg(da * i);
-            arm.rotateDeg(deg);
-            float pointX = x + arm.x;
-            float pointY = y + arm.y;
-            verticesBuffer.put(pointX).put(pointY).put(currentTint).put(0.5f).put(0.5f);
-        }
-
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < refinement; i++) {
-            indicesBuffer.put(startVertex);
-            indicesBuffer.put(startVertex + i + 1);
-            indicesBuffer.put(startVertex + i + 2);
-        }
-        indicesBuffer.put(startVertex);
-        indicesBuffer.put(startVertex + refinement + 1);
-        indicesBuffer.put(startVertex + 1);
-        vertexIndex += refinement + 2;
-
-        vectors2Pool.free(arm);
     }
 
     public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
@@ -1270,8 +1193,30 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Lines */
 
-    // TODO: consider transform
-    public void drawLineThin(float x1, float y1, float x2, float y2) {
+    public final void drawLineThin(float x1, float y1, float x2, float y2, float x, float y, float deg, float sclX, float sclY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if ((vertexIndex + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + 2 > indicesBuffer.capacity()) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        Vector2 firstPoint = vectors2Pool.allocate().set(x1, y1).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+        Vector2 secondPoint = vectors2Pool.allocate().set(x2, y2).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+        verticesBuffer.put(firstPoint.x).put(firstPoint.y).put(currentTint).put(0.5f).put(0.5f);
+        verticesBuffer.put(secondPoint.x).put(secondPoint.y).put(currentTint).put(0.5f).put(0.5f);
+        vectors2Pool.free(firstPoint);
+        vectors2Pool.free(secondPoint);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indicesBuffer.put(startVertex);
+        indicesBuffer.put(startVertex + 1);
+
+        vertexIndex += 2;
+    }
+
+    public final void drawLineThin(float x1, float y1, float x2, float y2) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + 2 > indicesBuffer.capacity()) flush();
@@ -1288,6 +1233,49 @@ public class Renderer2D implements MemoryResourceHolder {
         indicesBuffer.put(startVertex + 1);
 
         vertexIndex += 2;
+    }
+
+    public final void drawLineFilled(@Nullable Texture texture, float x1, float y1, float x2, float y2, float stroke, float x, float y, float deg, float sclX, float sclY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        Vector2 dir = vectors2Pool.allocate();
+        dir.x = x2 - x1;
+        dir.y = y2 - y1;
+        dir.nor();
+        dir.scl(stroke * 0.5f);
+        dir.rotate90(1);
+
+        Vector2 v1 = vectors2Pool.allocate().set(x1 + dir.x, y1 + dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+        Vector2 v2 = vectors2Pool.allocate().set(x1 - dir.x, y1 - dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+        Vector2 v3 = vectors2Pool.allocate().set(x2 - dir.x, y2 - dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+        Vector2 v4 = vectors2Pool.allocate().set(x2 + dir.x, y2 + dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+
+        // put vertices for line segment
+        verticesBuffer.put(x1 + dir.x).put(y1 + dir.y).put(currentTint).put(0).put(0);
+        verticesBuffer.put(x1 - dir.x).put(y1 - dir.y).put(currentTint).put(0).put(1);
+        verticesBuffer.put(x2 - dir.x).put(y2 - dir.y).put(currentTint).put(1).put(1);
+        verticesBuffer.put(x2 + dir.x).put(y2 + dir.y).put(currentTint).put(1).put(0);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indicesBuffer.put(startVertex + 0);
+        indicesBuffer.put(startVertex + 1);
+        indicesBuffer.put(startVertex + 2);
+        indicesBuffer.put(startVertex + 0);
+        indicesBuffer.put(startVertex + 2);
+        indicesBuffer.put(startVertex + 3);
+        vertexIndex += 4;
+
+        vectors2Pool.free(dir);
+        vectors2Pool.free(v1);
+        vectors2Pool.free(v2);
+        vectors2Pool.free(v3);
+        vectors2Pool.free(v4);
     }
 
     // TODO: consider transform
@@ -1325,7 +1313,6 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
     }
 
-    // TODO: consider transform
     public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, int edgeRefinement) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4 + (1 + edgeRefinement) + (1 + edgeRefinement)) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
