@@ -1416,8 +1416,8 @@ public class Renderer2D implements MemoryResourceHolder {
 
     // TODO: create versions with transform 2d
     // TODO: consider transform
-    // TODO: consider opacity
-    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f) {
+    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f,
+                              float x, float y, float deg, float sclX, float sclY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
         if ((vertexIndex + refinement) * VERTEX_SIZE  > verticesBuffer.capacity()) flush();
@@ -1433,55 +1433,26 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         float step = (maxX - minX) / refinement;
 
-        Array<Vector2> vertices = new Array<>(true, refinement);
-        for (int i = 0; i < refinement; i++) {
-            Vector2 vertex = vectors2Pool.allocate();
-            vertex.x = minX + i * step;
-            vertex.y = f.apply(vertex.x);
-            vertices.add(vertex);
-        }
-
         /* put vertices */
-        for (Vector2 value : vertices) {
-            verticesBuffer.put(value.x).put(value.y).put(currentTint).put(0.5f).put(0.5f);
+        Vector2 point = vectors2Pool.allocate();
+        for (int i = 0; i < refinement; i++) {
+            point.x = minX + i * step;
+            point.y = f.apply(point.x);
+            point.scl(sclX, sclY);
+            point.rotateDeg(deg);
+            point.add(x, y);
+            verticesBuffer.put(point.x).put(point.y).put(currentTint).put(0.5f).put(0.5f);
         }
+        vectors2Pool.free(point);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < vertices.size - 1; i++) {
+        for (int i = 0; i < refinement - 1; i++) {
             indicesBuffer.put(startVertex + i);
             indicesBuffer.put(startVertex + i + 1);
         }
 
-        vectors2Pool.freeAll(vertices);
         vertexIndex += refinement;
-    }
-
-    // TODO: bug here when step is small
-    // TODO: consider transform
-    // TODO: consider opacity
-    public void drawCurveFilled(float min, float max, float step, float stroke, int refinement, Function<Float, Float> f) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        step = Math.abs(step);
-        if (MathUtils.isZero(step)) return; // TODO: maybe set a default value.
-        if (min > max) {
-            float tmp = min;
-            min = max;
-            max = tmp;
-        }
-        int pointCount = (int) ((max - min) / step) + 1;
-        Vector2[] points = new Vector2[pointCount];
-        for (int i = 0; i < pointCount; i++) {
-            Vector2 point = vectors2Pool.allocate();
-            float x = min + i * step;
-            float y = f.apply(x);
-            point.x = x;
-            point.y = y;
-            points[i] = point;
-        }
-
-        drawCurveFilled(stroke, refinement, points);
-        vectors2Pool.freeAll(points);
     }
 
     // TODO: bug here when rendering many points. Solution: flush after every triangle

@@ -12,6 +12,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
@@ -101,14 +102,19 @@ public class SceneRendering2D_Renderer2D_1 extends ApplicationScreen {
 //
 //        renderer2D.drawLineFilled(yellowSquare, 0,0,3, 3,2, 0,0,0,1,1);
 
-        Array<Vector2> points = new Array<>();
-        points.add(new Vector2(-3, 3));
-        points.add(new Vector2(-2, -2));
-        points.add(new Vector2(-1, 0));
-        points.add(new Vector2(0, 2));
-        points.add(new Vector2(1, 1));
-        points.add(new Vector2(2, -1));
-        renderer2D.drawCurveThin(points, 0,0,30,1,1);
+//        Array<Vector2> points = new Array<>();
+//        points.add(new Vector2(-3, 3));
+//        points.add(new Vector2(-2, -2));
+//        points.add(new Vector2(-1, 0));
+//        points.add(new Vector2(0, 2));
+//        points.add(new Vector2(1, 1));
+//        points.add(new Vector2(2, -1));
+//        renderer2D.drawCurveThin(points, 0,0,30,1,1);
+
+        renderer2D.drawCurveThin(-4, 4, 10, MathUtils::sinRad, 0, 0, 0, 1, 1);
+        renderer2D.drawCurveThin(-4, 4, 10, MathUtils::sinRad, 0, 3, 0, 1, 1);
+        renderer2D.drawLineThin(0,0,2, -3);
+
         renderer2D.end();
     }
 
