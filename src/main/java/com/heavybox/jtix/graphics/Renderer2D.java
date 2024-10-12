@@ -425,8 +425,8 @@ public class Renderer2D implements MemoryResourceHolder {
             arm.rotateDeg(deg);
             float pointX = x + arm.x;
             float pointY = y + arm.y;
-            float u = (arm.x + texture.width * 0.5f) / texture.width;
-            float v = 1 - (arm.y + texture.height * 0.5f) / texture.height;
+            float u = arm.x / (2 * r * scaleX) + 0.5f;
+            float v = arm.y / (2 * r * scaleY) + 0.5f;
             verticesBuffer.put(pointX).put(pointY).put(currentTint).put(u).put(v);
             i++;
         }
