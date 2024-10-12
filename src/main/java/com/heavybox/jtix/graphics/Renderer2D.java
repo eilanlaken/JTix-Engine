@@ -1388,30 +1388,30 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Rendering 2D primitives - Curves */
     /* TODO: implement a version of these methods with a transform. */
 
-    // TODO: create versions with transform 2d
-    // TODO: consider transform
-    // TODO: consider opacity
-    public void drawCurveThin(final Vector2... values) {
+    public final void drawCurveThin(final Array<Vector2> points, float x, float y, float deg, float sclX, float sclY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (values == null || values.length < 2) return;
-        if ((vertexIndex + values.length) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (values.length - 1) * 2 > indicesBuffer.capacity()) flush();
+        if (points == null || points.size < 2) return;
+        if ((vertexIndex + points.size) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (indicesBuffer.limit() + (points.size - 1) * 2 > indicesBuffer.capacity()) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
         /* put vertices */
-        for (Vector2 value : values) {
-            verticesBuffer.put(value.x).put(value.y).put(currentTint).put(0.5f).put(0.5f);
+        Vector2 point = vectors2Pool.allocate();
+        for (Vector2 value : points) {
+            point.set(value).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            verticesBuffer.put(point.x).put(point.y).put(currentTint).put(0.5f).put(0.5f);
         }
+        vectors2Pool.free(point);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < values.length - 1; i++) {
+        for (int i = 0; i < points.size - 1; i++) {
             indicesBuffer.put(startVertex + i);
             indicesBuffer.put(startVertex + i + 1);
         }
-        vertexIndex += values.length;
+        vertexIndex += points.size;
     }
 
     // TODO: create versions with transform 2d
@@ -1743,37 +1743,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - meshes */
 
-    @Deprecated public void drawMeshFilled(float[] mesh, final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (mesh.length < VERTEX_SIZE * 3) throw new GraphicsException("Mesh must contain at least 3 vertices, each vertex should be 5 floating point values: [x,y,tint,u,v]. mesh.length should be > 15. Got: " + mesh.length);
-        if (mesh.length % VERTEX_SIZE != 0) throw new GraphicsException("Mesh represents a flat array of vertices: [x,y,tint,u,v]. Therefore, mesh array length must be a multiplicity of " + VERTEX_SIZE + ".");
-
-        int count = mesh.length / VERTEX_SIZE;
-        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
-
-        Vector2 vertex = vectors2Pool.allocate();
-        for (int i = 0; i < mesh.length; i += VERTEX_SIZE) {
-            float poly_x = mesh[i];
-            float poly_y = mesh[i + 1];
-            vertex.set(poly_x, poly_y);
-            vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(deg);
-            vertex.add(x, y);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(mesh[i + 2]).put(mesh[i + 3]).put(mesh[i + 4]);
-        }
-        vectors2Pool.free(vertex);
-
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < count; i ++) {
-            indicesBuffer.put(startVertex + i);
-        }
-        vertexIndex += count;
-    }
-
-    public void drawMeshFilled(Array<Vector2> positions, ArrayFloat colors, Array<Vector2> uvs, final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawMeshFilled(Array<Vector2> positions, ArrayFloat colors, Array<Vector2> uvs, @Nullable final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (positions.size < 3)            throw new GraphicsException("Mesh must contain at least 3 vertices. Got: " + positions.size);
         if (positions.size != colors.size) throw new GraphicsException("Mesh must contain the same number of positions, colors and uvs. Got: positions.size = " + positions.size + ", colors.size = " + colors.size + ", uvs.size = " + uvs.size);

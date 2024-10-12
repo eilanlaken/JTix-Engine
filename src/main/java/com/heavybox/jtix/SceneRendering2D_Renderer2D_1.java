@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.ecs.ECSUtils;
 import com.heavybox.jtix.ecs.Entity2D;
 import com.heavybox.jtix.ecs.EntityContainer;
@@ -11,6 +12,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
@@ -87,17 +89,26 @@ public class SceneRendering2D_Renderer2D_1 extends ApplicationScreen {
         //renderer2D.drawTexture(yellowSquare,0,0,0,1,1);
         //renderer2D.setTint(Color.BLUE);
         //renderer2D.drawCircleFilled(yellowSquare, 50f, 50, -200,0,0,1,1);
-        renderer2D.drawCircleFilled(yellowSquare, 2, 50, 270, -3,3,0,1.5f,1);
-        renderer2D.drawCircleFilled(yellowSquare, 2, 50, 3,3,0,1,1);
-        renderer2D.drawCircleFilled(2, 50, 270, 3,-3,0,1,1);
-        renderer2D.drawCircleFilled(2, 50, -3,-3,0,1,1);
+//        renderer2D.drawCircleFilled(yellowSquare, 2, 50, 270, -3,3,0,1.5f,1);
+//        renderer2D.drawCircleFilled(yellowSquare, 2, 50, 3,3,0,1,1);
+//        renderer2D.drawCircleFilled(2, 50, 270, 3,-3,0,1,1);
+//        renderer2D.drawCircleFilled(2, 50, -3,-3,0,1,1);
+//
+//        renderer2D.drawLineThin(0,0,2,2, 0,0,90,1,1);
+//        renderer2D.drawLineThin(0,0,2,2, 0,0,90,1,2);
+//        renderer2D.drawLineThin(0,0,2,2, -2,2,90,1,2);
+//        renderer2D.drawLineThin(0,0,2, -3);
+//
+//        renderer2D.drawLineFilled(yellowSquare, 0,0,3, 3,2, 0,0,0,1,1);
 
-        renderer2D.drawLineThin(0,0,2,2, 0,0,90,1,1);
-        renderer2D.drawLineThin(0,0,2,2, 0,0,90,1,2);
-        renderer2D.drawLineThin(0,0,2,2, -2,2,90,1,2);
-        renderer2D.drawLineThin(0,0,2, -3);
-
-        renderer2D.drawLineFilled(yellowSquare, 0,0,3, 3,2, 0,0,0,1,1);
+        Array<Vector2> points = new Array<>();
+        points.add(new Vector2(-3, 3));
+        points.add(new Vector2(-2, -2));
+        points.add(new Vector2(-1, 0));
+        points.add(new Vector2(0, 2));
+        points.add(new Vector2(1, 1));
+        points.add(new Vector2(2, -1));
+        renderer2D.drawCurveThin(points, 0,0,30,1,1);
         renderer2D.end();
     }
 
