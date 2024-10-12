@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 // TODO: RENDERING BUG S-O-L-V-E-D:
 // for a circle with high refinement for example, we don't do if (current > capacity) ... every time we
 // write to the buffer.
+
+// Lights: https://mini.gmshaders.com/p/radiance-cascades
 public class Renderer2D implements MemoryResourceHolder {
 
     /* constants */
