@@ -106,7 +106,8 @@ public final class AssetStore {
         return store.get(path);
     }
 
-    public static synchronized void clean() {
+    // TODO
+    public static synchronized void clear() {
 
     }
 
