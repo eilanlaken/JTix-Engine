@@ -48,13 +48,9 @@ public final class AssetStore {
         createTasks.removeAll(completedCreateTasks);
         for (AssetStoreLoadingTask task : createTasks) {
             Asset asset = task.create();
-            AssetStore.store(asset);
+            store.put(asset.descriptor.path, asset);
             completedCreateTasks.add(task);
         }
-    }
-
-    private static void store(final Asset asset) {
-        store.put(asset.descriptor.path, asset);
     }
 
     static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
