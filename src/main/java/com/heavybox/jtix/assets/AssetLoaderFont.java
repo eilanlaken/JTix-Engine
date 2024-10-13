@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: here is the solution: check if suffix is .ttf or .yaml or yml.
+// If ttf generate bitmap, then load the bitmap font
+// if bitmap, load the bitmap font.
 public class AssetLoaderFont implements AssetLoader<Font> {
 
     private Array<AssetDescriptor> dependencies;

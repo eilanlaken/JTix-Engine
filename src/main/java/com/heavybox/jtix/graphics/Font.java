@@ -37,8 +37,10 @@ public class Font implements MemoryResource {
         @Serial
         private static final long serialVersionUID = 1L; // Add a serial version ID for version control
 
-        public final int   width, height;
-        public final float bearingX, bearingY;
+        public final int   width;
+        public final int   height;
+        public final float bearingX;
+        public final float bearingY;
         public final float advanceX;
         public final float advanceY;
         public final int   atlasX;
