@@ -86,8 +86,8 @@ public class SceneRendering2D_Renderer2D_1 extends ApplicationScreen {
             y = screen.y;
         }
 
-        renderer2D.begin(componentGraphicsCamera.lens.combined);
-        //renderer2D.drawTexture(yellowSquare,0,0,0,1,1);
+        renderer2D.begin(null);
+        renderer2D.drawTexture(yellowSquare,0,0,0,1,1);
         //renderer2D.setTint(Color.BLUE);
         //renderer2D.drawCircleFilled(yellowSquare, 50f, 50, -200,0,0,1,1);
 //        renderer2D.drawCircleFilled(yellowSquare, 2, 50, 270, -3,3,0,1.5f,1);
@@ -111,9 +111,9 @@ public class SceneRendering2D_Renderer2D_1 extends ApplicationScreen {
 //        points.add(new Vector2(2, -1));
 //        renderer2D.drawCurveThin(points, 0,0,30,1,1);
 
-        renderer2D.drawCurveThin(-4, 4, 10, MathUtils::sinRad, 0, 0, 0, 1, 1);
-        renderer2D.drawCurveThin(-4, 4, 10, MathUtils::sinRad, 0, 3, 0, 1, 1);
-        renderer2D.drawLineThin(0,0,2, -3);
+//        renderer2D.drawCurveThin(-4, 4, 10, MathUtils::sinRad, 0, 0, 0, 1, 1);
+//        renderer2D.drawCurveThin(-4, 4, 10, MathUtils::sinRad, 0, 3, 0, 1, 1);
+//        renderer2D.drawLineThin(0,0,2, -3);
 
         renderer2D.end();
     }
