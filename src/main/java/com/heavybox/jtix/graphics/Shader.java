@@ -116,6 +116,7 @@ public class Shader implements MemoryResource {
         }
         this.uniformCache = new Object[uniformNames.length];
 
+        /* validation */
         /* validate: limit the allowed max sampled textures */
         final int maxSampledTextures = GraphicsUtils.getMaxFragmentShaderTextureUnits();
         int sampledTextures = 0;
@@ -124,6 +125,28 @@ public class Shader implements MemoryResource {
             if (type == GL20.GL_SAMPLER_2D) sampledTextures++;
         }
         if (sampledTextures > maxSampledTextures) throw new IllegalArgumentException("Error: shader code trying " + "to sample " + sampledTextures + ". The allowed maximum on this hardware is " + maxSampledTextures);
+        /* validate: attribute names should conform to ShaderVertexAttribute enum */
+        boolean badAttributeName = false;
+        for (final String attributeName : attributeNames) {
+            boolean contained = false;
+            for (ShaderVertexAttribute vertexAttribute : ShaderVertexAttribute.values()) {
+                if (vertexAttribute.glslVariableName.equals(attributeName)) {
+                    contained = true;
+                    break;
+                }
+            }
+            if (!contained) {
+                badAttributeName = true;
+                System.err.println("Warning: shader attribute " + attributeName + " is not " +
+                        "a valid vertex attribute name.");
+            }
+        }
+        if (badAttributeName) {
+            System.err.println("Valid shader attribute names are: ");
+            for (ShaderVertexAttribute shaderVertexAttribute : ShaderVertexAttribute.values()) {
+                System.err.println(shaderVertexAttribute.glslVariableName);
+            }
+        }
     }
 
     private int createVertexShader(final String shaderCode) {
