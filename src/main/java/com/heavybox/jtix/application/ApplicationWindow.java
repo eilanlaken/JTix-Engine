@@ -52,12 +52,9 @@ public class ApplicationWindow implements MemoryResource {
             } else {
                 if (requested) return;
                 requested = true;
-                Application.addTask(new Runnable() {
-                    @Override
-                    public void run () {
-                        requested = false;
-                        renderWindow(width, height);
-                    }
+                Application.addTask(() -> {
+                    requested = false;
+                    renderWindow(width, height);
                 });
             }
             ApplicationWindow.this.attributes.width = width;

@@ -16,7 +16,7 @@ public class Application {
     private static boolean initialized = false;
     private static boolean debugMode;
     private static ApplicationWindow window;
-    private static Array<Runnable> tasks = new Array<>();
+    private static final Array<Runnable> tasks = new Array<>();
     private static boolean running = false;
     private static GLFWErrorCallback errorCallback;
 
@@ -53,7 +53,6 @@ public class Application {
             boolean windowRendered = window.refresh();
             int targetFrameRate = GraphicsUtils.getTargetFps();
 
-            // asset loading
             AssetStore.update();
             Mouse.resetInternalState();
             Keyboard.resetInternalState();
@@ -78,7 +77,7 @@ public class Application {
                     // ignore
                 }
             } else if (targetFrameRate > 0) {
-                AsyncUtils.sync(targetFrameRate); // sleep as needed to meet the target framerate
+                AsyncUtils.sync(targetFrameRate); // sleep as needed to meet the target frame-rate
             }
         }
     }

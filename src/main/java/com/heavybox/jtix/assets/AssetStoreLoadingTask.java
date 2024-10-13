@@ -23,7 +23,7 @@ public class AssetStoreLoadingTask extends AsyncTask {
     @Override
     public void onComplete() {
         if (dependencies == null) return;
-        for (AssetDescriptor dependency : dependencies) AssetStore.loadAsset(dependency.type, dependency.path);
+        for (AssetDescriptor dependency : dependencies) AssetStore.load(dependency.type, dependency.path);
     }
 
     protected boolean ready() {

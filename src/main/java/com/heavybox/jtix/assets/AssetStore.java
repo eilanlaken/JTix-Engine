@@ -76,7 +76,7 @@ public final class AssetStore {
         return store.get(path) != null;
     }
 
-    public static synchronized void loadAsset(final Class<? extends MemoryResource> type, final String path) {
+    public static synchronized void load(final Class<? extends MemoryResource> type, final String path) {
         final Asset asset = store.get(path);
         if (asset != null) {
             asset.refCount++;
@@ -87,7 +87,7 @@ public final class AssetStore {
         loadQueue.addFirst(descriptor);
     }
 
-    public static synchronized void unloadAsset(final String path) {
+    public static synchronized void unload(final String path) {
 
     }
 
