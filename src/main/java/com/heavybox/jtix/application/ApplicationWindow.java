@@ -20,26 +20,21 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class ApplicationWindow implements MemoryResource {
 
-    // compute and auxiliary buffers
-    private final long        monitor    = GLFW.glfwGetPrimaryMonitor();
-    private final GLFWVidMode videoMode  = GLFW.glfwGetVideoMode(monitor);
-
     // window attributes
     protected final long handle;
     public ApplicationWindowAttributes attributes;
-
     private boolean focused = false;
-    private final Array<String> filesDraggedAndDropped = new Array<>();
     private int latestFilesDraggedAndDroppedCount = 0;
-    private volatile int backBufferWidth;
-    private volatile int backBufferHeight;
-    private volatile int logicalWidth;
-    private volatile int logicalHeight;
+    private int backBufferWidth;
+    private int backBufferHeight;
+    private int logicalWidth;
+    private int logicalHeight;
 
     // state management
     private final Array<Runnable>   tasks            = new Array<>();
     private       boolean           requestRendering = false;
     private       ApplicationScreen screen;
+    private final Array<String>     filesDraggedAndDropped = new Array<>();
 
     private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;
@@ -117,6 +112,10 @@ public class ApplicationWindow implements MemoryResource {
         this.attributes = attributes;
         if (attributes.title == null) attributes.title = "";
         if (attributes.fullScreen) {
+            // compute and auxiliary buffers
+            long monitor = GLFW.glfwGetPrimaryMonitor();
+            GLFWVidMode videoMode = GLFW.glfwGetVideoMode(monitor);
+            assert videoMode != null;
             GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.refreshRate());
             handle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title,
                     videoMode.refreshRate(), MemoryUtil.NULL);
