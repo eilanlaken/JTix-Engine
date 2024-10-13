@@ -150,22 +150,6 @@ public class Shader implements MemoryResource {
         return shaderId;
     }
 
-    private void link() throws RuntimeException {
-        GL20.glLinkProgram(program);
-        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0)
-            throw new RuntimeException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
-
-        if (vertexShaderId != 0)
-            GL20.glDetachShader(program, vertexShaderId);
-
-        if (fragmentShaderId != 0)
-            GL20.glDetachShader(program, fragmentShaderId);
-
-        GL20.glValidateProgram(program);
-        if (GL20.glGetProgrami(program, GL20.GL_VALIDATE_STATUS) == 0)
-            throw new RuntimeException("Could not validate shader code: " + GL20.glGetProgramInfoLog(program, 1024));
-    }
-
     protected final void bindUniforms(final HashMap<String, Object> uniforms) {
         if (uniforms == null) return;
         for (Map.Entry<String, Object> entry : uniforms.entrySet()) {
