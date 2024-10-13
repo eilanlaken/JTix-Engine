@@ -80,18 +80,19 @@ public final class AssetStore {
         return store.get(path) != null;
     }
 
-    public static synchronized void loadAsset(final Class<? extends MemoryResource> type, final String path) {
+    public static synchronized <T extends MemoryResource> void load(final Class<T> type, final String path, final AssetLoader.Options<T> options) {
         final Asset asset = store.get(path);
         if (asset != null) {
             asset.refCount++;
             return;
         }
         if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
-        AssetDescriptor descriptor = new AssetDescriptor(type, path);
+        AssetDescriptor<T> descriptor = new AssetDescriptor<T>(type, path, options);
         loadQueue.addFirst(descriptor);
     }
 
-    public static synchronized void unloadAsset(final String path) {
+    // TODO
+    public static synchronized void unload(final String path) {
 
     }
 

@@ -1,17 +1,19 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.memory.MemoryResource;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class AssetDescriptor {
+public class AssetDescriptor<T extends MemoryResource> {
 
-    public final Class<? extends MemoryResource> type;
-    public final String                          path;
-    public final long                            size;
+    public final Class<T>               type;
+    public final String                 path;
+    public final long                   size;
+    public final AssetLoader.Options<T> options;
 
-    public AssetDescriptor(Class<? extends MemoryResource> type, String path) {
+    public AssetDescriptor(Class<T> type, String path, @Nullable AssetLoader.Options<T> options) {
         this.type = type;
         this.path = path;
         long s = 0;
@@ -22,6 +24,7 @@ public class AssetDescriptor {
             //throw new AssetsException(e.getMessage());
         }
         this.size = s;
+        this.options = options;
     }
 
     @Override
@@ -29,8 +32,13 @@ public class AssetDescriptor {
         if (obj == null) return false;
         if (!(obj instanceof AssetDescriptor)) return false;
         if (this == obj) return true;
-        AssetDescriptor otherDescriptor = (AssetDescriptor) obj;
-        return Objects.equals(this.path, otherDescriptor.path) && this.type == otherDescriptor.type;
+        AssetDescriptor<T> otherDescriptor;
+        try {
+            otherDescriptor = (AssetDescriptor<T>) obj;
+        } catch (Exception e) {
+            return false;
+        }
+        return Objects.equals(this.path, otherDescriptor.path) && this.type == otherDescriptor.type && Objects.equals(this.options, otherDescriptor.options);
     }
 
 }

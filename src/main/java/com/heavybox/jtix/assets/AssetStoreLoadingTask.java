@@ -2,12 +2,13 @@ package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.memory.MemoryResource;
 
-public class AssetStoreLoadingTask extends AsyncTask {
+public class AssetStoreLoadingTask<T extends MemoryResource> extends AsyncTask {
 
-    private final AssetDescriptor descriptor;
+    private final AssetDescriptor<T> descriptor;
     private Array<AssetDescriptor> dependencies;
-    private final AssetLoader loader;
+    private final AssetLoader<T> loader;
 
     AssetStoreLoadingTask(AssetDescriptor descriptor) {
         this.descriptor = descriptor;
@@ -16,14 +17,14 @@ public class AssetStoreLoadingTask extends AsyncTask {
 
     @Override
     public void task() {
-        loader.asyncLoad(descriptor.path);
+        loader.asyncLoad(descriptor.path, descriptor.options);
         this.dependencies = loader.getDependencies();
     }
 
     @Override
     public void onComplete() {
         if (dependencies == null) return;
-        for (AssetDescriptor dependency : dependencies) AssetStore.loadAsset(dependency.type, dependency.path);
+        for (AssetDescriptor dependency : dependencies) AssetStore.load(dependency.type, dependency.path, dependency.options);
     }
 
     protected boolean ready() {
