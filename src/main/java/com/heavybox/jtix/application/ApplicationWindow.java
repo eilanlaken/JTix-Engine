@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.Configuration;
+import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
@@ -20,8 +21,6 @@ import static org.lwjgl.glfw.GLFW.*;
 public class ApplicationWindow implements MemoryResource {
 
     // compute and auxiliary buffers
-    private final IntBuffer   tmpBuffer  = BufferUtils.createIntBuffer(1);
-    private final IntBuffer   tmpBuffer2 = BufferUtils.createIntBuffer(1);
     private final long        monitor    = GLFW.glfwGetPrimaryMonitor();
     private final GLFWVidMode videoMode  = GLFW.glfwGetVideoMode(monitor);
 
@@ -161,12 +160,22 @@ public class ApplicationWindow implements MemoryResource {
     }
 
     private void updateFramebufferInfo() {
-        GLFW.glfwGetFramebufferSize(handle, tmpBuffer, tmpBuffer2);
-        this.backBufferWidth = tmpBuffer.get(0);
-        this.backBufferHeight = tmpBuffer2.get(0);
-        GLFW.glfwGetWindowSize(handle, tmpBuffer, tmpBuffer2);
-        this.logicalWidth = tmpBuffer.get(0);
-        this.logicalHeight = tmpBuffer2.get(0);
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            // Allocate two IntBuffers for framebuffer size
+            IntBuffer fbWidth = stack.mallocInt(1);
+            IntBuffer fbHeight = stack.mallocInt(1);
+            // Get framebuffer size
+            GLFW.glfwGetFramebufferSize(handle, fbWidth, fbHeight);
+            this.backBufferWidth = fbWidth.get(0);
+            this.backBufferHeight = fbHeight.get(0);
+            // Allocate two IntBuffers for window size
+            IntBuffer winWidth = stack.mallocInt(1);
+            IntBuffer winHeight = stack.mallocInt(1);
+            // Get window size
+            GLFW.glfwGetWindowSize(handle, winWidth, winHeight);
+            this.logicalWidth = winWidth.get(0);
+            this.logicalHeight = winHeight.get(0);
+        }
     }
 
     public boolean refresh() {
@@ -229,13 +238,21 @@ public class ApplicationWindow implements MemoryResource {
     }
 
     public int getPositionX() {
-        GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
-        return tmpBuffer.get(0);
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer posX = stack.mallocInt(1); // For the X position, even if we don't use it
+            IntBuffer posY = stack.mallocInt(1); // For the Y position
+            GLFW.glfwGetWindowPos(handle, posX, posY);
+            return posX.get(0);
+        }
     }
 
     public int getPositionY() {
-        GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
-        return tmpBuffer2.get(0);
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer posX = stack.mallocInt(1); // For the X position, even if we don't use it
+            IntBuffer posY = stack.mallocInt(1); // For the Y position
+            GLFW.glfwGetWindowPos(handle, posX, posY);
+            return posY.get(0);
+        }
     }
 
     protected void setVisible(boolean visible) {
@@ -339,3 +356,31 @@ public class ApplicationWindow implements MemoryResource {
     }
 
 }
+
+/*
+
+was:
+
+public int getPositionX() {
+    GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
+    return tmpBuffer.get(0);
+}
+
+
+
+public int getPositionY() {
+    GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
+    return tmpBuffer2.get(0);
+}
+
+private void updateFramebufferInfo() {
+
+    GLFW.glfwGetFramebufferSize(handle, tmpBuffer, tmpBuffer2);
+    this.backBufferWidth = tmpBuffer.get(0);
+    this.backBufferHeight = tmpBuffer2.get(0);
+    GLFW.glfwGetWindowSize(handle, tmpBuffer, tmpBuffer2);
+    this.logicalWidth = tmpBuffer.get(0);
+    this.logicalHeight = tmpBuffer2.get(0);
+}
+
+ */
