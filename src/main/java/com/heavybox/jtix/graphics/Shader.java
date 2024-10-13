@@ -13,7 +13,7 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShaderProgram implements MemoryResource {
+public class Shader implements MemoryResource {
 
     public final String vertexShaderSource;
     public final String fragmentShaderSource;
@@ -33,7 +33,7 @@ public class ShaderProgram implements MemoryResource {
     private String[] attributeNames;
     private Object[] uniformCache;
 
-    public ShaderProgram(final String vertexShaderSource, final String fragmentShaderSource) {
+    public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
         if (vertexShaderSource == null) throw new IllegalArgumentException("Vertex shader cannot be null.");
         if (fragmentShaderSource == null) throw new IllegalArgumentException("Fragment shader cannot be null.");
 
@@ -81,7 +81,7 @@ public class ShaderProgram implements MemoryResource {
             this.attributeSizes.put(name, params_attributes.get(0));
             this.attributeNames[i] = name;
         }
-        this.vertexAttributesBitmask = ModelVertexAttribute.getShaderAttributeBitmask(attributeNames);
+        this.vertexAttributesBitmask = ShaderVertexAttribute.getShaderAttributeBitmask(attributeNames);
 
         /* register uniforms */
         IntBuffer params_uniforms = BufferUtils.createIntBuffer(1);

@@ -56,9 +56,9 @@ public class Renderer2D implements MemoryResourceHolder {
     private final FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * VERTEX_SIZE);
 
     /* defaults */
-    private final ShaderProgram defaultShader = createDefaultShaderProgram();
-    private final Texture       whitePixel    = createWhiteSinglePixelTexture();
-    private final Matrix4x4     defaultMatrix = createDefaultMatrix();
+    private final Shader    defaultShader = createDefaultShaderProgram();
+    private final Texture   whitePixel    = createWhiteSinglePixelTexture();
+    private final Matrix4x4 defaultMatrix = createDefaultMatrix();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
@@ -66,16 +66,16 @@ public class Renderer2D implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private Matrix4x4     currentMatrix     = null;
-    private Texture       currentTexture    = null;
-    private ShaderProgram currentShader     = null;
-    private float         currentTint       = WHITE_TINT;
-    private boolean       drawing           = false;
-    private int           vertexIndex       = 0;
-    private int           currentMode       = GL11.GL_TRIANGLES;
-    private int           currentSFactor    = GL11.GL_SRC_ALPHA;
-    private int           currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
-    private int           perFrameDrawCalls = 0;
+    private Matrix4x4 currentMatrix     = null;
+    private Texture   currentTexture    = null;
+    private Shader    currentShader     = null;
+    private float     currentTint       = WHITE_TINT;
+    private boolean   drawing           = false;
+    private int       vertexIndex       = 0;
+    private int       currentMode       = GL11.GL_TRIANGLES;
+    private int       currentSFactor    = GL11.GL_SRC_ALPHA;
+    private int       currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    private int       perFrameDrawCalls = 0;
 
     public Renderer2D() {
         this.vao = GL30.glGenVertexArrays();
@@ -130,11 +130,11 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* State */
 
-    public void setShader(ShaderProgram shader) {
+    public void setShader(Shader shader) {
         if (shader == null) shader = defaultShader;
         if (currentShader == shader) return;
         flush();
-        ShaderProgramBinder.bind(shader);
+        ShaderBinder.bind(shader);
         shader.bindUniform("u_camera_combined", currentMatrix);
         shader.bindUniform("u_texture", currentTexture);
         currentShader = shader;
@@ -1844,7 +1844,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Create defaults: shader, texture (single white pixel), camera */
 
-    private static ShaderProgram createDefaultShaderProgram() {
+    private static Shader createDefaultShaderProgram() {
         try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
              InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
@@ -1852,7 +1852,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
-            return new ShaderProgram(vertexShader, fragmentShader);
+            return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
             System.err.println("Could not create shader program from resources. Creating manually.");
 
@@ -1894,7 +1894,7 @@ public class Renderer2D implements MemoryResourceHolder {
                         out_color = color * texture(u_texture, uv);
                     }""";
 
-            return new ShaderProgram(vertexShader, fragmentShader);
+            return new Shader(vertexShader, fragmentShader);
         }
     }
 

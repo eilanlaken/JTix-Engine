@@ -217,13 +217,13 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     private ModelPartMeshData processMesh(final AIMesh aiMesh) {
         ModelPartMeshData meshData = new ModelPartMeshData();
-        meshData.vertexBuffers.put(ModelVertexAttribute.POSITION, getPositions(aiMesh));
-        meshData.vertexBuffers.put(ModelVertexAttribute.COLOR, getColors(aiMesh)); // TODO: change to color packed.
-        meshData.vertexBuffers.put(ModelVertexAttribute.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
-        meshData.vertexBuffers.put(ModelVertexAttribute.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
-        meshData.vertexBuffers.put(ModelVertexAttribute.NORMAL, getNormals(aiMesh));
-        meshData.vertexBuffers.put(ModelVertexAttribute.TANGENT, getTangents(aiMesh));
-        meshData.vertexBuffers.put(ModelVertexAttribute.BI_NORMAL, getBiNormals(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.POSITION, getPositions(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.COLOR, getColors(aiMesh)); // TODO: change to color packed.
+        meshData.vertexBuffers.put(ShaderVertexAttribute.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.NORMAL, getNormals(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.TANGENT, getTangents(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.BI_NORMAL, getBiNormals(aiMesh));
         meshData.indices = getIndices(aiMesh);
         meshData.materialIndex = aiMesh.mMaterialIndex();
         meshData.vertexCount = getVertexCount(aiMesh);
@@ -383,25 +383,25 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     }
 
     private ModelPartMesh create(final ModelPartMeshData meshData) {
-        Array<ModelVertexAttribute> attributesCollector = new Array<>();
+        Array<ShaderVertexAttribute> attributesCollector = new Array<>();
         ArrayInt vbosCollector = new ArrayInt();
         int vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
         {
             storeIndicesBuffer(meshData.indices, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.POSITION, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.COLOR, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.NORMAL, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.TANGENT, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BI_NORMAL, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BONE_WEIGHT0, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BONE_WEIGHT1, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BONE_WEIGHT2, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BONE_WEIGHT3, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BONE_WEIGHT4, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(ModelVertexAttribute.BONE_WEIGHT5, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.POSITION, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.COLOR, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.NORMAL, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.TANGENT, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BI_NORMAL, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BONE_WEIGHT0, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BONE_WEIGHT1, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BONE_WEIGHT2, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BONE_WEIGHT3, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BONE_WEIGHT4, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.BONE_WEIGHT5, meshData, attributesCollector, vbosCollector);
         }
         GL30.glBindVertexArray(0);
         final short bitmask = generateBitmask(attributesCollector);
@@ -418,7 +418,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         vbosCollector.add(vbo);
     }
 
-    private void storeDataInAttributeList(final ModelVertexAttribute attribute, final ModelPartMeshData meshData, Array<ModelVertexAttribute> attributesCollector, ArrayInt vbosCollector) {
+    private void storeDataInAttributeList(final ShaderVertexAttribute attribute, final ModelPartMeshData meshData, Array<ShaderVertexAttribute> attributesCollector, ArrayInt vbosCollector) {
         final float[] data = (float[]) meshData.vertexBuffers.get(attribute);
         if (data == null) return;
         final int attributeNumber = attribute.ordinal();
@@ -433,9 +433,9 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         vbosCollector.add(vbo);
     }
 
-    private short generateBitmask(final Array<ModelVertexAttribute> attributes) {
+    private short generateBitmask(final Array<ShaderVertexAttribute> attributes) {
         short bitmask = 0b0000;
-        for (final ModelVertexAttribute attribute : attributes) {
+        for (final ShaderVertexAttribute attribute : attributes) {
             bitmask |= attribute.bitmask;
         }
         return bitmask;
@@ -443,7 +443,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     private static class ModelPartMeshData {
         public int vertexCount;
-        public Map<ModelVertexAttribute, Object> vertexBuffers = new HashMap<>();
+        public Map<ShaderVertexAttribute, Object> vertexBuffers = new HashMap<>();
         public int materialIndex;
         public int[] indices;
         public Vector3 boundingSphereCenter;

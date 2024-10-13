@@ -1,7 +1,7 @@
 package com.heavybox.jtix.z_ecs_old;
 
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.ShaderProgram;
+import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.graphics.TexturePack;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public abstract class Component {
     }
 
     /** Graphics - Sprites **/
-    public static ComponentGraphics2DSprite createSprite(TexturePack.Region region, Color tint, ShaderProgram customShader, HashMap<String, Object> customAttributes) {
+    public static ComponentGraphics2DSprite createSprite(TexturePack.Region region, Color tint, Shader customShader, HashMap<String, Object> customAttributes) {
         return new ComponentGraphics2DSprite(region, tint, customShader, customAttributes);
     }
 

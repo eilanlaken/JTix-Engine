@@ -2,14 +2,14 @@ package com.heavybox.jtix.graphics;
 
 import org.lwjgl.opengl.GL20;
 
-public class ShaderProgramBinder {
+public class ShaderBinder {
 
     private static int boundProgram = -1;
 
-    public static boolean bind(final ShaderProgram shaderProgram) {
-        if (boundProgram == shaderProgram.program) return false;
-        GL20.glUseProgram(shaderProgram.program);
-        boundProgram = shaderProgram.program;
+    public static boolean bind(final Shader shader) {
+        if (boundProgram == shader.program) return false;
+        GL20.glUseProgram(shader.program);
+        boundProgram = shader.program;
         return true;
     }
 

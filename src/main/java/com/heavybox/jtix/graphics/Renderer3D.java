@@ -21,7 +21,7 @@ public class Renderer3D implements MemoryResourceHolder {
 
 
     /* defaults */
-    private final ShaderProgram defaultShader = createDefaultShaderProgram();
+    private final Shader defaultShader = createDefaultShaderProgram();
 
     /* memory pools */
     private final MemoryPool<Vector2> vectorsPool    = new MemoryPool<>(Vector2.class, 10);
@@ -31,7 +31,7 @@ public class Renderer3D implements MemoryResourceHolder {
     /* state */
     private ComponentGraphicsCamera currentComponentGraphicsCamera = null;
     private Texture       currentTexture = null;
-    private ShaderProgram currentShader  = null;
+    private Shader currentShader  = null;
     private boolean       drawing        = false;
     private int           vertexIndex    = 0;
     private int           currentMode    = GL11.GL_TRIANGLES;
@@ -43,7 +43,7 @@ public class Renderer3D implements MemoryResourceHolder {
 
     }
 
-    private static ShaderProgram createDefaultShaderProgram() {
+    private static Shader createDefaultShaderProgram() {
         try (InputStream vertexShaderInputStream = Renderer2D_old.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
              InputStream fragmentShaderInputStream = Renderer2D_old.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.frag");
@@ -51,7 +51,7 @@ public class Renderer3D implements MemoryResourceHolder {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
-            return new ShaderProgram(vertexShader, fragmentShader);
+            return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
             System.err.println("Could not create shader program from resources. Creating manually.");
 
@@ -87,7 +87,7 @@ public class Renderer3D implements MemoryResourceHolder {
                         out_color = texture(u_texture, uv);
                     }""";
 
-            return new ShaderProgram(vertexShader, fragmentShader);
+            return new Shader(vertexShader, fragmentShader);
         }
     }
 

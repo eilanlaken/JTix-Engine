@@ -5,7 +5,7 @@ import com.heavybox.jtix.assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D_old;
-import com.heavybox.jtix.graphics.ShaderProgram;
+import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector2;
@@ -27,7 +27,7 @@ public class SceneRendering2D_Shapes_4 extends ApplicationScreen {
     private float white = new Color(1,1,1,0.5f).toFloatBits();
     private float yellow = new Color(1,1,0,0.3f).toFloatBits();
 
-    private ShaderProgram shaderYellow;
+    private Shader shaderYellow;
 
     public SceneRendering2D_Shapes_4() {
         renderer2DOld = new Renderer2D_old();
@@ -116,7 +116,7 @@ public class SceneRendering2D_Shapes_4 extends ApplicationScreen {
     public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
 
-        requiredAssets.put("assets/shaders/graphics-2d-shader-yellow", ShaderProgram.class);
+        requiredAssets.put("assets/shaders/graphics-2d-shader-yellow", Shader.class);
 
         return requiredAssets;
     }

@@ -6,7 +6,7 @@ import com.heavybox.jtix.assets.AssetUtils;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Renderer3D_old;
-import com.heavybox.jtix.graphics.ShaderProgram;
+import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.Component;
@@ -21,7 +21,7 @@ public class SceneRendering3D_1 extends ApplicationScreen {
 
     private Renderer3D_old renderer3DOld;
     private Model model;
-    private ShaderProgram shader;
+    private Shader shader;
     private ComponentTransform_1 transform;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
@@ -31,7 +31,7 @@ public class SceneRendering3D_1 extends ApplicationScreen {
 
         final String vertexShaderSrc = AssetUtils.getFileContent("assets/shaders/default.vert");
         final String fragmentShaderSrc = AssetUtils.getFileContent("assets/shaders/default.frag");
-        this.shader = new ShaderProgram(vertexShaderSrc, fragmentShaderSrc);
+        this.shader = new Shader(vertexShaderSrc, fragmentShaderSrc);
 
 
         this.componentGraphicsCamera = new ComponentGraphicsCamera(100, 100, 1, 0.1f, 100, 70);

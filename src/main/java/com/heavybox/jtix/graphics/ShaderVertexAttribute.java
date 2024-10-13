@@ -2,9 +2,7 @@ package com.heavybox.jtix.graphics;
 
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-
-public enum ModelVertexAttribute {
+public enum ShaderVertexAttribute {
 
     POSITION("a_position", 3, GL11.GL_FLOAT, false),
     COLOR("a_color", 4, GL11.GL_UNSIGNED_BYTE, true),
@@ -28,7 +26,7 @@ public enum ModelVertexAttribute {
     public final int bitmask;
     public final int slot;
 
-    ModelVertexAttribute(final String glslVariableName, final int length, int type, boolean normalized) {
+    ShaderVertexAttribute(final String glslVariableName, final int length, int type, boolean normalized) {
         this.glslVariableName = glslVariableName;
         this.type = type;
         this.normalized = normalized;
@@ -41,7 +39,7 @@ public enum ModelVertexAttribute {
         int bitmask = 0;
 
         for (final String shaderAttributeName : shaderAttributeNames) {
-            for (ModelVertexAttribute vertexAttribute : values()) {
+            for (ShaderVertexAttribute vertexAttribute : values()) {
                 if (vertexAttribute.glslVariableName.equals(shaderAttributeName)) {
                     bitmask |= vertexAttribute.bitmask;
                     break;
