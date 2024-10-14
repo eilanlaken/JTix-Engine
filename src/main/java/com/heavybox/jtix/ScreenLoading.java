@@ -2,7 +2,9 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationScreen;
+import com.heavybox.jtix.assets.AssetLoaderTexture;
 import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
 
@@ -16,7 +18,7 @@ public class ScreenLoading extends ApplicationScreen {
     public void show() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = screen.getRequiredAssets();
         for (Map.Entry<String, Class<? extends MemoryResource>> requiredAsset : requiredAssets.entrySet()) {
-            AssetStore.load(requiredAsset.getValue(), requiredAsset.getKey());
+            AssetStore.load_old(requiredAsset.getValue(), requiredAsset.getKey());
         }
     }
 

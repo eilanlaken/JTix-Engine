@@ -11,6 +11,8 @@ public class AssetDescriptor {
     public final String                          path;
     public final long                            size;
 
+    // TODO: add Options here in some way.
+
     public AssetDescriptor(Class<? extends MemoryResource> type, String path) {
         this.type = type;
         this.path = path;

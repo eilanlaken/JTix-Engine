@@ -76,7 +76,29 @@ public final class AssetStore {
         return store.get(path) != null;
     }
 
-    public static synchronized void load(final Class<? extends MemoryResource> type, final String path) {
+    @Deprecated public static synchronized void load_old(final Class<? extends MemoryResource> type, final String path) {
+        final Asset asset = store.get(path);
+        if (asset != null) {
+            asset.refCount++;
+            return;
+        }
+        if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
+        AssetDescriptor descriptor = new AssetDescriptor(type, path);
+        loadQueue.addFirst(descriptor);
+    }
+
+    public static synchronized <T extends MemoryResource> void load(final Class<T> type, final String path) {
+        final Asset asset = store.get(path);
+        if (asset != null) {
+            asset.refCount++;
+            return;
+        }
+        if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
+        AssetDescriptor descriptor = new AssetDescriptor(type, path);
+        loadQueue.addFirst(descriptor);
+    }
+
+    public static synchronized <T extends MemoryResource> void load(final Class<T> type, final String path, AssetLoader.Options<T> options) {
         final Asset asset = store.get(path);
         if (asset != null) {
             asset.refCount++;

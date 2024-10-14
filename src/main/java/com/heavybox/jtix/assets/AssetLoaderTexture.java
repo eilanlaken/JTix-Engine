@@ -45,6 +45,15 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
         return null;
     }
 
+    public static final class Options extends AssetLoader.Options<Texture> {
+
+        public Texture.Filter minFilter;
+        public Texture.Filter magFilter;
+        public Texture.Wrap   uWrap;
+        public Texture.Wrap   vWrap;
+
+    }
+
 }
 
 /*
