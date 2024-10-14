@@ -90,15 +90,15 @@ public final class AssetStore {
         loadQueue.addFirst(descriptor);
     }
 
-    public static synchronized <T extends MemoryResource> void load(final Class<T> type, final String path) {
+    public static void load(Class<? extends MemoryResource> type, String path) {
         load(type, path, null, false);
     }
 
-    public static synchronized <T extends MemoryResource> void load(final Class<T> type, final String path, AssetLoader.Options<T> options) {
+    public static void load(Class<? extends MemoryResource> type, String path, AssetLoader.Options<? extends MemoryResource> options) {
         load(type, path, options, false);
     }
 
-    static synchronized <T extends MemoryResource> void load(final Class<T> type, final String path, AssetLoader.Options<T> options, boolean isDependency) {
+    static void load(Class<? extends MemoryResource> type, String path, AssetLoader.Options<? extends MemoryResource> options, boolean isDependency) {
         final Asset asset = store.get(path);
         if (asset != null) {
             if (isDependency) asset.refCount++;

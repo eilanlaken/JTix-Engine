@@ -1,6 +1,7 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.graphics.TexturePack;
 import org.yaml.snakeyaml.Yaml;
@@ -51,6 +52,16 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
         }
 
         return new TexturePack(textures, yamlString);
+    }
+
+    public static final class Options extends AssetLoader.Options<Texture> {
+
+        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public Texture.Filter minFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Filter magFilter = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Wrap   uWrap     = Texture.Wrap.CLAMP_TO_EDGE;
+        public Texture.Wrap   vWrap     = Texture.Wrap.CLAMP_TO_EDGE;
+
     }
 
 }

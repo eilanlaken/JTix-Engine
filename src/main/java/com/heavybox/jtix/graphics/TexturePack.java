@@ -51,7 +51,9 @@ public final class TexturePack implements MemoryResource {
 
     @Override
     public void delete() {
-        // TODO: see how should be implemented.
+        for (Texture texture : textures) {
+            texture.delete();
+        }
     }
 
     public static class Region {

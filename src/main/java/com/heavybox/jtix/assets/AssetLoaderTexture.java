@@ -11,8 +11,8 @@ import java.nio.IntBuffer;
 
 public class AssetLoaderTexture implements AssetLoader<Texture> {
 
-    private int width;
-    private int height;
+    private int        width;
+    private int        height;
     private ByteBuffer buffer;
 
     @Override
@@ -47,35 +47,12 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     public static final class Options extends AssetLoader.Options<Texture> {
 
-        public Texture.Filter minFilter;
-        public Texture.Filter magFilter;
-        public Texture.Wrap   uWrap;
-        public Texture.Wrap   vWrap;
+        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
 
     }
 
 }
-
-/*
-old create() code:
-
-@Override
-    public Texture create() {
-        int glHandle = GL11.glGenTextures();
-        Texture texture = new Texture(glHandle,
-                width, height,
-                Texture.Filter.MIP_MAP_NEAREST_NEAREST, Texture.Filter.MIP_MAP_NEAREST_NEAREST,
-                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE
-        );
-        TextureBinder.bind(texture);
-        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        // TODO: here we need to see if we want to: generate mipmaps, use anisotropic filtering, what level of anisotropy etc
-        // TODO: For a raw Texture with no TextureMap, use defaults.
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        // TODO: we need to see if the anisotropic filtering extension is available. If yes, create that instead of mipmaps.
-        STBImage.stbi_image_free(buffer);
-        return texture;
-    }
-
- */

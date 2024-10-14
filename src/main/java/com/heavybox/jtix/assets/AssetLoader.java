@@ -1,8 +1,9 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.memory.MemoryResource;
 
-public interface AssetLoader<T> {
+public interface AssetLoader<T extends MemoryResource> {
 
     Array<AssetDescriptor> getDependencies();
     void asyncLoad(final String path);

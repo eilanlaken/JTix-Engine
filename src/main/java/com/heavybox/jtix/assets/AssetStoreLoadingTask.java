@@ -2,6 +2,7 @@ package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.memory.MemoryResource;
 
 public class AssetStoreLoadingTask extends AsyncTask {
 
@@ -23,7 +24,7 @@ public class AssetStoreLoadingTask extends AsyncTask {
     @Override
     public void onComplete() {
         if (dependencies == null) return;
-        for (AssetDescriptor dependency : dependencies) AssetStore.load_old(dependency.type, dependency.path);
+        for (AssetDescriptor dependency : dependencies) AssetStore.load(dependency.type, dependency.path, dependency.options,true);
     }
 
     protected boolean ready() {
@@ -33,8 +34,8 @@ public class AssetStoreLoadingTask extends AsyncTask {
     }
 
     protected Asset create() {
-        final Object obj = loader.create();
+        final MemoryResource data = loader.create();
         final Array<Asset> assetDependencies = AssetStore.getDependencies(dependencies);
-        return new Asset(obj, descriptor, assetDependencies);
+        return new Asset(data, descriptor, assetDependencies);
     }
 }
