@@ -98,10 +98,6 @@ public final class AssetStore {
         return (T) t.data;
     }
 
-    public static synchronized Asset getAsset(final String path) {
-        return store.get(path);
-    }
-
     // TODO
     public static synchronized void clear() {
 
