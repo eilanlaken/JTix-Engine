@@ -84,7 +84,7 @@ public final class AssetStore {
             return;
         }
         if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
-        AssetDescriptor descriptor = new AssetDescriptor(type, path);
+        AssetDescriptor descriptor = new AssetDescriptor(type, path, null);
         loadQueue.addFirst(descriptor);
     }
 
