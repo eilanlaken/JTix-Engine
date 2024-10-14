@@ -72,7 +72,8 @@ public class Keyboard {
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public static void resetInternalState() {
+    public static void update() {
+        /* reset internal state */
         keysJustPressed.clear();
     }
 

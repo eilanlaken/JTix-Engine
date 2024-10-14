@@ -54,8 +54,8 @@ public class Application {
             int targetFrameRate = GraphicsUtils.getTargetFps();
 
             AssetStore.update();
-            Mouse.resetInternalState();
-            Keyboard.resetInternalState();
+            Mouse.update();
+            Keyboard.update();
             GLFW.glfwPollEvents();
 
             boolean requestRendering;
@@ -68,9 +68,7 @@ public class Application {
             }
 
             if (requestRendering && !GraphicsUtils.isContinuousRendering()) window.requestRendering();
-            if (!windowRendered) {
-                // Sleep a few milliseconds in case no rendering was requested
-                // with continuous rendering disabled.
+            if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
                 try {
                     Thread.sleep(1000 / GraphicsUtils.getIdleFps());
                 } catch (InterruptedException ignored) {

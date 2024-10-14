@@ -1,6 +1,7 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.memory.MemoryResource;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -11,9 +12,11 @@ public class AssetDescriptor {
     public final String                          path;
     public final long                            size;
 
+    public final AssetLoader.Options<? extends MemoryResource> options;
+
     // TODO: add Options here in some way.
 
-    public AssetDescriptor(Class<? extends MemoryResource> type, String path) {
+    public AssetDescriptor(Class<? extends MemoryResource> type, String path, @Nullable AssetLoader.Options<? extends MemoryResource> options) {
         this.type = type;
         this.path = path;
         long s = 0;
@@ -24,6 +27,7 @@ public class AssetDescriptor {
             //throw new AssetsException(e.getMessage());
         }
         this.size = s;
+        this.options = options;
     }
 
     @Override
