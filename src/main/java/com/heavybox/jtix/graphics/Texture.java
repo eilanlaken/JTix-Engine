@@ -42,8 +42,7 @@ public class Texture implements MemoryResource {
         this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropicFilteringLevel = MathUtils.clampInt(anisotropicFilteringLevel,1, GraphicsUtils.getMaxAnisotropicFilterLevel());
-
+        this.anisotropicFilteringLevel = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropicFilteringLevel,1, GraphicsUtils.getMaxAnisotropicFilterLevel()));
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);

@@ -3,6 +3,7 @@ package com.heavybox.jtix.assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.math.MathUtils;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
@@ -14,9 +15,11 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     private int        width;
     private int        height;
     private ByteBuffer buffer;
+    private Options    textureOptions;
 
     @Override
-    public void asyncLoad(String path) {
+    public Array<AssetDescriptor> asyncLoad(String path, AssetLoader.Options options) {
+        textureOptions = (Options) options;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
             IntBuffer heightBuffer = stack.mallocInt(1);
@@ -28,21 +31,21 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
             width = widthBuffer.get();
             height = heightBuffer.get();
             int maxTextureSize = GraphicsUtils.getMaxTextureSize();
-            if (width > maxTextureSize || height > maxTextureSize)
-                throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+            if (width > maxTextureSize || height > maxTextureSize) throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
         }
+        return null;
     }
 
     @Override
     public Texture create() {
-        Texture texture = new Texture(width, height, buffer, null, null, null, null, 16);
+        final int anisotropy = textureOptions == null ? 16 : textureOptions.anisotropy;
+        final Texture.Filter magFilter = textureOptions == null ? null : textureOptions.magFilter;
+        final Texture.Filter minFilter = textureOptions == null ? null : textureOptions.minFilter;
+        final Texture.Wrap uWrap = textureOptions == null ? null : textureOptions.uWrap;
+        final Texture.Wrap vWrap = textureOptions == null ? null : textureOptions.vWrap;
+        Texture texture = new Texture(width, height, buffer, magFilter, minFilter, uWrap, vWrap, anisotropy);
         STBImage.stbi_image_free(buffer);
         return texture;
-    }
-
-    @Override
-    public Array<AssetDescriptor> getDependencies() {
-        return null;
     }
 
     public static final class Options extends AssetLoader.Options<Texture> {

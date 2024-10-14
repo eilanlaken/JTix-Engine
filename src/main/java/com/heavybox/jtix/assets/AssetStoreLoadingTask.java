@@ -8,7 +8,7 @@ public class AssetStoreLoadingTask extends AsyncTask {
 
     private final AssetDescriptor descriptor;
     private Array<AssetDescriptor> dependencies;
-    private final AssetLoader loader;
+    private final AssetLoader<? extends MemoryResource> loader;
 
     AssetStoreLoadingTask(AssetDescriptor descriptor) {
         this.descriptor = descriptor;
@@ -17,8 +17,7 @@ public class AssetStoreLoadingTask extends AsyncTask {
 
     @Override
     public void task() {
-        loader.asyncLoad(descriptor.path);
-        this.dependencies = loader.getDependencies();
+        this.dependencies = loader.asyncLoad(descriptor.path, descriptor.options);
     }
 
     @Override

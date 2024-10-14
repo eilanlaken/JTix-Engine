@@ -78,16 +78,62 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     private ModelArmatureData armatureData;
 
     @Override
-    public Array<AssetDescriptor> getDependencies() {
-        // TODO: see if the path is relative etc.
+    public Array<AssetDescriptor> asyncLoad(String path, AssetLoader.Options options) {
+        Options modelOptions = (Options) options;
+
+        final int importFlags = // TODO: use the options here.
+                Assimp.aiProcess_Triangulate |
+                        Assimp.aiProcess_ImproveCacheLocality |
+                        Assimp.aiProcess_GenBoundingBoxes |
+                        Assimp.aiProcess_GenNormals |
+                        Assimp.aiProcess_CalcTangentSpace |
+                        Assimp.aiProcess_RemoveRedundantMaterials;
+
+
+        try (AIScene aiScene = Assimp.aiImportFile(path, importFlags)) {
+            PointerBuffer aiMaterials  = aiScene.mMaterials();
+            int numMaterials = aiScene.mNumMaterials();
+            materialsData = new ModelPartMaterialData[numMaterials];
+            for (int i = 0; i < numMaterials; i++) {
+                materialsData[i] = processMaterial(AIMaterial.create(aiMaterials.get(i)));;
+            }
+
+            PointerBuffer aiMeshes = aiScene.mMeshes();
+            int numMeshes = aiScene.mNumMeshes();
+            meshesData = new ModelPartMeshData[numMeshes];
+            for (int i = 0; i < numMeshes; i++) {
+                final ModelPartMeshData meshData = processMesh(AIMesh.create(aiMeshes.get(i)));
+                meshesData[i] = meshData;
+            }
+
+            partsData = new ModelPartData[numMeshes];
+            for (int i = 0; i < partsData.length; i++) {
+                partsData[i] = new ModelPartData();
+                partsData[i].meshData = meshesData[i];
+                partsData[i].materialData = materialsData[meshesData[i].materialIndex];
+            }
+
+            armatureData = new ModelArmatureData();
+        }
+
         Array<AssetDescriptor> dependencies = new Array<>();
         for (ModelPartMaterialData materialData : materialsData) {
             Map<String, Object> attributesData = materialData.attributesData;
             for (Map.Entry<String, Object> entry : attributesData.entrySet()) {
-                if (entry instanceof TextureParameters) dependencies.add(new AssetDescriptor(Texture.class, ((TextureParameters) entry).path));
+                AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
+                textureLoaderOptions.anisotropy = modelOptions.anisotropy;
+                textureLoaderOptions.magFilter = modelOptions.magFilter;
+                textureLoaderOptions.minFilter = modelOptions.minFilter;
+                textureLoaderOptions.uWrap = modelOptions.uWrap;
+                textureLoaderOptions.vWrap = modelOptions.vWrap;
+
+                if (entry instanceof TextureParameters) {
+                    dependencies.add(new AssetDescriptor(Texture.class, ((TextureParameters) entry).path, textureLoaderOptions));
+                }
             }
         }
         return dependencies;
+
     }
 
     // TODO: use ModelBuilder for this part.
@@ -123,42 +169,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         return new Model(parts, armature);
     }
 
-    @Override
-    public void asyncLoad(final String path) {
-        final int importFlags =
-                Assimp.aiProcess_Triangulate |
-                Assimp.aiProcess_ImproveCacheLocality |
-                Assimp.aiProcess_GenBoundingBoxes |
-                Assimp.aiProcess_GenNormals |
-                Assimp.aiProcess_CalcTangentSpace |
-                Assimp.aiProcess_RemoveRedundantMaterials;
-        try (AIScene aiScene = Assimp.aiImportFile(path, importFlags)) {
-            PointerBuffer aiMaterials  = aiScene.mMaterials();
-            int numMaterials = aiScene.mNumMaterials();
-            materialsData = new ModelPartMaterialData[numMaterials];
-            for (int i = 0; i < numMaterials; i++) {
-                materialsData[i] = processMaterial(AIMaterial.create(aiMaterials.get(i)));;
-            }
-
-            PointerBuffer aiMeshes = aiScene.mMeshes();
-            int numMeshes = aiScene.mNumMeshes();
-            meshesData = new ModelPartMeshData[numMeshes];
-            for (int i = 0; i < numMeshes; i++) {
-                final ModelPartMeshData meshData = processMesh(AIMesh.create(aiMeshes.get(i)));
-                meshesData[i] = meshData;
-            }
-
-            partsData = new ModelPartData[numMeshes];
-            for (int i = 0; i < partsData.length; i++) {
-                partsData[i] = new ModelPartData();
-                partsData[i].meshData = meshesData[i];
-                partsData[i].materialData = materialsData[meshesData[i].materialIndex];
-            }
-
-            armatureData = new ModelArmatureData();
-        }
-    }
-
     private ModelPartMaterialData processMaterial(final AIMaterial aiMaterial) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             ModelPartMaterialData modelPartMaterialData = new ModelPartMaterialData();
@@ -176,7 +186,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 IntBuffer op = stack.mallocInt(1);
                 IntBuffer mapMode = stack.mallocInt(1);
                 FloatBuffer blendMode = stack.mallocFloat(1);
-                int result = Assimp.aiGetMaterialTexture(aiMaterial, entry.value, 0, path, (IntBuffer) mapping, uvIndex, blendMode, op, mapMode, null);
+                int result = Assimp.aiGetMaterialTexture(aiMaterial, entry.value, 0, path, mapping, uvIndex, blendMode, op, mapMode, null);
                 if (result == Assimp.aiReturn_SUCCESS) {
                     TextureParameters params = new TextureParameters();
                     params.path = path.dataString();
@@ -483,4 +493,20 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public int op;
         public float blendMode;
     }
+
+    public static final class Options extends AssetLoader.Options<Model> {
+
+        // TODO
+        public boolean        triangulate = false;
+        public boolean        flipNormals = false;
+
+
+        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+
+    }
+
 }

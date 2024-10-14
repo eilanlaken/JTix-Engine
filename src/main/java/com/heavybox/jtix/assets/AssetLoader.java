@@ -5,16 +5,12 @@ import com.heavybox.jtix.memory.MemoryResource;
 
 public interface AssetLoader<T extends MemoryResource> {
 
-    Array<AssetDescriptor> getDependencies();
-    void asyncLoad(final String path);
+    //Array<AssetDescriptor> getDependencies();
+    //@Deprecated void asyncLoad(final String path);
+
+    Array<AssetDescriptor> asyncLoad(final String path, final Options options);
     T create();
 
-    // TODO: finalize asset loading.
-    // tasks: font loading
-    // shader loading
-    // parameters
-    // asset management, free and delete
-    // handle background tasks - texture packing etc together with loading.
     class Options<T> {
 
     }
