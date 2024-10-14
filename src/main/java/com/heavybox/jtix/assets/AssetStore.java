@@ -76,20 +76,6 @@ public final class AssetStore {
         return store.get(path) != null;
     }
 
-
-
-    // TODO: remove this
-    @Deprecated public static synchronized void load_old(final Class<? extends MemoryResource> type, final String path) {
-        final Asset asset = store.get(path);
-        if (asset != null) {
-            asset.refCount++;
-            return;
-        }
-        if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
-        AssetDescriptor descriptor = new AssetDescriptor(type, path, null);
-        loadQueue.addFirst(descriptor);
-    }
-
     public static void load(Class<? extends MemoryResource> type, String path) {
         load(type, path, null, false);
     }

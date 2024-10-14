@@ -22,7 +22,7 @@ import java.util.Map;
 
 // TODO: recreate interleaved model building to minimize vbo count;
 // TODO: move stuff to model builder;
-public class AssetLoaderModel implements AssetLoader<Model> {
+@Deprecated public class AssetLoaderModel implements AssetLoader<Model> {
 
     private static final MapObjectInt<String> namedTextureTypes;
     private static final Map<String, String> namedColorParams;

@@ -18,7 +18,7 @@ public class ScreenLoading extends ApplicationScreen {
     public void show() {
         Map<String, Class<? extends MemoryResource>> requiredAssets = screen.getRequiredAssets();
         for (Map.Entry<String, Class<? extends MemoryResource>> requiredAsset : requiredAssets.entrySet()) {
-            AssetStore.load_old(requiredAsset.getValue(), requiredAsset.getKey());
+            AssetStore.load(requiredAsset.getValue(), requiredAsset.getKey());
         }
     }
 
