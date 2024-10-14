@@ -7,6 +7,8 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.scene.Scene;
+import com.heavybox.jtix.scene.SceneUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -28,6 +30,7 @@ public class Application {
         GL.createCapabilities();
         AsyncUtils.init();
         ApplicationUtils.init(window);
+        SceneUtils.init(window);
         GraphicsUtils.init(window);
         AssetUtils.init(window);
         Mouse.init(window);

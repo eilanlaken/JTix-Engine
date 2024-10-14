@@ -2,8 +2,10 @@ package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.memory.MemoryResourceHolder;
 
-public class EntityContainer {
+public class EntityContainer implements MemoryResourceHolder {
 
     /* Entities */
     protected Array<Entity> entities = new Array<>(false, 200);
@@ -30,6 +32,9 @@ public class EntityContainer {
     protected Array<ComponentPhysics>   componentPhysics    = new Array<>(false, 200);
     protected Array<ComponentLogics>    componentScripts    = new Array<>(false, 200);
     protected Array<ComponentRegion>    componentRegions    = new Array<>(false, 200);
+
+    /* global container services */
+    protected final Renderer2D renderer2D = new Renderer2D();
 
     public EntityContainer() {
         systems.add(systemDynamics);
@@ -161,6 +166,12 @@ public class EntityContainer {
     public void registerSystem(System system) {
         if (systems.contains(system, true)) return;
         systems.add(system);
+    }
+
+    @Override
+    public void deleteAll() {
+        renderer2D.deleteAll();
+        // TODO: delete all. Renderer2D, any other resources.
     }
 
     @Override

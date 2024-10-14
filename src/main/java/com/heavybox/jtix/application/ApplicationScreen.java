@@ -6,7 +6,7 @@ import com.heavybox.jtix.memory.MemoryResourceHolder;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ApplicationScreen implements MemoryResourceHolder {
+@Deprecated public abstract class ApplicationScreen implements MemoryResourceHolder {
 
     protected ApplicationWindow window;
 

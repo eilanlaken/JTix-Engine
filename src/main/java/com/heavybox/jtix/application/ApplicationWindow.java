@@ -3,6 +3,7 @@ package com.heavybox.jtix.application;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.memory.MemoryResource;
+import com.heavybox.jtix.scene.Scene;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.*;
@@ -33,8 +34,11 @@ public class ApplicationWindow implements MemoryResource {
     // state management
     private final Array<Runnable>   tasks            = new Array<>();
     private       boolean           requestRendering = false;
-    private       ApplicationScreen screen;
     private final Array<String>     filesDraggedAndDropped = new Array<>();
+
+    // TODO: remove
+    private ApplicationScreen screen;
+    private Scene currentScene;
 
     private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;
