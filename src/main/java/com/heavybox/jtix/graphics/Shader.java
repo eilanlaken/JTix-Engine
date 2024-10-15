@@ -358,12 +358,10 @@ public class Shader implements MemoryResource {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Shader : ").append(program).append('\n');
-        sb.append("Vertex Shader : ").append('\n').append(vertexShaderSource).append('\n');
-        sb.append("Fragment Shader : ").append('\n').append(fragmentShaderSource).append('\n');
-        sb.append("Attributes Bitmask : ").append('\n').append(Integer.toBinaryString(vertexAttributesBitmask)).append('\n');
-        return sb.toString();
+        return "Shader : " + program + '\n' +
+                "Vertex Shader : " + '\n' + vertexShaderSource + '\n' +
+                "Fragment Shader : " + '\n' + fragmentShaderSource + '\n' +
+                "Attributes Bitmask : " + '\n' + Integer.toBinaryString(vertexAttributesBitmask) + '\n';
     }
 
     private static class IntegerCache {
