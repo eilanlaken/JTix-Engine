@@ -28,10 +28,12 @@ public class Shader implements MemoryResource {
     private final MapObjectInt<String> uniformLocations;
     private final MapObjectInt<String> uniformTypes;
     private final MapObjectInt<String> uniformSizes;
+    private final String[]             attributeNames;
+    private final String[]             uniformNames;
 
-    private String[] attributeNames;
-    private String[] uniformNames;
+
     private Object[] uniformCache; // TODO: revise
+    private Map<String, Object> uniformsCache = new HashMap<>(); // TODO
 
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
         if (vertexShaderSource == null) throw new IllegalArgumentException("Vertex shader cannot be null.");
@@ -49,17 +51,34 @@ public class Shader implements MemoryResource {
         this.uniformSizes = new MapObjectInt<>();
         this.program = GL20.glCreateProgram();
         if (program == 0) throw new RuntimeException("Could not create shader");
-        this.vertexShaderId = createVertexShader(vertexShaderSource);
-        this.fragmentShaderId = createFragmentShader(fragmentShaderSource);
+
+        /* create vertex shader */
+        this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+        if (vertexShaderId == 0)
+            throw new RuntimeException("Error creating vertex shader.");
+        GL20.glShaderSource(vertexShaderId, vertexShaderSource);
+        GL20.glCompileShader(vertexShaderId);
+        if (GL20.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0)
+            throw new RuntimeException("Error compiling vertex shader: " + GL20.glGetShaderInfoLog(vertexShaderId, 1024));
+        GL20.glAttachShader(program, vertexShaderId);
+        // this.vertexShaderId = createVertexShader(vertexShaderSource); // was
+
+        /* create fragment shader */
+        this.fragmentShaderId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+        if (fragmentShaderId == 0)
+            throw new RuntimeException("Error creating fragment shader.");
+        GL20.glShaderSource(fragmentShaderId, fragmentShaderSource);
+        GL20.glCompileShader(fragmentShaderId);
+        if (GL20.glGetShaderi(fragmentShaderId, GL20.GL_COMPILE_STATUS) == 0)
+            throw new RuntimeException("Error compiling fragment shader: " + GL20.glGetShaderInfoLog(fragmentShaderId, 1024));
+        GL20.glAttachShader(program, fragmentShaderId);
+        // this.fragmentShaderId = createFragmentShader(fragmentShaderSource); // was
 
         /* link program */
         GL20.glLinkProgram(program);
-        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0)
-            throw new RuntimeException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
-        if (vertexShaderId != 0)
-            GL20.glDetachShader(program, vertexShaderId);
-        if (fragmentShaderId != 0)
-            GL20.glDetachShader(program, fragmentShaderId);
+        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0) throw new RuntimeException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
+        GL20.glDetachShader(program, vertexShaderId);
+        GL20.glDetachShader(program, fragmentShaderId);
         GL20.glValidateProgram(program);
         if (GL20.glGetProgrami(program, GL20.GL_VALIDATE_STATUS) == 0)
             throw new RuntimeException("Could not validate shader code: " + GL20.glGetProgramInfoLog(program, 1024));
@@ -114,7 +133,13 @@ public class Shader implements MemoryResource {
             this.uniformNames[i] = entry.key;
             i++;
         }
-        this.uniformCache = new Object[uniformNames.length];
+
+        /* instantiate cache */
+        this.uniformCache = new Object[uniformNames.length]; // TODO: delete
+        this.uniformsCache = new HashMap<>();
+        for (String uniformName : uniformNames) {
+
+        }
 
         /* validation */
         /* validate: limit the allowed max sampled textures */
@@ -149,30 +174,6 @@ public class Shader implements MemoryResource {
         }
     }
 
-    private int createVertexShader(final String shaderCode) {
-        int shaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        if (shaderId == 0)
-            throw new RuntimeException("Error creating vertex shader.");
-        GL20.glShaderSource(shaderId, shaderCode);
-        GL20.glCompileShader(shaderId);
-        if (GL20.glGetShaderi(shaderId, GL20.GL_COMPILE_STATUS) == 0)
-            throw new RuntimeException("Error compiling vertex shader: " + GL20.glGetShaderInfoLog(shaderId, 1024));
-        GL20.glAttachShader(program, shaderId);
-        return shaderId;
-    }
-
-    private int createFragmentShader(final String shaderCode) {
-        int shaderId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        if (shaderId == 0)
-            throw new RuntimeException("Error creating fragment shader.");
-        GL20.glShaderSource(shaderId, shaderCode);
-        GL20.glCompileShader(shaderId);
-        if (GL20.glGetShaderi(shaderId, GL20.GL_COMPILE_STATUS) == 0)
-            throw new RuntimeException("Error compiling fragment shader: " + GL20.glGetShaderInfoLog(shaderId, 1024));
-        GL20.glAttachShader(program, shaderId);
-        return shaderId;
-    }
-
     protected final void bindUniforms(final HashMap<String, Object> uniforms) {
         if (uniforms == null) return;
         for (Map.Entry<String, Object> entry : uniforms.entrySet()) {
@@ -186,8 +187,7 @@ public class Shader implements MemoryResource {
         if (value == null) return;
         final int location = uniformLocations.get(name, -1);
         // TODO: remove. Good only for debugging, but prevents custom flexible shading.
-        if (location == -1) throw new IllegalArgumentException("\n\nError: " + this.getClass().getSimpleName() +  " does not have a uniform named " + name + "." +
-                "\nIf you have defined the uniform but have not used it, the GLSL compiler discarded it.\n");
+        if (location == -1) throw new IllegalArgumentException("\n\nError: " + this.getClass().getSimpleName() +  " does not have a uniform named " + name + "." + "\nIf you have defined the uniform but have not used it, the GLSL compiler discarded it.\n");
         final int type = uniformTypes.get(name, -1);
         switch (type) {
 
@@ -249,105 +249,6 @@ public class Shader implements MemoryResource {
         }
     }
 
-    private boolean isUniformIntegerCached(final int location, int value) {
-        final IntegerCache cached = (IntegerCache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value == value;
-    }
-
-    private boolean isUniformBooleanCached(final int location, boolean value) {
-        final BooleanCache cached = (BooleanCache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value == value;
-    }
-
-    private boolean isUniformFloatCached(final int location, float value) {
-        final FloatCache cached = (FloatCache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value == value;
-    }
-
-    private boolean isUniformFloatTupleCached(final int location, float x, float y) {
-        final FloatTuple2Cache cached = (FloatTuple2Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.x == x && cached.y == y;
-    }
-
-    private boolean isUniformFloatTupleCached(final int location, float x, float y, float z) {
-        final FloatTuple3Cache cached = (FloatTuple3Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.x == x && cached.y == y && cached.z == z;
-    }
-
-    private boolean isUniformFloatTupleCached(final int location, float x, float y, float z, float w) {
-        final FloatTuple4Cache cached = (FloatTuple4Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.x == x && cached.y == y && cached.z == z && cached.w == w;
-    }
-
-    private boolean isUniformMatrix4Cached(final int location, final Matrix4x4 value) {
-        final Matrix4Cache cached = (Matrix4Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value.equals(value);
-    }
-
-    private void cacheUniformInteger(final int location, final int value) {
-        if (uniformCache[location] == null) uniformCache[location] = new IntegerCache();
-        ((IntegerCache) uniformCache[location]).value = value;
-    }
-
-    private void cacheUniformBoolean(final int location, final boolean value) {
-        if (uniformCache[location] == null) uniformCache[location] = new BooleanCache();
-        ((BooleanCache) uniformCache[location]).value = value;
-    }
-
-    private void cacheUniformFloat(final int location, final float value) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatCache();
-        ((FloatCache) uniformCache[location]).value = value;
-    }
-
-    private void cacheUniformFloatTuple(final int location, float x, float y) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple2Cache();
-        FloatTuple2Cache cache = (FloatTuple2Cache) uniformCache[location];
-        cache.x = x;
-        cache.y = y;
-    }
-
-    private void cacheUniformFloatTuple(final int location, float x, float y, float z) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple3Cache();
-        FloatTuple3Cache cache = (FloatTuple3Cache) uniformCache[location];
-        cache.x = x;
-        cache.y = y;
-        cache.z = z;
-    }
-
-    private void cacheUniformFloatTuple(final int location, float x, float y, float z, float w) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple4Cache();
-        FloatTuple4Cache cache = (FloatTuple4Cache) uniformCache[location];
-        cache.x = x;
-        cache.y = y;
-        cache.z = z;
-        cache.w = w;
-    }
-
-    private void cacheUniformMatrix4(final int location, final Matrix4x4 value) {
-        if (uniformCache[location] == null) uniformCache[location] = new Matrix4Cache();
-        Matrix4Cache cache = (Matrix4Cache) uniformCache[location];
-        cache.value.set(value);
-    }
-
-    private void validate() {
-        // validate that the number of sampled textures does not exceed the allowed maximum on current GPU
-        final int maxSampledTextures = GraphicsUtils.getMaxFragmentShaderTextureUnits();
-        int sampledTextures = 0;
-        for (MapObjectInt.Entry<String> uniform : uniformTypes.entries()) {
-            int type = uniform.value;
-            if (type == GL20.GL_SAMPLER_2D) sampledTextures++;
-        }
-        if (sampledTextures > maxSampledTextures) throw new IllegalArgumentException("Error: shader code trying " +
-                "to sample " + sampledTextures + ". The allowed maximum on this hardware is " + maxSampledTextures);
-    }
-
     @Override
     public void delete() {
         GL20.glUseProgram(0);
@@ -364,37 +265,126 @@ public class Shader implements MemoryResource {
                 "Attributes Bitmask : " + '\n' + Integer.toBinaryString(vertexAttributesBitmask) + '\n';
     }
 
-    private static class IntegerCache {
+    // TODO: remove these methods and classes.
+
+    @Deprecated private boolean isUniformIntegerCached(final int location, int value) {
+        final IntegerCache cached = (IntegerCache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.value == value;
+    }
+
+    @Deprecated private boolean isUniformBooleanCached(final int location, boolean value) {
+        final BooleanCache cached = (BooleanCache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.value == value;
+    }
+
+    @Deprecated private boolean isUniformFloatCached(final int location, float value) {
+        final FloatCache cached = (FloatCache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.value == value;
+    }
+
+    @Deprecated private boolean isUniformFloatTupleCached(final int location, float x, float y) {
+        final FloatTuple2Cache cached = (FloatTuple2Cache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.x == x && cached.y == y;
+    }
+
+    @Deprecated private boolean isUniformFloatTupleCached(final int location, float x, float y, float z) {
+        final FloatTuple3Cache cached = (FloatTuple3Cache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.x == x && cached.y == y && cached.z == z;
+    }
+
+    @Deprecated private boolean isUniformFloatTupleCached(final int location, float x, float y, float z, float w) {
+        final FloatTuple4Cache cached = (FloatTuple4Cache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.x == x && cached.y == y && cached.z == z && cached.w == w;
+    }
+
+    @Deprecated private boolean isUniformMatrix4Cached(final int location, final Matrix4x4 value) {
+        final Matrix4Cache cached = (Matrix4Cache) uniformCache[location];
+        if (cached == null) return false;
+        return cached.value.equals(value);
+    }
+
+    @Deprecated private void cacheUniformInteger(final int location, final int value) {
+        if (uniformCache[location] == null) uniformCache[location] = new IntegerCache();
+        ((IntegerCache) uniformCache[location]).value = value;
+    }
+
+    @Deprecated private void cacheUniformBoolean(final int location, final boolean value) {
+        if (uniformCache[location] == null) uniformCache[location] = new BooleanCache();
+        ((BooleanCache) uniformCache[location]).value = value;
+    }
+
+    @Deprecated private void cacheUniformFloat(final int location, final float value) {
+        if (uniformCache[location] == null) uniformCache[location] = new FloatCache();
+        ((FloatCache) uniformCache[location]).value = value;
+    }
+
+    @Deprecated private void cacheUniformFloatTuple(final int location, float x, float y) {
+        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple2Cache();
+        FloatTuple2Cache cache = (FloatTuple2Cache) uniformCache[location];
+        cache.x = x;
+        cache.y = y;
+    }
+
+    @Deprecated private void cacheUniformFloatTuple(final int location, float x, float y, float z) {
+        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple3Cache();
+        FloatTuple3Cache cache = (FloatTuple3Cache) uniformCache[location];
+        cache.x = x;
+        cache.y = y;
+        cache.z = z;
+    }
+
+    @Deprecated private void cacheUniformFloatTuple(final int location, float x, float y, float z, float w) {
+        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple4Cache();
+        FloatTuple4Cache cache = (FloatTuple4Cache) uniformCache[location];
+        cache.x = x;
+        cache.y = y;
+        cache.z = z;
+        cache.w = w;
+    }
+
+    @Deprecated private void cacheUniformMatrix4(final int location, final Matrix4x4 value) {
+        if (uniformCache[location] == null) uniformCache[location] = new Matrix4Cache();
+        Matrix4Cache cache = (Matrix4Cache) uniformCache[location];
+        cache.value.set(value);
+    }
+
+    @Deprecated private static class IntegerCache {
         private int value;
     }
 
-    private static class BooleanCache {
+    @Deprecated private static class BooleanCache {
         private boolean value;
     }
 
-    private static class FloatCache {
+    @Deprecated private static class FloatCache {
         private float value;
     }
 
-    private static class FloatTuple2Cache {
+    @Deprecated private static class FloatTuple2Cache {
         private float x;
         private float y;
     }
 
-    private static class FloatTuple3Cache {
+    @Deprecated private static class FloatTuple3Cache {
         private float x;
         private float y;
         private float z;
     }
 
-    private static class FloatTuple4Cache {
+    @Deprecated private static class FloatTuple4Cache {
         private float x;
         private float y;
         private float z;
         private float w;
     }
 
-    private static class Matrix4Cache {
+    @Deprecated private static class Matrix4Cache {
         private final Matrix4x4 value = new Matrix4x4();
     }
 
