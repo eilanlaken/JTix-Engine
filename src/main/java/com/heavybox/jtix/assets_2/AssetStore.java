@@ -8,6 +8,7 @@ import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.memory.MemoryResource;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -74,15 +75,25 @@ public final class AssetStore {
         return store.get(path) != null;
     }
 
-    public static void load(Class<? extends MemoryResource> type, String path) {
-        load(type, path, null, false);
+
+    public static void loadTexture(String path) {
+        load(Texture.class, path, null,false);
     }
 
-    public static void load(Class<? extends MemoryResource> type, String path, AssetLoader.Options<? extends MemoryResource> options) {
-        load(type, path, options, false);
+    public static void loadTexture(String path,
+                                   int anisotropy,
+                                   Texture.Filter magFilter, Texture.Filter minFilter,
+                                   Texture.Wrap uWrap, Texture.Wrap vWrap) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("anisotropy", anisotropy);
+        options.put("magFilter", magFilter);
+        options.put("minFilter", minFilter);
+        options.put("uWrap", uWrap);
+        options.put("vWrap", vWrap);
+        load(Texture.class, path, options,false);
     }
 
-    static void load(Class<? extends MemoryResource> type, String path, AssetLoader.Options<? extends MemoryResource> options, boolean isDependency) {
+    static void load(Class<? extends MemoryResource> type, String path, @Nullable final HashMap<String, Object> options, boolean isDependency) {
         final Asset asset = store.get(path);
         if (asset != null) {
             if (isDependency) asset.refCount++;
@@ -91,17 +102,6 @@ public final class AssetStore {
         if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
         AssetDescriptor descriptor = new AssetDescriptor(type, path, options);
         loadQueue.addFirst(descriptor);
-    }
-
-    public static void loadTexture(String path) {
-
-    }
-
-    public static void loadTexture(String path,
-                                   int anisotropy,
-                                   Texture.Filter magFilter, Texture.Filter minFilter,
-                                   Texture.Wrap uWrap, Texture.Wrap vWrap) {
-
     }
 
     public static synchronized void unload(final String path) {

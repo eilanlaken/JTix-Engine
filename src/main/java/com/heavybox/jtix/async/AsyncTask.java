@@ -6,8 +6,8 @@ import com.heavybox.jtix.memory.MemoryPool;
 public abstract class AsyncTask implements MemoryPool.Reset {
 
     protected Array<AsyncTask> prerequisites = new Array<>();
-    protected volatile boolean            inProgress    = false;
-    protected volatile boolean            complete      = false;
+    protected boolean          inProgress    = false;
+    protected boolean          complete      = false;
 
     public AsyncTask(AsyncTask... prerequisites) {
         for (final AsyncTask task : prerequisites) {

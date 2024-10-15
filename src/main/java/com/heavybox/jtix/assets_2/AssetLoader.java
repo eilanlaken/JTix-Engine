@@ -3,16 +3,11 @@ package com.heavybox.jtix.assets_2;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.memory.MemoryResource;
 
-public interface AssetLoader<T extends MemoryResource> {
+import java.util.HashMap;
 
-    //Array<AssetDescriptor> getDependencies();
-    //@Deprecated void asyncLoad(final String path);
+interface AssetLoader<T extends MemoryResource> {
 
-    Array<AssetDescriptor> asyncLoad(final String path, final Options options);
+    Array<AssetDescriptor> asyncLoad(final String path, final HashMap<String, Object> options);
     T create();
-
-    class Options<T> {
-
-    }
 
 }
