@@ -29,9 +29,9 @@ public class Shader implements MemoryResource {
     private final MapObjectInt<String> attributeTypes;
     private final MapObjectInt<String> attributeSizes;
 
-    private String[] uniformNames;
     private String[] attributeNames;
-    private Object[] uniformCache;
+    private String[] uniformNames;
+    private Object[] uniformCache; // TODO: revise
 
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
         if (vertexShaderSource == null) throw new IllegalArgumentException("Vertex shader cannot be null.");

@@ -227,7 +227,7 @@ import java.util.Map;
 
     private ModelPartMeshData processMesh(final AIMesh aiMesh) {
         ModelPartMeshData meshData = new ModelPartMeshData();
-        meshData.vertexBuffers.put(ShaderVertexAttribute.POSITION, getPositions(aiMesh));
+        meshData.vertexBuffers.put(ShaderVertexAttribute.POSITION_2D, getPositions(aiMesh));
         meshData.vertexBuffers.put(ShaderVertexAttribute.COLOR, getColors(aiMesh)); // TODO: change to color packed.
         meshData.vertexBuffers.put(ShaderVertexAttribute.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
         meshData.vertexBuffers.put(ShaderVertexAttribute.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
@@ -399,7 +399,7 @@ import java.util.Map;
         GL30.glBindVertexArray(vaoId);
         {
             storeIndicesBuffer(meshData.indices, vbosCollector);
-            storeDataInAttributeList(ShaderVertexAttribute.POSITION, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(ShaderVertexAttribute.POSITION_2D, meshData, attributesCollector, vbosCollector);
             storeDataInAttributeList(ShaderVertexAttribute.COLOR, meshData, attributesCollector, vbosCollector);
             storeDataInAttributeList(ShaderVertexAttribute.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
             storeDataInAttributeList(ShaderVertexAttribute.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
