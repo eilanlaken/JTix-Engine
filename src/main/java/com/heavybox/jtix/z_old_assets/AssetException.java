@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets_2;
+package com.heavybox.jtix.z_old_assets;
 
 public class AssetException extends RuntimeException {
 

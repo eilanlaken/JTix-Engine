@@ -22,12 +22,12 @@ public class Shader implements MemoryResource {
     public final int    fragmentShaderId;
     public final int    vertexAttributesBitmask;
 
-    private final MapObjectInt<String> uniformLocations;
-    private final MapObjectInt<String> uniformTypes;
-    private final MapObjectInt<String> uniformSizes;
     private final MapObjectInt<String> attributeLocations;
     private final MapObjectInt<String> attributeTypes;
     private final MapObjectInt<String> attributeSizes;
+    private final MapObjectInt<String> uniformLocations;
+    private final MapObjectInt<String> uniformTypes;
+    private final MapObjectInt<String> uniformSizes;
 
     private String[] attributeNames;
     private String[] uniformNames;

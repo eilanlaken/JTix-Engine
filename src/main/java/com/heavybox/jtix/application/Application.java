@@ -1,13 +1,12 @@
 package com.heavybox.jtix.application;
 
-import com.heavybox.jtix.assets.AssetStore;
-import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.z_old_assets.AssetStore;
+import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.async.AsyncUtils;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.scene.Scene;
 import com.heavybox.jtix.scene.SceneUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -32,7 +31,7 @@ public class Application {
         ApplicationUtils.init(window);
         SceneUtils.init(window);
         GraphicsUtils.init(window);
-        AssetUtils.init(window);
+        AssetUtils.init(window); // TODO: replace
         Mouse.init(window);
         Keyboard.init(window);
         initialized = true;
@@ -56,7 +55,7 @@ public class Application {
             boolean windowRendered = window.refresh();
             int targetFrameRate = GraphicsUtils.getTargetFps();
 
-            AssetStore.update();
+            AssetStore.update(); // TODO: replace with new one.
             Mouse.update();
             Keyboard.update();
             GLFW.glfwPollEvents();

@@ -20,7 +20,6 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Set;
 
-// TODO: change whole package from Asset to File
 public final class AssetUtils {
 
     private static boolean           initialized = false;

@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets_2;
+package com.heavybox.jtix.z_old_assets;
 
 import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
@@ -8,7 +8,6 @@ import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.memory.MemoryResource;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 
 public final class AssetStore {
+
+    private static final HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> loaders = createLoadersMap();
 
     private static final HashMap<String, Asset>     store                = new HashMap<>();
     private static final Queue<AssetDescriptor>     loadQueue            = new Queue<>();
@@ -75,25 +76,15 @@ public final class AssetStore {
         return store.get(path) != null;
     }
 
-
-    public static void loadTexture(String path) {
-        load(Texture.class, path, null,false);
+    public static void load(Class<? extends MemoryResource> type, String path) {
+        load(type, path, null, false);
     }
 
-    public static void loadTexture(String path,
-                                   int anisotropy,
-                                   Texture.Filter magFilter, Texture.Filter minFilter,
-                                   Texture.Wrap uWrap, Texture.Wrap vWrap) {
-        final HashMap<String, Object> options = new HashMap<>();
-        options.put("anisotropy", anisotropy);
-        options.put("magFilter", magFilter);
-        options.put("minFilter", minFilter);
-        options.put("uWrap", uWrap);
-        options.put("vWrap", vWrap);
-        load(Texture.class, path, options,false);
+    public static void load(Class<? extends MemoryResource> type, String path, AssetLoader.Options<? extends MemoryResource> options) {
+        load(type, path, options, false);
     }
 
-    static void load(Class<? extends MemoryResource> type, String path, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+    static void load(Class<? extends MemoryResource> type, String path, AssetLoader.Options<? extends MemoryResource> options, boolean isDependency) {
         final Asset asset = store.get(path);
         if (asset != null) {
             if (isDependency) asset.refCount++;
@@ -133,17 +124,24 @@ public final class AssetStore {
     }
 
     static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
-        if (type == Texture.class)     return new AssetLoaderTexture();
-        if (type == TexturePack.class) return new AssetLoaderTexturePack();
-        if (type == Font.class)        return new AssetLoaderFont();
-        if (type == Model.class)       return new AssetLoaderModel();
+        Class<? extends AssetLoader<? extends MemoryResource>> loaderClass = AssetStore.loaders.get(type);
+        AssetLoader<? extends MemoryResource> loaderInstance;
+        try {
+            Constructor<?> constructor = loaderClass.getConstructor();
+            loaderInstance = (AssetLoader<? extends MemoryResource>) constructor.newInstance();
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException  | InvocationTargetException e) {
+            throw new AssetException("Could not get loader for type: " + type.getSimpleName());
+        }
+        return loaderInstance;
+    }
 
-        throw new AssetException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
-                "Type must be one of the following: " +
-                Texture.class.getSimpleName() + ", " +
-                TexturePack.class.getSimpleName() + ", " +
-                Font.class.getSimpleName() + ", " +
-                Model.class.getSimpleName() + "."); // TODO: add audio.
+    private static HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> createLoadersMap() {
+        HashMap<Class<? extends MemoryResource>, Class<? extends AssetLoader<? extends MemoryResource>>> loaders = new HashMap<>();
+        loaders.put(Texture.class, AssetLoaderTexture.class);
+        loaders.put(Font.class, AssetLoaderFont.class);
+        loaders.put(Model.class, AssetLoaderModel.class);
+        loaders.put(TexturePack.class, AssetLoaderTexturePack.class);
+        return loaders;
     }
 
 }

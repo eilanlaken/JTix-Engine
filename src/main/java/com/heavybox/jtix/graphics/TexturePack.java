@@ -1,6 +1,6 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;

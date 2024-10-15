@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets;
+package com.heavybox.jtix.z_old_assets;
 
 import org.junit.jupiter.api.Test;
 

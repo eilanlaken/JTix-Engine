@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets_2;
+package com.heavybox.jtix.z_old_assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
@@ -8,18 +8,17 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.HashMap;
 
 public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     private int        width;
     private int        height;
     private ByteBuffer buffer;
-    private HashMap<String, Object> options;
+    private Options    textureOptions;
 
     @Override
-    public Array<AssetDescriptor> asyncLoad(String path, final HashMap<String, Object> options) {
-        this.options = options;
+    public Array<AssetDescriptor> asyncLoad(String path, AssetLoader.Options options) {
+        textureOptions = (Options) options;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
             IntBuffer heightBuffer = stack.mallocInt(1);
@@ -38,24 +37,24 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     @Override
     public Texture create() {
-        final int anisotropy = options == null ? 16 : (int) options.get("anisotropy");
-        final Texture.Filter magFilter = options == null ? null : (Texture.Filter) options.get("magFilter");
-        final Texture.Filter minFilter = options == null ? null : (Texture.Filter) options.get("minFilter");
-        final Texture.Wrap uWrap = options == null ? null : (Texture.Wrap) options.get("uWrap");
-        final Texture.Wrap vWrap = options == null ? null : (Texture.Wrap) options.get("vWrap");
+        final int anisotropy = textureOptions == null ? 16 : textureOptions.anisotropy;
+        final Texture.Filter magFilter = textureOptions == null ? null : textureOptions.magFilter;
+        final Texture.Filter minFilter = textureOptions == null ? null : textureOptions.minFilter;
+        final Texture.Wrap uWrap = textureOptions == null ? null : textureOptions.uWrap;
+        final Texture.Wrap vWrap = textureOptions == null ? null : textureOptions.vWrap;
         Texture texture = new Texture(width, height, buffer, magFilter, minFilter, uWrap, vWrap, anisotropy);
         STBImage.stbi_image_free(buffer);
         return texture;
     }
 
-//    public static final class Options extends AssetLoader.Options<Texture> {
-//
-//        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
-//        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-//        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-//        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-//        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-//
-//    }
+    public static final class Options extends AssetLoader.Options<Texture> {
+
+        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+
+    }
 
 }

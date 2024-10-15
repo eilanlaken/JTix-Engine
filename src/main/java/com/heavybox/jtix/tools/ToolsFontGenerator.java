@@ -1,6 +1,6 @@
 package com.heavybox.jtix.tools;
 
-import com.heavybox.jtix.assets.AssetUtils;
+import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.graphics.GraphicsException;
 import com.heavybox.jtix.math.MathUtils;
 import org.jetbrains.annotations.Nullable;

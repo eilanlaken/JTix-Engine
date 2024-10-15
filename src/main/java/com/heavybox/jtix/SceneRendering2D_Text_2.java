@@ -2,7 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.application.ApplicationUtils;
-import com.heavybox.jtix.assets.AssetStore;
+import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer;
 import com.heavybox.jtix.graphics.Texture;

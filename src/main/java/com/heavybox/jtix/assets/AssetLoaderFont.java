@@ -2,8 +2,8 @@ package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Texture;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -19,9 +19,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     private Map<String, Object>    data;
 
     @Override
-    public Array<AssetDescriptor> asyncLoad(String path, AssetLoader.Options options) {
-        Options fontOptions = (Options) options;
-
+    public Array<AssetDescriptor> asyncLoad(final String path, @Nullable final HashMap<String, Object> options) {
         String yaml = AssetUtils.getFileContent(path);
         data = AssetUtils.yaml().load(yaml);
 
@@ -32,13 +30,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
         String filePath = Paths.get(directoryPath, atlasName).toString();
         dependencies = new Array<>(false, 1);
 
-        AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
-        textureLoaderOptions.anisotropy = fontOptions.anisotropy;
-        textureLoaderOptions.magFilter = fontOptions.magFilter;
-        textureLoaderOptions.minFilter = fontOptions.minFilter;
-        textureLoaderOptions.uWrap = fontOptions.uWrap;
-        textureLoaderOptions.vWrap = fontOptions.vWrap;
-        dependencies.add(new AssetDescriptor(Texture.class, filePath, textureLoaderOptions));
+        dependencies.add(new AssetDescriptor(Texture.class, filePath, options));
         return dependencies;
     }
 
@@ -71,16 +63,6 @@ public class AssetLoaderFont implements AssetLoader<Font> {
         }
 
         return new Font(atlas, charset, size, antialiasing, glyphs);
-    }
-
-    public static final class Options extends AssetLoader.Options<Font> {
-
-        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
-        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-
     }
 
 }

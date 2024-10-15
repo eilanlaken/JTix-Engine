@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets_2;
+package com.heavybox.jtix.z_old_assets;
 
 import com.google.gson.Gson;
 import com.heavybox.jtix.application.ApplicationWindow;
@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Set;
 
+// TODO: change whole package from Asset to File
 public final class AssetUtils {
 
     private static boolean           initialized = false;

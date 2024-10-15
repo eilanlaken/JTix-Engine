@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets_2;
+package com.heavybox.jtix.z_old_assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
@@ -7,7 +7,6 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryUtils;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
 import org.lwjgl.opengl.GL11;
@@ -21,7 +20,9 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AssetLoaderModel implements AssetLoader<Model> {
+// TODO: recreate interleaved model building to minimize vbo count;
+// TODO: move stuff to model builder;
+@Deprecated public class AssetLoaderModel implements AssetLoader<Model> {
 
     private static final MapObjectInt<String> namedTextureTypes;
     private static final Map<String, String> namedColorParams;
@@ -76,8 +77,10 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     private ModelPartData[] partsData;
     private ModelArmatureData armatureData;
 
-    @Override // TODO
-    public Array<AssetDescriptor> asyncLoad(String path, @Nullable final HashMap<String, Object> options) {
+    @Override
+    public Array<AssetDescriptor> asyncLoad(String path, AssetLoader.Options options) {
+        Options modelOptions = (Options) options;
+
         final int importFlags = // TODO: use the options here.
                 Assimp.aiProcess_Triangulate |
                         Assimp.aiProcess_ImproveCacheLocality |
@@ -117,8 +120,15 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         for (ModelPartMaterialData materialData : materialsData) {
             Map<String, Object> attributesData = materialData.attributesData;
             for (Map.Entry<String, Object> entry : attributesData.entrySet()) {
+                AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
+                textureLoaderOptions.anisotropy = modelOptions.anisotropy;
+                textureLoaderOptions.magFilter = modelOptions.magFilter;
+                textureLoaderOptions.minFilter = modelOptions.minFilter;
+                textureLoaderOptions.uWrap = modelOptions.uWrap;
+                textureLoaderOptions.vWrap = modelOptions.vWrap;
+
                 if (entry instanceof TextureParameters) {
-                    dependencies.add(new AssetDescriptor(Texture.class, ((TextureParameters) entry).path, options));
+                    dependencies.add(new AssetDescriptor(Texture.class, ((TextureParameters) entry).path, textureLoaderOptions));
                 }
             }
         }
@@ -484,5 +494,19 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public float blendMode;
     }
 
+    public static final class Options extends AssetLoader.Options<Model> {
+
+        // TODO
+        public boolean        triangulate = false;
+        public boolean        flipNormals = false;
+
+
+        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
+        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
+
+    }
 
 }

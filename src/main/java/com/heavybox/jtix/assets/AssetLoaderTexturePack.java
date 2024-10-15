@@ -1,13 +1,13 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.graphics.TexturePack;
 import org.yaml.snakeyaml.Yaml;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +18,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
     private String                 yamlString;
 
     @Override
-    public Array<AssetDescriptor> asyncLoad(String path, AssetLoader.Options options) {
-        Options packOptions = (Options) options;
-
+    public Array<AssetDescriptor> asyncLoad(String path, final HashMap<String, Object> options) {
         yamlString = AssetUtils.getFileContent(path);
         Yaml yaml = AssetUtils.yaml();
         Map<String, Object> data = yaml.load(yamlString);
@@ -32,13 +30,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
             String fileName = (String) texture.get("file");
             Path directoryPath = Paths.get(path).getParent();
             String filePath = Paths.get(directoryPath.toString(), fileName).toString();
-            AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
-            textureLoaderOptions.anisotropy = packOptions.anisotropy;
-            textureLoaderOptions.magFilter = packOptions.magFilter;
-            textureLoaderOptions.minFilter = packOptions.minFilter;
-            textureLoaderOptions.uWrap = packOptions.uWrap;
-            textureLoaderOptions.vWrap = packOptions.vWrap;
-            dependencies.add(new AssetDescriptor(Texture.class, filePath, textureLoaderOptions));
+            dependencies.add(new AssetDescriptor(Texture.class, filePath, options));
         }
 
         return dependencies;
@@ -55,16 +47,6 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
         }
 
         return new TexturePack(textures, yamlString);
-    }
-
-    public static final class Options extends AssetLoader.Options<TexturePack> {
-
-        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
-        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-
     }
 
 }

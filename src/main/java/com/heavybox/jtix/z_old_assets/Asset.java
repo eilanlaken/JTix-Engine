@@ -1,4 +1,4 @@
-package com.heavybox.jtix.assets_2;
+package com.heavybox.jtix.z_old_assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.memory.MemoryResource;
