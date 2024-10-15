@@ -5,20 +5,20 @@ import org.lwjgl.opengl.GL20;
 
 public enum ShaderVertexAttribute {
 
-    POSITION_2D          (GL20.GL_FLOAT_VEC2,"a_position",    2, GL11.GL_FLOAT,        false),
-    POSITION_3D          (GL20.GL_FLOAT_VEC3, "a_position",   3, GL11.GL_FLOAT,        false),
-    COLOR                (GL20.GL_FLOAT_VEC4,"a_color",       4, GL11.GL_UNSIGNED_BYTE,true),
-    TEXTURE_COORDINATES0 (GL20.GL_FLOAT_VEC2,"a_textCoords0", 2, GL11.GL_FLOAT ,       false),
-    TEXTURE_COORDINATES1 (GL20.GL_FLOAT_VEC2,"a_textCoords1", 2, GL11.GL_FLOAT ,       false),
-    NORMAL               (GL20.GL_FLOAT_VEC3, "a_normal",     3, GL11.GL_FLOAT,        false),
-    TANGENT              (GL20.GL_FLOAT_VEC3,"a_tangent",     3, GL11.GL_FLOAT,        false),
-    BI_NORMAL            (GL20.GL_FLOAT_VEC3,"a_biNormal",    3, GL11.GL_FLOAT,        false),
-    BONE_WEIGHT0         (GL20.GL_FLOAT_VEC3,"a_boneWeight0", 3, GL11.GL_FLOAT ,       false),
-    BONE_WEIGHT1         (GL20.GL_FLOAT_VEC3,"a_boneWeight1", 3, GL11.GL_FLOAT ,       false),
-    BONE_WEIGHT2         (GL20.GL_FLOAT_VEC3,"a_boneWeight2", 3, GL11.GL_FLOAT ,       false),
-    BONE_WEIGHT3         (GL20.GL_FLOAT_VEC3,"a_boneWeight3", 3, GL11.GL_FLOAT ,       false),
-    BONE_WEIGHT4         (GL20.GL_FLOAT_VEC3,"a_boneWeight4", 3, GL11.GL_FLOAT ,       false),
-    BONE_WEIGHT5         (GL20.GL_FLOAT_VEC3,"a_boneWeight5", 3, GL11.GL_FLOAT ,       false),
+    POSITION_2D          (GL20.GL_FLOAT_VEC2,"a_position",   2, GL11.GL_FLOAT,        false),
+    POSITION_3D          (GL20.GL_FLOAT_VEC3,"a_position",   3, GL11.GL_FLOAT,        false),
+    COLOR                (GL20.GL_FLOAT_VEC4,"a_color",      4, GL11.GL_UNSIGNED_BYTE,true),
+    TEXTURE_COORDINATES0 (GL20.GL_FLOAT_VEC2,"a_textCoords0",2, GL11.GL_FLOAT ,       false),
+    TEXTURE_COORDINATES1 (GL20.GL_FLOAT_VEC2,"a_textCoords1",2, GL11.GL_FLOAT ,       false),
+    NORMAL               (GL20.GL_FLOAT_VEC3,"a_normal",     3, GL11.GL_FLOAT,        false),
+    TANGENT              (GL20.GL_FLOAT_VEC3,"a_tangent",    3, GL11.GL_FLOAT,        false),
+    BI_NORMAL            (GL20.GL_FLOAT_VEC3,"a_biNormal",   3, GL11.GL_FLOAT,        false),
+    BONE_WEIGHT0         (GL20.GL_FLOAT_VEC3,"a_boneWeight0",3, GL11.GL_FLOAT ,       false),
+    BONE_WEIGHT1         (GL20.GL_FLOAT_VEC3,"a_boneWeight1",3, GL11.GL_FLOAT ,       false),
+    BONE_WEIGHT2         (GL20.GL_FLOAT_VEC3,"a_boneWeight2",3, GL11.GL_FLOAT ,       false),
+    BONE_WEIGHT3         (GL20.GL_FLOAT_VEC3,"a_boneWeight3",3, GL11.GL_FLOAT ,       false),
+    BONE_WEIGHT4         (GL20.GL_FLOAT_VEC3,"a_boneWeight4",3, GL11.GL_FLOAT ,       false),
+    BONE_WEIGHT5         (GL20.GL_FLOAT_VEC3,"a_boneWeight5",3, GL11.GL_FLOAT ,       false),
     ;
 
     public final int     glslVariableType;
