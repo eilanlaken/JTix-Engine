@@ -22,21 +22,21 @@ public class Shader implements MemoryResource {
     public final int    fragmentShaderId;
     public final int    vertexAttributesBitmask;
 
-    private final MapObjectInt<String> attributeLocations;
-    private final MapObjectInt<String> attributeTypes;
-    private final MapObjectInt<String> attributeSizes;
-    private final MapObjectInt<String> uniformLocations;
-    private final MapObjectInt<String> uniformTypes;
-    private final MapObjectInt<String> uniformSizes;
-    private final String[]             attributeNames;
-    private final String[]             uniformNames;
+    public final MapObjectInt<String> attributeLocations;
+    public final MapObjectInt<String> attributeTypes;
+    public final MapObjectInt<String> attributeSizes;
+    public final MapObjectInt<String> uniformLocations;
+    public final MapObjectInt<String> uniformTypes;
+    public final MapObjectInt<String> uniformSizes;
+    public final String[]             attributeNames;
+    public final String[]             uniformNames;
 
 
-    private Object[] uniformCache; // TODO: revise
-    private Map<String, Object> uniformsCache = new HashMap<>(); // TODO
+    private final Object[] uniformCache; // TODO: remove
+    private final Object[] uniformsCache; // TODO: use this
 
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
-        if (vertexShaderSource == null) throw new IllegalArgumentException("Vertex shader cannot be null.");
+        if (vertexShaderSource == null)   throw new IllegalArgumentException("Vertex shader cannot be null.");
         if (fragmentShaderSource == null) throw new IllegalArgumentException("Fragment shader cannot be null.");
 
         this.vertexShaderSource = vertexShaderSource;
@@ -129,17 +129,14 @@ public class Shader implements MemoryResource {
         }
         this.uniformNames = new String[uniformLocations.size];
         int i = 0;
-        for(MapObjectInt.Entry<String> entry : uniformLocations) {
+        for (MapObjectInt.Entry<String> entry : uniformLocations) {
             this.uniformNames[i] = entry.key;
             i++;
         }
 
         /* instantiate cache */
         this.uniformCache = new Object[uniformNames.length]; // TODO: delete
-        this.uniformsCache = new HashMap<>();
-        for (String uniformName : uniformNames) {
-
-        }
+        this.uniformsCache = new Object[uniformNames.length]; // TODO: use this instead
 
         /* validation */
         /* validate: limit the allowed max sampled textures */
