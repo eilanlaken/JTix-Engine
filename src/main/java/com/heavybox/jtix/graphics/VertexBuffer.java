@@ -14,7 +14,7 @@ public class VertexBuffer {
     /* buffers */
 
     private int vao;
-    private int vbo;
+    private int vbos[];
     private int ebo;
     private int vertexSize;
     private IntBuffer indicesBuffer;//  = BufferUtils.createIntBuffer(INDICES_CAPACITY * 3);
@@ -27,11 +27,11 @@ public class VertexBuffer {
     }
 
     // TODO: this is the hard part.
-    void addVertex(final VertexAttribute attribute, float ...values) {
+    void write(final VertexAttribute attribute, float ...values) {
 
     }
 
-    void clear() {
+    void erase() {
 
     }
 

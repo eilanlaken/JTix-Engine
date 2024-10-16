@@ -217,7 +217,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     private ModelPartMeshData processMesh(final AIMesh aiMesh) {
         ModelPartMeshData meshData = new ModelPartMeshData();
-        meshData.vertexBuffers.put(VertexAttribute.POSITION_2D, getPositions(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute.POSITION_3D, getPositions(aiMesh));
         meshData.vertexBuffers.put(VertexAttribute.COLOR, getColors(aiMesh)); // TODO: change to color packed.
         meshData.vertexBuffers.put(VertexAttribute.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
         meshData.vertexBuffers.put(VertexAttribute.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
@@ -389,7 +389,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         GL30.glBindVertexArray(vaoId);
         {
             storeIndicesBuffer(meshData.indices, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.POSITION_2D, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.POSITION_3D, meshData, attributesCollector, vbosCollector);
             storeDataInAttributeList(VertexAttribute.COLOR, meshData, attributesCollector, vbosCollector);
             storeDataInAttributeList(VertexAttribute.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
             storeDataInAttributeList(VertexAttribute.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
