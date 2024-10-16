@@ -10,10 +10,10 @@ public enum VertexAttribute_2 {
     POSITION_3D        (GL20.GL_FLOAT_VEC3,"a_position",       3, GL11.GL_FLOAT,             false),
     COLOR              (GL20.GL_FLOAT_VEC4,"a_color",          4, GL11.GL_UNSIGNED_BYTE,     true),
     COLOR_HDR          (GL20.GL_FLOAT_VEC4,"a_colorHDR",       4, GL11.GL_FLOAT,             false),
-    TEXT_COORDS_0      (GL20.GL_FLOAT_VEC2,"a_textCoords0",    2, GL11.GL_FLOAT,             false),
-    TEXT_COORDS_0_NORM (GL20.GL_FLOAT_VEC2,"a_textCoords0Norm",2, GL11.GL_UNSIGNED_SHORT,    true),
-    TEXT_COORDS_1      (GL20.GL_FLOAT_VEC2,"a_textCoords1",    2, GL11.GL_FLOAT,             false),
-    TEXT_COORDS_1_NORM (GL20.GL_FLOAT_VEC2,"a_textCoords1Norm",2, GL11.GL_UNSIGNED_SHORT,    true),
+    TEXT_COORDS0       (GL20.GL_FLOAT_VEC2,"a_textCoords0",    2, GL11.GL_FLOAT,             false),
+    TEXT_COORDS0_NORM  (GL20.GL_FLOAT_VEC2,"a_textCoords0Norm",2, GL11.GL_UNSIGNED_SHORT,    true),
+    TEXT_COORDS1       (GL20.GL_FLOAT_VEC2,"a_textCoords1",    2, GL11.GL_FLOAT,             false),
+    TEXT_COORDS1_NORM  (GL20.GL_FLOAT_VEC2,"a_textCoords1Norm",2, GL11.GL_UNSIGNED_SHORT,    true),
     NORMAL             (GL20.GL_FLOAT_VEC3,"a_normal",         3, GL33.GL_INT_2_10_10_10_REV,true),
     TANGENT            (GL20.GL_FLOAT_VEC3,"a_tangent",        3, GL33.GL_INT_2_10_10_10_REV,true),
     BI_NORMAL          (GL20.GL_FLOAT_VEC3,"a_biNormal",       3, GL33.GL_INT_2_10_10_10_REV,true),
@@ -43,7 +43,7 @@ public enum VertexAttribute_2 {
         this.slot = ordinal();
     }
 
-    public static int getShaderAttributeBitmask(final String[] shaderAttributeNames) {
+    public static int getShaderBitmask(final String[] shaderAttributeNames) {
         int bitmask = 0;
 
         for (final String shaderAttributeName : shaderAttributeNames) {
@@ -66,12 +66,12 @@ public enum VertexAttribute_2 {
         return bitmask;
     }
 
-    public static int getVertexSize(final VertexAttribute_2 ...attribute_2s) {
-        int size = 0;
+    public static int getVertexLength(final VertexAttribute_2 ...attribute_2s) {
+        int length = 0;
         for (final VertexAttribute_2 attribute_2 : attribute_2s) {
-            size += attribute_2.length;
+            length += attribute_2.length;
         }
-        return size;
+        return length;
     }
 
 }

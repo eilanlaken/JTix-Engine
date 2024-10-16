@@ -2,7 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
-import com.heavybox.jtix.graphics.Renderer2D_old_2;
+import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
 
-    private Renderer2D_old_2 renderer2D;
+    private Renderer2D renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     ComponentTransform t = new ComponentTransform();
@@ -26,7 +26,7 @@ public class SceneRendering2D_Fonts_2 extends ApplicationScreen {
     Texture fontMap;
 
     public SceneRendering2D_Fonts_2() {
-        renderer2D = new Renderer2D_old_2();
+        renderer2D = new Renderer2D();
 
     }
 

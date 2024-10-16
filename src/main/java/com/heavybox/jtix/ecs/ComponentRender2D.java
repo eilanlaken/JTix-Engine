@@ -1,7 +1,7 @@
 package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Renderer2D_old_2;
+import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Shader;
 
 import java.util.Map;
@@ -15,6 +15,6 @@ public abstract class ComponentRender2D implements ComponentRender {
     public float               tint           = Color.WHITE.toFloatBits();
     public int                 pixelsPerUnit  = 100;
 
-    public abstract void render(Renderer2D_old_2 renderer2D, float x, float y, float deg, float sclX, float sclY);
+    public abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
 
 }

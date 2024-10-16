@@ -1,8 +1,7 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.assets.AssetLoaderModel;
+import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -13,18 +12,18 @@ import java.nio.IntBuffer;
 /*
 represents a dynamic mesh (a container of vertices) that can be written to, rendered and cleared.
  */
-public class VertexBuffer {
+public final class VertexBuffer implements MemoryResource {
 
     /* buffers */
 
-    private int vao;
-    private int vbos[];
-    private int ebo;
-    private int vertexSize;
-    private IntBuffer indicesBuffer;//  = BufferUtils.createIntBuffer(INDICES_CAPACITY * 3);
-    private FloatBuffer[] verticesBuffer;// = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * VERTEX_SIZE);
-    private int bitmask; // attributes bitmask
-    private boolean indexed;
+    final int vao;
+    final int[] vbos;
+    final int ebo;
+    final int vertexSize;
+    final IntBuffer indicesBuffer;//  = BufferUtils.createIntBuffer(INDICES_CAPACITY * 3);
+    final FloatBuffer[] verticesBuffers;// = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * VERTEX_SIZE);
+    final int bitmask; // attributes bitmask
+
 
     VertexBuffer(int capacity, final VertexAttribute_2 ...attributes) {
         // AssetLoaderModel.storeDataInAttributeList() example...
@@ -32,11 +31,11 @@ public class VertexBuffer {
         GL30.glBindVertexArray(vao);
 
         // calculate vertex size
-        this.vertexSize = VertexAttribute_2.getVertexSize(attributes);
+        this.vertexSize = VertexAttribute_2.getVertexLength(attributes);
         this.vbos = new int[VertexAttribute_2.values().length];
         this.bitmask = VertexAttribute_2.getBitmask(attributes);
 
-        this.verticesBuffer = new FloatBuffer[VertexAttribute_2.values().length];
+        this.verticesBuffers = new FloatBuffer[VertexAttribute_2.values().length];
         for (int i = 0; i < VertexAttribute_2.values().length; i++) {
             VertexAttribute_2 attribute_2 = VertexAttribute_2.values()[i];
             if ((attribute_2.bitmask & bitmask) == 0) {
@@ -45,9 +44,9 @@ public class VertexBuffer {
             }
             int vbo = GL15.glGenBuffers();
             this.vbos[i] = vbo;
-            this.verticesBuffer[i] = BufferUtils.createFloatBuffer(capacity * vertexSize);
+            this.verticesBuffers[i] = BufferUtils.createFloatBuffer(capacity * vertexSize);
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, this.verticesBuffer[i].capacity(), GL15.GL_DYNAMIC_DRAW);
+            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, this.verticesBuffers[i].capacity(), GL15.GL_DYNAMIC_DRAW);
             GL20.glVertexAttribPointer(i, attribute_2.length, attribute_2.primitiveType, attribute_2.normalized, 0, 0);
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
             GL20.glEnableVertexAttribArray(i);
@@ -62,6 +61,10 @@ public class VertexBuffer {
         GL30.glBindVertexArray(0);
     }
 
+    public boolean hasVertexAttribute(final VertexAttribute attribute) {
+        return (bitmask & attribute.bitmask) != 0;
+    }
+
     // TODO: this is the hard part.
     void write(final VertexAttribute attribute, float ...values) {
 
@@ -72,17 +75,23 @@ public class VertexBuffer {
     }
 
     @Override
+    public void delete() {
+        // TODO
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Vertex Buffer: ").append(Integer.toBinaryString(bitmask)).append('\n');
         sb.append("Vertices: ").append('\n');
         for (int i = 0; i < VertexAttribute_2.values().length; i++) {
-            if (verticesBuffer[i] == null) continue;
+            if (verticesBuffers[i] == null) continue;
+            sb.append(VertexAttribute_2.values()[i].name()).append(" :");
+            for (int j = 0; j < verticesBuffers[i].limit(); j++) {
+                sb.append(String.format("%5f", verticesBuffers[i].get(j)));
+            }
+            sb.append('\n');
         }
-//        for (int i = 0; i < verticesBuffer.limit(); i++) {
-//            sb.append(String.format("%6f", verticesBuffer.get(i)));
-//            if (i % vertexSize == 0) sb.append('\n');
-//        }
         return sb.toString();
     }
 
