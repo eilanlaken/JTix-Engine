@@ -58,4 +58,20 @@ public enum VertexAttribute_2 {
         return bitmask;
     }
 
+    public static int getBitmask(final VertexAttribute_2 ...vertexAttribute2s) {
+        int bitmask = 0;
+        for (final VertexAttribute_2 vertexAttribute2 : vertexAttribute2s) {
+            bitmask |= vertexAttribute2.bitmask;
+        }
+        return bitmask;
+    }
+
+    public static int getVertexSize(final VertexAttribute_2 ...attribute_2s) {
+        int size = 0;
+        for (final VertexAttribute_2 attribute_2 : attribute_2s) {
+            size += attribute_2.length;
+        }
+        return size;
+    }
+
 }
