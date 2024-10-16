@@ -15,6 +15,8 @@ import java.util.Map;
 
 public class Shader implements MemoryResource {
 
+    private boolean deleted = false;
+
     public final String vertexShaderSource;
     public final String fragmentShaderSource;
     public final int    program;
@@ -30,7 +32,6 @@ public class Shader implements MemoryResource {
     public final MapObjectInt<String> uniformSizes;
     public final String[]             attributeNames;
     public final String[]             uniformNames;
-
 
     private final Object[] uniformCache; // TODO: remove
     private final Object[] uniformsCache; // TODO: use this
@@ -100,7 +101,7 @@ public class Shader implements MemoryResource {
             this.attributeSizes.put(name, params_attributes.get(0));
             this.attributeNames[i] = name;
         }
-        this.vertexAttributesBitmask = ShaderVertexAttribute.getShaderAttributeBitmask(attributeNames);
+        this.vertexAttributesBitmask = VertexAttribute.getShaderAttributeBitmask(attributeNames);
 
         /* register uniforms */
         IntBuffer params_uniforms = BufferUtils.createIntBuffer(1);
@@ -151,7 +152,7 @@ public class Shader implements MemoryResource {
         boolean badAttributeName = false;
         for (final String attributeName : attributeNames) {
             boolean contained = false;
-            for (ShaderVertexAttribute vertexAttribute : ShaderVertexAttribute.values()) {
+            for (VertexAttribute vertexAttribute : VertexAttribute.values()) {
                 if (vertexAttribute.glslVariableName.equals(attributeName)) {
                     contained = true;
                     break;
@@ -165,8 +166,8 @@ public class Shader implements MemoryResource {
         }
         if (badAttributeName) {
             System.err.println("Valid shader attribute names are: ");
-            for (ShaderVertexAttribute shaderVertexAttribute : ShaderVertexAttribute.values()) {
-                System.err.println(shaderVertexAttribute.glslVariableName);
+            for (VertexAttribute vertexAttribute : VertexAttribute.values()) {
+                System.err.println(vertexAttribute.glslVariableName);
             }
         }
     }
@@ -248,10 +249,12 @@ public class Shader implements MemoryResource {
 
     @Override
     public void delete() {
+        if (deleted) return;
         GL20.glUseProgram(0);
         GL20.glDeleteProgram(vertexShaderId);
         GL20.glDeleteProgram(fragmentShaderId);
         GL20.glDeleteProgram(program);
+        deleted = true;
     }
 
     @Override

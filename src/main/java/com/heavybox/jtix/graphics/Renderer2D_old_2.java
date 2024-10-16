@@ -10,10 +10,7 @@ import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -23,7 +20,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -44,7 +40,7 @@ import java.util.stream.Collectors;
 // https://tmpvar.com/poc/radiance-cascades/
 // Lights 1: https://mini.gmshaders.com/p/radiance-cascades
 // Lights 2: https://mini.gmshaders.com/p/radiance-cascades2
-public class Renderer2D implements MemoryResourceHolder {
+public class Renderer2D_old_2 implements MemoryResourceHolder {
 
     /* constants */
     private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
@@ -52,9 +48,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private static final int   INDICES_CAPACITY  = 20000;
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
 
-    /* buffers */ // TODO: replace with vertex buffers
-    private final VertexBuffer defaultVertexBuffer = new VertexBuffer(VERTICES_CAPACITY, VertexAttribute.POSITION_2D, VertexAttribute.COLOR, VertexAttribute.TEXTURE_COORDINATES0);
-    private final Map<Integer, VertexBuffer> bitmapVertexBuffers = new HashMap<>(); // a vertex buffer is selected every shader switch based on the attribute bitmap of the shader.
+    /* buffers */
     private final int         vao;
     private final int         vbo;
     private final int         ebo;
@@ -72,19 +66,18 @@ public class Renderer2D implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private VertexBuffer currentVertexBuffer = defaultVertexBuffer;
-    private Matrix4x4    currentMatrix       = null;
-    private Texture      currentTexture      = null;
-    private Shader       currentShader       = null;
-    private float        currentTint         = WHITE_TINT;
-    private boolean      drawing             = false;
-    private int          vertexIndex         = 0;
-    private int          currentMode         = GL11.GL_TRIANGLES;
-    private int          currentSFactor      = GL11.GL_SRC_ALPHA;
-    private int          currentDFactor      = GL11.GL_ONE_MINUS_SRC_ALPHA;
-    private int          perFrameDrawCalls   = 0;
+    private Matrix4x4 currentMatrix     = null;
+    private Texture   currentTexture    = null;
+    private Shader    currentShader     = null;
+    private float     currentTint       = WHITE_TINT;
+    private boolean   drawing           = false;
+    private int       vertexIndex       = 0;
+    private int       currentMode       = GL11.GL_TRIANGLES;
+    private int       currentSFactor    = GL11.GL_SRC_ALPHA;
+    private int       currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    private int       perFrameDrawCalls = 0;
 
-    public Renderer2D() {
+    public Renderer2D_old_2() {
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
         {
@@ -120,7 +113,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void begin(Matrix4x4 combined) {
-        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
+        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D_old_2.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
@@ -1727,6 +1720,70 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
+    /* Rendering 2D primitives - meshes */
+
+    public void drawMeshFilled(Array<Vector2> positions, ArrayFloat colors, Array<Vector2> uvs, @Nullable final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (positions.size < 3)            throw new GraphicsException("Mesh must contain at least 3 vertices. Got: " + positions.size);
+        if (positions.size != colors.size) throw new GraphicsException("Mesh must contain the same number of positions, colors and uvs. Got: positions.size = " + positions.size + ", colors.size = " + colors.size + ", uvs.size = " + uvs.size);
+        if (positions.size != uvs.size)    throw new GraphicsException("Mesh must contain the same number of positions, colors and uvs. Got: positions.size = " + positions.size + ", colors.size = " + colors.size + ", uvs.size = " + uvs.size);
+
+        if ((vertexIndex + positions.size) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < positions.size; i ++) {
+            Vector2 position = positions.get(i);
+            float poly_x = position.x;
+            float poly_y = position.y;
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(deg);
+            vertex.add(x, y);
+            float color = colors.get(i);
+            Vector2 uv = uvs.getCyclic(i);
+            verticesBuffer.put(vertex.x).put(vertex.y).put(color).put(uv.x).put(uv.y);
+        }
+        vectors2Pool.free(vertex);
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < positions.size; i ++) {
+            indicesBuffer.put(startVertex + i);
+        }
+        vertexIndex += positions.size;
+    }
+
+    public void drawMeshFilled(Array<Vector2> positions, Array<Vector2> uvs, final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (positions.size < 3)         throw new GraphicsException("Mesh must contain at least 3 vertices. Got: " + positions.size);
+        if (positions.size != uvs.size) throw new GraphicsException("Mesh must contain the same number of positions and uvs. Got: positions.size = " + positions.size + ", uvs.size = " + uvs.size);
+
+        if ((vertexIndex + positions.size) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < positions.size; i ++) {
+            Vector2 position = positions.get(i);
+            float poly_x = position.x;
+            float poly_y = position.y;
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(deg);
+            vertex.add(x, y);
+            Vector2 uv = uvs.getCyclic(i);
+            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(uv.x).put(uv.y);
+        }
+        vectors2Pool.free(vertex);
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < positions.size; i ++) {
+            indicesBuffer.put(startVertex + i);
+        }
+        vertexIndex += positions.size;
+    }
+
     /* Rendering 2D primitives - text */
 
     public void drawText(final String text, final Font font, float x, float y, float angleZ, float scaleX, float scaleY) {
@@ -1767,7 +1824,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void end() {
-        if (!drawing) throw new GraphicsException("Called " + Renderer2D.class.getSimpleName() + ".end() without calling " + Renderer2D.class.getSimpleName() + ".begin() first.");
+        if (!drawing) throw new GraphicsException("Called " + Renderer2D_old_2.class.getSimpleName() + ".end() without calling " + Renderer2D_old_2.class.getSimpleName() + ".begin() first.");
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -1788,9 +1845,9 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Create defaults: shader, texture (single white pixel), camera */
 
     private static Shader createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D_old_2.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D_old_2.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

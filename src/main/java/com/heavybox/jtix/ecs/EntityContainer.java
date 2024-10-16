@@ -2,7 +2,7 @@ package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old_2;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 
 public class EntityContainer implements MemoryResourceHolder {
@@ -34,7 +34,7 @@ public class EntityContainer implements MemoryResourceHolder {
     protected Array<ComponentRegion>    componentRegions    = new Array<>(false, 200);
 
     /* global container services */
-    protected final Renderer2D renderer2D = new Renderer2D();
+    protected final Renderer2D_old_2 renderer2D = new Renderer2D_old_2();
 
     public EntityContainer() {
         systems.add(systemDynamics);

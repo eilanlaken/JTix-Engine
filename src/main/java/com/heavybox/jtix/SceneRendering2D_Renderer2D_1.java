@@ -2,7 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.Renderer2D_old_2;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -16,14 +16,14 @@ import java.util.Map;
 
 public class SceneRendering2D_Renderer2D_1 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_old_2 renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
     float x, y;
 
     public SceneRendering2D_Renderer2D_1() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer2D_old_2();
     }
 
     @Override

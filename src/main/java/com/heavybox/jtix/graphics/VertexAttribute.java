@@ -3,7 +3,7 @@ package com.heavybox.jtix.graphics;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-public enum ShaderVertexAttribute {
+public enum VertexAttribute {
 
     POSITION_2D          (GL20.GL_FLOAT_VEC2,"a_position",   2, GL11.GL_FLOAT,        false),
     POSITION_3D          (GL20.GL_FLOAT_VEC3,"a_position",   3, GL11.GL_FLOAT,        false),
@@ -29,7 +29,7 @@ public enum ShaderVertexAttribute {
     public final int     bitmask;
     public final int     slot;
 
-    ShaderVertexAttribute(final int glslVariableType, final String glslVariableName, final int length, int primitiveType, boolean normalized) {
+    VertexAttribute(final int glslVariableType, final String glslVariableName, final int length, int primitiveType, boolean normalized) {
         this.glslVariableType = glslVariableType;
         this.glslVariableName = glslVariableName;
         this.primitiveType = primitiveType;
@@ -43,7 +43,7 @@ public enum ShaderVertexAttribute {
         int bitmask = 0;
 
         for (final String shaderAttributeName : shaderAttributeNames) {
-            for (ShaderVertexAttribute vertexAttribute : values()) {
+            for (VertexAttribute vertexAttribute : values()) {
                 if (vertexAttribute.glslVariableName.equals(shaderAttributeName)) {
                     bitmask |= vertexAttribute.bitmask;
                     break;
