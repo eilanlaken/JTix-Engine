@@ -75,6 +75,13 @@ public class Shader implements MemoryResource {
         GL20.glAttachShader(program, fragmentShaderId);
         // this.fragmentShaderId = createFragmentShader(fragmentShaderSource); // was
 
+        /*
+        TODO: bind attribute locations to their respective VertexAttribute.ordinal()
+         */
+        for (VertexAttribute_2 attribute : VertexAttribute_2.values()) {
+            //GL20.glBindAttribLocation(program, attribute.ordinal(), attribute.glslVariableName);
+        }
+
         /* link program */
         GL20.glLinkProgram(program);
         if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0) throw new RuntimeException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
