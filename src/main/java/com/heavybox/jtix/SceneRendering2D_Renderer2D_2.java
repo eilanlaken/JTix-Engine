@@ -1,7 +1,6 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Renderer2D_2;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
@@ -80,7 +79,7 @@ public class SceneRendering2D_Renderer2D_2 extends ApplicationScreen {
 
         renderer2D.begin(null);
         //renderer2D.drawTexture(yellowSquare,0,0,0,1,1);
-        renderer2D.drawTexture_new(yellowSquare,0,0,0,1,1);
+        renderer2D.drawTexture(yellowSquare,0,0,0,1,1);
 
         renderer2D.end();
     }

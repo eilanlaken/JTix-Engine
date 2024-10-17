@@ -1,15 +1,11 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -23,23 +19,11 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Renderer2D_2 implements MemoryResourceHolder {
 
-    /* constants */
-    private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
-    private static final int   VERTICES_CAPACITY = 20000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
-    private static final int   INDICES_CAPACITY  = 20000;
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
-
-    /* buffers */
-    private final int         vao;
-    private final int         vbo;
-    private final int         ebo;
-    private final IntBuffer   indicesBuffer  = BufferUtils.createIntBuffer(INDICES_CAPACITY * 3);
-    private final FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * VERTEX_SIZE);
 
     /* defaults */
     private final Shader    defaultShader = createDefaultShaderProgram();
@@ -64,29 +48,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     private int       perFrameDrawCalls = 0;
 
     /* Vertex Buffers */
-
-    private VertexBuffer defaultVertexBuffer = new VertexBuffer(10000);
-
-    public Renderer2D_2() {
-        this.vao = GL30.glGenVertexArrays();
-        GL30.glBindVertexArray(vao);
-        {
-            this.vbo = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer.capacity(), GL15.GL_DYNAMIC_DRAW);
-            int vertexSizeBytes = VERTEX_SIZE * Float.BYTES;
-            GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, vertexSizeBytes, 0); // positions
-            GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, vertexSizeBytes, Float.BYTES * 2L); // colors
-            GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, true, vertexSizeBytes, Float.BYTES * 3L); // uvs
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glEnableVertexAttribArray(1);
-            GL20.glEnableVertexAttribArray(2);
-            this.ebo = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
-            GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity(), GL15.GL_DYNAMIC_DRAW);
-        }
-        GL30.glBindVertexArray(0);
-    }
+    private VertexBuffer vertexBuffer = new VertexBuffer(10000);
 
     public Matrix4x4 getCurrentMatrix() {
         return currentMatrix;
@@ -171,8 +133,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
     public void drawTexture(Texture texture, float x, float y, float angleDeg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!vertexBuffer.ensureCapacity(4)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
@@ -202,74 +163,19 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         arm3.rotateDeg(angleDeg);
 
         /* put vertices */
-        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0).put(0); // V0
-        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0).put(1); // V1
-        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(1).put(1); // V2
-        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(1).put(0); // V3
-
-        /* put indices */
-        int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        vertexIndex += 4;
-
-        /* free resources */
-        vectors2Pool.free(arm0);
-        vectors2Pool.free(arm1);
-        vectors2Pool.free(arm2);
-        vectors2Pool.free(arm3);
-    }
-
-    public void drawTexture_new(Texture texture, float x, float y, float angleDeg, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
-
-        setTexture(texture);
-        setMode(GL11.GL_TRIANGLES);
-
-        float widthHalf  = texture.width  * scaleX * 0.5f;
-        float heightHalf = texture.height * scaleY * 0.5f;
-
-        Vector2 arm0 = vectors2Pool.allocate();
-        Vector2 arm1 = vectors2Pool.allocate();
-        Vector2 arm2 = vectors2Pool.allocate();
-        Vector2 arm3 = vectors2Pool.allocate();
-
-        arm0.x = -widthHalf;
-        arm0.y =  heightHalf;
-        arm0.rotateDeg(angleDeg);
-
-        arm1.x = -widthHalf;
-        arm1.y = -heightHalf;
-        arm1.rotateDeg(angleDeg);
-
-        arm2.x =  widthHalf;
-        arm2.y = -heightHalf;
-        arm2.rotateDeg(angleDeg);
-
-        arm3.x = widthHalf;
-        arm3.y = heightHalf;
-        arm3.rotateDeg(angleDeg);
-
-        /* put vertices */
-        FloatBuffer positions = defaultVertexBuffer.positions;
+        FloatBuffer positions = vertexBuffer.positions;
         positions.put(arm0.x + x).put(arm0.y + y);
         positions.put(arm1.x + x).put(arm1.y + y);
         positions.put(arm2.x + x).put(arm2.y + y);
         positions.put(arm3.x + x).put(arm3.y + y);
 
-        FloatBuffer colors = defaultVertexBuffer.colors;
+        FloatBuffer colors = vertexBuffer.colors;
         colors.put(currentTint);
         colors.put(currentTint);
         colors.put(currentTint);
         colors.put(currentTint);
 
-        FloatBuffer textCoords = defaultVertexBuffer.textCoords;
+        FloatBuffer textCoords = vertexBuffer.textCoords;
         textCoords.put(0).put(0);
         textCoords.put(0).put(1);
         textCoords.put(1).put(1);
@@ -277,7 +183,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        IntBuffer indices = defaultVertexBuffer.indices;
+        IntBuffer indices = vertexBuffer.indices;
         indices.put(startVertex + 0);
         indices.put(startVertex + 1);
         indices.put(startVertex + 3);
@@ -297,25 +203,34 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
 
     private void flush() {
-        GL30.glBindVertexArray(defaultVertexBuffer.vao);
-        defaultVertexBuffer.flip();
+        GL30.glBindVertexArray(vertexBuffer.vao);
+        vertexBuffer.flip();
 
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, defaultVertexBuffer.vboPositions);
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, defaultVertexBuffer.positions);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer.vboPositions);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, vertexBuffer.positions);
 
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, defaultVertexBuffer.vboColors);
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, defaultVertexBuffer.colors);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer.vboColors);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, vertexBuffer.colors);
 
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, defaultVertexBuffer.vboTextCoords);
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, defaultVertexBuffer.textCoords);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexBuffer.vboTextCoords);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, vertexBuffer.textCoords);
 
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, defaultVertexBuffer.ebo);
-        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, defaultVertexBuffer.indices);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vertexBuffer.ebo);
+        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, vertexBuffer.indices);
 
-        GL11.glDrawElements(currentMode, defaultVertexBuffer.indices.limit(), GL11.GL_UNSIGNED_INT, 0);
+        // enable selected buffers - maybe on shader switch?
+        GL20.glEnableVertexAttribArray(0);
+        GL20.glEnableVertexAttribArray(1);
+        GL20.glEnableVertexAttribArray(2);
+        GL11.glDrawElements(currentMode, vertexBuffer.indices.limit(), GL11.GL_UNSIGNED_INT, 0);
+        // disable selected buffers
+        GL20.glDisableVertexAttribArray(2);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(0);
+
 
         GL30.glBindVertexArray(0);
-        defaultVertexBuffer.clear();
+        vertexBuffer.clear();
         vertexIndex = 0;
         perFrameDrawCalls++;
     }
@@ -333,9 +248,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     @Override
     public void deleteAll() {
         defaultShader.delete();
-        GL30.glDeleteVertexArrays(vao);
-        GL30.glDeleteBuffers(vbo);
-        GL30.glDeleteBuffers(ebo);
+        vertexBuffer.delete();
         whitePixel.delete();
     }
 

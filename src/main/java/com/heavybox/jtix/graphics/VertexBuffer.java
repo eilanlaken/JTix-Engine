@@ -77,6 +77,12 @@ public class VertexBuffer implements MemoryResource {
         indices.clear();
     }
 
+    // TODO: implement.
+    public boolean ensureCapacity(int verticesCount) {
+        // TODO: make sure that the vertex buffer has enough room to contain additional verticesCount of vertices.
+        return true;
+    }
+
     @Override
     public void delete() {
 
