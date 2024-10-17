@@ -318,30 +318,6 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         defaultVertexBuffer.clear();
         vertexIndex = 0;
         perFrameDrawCalls++;
-
-        if (true) return;
-        if (verticesBuffer.position() == 0) return;
-        verticesBuffer.flip();
-        indicesBuffer.flip();
-        GL30.glBindVertexArray(vao);
-        {
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-            GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, verticesBuffer);
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
-            GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indicesBuffer);
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glEnableVertexAttribArray(1);
-            GL20.glEnableVertexAttribArray(2);
-            GL11.glDrawElements(currentMode, indicesBuffer.limit(), GL11.GL_UNSIGNED_INT, 0);
-            GL20.glDisableVertexAttribArray(2);
-            GL20.glDisableVertexAttribArray(1);
-            GL20.glDisableVertexAttribArray(0);
-        }
-        GL30.glBindVertexArray(0);
-        verticesBuffer.clear();
-        indicesBuffer.clear();
-        vertexIndex = 0;
-        perFrameDrawCalls++;
     }
 
     public void end() {

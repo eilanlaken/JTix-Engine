@@ -81,7 +81,7 @@ public class SceneRendering2D_Renderer2D_2 extends ApplicationScreen {
         renderer2D.begin(null);
         //renderer2D.drawTexture(yellowSquare,0,0,0,1,1);
         renderer2D.drawTexture_new(yellowSquare,0,0,0,1,1);
-        System.out.println("hi");
+
         renderer2D.end();
     }
 
