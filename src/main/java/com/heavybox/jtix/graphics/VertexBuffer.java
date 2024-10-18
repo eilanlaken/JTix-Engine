@@ -12,7 +12,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 // plan: let's create a simple "hard-coded" vertex buffer first with positions[...] colors[...] and uvs [...]
-public class VertexBuffer implements MemoryResource {
+@Deprecated public class VertexBuffer implements MemoryResource {
 
     int vao;
 
