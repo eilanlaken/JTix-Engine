@@ -1,10 +1,8 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.MapObjectInt;
-import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Quaternion;
-import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.math.Vector4;
+import com.heavybox.jtix.ecs.ECSException;
+import com.heavybox.jtix.math.*;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
@@ -184,72 +182,132 @@ public class Shader implements MemoryResource {
         for (Map.Entry<String, Object> entry : uniforms.entrySet()) {
             final String name = entry.getKey();
             final Object value = uniforms.get(name);
-            bindUniform(name, value);
+            try {
+                bindUniform(name, value);
+            } catch (Exception e) {
+                throw new GraphicsException("Trying to bind " + null + " value to a shader uniform: \n" + "name:  <" + name + ">" + "\n" + "value: <" + value + ">");
+            }
         }
     }
 
     public void bindUniform(final String name, final Object value) {
-        if (value == null) return;
+        if (value == null) throw new IllegalArgumentException();
         final int location = uniformLocations.get(name, -1);
         // TODO: remove. Good only for debugging, but prevents custom flexible shading.
         if (location == -1) throw new IllegalArgumentException("\n\nError: " + this.getClass().getSimpleName() +  " does not have a uniform named " + name + "." + "\nIf you have defined the uniform but have not used it, the GLSL compiler discarded it.\n");
         final int type = uniformTypes.get(name, -1);
         switch (type) {
 
-            case GL20.GL_SAMPLER_2D:
+            case GL20.GL_SAMPLER_2D -> {
                 Texture texture = (Texture) value;
                 int slot = TextureBinder.bind(texture);
-                if (isUniformIntegerCached(location, slot)) return;
-                GL20.glUniform1i(location, slot);
-                cacheUniformInteger(location, slot);
-                break;
+                final Integer cache = (Integer) uniformCache[location];
+                if (cache == null || !cache.equals(slot)) {
+                    GL20.glUniform1i(location, slot); // bind
+                    uniformCache[location] = slot; // create cache and store value
+                }
+            }
 
-            case GL20.GL_INT:
+            case GL20.GL_BOOL -> {
+                boolean b = (Boolean) value;
+                final Boolean cache = (Boolean) uniformCache[location];
+                if (cache == null || !cache.equals(b)) {
+                    GL20.glUniform1i(location, b ? GL20.GL_TRUE : GL20.GL_FALSE);  // bind
+                    uniformCache[location] = b; // create cache and store value
+                }
+            }
+
+            case GL20.GL_INT -> {
                 int i = (Integer) value;
-                if (isUniformIntegerCached(location, i)) return;
-                GL20.glUniform1i(location, i);
-                cacheUniformInteger(location, i);
-                break;
+                final Integer cache = (Integer) uniformCache[location];
+                if (cache == null || !cache.equals(i)) {
+                    GL20.glUniform1i(location, i); // bind
+                    uniformCache[location] = i; // create cache and store value
+                }
+            }
 
-            case GL20.GL_FLOAT:
+            case GL20.GL_FLOAT -> {
                 float f = (Float) value;
-                if (isUniformFloatCached(location, f)) return;
-                GL20.glUniform1f(location, f);
-                cacheUniformFloat(location, f);
-                break;
+                final Float cache = (Float) uniformCache[location];
+                if (cache == null || !cache.equals(f)) {
+                    GL20.glUniform1f(location, f); // bind
+                    uniformCache[location] = f; // create cache and store value
+                }
+            }
 
-            case GL20.GL_FLOAT_MAT4:
+            case GL20.GL_FLOAT_MAT4 -> {
                 Matrix4x4 matrix4 = (Matrix4x4) value;
-                if (isUniformMatrix4Cached(location, matrix4)) return;
-                GL20.glUniformMatrix4fv(location, false, matrix4.val);
-                cacheUniformMatrix4(location, matrix4);
-                break;
+                final Matrix4x4 cache = (Matrix4x4) uniformCache[location];
+                if (cache == null) {
+                    GL20.glUniformMatrix4fv(location, false, matrix4.val); // bind
+                    uniformCache[location] = new Matrix4x4(); // create cache
+                    ((Matrix4x4) uniformCache[location]).set(matrix4); // store cache
+                } else if (!cache.equals(matrix4)) {
+                    GL20.glUniformMatrix4fv(location, false, matrix4.val); // bind
+                    ((Matrix4x4) uniformCache[location]).set(matrix4); // store cache
+                }
+            }
 
-            case GL20.GL_FLOAT_VEC3:
+            case GL20.GL_FLOAT_VEC2 -> {
+                Vector2 vector2 = (Vector2) value;
+                final Vector2 cache = (Vector2) uniformCache[location];
+                if (cache == null) {
+                    GL20.glUniform2f(location, vector2.x, vector2.y); // bind
+                    uniformCache[location] = new Vector2(); // create cache
+                    ((Vector2) uniformCache[location]).set(vector2); // store cache
+                } else if (!cache.equals(vector2)) {
+                    GL20.glUniform2f(location, vector2.x, vector2.y); // bind
+                    ((Vector2) uniformCache[location]).set(vector2); // store cache
+                }
+            }
+
+            case GL20.GL_FLOAT_VEC3 -> {
                 Vector3 vector3 = (Vector3) value;
-                if (isUniformFloatTupleCached(location, vector3.x, vector3.y, vector3.z)) return;
-                GL20.glUniform3f(location, vector3.x, vector3.y, vector3.z);
-                cacheUniformFloatTuple(location, vector3.x, vector3.y, vector3.z);
-                break;
+                final Vector3 cache = (Vector3) uniformCache[location];
+                if (cache == null) {
+                    GL20.glUniform3f(location, vector3.x, vector3.y, vector3.z); // bind
+                    uniformCache[location] = new Vector3(); // create cache
+                    ((Vector3) uniformCache[location]).set(vector3); // store cache
+                } else if (!cache.equals(vector3)) {
+                    GL20.glUniform3f(location, vector3.x, vector3.y, vector3.z); // bind
+                    ((Vector3) uniformCache[location]).set(vector3); // store cache
+                }
+            }
 
-            case GL20.GL_FLOAT_VEC4:
+            case GL20.GL_FLOAT_VEC4 -> {
+                final Vector4 cache = (Vector4) uniformCache[location];
                 if (value instanceof Color) {
                     Color color = (Color) value;
-                    if (isUniformFloatTupleCached(location, color.r, color.g, color.b, color.a)) return;
-                    GL20.glUniform4f(location, color.r, color.g, color.b, color.a);
-                    cacheUniformFloatTuple(location, color.r, color.g, color.b, color.a);
+                    if (cache == null) {
+                        GL20.glUniform4f(location, color.r, color.g, color.b, color.a); // bind
+                        uniformCache[location] = new Vector4(); // create cache
+                        ((Vector4) uniformCache[location]).set(color.r, color.g, color.b, color.a); // store cache
+                    } else if (cache.x != color.r || cache.y != color.g || cache.z != color.b || cache.w != color.a) {
+                        GL20.glUniform4f(location, color.r, color.g, color.b, color.a); // bind
+                        ((Vector4) uniformCache[location]).set(color.r, color.g, color.b, color.a); // store cache
+                    }
                 } else if (value instanceof Vector4) {
                     Vector4 vector4 = (Vector4) value;
-                    if (isUniformFloatTupleCached(location, vector4.x, vector4.y, vector4.z, vector4.w)) return;
-                    GL20.glUniform4f(location, vector4.x, vector4.y, vector4.z, vector4.w);
-                    cacheUniformFloatTuple(location, vector4.x, vector4.y, vector4.z, vector4.w);
+                    if (cache == null) {
+                        GL20.glUniform4f(location, vector4.x, vector4.y, vector4.z, vector4.w); // bind
+                        uniformCache[location] = new Vector4(); // create cache
+                        ((Vector4) uniformCache[location]).set(vector4); // store cache
+                    } else if (!cache.equals(vector4)) {
+                        GL20.glUniform4f(location, vector4.x, vector4.y, vector4.z, vector4.w); // bind
+                        ((Vector4) uniformCache[location]).set(vector4); // store cache
+                    }
                 } else if (value instanceof Quaternion) {
                     Quaternion quaternion = (Quaternion) value;
-                    if (isUniformFloatTupleCached(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w)) return;
-                    GL20.glUniform4f(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
-                    cacheUniformFloatTuple(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+                    if (cache == null) {
+                        GL20.glUniform4f(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w); // bind
+                        uniformCache[location] = new Vector4(); // create cache
+                        ((Vector4) uniformCache[location]).set(quaternion.x, quaternion.y, quaternion.z, quaternion.w); // store cache
+                    } else if (cache.x != quaternion.x || cache.y != quaternion.y || cache.z != quaternion.z || cache.w != quaternion.w) {
+                        GL20.glUniform4f(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w); // bind
+                        ((Vector4) uniformCache[location]).set(quaternion.x, quaternion.y, quaternion.z, quaternion.w); // store cache
+                    }
                 }
-                break;
+            }
 
         }
     }
@@ -270,129 +328,6 @@ public class Shader implements MemoryResource {
                 "Vertex Shader : " + '\n' + vertexShaderSource + '\n' +
                 "Fragment Shader : " + '\n' + fragmentShaderSource + '\n' +
                 "Attributes Bitmask : " + '\n' + Integer.toBinaryString(vertexAttributesBitmask) + '\n';
-    }
-
-    // TODO: remove these methods and classes.
-
-    @Deprecated private boolean isUniformIntegerCached(final int location, int value) {
-        final IntegerCache cached = (IntegerCache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value == value;
-    }
-
-    @Deprecated private boolean isUniformBooleanCached(final int location, boolean value) {
-        final BooleanCache cached = (BooleanCache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value == value;
-    }
-
-    @Deprecated private boolean isUniformFloatCached(final int location, float value) {
-        final FloatCache cached = (FloatCache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value == value;
-    }
-
-    @Deprecated private boolean isUniformFloatTupleCached(final int location, float x, float y) {
-        final FloatTuple2Cache cached = (FloatTuple2Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.x == x && cached.y == y;
-    }
-
-    @Deprecated private boolean isUniformFloatTupleCached(final int location, float x, float y, float z) {
-        final FloatTuple3Cache cached = (FloatTuple3Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.x == x && cached.y == y && cached.z == z;
-    }
-
-    @Deprecated private boolean isUniformFloatTupleCached(final int location, float x, float y, float z, float w) {
-        final FloatTuple4Cache cached = (FloatTuple4Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.x == x && cached.y == y && cached.z == z && cached.w == w;
-    }
-
-    @Deprecated private boolean isUniformMatrix4Cached(final int location, final Matrix4x4 value) {
-        final Matrix4Cache cached = (Matrix4Cache) uniformCache[location];
-        if (cached == null) return false;
-        return cached.value.equals(value);
-    }
-
-    @Deprecated private void cacheUniformInteger(final int location, final int value) {
-        if (uniformCache[location] == null) uniformCache[location] = new IntegerCache();
-        ((IntegerCache) uniformCache[location]).value = value;
-    }
-
-    @Deprecated private void cacheUniformBoolean(final int location, final boolean value) {
-        if (uniformCache[location] == null) uniformCache[location] = new BooleanCache();
-        ((BooleanCache) uniformCache[location]).value = value;
-    }
-
-    @Deprecated private void cacheUniformFloat(final int location, final float value) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatCache();
-        ((FloatCache) uniformCache[location]).value = value;
-    }
-
-    @Deprecated private void cacheUniformFloatTuple(final int location, float x, float y) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple2Cache();
-        FloatTuple2Cache cache = (FloatTuple2Cache) uniformCache[location];
-        cache.x = x;
-        cache.y = y;
-    }
-
-    @Deprecated private void cacheUniformFloatTuple(final int location, float x, float y, float z) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple3Cache();
-        FloatTuple3Cache cache = (FloatTuple3Cache) uniformCache[location];
-        cache.x = x;
-        cache.y = y;
-        cache.z = z;
-    }
-
-    @Deprecated private void cacheUniformFloatTuple(final int location, float x, float y, float z, float w) {
-        if (uniformCache[location] == null) uniformCache[location] = new FloatTuple4Cache();
-        FloatTuple4Cache cache = (FloatTuple4Cache) uniformCache[location];
-        cache.x = x;
-        cache.y = y;
-        cache.z = z;
-        cache.w = w;
-    }
-
-    @Deprecated private void cacheUniformMatrix4(final int location, final Matrix4x4 value) {
-        if (uniformCache[location] == null) uniformCache[location] = new Matrix4Cache();
-        Matrix4Cache cache = (Matrix4Cache) uniformCache[location];
-        cache.value.set(value);
-    }
-
-    @Deprecated private static class IntegerCache {
-        private int value;
-    }
-
-    @Deprecated private static class BooleanCache {
-        private boolean value;
-    }
-
-    @Deprecated private static class FloatCache {
-        private float value;
-    }
-
-    @Deprecated private static class FloatTuple2Cache {
-        private float x;
-        private float y;
-    }
-
-    @Deprecated private static class FloatTuple3Cache {
-        private float x;
-        private float y;
-        private float z;
-    }
-
-    @Deprecated private static class FloatTuple4Cache {
-        private float x;
-        private float y;
-        private float z;
-        private float w;
-    }
-
-    @Deprecated private static class Matrix4Cache {
-        private final Matrix4x4 value = new Matrix4x4();
     }
 
 }

@@ -36,8 +36,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private Matrix4x4 currentMatrix     = null;
-    private Texture   currentTexture    = null;
+    private Matrix4x4 currentMatrix     = defaultMatrix;
+    private Texture   currentTexture    = whitePixel;
     private Shader    currentShader     = null;
     private float     currentTint       = WHITE_TINT;
     private boolean   drawing           = false;
@@ -48,7 +48,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     private int       perFrameDrawCalls = 0;
 
     /* Vertex Buffers */
-    private VertexBuffer vertexBuffer = new VertexBuffer(10000);
+    private final VertexBuffer vertexBuffer = new VertexBuffer(10000);
 
     public Matrix4x4 getCurrentMatrix() {
         return currentMatrix;
@@ -199,6 +199,32 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
+    public final void drawLineThin(float x1, float y1, float x2, float y2) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!vertexBuffer.ensureCapacity(2)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        FloatBuffer positions = vertexBuffer.positions;
+        positions.put(x1).put(y1);
+        positions.put(x2).put(y2);
+
+        FloatBuffer colors = vertexBuffer.colors;
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        FloatBuffer uvs = vertexBuffer.textCoords;
+        uvs.put(0.5f).put(0.5f);
+        uvs.put(0.5f).put(0.5f);
+
+        // put indices
+        IntBuffer indices = vertexBuffer.indices;
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex);
+        indices.put(startVertex + 1);
+        vertexIndex += 2;
+    }
 
     /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
 

@@ -58,8 +58,8 @@ public class Renderer implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private Matrix4x4     currentMatrix  = null;
-    private Texture       currentTexture = null;
+    private Matrix4x4 currentMatrix     = defaultMatrix;
+    private Texture   currentTexture    = whitePixel;
     private Shader currentShader  = null;
     private float         currentTint    = WHITE_TINT;
     private boolean       drawing        = false;
