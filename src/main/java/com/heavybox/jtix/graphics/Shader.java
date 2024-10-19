@@ -9,8 +9,13 @@ import org.lwjgl.opengl.GL20;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Shader implements MemoryResource {
+
+    private static final Pattern GLSL_COMMENT_PATTERN   = Pattern.compile("//.*|/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/");
+    private static final Pattern GLSL_LAYOUT_IN_PATTERN = Pattern.compile("layout\\s*\\(\\s*location\\s*=\\s*\\d+\\s*\\)\\s*(in|attribute)");
 
     private boolean deleted = false;
 
@@ -35,8 +40,9 @@ public class Shader implements MemoryResource {
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
         if (vertexShaderSource == null)   throw new GraphicsException("Vertex shader cannot be null.");
         if (fragmentShaderSource == null) throw new GraphicsException("Fragment shader cannot be null.");
-        this.vertexShaderSource = vertexShaderSource;
-        this.fragmentShaderSource = fragmentShaderSource;
+        /* pre-process shader code */
+        this.vertexShaderSource = preprocessVertexShader(vertexShaderSource);
+        this.fragmentShaderSource = preprocessFragmentShader(fragmentShaderSource);
         /* attributes */
         this.attributeLocations = new MapObjectInt<>();
         this.attributeTypes = new MapObjectInt<>();
@@ -54,7 +60,7 @@ public class Shader implements MemoryResource {
         this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         if (vertexShaderId == 0)
             throw new GraphicsException("Error creating vertex shader.");
-        GL20.glShaderSource(vertexShaderId, vertexShaderSource);
+        GL20.glShaderSource(vertexShaderId, this.vertexShaderSource);
         GL20.glCompileShader(vertexShaderId);
         if (GL20.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0)
             throw new RuntimeException("Error compiling vertex shader: " + GL20.glGetShaderInfoLog(vertexShaderId, 1024));
@@ -63,7 +69,7 @@ public class Shader implements MemoryResource {
         this.fragmentShaderId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
         if (fragmentShaderId == 0)
             throw new RuntimeException("Error creating fragment shader.");
-        GL20.glShaderSource(fragmentShaderId, fragmentShaderSource);
+        GL20.glShaderSource(fragmentShaderId, this.fragmentShaderSource);
         GL20.glCompileShader(fragmentShaderId);
         if (GL20.glGetShaderi(fragmentShaderId, GL20.GL_COMPILE_STATUS) == 0)
             throw new RuntimeException("Error compiling fragment shader: " + GL20.glGetShaderInfoLog(fragmentShaderId, 1024));
@@ -72,7 +78,8 @@ public class Shader implements MemoryResource {
         /*
         TODO: bind attribute locations to their respective VertexAttribute.ordinal()
          */
-        for (VertexAttribute_old_2 attribute : VertexAttribute_old_2.values()) {
+        GL20.glBindAttribLocation(program, 0, "a_position");
+        for (VertexAttribute attribute : VertexAttribute.values()) {
             //GL20.glBindAttribLocation(program, attribute.ordinal(), attribute.glslVariableName);
         }
 
@@ -171,6 +178,18 @@ public class Shader implements MemoryResource {
                 System.err.println(vertexAttribute.glslVariableName);
             }
         }
+    }
+
+    private String preprocessVertexShader(final String vertexShaderSource) {
+        Matcher comments = GLSL_COMMENT_PATTERN.matcher(vertexShaderSource);
+        String noComments = comments.replaceAll("");
+        Matcher layouts = GLSL_LAYOUT_IN_PATTERN.matcher(noComments);
+        return layouts.replaceAll("in");
+    }
+
+    private String preprocessFragmentShader(final String fragmentShaderSource) {
+        // TODO: see how this should be preprocessed
+        return fragmentShaderSource;
     }
 
     protected final void bindUniforms(final HashMap<String, Object> uniforms) {

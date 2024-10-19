@@ -25,9 +25,13 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
                     #version 450
 
                     // attributes
-                    layout(location = 0) in vec2 a_position;
-                    layout(location = 1) in vec4 a_color;
+                    layout  ( /*dsfsdf */  location = 0) in vec2 a_position; //ggg
+                    /* daf
+                    df */
+                    layout(location = 1 // iii
+                    ) in vec4 a_color;
                     layout(location = 2) in vec2 a_textCoords0;
+                    layout(location = 8) attribute vec2 a_textCoords1;
 
                     // uniforms
                     uniform mat4 u_camera_combined;
@@ -62,7 +66,9 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
     public SceneRendering2D_Renderer2D_3() {
         renderer2D = new Renderer2D_3();
         Shader shader = new Shader(vertexShader, fragmentShader);
-        System.out.println();
+        System.out.println(shader);
+
+        System.out.println(shader.attributeLocations.get("a_position", -1));
 
         boolean x = false;
         Boolean a = (Boolean) x;
@@ -73,7 +79,6 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
         componentGraphicsCamera = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(),GraphicsUtils.getWindowHeight(), 1);
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
-
     }
 
     @Override
