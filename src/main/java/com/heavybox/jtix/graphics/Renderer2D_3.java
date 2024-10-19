@@ -79,34 +79,34 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(0);
+        //GL20.glEnableVertexAttribArray(0);
         //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboColors = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColors); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colors, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, 0, 0);
-        GL20.glEnableVertexAttribArray(1);
+        //GL20.glEnableVertexAttribArray(1);
         //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboTextCoords = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextCoords); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textCoords, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(2);
+        //GL20.glEnableVertexAttribArray(2);
         //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboNormals = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboNormals); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normals, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(3);
+        //GL20.glEnableVertexAttribArray(3);
 
         this.vboTangents = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTangents); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, tangents, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(4, 2, GL11.GL_FLOAT, false, 0, 0);
-        GL20.glEnableVertexAttribArray(4);
+        //GL20.glEnableVertexAttribArray(4);
 
         this.ebo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -152,13 +152,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (currentShader == shader) return;
         flush();
         ShaderBinder.bind(shader);
-        /* disable all vertex attributes, then enable the ones required by the shader */
-        /*for (VertexAttribute attribute : VertexAttribute.values()) {
-            GL20.glDisableVertexAttribArray(attribute.glslLocation);
-        }
-        GL20.glDisableVertexAttribArray(2);
-        GL20.glEnableVertexAttribArray(2);*/
-
         shader.bindUniform("u_camera_combined", currentMatrix);
         shader.bindUniform("u_texture", currentTexture);
         currentShader = shader;
@@ -319,15 +312,13 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
         GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indices);
 
-        // enable selected buffers - maybe on shader switch?
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        GL20.glEnableVertexAttribArray(2);
+        for (VertexAttribute attribute : VertexAttribute.values()) {
+            final boolean hasAttribute = (currentShader.vertexAttributesBitmask & attribute.bitmask) != 0;
+            if (hasAttribute) GL20.glEnableVertexAttribArray(attribute.glslLocation); // enable attribute
+            else GL20.glDisableVertexAttribArray(attribute.glslLocation); // disable attribute
+        }
         GL11.glDrawElements(currentMode, indices.limit(), GL11.GL_UNSIGNED_INT, 0);
-        // disable selected buffers
-        GL20.glDisableVertexAttribArray(2);
-        GL20.glDisableVertexAttribArray(1);
-        GL20.glDisableVertexAttribArray(0);
+
 
         GL30.glBindVertexArray(0);
         positions.clear();
