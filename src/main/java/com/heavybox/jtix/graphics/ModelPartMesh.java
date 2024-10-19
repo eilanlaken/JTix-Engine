@@ -24,7 +24,7 @@ public class ModelPartMesh implements MemoryResource {
         this.vbos = vbos;
     }
 
-    public boolean hasVertexAttribute(final VertexAttribute attribute) {
+    public boolean hasVertexAttribute(final VertexAttribute_old attribute) {
         return (vertexAttributeBitmask & attribute.bitmask) != 0;
     }
 

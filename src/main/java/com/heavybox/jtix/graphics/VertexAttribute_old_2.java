@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL33;
 
-public enum VertexAttribute_2 {
+public enum VertexAttribute_old_2 {
 
     POSITION_2D        (GL20.GL_FLOAT_VEC2,2,"a_position",       2, GL11.GL_FLOAT,             false),
     POSITION_3D        (GL20.GL_FLOAT_VEC3,3,"a_position",       3, GL11.GL_FLOAT,             false),
@@ -32,7 +32,7 @@ public enum VertexAttribute_2 {
     public final int     bitmask;
     public final int     slot;
 
-    VertexAttribute_2(final int glslVariableType, final int dimension, final String glslVariableName, final int length, int primitiveType, boolean normalized) {
+    VertexAttribute_old_2(final int glslVariableType, final int dimension, final String glslVariableName, final int length, int primitiveType, boolean normalized) {
         this.glslVariableType = glslVariableType;
         this.dimension = dimension;
         this.glslVariableName = glslVariableName;
@@ -47,7 +47,7 @@ public enum VertexAttribute_2 {
         int bitmask = 0;
 
         for (final String shaderAttributeName : shaderAttributeNames) {
-            for (VertexAttribute_2 vertexAttribute : values()) {
+            for (VertexAttribute_old_2 vertexAttribute : values()) {
                 if (vertexAttribute.glslVariableName.equals(shaderAttributeName)) {
                     bitmask |= vertexAttribute.bitmask;
                     break;
@@ -58,17 +58,17 @@ public enum VertexAttribute_2 {
         return bitmask;
     }
 
-    public static int getBitmask(final VertexAttribute_2 ...vertexAttribute2s) {
+    public static int getBitmask(final VertexAttribute_old_2...vertexAttribute2s) {
         int bitmask = 0;
-        for (final VertexAttribute_2 vertexAttribute2 : vertexAttribute2s) {
+        for (final VertexAttribute_old_2 vertexAttribute2 : vertexAttribute2s) {
             bitmask |= vertexAttribute2.bitmask;
         }
         return bitmask;
     }
 
-    public static int getVertexLength(final VertexAttribute_2 ...attribute_2s) {
+    public static int getVertexLength(final VertexAttribute_old_2...attribute_2s) {
         int length = 0;
-        for (final VertexAttribute_2 attribute_2 : attribute_2s) {
+        for (final VertexAttribute_old_2 attribute_2 : attribute_2s) {
             length += attribute_2.length;
         }
         return length;

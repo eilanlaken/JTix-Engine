@@ -227,13 +227,13 @@ import java.util.Map;
 
     private ModelPartMeshData processMesh(final AIMesh aiMesh) {
         ModelPartMeshData meshData = new ModelPartMeshData();
-        meshData.vertexBuffers.put(VertexAttribute.POSITION_2D, getPositions(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute.COLOR, getColors(aiMesh)); // TODO: change to color packed.
-        meshData.vertexBuffers.put(VertexAttribute.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute.NORMAL, getNormals(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute.TANGENT, getTangents(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute.BI_NORMAL, getBiNormals(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute_old.POSITION_2D, getPositions(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute_old.COLOR, getColors(aiMesh)); // TODO: change to color packed.
+        meshData.vertexBuffers.put(VertexAttribute_old.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute_old.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute_old.NORMAL, getNormals(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute_old.TANGENT, getTangents(aiMesh));
+        meshData.vertexBuffers.put(VertexAttribute_old.BI_NORMAL, getBiNormals(aiMesh));
         meshData.indices = getIndices(aiMesh);
         meshData.materialIndex = aiMesh.mMaterialIndex();
         meshData.vertexCount = getVertexCount(aiMesh);
@@ -393,25 +393,25 @@ import java.util.Map;
     }
 
     private ModelPartMesh create(final ModelPartMeshData meshData) {
-        Array<VertexAttribute> attributesCollector = new Array<>();
+        Array<VertexAttribute_old> attributesCollector = new Array<>();
         ArrayInt vbosCollector = new ArrayInt();
         int vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
         {
             storeIndicesBuffer(meshData.indices, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.POSITION_2D, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.COLOR, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.NORMAL, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.TANGENT, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BI_NORMAL, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BONE_WEIGHT0, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BONE_WEIGHT1, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BONE_WEIGHT2, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BONE_WEIGHT3, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BONE_WEIGHT4, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.BONE_WEIGHT5, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.POSITION_2D, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.COLOR, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.NORMAL, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.TANGENT, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BI_NORMAL, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT0, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT1, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT2, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT3, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT4, meshData, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT5, meshData, attributesCollector, vbosCollector);
         }
         GL30.glBindVertexArray(0);
         final short bitmask = generateBitmask(attributesCollector);
@@ -428,7 +428,7 @@ import java.util.Map;
         vbosCollector.add(vbo);
     }
 
-    private void storeDataInAttributeList(final VertexAttribute attribute, final ModelPartMeshData meshData, Array<VertexAttribute> attributesCollector, ArrayInt vbosCollector) {
+    private void storeDataInAttributeList(final VertexAttribute_old attribute, final ModelPartMeshData meshData, Array<VertexAttribute_old> attributesCollector, ArrayInt vbosCollector) {
         final float[] data = (float[]) meshData.vertexBuffers.get(attribute);
         if (data == null) return;
         final int attributeNumber = attribute.ordinal();
@@ -443,9 +443,9 @@ import java.util.Map;
         vbosCollector.add(vbo);
     }
 
-    private short generateBitmask(final Array<VertexAttribute> attributes) {
+    private short generateBitmask(final Array<VertexAttribute_old> attributes) {
         short bitmask = 0b0000;
-        for (final VertexAttribute attribute : attributes) {
+        for (final VertexAttribute_old attribute : attributes) {
             bitmask |= attribute.bitmask;
         }
         return bitmask;
@@ -453,7 +453,7 @@ import java.util.Map;
 
     private static class ModelPartMeshData {
         public int vertexCount;
-        public Map<VertexAttribute, Object> vertexBuffers = new HashMap<>();
+        public Map<VertexAttribute_old, Object> vertexBuffers = new HashMap<>();
         public int materialIndex;
         public int[] indices;
         public Vector3 boundingSphereCenter;

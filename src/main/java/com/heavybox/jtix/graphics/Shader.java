@@ -74,7 +74,7 @@ public class Shader implements MemoryResource {
         /*
         TODO: bind attribute locations to their respective VertexAttribute.ordinal()
          */
-        for (VertexAttribute_2 attribute : VertexAttribute_2.values()) {
+        for (VertexAttribute_old_2 attribute : VertexAttribute_old_2.values()) {
             //GL20.glBindAttribLocation(program, attribute.ordinal(), attribute.glslVariableName);
         }
 
@@ -104,7 +104,7 @@ public class Shader implements MemoryResource {
             this.attributeSizes.put(name, params_attributes.get(0));
             this.attributeNames[i] = name;
         }
-        this.vertexAttributesBitmask = VertexAttribute.getShaderAttributeBitmask(attributeNames);
+        this.vertexAttributesBitmask = VertexAttribute_old.getShaderAttributeBitmask(attributeNames);
 
         /* register uniforms */
         IntBuffer params_uniforms = BufferUtils.createIntBuffer(1);
@@ -154,7 +154,7 @@ public class Shader implements MemoryResource {
         boolean badAttributeName = false;
         for (final String attributeName : attributeNames) {
             boolean contained = false;
-            for (VertexAttribute vertexAttribute : VertexAttribute.values()) {
+            for (VertexAttribute_old vertexAttribute : VertexAttribute_old.values()) {
                 if (vertexAttribute.glslVariableName.equals(attributeName)) {
                     contained = true;
                     break;
@@ -168,7 +168,7 @@ public class Shader implements MemoryResource {
         }
         if (badAttributeName) {
             System.err.println("Valid shader attribute names are: ");
-            for (VertexAttribute vertexAttribute : VertexAttribute.values()) {
+            for (VertexAttribute_old vertexAttribute : VertexAttribute_old.values()) {
                 System.err.println(vertexAttribute.glslVariableName);
             }
         }
