@@ -290,10 +290,14 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     }
 
     private void flush() {
+        if (vertexIndex == 0) return;
+
         GL30.glBindVertexArray(vao);
         positions.flip();
         colors.flip();
         textCoords.flip();
+        normals.flip();
+        tangents.flip();
         indices.flip();
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions);
@@ -322,6 +326,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         positions.clear();
         colors.clear();
         textCoords.clear();
+        normals.clear();
+        tangents.clear();
         indices.clear();
         vertexIndex = 0;
         perFrameDrawCalls++;
@@ -344,6 +350,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         GL30.glDeleteBuffers(vboPositions);
         GL30.glDeleteBuffers(vboColors);
         GL30.glDeleteBuffers(vboTextCoords);
+        GL30.glDeleteBuffers(vboNormals);
+        GL30.glDeleteBuffers(vboTangents);
         GL30.glDeleteBuffers(ebo);
         whitePixel.delete();
     }

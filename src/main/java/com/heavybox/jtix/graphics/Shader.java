@@ -30,36 +30,35 @@ public class Shader implements MemoryResource {
     public final String[]             attributeNames;
     public final String[]             uniformNames;
 
-    private final Object[] uniformsCache; // TODO: remove
+    private final Object[] uniformsCache;
 
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
-        if (vertexShaderSource == null)   throw new IllegalArgumentException("Vertex shader cannot be null.");
-        if (fragmentShaderSource == null) throw new IllegalArgumentException("Fragment shader cannot be null.");
-
+        if (vertexShaderSource == null)   throw new GraphicsException("Vertex shader cannot be null.");
+        if (fragmentShaderSource == null) throw new GraphicsException("Fragment shader cannot be null.");
         this.vertexShaderSource = vertexShaderSource;
         this.fragmentShaderSource = fragmentShaderSource;
-        // attributes
+        /* attributes */
         this.attributeLocations = new MapObjectInt<>();
         this.attributeTypes = new MapObjectInt<>();
         this.attributeSizes = new MapObjectInt<>();
-        // uniforms
+        /* uniforms */
         this.uniformLocations = new MapObjectInt<>();
         this.uniformTypes = new MapObjectInt<>();
         this.uniformSizes = new MapObjectInt<>();
+        /* create shader */
         this.program = GL20.glCreateProgram();
-        if (program == 0) throw new RuntimeException("Could not create shader");
+        if (program == 0)
+            throw new GraphicsException("Could not create shader");
 
         /* create vertex shader */
         this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         if (vertexShaderId == 0)
-            throw new RuntimeException("Error creating vertex shader.");
+            throw new GraphicsException("Error creating vertex shader.");
         GL20.glShaderSource(vertexShaderId, vertexShaderSource);
         GL20.glCompileShader(vertexShaderId);
         if (GL20.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0)
             throw new RuntimeException("Error compiling vertex shader: " + GL20.glGetShaderInfoLog(vertexShaderId, 1024));
         GL20.glAttachShader(program, vertexShaderId);
-        // this.vertexShaderId = createVertexShader(vertexShaderSource); // was
-
         /* create fragment shader */
         this.fragmentShaderId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
         if (fragmentShaderId == 0)
@@ -69,7 +68,6 @@ public class Shader implements MemoryResource {
         if (GL20.glGetShaderi(fragmentShaderId, GL20.GL_COMPILE_STATUS) == 0)
             throw new RuntimeException("Error compiling fragment shader: " + GL20.glGetShaderInfoLog(fragmentShaderId, 1024));
         GL20.glAttachShader(program, fragmentShaderId);
-        // this.fragmentShaderId = createFragmentShader(fragmentShaderSource); // was
 
         /*
         TODO: bind attribute locations to their respective VertexAttribute.ordinal()
@@ -80,12 +78,13 @@ public class Shader implements MemoryResource {
 
         /* link program */
         GL20.glLinkProgram(program);
-        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0) throw new RuntimeException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
+        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0)
+            throw new GraphicsException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
         GL20.glDetachShader(program, vertexShaderId);
         GL20.glDetachShader(program, fragmentShaderId);
         GL20.glValidateProgram(program);
         if (GL20.glGetProgrami(program, GL20.GL_VALIDATE_STATUS) == 0)
-            throw new RuntimeException("Could not validate shader code: " + GL20.glGetProgramInfoLog(program, 1024));
+            throw new GraphicsException("Could not validate shader code: " + GL20.glGetProgramInfoLog(program, 1024));
 
         /* register attributes */
         IntBuffer params_attributes = BufferUtils.createIntBuffer(1);
@@ -149,7 +148,7 @@ public class Shader implements MemoryResource {
             int type = uniform.value;
             if (type == GL20.GL_SAMPLER_2D) sampledTextures++;
         }
-        if (sampledTextures > maxSampledTextures) throw new IllegalArgumentException("Error: shader code trying " + "to sample " + sampledTextures + ". The allowed maximum on this hardware is " + maxSampledTextures);
+        if (sampledTextures > maxSampledTextures) throw new GraphicsException("Error: shader code trying to sample " + sampledTextures + ". The allowed maximum on this hardware is " + maxSampledTextures);
         /* validate: attribute names should conform to ShaderVertexAttribute enum */
         boolean badAttributeName = false;
         for (final String attributeName : attributeNames) {
