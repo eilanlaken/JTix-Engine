@@ -75,12 +75,9 @@ public class Shader implements MemoryResource {
             throw new RuntimeException("Error compiling fragment shader: " + GL20.glGetShaderInfoLog(fragmentShaderId, 1024));
         GL20.glAttachShader(program, fragmentShaderId);
 
-        /*
-        TODO: bind attribute locations to their respective VertexAttribute.ordinal()
-         */
-        GL20.glBindAttribLocation(program, 0, "a_position");
+        /* set attribute locations to what's expected using the standard */
         for (VertexAttribute attribute : VertexAttribute.values()) {
-            //GL20.glBindAttribLocation(program, attribute.ordinal(), attribute.glslVariableName);
+            GL20.glBindAttribLocation(program, attribute.glslLocation, attribute.glslVariableName);
         }
 
         /* link program */
@@ -110,7 +107,7 @@ public class Shader implements MemoryResource {
             this.attributeSizes.put(name, params_attributes.get(0));
             this.attributeNames[i] = name;
         }
-        this.vertexAttributesBitmask = VertexAttribute_old.getShaderAttributeBitmask(attributeNames);
+        this.vertexAttributesBitmask = VertexAttribute.getShaderBitmask(attributeNames);
 
         /* register uniforms */
         IntBuffer params_uniforms = BufferUtils.createIntBuffer(1);
@@ -184,6 +181,8 @@ public class Shader implements MemoryResource {
         Matcher comments = GLSL_COMMENT_PATTERN.matcher(vertexShaderSource);
         String noComments = comments.replaceAll("");
         Matcher layouts = GLSL_LAYOUT_IN_PATTERN.matcher(noComments);
+        String removeOriginalLayouts = layouts.replaceAll("in");
+
         return layouts.replaceAll("in");
     }
 

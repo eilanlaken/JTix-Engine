@@ -152,6 +152,13 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (currentShader == shader) return;
         flush();
         ShaderBinder.bind(shader);
+        /* disable all vertex attributes, then enable the ones required by the shader */
+        /*for (VertexAttribute attribute : VertexAttribute.values()) {
+            GL20.glDisableVertexAttribArray(attribute.glslLocation);
+        }
+        GL20.glDisableVertexAttribArray(2);
+        GL20.glEnableVertexAttribArray(2);*/
+
         shader.bindUniform("u_camera_combined", currentMatrix);
         shader.bindUniform("u_texture", currentTexture);
         currentShader = shader;
