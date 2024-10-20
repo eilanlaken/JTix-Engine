@@ -5,7 +5,7 @@ import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 
-public class EntityContainer implements MemoryResourceHolder {
+public abstract class Scene implements MemoryResourceHolder {
 
     /* Entities */
     protected Array<Entity> entities = new Array<>(false, 200);
@@ -36,13 +36,16 @@ public class EntityContainer implements MemoryResourceHolder {
     /* global container services */
     protected final Renderer2D renderer2D = new Renderer2D();
 
-    public EntityContainer() {
+    public Scene() {
         systems.add(systemDynamics);
         systems.add(systemAudio);
         systems.add(systemGUI);
         systems.add(systemRendering);
         systems.add(systemLogics);
     }
+
+    public abstract void prepare();
+    public abstract void start();
 
     public void update() {
         float elapsedTime = GraphicsUtils.getDeltaTime();

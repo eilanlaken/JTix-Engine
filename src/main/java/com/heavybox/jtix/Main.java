@@ -45,8 +45,8 @@ public class Main {
 
         //if (true) return;
 
-        ApplicationWindowAttributes config = new ApplicationWindowAttributes();
-        Application.createSingleWindowApplication(config);
+        //ApplicationWindowAttributes config = new ApplicationWindowAttributes();
+        Application.create();
         Application.launch(new ScreenLoading());
 
     }

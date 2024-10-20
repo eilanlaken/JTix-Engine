@@ -1,6 +1,5 @@
 package com.heavybox.jtix.application;
 
-// TODO: revise.
 public class ApplicationWindowAttributes {
 
     public int     posX                   = -1;

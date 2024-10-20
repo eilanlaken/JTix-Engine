@@ -1,20 +1,19 @@
 package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.memory.MemoryResourceHolder;
 
 public class SystemRendering implements System {
 
     public static final int SYSTEM_BITMASK = Component.Type.RENDER.bitmask | Component.Type.CAMERA.bitmask;
 
-    private final EntityContainer container;
+    private final Scene container;
 
     private final Array<Entity2D> renders_2d = new Array<>(false, 10);
     private final Array<Entity2D> cameras_2d = new Array<>(false, 10);
     private final Array<Entity3D> renders_3d = new Array<>(false, 10);
     private final Array<Entity3D> cameras_3d = new Array<>(false, 10);
 
-    SystemRendering(final EntityContainer container) {
+    SystemRendering(final Scene container) {
         this.container = container;
     }
 

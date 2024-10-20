@@ -1,9 +1,9 @@
 package com.heavybox.jtix.application;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.scene.Scene;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.*;
@@ -22,22 +22,22 @@ import static org.lwjgl.glfw.GLFW.*;
 public class ApplicationWindow implements MemoryResource {
 
     // window attributes
-    protected final long handle;
-    public ApplicationWindowAttributes attributes;
-    private boolean focused = false;
-    private int latestFilesDraggedAndDroppedCount = 0;
-    private int backBufferWidth;
-    private int backBufferHeight;
-    private int logicalWidth;
-    private int logicalHeight;
+    public final long                        handle;
+    public final ApplicationWindowAttributes attributes;
 
     // state management
-    private final Array<Runnable>   tasks            = new Array<>();
-    private       boolean           requestRendering = false;
-    private final Array<String>     filesDraggedAndDropped = new Array<>();
+    private boolean focused = false;
+    private int     lastDragAndDropFileCount = 0;
+    private int     backBufferWidth;
+    private int     backBufferHeight;
+    private boolean requestRendering = false;
 
-    // TODO: remove
+    private final Array<Runnable> tasks                  = new Array<>();
+    private final Array<String>   filesDraggedAndDropped = new Array<>();
+
+    // TODO: remove.
     private ApplicationScreen screen;
+    // TODO: use this.
     private Scene currentScene;
 
     private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
@@ -85,7 +85,6 @@ public class ApplicationWindow implements MemoryResource {
         @Override
         public synchronized void invoke(final long handle) {
             tasks.add(() -> GLFW.glfwSetWindowShouldClose(handle, false));
-
         }
     };
 
@@ -93,7 +92,7 @@ public class ApplicationWindow implements MemoryResource {
         @Override
         public synchronized void invoke(final long windowHandle, final int count, final long names) {
             tasks.add(() -> {
-                latestFilesDraggedAndDroppedCount = count;
+                lastDragAndDropFileCount = count;
                 for (int i = 0; i < count; i++) {
                     filesDraggedAndDropped.add(GLFWDropCallback.getName(names, i));
                 }
@@ -121,8 +120,7 @@ public class ApplicationWindow implements MemoryResource {
             GLFWVidMode videoMode = GLFW.glfwGetVideoMode(monitor);
             assert videoMode != null;
             GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.refreshRate());
-            handle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title,
-                    videoMode.refreshRate(), MemoryUtil.NULL);
+            handle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title, videoMode.refreshRate(), MemoryUtil.NULL);
         } else {
             GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, attributes.decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
             handle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title, MemoryUtil.NULL, MemoryUtil.NULL);
@@ -171,13 +169,6 @@ public class ApplicationWindow implements MemoryResource {
             GLFW.glfwGetFramebufferSize(handle, fbWidth, fbHeight);
             this.backBufferWidth = fbWidth.get(0);
             this.backBufferHeight = fbHeight.get(0);
-            // Allocate two IntBuffers for window size
-            IntBuffer winWidth = stack.mallocInt(1);
-            IntBuffer winHeight = stack.mallocInt(1);
-            // Get window size
-            GLFW.glfwGetWindowSize(handle, winWidth, winHeight);
-            this.logicalWidth = winWidth.get(0);
-            this.logicalHeight = winHeight.get(0);
         }
     }
 
@@ -309,11 +300,11 @@ public class ApplicationWindow implements MemoryResource {
         return filesDraggedAndDropped;
     }
 
-    public int getLatestFilesDraggedAndDroppedCount() {
-        return latestFilesDraggedAndDroppedCount;
+    public int getLastDragAndDropFileCount() {
+        return lastDragAndDropFileCount;
     }
 
-    public void setScreen(ApplicationScreen screen) {
+    @Deprecated public void setScreen(ApplicationScreen screen) {
         if (this.screen != null) {
             this.screen.hide();
             this.screen.window = null;
@@ -359,31 +350,3 @@ public class ApplicationWindow implements MemoryResource {
     }
 
 }
-
-/*
-
-was:
-
-public int getPositionX() {
-    GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
-    return tmpBuffer.get(0);
-}
-
-
-
-public int getPositionY() {
-    GLFW.glfwGetWindowPos(handle, tmpBuffer, tmpBuffer2);
-    return tmpBuffer2.get(0);
-}
-
-private void updateFramebufferInfo() {
-
-    GLFW.glfwGetFramebufferSize(handle, tmpBuffer, tmpBuffer2);
-    this.backBufferWidth = tmpBuffer.get(0);
-    this.backBufferHeight = tmpBuffer2.get(0);
-    GLFW.glfwGetWindowSize(handle, tmpBuffer, tmpBuffer2);
-    this.logicalWidth = tmpBuffer.get(0);
-    this.logicalHeight = tmpBuffer2.get(0);
-}
-
- */

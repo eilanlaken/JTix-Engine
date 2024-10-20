@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Set;
 
 // TODO: change whole package from Asset to File
-public final class AssetUtils {
+@Deprecated public final class AssetUtils {
 
     private static boolean           initialized = false;
     private static ApplicationWindow window      = null;
@@ -76,7 +76,7 @@ public final class AssetUtils {
     }
 
     public static Array<String> getLastDroppedFilePaths() {
-        int count = window.getLatestFilesDraggedAndDroppedCount();
+        int count = window.getLastDragAndDropFileCount();
         Array<String> allFileDraggedAndDroppedPaths = window.getFilesDraggedAndDropped();
         Array<String> lastDroppedFilePaths = new Array<>(5);
         for (int i = 0; i < count; i++) {

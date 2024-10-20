@@ -6,10 +6,10 @@ public class SystemAudio implements System {
 
     public static final int SYSTEM_BITMASK = Component.Type.AUDIO.bitmask;
 
-    private final EntityContainer container;
+    private final Scene container;
     private final Array<Entity> entities = new Array<>(false, 10);
 
-    SystemAudio(final EntityContainer container) {
+    SystemAudio(final Scene container) {
         this.container = container;
     }
 

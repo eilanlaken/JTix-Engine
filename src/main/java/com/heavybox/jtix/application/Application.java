@@ -1,5 +1,6 @@
 package com.heavybox.jtix.application;
 
+import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.async.AsyncUtils;
@@ -7,21 +8,27 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsUtils;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.scene.SceneUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+// TODO: merge application with application window.
+// TODO: as part of a refactor branch, create a singleton application.
+// TODO: the Application static variable will be injected to the utils classes.
 public class Application {
 
     private static boolean initialized = false;
-    private static boolean debugMode;
     private static ApplicationWindow window;
     private static final Array<Runnable> tasks = new Array<>();
     private static boolean running = false;
     private static GLFWErrorCallback errorCallback;
 
-    public static void createSingleWindowApplication(final ApplicationWindowAttributes attributes) {
+    // TODO: create a static block.
+    public static void create() {
+        create(new ApplicationWindowAttributes());
+    }
+
+    public static void create(final ApplicationWindowAttributes attributes) {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
         GLFWErrorCallback.createPrint(System.err).set();
         if (!GLFW.glfwInit()) throw new RuntimeException("Unable to initialize GLFW.");
@@ -29,7 +36,6 @@ public class Application {
         GL.createCapabilities();
         AsyncUtils.init();
         ApplicationUtils.init(window);
-        SceneUtils.init(window);
         GraphicsUtils.init(window);
         AssetUtils.init(window); // TODO: replace
         Mouse.init(window);
@@ -37,7 +43,12 @@ public class Application {
         initialized = true;
     }
 
-    public static void launch(ApplicationScreen screen) {
+    // TODO: implement
+    public static void playScene(Scene scene) {
+
+    }
+
+    @Deprecated public static void launch(ApplicationScreen screen) {
         if (!initialized) throw new IllegalStateException("Must call createSingleWindowApplication before launch().");
         window.setScreen(screen);
         running = true;
@@ -45,7 +56,7 @@ public class Application {
         clean();
     }
 
-    public static void switchScreen(ApplicationScreen screen) {
+    @Deprecated public static void switchScreen(ApplicationScreen screen) {
         window.setScreen(screen);
     }
 

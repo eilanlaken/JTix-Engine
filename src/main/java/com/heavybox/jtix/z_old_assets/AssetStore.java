@@ -29,7 +29,7 @@ public final class AssetStore {
 
     // TODO: loading state
 
-    public static synchronized void update() {
+    @Deprecated public static synchronized void update() {
         for (AssetStoreLoadingTask task : asyncTasks) {
             if (task.ready())  {
                 completedAsyncTasks.add(task);
