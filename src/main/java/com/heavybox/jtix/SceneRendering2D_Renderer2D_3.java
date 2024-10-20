@@ -32,6 +32,7 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
                     ) in vec4 a_color;
                     layout(location = 2) in vec2 a_textCoords0;
                     layout(location = 8) attribute vec2 a_textCoords1;
+                    layout(location = 34) attribute vec2 g;
 
                     // uniforms
                     uniform mat4 u_camera_combined;
@@ -68,7 +69,7 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
         Shader shader = new Shader(vertexShader, fragmentShader);
         System.out.println(shader);
 
-        System.out.println(shader.attributeLocations.get("a_position", -1));
+        //System.out.println(shader.attributeLocations.get("a_position", -1));
 
         boolean x = false;
         Boolean a = (Boolean) x;

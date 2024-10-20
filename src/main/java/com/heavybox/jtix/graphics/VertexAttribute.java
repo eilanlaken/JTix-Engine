@@ -2,6 +2,9 @@ package com.heavybox.jtix.graphics;
 
 import org.lwjgl.opengl.GL20;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public enum VertexAttribute {
 
     POSITION_2D        (GL20.GL_FLOAT_VEC2,2,"a_position"   , 0),
@@ -19,7 +22,6 @@ public enum VertexAttribute {
     BONE_WEIGHT2       (GL20.GL_FLOAT_VEC3,2,"a_boneWeight2", 9),
     BONE_WEIGHT3       (GL20.GL_FLOAT_VEC3,2,"a_boneWeight3", 10),
     BONE_WEIGHT4       (GL20.GL_FLOAT_VEC3,2,"a_boneWeight4", 11),
-    BONE_WEIGHT5       (GL20.GL_FLOAT_VEC3,2,"a_boneWeight5", 12),
     ;
 
     public final int     glslVariableType;
@@ -64,6 +66,21 @@ public enum VertexAttribute {
             if (attribute.glslVariableName.equals(name)) return attribute.glslLocation;
         }
         return -1;
+    }
+
+    public static boolean isValidGlslAttributeName(final String name) {
+        for (VertexAttribute attribute : values()) {
+            if (attribute.glslVariableName.equals(name)) return true;
+        }
+        return false;
+    }
+
+    public static Set<String> getValidAttributeNames() {
+        Set<String> validAttributeNames = new HashSet<>();
+        for (VertexAttribute attribute : values()) {
+            validAttributeNames.add(attribute.glslVariableName);
+        }
+        return validAttributeNames;
     }
 
 }

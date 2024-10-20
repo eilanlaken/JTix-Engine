@@ -7,8 +7,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 
 import java.nio.IntBuffer;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -153,28 +152,17 @@ public class Shader implements MemoryResource {
             if (type == GL20.GL_SAMPLER_2D) sampledTextures++;
         }
         if (sampledTextures > maxSampledTextures) throw new GraphicsException("Error: shader code trying to sample " + sampledTextures + ". The allowed maximum on this hardware is " + maxSampledTextures);
+        // TODO
         /* validate: attribute names should conform to ShaderVertexAttribute enum */
-        boolean badAttributeName = false;
-        for (final String attributeName : attributeNames) {
-            boolean contained = false;
-            for (VertexAttribute_old vertexAttribute : VertexAttribute_old.values()) {
-                if (vertexAttribute.glslVariableName.equals(attributeName)) {
-                    contained = true;
-                    break;
-                }
-            }
-            if (!contained) {
-                badAttributeName = true;
-                System.err.println("Warning: shader attribute " + attributeName + " is not " +
-                        "a valid vertex attribute name.");
-            }
-        }
-        if (badAttributeName) {
-            System.err.println("Valid shader attribute names are: ");
-            for (VertexAttribute_old vertexAttribute : VertexAttribute_old.values()) {
-                System.err.println(vertexAttribute.glslVariableName);
-            }
-        }
+//        Set<String> invalidAttributeNames = new HashSet<>();
+//        for (final String attributeName : attributeNames) {
+//            if (VertexAttribute.isValidGlslAttributeName(attributeName)) continue;
+//            invalidAttributeNames.add(attributeName);
+//        }
+//        if (!invalidAttributeNames.isEmpty()) {
+//            throw new GraphicsException("Shader attributes contain invalid attribute names: \n" + invalidAttributeNames + "\n" +
+//                    "You can only use the following attribute names in your shaders: " + VertexAttribute.getValidAttributeNames());
+//        }
     }
 
     private String preprocessVertexShader(final String vertexShaderSource) {
