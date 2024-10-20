@@ -1,28 +1,64 @@
 package com.heavybox.jtix.input;
 
 import com.heavybox.jtix.application.ApplicationWindow;
+import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class Keyboard {
 
-    private static boolean initialized = false;
+    private static Application application = null;
+    private static boolean     initialized = false;
 
-    private static int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
-    private static int[] keysPrevState = new int[keysCurrentState.length];
-    private static ArrayInt keysPressed = new ArrayInt(12);
-    private static ArrayInt keysHeld = new ArrayInt(12);
-    private static ArrayInt keysJustPressed = new ArrayInt(12);
+    private static final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
+    private static final int[] keysPrevState = new int[keysCurrentState.length];
+    private static final ArrayInt keysPressed = new ArrayInt(12);
+    private static final ArrayInt keysHeld = new ArrayInt(12);
+    private static final ArrayInt keysJustPressed = new ArrayInt(12);
 
     private Keyboard() {}
 
     // TODO: change window to application context.
-    public static void init(ApplicationWindow window) {
+    @Deprecated public static void init(ApplicationWindow window) {
         if (initialized)
             throw new IllegalStateException("Device input " + Keyboard.class.getSimpleName() + " already initialized.");
 
         GLFW.glfwSetKeyCallback(window.getHandle(), new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scanCode, int action, int mods) {
+                keysPrevState[key] = keysCurrentState[key];
+                keysCurrentState[key] = action;
+                switch (action) {
+                    case GLFW.GLFW_PRESS: {
+                        if (!keysPressed.contains(key)) keysPressed.add(key);
+                        keysJustPressed.removeValue(key);
+                        break;
+                    }
+                    case GLFW.GLFW_REPEAT: {
+                        if (!keysPressed.contains(key)) keysPressed.add(key);
+                        if (!keysHeld.contains(key)) keysHeld.add(key);
+                        keysJustPressed.removeValue(key);
+                        break;
+                    }
+                    case GLFW.GLFW_RELEASE: {
+                        keysJustPressed.add(key);
+                        keysPressed.removeValue(key);
+                        keysHeld.removeValue(key);
+                        break;
+                    }
+                }
+            }
+        });
+
+        initialized = true;
+    }
+
+    public static void init(Application application) {
+        if (initialized) throw new IllegalStateException("Device input " + Keyboard.class.getSimpleName() + " already initialized.");
+        Keyboard.application = application;
+
+        GLFW.glfwSetKeyCallback(application.window.getHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
                 keysPrevState[key] = keysCurrentState[key];

@@ -3,7 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.application.ApplicationUtils;
 import com.heavybox.jtix.z_old_assets.AssetStore;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
@@ -28,24 +28,24 @@ public class SceneRendering2D_Text_2 extends ApplicationScreen {
 
     public SceneRendering2D_Text_2() {
         renderer2D = new Renderer();
-        System.out.println(GraphicsUtils.getContentScaleX());
+        System.out.println(Graphics.getContentScaleX());
     }
 
     @Override
     public void show() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
         if (Keyboard.isKeyJustPressed(Keyboard.Key.I)) {
             ApplicationUtils.windowSetIcon("assets/textures/icon-128.png");
             ApplicationUtils.windowSetTitle("Planes IO");
-            System.out.println(GraphicsUtils.getWindowPositionX());
-            System.out.println(GraphicsUtils.getWindowPositionY());
+            System.out.println(Graphics.getWindowPositionX());
+            System.out.println(Graphics.getWindowPositionY());
         }
 
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) {

@@ -21,7 +21,7 @@ public class ScreenLoading extends ApplicationScreen {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
         if (!AssetStore.isLoadingInProgress()) {
             Application.switchScreen(screen);
         }

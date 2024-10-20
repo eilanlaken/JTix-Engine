@@ -36,7 +36,7 @@ public class MapObjectInt<K> implements Iterable<MapObjectInt.Entry<K>> {
             throw new IllegalArgumentException("loadFactor must be > 0 and < 1: " + loadFactor);
         this.loadFactor = loadFactor;
 
-        int tableSize = CollectionsUtils.tableSize(initialCapacity, loadFactor);
+        int tableSize = Collections.tableSize(initialCapacity, loadFactor);
         threshold = (int)(tableSize * loadFactor);
         mask = tableSize - 1;
         shift = Long.numberOfLeadingZeros(mask);
@@ -192,13 +192,13 @@ public class MapObjectInt<K> implements Iterable<MapObjectInt.Entry<K>> {
      * instead. */
     public void shrink(int maximumCapacity) {
         if (maximumCapacity < 0) throw new IllegalArgumentException("maximumCapacity must be >= 0: " + maximumCapacity);
-        int tableSize = CollectionsUtils.tableSize(maximumCapacity, loadFactor);
+        int tableSize = Collections.tableSize(maximumCapacity, loadFactor);
         if (keyTable.length > tableSize) resize(tableSize);
     }
 
     /** Clears the map and reduces the size of the backing arrays to be the specified capacity / loadFactor, if they are larger. */
     public void clear(int maximumCapacity) {
-        int tableSize = CollectionsUtils.tableSize(maximumCapacity, loadFactor);
+        int tableSize = Collections.tableSize(maximumCapacity, loadFactor);
         if (keyTable.length <= tableSize) {
             clear();
             return;
@@ -242,7 +242,7 @@ public class MapObjectInt<K> implements Iterable<MapObjectInt.Entry<K>> {
     /** Increases the size of the backing array to accommodate the specified number of additional items / loadFactor. Useful before
      * adding many items to avoid multiple backing array resizes. */
     public void ensureCapacity (int additionalCapacity) {
-        int tableSize = CollectionsUtils.tableSize(size + additionalCapacity, loadFactor);
+        int tableSize = Collections.tableSize(size + additionalCapacity, loadFactor);
         if (keyTable.length < tableSize) resize(tableSize);
     }
 

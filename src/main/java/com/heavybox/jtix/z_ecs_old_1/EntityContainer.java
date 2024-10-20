@@ -1,7 +1,7 @@
 package com.heavybox.jtix.z_ecs_old_1;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 
 public class EntityContainer {
 
@@ -42,7 +42,7 @@ public class EntityContainer {
     }
 
     public void update() {
-        float elapsedTime = GraphicsUtils.getDeltaTime();
+        float elapsedTime = Graphics.getDeltaTime();
         this.lag += elapsedTime;
 
         /* call the fixedUpdate() of every system */

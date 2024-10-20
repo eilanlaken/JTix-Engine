@@ -4,7 +4,7 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_ecs_old_1.ComponentTransform;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
@@ -43,7 +43,7 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
 
     float ay = 0;
     @Override
-    protected void refresh() {
+    public void refresh() {
 
 
         Vector2[] vs = new Vector2[3];
@@ -54,12 +54,12 @@ public class SceneRendering2D_Shapes_6_capacity_bug extends ApplicationScreen {
             v.rotateRad(dy);
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-            dy += GraphicsUtils.getDeltaTime();
-            dx += GraphicsUtils.getDeltaTime();
+            dy += Graphics.getDeltaTime();
+            dx += Graphics.getDeltaTime();
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-            dx -= GraphicsUtils.getDeltaTime();
-            dy -= GraphicsUtils.getDeltaTime();
+            dx -= Graphics.getDeltaTime();
+            dy -= Graphics.getDeltaTime();
         }
 
         if (Keyboard.isKeyPressed(Keyboard.Key.X)) {

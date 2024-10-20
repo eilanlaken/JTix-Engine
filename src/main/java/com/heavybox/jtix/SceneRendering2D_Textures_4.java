@@ -38,7 +38,7 @@ public class SceneRendering2D_Textures_4 extends ApplicationScreen {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
 
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) {

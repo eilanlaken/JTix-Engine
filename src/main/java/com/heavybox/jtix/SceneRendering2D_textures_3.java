@@ -42,7 +42,7 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
 
 

@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_2;
 import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.graphics.Texture;
@@ -73,14 +73,14 @@ public class SceneRendering2D_Renderer2D_2 extends ApplicationScreen {
 
     @Override
     public void show() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(),GraphicsUtils.getWindowHeight(), 1);
+        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
 
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
         componentGraphicsCamera.update();
 

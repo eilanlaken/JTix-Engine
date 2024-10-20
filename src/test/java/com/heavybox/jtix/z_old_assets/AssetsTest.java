@@ -2,7 +2,7 @@ package com.heavybox.jtix.z_old_assets;
 
 import org.junit.jupiter.api.Test;
 
-class AssetUtilsTest {
+class AssetsTest {
 
     @Test
     void init() {

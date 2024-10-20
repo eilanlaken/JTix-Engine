@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL20;
 public class TextureBinder {
 
     private static final int       RESERVED_OFFSET             = 0; // we will begin binding from slots OFFSET, OFFSET + 1,... leaving slots 0... OFFSET - 1 for texture loading and manipulation?
-    private static final int       MAXIMUM_BOUND_TEXTURE_UNITS = GraphicsUtils.getMaxBoundTextureUnits();
+    private static final int       MAXIMUM_BOUND_TEXTURE_UNITS = Graphics.getMaxBoundTextureUnits();
     private static final int       AVAILABLE_TEXTURE_SLOTS     = MAXIMUM_BOUND_TEXTURE_UNITS - RESERVED_OFFSET;
     private static final Texture[] boundTextures               = new Texture[MAXIMUM_BOUND_TEXTURE_UNITS];
     private static int             roundRobinCounter           = 0;

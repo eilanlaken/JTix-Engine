@@ -51,7 +51,7 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
 
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) {

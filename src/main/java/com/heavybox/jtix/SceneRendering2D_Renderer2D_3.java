@@ -77,13 +77,13 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
 
     @Override
     public void show() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(),GraphicsUtils.getWindowHeight(), 1);
+        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
         componentGraphicsCamera.update();
 

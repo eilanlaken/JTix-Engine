@@ -1,7 +1,7 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Texture;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
@@ -30,7 +30,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
                     + STBImage.stbi_failure_reason());
             width = widthBuffer.get();
             height = heightBuffer.get();
-            int maxTextureSize = GraphicsUtils.getMaxTextureSize();
+            int maxTextureSize = Graphics.getMaxTextureSize();
             if (width > maxTextureSize || height > maxTextureSize) throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
         }
         return null;

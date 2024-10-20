@@ -3,7 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.input.Keyboard;
@@ -43,7 +43,7 @@ public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
 
     float ay = 0;
     @Override
-    protected void refresh() {
+    public void refresh() {
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         componentGraphicsCamera.lens.unProject(screen);
 
@@ -54,8 +54,8 @@ public class SceneRendering2D_Shapes_2 extends ApplicationScreen {
         for (Vector2 v : vs) {
             v.rotateRad(dy);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.W)) dy += GraphicsUtils.getDeltaTime();
-        if (Keyboard.isKeyPressed(Keyboard.Key.S)) dy -= GraphicsUtils.getDeltaTime();
+        if (Keyboard.isKeyPressed(Keyboard.Key.W)) dy += Graphics.getDeltaTime();
+        if (Keyboard.isKeyPressed(Keyboard.Key.S)) dy -= Graphics.getDeltaTime();
 
         if (Mouse.isButtonPressed(Mouse.Button.LEFT)) {
             ay++;

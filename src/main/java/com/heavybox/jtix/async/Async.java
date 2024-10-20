@@ -2,7 +2,7 @@ package com.heavybox.jtix.async;
 
 import org.lwjgl.glfw.GLFW;
 
-public final class AsyncUtils {
+public final class Async {
 
     private static final long       NANOS_IN_SECOND = 1000L * 1000L * 1000L;
     private static       long       nextFrame       = 0;

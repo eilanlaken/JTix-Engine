@@ -3,7 +3,7 @@ package com.heavybox.jtix.math;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.collections.CollectionsUtils;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.jetbrains.annotations.NotNull;
 
@@ -736,11 +736,11 @@ public final class MathUtils {
     public static int polygonWindingOrder(final float[] polygon) {
         float sum = 0;
         for (int i = 0; i < polygon.length - 1; i += 2) {
-            float x1 = CollectionsUtils.getCyclic(polygon, i);
-            float y1 = CollectionsUtils.getCyclic(polygon, i+1);
+            float x1 = Collections.getCyclic(polygon, i);
+            float y1 = Collections.getCyclic(polygon, i+1);
 
-            float x2 = CollectionsUtils.getCyclic(polygon, i+2);
-            float y2 = CollectionsUtils.getCyclic(polygon, i+3);
+            float x2 = Collections.getCyclic(polygon, i+2);
+            float y2 = Collections.getCyclic(polygon, i+3);
 
             sum += (x2 - x1) * (y2 + y1);
         }
@@ -797,11 +797,11 @@ public final class MathUtils {
         float crossSign = Math.signum(tmp1.crs(tmp2));
 
         for (int i = 2; i < vertices.length; i += 2) {
-            tmp1.x = CollectionsUtils.getCyclic(vertices, i) - CollectionsUtils.getCyclic(vertices, i - 2);
-            tmp1.y = CollectionsUtils.getCyclic(vertices,i + 1) - CollectionsUtils.getCyclic(vertices, i - 1);
+            tmp1.x = Collections.getCyclic(vertices, i) - Collections.getCyclic(vertices, i - 2);
+            tmp1.y = Collections.getCyclic(vertices,i + 1) - Collections.getCyclic(vertices, i - 1);
 
-            tmp2.x = CollectionsUtils.getCyclic(vertices, i + 2) - CollectionsUtils.getCyclic(vertices, i);
-            tmp2.y = CollectionsUtils.getCyclic(vertices,i + 3) - CollectionsUtils.getCyclic(vertices, i + 1);
+            tmp2.x = Collections.getCyclic(vertices, i + 2) - Collections.getCyclic(vertices, i);
+            tmp2.y = Collections.getCyclic(vertices,i + 3) - Collections.getCyclic(vertices, i + 1);
 
             float crossSignCurrent = Math.signum(tmp1.crs(tmp2));
             if (crossSignCurrent != crossSign) return false;

@@ -3,7 +3,7 @@ package com.heavybox.jtix.async;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class AsyncUtilsTest {
+class AsyncTest {
 
     @Test
     void sync() {
@@ -11,6 +11,6 @@ class AsyncUtilsTest {
 
     @Test
     void getAvailableProcessors() {
-        Assertions.assertTrue(AsyncUtils.getAvailableProcessorsNumber() > 0);
+        Assertions.assertTrue(Async.getAvailableProcessorsNumber() > 0);
     }
 }

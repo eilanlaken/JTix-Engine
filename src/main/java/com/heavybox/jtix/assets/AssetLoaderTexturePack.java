@@ -19,8 +19,8 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
 
     @Override
     public Array<AssetDescriptor> asyncLoad(String path, final HashMap<String, Object> options) {
-        yamlString = AssetUtils.getFileContent(path);
-        Yaml yaml = AssetUtils.yaml();
+        yamlString = Assets.getFileContent(path);
+        Yaml yaml = Assets.yaml();
         Map<String, Object> data = yaml.load(yamlString);
 
         /* get dependencies */

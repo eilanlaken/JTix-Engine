@@ -5,12 +5,12 @@ import com.heavybox.jtix.math.MathUtils;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public final class CollectionsUtils {
+public final class Collections {
 
-    private static CollectionsUtils.CollectionsSorterArray arraySorter = new CollectionsSorterArray();
-    private static CollectionsUtils.CollectionsSorterArrayComparable arraySorterComparable = new CollectionsSorterArrayComparable();
+    private static Collections.CollectionsSorterArray arraySorter = new CollectionsSorterArray();
+    private static Collections.CollectionsSorterArrayComparable arraySorterComparable = new CollectionsSorterArrayComparable();
 
-    private CollectionsUtils() {}
+    private Collections() {}
 
     public static Object createArray(Class clazz, int size) {
         return java.lang.reflect.Array.newInstance(clazz, size);

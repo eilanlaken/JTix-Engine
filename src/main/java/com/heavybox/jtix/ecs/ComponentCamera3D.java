@@ -19,7 +19,7 @@ public class ComponentCamera3D implements ComponentCamera {
 
     public ComponentCamera3D(float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov, EntityLayer3D... layers) {
         this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, zoom, near, far, fov);
-        this.layersBitmask = ECSUtils.getLayersBitmask(layers);
+        this.layersBitmask = ECS.getLayersBitmask(layers);
         update();
     }
 

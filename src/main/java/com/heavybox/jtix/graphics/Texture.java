@@ -29,7 +29,7 @@ public class Texture implements MemoryResource {
         this.handle = GL11.glGenTextures();
         this.slot = -1;
 
-        int maxTextureSize = GraphicsUtils.getMaxTextureSize();
+        int maxTextureSize = Graphics.getMaxTextureSize();
         if (width > maxTextureSize || height > maxTextureSize)
             throw new IllegalStateException("Trying to create " + Texture.class + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
 
@@ -42,13 +42,13 @@ public class Texture implements MemoryResource {
         this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropy = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropy,1, GraphicsUtils.getMaxAnisotropicFilterLevel()));
+        this.anisotropy = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropicFilterLevel()));
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        if (GraphicsUtils.isAnisotropicFilteringSupported()) {
+        if (Graphics.isAnisotropicFilteringSupported()) {
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
         }
     }
@@ -69,7 +69,7 @@ public class Texture implements MemoryResource {
         this.height = heightBuffer.get();
         this.invWidth = 1.0f / width;
         this.invHeight = 1.0f / height;
-        int maxTextureSize = GraphicsUtils.getMaxTextureSize();
+        int maxTextureSize = Graphics.getMaxTextureSize();
         if (width > maxTextureSize || height > maxTextureSize)
             throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
 
@@ -77,14 +77,14 @@ public class Texture implements MemoryResource {
         this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropy = MathUtils.clampInt(anisotropy,1, GraphicsUtils.getMaxAnisotropicFilterLevel());
+        this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropicFilterLevel());
 
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        if (GraphicsUtils.isAnisotropicFilteringSupported()) {
+        if (Graphics.isAnisotropicFilteringSupported()) {
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
         }
     }

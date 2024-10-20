@@ -124,7 +124,7 @@ Known bugs:
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.frameDrawCalls = 0;
-        this.currentComponentGraphicsCamera = componentGraphicsCamera != null ? componentGraphicsCamera : defaultComponentGraphicsCamera.update(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight());
+        this.currentComponentGraphicsCamera = componentGraphicsCamera != null ? componentGraphicsCamera : defaultComponentGraphicsCamera.update(Graphics.getWindowWidth(), Graphics.getWindowHeight());
         setShader(defaultShader);
         setShaderAttributes(null);
         setTexture(whitePixel);
@@ -1899,10 +1899,10 @@ Known bugs:
     }
 
     private static ComponentGraphicsCamera createDefaultCamera() {
-        ComponentGraphicsCamera c = new ComponentGraphicsCamera(GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), 1);
+        ComponentGraphicsCamera c = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         c.update();
-        System.out.println(GraphicsUtils.getWindowWidth());
-        System.out.println(GraphicsUtils.getWindowHeight());
+        System.out.println(Graphics.getWindowWidth());
+        System.out.println(Graphics.getWindowHeight());
         System.out.println("prj: " + c.lens.projection);
         System.out.println("view: " + c.lens.view);
         System.out.println("combined: " + c.lens.combined);

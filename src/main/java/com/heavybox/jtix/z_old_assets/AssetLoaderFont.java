@@ -2,7 +2,7 @@ package com.heavybox.jtix.z_old_assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Texture;
 
 import java.nio.file.Paths;
@@ -75,7 +75,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
 
     public static final class Options extends AssetLoader.Options<Font> {
 
-        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public int            anisotropy = Graphics.getMaxAnisotropicFilterLevel();
         public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;

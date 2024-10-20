@@ -8,15 +8,15 @@ import java.util.Map;
 
 @Deprecated public abstract class ApplicationScreen implements MemoryResourceHolder {
 
-    protected ApplicationWindow window;
+    public ApplicationWindow window;
 
-    protected abstract void show();
+    public abstract void show();
 
-    protected abstract void refresh();
+    public abstract void refresh();
 
-    protected abstract void hide();
+    public abstract void hide();
 
-    protected abstract void resize(int width, int height);
+    public abstract void resize(int width, int height);
 
     // TODO: find a better way of doing background required tasks before show()ing the scene.
     @Deprecated public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {

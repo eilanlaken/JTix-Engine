@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -43,8 +43,8 @@ public class ScenePhysics2D_Better_3 extends ApplicationScreen {
 
 
     @Override
-    protected void refresh() {
-        world.update(GraphicsUtils.getDeltaTime());
+    public void refresh() {
+        world.update(Graphics.getDeltaTime());
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         componentGraphicsCamera.lens.unProject(screen);
 

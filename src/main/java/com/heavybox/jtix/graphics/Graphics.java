@@ -1,6 +1,7 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.application.ApplicationWindow;
+import com.heavybox.jtix.application_2.Application;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -11,9 +12,10 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
 
-public final class GraphicsUtils {
+public final class Graphics {
 
-    private static ApplicationWindow window      = null;
+    private static Application application = null;
+    @Deprecated private static ApplicationWindow window      = null;
     private static boolean           initialized = false;
 
     private static boolean isContinuous = true;
@@ -32,12 +34,29 @@ public final class GraphicsUtils {
     private static float   contentScaleX;
     private static float   contentScaleY;
 
-    private GraphicsUtils() {}
+    private Graphics() {}
 
-    public static void init(final ApplicationWindow window) {
+    @Deprecated public static void init(final ApplicationWindow window) {
         if (initialized) return;
 
-        GraphicsUtils.window = window;
+        Graphics.window = window;
+        maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        /* set content scale */
+        FloatBuffer px = BufferUtils.createFloatBuffer(1);
+        FloatBuffer py = BufferUtils.createFloatBuffer(1);
+        GLFW.glfwGetMonitorContentScale(monitor, px, py);
+        contentScaleX = px.get(0);
+        contentScaleY = py.get(0);
+
+        initialized = true;
+    }
+
+    public static void init(final Application application) {
+        if (initialized) return;
+
+        Graphics.application = application;
+        //GraphicsUtils.window = application.window;
         maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
         long monitor = GLFW.glfwGetPrimaryMonitor();
         /* set content scale */
@@ -90,7 +109,7 @@ public final class GraphicsUtils {
     }
 
     public static void setIdleFps(int idleFps) {
-        GraphicsUtils.idleFps = idleFps;
+        Graphics.idleFps = idleFps;
     }
 
     public static int getTargetFps() {
@@ -98,8 +117,8 @@ public final class GraphicsUtils {
     }
 
     public static void setTargetFps(int targetFps) {
-        prevTargetFps = GraphicsUtils.targetFps;
-        GraphicsUtils.targetFps = targetFps;
+        prevTargetFps = Graphics.targetFps;
+        Graphics.targetFps = targetFps;
     }
 
     public static int getMaxTextureSize() {
@@ -111,7 +130,7 @@ public final class GraphicsUtils {
     }
 
     public static void setContinuousRendering(boolean isContinuous) {
-        GraphicsUtils.isContinuous = isContinuous;
+        Graphics.isContinuous = isContinuous;
     }
 
     public static boolean isContinuousRendering () {

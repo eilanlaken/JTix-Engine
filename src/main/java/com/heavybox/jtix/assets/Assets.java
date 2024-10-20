@@ -20,16 +20,16 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Set;
 
-public final class AssetUtils {
+public final class Assets {
 
     private static boolean           initialized = false;
     private static ApplicationWindow window      = null;
 
-    private AssetUtils() {}
+    private Assets() {}
 
     public static void init(final ApplicationWindow window) {
         if (initialized) return;
-        AssetUtils.window = window;
+        Assets.window = window;
         initialized = true;
     }
 

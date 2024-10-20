@@ -3,9 +3,9 @@ package com.heavybox.jtix.ecs;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.math.MathUtils;
 
-public final class ECSUtils {
+public final class ECS {
 
-    private ECSUtils() {}
+    private ECS() {}
 
     static int getComponentsBitmask(final Entity entity) {
         int mask = 0;

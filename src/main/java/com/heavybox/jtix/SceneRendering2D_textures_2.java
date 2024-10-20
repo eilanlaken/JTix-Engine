@@ -37,7 +37,7 @@ public class SceneRendering2D_textures_2 extends ApplicationScreen {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1f,0f,0,1);

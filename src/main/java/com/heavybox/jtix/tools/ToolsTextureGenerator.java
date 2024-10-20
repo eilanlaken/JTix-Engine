@@ -1,7 +1,7 @@
 package com.heavybox.jtix.tools;
 
 import com.heavybox.jtix.z_old_assets.AssetUtils;
-import com.heavybox.jtix.collections.CollectionsUtils;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.math.MathUtils;
 
 import java.awt.image.BufferedImage;
@@ -20,7 +20,7 @@ public final class ToolsTextureGenerator {
         for (int i = 0; i < 256; i++) {
             PERLIN_PERM_256[i] = i;
         }
-        CollectionsUtils.shuffle(PERLIN_PERM_256);
+        Collections.shuffle(PERLIN_PERM_256);
         for (int i = 0; i < 256; i++) {
             PERLIN_PERM_512[i] = PERLIN_PERM_256[i];
             PERLIN_PERM_512[256 + i] = PERLIN_PERM_256[i];

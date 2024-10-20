@@ -145,7 +145,7 @@ public class Shader implements MemoryResource {
 
         /* validation */
         /* validate: limit the allowed max sampled textures */
-        final int maxSampledTextures = GraphicsUtils.getMaxFragmentShaderTextureUnits();
+        final int maxSampledTextures = Graphics.getMaxFragmentShaderTextureUnits();
         int sampledTextures = 0;
         for (MapObjectInt.Entry<String> uniform : uniformTypes.entries()) {
             int type = uniform.value;

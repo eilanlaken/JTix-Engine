@@ -39,7 +39,7 @@ public class SceneRendering2D_Input_Fix extends ApplicationScreen {
 
     float ay = 0;
     @Override
-    protected void refresh() {
+    public void refresh() {
 
 
 

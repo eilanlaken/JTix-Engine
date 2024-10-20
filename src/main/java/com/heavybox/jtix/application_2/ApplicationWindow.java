@@ -1,5 +1,8 @@
-package com.heavybox.jtix.application;
+package com.heavybox.jtix.application_2;
 
+import com.heavybox.jtix.application.Application;
+import com.heavybox.jtix.application.ApplicationException;
+import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.graphics.Graphics;
@@ -19,11 +22,11 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class ApplicationWindow implements MemoryResource {
+@Deprecated public class ApplicationWindow implements MemoryResource {
 
     // window attributes
-    public final long                        handle;
-    public final ApplicationWindowAttributes attributes;
+    public final long                  handle;
+    public final ApplicationAttributes attributes;
 
     // state management
     private boolean focused = false;
@@ -100,7 +103,9 @@ public class ApplicationWindow implements MemoryResource {
         }
     };
 
-    public ApplicationWindow(ApplicationWindowAttributes attributes) {
+    public ApplicationWindow() {
+        this.attributes = new ApplicationAttributes(); // remove.
+
         GLFW.glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         GLFW.glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -112,7 +117,6 @@ public class ApplicationWindow implements MemoryResource {
         GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, attributes.autoMinimized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, attributes.transparentFrameBuffer ? GLFW.GLFW_TRUE : GLFW_FALSE);
 
-        this.attributes = attributes;
         if (attributes.title == null) attributes.title = "";
         if (attributes.fullScreen) {
             // compute and auxiliary buffers
@@ -305,13 +309,13 @@ public class ApplicationWindow implements MemoryResource {
     }
 
     @Deprecated public void setScreen(ApplicationScreen screen) {
-        if (this.screen != null) {
-            this.screen.hide();
-            this.screen.window = null;
-        }
-        this.screen = screen;
-        this.screen.show();
-        this.screen.window = this;
+//        if (this.screen != null) {
+//            this.screen.hide();
+//            this.screen.window = null;
+//        }
+//        this.screen = screen;
+//        this.screen.show();
+//        this.screen.window = this;
     }
 
     public void setSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {

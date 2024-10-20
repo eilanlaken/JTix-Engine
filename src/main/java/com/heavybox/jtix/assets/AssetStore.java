@@ -15,7 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class AssetStore {
+// TODO move all code to Assets.java
+@Deprecated public final class AssetStore {
 
     private static final HashMap<String, Asset>     store                = new HashMap<>();
     private static final Queue<AssetDescriptor>     loadQueue            = new Queue<>();
@@ -97,7 +98,7 @@ public final class AssetStore {
             if (isDependency) asset.refCount++;
             return;
         }
-        if (!AssetUtils.fileExists(path)) throw new AssetException("File not found: " + path);
+        if (!Assets.fileExists(path)) throw new AssetException("File not found: " + path);
         AssetDescriptor descriptor = new AssetDescriptor(type, path, options);
         loadQueue.addFirst(descriptor);
     }

@@ -3,7 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Renderer3D_old;
 import com.heavybox.jtix.graphics.Shader;
@@ -59,8 +59,8 @@ public class SceneRendering3D_1 extends ApplicationScreen {
 
 
     @Override
-    protected void refresh() {
-        float delta = GraphicsUtils.getDeltaTime();
+    public void refresh() {
+        float delta = Graphics.getDeltaTime();
         float angularSpeed = 200; // degrees per second
 
         // rotate

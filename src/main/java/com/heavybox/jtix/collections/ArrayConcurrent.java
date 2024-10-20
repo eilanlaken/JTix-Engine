@@ -33,7 +33,7 @@ public class ArrayConcurrent<T> implements Iterable<T> {
      * @param capacity Any elements added beyond this will cause the backing array to be grown. */
     public ArrayConcurrent(boolean ordered, int capacity, Class arrayType) {
         this.ordered = ordered;
-        items = (T[]) CollectionsUtils.createArray(arrayType, capacity);
+        items = (T[]) Collections.createArray(arrayType, capacity);
     }
 
     public ArrayConcurrent(boolean ordered, T[] array, int start, int count) {
@@ -314,18 +314,18 @@ public class ArrayConcurrent<T> implements Iterable<T> {
     /** Creates a new backing array with the specified size containing the current items. */
     protected synchronized T[] resize(int newSize) {
         T[] items = this.items;
-        T[] newItems = (T[]) CollectionsUtils.createArray(items.getClass().getComponentType(), newSize);
+        T[] newItems = (T[]) Collections.createArray(items.getClass().getComponentType(), newSize);
         System.arraycopy(items, 0, newItems, 0, Math.min(size, newItems.length));
         this.items = newItems;
         return newItems;
     }
 
     public synchronized void sort() {
-        CollectionsUtils.sort(items, 0, size);
+        Collections.sort(items, 0, size);
     }
 
     public synchronized void sort(Comparator<? super T> comparator) {
-        CollectionsUtils.sort(items, comparator, 0, size);
+        Collections.sort(items, comparator, 0, size);
     }
 
     public synchronized void reverse() {
@@ -382,7 +382,7 @@ public class ArrayConcurrent<T> implements Iterable<T> {
     }
 
     public synchronized <V> V[] toArray (Class<V> type) {
-        V[] result = (V[]) CollectionsUtils.createArray(type, size);
+        V[] result = (V[]) Collections.createArray(type, size);
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }

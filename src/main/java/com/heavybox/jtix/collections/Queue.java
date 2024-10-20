@@ -34,7 +34,7 @@ public class Queue<T> implements Iterable<T> {
      * backing array of the specified type via reflection, which is necessary only when accessing the backing array directly. */
     public Queue(int initialSize, Class<T> type) {
         // noinspection unchecked
-        this.values = (T[])CollectionsUtils.createArray(type, initialSize);
+        this.values = (T[]) Collections.createArray(type, initialSize);
     }
 
     /** Append given object to the tail. (enqueue to tail) Unless backing array needs resizing, operates in O(1) time.
@@ -91,7 +91,7 @@ public class Queue<T> implements Iterable<T> {
         final int head = this.head;
         final int tail = this.tail;
 
-        final T[] newArray = (T[])CollectionsUtils.createArray(values.getClass().getComponentType(), newSize);
+        final T[] newArray = (T[]) Collections.createArray(values.getClass().getComponentType(), newSize);
         if (head < tail) {
             // Continuous
             System.arraycopy(values, head, newArray, 0, tail - head);

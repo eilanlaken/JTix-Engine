@@ -2,7 +2,7 @@ package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_old;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
@@ -27,8 +27,8 @@ public class World2DRenderer {
 
     public void render(Renderer2D_old renderer) {
         final float pointPixelRadius = 3;
-        float scaleX = renderer.getCurrentCamera().lens.getViewportWidth()  * pointPixelRadius / GraphicsUtils.getWindowWidth();
-        float scaleY = renderer.getCurrentCamera().lens.getViewportHeight() * pointPixelRadius / GraphicsUtils.getWindowHeight();
+        float scaleX = renderer.getCurrentCamera().lens.getViewportWidth()  * pointPixelRadius / Graphics.getWindowWidth();
+        float scaleY = renderer.getCurrentCamera().lens.getViewportHeight() * pointPixelRadius / Graphics.getWindowHeight();
 
         // render bodies
         if (world.renderBodies) {

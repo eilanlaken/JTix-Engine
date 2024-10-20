@@ -3,7 +3,7 @@ package com.heavybox.jtix.tools;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsException;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import org.lwjgl.stb.STBRPContext;
 import org.lwjgl.stb.STBRPNode;
 import org.lwjgl.stb.STBRPRect;
@@ -18,7 +18,7 @@ import java.util.*;
 
 public final class ToolsTexturePacker {
 
-    public static final int maxTextureSize = GraphicsUtils.getMaxTextureSize();
+    public static final int maxTextureSize = Graphics.getMaxTextureSize();
 
     private ToolsTexturePacker() {}
 

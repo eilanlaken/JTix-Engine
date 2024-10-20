@@ -21,7 +21,7 @@ public class AssetDescriptor {
         this.path = path;
         long s = 0;
         try {
-            s = AssetUtils.getFileSize(path);
+            s = Assets.getFileSize(path);
         } catch (IOException e) {
             // TODO: see how to get the total file size for assets that are composed of multiple files.
             //throw new AssetsException(e.getMessage());

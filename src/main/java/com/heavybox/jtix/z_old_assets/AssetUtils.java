@@ -2,6 +2,7 @@ package com.heavybox.jtix.z_old_assets;
 
 import com.google.gson.Gson;
 import com.heavybox.jtix.application.ApplicationWindow;
+import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.collections.Array;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -25,12 +26,19 @@ import java.util.Set;
 
     private static boolean           initialized = false;
     private static ApplicationWindow window      = null;
+    private static Application application      = null;
 
     private AssetUtils() {}
 
     public static void init(final ApplicationWindow window) {
         if (initialized) return;
         AssetUtils.window = window;
+        initialized = true;
+    }
+
+    public static void init(final Application application) {
+        if (initialized) return;
+        AssetUtils.application = application;
         initialized = true;
     }
 

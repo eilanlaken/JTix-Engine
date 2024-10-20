@@ -89,7 +89,7 @@ public class Camera {
     }
 
     public void unProject(Vector3 screenCoordinates) {
-        unProject(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), screenCoordinates);
+        unProject(0, 0, Graphics.getWindowWidth(), Graphics.getWindowHeight(), screenCoordinates);
     }
 
     public boolean frustumIntersectsSphere(final Vector3 center, final float r) {
@@ -102,7 +102,7 @@ public class Camera {
     }
 
     public void unProject(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 screenCoordinates) {
-        float x = screenCoordinates.x - viewportX, y = GraphicsUtils.getWindowHeight() - screenCoordinates.y - viewportY;
+        float x = screenCoordinates.x - viewportX, y = Graphics.getWindowHeight() - screenCoordinates.y - viewportY;
         screenCoordinates.x = (2 * x) / viewportWidth - 1;
         screenCoordinates.y = (2 * y) / viewportHeight - 1;
         screenCoordinates.z = 2 * screenCoordinates.z - 1;
@@ -110,7 +110,7 @@ public class Camera {
     }
 
     public void project(Vector3 worldCoordinates) {
-        project(0, 0, GraphicsUtils.getWindowWidth(), GraphicsUtils.getWindowHeight(), worldCoordinates);
+        project(0, 0, Graphics.getWindowWidth(), Graphics.getWindowHeight(), worldCoordinates);
     }
 
     public void project(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 worldCoordinates) {

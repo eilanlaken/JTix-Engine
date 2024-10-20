@@ -42,7 +42,7 @@ public class SceneRendering2D_Shapes_3 extends ApplicationScreen {
 
     float ay = 0;
     @Override
-    protected void refresh() {
+    public void refresh() {
         Vector3 screen = new Vector3(Mouse.getCursorX(), Mouse.getCursorY(), 0);
         componentGraphicsCamera.lens.unProject(screen);
 

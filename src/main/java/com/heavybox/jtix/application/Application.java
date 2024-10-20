@@ -3,9 +3,9 @@ package com.heavybox.jtix.application;
 import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
-import com.heavybox.jtix.async.AsyncUtils;
+import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import org.lwjgl.glfw.GLFW;
@@ -34,9 +34,9 @@ public class Application {
         if (!GLFW.glfwInit()) throw new RuntimeException("Unable to initialize GLFW.");
         window = new ApplicationWindow(attributes);
         GL.createCapabilities();
-        AsyncUtils.init();
+        Async.init();
         ApplicationUtils.init(window);
-        GraphicsUtils.init(window);
+        Graphics.init(window);
         AssetUtils.init(window); // TODO: replace
         Mouse.init(window);
         Keyboard.init(window);
@@ -64,7 +64,7 @@ public class Application {
         while (running && !window.shouldClose()) {
             GLFW.glfwMakeContextCurrent(window.getHandle());
             boolean windowRendered = window.refresh();
-            int targetFrameRate = GraphicsUtils.getTargetFps();
+            int targetFrameRate = Graphics.getTargetFps();
 
             AssetStore.update(); // TODO: replace with new one.
             Mouse.update();
@@ -80,15 +80,15 @@ public class Application {
                 tasks.clear();
             }
 
-            if (requestRendering && !GraphicsUtils.isContinuousRendering()) window.requestRendering();
+            if (requestRendering && !Graphics.isContinuousRendering()) window.requestRendering();
             if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
                 try {
-                    Thread.sleep(1000 / GraphicsUtils.getIdleFps());
+                    Thread.sleep(1000 / Graphics.getIdleFps());
                 } catch (InterruptedException ignored) {
                     // ignore
                 }
             } else if (targetFrameRate > 0) {
-                AsyncUtils.sync(targetFrameRate); // sleep as needed to meet the target frame-rate
+                Async.sync(targetFrameRate); // sleep as needed to meet the target frame-rate
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.graphics.Camera;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
@@ -19,14 +19,14 @@ public class ComponentCamera2D implements ComponentCamera {
     public int layersBitmask;
 
     public ComponentCamera2D(float viewportHeight, EntityLayer2D... layers) {
-        this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, GraphicsUtils.getWindowAspectRatio() * viewportHeight, viewportHeight, 1, 0, 100, 70);
-        this.layersBitmask = ECSUtils.getLayersBitmask(layers);
+        this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowAspectRatio() * viewportHeight, viewportHeight, 1, 0, 100, 70);
+        this.layersBitmask = ECS.getLayersBitmask(layers);
         update();
     }
 
     public ComponentCamera2D(float viewportWidth, float viewportHeight, EntityLayer2D... layers) {
         this.lens = new Camera(Camera.Mode.ORTHOGRAPHIC, viewportWidth, viewportHeight, 1, 0, 100, 70);
-        this.layersBitmask = ECSUtils.getLayersBitmask(layers);
+        this.layersBitmask = ECS.getLayersBitmask(layers);
         update();
     }
 

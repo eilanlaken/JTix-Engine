@@ -52,14 +52,14 @@ public class SceneRendering2D_ECS_1 extends ApplicationScreen {
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
 
-        Entity2D parent = ECSUtils.createDebugEntity();
+        Entity2D parent = ECS.createDebugEntity();
         for (int i = 0; i < 10; i++) {
-            Entity2D e = ECSUtils.createDebugEntity();
+            Entity2D e = ECS.createDebugEntity();
             parent.addChild(e,false);
             if (i == 4) child5 = e;
         }
 
-        Entity2D x = ECSUtils.createDebugEntity();
+        Entity2D x = ECS.createDebugEntity();
         child5.addChild(x, false);
 
 
@@ -69,7 +69,7 @@ public class SceneRendering2D_ECS_1 extends ApplicationScreen {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
 
         container.update();
 

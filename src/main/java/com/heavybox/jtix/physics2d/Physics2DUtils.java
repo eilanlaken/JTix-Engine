@@ -2,7 +2,7 @@ package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
-import com.heavybox.jtix.collections.CollectionsUtils;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
@@ -46,12 +46,12 @@ public final class Physics2DUtils {
                 int indexB = indices[i + 1] * 2;
                 int indexC = indices[i + 2] * 2;
                 // Extract the vertices of the current triangle
-                float ax = CollectionsUtils.getCyclic(vertices, indexA);
-                float ay = CollectionsUtils.getCyclic(vertices,indexA + 1);
-                float bx = CollectionsUtils.getCyclic(vertices, indexB);
-                float by = CollectionsUtils.getCyclic(vertices,indexB + 1);
-                float cx = CollectionsUtils.getCyclic(vertices, indexC);
-                float cy = CollectionsUtils.getCyclic(vertices,indexC + 1);
+                float ax = Collections.getCyclic(vertices, indexA);
+                float ay = Collections.getCyclic(vertices,indexA + 1);
+                float bx = Collections.getCyclic(vertices, indexB);
+                float by = Collections.getCyclic(vertices,indexB + 1);
+                float cx = Collections.getCyclic(vertices, indexC);
+                float cy = Collections.getCyclic(vertices,indexC + 1);
                 // calculate mass of the triangle
                 float tri_mass = MathUtils.getAreaTriangle(ax, ay, bx, by, cx, cy) * collider.density;
                 totalMass += tri_mass;

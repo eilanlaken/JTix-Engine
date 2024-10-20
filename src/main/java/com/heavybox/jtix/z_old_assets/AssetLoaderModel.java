@@ -501,7 +501,7 @@ import java.util.Map;
         public boolean        flipNormals = false;
 
 
-        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
+        public int            anisotropy = Graphics.getMaxAnisotropicFilterLevel();
         public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;

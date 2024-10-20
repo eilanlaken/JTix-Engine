@@ -1,7 +1,7 @@
 package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.GraphicsUtils;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 
@@ -48,7 +48,7 @@ public abstract class Scene implements MemoryResourceHolder {
     public abstract void start();
 
     public void update() {
-        float elapsedTime = GraphicsUtils.getDeltaTime();
+        float elapsedTime = Graphics.getDeltaTime();
         this.lag += elapsedTime;
 
         /* call the fixedUpdate() of every system */
@@ -119,7 +119,7 @@ public abstract class Scene implements MemoryResourceHolder {
             componentScripts.add(cLogics);
             componentRegions.add(cRegion);
 
-            entity.bitmask = ECSUtils.getComponentsBitmask(entity);
+            entity.bitmask = ECS.getComponentsBitmask(entity);
         }
         for (Entity entity : toAdd) {
             for (System system : systems) {
@@ -140,7 +140,7 @@ public abstract class Scene implements MemoryResourceHolder {
     public void destroyEntity(Entity2D entity) {
         entity.clearParent(false);
         this.toRemove.add(entity);
-        ECSUtils.getDescendants(entity, this.toRemove);
+        ECS.getDescendants(entity, this.toRemove);
     }
 
 //    public void createEntity(Entity3D entity) {

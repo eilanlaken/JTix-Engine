@@ -29,7 +29,7 @@ public abstract class Entity2D extends Entity {
             return;
         }
         if (newParent == this) throw new ECSException("Cannot parent an " + Entity2D.class.getSimpleName() + " to itself.");
-        if (ECSUtils.isDescendant(this, newParent)) throw new ECSException("Trying to create circular dependency between entities.");
+        if (ECS.isDescendant(this, newParent)) throw new ECSException("Trying to create circular dependency between entities.");
         if (this.parent == newParent) return;
 
         if (this.parent != null) clearParent(keepTransform); // clear old parent first
