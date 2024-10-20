@@ -169,8 +169,6 @@ public class Shader implements MemoryResource {
         Matcher comments = GLSL_COMMENT_PATTERN.matcher(vertexShaderSource);
         String noComments = comments.replaceAll("");
         Matcher layouts = GLSL_LAYOUT_IN_PATTERN.matcher(noComments);
-        String removeOriginalLayouts = layouts.replaceAll("in");
-
         return layouts.replaceAll("in");
     }
 
