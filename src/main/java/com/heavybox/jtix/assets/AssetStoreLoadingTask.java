@@ -12,7 +12,7 @@ public class AssetStoreLoadingTask extends AsyncTask {
 
     AssetStoreLoadingTask(AssetDescriptor descriptor) {
         this.descriptor = descriptor;
-        this.loader = AssetStore.getNewLoader(descriptor.type);
+        this.loader = Assets.getNewLoader(descriptor.type);
     }
 
     @Override
@@ -23,18 +23,19 @@ public class AssetStoreLoadingTask extends AsyncTask {
     @Override
     public void onComplete() {
         if (dependencies == null) return;
-        for (AssetDescriptor dependency : dependencies) AssetStore.load(dependency.type, dependency.path, dependency.options,true);
+        for (AssetDescriptor dependency : dependencies) Assets.load(dependency.type, dependency.path, dependency.options,true);
     }
 
     protected boolean ready() {
         if (!isComplete()) return false;
         if (dependencies == null || dependencies.size == 0) return true;
-        return AssetStore.areLoaded(dependencies);
+        return Assets.areLoaded(dependencies);
     }
 
     protected Asset create() {
         final MemoryResource data = loader.create();
-        final Array<Asset> assetDependencies = AssetStore.getDependencies(dependencies);
+        final Array<Asset> assetDependencies = Assets.getDependencies(dependencies);
         return new Asset(data, descriptor, assetDependencies);
     }
+
 }

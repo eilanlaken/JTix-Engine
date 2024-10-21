@@ -2,7 +2,16 @@ package com.heavybox.jtix.assets;
 
 import com.google.gson.Gson;
 import com.heavybox.jtix.application.ApplicationWindow;
+import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.Queue;
+import com.heavybox.jtix.graphics.Font;
+import com.heavybox.jtix.graphics.Model;
+import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.graphics.TexturePack;
+import com.heavybox.jtix.memory.MemoryResource;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.Property;
@@ -17,13 +26,20 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 public final class Assets {
 
     private static boolean           initialized = false;
-    private static ApplicationWindow window      = null;
+    @Deprecated private static ApplicationWindow window      = null;
+    private static Application application; // TODO
+
+    private static final HashMap<String, Asset>     store                = new HashMap<>();
+    private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
+    private static final Set<AssetStoreLoadingTask> storeCompletedAsyncTasks = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> storeAsyncTasks = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> storeCompletedCreateTasks = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> storeCreateTasks = new HashSet<>();
 
     private Assets() {}
 
@@ -31,6 +47,125 @@ public final class Assets {
         if (initialized) return;
         Assets.window = window;
         initialized = true;
+    }
+
+    /* store */
+    public static synchronized void update() {
+        for (AssetStoreLoadingTask task : storeAsyncTasks) {
+            if (task.ready())  {
+                storeCompletedAsyncTasks.add(task);
+                storeCreateTasks.add(task);
+            }
+        }
+
+        storeAsyncTasks.removeAll(storeCompletedAsyncTasks);
+        for (AssetDescriptor descriptor : storeLoadQueue) {
+            AssetStoreLoadingTask task = new AssetStoreLoadingTask(descriptor);
+            storeAsyncTasks.add(task);
+            AsyncTaskRunner.async(task);
+        }
+        storeLoadQueue.clear();
+
+        storeCreateTasks.removeAll(storeCompletedCreateTasks);
+        for (AssetStoreLoadingTask task : storeCreateTasks) {
+            Asset asset = task.create();
+            store.put(asset.descriptor.path, asset);
+            storeCompletedCreateTasks.add(task);
+        }
+    }
+
+    static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
+        Array<Asset> assets = new Array<>();
+        if (dependencies != null) {
+            for (AssetDescriptor dependency : dependencies) {
+                assets.add(store.get(dependency.path));
+            }
+        }
+        return assets;
+    }
+
+    static synchronized boolean areLoaded(final Array<AssetDescriptor> dependencies) {
+        if (dependencies == null || dependencies.size == 0) return true;
+        for (AssetDescriptor dependency : dependencies) {
+            Asset asset = store.get(dependency.path);
+            if (asset == null) return false;
+        }
+        return true;
+    }
+
+    public static synchronized boolean isLoaded(final String path) {
+        return store.get(path) != null;
+    }
+
+
+    public static void loadTexture(String path) {
+        load(Texture.class, path, null,false);
+    }
+
+    public static void loadTexture(String path,
+                                   int anisotropy,
+                                   Texture.Filter magFilter, Texture.Filter minFilter,
+                                   Texture.Wrap uWrap, Texture.Wrap vWrap) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("anisotropy", anisotropy);
+        options.put("magFilter", magFilter);
+        options.put("minFilter", minFilter);
+        options.put("uWrap", uWrap);
+        options.put("vWrap", vWrap);
+        load(Texture.class, path, options,false);
+    }
+
+    static void load(Class<? extends MemoryResource> type, String path, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+        final Asset asset = store.get(path);
+        if (asset != null) {
+            if (isDependency) asset.refCount++;
+            return;
+        }
+        if (!Assets.fileExists(path)) throw new AssetException("File not found: " + path);
+        AssetDescriptor descriptor = new AssetDescriptor(type, path, options);
+        storeLoadQueue.addFirst(descriptor);
+    }
+
+    public static synchronized void unload(final String path) {
+
+    }
+
+    public static synchronized <T extends MemoryResource> T get(final String path) {
+        var t = store.get(path);
+        if (t == null) throw new AssetException("File not loaded: " + path + System.lineSeparator() + "Make sure you spelled the file path correctly. You must " +
+                "provide the full relative path.");
+        return (T) t.data;
+    }
+
+    // TODO
+    public static synchronized void clear() {
+
+    }
+
+    public static long getTotalStorageBytes() {
+        long total = 0;
+        for (Map.Entry<String, Asset> assetEntry : store.entrySet()) {
+            total += assetEntry.getValue().descriptor.size;
+        }
+        return total;
+    }
+
+    public static boolean isLoadingInProgress() {
+        return !storeLoadQueue.isEmpty() || !storeAsyncTasks.isEmpty() || !storeCreateTasks.isEmpty();
+    }
+
+    static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
+        if (type == Texture.class)     return new AssetLoaderTexture();
+        if (type == TexturePack.class) return new AssetLoaderTexturePack();
+        if (type == Font.class)        return new AssetLoaderFont();
+        if (type == Model.class)       return new AssetLoaderModel();
+
+        throw new AssetException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
+                "Type must be one of the following: " +
+                Texture.class.getSimpleName() + ", " +
+                TexturePack.class.getSimpleName() + ", " +
+                Font.class.getSimpleName() + ", " +
+                Model.class.getSimpleName() + "."); // TODO: add audio.
     }
 
     public static Yaml yaml() {

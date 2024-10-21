@@ -38,7 +38,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     public Font create() {
         String path = dependencies.first().path;
         Map<String, Object> options = (Map<String, Object>) data.get("options");
-        Texture atlas = AssetStore.get(path);
+        Texture atlas = Assets.get(path);
         String charset = (String) options.get("charset");
         int size = (int) options.get("size");
         boolean antialiasing = (boolean) options.get("antialiasing");

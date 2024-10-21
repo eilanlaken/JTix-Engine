@@ -145,7 +145,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                     materialAttributes.put(uniform, new Color(color.r, color.g, color.b, color.a));
                 } else if (dataValue instanceof TextureParameters) {
                     TextureParameters params = (TextureParameters) dataValue;
-                    Texture texture = AssetStore.get(params.path);
+                    Texture texture = Assets.get(params.path);
                     materialAttributes.put(uniform, texture);
                 } else if (dataValue instanceof Float) {
                     materialAttributes.put(uniform, dataValue);
