@@ -15,33 +15,26 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
 // TODO: merge application with application window.
-// TODO: as part of a refactor branch, create a singleton application.
-// TODO: the Application static variable will be injected to the utils classes.
 public class Application {
 
-    private static final Application instance = new Application();
-
-    private boolean initialized = false;
-    public ApplicationWindow window; // TODO: "flatify" with application
-    private final Array<Runnable> application_tasks = new Array<>();
-    private boolean running = false;
-    private GLFWErrorCallback errorCallback;
+    private static boolean initialized = false;
+    public static ApplicationWindow window; // TODO: "flatify" with application
+    private static final Array<Runnable> application_tasks = new Array<>();
+    private static boolean running = false;
+    private static GLFWErrorCallback errorCallback;
 
     static {
-        instance.errorCallback = GLFWErrorCallback.createPrint(System.err);
-        GLFW.glfwSetErrorCallback(instance.errorCallback);
+        errorCallback = GLFWErrorCallback.createPrint(System.err);
+        GLFW.glfwSetErrorCallback(errorCallback);
         GLFWErrorCallback.createPrint(System.err).set();
         if (!GLFW.glfwInit()) throw new RuntimeException("Unable to initialize GLFW.");
-        instance.window = new ApplicationWindow();
+        window = new ApplicationWindow();
         GL.createCapabilities();
         Async.init();
-        ApplicationUtils.init(instance);
         Graphics.init(instance);
         AssetUtils.init(instance); // TODO: replace
         Input.init(instance);
-//        Mouse.init(window);
-//        Keyboard.init(window);
-        instance.initialized = true;
+        initialized = true;
     }
 
     // TODO: implement
@@ -61,7 +54,7 @@ public class Application {
 //        window.setScreen(screen);
 //    }
 
-    public void loop() {
+    public static void loop() {
         while (running && !window.shouldClose()) {
             GLFW.glfwMakeContextCurrent(window.getHandle());
             boolean windowRendered = window.refresh();
@@ -94,13 +87,13 @@ public class Application {
         }
     }
 
-    private void clean() {
+    private static void clean() {
         window.delete();
         GLFW.glfwTerminate();
         errorCallback.free();
     }
 
-    public synchronized void addTask(Runnable task) {
+    public static synchronized void addTask(Runnable task) {
         application_tasks.add(task);
     }
 
