@@ -2,11 +2,11 @@ package com.heavybox.jtix.application_2;
 
 public interface Scene {
 
-    default void prepare() {}
+    void beforeStart();
     void start();
     void frameUpdate();
-    void hide();
+    void finish();
 
-    void resize(int width, int height); // TODO: see maybe there's a better way.
+    void resize(int width, int height); // TODO: see maybe there's a better way. Handle using window callbacks and graphics.
 
 }

@@ -4,9 +4,9 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.input_2.Input;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -15,9 +15,17 @@ import org.lwjgl.opengl.GL;
 public class Application {
 
     private static boolean initialized = false;
-    public static ApplicationWindow window; // TODO: "flatify" with application
     private static final Array<Runnable> application_tasks = new Array<>();
     private static boolean running = false;
+
+    @Deprecated public static ApplicationWindow window; // TODO: "flatify" with application
+    public  long                  windowHandle;
+    private boolean windowFocused = false;
+    private int     windowLastDragAndDropFileCount = 0;
+    private boolean windowRequestRendering = false;
+
+    private final Array<Runnable> windowTasks                  = new Array<>();
+    private final Array<String>   windowFilesDraggedAndDropped = new Array<>();
 
     public int     windowPosX                   = -1;
     public int     windowPosY                   = -1;
@@ -27,23 +35,25 @@ public class Application {
     public int     windowMinHeight              = -1;
     public int     windowMaxWidth               = -1;
     public int     windowMaxHeight              = -1;
-    public boolean autoMinimized          = true;
-    public boolean minimized              = false;
-    public boolean maximized              = false;
-    public String  iconPath               = null;
-    public boolean visible                = true;
-    public boolean fullScreen             = false;
-    public String  title                  = "JTix Game";
-    public boolean vSyncEnabled           = false;
+    public boolean windowAutoMinimized          = true;
+    public boolean windowMinimized              = false;
+    public boolean windowMaximized              = false;
+    public String  windowIconPath               = null;
+    public boolean windowVisible                = true;
+    public boolean windowFullScreen             = false;
+    public String  windowTitle                  = "HeavyBox Game";
+    public boolean windowVSyncEnabled           = false;
 
     private static GLFWErrorCallback errorCallback;
 
-    private static void init() {
-        if (initialized) return;
+    private static Scene currentScene = null;
+
+    @Deprecated public static void init() {
+        if (initialized) throw new ApplicationException("Application window already created and initialized. Cannot call init() twice.");
         errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
         GLFWErrorCallback.createPrint(System.err).set();
-        if (!GLFW.glfwInit()) throw new RuntimeException("Unable to initialize GLFW.");
+        if (!GLFW.glfwInit()) throw new ApplicationException("Unable to initialize GLFW.");
         window = new ApplicationWindow();
         GL.createCapabilities();
         Async.init();
@@ -53,9 +63,39 @@ public class Application {
         initialized = true;
     }
 
-    // TODO: implement
-    public static void playScene(Scene scene) {
+    public static void init(boolean resizeableWindow, boolean floatingWindow, boolean transparentWindow) {
 
+        if (initialized) throw new ApplicationException("Application window already created and initialized. Cannot call init() twice.");
+        errorCallback = GLFWErrorCallback.createPrint(System.err);
+        GLFW.glfwSetErrorCallback(errorCallback);
+        GLFWErrorCallback.createPrint(System.err).set();
+        if (!GLFW.glfwInit()) throw new ApplicationException("Unable to initialize GLFW.");
+        window = new ApplicationWindow();
+        GL.createCapabilities();
+        Async.init();
+        Graphics.init();
+        Input.init();
+        initialized = true;
+    }
+
+    public static void launch(@NotNull Scene scene) {
+        if (running) throw new ApplicationException("Application already running. Function run() already called - Cannot call run() twice.");
+        currentScene = scene;
+        currentScene.beforeStart();
+        currentScene.start();
+        running = true;
+        loop();
+        clean();
+    }
+
+    public void playScene(@NotNull Scene scene) {
+        if (!running) throw new ApplicationException("Application not running. Function run() must be called with the starting scene, after init.");
+        if (currentScene != null) {
+            currentScene.finish();
+        }
+        currentScene = scene;
+        currentScene.beforeStart();
+        currentScene.start();
     }
 
     @Deprecated public static void launch(ApplicationScreen screen) {
