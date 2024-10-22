@@ -1,6 +1,5 @@
 package com.heavybox.jtix.application_2;
 
-import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
@@ -48,23 +47,12 @@ public class Application {
 
     private static Scene currentScene = null;
 
-    @Deprecated public static void init() {
-        if (initialized) throw new ApplicationException("Application window already created and initialized. Cannot call init() twice.");
-        errorCallback = GLFWErrorCallback.createPrint(System.err);
-        GLFW.glfwSetErrorCallback(errorCallback);
-        GLFWErrorCallback.createPrint(System.err).set();
-        if (!GLFW.glfwInit()) throw new ApplicationException("Unable to initialize GLFW.");
-        window = new ApplicationWindow();
-        GL.createCapabilities();
-        Async.init();
-        Graphics.init();
-        Assets.init(); // TODO: replace
-        Input.init();
-        initialized = true;
+    public static void init() {
+        final ApplicationConfiguration config = new ApplicationConfiguration(); // defaults.
+        init(config);
     }
 
-    public static void init(boolean resizeableWindow, boolean floatingWindow, boolean transparentWindow) {
-
+    public static void init(final ApplicationConfiguration config) {
         if (initialized) throw new ApplicationException("Application window already created and initialized. Cannot call init() twice.");
         errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
@@ -80,33 +68,14 @@ public class Application {
 
     public static void launch(@NotNull Scene scene) {
         if (running) throw new ApplicationException("Application already running. Function run() already called - Cannot call run() twice.");
+
+        /* start the application with active scene */
         currentScene = scene;
-        currentScene.beforeStart();
+        currentScene.setup();
         currentScene.start();
+
+        /* main thread game loop */
         running = true;
-        loop();
-        clean();
-    }
-
-    public void playScene(@NotNull Scene scene) {
-        if (!running) throw new ApplicationException("Application not running. Function run() must be called with the starting scene, after init.");
-        if (currentScene != null) {
-            currentScene.finish();
-        }
-        currentScene = scene;
-        currentScene.beforeStart();
-        currentScene.start();
-    }
-
-    @Deprecated public static void launch(ApplicationScreen screen) {
-//        if (!initialized) throw new IllegalStateException("Must call createSingleWindowApplication before launch().");
-//        window.setScreen(screen);
-//        running = true;
-//        loop();
-//        clean();
-    }
-
-    public static void loop() {
         while (running && !window.shouldClose()) {
             GLFW.glfwMakeContextCurrent(window.getHandle());
             boolean windowRendered = window.refresh();
@@ -125,7 +94,89 @@ public class Application {
                 application_tasks.clear();
             }
 
-            if (requestRendering && !Graphics.isContinuousRendering()) window.requestRendering();
+            if (requestRendering && !Graphics.isContinuousRendering()) {
+                window.requestRendering();
+            }
+            if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
+                try {
+                    Thread.sleep(1000 / Graphics.getIdleFps());
+                } catch (InterruptedException ignored) {
+                    // ignore
+                }
+            } else if (targetFrameRate > 0) {
+                Async.sync(targetFrameRate); // sleep as needed to meet the target frame-rate
+            }
+        }
+
+        /* clean memory resources */ // TODO: clear Assets.
+        window.delete();
+        GLFW.glfwTerminate();
+        errorCallback.free();
+    }
+
+    public void playScene(@NotNull Scene scene) {
+        if (!running) throw new ApplicationException("Application not running. Function run() must be called with the starting scene, after init.");
+        if (currentScene != null) {
+            currentScene.finish();
+        }
+        currentScene = scene;
+        currentScene.setup();
+        currentScene.start();
+    }
+
+    @Deprecated private static void frameUpdate() {
+        GLFW.glfwMakeContextCurrent(window.getHandle());
+        boolean windowRendered = window.refresh();
+        int targetFrameRate = Graphics.getTargetFps();
+
+        Assets.update();
+        Input.update();
+        GLFW.glfwPollEvents();
+
+        boolean requestRendering;
+        for (Runnable task : application_tasks) {
+            task.run();
+        }
+        synchronized (application_tasks) {
+            requestRendering = application_tasks.size > 0;
+            application_tasks.clear();
+        }
+
+        if (requestRendering && !Graphics.isContinuousRendering()) {
+            window.requestRendering();
+        }
+        if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
+            try {
+                Thread.sleep(1000 / Graphics.getIdleFps());
+            } catch (InterruptedException ignored) {
+                // ignore
+            }
+        } else if (targetFrameRate > 0) {
+            Async.sync(targetFrameRate); // sleep as needed to meet the target frame-rate
+        }
+    }
+    @Deprecated public static void loop() {
+        while (running && !window.shouldClose()) {
+            GLFW.glfwMakeContextCurrent(window.getHandle());
+            boolean windowRendered = window.refresh();
+            int targetFrameRate = Graphics.getTargetFps();
+
+            Assets.update();
+            Input.update();
+            GLFW.glfwPollEvents();
+
+            boolean requestRendering;
+            for (Runnable task : application_tasks) {
+                task.run();
+            }
+            synchronized (application_tasks) {
+                requestRendering = application_tasks.size > 0;
+                application_tasks.clear();
+            }
+
+            if (requestRendering && !Graphics.isContinuousRendering()) {
+                window.requestRendering();
+            }
             if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
                 try {
                     Thread.sleep(1000 / Graphics.getIdleFps());
@@ -137,14 +188,12 @@ public class Application {
             }
         }
     }
-
-    private static void clean() {
+    @Deprecated private static void clean() {
         window.delete();
         GLFW.glfwTerminate();
         errorCallback.free();
     }
-
-    public static synchronized void addTask(Runnable task) {
+    @Deprecated public static synchronized void addTask(Runnable task) {
         application_tasks.add(task);
     }
 

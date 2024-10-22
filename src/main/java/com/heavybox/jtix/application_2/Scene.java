@@ -2,11 +2,12 @@ package com.heavybox.jtix.application_2;
 
 public interface Scene {
 
-    void beforeStart();
+    /* Scene life-cycle: setup() -> start() -> update()...[repeat] -> finish() */
+    void setup();
     void start();
-    void frameUpdate();
+    void update();
     void finish();
 
-    void resize(int width, int height); // TODO: see maybe there's a better way. Handle using window callbacks and graphics.
+    @Deprecated void resize(int width, int height); // TODO: see maybe there's a better way. Handle using window callbacks and graphics.
 
 }

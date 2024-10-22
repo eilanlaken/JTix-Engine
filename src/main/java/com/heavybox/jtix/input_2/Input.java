@@ -1,10 +1,10 @@
 package com.heavybox.jtix.input_2;
 
-import com.heavybox.jtix.application_2.Application;
-
-public class Input {
+public final class Input {
 
     private static boolean initialized = false;
+
+    private Input() {}
 
     public static void init() {
         if (initialized) return;

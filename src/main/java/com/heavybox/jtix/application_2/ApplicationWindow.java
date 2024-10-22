@@ -25,7 +25,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
     // window attributes
     public final long                  handle;
-    public final ApplicationAttributes attributes;
+    public final ApplicationConfiguration attributes;
 
     // state management
     private boolean focused = false;
@@ -98,7 +98,7 @@ import static org.lwjgl.glfw.GLFW.*;
     };
 
     public ApplicationWindow() {
-        this.attributes = new ApplicationAttributes(); // remove.
+        this.attributes = new ApplicationConfiguration(); // remove.
 
         GLFW.glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -109,7 +109,7 @@ import static org.lwjgl.glfw.GLFW.*;
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, attributes.resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, attributes.maximized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, attributes.autoMinimized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, attributes.transparentFrameBuffer ? GLFW.GLFW_TRUE : GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, attributes.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
 
         if (attributes.title == null) attributes.title = "";
         if (attributes.fullScreen) {
@@ -163,7 +163,7 @@ import static org.lwjgl.glfw.GLFW.*;
         GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
         scene.resize(width, height);
         Graphics.update();
-        scene.frameUpdate();
+        scene.update();
         GLFW.glfwSwapBuffers(handle);
     }
 
@@ -180,7 +180,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
         if (shouldRefresh) {
             Graphics.update();
-            scene.frameUpdate();
+            scene.update();
             GLFW.glfwSwapBuffers(handle);
         }
 
@@ -319,7 +319,6 @@ import static org.lwjgl.glfw.GLFW.*;
         return handle;
     }
 
-
     @Override
     public void delete() {
         GLFW.glfwSetWindowFocusCallback(handle, null);
@@ -333,15 +332,6 @@ import static org.lwjgl.glfw.GLFW.*;
         defaultMaximizedCallback.free();
         defaultCloseCallback.free();
         filesDroppedCallback.free();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ApplicationWindow other = (ApplicationWindow)obj;
-        return handle == other.handle;
     }
 
 }

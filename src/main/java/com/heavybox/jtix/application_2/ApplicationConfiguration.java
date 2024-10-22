@@ -1,6 +1,6 @@
 package com.heavybox.jtix.application_2;
 
-@Deprecated public class ApplicationAttributes {
+public final class ApplicationConfiguration {
 
     public int     posX                   = -1;
     public int     posY                   = -1;
@@ -23,6 +23,6 @@ package com.heavybox.jtix.application_2;
     public boolean resizable              = true;
     public boolean decorated              = true;
     public boolean floating               = false;
-    public boolean transparentFrameBuffer = false;
+    public boolean transparentWindow = false;
 
 }
