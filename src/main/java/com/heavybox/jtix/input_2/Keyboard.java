@@ -8,14 +8,14 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class Keyboard {
 
-    private final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
-    private final ArrayInt keysPressed = new ArrayInt(12);
-    private final ArrayInt keysHeld = new ArrayInt(12);
-    private final ArrayInt keysJustPressed = new ArrayInt(12);
+    private static final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
+    private static final ArrayInt keysPressed = new ArrayInt(12);
+    private static final ArrayInt keysHeld = new ArrayInt(12);
+    private static final ArrayInt keysJustPressed = new ArrayInt(12);
 
-    private Keyboard(Application application) {
+    static void init() {
 
-        GLFW.glfwSetKeyCallback(application.window.getHandle(), new GLFWKeyCallback() {
+        GLFW.glfwSetKeyCallback(Application.window.getHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
                 keysCurrentState[key] = action;
@@ -42,27 +42,27 @@ public class Keyboard {
         });
     }
 
-    public boolean isKeyPressed(final Key key) {
+    public static boolean isKeyPressed(final Key key) {
         if (key == Key.ANY_KEY) return keysPressed.size > 0;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_PRESS || keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public boolean isKeyReleased(final Key key) {
+    public static boolean isKeyReleased(final Key key) {
         if (key.glfwCode == Key.ANY_KEY.glfwCode) return true;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public boolean isKeyJustPressed(final Key key) {
+    public static boolean isKeyJustPressed(final Key key) {
         if (key == Key.ANY_KEY) return keysJustPressed.size > 0;
         else return keysJustPressed.contains(key.glfwCode);
     }
 
-    public boolean isKeyHeld(final Key key) {
+    public static boolean isKeyHeld(final Key key) {
         if (key == Key.ANY_KEY) return keysHeld.size > 0;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public void update() {
+    public static void update() {
         /* reset internal state */
         keysJustPressed.clear();
     }

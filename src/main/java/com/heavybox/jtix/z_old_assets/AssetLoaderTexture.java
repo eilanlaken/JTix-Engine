@@ -49,7 +49,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     public static final class Options extends AssetLoader.Options<Texture> {
 
-        public int            anisotropy = Graphics.getMaxAnisotropicFilterLevel();
+        public int            anisotropy = Graphics.getMaxAnisotropy();
         public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;

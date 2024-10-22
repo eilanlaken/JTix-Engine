@@ -11,16 +11,18 @@ package com.heavybox.jtix.application_2;
     public int     maxWidth               = -1;
     public int     maxHeight              = -1;
     public boolean autoMinimized          = true;
-    public boolean resizable              = true;
-    public boolean decorated              = true;
     public boolean minimized              = false;
     public boolean maximized              = false;
     public String  iconPath               = null;
     public boolean visible                = true;
     public boolean fullScreen             = false;
     public String  title                  = "JTix Game";
-    public boolean initialVisible         = true;
     public boolean vSyncEnabled           = false;
+
+    public boolean initialVisible         = true;
+    public boolean resizable              = true;
+    public boolean decorated              = true;
+    public boolean floating               = false;
     public boolean transparentFrameBuffer = false;
 
 }

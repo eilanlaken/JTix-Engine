@@ -42,7 +42,7 @@ public class Texture implements MemoryResource {
         this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropy = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropicFilterLevel()));
+        this.anisotropy = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
@@ -77,7 +77,7 @@ public class Texture implements MemoryResource {
         this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropicFilterLevel());
+        this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
 
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
@@ -87,6 +87,8 @@ public class Texture implements MemoryResource {
         if (Graphics.isAnisotropicFilteringSupported()) {
             GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
         }
+
+        STBImage.stbi_image_free(buffer); // TODO: test
     }
 
     protected final void setSlot(final int slot) { this.slot = slot; }

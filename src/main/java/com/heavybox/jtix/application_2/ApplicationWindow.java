@@ -4,7 +4,6 @@ import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationException;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
@@ -31,17 +30,12 @@ import static org.lwjgl.glfw.GLFW.*;
     // state management
     private boolean focused = false;
     private int     lastDragAndDropFileCount = 0;
-    private int     backBufferWidth;
-    private int     backBufferHeight;
     private boolean requestRendering = false;
 
     private final Array<Runnable> tasks                  = new Array<>();
     private final Array<String>   filesDraggedAndDropped = new Array<>();
 
-    // TODO: remove.
-    private ApplicationScreen screen;
-    // TODO: use this.
-    private Scene currentScene;
+    private Scene scene;
 
     private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;
@@ -155,25 +149,22 @@ import static org.lwjgl.glfw.GLFW.*;
     }
 
     private void renderWindow(final int width, final int height) {
-        updateFramebufferInfo();
-        GLFW.glfwMakeContextCurrent(handle);
-        GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
-        screen.resize(width, height);
-        Graphics.update();
-        screen.refresh();
-        GLFW.glfwSwapBuffers(handle);
-    }
-
-    private void updateFramebufferInfo() {
+        // update frame buffer info
+        int backBufferWidth;
+        int backBufferHeight;
         try (MemoryStack stack = MemoryStack.stackPush()) {
-            // Allocate two IntBuffers for framebuffer size
             IntBuffer fbWidth = stack.mallocInt(1);
             IntBuffer fbHeight = stack.mallocInt(1);
-            // Get framebuffer size
             GLFW.glfwGetFramebufferSize(handle, fbWidth, fbHeight);
-            this.backBufferWidth = fbWidth.get(0);
-            this.backBufferHeight = fbHeight.get(0);
+            backBufferWidth = fbWidth.get(0);
+            backBufferHeight = fbHeight.get(0);
         }
+        GLFW.glfwMakeContextCurrent(handle);
+        GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
+        scene.resize(width, height);
+        Graphics.update();
+        scene.frameUpdate();
+        GLFW.glfwSwapBuffers(handle);
     }
 
     public boolean refresh() {
@@ -189,7 +180,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
         if (shouldRefresh) {
             Graphics.update();
-            screen.refresh();
+            scene.frameUpdate();
             GLFW.glfwSwapBuffers(handle);
         }
 

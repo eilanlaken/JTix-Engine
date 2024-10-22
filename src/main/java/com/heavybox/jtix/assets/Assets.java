@@ -30,9 +30,8 @@ import java.util.*;
 
 public final class Assets {
 
-    private static boolean           initialized = false;
-    @Deprecated private static ApplicationWindow window      = null;
-    private static Application application; // TODO
+    @Deprecated private static boolean           initialized = false;
+    //@Deprecated private static ApplicationWindow window      = null;
 
     private static final HashMap<String, Asset>     store                = new HashMap<>();
     private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
@@ -43,10 +42,14 @@ public final class Assets {
 
     private Assets() {}
 
-    public static void init(final ApplicationWindow window) {
+    @Deprecated public static void init(final ApplicationWindow window) {
         if (initialized) return;
-        Assets.window = window;
+        //Assets.window = window;
         initialized = true;
+    }
+
+    public static void init() {
+
     }
 
     /* store */
@@ -210,8 +213,8 @@ public final class Assets {
     }
 
     public static Array<String> getLastDroppedFilePaths() {
-        int count = window.getLastDragAndDropFileCount();
-        Array<String> allFileDraggedAndDroppedPaths = window.getFilesDraggedAndDropped();
+        int count = Application.window.getLastDragAndDropFileCount(); // TODO: make part of app API
+        Array<String> allFileDraggedAndDroppedPaths = Application.window.getFilesDraggedAndDropped();
         Array<String> lastDroppedFilePaths = new Array<>(5);
         for (int i = 0; i < count; i++) {
             lastDroppedFilePaths.add(allFileDraggedAndDroppedPaths.get(allFileDraggedAndDroppedPaths.size - 1 - i));
@@ -220,7 +223,7 @@ public final class Assets {
     }
 
     public static Array<String> getDroppedFilesHistory() {
-        Array<String> allFileDraggedAndDroppedPaths = window.getFilesDraggedAndDropped();
+        Array<String> allFileDraggedAndDroppedPaths = Application.window.getFilesDraggedAndDropped();
         Array<String> droppedFilesHistory = new Array<>(20);
         for (int i = 0; i < allFileDraggedAndDroppedPaths.size; i++) {
             droppedFilesHistory.add(allFileDraggedAndDroppedPaths.get(i));

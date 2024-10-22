@@ -1,7 +1,6 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.application.ApplicationWindow;
-import com.heavybox.jtix.application_2.Application;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -9,30 +8,30 @@ import org.lwjgl.opengl.GL20;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Objects;
 
 import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
 
 public final class Graphics {
 
-    private static Application application = null;
     @Deprecated private static ApplicationWindow window      = null;
-    private static boolean           initialized = false;
+    @Deprecated private static boolean           initialized = false;
 
-    private static boolean isContinuous = true;
-    private static long    lastFrameTime = -1;
+    private static boolean isContinuous      = true;
+    private static long    lastFrameTime     = -1;
     private static float   deltaTime;
-    private static boolean resetDeltaTime = false;
-    private static long    frameId = 0;
+    private static boolean resetDeltaTime    = false;
+    private static long    frameId           = 0;
     private static long    frameCounterStart = 0;
-    private static int     frames = 0;
+    private static int     frames            = 0;
     private static int     fps;
-    private static int     targetFps = 120;
-    private static int     prevTargetFps = targetFps;
-    private static int     idleFps = 10;
-    private static int     maxTextureSize;
-    private static int     maxAnisotropicFilterLevel = 0;
-    private static float   contentScaleX;
-    private static float   contentScaleY;
+    private static int     targetFps         = 120;
+    private static int     prevTargetFps     = targetFps;
+    private static int     idleFps           = 10;
+    private static int     maxTextureSize    = -1;
+    private static int     maxAnisotropy     = 0;
+    private static float   contentScaleX     = Float.NaN;
+    private static float   contentScaleY     = Float.NaN;
 
     private Graphics() {}
 
@@ -40,9 +39,8 @@ public final class Graphics {
         if (initialized) return;
 
         Graphics.window = window;
-        maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
+
         long monitor = GLFW.glfwGetPrimaryMonitor();
-        /* set content scale */
         FloatBuffer px = BufferUtils.createFloatBuffer(1);
         FloatBuffer py = BufferUtils.createFloatBuffer(1);
         GLFW.glfwGetMonitorContentScale(monitor, px, py);
@@ -52,14 +50,10 @@ public final class Graphics {
         initialized = true;
     }
 
-    public static void init(final Application application) {
+    public static void init() {
         if (initialized) return;
 
-        Graphics.application = application;
-        //GraphicsUtils.window = application.window;
-        maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
         long monitor = GLFW.glfwGetPrimaryMonitor();
-        /* set content scale */
         FloatBuffer px = BufferUtils.createFloatBuffer(1);
         FloatBuffer py = BufferUtils.createFloatBuffer(1);
         GLFW.glfwGetMonitorContentScale(monitor, px, py);
@@ -96,6 +90,8 @@ public final class Graphics {
         return contentScaleY;
     }
 
+    public static long getFrameId() { return frameId; }
+
     public static int getFps() {
         return fps;
     }
@@ -122,6 +118,7 @@ public final class Graphics {
     }
 
     public static int getMaxTextureSize() {
+        if (maxTextureSize == -1) maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE);
         return maxTextureSize;
     }
 
@@ -138,11 +135,11 @@ public final class Graphics {
     }
 
     public static int getMonitorWidth() {
-        return GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).width();
+        return Objects.requireNonNull(GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor())).width();
     }
 
     public static int getMonitorHeight() {
-        return GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).height();
+        return Objects.requireNonNull(GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor())).height();
     }
 
     public static int getWindowHeight() {
@@ -208,20 +205,20 @@ public final class Graphics {
         return GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic");
     }
 
-    public static int getMaxAnisotropicFilterLevel() {
-        if (maxAnisotropicFilterLevel > 0) return maxAnisotropicFilterLevel;
+    public static int getMaxAnisotropy() {
+        if (maxAnisotropy > 0) return maxAnisotropy;
 
         if (GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic")) {
             FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
             buffer.position(0);
             buffer.limit(buffer.capacity());
             GL20.glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, buffer);
-            maxAnisotropicFilterLevel = (int) buffer.get(0);
+            maxAnisotropy = (int) buffer.get(0);
         } else {
-            maxAnisotropicFilterLevel = 1;
+            maxAnisotropy = 1;
         }
 
-        return maxAnisotropicFilterLevel;
+        return maxAnisotropy;
     }
 
 }

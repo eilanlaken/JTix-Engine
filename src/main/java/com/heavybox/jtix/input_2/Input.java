@@ -4,23 +4,18 @@ import com.heavybox.jtix.application_2.Application;
 
 public class Input {
 
-    private static Application application = null;
-    private static boolean     initialized = false;
+    private static boolean initialized = false;
 
-    public static final Mouse mouse = new Mouse();
-    public static final Keyboard keyboard = new Keyboard();
-
-    public static void init(final Application application) {
+    public static void init() {
         if (initialized) return;
-        Input.application = application;
-        Mouse.init(application);
-        Keyboard.init(application);
+        Mouse.init();
+        Keyboard.init();
         initialized = true;
     }
 
-    // TODO
     public static void update() {
-
+        Mouse.update();
+        Keyboard.update();
     }
 
 }

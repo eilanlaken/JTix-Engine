@@ -1,15 +1,12 @@
 package com.heavybox.jtix.application_2;
 
 import com.heavybox.jtix.application.ApplicationScreen;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.ecs.Scene;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.input.Input;
-import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.z_old_assets.AssetStore;
-import com.heavybox.jtix.z_old_assets.AssetUtils;
+import com.heavybox.jtix.input_2.Input;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -21,9 +18,28 @@ public class Application {
     public static ApplicationWindow window; // TODO: "flatify" with application
     private static final Array<Runnable> application_tasks = new Array<>();
     private static boolean running = false;
+
+    public int     windowPosX                   = -1;
+    public int     windowPosY                   = -1;
+    public int     windowWidth                  = 640*2;
+    public int     windowHeight                 = 480*2;
+    public int     windowMinWidth               = -1;
+    public int     windowMinHeight              = -1;
+    public int     windowMaxWidth               = -1;
+    public int     windowMaxHeight              = -1;
+    public boolean autoMinimized          = true;
+    public boolean minimized              = false;
+    public boolean maximized              = false;
+    public String  iconPath               = null;
+    public boolean visible                = true;
+    public boolean fullScreen             = false;
+    public String  title                  = "JTix Game";
+    public boolean vSyncEnabled           = false;
+
     private static GLFWErrorCallback errorCallback;
 
-    static {
+    private static void init() {
+        if (initialized) return;
         errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
         GLFWErrorCallback.createPrint(System.err).set();
@@ -31,9 +47,9 @@ public class Application {
         window = new ApplicationWindow();
         GL.createCapabilities();
         Async.init();
-        Graphics.init(instance);
-        AssetUtils.init(instance); // TODO: replace
-        Input.init(instance);
+        Graphics.init();
+        Assets.init(); // TODO: replace
+        Input.init();
         initialized = true;
     }
 
@@ -50,19 +66,14 @@ public class Application {
 //        clean();
     }
 
-//    @Deprecated public static void switchScreen(ApplicationScreen screen) {
-//        window.setScreen(screen);
-//    }
-
     public static void loop() {
         while (running && !window.shouldClose()) {
             GLFW.glfwMakeContextCurrent(window.getHandle());
             boolean windowRendered = window.refresh();
             int targetFrameRate = Graphics.getTargetFps();
 
-            AssetStore.update(); // TODO: replace with new one.
-            Mouse.update();
-            Keyboard.update();
+            Assets.update();
+            Input.update();
             GLFW.glfwPollEvents();
 
             boolean requestRendering;
@@ -98,39 +109,39 @@ public class Application {
     }
 
     public static void exit() {
-        instance.running = false;
+        running = false;
     }
 
     public static void windowClose() {
-        instance.window.close();
+        window.close();
     }
 
     public static void windowMinimize() {
-        instance.window.minimize();
+        window.minimize();
     }
 
     public static void windowMaximize() {
-        instance.window.maximize();
+        window.maximize();
     }
 
     public static void windowFocus() {
-        instance.window.focus();
+        window.focus();
     }
 
     public static void windowRestore() {
-        instance.window.restore();
+        window.restore();
     }
 
     public static void windowFlash() {
-        instance.window.flash();
+        window.flash();
     }
 
     public static void windowSetIcon(final String path) {
-        instance.window.setIcon(path);
+        window.setIcon(path);
     }
 
     public static void windowSetTitle(final String title) {
-        instance.window.setTitle(title);
+        window.setTitle(title);
     }
 
 }
