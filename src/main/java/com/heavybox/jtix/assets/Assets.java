@@ -213,8 +213,8 @@ public final class Assets {
     }
 
     public static Array<String> getLastDroppedFilePaths() {
-        int count = Application.window.getLastDragAndDropFileCount(); // TODO: make part of app API
-        Array<String> allFileDraggedAndDroppedPaths = Application.window.getFilesDraggedAndDropped();
+        int count = Application.window.getWindowLastDragAndDropFileCount(); // TODO: make part of app API
+        Array<String> allFileDraggedAndDroppedPaths = Application.window.getWindowFilesDraggedAndDropped();
         Array<String> lastDroppedFilePaths = new Array<>(5);
         for (int i = 0; i < count; i++) {
             lastDroppedFilePaths.add(allFileDraggedAndDroppedPaths.get(allFileDraggedAndDroppedPaths.size - 1 - i));
@@ -223,7 +223,7 @@ public final class Assets {
     }
 
     public static Array<String> getDroppedFilesHistory() {
-        Array<String> allFileDraggedAndDroppedPaths = Application.window.getFilesDraggedAndDropped();
+        Array<String> allFileDraggedAndDroppedPaths = Application.window.getWindowFilesDraggedAndDropped();
         Array<String> droppedFilesHistory = new Array<>(20);
         for (int i = 0; i < allFileDraggedAndDroppedPaths.size; i++) {
             droppedFilesHistory.add(allFileDraggedAndDroppedPaths.get(i));

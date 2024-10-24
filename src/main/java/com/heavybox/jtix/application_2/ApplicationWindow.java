@@ -24,20 +24,20 @@ import static org.lwjgl.glfw.GLFW.*;
 @Deprecated public class ApplicationWindow implements MemoryResource {
 
     // window attributes
-    public final long                  handle;
+    public final long windowHandle;
     public final ApplicationConfiguration attributes;
 
     // state management
-    private boolean focused = false;
-    private int     lastDragAndDropFileCount = 0;
-    private boolean requestRendering = false;
+    private boolean windowFocused = false;
+    private int windowLastDragAndDropFileCount = 0;
+    private boolean windowRequestRendering = false;
 
-    private final Array<Runnable> tasks                  = new Array<>();
-    private final Array<String>   filesDraggedAndDropped = new Array<>();
+    private final Array<Runnable> windowTasks = new Array<>();
+    private final Array<String> windowFilesDraggedAndDropped = new Array<>();
 
     private Scene scene;
 
-    private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
+    private final GLFWFramebufferSizeCallback windowResizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;
 
         @Override
@@ -57,41 +57,41 @@ import static org.lwjgl.glfw.GLFW.*;
         }
     };
 
-    private final GLFWWindowFocusCallback defaultFocusChangeCallback = new GLFWWindowFocusCallback() {
+    private final GLFWWindowFocusCallback windowFocusChangeCallback = new GLFWWindowFocusCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean focused) {
-            tasks.add(() -> ApplicationWindow.this.focused = focused);
+            windowTasks.add(() -> ApplicationWindow.this.windowFocused = focused);
         }
     };
 
-    private final GLFWWindowIconifyCallback defaultMinimizedCallback = new GLFWWindowIconifyCallback() {
+    private final GLFWWindowIconifyCallback windowMinimizedCallback = new GLFWWindowIconifyCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean minimized) {
-            tasks.add(() -> ApplicationWindow.this.attributes.minimized = minimized);
+            windowTasks.add(() -> ApplicationWindow.this.attributes.minimized = minimized);
         }
     };
 
-    private final GLFWWindowMaximizeCallback defaultMaximizedCallback = new GLFWWindowMaximizeCallback() {
+    private final GLFWWindowMaximizeCallback windowMaximizedCallback = new GLFWWindowMaximizeCallback() {
         @Override
         public synchronized void invoke(long windowHandle, final boolean maximized) {
-            tasks.add(() -> ApplicationWindow.this.attributes.maximized = maximized);
+            windowTasks.add(() -> ApplicationWindow.this.attributes.maximized = maximized);
         }
     };
 
-    private final GLFWWindowCloseCallback defaultCloseCallback = new GLFWWindowCloseCallback() {
+    private final GLFWWindowCloseCallback windowCloseCallback = new GLFWWindowCloseCallback() {
         @Override
         public synchronized void invoke(final long handle) {
-            tasks.add(() -> GLFW.glfwSetWindowShouldClose(handle, false));
+            windowTasks.add(() -> GLFW.glfwSetWindowShouldClose(handle, false));
         }
     };
 
-    private final GLFWDropCallback filesDroppedCallback = new GLFWDropCallback() {
+    private final GLFWDropCallback windowFilesDroppedCallback = new GLFWDropCallback() {
         @Override
         public synchronized void invoke(final long windowHandle, final int count, final long names) {
-            tasks.add(() -> {
-                lastDragAndDropFileCount = count;
+            windowTasks.add(() -> {
+                windowLastDragAndDropFileCount = count;
                 for (int i = 0; i < count; i++) {
-                    filesDraggedAndDropped.add(GLFWDropCallback.getName(names, i));
+                    windowFilesDraggedAndDropped.add(GLFWDropCallback.getName(names, i));
                 }
             });
         }
@@ -118,12 +118,12 @@ import static org.lwjgl.glfw.GLFW.*;
             GLFWVidMode videoMode = GLFW.glfwGetVideoMode(monitor);
             assert videoMode != null;
             GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.refreshRate());
-            handle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title, videoMode.refreshRate(), MemoryUtil.NULL);
+            windowHandle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title, videoMode.refreshRate(), MemoryUtil.NULL);
         } else {
             GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, attributes.decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-            handle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title, MemoryUtil.NULL, MemoryUtil.NULL);
+            windowHandle = GLFW.glfwCreateWindow(attributes.width, attributes.height, attributes.title, MemoryUtil.NULL, MemoryUtil.NULL);
         }
-        if (handle == MemoryUtil.NULL) throw new RuntimeException("Unable to create window.");
+        if (windowHandle == MemoryUtil.NULL) throw new RuntimeException("Unable to create window.");
         setSizeLimits(attributes.minWidth, attributes.minHeight, attributes.maxWidth, attributes.maxHeight);
         // we need to set window position
         if (!attributes.fullScreen) {
@@ -137,15 +137,15 @@ import static org.lwjgl.glfw.GLFW.*;
         }
 
         // register callbacks
-        GLFW.glfwSetFramebufferSizeCallback(handle, resizeCallback);
-        GLFW.glfwSetWindowFocusCallback(handle, defaultFocusChangeCallback);
-        GLFW.glfwSetWindowIconifyCallback(handle, defaultMinimizedCallback);
-        GLFW.glfwSetWindowMaximizeCallback(handle, defaultMaximizedCallback);
-        GLFW.glfwSetWindowCloseCallback(handle, defaultCloseCallback);
-        GLFW.glfwSetDropCallback(handle, filesDroppedCallback);
-        GLFW.glfwMakeContextCurrent(handle);
+        GLFW.glfwSetFramebufferSizeCallback(windowHandle, windowResizeCallback);
+        GLFW.glfwSetWindowFocusCallback(windowHandle, windowFocusChangeCallback);
+        GLFW.glfwSetWindowIconifyCallback(windowHandle, windowMinimizedCallback);
+        GLFW.glfwSetWindowMaximizeCallback(windowHandle, windowMaximizedCallback);
+        GLFW.glfwSetWindowCloseCallback(windowHandle, windowCloseCallback);
+        GLFW.glfwSetDropCallback(windowHandle, windowFilesDroppedCallback);
+        GLFW.glfwMakeContextCurrent(windowHandle);
         GLFW.glfwSwapInterval(attributes.vSyncEnabled ? 1 : 0);
-        GLFW.glfwShowWindow(handle);
+        GLFW.glfwShowWindow(windowHandle);
     }
 
     private void renderWindow(final int width, final int height) {
@@ -155,56 +155,56 @@ import static org.lwjgl.glfw.GLFW.*;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer fbWidth = stack.mallocInt(1);
             IntBuffer fbHeight = stack.mallocInt(1);
-            GLFW.glfwGetFramebufferSize(handle, fbWidth, fbHeight);
+            GLFW.glfwGetFramebufferSize(windowHandle, fbWidth, fbHeight);
             backBufferWidth = fbWidth.get(0);
             backBufferHeight = fbHeight.get(0);
         }
-        GLFW.glfwMakeContextCurrent(handle);
+        GLFW.glfwMakeContextCurrent(windowHandle);
         GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
         scene.resize(width, height);
         Graphics.update();
         scene.update();
-        GLFW.glfwSwapBuffers(handle);
+        GLFW.glfwSwapBuffers(windowHandle);
     }
 
-    public boolean refresh() {
-        for (Runnable task : tasks) {
+    public boolean windowRefresh() {
+        for (Runnable task : windowTasks) {
             task.run();
         }
-        boolean shouldRefresh = tasks.size > 0 || Graphics.isContinuousRendering();
+        boolean shouldRefresh = windowTasks.size > 0 || Graphics.isContinuousRendering();
         synchronized (this) {
-            tasks.clear();
-            shouldRefresh |= requestRendering && !attributes.minimized;
-            requestRendering = false;
+            windowTasks.clear();
+            shouldRefresh |= windowRequestRendering && !attributes.minimized;
+            windowRequestRendering = false;
         }
 
         if (shouldRefresh) {
             Graphics.update();
             scene.update();
-            GLFW.glfwSwapBuffers(handle);
+            GLFW.glfwSwapBuffers(windowHandle);
         }
 
         return shouldRefresh;
     }
 
-    public void requestRendering() {
+    public void windowRequestRendering() {
         synchronized (this) {
-            this.requestRendering = true;
+            this.windowRequestRendering = true;
         }
     }
 
-    public boolean shouldClose() {
-        return GLFW.glfwWindowShouldClose(handle);
+    public boolean windowShouldClose() {
+        return GLFW.glfwWindowShouldClose(windowHandle);
     }
 
     protected void setDecorated(boolean decorated) {
         this.attributes.decorated = decorated;
-        GLFW.glfwSetWindowAttrib(handle, GLFW.GLFW_DECORATED, decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwSetWindowAttrib(windowHandle, GLFW.GLFW_DECORATED, decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
     }
 
     protected void setTitle(final String title) {
         this.attributes.title = title;
-        GLFW.glfwSetWindowTitle(handle, title);
+        GLFW.glfwSetWindowTitle(windowHandle, title);
     }
 
     protected void setIcon(final String path) {
@@ -216,12 +216,12 @@ import static org.lwjgl.glfw.GLFW.*;
         if (imageData == null) throw new ApplicationException("Failed to load icon image: " + STBImage.stbi_failure_reason());
         GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
         iconBuffer.position(0).width(width.get(0)).height(height.get(0)).pixels(imageData);
-        GLFW.glfwSetWindowIcon(handle, iconBuffer);
+        GLFW.glfwSetWindowIcon(windowHandle, iconBuffer);
         STBImage.stbi_image_free(imageData);
     }
 
     protected void setPosition(int x, int y) {
-        GLFW.glfwSetWindowPos(handle, x, y);
+        GLFW.glfwSetWindowPos(windowHandle, x, y);
         attributes.posX = x;
         attributes.posY = y;
     }
@@ -230,7 +230,7 @@ import static org.lwjgl.glfw.GLFW.*;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer posX = stack.mallocInt(1); // For the X position, even if we don't use it
             IntBuffer posY = stack.mallocInt(1); // For the Y position
-            GLFW.glfwGetWindowPos(handle, posX, posY);
+            GLFW.glfwGetWindowPos(windowHandle, posX, posY);
             return posX.get(0);
         }
     }
@@ -239,16 +239,16 @@ import static org.lwjgl.glfw.GLFW.*;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer posX = stack.mallocInt(1); // For the X position, even if we don't use it
             IntBuffer posY = stack.mallocInt(1); // For the Y position
-            GLFW.glfwGetWindowPos(handle, posX, posY);
+            GLFW.glfwGetWindowPos(windowHandle, posX, posY);
             return posY.get(0);
         }
     }
 
     protected void setVisible(boolean visible) {
         if (visible) {
-            GLFW.glfwShowWindow(handle);
+            GLFW.glfwShowWindow(windowHandle);
         } else {
-            GLFW.glfwHideWindow(handle);
+            GLFW.glfwHideWindow(windowHandle);
         }
     }
 
@@ -258,11 +258,11 @@ import static org.lwjgl.glfw.GLFW.*;
     }
 
     protected void close() {
-        GLFW.glfwSetWindowShouldClose(handle, true);
+        GLFW.glfwSetWindowShouldClose(windowHandle, true);
     }
 
     protected void minimize() {
-        GLFW.glfwIconifyWindow(handle);
+        GLFW.glfwIconifyWindow(windowHandle);
         attributes.minimized = true;
     }
 
@@ -271,32 +271,32 @@ import static org.lwjgl.glfw.GLFW.*;
     }
 
     protected void maximize() {
-        GLFW.glfwMaximizeWindow(handle);
+        GLFW.glfwMaximizeWindow(windowHandle);
         attributes.maximized = true;
     }
 
     protected void flash() {
-        GLFW.glfwRequestWindowAttention(handle);
+        GLFW.glfwRequestWindowAttention(windowHandle);
     }
 
     protected void restore() {
-        GLFW.glfwRestoreWindow(handle);
+        GLFW.glfwRestoreWindow(windowHandle);
     }
 
     protected void focus() {
-        GLFW.glfwFocusWindow(handle);
+        GLFW.glfwFocusWindow(windowHandle);
     }
 
-    protected boolean isFocused() {
-        return focused;
+    protected boolean isWindowFocused() {
+        return windowFocused;
     }
 
-    public Array<String> getFilesDraggedAndDropped() {
-        return filesDraggedAndDropped;
+    public Array<String> getWindowFilesDraggedAndDropped() {
+        return windowFilesDraggedAndDropped;
     }
 
-    public int getLastDragAndDropFileCount() {
-        return lastDragAndDropFileCount;
+    public int getWindowLastDragAndDropFileCount() {
+        return windowLastDragAndDropFileCount;
     }
 
     @Deprecated public void setScreen(ApplicationScreen screen) {
@@ -310,28 +310,28 @@ import static org.lwjgl.glfw.GLFW.*;
     }
 
     public void setSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
-        GLFW.glfwSetWindowSizeLimits(handle, minWidth > -1 ? minWidth : GLFW.GLFW_DONT_CARE,
+        GLFW.glfwSetWindowSizeLimits(windowHandle, minWidth > -1 ? minWidth : GLFW.GLFW_DONT_CARE,
                 minHeight > -1 ? minHeight : GLFW.GLFW_DONT_CARE, maxWidth > -1 ? maxWidth : GLFW.GLFW_DONT_CARE,
                 maxHeight > -1 ? maxHeight : GLFW.GLFW_DONT_CARE);
     }
 
-    public long getHandle() {
-        return handle;
+    public long getWindowHandle() {
+        return windowHandle;
     }
 
     @Override
     public void delete() {
-        GLFW.glfwSetWindowFocusCallback(handle, null);
-        GLFW.glfwSetWindowIconifyCallback(handle, null);
-        GLFW.glfwSetWindowCloseCallback(handle, null);
-        GLFW.glfwSetDropCallback(handle, null);
-        GLFW.glfwDestroyWindow(handle);
+        GLFW.glfwSetWindowFocusCallback(windowHandle, null);
+        GLFW.glfwSetWindowIconifyCallback(windowHandle, null);
+        GLFW.glfwSetWindowCloseCallback(windowHandle, null);
+        GLFW.glfwSetDropCallback(windowHandle, null);
+        GLFW.glfwDestroyWindow(windowHandle);
 
-        defaultFocusChangeCallback.free();
-        defaultMinimizedCallback.free();
-        defaultMaximizedCallback.free();
-        defaultCloseCallback.free();
-        filesDroppedCallback.free();
+        windowFocusChangeCallback.free();
+        windowMinimizedCallback.free();
+        windowMaximizedCallback.free();
+        windowCloseCallback.free();
+        windowFilesDroppedCallback.free();
     }
 
 }

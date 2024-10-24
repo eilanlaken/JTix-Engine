@@ -120,7 +120,38 @@ public class Texture implements MemoryResource {
         handle = 0;
     }
 
-    public enum Filter {
+    public enum FilterMag {
+
+        NEAREST (GL20.GL_NEAREST),
+        LINEAR  (GL20.GL_LINEAR),
+        ;
+
+        public final int glValue;
+
+        FilterMag(final int glValue) {
+            this.glValue = glValue;
+        }
+    }
+
+    public enum FilterMin {
+
+        NEAREST                (GL20.GL_NEAREST),
+        LINEAR                 (GL20.GL_LINEAR),
+        NEAREST_MIPMAP_NEAREST (GL20.GL_NEAREST_MIPMAP_NEAREST),
+        LINEAR_MIPMAP_NEAREST  (GL20.GL_LINEAR_MIPMAP_NEAREST),
+        NEAREST_MIPMAP_LINEAR  (GL20.GL_NEAREST_MIPMAP_LINEAR),
+        LINEAR_MIPMAP_LINEAR   (GL20.GL_LINEAR_MIPMAP_LINEAR)
+        ;
+
+        public final int glValue;
+
+        FilterMin(final int glValue) {
+            this.glValue = glValue;
+        }
+
+    }
+
+    @Deprecated public enum Filter {
 
         NEAREST(GL20.GL_NEAREST),
         LINEAR(GL20.GL_LINEAR),

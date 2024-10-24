@@ -1,6 +1,7 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.application.ApplicationWindow;
+import com.heavybox.jtix.application_2.Application;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -32,6 +33,8 @@ public final class Graphics {
     private static int     maxAnisotropy     = 0;
     private static float   contentScaleX     = Float.NaN;
     private static float   contentScaleY     = Float.NaN;
+
+    public static boolean justResized = false;
 
     private Graphics() {}
 
@@ -80,6 +83,7 @@ public final class Graphics {
         }
         frames++;
         frameId++;
+        justResized = false;
     }
 
     public static float getContentScaleX() {
@@ -143,11 +147,11 @@ public final class Graphics {
     }
 
     public static int getWindowHeight() {
-        return window.attributes.height;
+        return Application.getWindowHeight();
     }
 
     public static int getWindowWidth() {
-        return window.attributes.width;
+        return Application.getWindowWidth();
     }
 
     public static float getMonitorAspectRatio() {

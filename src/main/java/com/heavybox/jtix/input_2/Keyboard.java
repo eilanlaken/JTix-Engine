@@ -1,6 +1,5 @@
 package com.heavybox.jtix.input_2;
 
-import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
@@ -15,7 +14,7 @@ public class Keyboard {
 
     static void init() {
 
-        GLFW.glfwSetKeyCallback(Application.window.getHandle(), new GLFWKeyCallback() {
+        GLFW.glfwSetKeyCallback(Application.window.getWindowHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
                 keysCurrentState[key] = action;

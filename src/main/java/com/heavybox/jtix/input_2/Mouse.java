@@ -1,6 +1,5 @@
 package com.heavybox.jtix.input_2;
 
-import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
 import org.lwjgl.glfw.*;
 
@@ -26,7 +25,7 @@ public class Mouse {
     private Mouse() {}
 
     static void init() {
-        GLFW.glfwSetMouseButtonCallback(Application.window.getHandle(), new GLFWMouseButtonCallback() {
+        GLFW.glfwSetMouseButtonCallback(Application.window.getWindowHandle(), new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
                 mouseButtonsPrevStates[button] = mouseButtonsCurrentStates[button];
@@ -34,7 +33,7 @@ public class Mouse {
             }
         });
 
-        GLFW.glfwSetCursorPosCallback(Application.window.getHandle(), new GLFWCursorPosCallback() {
+        GLFW.glfwSetCursorPosCallback(Application.window.getWindowHandle(), new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xPos, double yPos) {
                 prevCursorX = cursorX;
@@ -46,14 +45,14 @@ public class Mouse {
             }
         });
 
-        GLFW.glfwSetCursorEnterCallback(Application.window.getHandle(), new GLFWCursorEnterCallback() {
+        GLFW.glfwSetCursorEnterCallback(Application.window.getWindowHandle(), new GLFWCursorEnterCallback() {
             @Override
             public void invoke(long window, boolean entered) {
                 cursorInWindow = entered;
             }
         });
 
-        GLFW.glfwSetScrollCallback(Application.window.getHandle(), new GLFWScrollCallback() {
+        GLFW.glfwSetScrollCallback(Application.window.getWindowHandle(), new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xOffset, double yOffset) {
                 verticalScroll = (float) yOffset;
@@ -71,12 +70,12 @@ public class Mouse {
     }
 
     public static void hideCursor() {
-        GLFW.glfwSetInputMode(Application.window.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+        GLFW.glfwSetInputMode(Application.window.getWindowHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
         cursorHidden = true;
     }
 
     public static void revealCursor() {
-        GLFW.glfwSetInputMode(Application.window.getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        GLFW.glfwSetInputMode(Application.window.getWindowHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         cursorHidden = false;
     }
 

@@ -8,6 +8,6 @@ public interface Scene {
     void update();
     void finish();
 
-    @Deprecated void resize(int width, int height); // TODO: see maybe there's a better way. Handle using window callbacks and graphics.
+    @Deprecated void resize(int width, int height); // TODO: there's a better way. Handle using window callbacks and Graphics.
 
 }
