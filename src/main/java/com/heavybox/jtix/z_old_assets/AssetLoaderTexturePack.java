@@ -34,8 +34,6 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
             String filePath = Paths.get(directoryPath.toString(), fileName).toString();
             AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
             textureLoaderOptions.anisotropy = packOptions.anisotropy;
-            textureLoaderOptions.magFilter = packOptions.magFilter;
-            textureLoaderOptions.minFilter = packOptions.minFilter;
             textureLoaderOptions.uWrap = packOptions.uWrap;
             textureLoaderOptions.vWrap = packOptions.vWrap;
             dependencies.add(new AssetDescriptor(Texture.class, filePath, textureLoaderOptions));
@@ -60,8 +58,6 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
     public static final class Options extends AssetLoader.Options<TexturePack> {
 
         public int            anisotropy = Graphics.getMaxAnisotropy();
-        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
         public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
 

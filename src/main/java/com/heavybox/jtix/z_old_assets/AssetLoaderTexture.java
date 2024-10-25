@@ -38,11 +38,11 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     @Override
     public Texture create() {
         final int anisotropy = textureOptions == null ? 16 : textureOptions.anisotropy;
-        final Texture.Filter magFilter = textureOptions == null ? null : textureOptions.magFilter;
-        final Texture.Filter minFilter = textureOptions == null ? null : textureOptions.minFilter;
+        //final Texture.Filter magFilter = textureOptions == null ? null : textureOptions.magFilter;
+        //final Texture.Filter minFilter = textureOptions == null ? null : textureOptions.minFilter;
         final Texture.Wrap uWrap = textureOptions == null ? null : textureOptions.uWrap;
         final Texture.Wrap vWrap = textureOptions == null ? null : textureOptions.vWrap;
-        Texture texture = new Texture(width, height, buffer, magFilter, minFilter, uWrap, vWrap, anisotropy);
+        Texture texture = new Texture(width, height, buffer, null, null, uWrap, vWrap, anisotropy);
         STBImage.stbi_image_free(buffer);
         return texture;
     }
@@ -50,8 +50,6 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     public static final class Options extends AssetLoader.Options<Texture> {
 
         public int            anisotropy = Graphics.getMaxAnisotropy();
-        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
         public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
 

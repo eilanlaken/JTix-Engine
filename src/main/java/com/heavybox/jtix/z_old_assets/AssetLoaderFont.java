@@ -34,8 +34,6 @@ public class AssetLoaderFont implements AssetLoader<Font> {
 
         AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
         textureLoaderOptions.anisotropy = fontOptions.anisotropy;
-        textureLoaderOptions.magFilter = fontOptions.magFilter;
-        textureLoaderOptions.minFilter = fontOptions.minFilter;
         textureLoaderOptions.uWrap = fontOptions.uWrap;
         textureLoaderOptions.vWrap = fontOptions.vWrap;
         dependencies.add(new AssetDescriptor(Texture.class, filePath, textureLoaderOptions));
@@ -76,8 +74,6 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     public static final class Options extends AssetLoader.Options<Font> {
 
         public int            anisotropy = Graphics.getMaxAnisotropy();
-        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
         public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
 

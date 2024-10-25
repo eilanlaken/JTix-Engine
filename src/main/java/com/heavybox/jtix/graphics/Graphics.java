@@ -2,6 +2,7 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.math.MathUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -33,6 +34,7 @@ public final class Graphics {
     private static int     maxAnisotropy     = 0;
     private static float   contentScaleX     = Float.NaN;
     private static float   contentScaleY     = Float.NaN;
+    private static int     anisotropicFilteringSupported = -1;
 
     public static boolean justResized = false;
 
@@ -206,7 +208,13 @@ public final class Graphics {
     }
 
     public static boolean isAnisotropicFilteringSupported() {
-        return GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic");
+        if (anisotropicFilteringSupported == -1) {
+            boolean supported = GLFW.glfwExtensionSupported("GL_EXT_texture_filter_anisotropic");
+            if (supported) anisotropicFilteringSupported = 1;
+            else anisotropicFilteringSupported = 0;
+        }
+
+        return anisotropicFilteringSupported == 1;
     }
 
     public static int getMaxAnisotropy() {

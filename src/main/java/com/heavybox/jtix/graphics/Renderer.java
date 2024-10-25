@@ -2310,7 +2310,7 @@ public class Renderer implements MemoryResourceHolder {
         buffer.flip();
 
         return new Texture(1, 1, buffer,
-                Texture.Filter.NEAREST, Texture.Filter.NEAREST,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 

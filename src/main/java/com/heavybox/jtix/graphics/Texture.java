@@ -2,6 +2,7 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 import org.lwjgl.stb.STBImage;
@@ -9,23 +10,28 @@ import org.lwjgl.stb.STBImage;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-public class Texture implements MemoryResource {
+// TODO:
+// need to change filter
+// need to put anisotropy in Graphics
+// need to implement LOD: GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
+public final class Texture implements MemoryResource {
 
-    protected    int    handle;
-    private      int    slot;
-    public final int    width;
-    public final int    height;
-    public final float  invWidth;
-    public final float  invHeight;
-    public final Filter magFilter;
-    public final Filter minFilter;
-    public final Wrap   uWrap;
-    public final Wrap   vWrap;
-    public final int    anisotropy;
+    private       int       handle;
+    private       int       slot;
+    public  final int       width;
+    public  final int       height;
+    public  final float     invWidth;
+    public  final float     invHeight;
+    private       FilterMag filterMag;
+    private       FilterMin filterMin;
+    private       Wrap      sWrap;
+    private       Wrap      tWrap;
+    private       int       anisotropy;
+    private       float     biasLOD; // higher LOD bias will sample from higher mip level, which means lower texture quality.
 
     private ByteBuffer bytes;
 
-    public Texture(int width, int height, ByteBuffer bytes, Filter magFilter, Filter minFilter, Wrap uWrap, Wrap vWrap, int anisotropy) {
+    public Texture(int width, int height, ByteBuffer bytes, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy) {
         this.handle = GL11.glGenTextures();
         this.slot = -1;
 
@@ -38,23 +44,26 @@ public class Texture implements MemoryResource {
         this.invWidth = 1.0f / width;
         this.invHeight = 1.0f / height;
 
-        this.magFilter = magFilter != null ? magFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.filterMag = filterMag != null ? filterMag : FilterMag.NEAREST;
+        this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
+        this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.anisotropy = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
+        this.biasLOD = 0;
+
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        if (Graphics.isAnisotropicFilteringSupported()) {
-            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
-        }
+
+//        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
+//        if (Graphics.isAnisotropicFilteringSupported()) {
+//            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+//        }
     }
 
     // TODO: test
-    public Texture(final String path, Filter magFilter, Filter minFilter, Wrap uWrap, Wrap vWrap, int anisotropy) {
+    public Texture(final String path, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy) {
         this.handle = GL11.glGenTextures();
         this.slot = -1;
 
@@ -73,26 +82,101 @@ public class Texture implements MemoryResource {
         if (width > maxTextureSize || height > maxTextureSize)
             throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
 
-        this.magFilter = magFilter != null ? magFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        this.minFilter = minFilter != null ? minFilter : Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        this.uWrap = uWrap != null ? uWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.vWrap = vWrap != null ? vWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.filterMag = filterMag != null ? filterMag : FilterMag.NEAREST;
+        this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
+        this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+        this.biasLOD = 0;
 
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        if (Graphics.isAnisotropicFilteringSupported()) {
-            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
-        }
+
+//        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
+//        if (Graphics.isAnisotropicFilteringSupported()) {
+//            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+//        }
 
         STBImage.stbi_image_free(buffer); // TODO: test
     }
 
-    protected final void setSlot(final int slot) { this.slot = slot; }
-    protected final int  getSlot() { return slot; }
+    void setSlot(final int slot) { this.slot = slot; }
+    int  getSlot() { return slot; }
+    int  getHandle() { return handle; }
+
+    public FilterMag getFilterMag() {
+        return filterMag;
+    }
+
+    public FilterMin getFilterMin() {
+        return filterMin;
+    }
+
+    public Wrap getsWrap() {
+        return sWrap;
+    }
+
+    public Wrap gettWrap() {
+        return tWrap;
+    }
+
+    public int getAnisotropy() {
+        return anisotropy;
+    }
+
+    public float getBiasLOD() {
+        return biasLOD;
+    }
+
+    public void setFilterMag(@Nullable FilterMag filterMag) {
+        if (this.filterMag == filterMag) return;
+        this.filterMag = filterMag == null ? FilterMag.NEAREST : filterMag;
+        TextureBinder.bind(this);
+        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, this.filterMag.glValue);
+    }
+
+    public void setFilterMin(@Nullable FilterMin filterMin) {
+        if (this.filterMin == filterMin) return;
+        this.filterMin = filterMin == null ? FilterMin.NEAREST_MIPMAP_NEAREST : filterMin;
+        TextureBinder.bind(this);
+        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, this.filterMin.glValue);
+    }
+
+    public void setsWrap(@Nullable Wrap sWrap) {
+        if (this.sWrap == sWrap) return;
+        this.sWrap = sWrap == null ? Wrap.CLAMP_TO_EDGE : sWrap;
+        TextureBinder.bind(this);
+        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, this.sWrap.glValue);
+    }
+
+    public void settWrap(@Nullable Wrap tWrap) {
+        if (this.tWrap == tWrap) return;
+        this.tWrap = tWrap == null ? Wrap.CLAMP_TO_EDGE : tWrap;
+        TextureBinder.bind(this);
+        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, this.tWrap.glValue);
+    }
+
+    public void setAnisotropy(int anisotropy) {
+        if (this.anisotropy == anisotropy) return;
+        this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+        TextureBinder.bind(this);
+        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+    }
+
+    public void setBiasLOD(float biasLOD) {
+        if (this.biasLOD == biasLOD) return;
+        this.biasLOD = biasLOD;
+        TextureBinder.bind(this);
+        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, this.biasLOD);
+    }
 
     public Color getPixelColor(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) throw new IndexOutOfBoundsException("Trying to read out of bounds pixel: (" + x + ", " + y + ") of " + Texture.class.getSimpleName() + " with dimensions: " + "(" + width + ", " + height + ")");
@@ -117,7 +201,7 @@ public class Texture implements MemoryResource {
     public void delete() {
         TextureBinder.unbind(this);
         GL11.glDeleteTextures(handle);
-        handle = 0;
+        handle = -1;
     }
 
     public enum FilterMag {
@@ -146,24 +230,6 @@ public class Texture implements MemoryResource {
         public final int glValue;
 
         FilterMin(final int glValue) {
-            this.glValue = glValue;
-        }
-
-    }
-
-    @Deprecated public enum Filter {
-
-        NEAREST(GL20.GL_NEAREST),
-        LINEAR(GL20.GL_LINEAR),
-        MIP_MAP_NEAREST_NEAREST(GL20.GL_NEAREST_MIPMAP_NEAREST),
-        MIP_MAP_LINEAR_NEAREST(GL20.GL_LINEAR_MIPMAP_NEAREST),
-        MIP_MAP_NEAREST_LINEAR(GL20.GL_NEAREST_MIPMAP_LINEAR),
-        MIP_MAP_LINEAR_LINEAR(GL20.GL_LINEAR_MIPMAP_LINEAR)
-        ;
-
-        public final int glValue;
-
-        Filter(final int glValue) {
             this.glValue = glValue;
         }
 

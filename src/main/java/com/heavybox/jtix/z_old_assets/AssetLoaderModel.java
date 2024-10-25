@@ -122,8 +122,8 @@ import java.util.Map;
             for (Map.Entry<String, Object> entry : attributesData.entrySet()) {
                 AssetLoaderTexture.Options textureLoaderOptions = new AssetLoaderTexture.Options();
                 textureLoaderOptions.anisotropy = modelOptions.anisotropy;
-                textureLoaderOptions.magFilter = modelOptions.magFilter;
-                textureLoaderOptions.minFilter = modelOptions.minFilter;
+//                textureLoaderOptions.magFilter = modelOptions.magFilter;
+//                textureLoaderOptions.minFilter = modelOptions.minFilter;
                 textureLoaderOptions.uWrap = modelOptions.uWrap;
                 textureLoaderOptions.vWrap = modelOptions.vWrap;
 
@@ -502,8 +502,6 @@ import java.util.Map;
 
 
         public int            anisotropy = Graphics.getMaxAnisotropy();
-        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
         public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
         public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
 

@@ -1,8 +1,6 @@
 package com.heavybox.jtix.graphics;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.*;
 
 public class TextureBinder {
 
@@ -13,16 +11,22 @@ public class TextureBinder {
     private static int             roundRobinCounter           = 0;
 
     public static int bind(final Texture texture) {
-        if (texture.handle == 0) throw new GraphicsException("Trying to bind " + Texture.class.getSimpleName() + " that was already freed.");
+        if (texture.getHandle() == -1) throw new GraphicsException("Trying to bind " + Texture.class.getSimpleName() + " that was already freed.");
         if (texture.getSlot() >= 0) return texture.getSlot();
         int slot = roundRobinCounter + RESERVED_OFFSET;
         if (boundTextures[slot] != null) unbind(boundTextures[slot]);
         GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
-        GL11.glBindTexture(GL20.GL_TEXTURE_2D, texture.handle);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, texture.minFilter.glValue);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, texture.magFilter.glValue);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, texture.uWrap.glValue);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, texture.vWrap.glValue);
+        GL11.glBindTexture(GL20.GL_TEXTURE_2D, texture.getHandle());
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, texture.getFilterMag().glValue);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, texture.getFilterMin().glValue);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, texture.getsWrap().glValue);
+        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, texture.gettWrap().glValue);
+
+        // TODO
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, texture.getBiasLOD());
+        if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, texture.getAnisotropy());
+
+
         boundTextures[slot] = texture;
         roundRobinCounter = (roundRobinCounter + 1) % AVAILABLE_TEXTURE_SLOTS;
         texture.setSlot(slot);
@@ -30,7 +34,7 @@ public class TextureBinder {
     }
 
     public static void unbind(Texture texture) {
-        if (texture.handle == 0) return;
+        if (texture.getHandle() == -1) return;
         int slot = texture.getSlot();
         if (slot < 0) return;
         GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
