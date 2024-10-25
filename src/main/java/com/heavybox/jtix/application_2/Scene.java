@@ -8,6 +8,9 @@ public interface Scene {
     void update();
     void finish();
 
-    @Deprecated void resize(int width, int height); // TODO: there's a better way. Handle using window callbacks and Graphics.
+    /* GLFW Window callbacks. */
+    default void windowResize(int width, int height) {}
+    default void windowFocusChanged(boolean focus) {}
+    default void windowMinimizedChanged(boolean minimized) {}
 
 }

@@ -17,16 +17,13 @@ public class TextureBinder {
         if (boundTextures[slot] != null) unbind(boundTextures[slot]);
         GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
         GL11.glBindTexture(GL20.GL_TEXTURE_2D, texture.getHandle());
+        /* set Texture parameters whenever the Texture is bound. */
         GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, texture.filterMag.glValue);
         GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, texture.filterMin.glValue);
         GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, texture.sWrap.glValue);
         GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, texture.tWrap.glValue);
-
-        // TODO
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, texture.getBiasLOD());
         if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, texture.getAnisotropy());
-
-
         boundTextures[slot] = texture;
         roundRobinCounter = (roundRobinCounter + 1) % AVAILABLE_TEXTURE_SLOTS;
         texture.setSlot(slot);
@@ -55,7 +52,7 @@ public class TextureBinder {
      *         GL_REPEAT: Repeats the texture image.
      *         GL_MIRRORED_REPEAT: Repeats the texture image but mirrors it with each repeat.
      *         GL_CLAMP_TO_EDGE: Clamps the coordinates between 0 and 1, effectively stretching the edge pixels of the texture.
-     *         GL_CLAMP_TO_BORDER: Coordinates outside the range are given a specific border color.
+     *         GL_CLAMP_TO_BORDER: Coordinates outside the range are given a specific border color. (probably not available on mobile)
      *
      *     Filtering Parameters:
      *         GL_TEXTURE_MIN_FILTER: Filtering method used when a pixel maps to an area greater than one texture element. Options include GL_NEAREST, GL_LINEAR, GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR, and GL_LINEAR_MIPMAP_LINEAR.
