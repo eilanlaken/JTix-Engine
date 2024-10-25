@@ -22,10 +22,10 @@ public final class Texture implements MemoryResource {
     public  final int       height;
     public  final float     invWidth;
     public  final float     invHeight;
-    private       FilterMag filterMag;
-    private       FilterMin filterMin;
-    private       Wrap      sWrap;
-    private       Wrap      tWrap;
+    public  final FilterMag filterMag;
+    public  final FilterMin filterMin;
+    public  final Wrap      sWrap;
+    public  final Wrap      tWrap;
     private       int       anisotropy;
     private       float     biasLOD; // higher LOD bias will sample from higher mip level, which means lower texture quality.
 
@@ -54,7 +54,17 @@ public final class Texture implements MemoryResource {
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        if (filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
+                filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
+                filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
+                filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+        } else {
+            this.anisotropy = 1;
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
+        }
 
 //        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
 //        if (Graphics.isAnisotropicFilteringSupported()) {
@@ -86,13 +96,22 @@ public final class Texture implements MemoryResource {
         this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
         this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
         this.biasLOD = 0;
 
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        if (filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
+            filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
+            filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
+            filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+        } else {
+            this.anisotropy = 1;
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
+        }
 
 //        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
 //        if (Graphics.isAnisotropicFilteringSupported()) {
@@ -106,60 +125,12 @@ public final class Texture implements MemoryResource {
     int  getSlot() { return slot; }
     int  getHandle() { return handle; }
 
-    public FilterMag getFilterMag() {
-        return filterMag;
-    }
-
-    public FilterMin getFilterMin() {
-        return filterMin;
-    }
-
-    public Wrap getsWrap() {
-        return sWrap;
-    }
-
-    public Wrap gettWrap() {
-        return tWrap;
-    }
-
     public int getAnisotropy() {
         return anisotropy;
     }
 
     public float getBiasLOD() {
         return biasLOD;
-    }
-
-    public void setFilterMag(@Nullable FilterMag filterMag) {
-        if (this.filterMag == filterMag) return;
-        this.filterMag = filterMag == null ? FilterMag.NEAREST : filterMag;
-        TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, this.filterMag.glValue);
-    }
-
-    public void setFilterMin(@Nullable FilterMin filterMin) {
-        if (this.filterMin == filterMin) return;
-        this.filterMin = filterMin == null ? FilterMin.NEAREST_MIPMAP_NEAREST : filterMin;
-        TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, this.filterMin.glValue);
-    }
-
-    public void setsWrap(@Nullable Wrap sWrap) {
-        if (this.sWrap == sWrap) return;
-        this.sWrap = sWrap == null ? Wrap.CLAMP_TO_EDGE : sWrap;
-        TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, this.sWrap.glValue);
-    }
-
-    public void settWrap(@Nullable Wrap tWrap) {
-        if (this.tWrap == tWrap) return;
-        this.tWrap = tWrap == null ? Wrap.CLAMP_TO_EDGE : tWrap;
-        TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
-        GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, this.tWrap.glValue);
     }
 
     public void setAnisotropy(int anisotropy) {
