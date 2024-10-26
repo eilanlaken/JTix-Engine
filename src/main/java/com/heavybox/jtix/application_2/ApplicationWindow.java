@@ -161,7 +161,7 @@ import static org.lwjgl.glfw.GLFW.*;
         }
         GLFW.glfwMakeContextCurrent(windowHandle);
         GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
-        scene.windowResize(width, height);
+        scene.windowResized(width, height);
         Graphics.update();
         scene.update();
         GLFW.glfwSwapBuffers(windowHandle);

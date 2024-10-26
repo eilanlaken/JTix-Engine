@@ -54,11 +54,10 @@ public class Keyboard {
         initialized = true;
     }
 
-    public static void init(Application application) {
+    public static void init() {
         if (initialized) throw new IllegalStateException("Device input " + Keyboard.class.getSimpleName() + " already initialized.");
-        Keyboard.application = application;
 
-        GLFW.glfwSetKeyCallback(application.window.getWindowHandle(), new GLFWKeyCallback() {
+        GLFW.glfwSetKeyCallback(Application.getWindowHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
                 keysPrevState[key] = keysCurrentState[key];

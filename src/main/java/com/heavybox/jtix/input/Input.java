@@ -14,7 +14,7 @@ public class Input {
         if (initialized) return;
         Input.application = application;
         Mouse.init(application);
-        Keyboard.init(application);
+        Keyboard.init();
         initialized = true;
     }
 

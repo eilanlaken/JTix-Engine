@@ -259,27 +259,29 @@ public class Application {
     }
 
     public static void windowClose() {
-        window.close();
+        GLFW.glfwSetWindowShouldClose(windowHandle, true);
     }
 
     public static void windowMinimize() {
-        window.minimize();
+        GLFW.glfwIconifyWindow(windowHandle);
+        windowMinimized = true;
     }
 
     public static void windowMaximize() {
-        window.maximize();
+        GLFW.glfwMaximizeWindow(windowHandle);
+        windowMaximized = true;
     }
 
     public static void windowFocus() {
-        window.focus();
+        GLFW.glfwFocusWindow(windowHandle);
     }
 
     public static void windowRestore() {
-        window.restore();
+        GLFW.glfwRestoreWindow(windowHandle);
     }
 
     public static void windowFlash() {
-        window.flash();
+        GLFW.glfwRequestWindowAttention(windowHandle);
     }
 
     protected void windowSetIcon(final String path) {
@@ -302,6 +304,8 @@ public class Application {
 
     /* Getters */
 
+    public static long getWindowHandle() { return windowHandle; }
+
     public static int getWindowWidth() {
         return windowWidth;
     }
@@ -313,5 +317,15 @@ public class Application {
     public String getWindowTitle() {
         return windowTitle;
     }
+
+    public static int getWindowLastDragAndDropFileCount() {
+        return windowLastDragAndDropFileCount;
+    }
+
+    public static Array<String> getWindowFilesDraggedAndDropped() {
+        return windowFilesDraggedAndDropped;
+    }
+
+
 
 }

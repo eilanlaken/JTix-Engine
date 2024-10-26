@@ -14,7 +14,7 @@ public class Keyboard {
 
     static void init() {
 
-        GLFW.glfwSetKeyCallback(Application.window.getWindowHandle(), new GLFWKeyCallback() {
+        GLFW.glfwSetKeyCallback(Application.getWindowHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
                 keysCurrentState[key] = action;
