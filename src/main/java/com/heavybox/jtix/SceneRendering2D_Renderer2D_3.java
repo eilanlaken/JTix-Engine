@@ -31,8 +31,8 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
                     layout(location = 1 // iii
                     ) in vec4 a_color;
                     layout(location = 2) in vec2 a_textCoords0;
-                    layout(location = 8) attribute vec2 a_textCoords1;
-                    layout(location = 34) attribute vec2 g;
+                    layout(location = 8) in vec2 a_textCoords1;
+                    layout(location = 34) in vec2 g;
 
                     // uniforms
                     uniform mat4 u_camera_combined;

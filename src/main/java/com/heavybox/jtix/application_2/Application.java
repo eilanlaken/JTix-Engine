@@ -9,13 +9,18 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 
 // TODO: merge application with application window.
 public class Application {
@@ -131,7 +136,54 @@ public class Application {
         if (!GLFW.glfwInit()) throw new ApplicationException("Unable to initialize GLFW.");
         //window = new ApplicationWindow();
         // initialize window
+        GLFW.glfwDefaultWindowHints();
+        GLFW.glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        GLFW.glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        GLFW.glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        GLFW.glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
+        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, config.resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, config.maximized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, config.autoMinimized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, config.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
 
+        if (config.title == null) config.title = "";
+        if (config.fullScreen) {
+            // compute and auxiliary buffers
+            long monitor = GLFW.glfwGetPrimaryMonitor();
+            GLFWVidMode videoMode = GLFW.glfwGetVideoMode(monitor);
+            assert videoMode != null;
+            GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.refreshRate());
+            windowHandle = GLFW.glfwCreateWindow(config.width, config.height, config.title, videoMode.refreshRate(), MemoryUtil.NULL);
+        } else {
+            GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, config.decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+            windowHandle = GLFW.glfwCreateWindow(config.width, config.height, config.title, MemoryUtil.NULL, MemoryUtil.NULL);
+        }
+        if (windowHandle == MemoryUtil.NULL) throw new RuntimeException("Unable to create window.");
+        windowSetSizeLimits(config.minWidth, config.minHeight, config.maxWidth, config.maxHeight);
+
+        // we need to set window position
+        if (!config.fullScreen) {
+            if (config.posX == -1 && config.posY == -1) windowSetPosition(Graphics.getMonitorWidth() / 2 - config.width / 2, Graphics.getMonitorHeight() / 2 - config.height / 2);
+            else windowSetPosition(config.posX, config.posY);
+            if (config.maximized) windowMaximize();
+        }
+
+        if (config.iconPath != null) {
+            windowSetIcon(config.iconPath);
+        }
+
+        // register callbacks
+        GLFW.glfwSetFramebufferSizeCallback(windowHandle, windowResizeCallback);
+        GLFW.glfwSetWindowFocusCallback(windowHandle, windowFocusChangeCallback);
+        GLFW.glfwSetWindowIconifyCallback(windowHandle, windowMinimizedCallback);
+        GLFW.glfwSetWindowMaximizeCallback(windowHandle, windowMaximizedCallback);
+        GLFW.glfwSetWindowCloseCallback(windowHandle, windowCloseCallback);
+        GLFW.glfwSetDropCallback(windowHandle, windowFilesDroppedCallback);
+        GLFW.glfwMakeContextCurrent(windowHandle);
+        GLFW.glfwSwapInterval(config.vSyncEnabled ? 1 : 0);
+        GLFW.glfwShowWindow(windowHandle);
+        //
         GL.createCapabilities();
         Async.init();
         Graphics.init();
@@ -262,6 +314,16 @@ public class Application {
         GLFW.glfwSetWindowShouldClose(windowHandle, true);
     }
 
+    public static void windowSetSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
+        GLFW.glfwSetWindowSizeLimits(windowHandle, minWidth > -1 ? minWidth : GLFW.GLFW_DONT_CARE,
+                minHeight > -1 ? minHeight : GLFW.GLFW_DONT_CARE, maxWidth > -1 ? maxWidth : GLFW.GLFW_DONT_CARE,
+                maxHeight > -1 ? maxHeight : GLFW.GLFW_DONT_CARE);
+    }
+
+    protected static void windowSetPosition(int x, int y) {
+        GLFW.glfwSetWindowPos(windowHandle, x, y);
+    }
+
     public static void windowMinimize() {
         GLFW.glfwIconifyWindow(windowHandle);
         windowMinimized = true;
@@ -284,7 +346,7 @@ public class Application {
         GLFW.glfwRequestWindowAttention(windowHandle);
     }
 
-    protected void windowSetIcon(final String path) {
+    protected static void windowSetIcon(final String path) {
         windowIconPath = path;
         IntBuffer width = BufferUtils.createIntBuffer(1);
         IntBuffer height = BufferUtils.createIntBuffer(1);

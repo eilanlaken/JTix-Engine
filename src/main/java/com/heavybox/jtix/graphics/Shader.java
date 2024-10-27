@@ -40,8 +40,8 @@ public class Shader implements MemoryResource {
         if (vertexShaderSource == null)   throw new GraphicsException("Vertex shader cannot be null.");
         if (fragmentShaderSource == null) throw new GraphicsException("Fragment shader cannot be null.");
         /* pre-process shader code */
-        this.vertexShaderSource = preprocessVertexShader(vertexShaderSource);
-        this.fragmentShaderSource = preprocessFragmentShader(fragmentShaderSource);
+        this.vertexShaderSource = vertexShaderSource;//preprocessVertexShader(vertexShaderSource);
+        this.fragmentShaderSource = fragmentShaderSource;//preprocessFragmentShader(fragmentShaderSource);
         /* attributes */
         this.attributeLocations = new MapObjectInt<>();
         this.attributeTypes = new MapObjectInt<>();
@@ -165,14 +165,14 @@ public class Shader implements MemoryResource {
 //        }
     }
 
-    private String preprocessVertexShader(final String vertexShaderSource) {
+    @Deprecated private String preprocessVertexShader(final String vertexShaderSource) {
         Matcher comments = GLSL_COMMENT_PATTERN.matcher(vertexShaderSource);
         String noComments = comments.replaceAll("");
         Matcher layouts = GLSL_LAYOUT_IN_PATTERN.matcher(noComments);
         return layouts.replaceAll("in");
     }
 
-    private String preprocessFragmentShader(final String fragmentShaderSource) {
+    @Deprecated private String preprocessFragmentShader(final String fragmentShaderSource) {
         // TODO: see how this should be preprocessed
         return fragmentShaderSource;
     }
