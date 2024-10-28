@@ -1,5 +1,6 @@
 package com.heavybox.jtix.application_2;
 
+import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
@@ -31,6 +33,7 @@ public class Application {
     private static int     windowLastDragAndDropFileCount = 0;
     private static boolean windowRequestRendering = false;
 
+    private static final Array<Runnable> tasks                         = new Array<>();
     private static final Array<Runnable> windowTasks                  = new Array<>();
     private static final Array<String>   windowFilesDraggedAndDropped = new Array<>();
 
@@ -59,14 +62,22 @@ public class Application {
     /* GLFW Window callbacks */
     private static final GLFWFramebufferSizeCallback windowResizeCallback = new GLFWFramebufferSizeCallback() {
 
+        private volatile boolean requested;
+
         @Override
         public void invoke(long windowHandle, final int width, final int height) {
-            renderWindow(width, height);
-            //GL20.glViewport(0, 0, width, height); // TODO: see
+            if (Configuration.GLFW_CHECK_THREAD0.get(true)) {
+                renderWindow2(width, height);
+            } else {
+                if (requested) return;
+                requested = true;
+                addTask(() -> {
+                    requested = false;
+                    renderWindow2(width, height);
+                });
+            }
             windowWidth = width;
             windowHeight = height;
-            if (currentScene != null) currentScene.windowResized(width, height);
-            Graphics.justResized = true;
         }
 
     };
@@ -196,14 +207,25 @@ public class Application {
         /* main thread game loop */
         running = true;
         while (running && !GLFW.glfwWindowShouldClose(windowHandle)) {
-            if (windowFocused) GLFW.glfwMakeContextCurrent(windowHandle);
-            //GLFW.glfwMakeContextCurrent(windowHandle); // was
+            //if (windowFocused) GLFW.glfwMakeContextCurrent(windowHandle);
+            GLFW.glfwMakeContextCurrent(windowHandle); // was
             boolean windowRendered = windowRefresh();
             int targetFrameRate = Graphics.getTargetFps();
 
             Assets.update();
             Input.update();
             GLFW.glfwPollEvents();
+
+            boolean requestRendering;
+            for (Runnable task : tasks) {
+                task.run();
+            }
+            synchronized (tasks) {
+                requestRendering = tasks.size > 0;
+                tasks.clear();
+            }
+
+            if (requestRendering && !Graphics.isContinuousRendering()) windowRequestRendering();
 
             if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
                 try {
@@ -246,8 +268,11 @@ public class Application {
         currentScene.start();
     }
 
-    private static void renderWindow(final int width, final int height) {
-        // update frame buffer info
+    public static synchronized void addTask(Runnable task) {
+        tasks.add(task);
+    }
+
+    public static void renderWindow2(final int width, final int height) {
         int backBufferWidth;
         int backBufferHeight;
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -259,9 +284,16 @@ public class Application {
         }
         GLFW.glfwMakeContextCurrent(windowHandle);
         GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
+        currentScene.windowResized(width, height);
         Graphics.update();
         currentScene.update();
         GLFW.glfwSwapBuffers(windowHandle);
+    }
+
+    public static void windowRequestRendering() {
+        synchronized (tasks) {
+            windowRequestRendering = true;
+        }
     }
 
     public static boolean windowRefresh() {
@@ -299,6 +331,10 @@ public class Application {
     }
 
     public static void windowSetSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
+        windowMinWidth = minWidth;
+        windowMinHeight = minHeight;
+        windowMaxWidth = maxWidth;
+        windowMaxHeight = maxHeight;
         GLFW.glfwSetWindowSizeLimits(windowHandle, minWidth > -1 ? minWidth : GLFW.GLFW_DONT_CARE,
                 minHeight > -1 ? minHeight : GLFW.GLFW_DONT_CARE, maxWidth > -1 ? maxWidth : GLFW.GLFW_DONT_CARE,
                 maxHeight > -1 ? maxHeight : GLFW.GLFW_DONT_CARE);
@@ -319,11 +355,8 @@ public class Application {
     }
 
     public static void windowFocus() {
+        windowFocused = true;
         GLFW.glfwFocusWindow(windowHandle);
-    }
-
-    public static void windowRestore() {
-        GLFW.glfwRestoreWindow(windowHandle);
     }
 
     public static void windowFlash() {

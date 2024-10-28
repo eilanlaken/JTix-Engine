@@ -137,7 +137,7 @@ public class Mouse {
         return mouseButtonsPrevStates[button.glfwCode] == GLFW.GLFW_PRESS && mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public void update() {
+    void update() {
         /* reset internal state */
         verticalScroll = 0;
         horizontalScroll = 0;

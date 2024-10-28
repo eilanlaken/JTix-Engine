@@ -66,10 +66,6 @@ public final class Texture implements MemoryResource {
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
         }
 
-//        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
-//        if (Graphics.isAnisotropicFilteringSupported()) {
-//            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
-//        }
     }
 
     // TODO: test
@@ -113,12 +109,11 @@ public final class Texture implements MemoryResource {
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
         }
 
-//        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
-//        if (Graphics.isAnisotropicFilteringSupported()) {
-//            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
-//        }
-
         STBImage.stbi_image_free(buffer); // TODO: test
+    }
+
+    public Texture(String path) {
+        this(path, null, null, null, null, Graphics.getMaxAnisotropy());
     }
 
     void setSlot(final int slot) { this.slot = slot; }
