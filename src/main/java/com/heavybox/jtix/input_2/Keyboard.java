@@ -5,14 +5,14 @@ import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
-public class Keyboard {
+public final class Keyboard {
 
-    private static final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
-    private static final ArrayInt keysPressed = new ArrayInt(12);
-    private static final ArrayInt keysHeld = new ArrayInt(12);
-    private static final ArrayInt keysJustPressed = new ArrayInt(12);
+    private final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
+    private final ArrayInt keysPressed = new ArrayInt(12);
+    private final ArrayInt keysHeld = new ArrayInt(12);
+    private final ArrayInt keysJustPressed = new ArrayInt(12);
 
-    static void init() {
+    Keyboard() {
 
         GLFW.glfwSetKeyCallback(Application.getWindowHandle(), new GLFWKeyCallback() {
             @Override
@@ -41,27 +41,27 @@ public class Keyboard {
         });
     }
 
-    public static boolean isKeyPressed(final Key key) {
+    public boolean isKeyPressed(final Key key) {
         if (key == Key.ANY_KEY) return keysPressed.size > 0;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_PRESS || keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public static boolean isKeyReleased(final Key key) {
+    public boolean isKeyReleased(final Key key) {
         if (key.glfwCode == Key.ANY_KEY.glfwCode) return true;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public static boolean isKeyJustPressed(final Key key) {
+    public boolean isKeyJustPressed(final Key key) {
         if (key == Key.ANY_KEY) return keysJustPressed.size > 0;
         else return keysJustPressed.contains(key.glfwCode);
     }
 
-    public static boolean isKeyHeld(final Key key) {
+    public boolean isKeyHeld(final Key key) {
         if (key == Key.ANY_KEY) return keysHeld.size > 0;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public static void update() {
+    public void update() {
         /* reset internal state */
         keysJustPressed.clear();
     }

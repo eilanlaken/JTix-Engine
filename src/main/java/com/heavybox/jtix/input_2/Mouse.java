@@ -6,25 +6,23 @@ import org.lwjgl.glfw.*;
 public class Mouse {
 
     /* mouse info */
-    private static float   sensitivity      = 1f; // goes from 0 to infinity. Default is 1.
-    private static int     prevCursorX      = 0;
-    private static int     prevCursorY      = 0;
-    private static int     cursorX          = 0;
-    private static int     cursorY          = 0;
-    private static int     cursorDeltaX     = 0;
-    private static int     cursorDeltaY     = 0;
-    private static boolean cursorHidden     = false;
-    private static boolean cursorInWindow   = true;
-    private static float   verticalScroll   = 0;
-    private static float   horizontalScroll = 0;
+    private float   sensitivity      = 1f; // goes from 0 to infinity. Default is 1.
+    private int     prevCursorX      = 0;
+    private int     prevCursorY      = 0;
+    private int     cursorX          = 0;
+    private int     cursorY          = 0;
+    private int     cursorDeltaX     = 0;
+    private int     cursorDeltaY     = 0;
+    private boolean cursorHidden     = false;
+    private boolean cursorInWindow   = true;
+    private float   verticalScroll   = 0;
+    private float   horizontalScroll = 0;
 
     /* mouse state */
-    private static final int[] mouseButtonsPrevStates    = new int[5];
-    private static final int[] mouseButtonsCurrentStates = new int[5];
+    private final int[] mouseButtonsPrevStates    = new int[5];
+    private final int[] mouseButtonsCurrentStates = new int[5];
 
-    private Mouse() {}
-
-    static void init() {
+    Mouse() {
         GLFW.glfwSetMouseButtonCallback(Application.getWindowHandle(), new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
@@ -61,85 +59,85 @@ public class Mouse {
         });
     }
 
-    public static float getVerticalScroll() {
+    public float getVerticalScroll() {
         return verticalScroll;
     }
 
-    public static float getHorizontalScroll() {
+    public float getHorizontalScroll() {
         return horizontalScroll;
     }
 
-    public static void hideCursor() {
+    public void hideCursor() {
         GLFW.glfwSetInputMode(Application.getWindowHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
         cursorHidden = true;
     }
 
-    public static void revealCursor() {
+    public void revealCursor() {
         GLFW.glfwSetInputMode(Application.getWindowHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         cursorHidden = false;
     }
 
-    public static boolean isCursorHidden() {
+    public boolean isCursorHidden() {
         return cursorHidden;
     }
 
-    public static boolean isInsideWindow() {
+    public boolean isInsideWindow() {
         return true;
     }
 
-    public static void setMouseSensitivity(float sensitivity) {
+    public void setMouseSensitivity(float sensitivity) {
         sensitivity = sensitivity;
     }
 
-    public static float getMouseSensitivity() {
+    public float getMouseSensitivity() {
         return sensitivity;
     }
 
-    public static int getPrevCursorX() {
+    public int getPrevCursorX() {
         return prevCursorX;
     }
 
-    public static int getPrevCursorY() {
+    public int getPrevCursorY() {
         return prevCursorY;
     }
 
-    public static int getCursorX() {
+    public int getCursorX() {
         return cursorX;
     }
 
-    public static int getCursorY() {
+    public int getCursorY() {
         return cursorY;
     }
 
-    public static int getCursorDeltaX() {
+    public int getCursorDeltaX() {
         return cursorDeltaX;
     }
 
-    public static int getCursorDeltaY() {
+    public int getCursorDeltaY() {
         return cursorDeltaY;
     }
 
-    public static boolean isCursorInWindow() {
+    public boolean isCursorInWindow() {
         return cursorInWindow;
     }
 
-    public static boolean isButtonPressed(final Button button) {
+    public boolean isButtonPressed(final Button button) {
         return mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_PRESS;
     }
 
-    public static boolean isButtonJustPressed(final Button button) {
+    public boolean isButtonJustPressed(final Button button) {
         return mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_PRESS && mouseButtonsPrevStates[button.glfwCode] != GLFW.GLFW_PRESS;
     }
 
-    public static boolean isButtonReleased(final Button button) {
+    public boolean isButtonReleased(final Button button) {
         return mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public static boolean isButtonClicked(final Button button) {
+    public boolean isButtonClicked(final Button button) {
         return mouseButtonsPrevStates[button.glfwCode] == GLFW.GLFW_PRESS && mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public static void update() {
+    public void update() {
         /* reset internal state */
         verticalScroll = 0;
         horizontalScroll = 0;

@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.stb.STBImage;
-import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
@@ -22,11 +21,9 @@ import java.nio.IntBuffer;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 
-// TODO: merge application with application window.
 public class Application {
 
-    private static boolean initialized = false;
-    private static final Array<Runnable> applicationTasks = new Array<>();
+    @Deprecated private static boolean initialized = false;
     private static boolean running = false;
 
     private static long    windowHandle;
@@ -51,10 +48,11 @@ public class Application {
     private static String  windowIconPath               = null;
     private static boolean windowVisible                = true;
     private static boolean windowFullScreen             = false;
+    private static boolean windowResizeable             = true;
     private static String  windowTitle                  = "HeavyBox Game";
     private static boolean windowVSyncEnabled           = false;
 
-    private static GLFWErrorCallback errorCallback;
+    private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
 
     private static Scene currentScene = null;
 
@@ -64,17 +62,6 @@ public class Application {
 
         @Override
         public void invoke(long windowHandle, final int width, final int height) {
-            // OLD RESIZE CODE
-//            if (Configuration.GLFW_CHECK_THREAD0.get(true)) {
-//                renderWindow(width, height);
-//            } else {
-//                if (requested) return;
-//                requested = true;
-//                addTask(() -> {
-//                    requested = false;
-//                    renderWindow(width, height);
-//                });
-//            }
             renderWindow(width, height);
             //GL20.glViewport(0, 0, width, height); // TODO: see
             windowWidth = width;
@@ -87,6 +74,9 @@ public class Application {
         @Override
         public synchronized void invoke(long handle, final boolean focused) {
             windowTasks.add(() -> windowFocused = focused);
+            windowTasks.add(() -> {
+                if (currentScene != null) currentScene.windowFocused(focused);
+            });
         }
     };
 
@@ -124,13 +114,13 @@ public class Application {
     };
 
     public static void init() {
-        final ApplicationConfiguration config = new ApplicationConfiguration(); // defaults.
+        final ApplicationSettings config = new ApplicationSettings(); // defaults.
         init(config);
     }
 
-    public static void init(final ApplicationConfiguration config) {
+    public static void init(final ApplicationSettings settings) {
         if (initialized) throw new ApplicationException("Application window already created and initialized. Cannot call init() twice.");
-        errorCallback = GLFWErrorCallback.createPrint(System.err);
+        //errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
         GLFWErrorCallback.createPrint(System.err).set();
         if (!GLFW.glfwInit()) throw new ApplicationException("Unable to initialize GLFW.");
@@ -142,35 +132,35 @@ public class Application {
         GLFW.glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         GLFW.glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, config.resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, config.maximized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, config.autoMinimized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, config.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, settings.resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, settings.maximized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, settings.autoMinimized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
 
-        if (config.title == null) config.title = "";
-        if (config.fullScreen) {
+        if (settings.title == null) settings.title = "";
+        if (settings.fullScreen) {
             // compute and auxiliary buffers
             long monitor = GLFW.glfwGetPrimaryMonitor();
             GLFWVidMode videoMode = GLFW.glfwGetVideoMode(monitor);
             assert videoMode != null;
             GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, videoMode.refreshRate());
-            windowHandle = GLFW.glfwCreateWindow(config.width, config.height, config.title, videoMode.refreshRate(), MemoryUtil.NULL);
+            windowHandle = GLFW.glfwCreateWindow(settings.width, settings.height, settings.title, videoMode.refreshRate(), MemoryUtil.NULL);
         } else {
-            GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, config.decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
-            windowHandle = GLFW.glfwCreateWindow(config.width, config.height, config.title, MemoryUtil.NULL, MemoryUtil.NULL);
+            GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, settings.decorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+            windowHandle = GLFW.glfwCreateWindow(settings.width, settings.height, settings.title, MemoryUtil.NULL, MemoryUtil.NULL);
         }
         if (windowHandle == MemoryUtil.NULL) throw new RuntimeException("Unable to create window.");
-        windowSetSizeLimits(config.minWidth, config.minHeight, config.maxWidth, config.maxHeight);
+        windowSetSizeLimits(settings.minWidth, settings.minHeight, settings.maxWidth, settings.maxHeight);
 
         // we need to set window position
-        if (!config.fullScreen) {
-            if (config.posX == -1 && config.posY == -1) windowSetPosition(Graphics.getMonitorWidth() / 2 - config.width / 2, Graphics.getMonitorHeight() / 2 - config.height / 2);
-            else windowSetPosition(config.posX, config.posY);
-            if (config.maximized) windowMaximize();
+        if (!settings.fullScreen) {
+            if (settings.posX == -1 && settings.posY == -1) windowSetPosition(Graphics.getMonitorWidth() / 2 - settings.width / 2, Graphics.getMonitorHeight() / 2 - settings.height / 2);
+            else windowSetPosition(settings.posX, settings.posY);
+            if (settings.maximized) windowMaximize();
         }
 
-        if (config.iconPath != null) {
-            windowSetIcon(config.iconPath);
+        if (settings.iconPath != null) {
+            windowSetIcon(settings.iconPath);
         }
 
         // register callbacks
@@ -181,13 +171,13 @@ public class Application {
         GLFW.glfwSetWindowCloseCallback(windowHandle, windowCloseCallback);
         GLFW.glfwSetDropCallback(windowHandle, windowFilesDroppedCallback);
         GLFW.glfwMakeContextCurrent(windowHandle);
-        GLFW.glfwSwapInterval(config.vSyncEnabled ? 1 : 0);
+        GLFW.glfwSwapInterval(settings.vSyncEnabled ? 1 : 0);
         GLFW.glfwShowWindow(windowHandle);
         //
         GL.createCapabilities();
         Async.init();
         Graphics.init();
-        Input.init();
+        //Input.init();
         initialized = true;
     }
 
@@ -210,23 +200,9 @@ public class Application {
             Input.update();
             GLFW.glfwPollEvents();
 
-            boolean requestRendering;
-            for (Runnable task : applicationTasks) {
-                task.run();
-            }
-            synchronized (applicationTasks) {
-                requestRendering = applicationTasks.size > 0;
-                applicationTasks.clear();
-            }
-
-            if (requestRendering && !Graphics.isContinuousRendering()) {
-                synchronized (applicationTasks) {
-                    windowRequestRendering = true;
-                }
-            }
             if (!windowRendered) { // Sleep a few milliseconds in case no rendering was requested with continuous rendering disabled.
                 try {
-                    Thread.sleep(1000 / Graphics.getIdleFps());
+                    Thread.sleep(1000 / Graphics.getIdleFps()); // TODO: fix the busy waiting.
                 } catch (InterruptedException ignored) {
                     // ignore
                 }
@@ -260,10 +236,6 @@ public class Application {
         currentScene = scene;
         currentScene.setup();
         currentScene.start();
-    }
-
-    @Deprecated public static synchronized void addTask(Runnable task) {
-        applicationTasks.add(task);
     }
 
     private static void renderWindow(final int width, final int height) {
@@ -305,6 +277,10 @@ public class Application {
     }
 
     /* Setters & Actions */
+
+    public static void restart() { // TODO
+
+    }
 
     public static void exit() {
         running = false;

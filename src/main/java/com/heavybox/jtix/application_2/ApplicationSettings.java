@@ -1,6 +1,6 @@
 package com.heavybox.jtix.application_2;
 
-public final class ApplicationConfiguration {
+public final class ApplicationSettings {
 
     public int     posX                   = -1;
     public int     posY                   = -1;

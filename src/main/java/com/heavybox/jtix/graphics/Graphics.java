@@ -2,7 +2,6 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
-import com.heavybox.jtix.math.MathUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -56,16 +55,12 @@ public final class Graphics {
     }
 
     public static void init() {
-        if (initialized) return;
-
         long monitor = GLFW.glfwGetPrimaryMonitor();
         FloatBuffer px = BufferUtils.createFloatBuffer(1);
         FloatBuffer py = BufferUtils.createFloatBuffer(1);
         GLFW.glfwGetMonitorContentScale(monitor, px, py);
         contentScaleX = px.get(0);
         contentScaleY = py.get(0);
-
-        initialized = true;
     }
 
     public static void update() {
