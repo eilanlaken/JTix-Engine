@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
+import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 
@@ -20,12 +20,12 @@ public class Main {
 
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
         //FontGenerator.generateBitmapFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 64);
-        AsyncTask italic = new AsyncTask() {
-            @Override
-            public void task() {
-                ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
-            }
-        };
+//        AsyncTask italic = new AsyncTask() {
+//            @Override
+//            public void task() {
+//                ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
+//            }
+//        };
 
 //        AsyncTask regular = new AsyncTask() {
 //            @Override
@@ -46,8 +46,11 @@ public class Main {
         //if (true) return;
 
         //ApplicationWindowAttributes config = new ApplicationWindowAttributes();
-        Application.create();
-        Application.launch(new ScreenLoading());
+//        Application.create();
+//        Application.launch(new ScreenLoading());
+
+        Application.init();
+        Application.launch(new SceneTest());
 
     }
 

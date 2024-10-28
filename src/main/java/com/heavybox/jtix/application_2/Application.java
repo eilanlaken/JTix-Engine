@@ -58,7 +58,6 @@ public class Application {
 
     /* GLFW Window callbacks */
     private static final GLFWFramebufferSizeCallback windowResizeCallback = new GLFWFramebufferSizeCallback() {
-        private volatile boolean requested;
 
         @Override
         public void invoke(long windowHandle, final int width, final int height) {
@@ -66,15 +65,17 @@ public class Application {
             //GL20.glViewport(0, 0, width, height); // TODO: see
             windowWidth = width;
             windowHeight = height;
+            if (currentScene != null) currentScene.windowResized(width, height);
             Graphics.justResized = true;
         }
+
     };
 
     private static final GLFWWindowFocusCallback windowFocusChangeCallback = new GLFWWindowFocusCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean focused) {
-            windowTasks.add(() -> windowFocused = focused);
             windowTasks.add(() -> {
+                windowFocused = focused;
                 if (currentScene != null) currentScene.windowFocused(focused);
             });
         }
@@ -83,7 +84,10 @@ public class Application {
     private static final GLFWWindowIconifyCallback windowMinimizedCallback = new GLFWWindowIconifyCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean minimized) {
-            windowTasks.add(() -> windowMinimized = minimized);
+            windowTasks.add(() -> {
+                windowMinimized = minimized;
+                if (currentScene != null) currentScene.windowMinimized(minimized);
+            });
         }
     };
 
@@ -192,7 +196,8 @@ public class Application {
         /* main thread game loop */
         running = true;
         while (running && !GLFW.glfwWindowShouldClose(windowHandle)) {
-            GLFW.glfwMakeContextCurrent(windowHandle);
+            if (windowFocused) GLFW.glfwMakeContextCurrent(windowHandle);
+            //GLFW.glfwMakeContextCurrent(windowHandle); // was
             boolean windowRendered = windowRefresh();
             int targetFrameRate = Graphics.getTargetFps();
 
@@ -214,11 +219,14 @@ public class Application {
         /* clean memory resources */ // TODO: clear Assets.
         currentScene.finish();
         Assets.clear(); // TODO: implement
+
         GLFW.glfwSetWindowFocusCallback(windowHandle, null);
         GLFW.glfwSetWindowIconifyCallback(windowHandle, null);
         GLFW.glfwSetWindowCloseCallback(windowHandle, null);
         GLFW.glfwSetDropCallback(windowHandle, null);
+        GLFW.glfwSetFramebufferSizeCallback(windowHandle, null);
         GLFW.glfwDestroyWindow(windowHandle);
+        windowResizeCallback.free();
         windowFocusChangeCallback.free();
         windowMinimizedCallback.free();
         windowMaximizedCallback.free();
@@ -228,7 +236,7 @@ public class Application {
         errorCallback.free();
     }
 
-    public void playScene(@NotNull Scene scene) {
+    public static void playScene(@NotNull Scene scene) {
         if (!running) throw new ApplicationException("Application not running. Function run() must be called with the starting scene, after init.");
         if (currentScene != null) {
             currentScene.finish();
