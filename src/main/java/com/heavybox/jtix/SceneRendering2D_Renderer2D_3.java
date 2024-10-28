@@ -67,7 +67,6 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
     public SceneRendering2D_Renderer2D_3() {
         renderer2D = new Renderer2D_3();
         Shader shader = new Shader(vertexShader, fragmentShader);
-        System.out.println(shader);
 
         //System.out.println(shader.attributeLocations.get("a_position", -1));
 
@@ -80,6 +79,7 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
         componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
         yellowSquare = AssetStore.get("assets/textures/yellowSquare.jpg");
+        //yellowSquare = new Texture("assets/textures/yellowSquare.jpg");
     }
 
     @Override

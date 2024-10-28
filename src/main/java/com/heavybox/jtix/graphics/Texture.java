@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -16,7 +17,7 @@ import java.nio.IntBuffer;
 // need to implement LOD: GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
 public final class Texture implements MemoryResource {
 
-    private       int       handle;
+    private         int     handle;
     private       int       slot;
     public  final int       width;
     public  final int       height;
@@ -54,10 +55,10 @@ public final class Texture implements MemoryResource {
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-        if (filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
-                filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
-                filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
-                filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+        if (this.filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
+            this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
+            this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
+            this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
             GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
             this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
         } else {
@@ -66,52 +67,6 @@ public final class Texture implements MemoryResource {
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
         }
 
-    }
-
-    // TODO: test
-    public Texture(final String path, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy) {
-        this.handle = GL11.glGenTextures();
-        this.slot = -1;
-
-        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
-        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
-        IntBuffer channelsBuffer = BufferUtils.createIntBuffer(1);
-        ByteBuffer buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
-        if (buffer == null) throw new RuntimeException("Failed to load a texture file. Check that the path is correct: " + path + System.lineSeparator() + "STBImage error: " + STBImage.stbi_failure_reason());
-        this.width = widthBuffer.get();
-        this.height = heightBuffer.get();
-        this.invWidth = 1.0f / width;
-        this.invHeight = 1.0f / height;
-        int maxTextureSize = Graphics.getMaxTextureSize();
-        if (width > maxTextureSize || height > maxTextureSize)
-            throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
-
-        this.filterMag = filterMag != null ? filterMag : FilterMag.NEAREST;
-        this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
-        this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.biasLOD = 0;
-
-        TextureBinder.bind(this);
-        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-        System.out.println("min f " + this.filterMin);
-        if (this.filterMin == FilterMin.NEAREST_MIPMAP_LINEAR || this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  || this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST || this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
-            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-            this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
-            System.out.println("hi");
-        } else {
-            this.anisotropy = 1;
-            System.out.println("here");
-            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
-            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
-        }
-
-        STBImage.stbi_image_free(buffer); // TODO: test
-    }
-
-    public Texture(String path) {
-        this(path, null, null, null, null, Graphics.getMaxAnisotropy());
     }
 
     void setSlot(final int slot) { this.slot = slot; }

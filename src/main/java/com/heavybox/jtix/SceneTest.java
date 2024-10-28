@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 public class SceneTest implements Scene {
 
-    Texture yellow = new Texture("assets/textures/yellowSquare.jpg");
+    Texture yellow = null;
     private Renderer2D_3 renderer2D = new Renderer2D_3();
 
     @Override
