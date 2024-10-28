@@ -49,8 +49,8 @@ public class Main {
         Application.create();
         Application.launch(new ScreenLoading());
 
-        //Application.init();
-        //Application.launch(new SceneTest());
+//        Application.init();
+//        Application.launch(new SceneTest());
 
     }
 

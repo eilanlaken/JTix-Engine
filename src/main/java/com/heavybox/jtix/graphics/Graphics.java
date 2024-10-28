@@ -69,8 +69,9 @@ public final class Graphics {
         if (resetDeltaTime) {
             resetDeltaTime = false;
             deltaTime = 0;
-        } else
+        } else {
             deltaTime = (time - lastFrameTime) / 1000000000.0f;
+        }
         lastFrameTime = time;
 
         if (time - frameCounterStart >= 1000000000) {

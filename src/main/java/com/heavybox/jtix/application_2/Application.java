@@ -1,6 +1,5 @@
 package com.heavybox.jtix.application_2;
 
-import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
@@ -67,13 +66,13 @@ public class Application {
         @Override
         public void invoke(long windowHandle, final int width, final int height) {
             if (Configuration.GLFW_CHECK_THREAD0.get(true)) {
-                renderWindow2(width, height);
+                renderWindow(width, height);
             } else {
                 if (requested) return;
                 requested = true;
                 addTask(() -> {
                     requested = false;
-                    renderWindow2(width, height);
+                    renderWindow(width, height);
                 });
             }
             windowWidth = width;
@@ -272,18 +271,14 @@ public class Application {
         tasks.add(task);
     }
 
-    public static void renderWindow2(final int width, final int height) {
-        int backBufferWidth;
-        int backBufferHeight;
+    public static void renderWindow(final int width, final int height) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer fbWidth = stack.mallocInt(1);
             IntBuffer fbHeight = stack.mallocInt(1);
             GLFW.glfwGetFramebufferSize(windowHandle, fbWidth, fbHeight);
-            backBufferWidth = fbWidth.get(0);
-            backBufferHeight = fbHeight.get(0);
+            GL20.glViewport(0, 0, fbWidth.get(0), fbHeight.get(0));
         }
         GLFW.glfwMakeContextCurrent(windowHandle);
-        GL20.glViewport(0, 0, backBufferWidth, backBufferHeight);
         currentScene.windowResized(width, height);
         Graphics.update();
         currentScene.update();

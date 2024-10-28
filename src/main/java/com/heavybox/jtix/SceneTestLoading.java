@@ -9,7 +9,7 @@ import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest implements Scene {
+public class SceneTestLoading implements Scene {
 
     Texture yellow = new Texture("assets/textures/yellowSquare.jpg");
     private Renderer2D_3 renderer2D = new Renderer2D_3();
@@ -38,8 +38,8 @@ public class SceneTest implements Scene {
 
         renderer2D.begin(null);
 
-        renderer2D.drawLineThin(0,0,400,400);
         renderer2D.drawTexture(yellow,0,0,0,1,1);
+        renderer2D.drawLineThin(0,0,400,400);
 
         renderer2D.end();
 

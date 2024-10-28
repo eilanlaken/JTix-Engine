@@ -77,9 +77,7 @@ public final class Texture implements MemoryResource {
         IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
         IntBuffer channelsBuffer = BufferUtils.createIntBuffer(1);
         ByteBuffer buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
-        if (buffer == null) throw new RuntimeException("Failed to load a texture file. Check that the path is correct: " + path
-                + System.lineSeparator() + "STBImage error: "
-                + STBImage.stbi_failure_reason());
+        if (buffer == null) throw new RuntimeException("Failed to load a texture file. Check that the path is correct: " + path + System.lineSeparator() + "STBImage error: " + STBImage.stbi_failure_reason());
         this.width = widthBuffer.get();
         this.height = heightBuffer.get();
         this.invWidth = 1.0f / width;
@@ -97,14 +95,14 @@ public final class Texture implements MemoryResource {
         TextureBinder.bind(this);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
-        if (filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
-            filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
-            filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
-            filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+        System.out.println("min f " + this.filterMin);
+        if (this.filterMin == FilterMin.NEAREST_MIPMAP_LINEAR || this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  || this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST || this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
             GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
             this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+            System.out.println("hi");
         } else {
             this.anisotropy = 1;
+            System.out.println("here");
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
         }
