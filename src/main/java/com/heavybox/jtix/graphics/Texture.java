@@ -83,7 +83,7 @@ public final class Texture implements MemoryResource {
         if (this.anisotropy == anisotropy) return;
         this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
         TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        //GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
         if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
     }
 
@@ -91,7 +91,7 @@ public final class Texture implements MemoryResource {
         if (this.biasLOD == biasLOD) return;
         this.biasLOD = biasLOD;
         TextureBinder.bind(this);
-        GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
+        //GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, this.biasLOD);
     }
 

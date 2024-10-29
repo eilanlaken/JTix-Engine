@@ -4,16 +4,20 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Mouse;
+import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest implements Scene {
 
     Texture yellow = Assets.get("assets/textures/yellowSquare.jpg");
     private Renderer2D_3 renderer2D = new Renderer2D_3();
+    private ComponentGraphicsCamera componentGraphicsCamera;
 
     @Override
     public void setup() {
@@ -23,24 +27,32 @@ public class SceneTest implements Scene {
     @Override
     public void start() {
         System.out.println("start");
+        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
+        componentGraphicsCamera.update();
 
     }
 
+    float x = 0, y = 0;
+
     @Override
     public void update() {
-        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            Application.windowSetSizeLimits(100, 100, 200, 200);
-            Application.windowFlash();
-        }
 
+        Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
+        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+            //Application.windowSetSizeLimits(100, 100, 200, 200);
+            //Application.windowFlash();
+            componentGraphicsCamera.lens.unProject(screen);
+            x = screen.x;
+            y = screen.y;
+        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
-        renderer2D.begin(null);
+        renderer2D.begin(componentGraphicsCamera.lens.combined);
 
         renderer2D.drawLineThin(0,0,400,400);
-        renderer2D.drawTexture(yellow,0,0,0,1,1);
+        renderer2D.drawTexture(yellow,x,y,0,1,1);
 
         renderer2D.end();
 
