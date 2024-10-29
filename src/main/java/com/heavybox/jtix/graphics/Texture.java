@@ -58,8 +58,9 @@ public final class Texture implements MemoryResource {
             this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
             this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
             this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
-            if (Graphics.isAnisotropicFilteringSupported()) GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
             this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+            if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
         } else {
             this.anisotropy = 1;
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
@@ -83,7 +84,6 @@ public final class Texture implements MemoryResource {
         if (this.anisotropy == anisotropy) return;
         this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
         TextureBinder.bind(this);
-        //GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
         if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
     }
 
@@ -91,7 +91,6 @@ public final class Texture implements MemoryResource {
         if (this.biasLOD == biasLOD) return;
         this.biasLOD = biasLOD;
         TextureBinder.bind(this);
-        //GL13.glActiveTexture(GL20.GL_TEXTURE0 + slot);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, this.biasLOD);
     }
 

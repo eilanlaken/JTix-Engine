@@ -1,6 +1,9 @@
 package com.heavybox.jtix.graphics;
 
 import org.lwjgl.opengl.*;
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.IntBuffer;
 
 public class TextureBinder {
 
@@ -41,6 +44,14 @@ public class TextureBinder {
         GL11.glBindTexture(GL20.GL_TEXTURE_2D, 0);
         boundTextures[slot] = null;
         texture.setSlot(-1);
+    }
+
+    public static int getCurrentActiveSlot() {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer slot = stack.mallocInt(1);
+            GL11.glGetIntegerv(GL13.GL_ACTIVE_TEXTURE, slot);
+            return slot.get() - GL20.GL_TEXTURE0;
+        }
     }
 
     /**

@@ -7,11 +7,14 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.graphics.TextureBinder;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 
 public class SceneTest implements Scene {
 
@@ -55,6 +58,7 @@ public class SceneTest implements Scene {
         renderer2D.drawTexture(yellow,x,y,0,1,1);
 
         renderer2D.end();
+
 
     }
 
