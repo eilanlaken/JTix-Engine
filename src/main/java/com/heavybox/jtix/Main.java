@@ -50,7 +50,7 @@ public class Main {
 //        Application.launch(new ScreenLoading());
 
         Application.init();
-        Application.launch(new SceneTestLoading());
+        Application.launch(new SceneTest_2());
 
     }
 

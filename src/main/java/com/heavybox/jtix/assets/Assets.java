@@ -132,6 +132,13 @@ public final class Assets {
 
     }
 
+    public static synchronized void finishLoading() {
+        while (isLoadingInProgress()) {
+            update();
+            Thread.yield();
+        }
+    }
+
     public static long getTotalStorageBytes() {
         long total = 0;
         for (Map.Entry<String, Asset> assetEntry : store.entrySet()) {
