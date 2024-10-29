@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
@@ -16,13 +17,12 @@ public class SceneTestLoading implements Scene {
 
     @Override
     public void setup() {
-        System.out.println("setup");
+
     }
 
     @Override
     public void start() {
-        System.out.println("start");
-
+        Assets.loadTexture("assets/textures/yellowSquare.jpg");
     }
 
     @Override
@@ -36,18 +36,16 @@ public class SceneTestLoading implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
-        renderer2D.begin(null);
-
-        renderer2D.drawTexture(yellow,0,0,0,1,1);
-        renderer2D.drawLineThin(0,0,400,400);
-
-        renderer2D.end();
+        System.out.println("loading? " + Assets.isLoadingInProgress());
+        if (!Assets.isLoadingInProgress()) {
+            Application.playScene(new SceneTest());
+        }
 
     }
 
     @Override
     public void finish() {
-        System.out.println("finish");
+
 
     }
 

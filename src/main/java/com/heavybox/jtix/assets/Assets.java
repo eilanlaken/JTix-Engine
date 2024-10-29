@@ -106,9 +106,9 @@ public final class Assets {
     }
 
     public static void loadTexture(String path,
-                                   int anisotropy,
                                    Texture.FilterMag magFilter, Texture.FilterMin minFilter,
-                                   Texture.Wrap uWrap, Texture.Wrap vWrap) {
+                                   Texture.Wrap uWrap, Texture.Wrap vWrap,
+                                   int anisotropy) {
         final HashMap<String, Object> options = new HashMap<>();
         options.put("anisotropy", anisotropy);
         options.put("magFilter", magFilter);

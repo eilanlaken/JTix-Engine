@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
@@ -11,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 public class SceneTest implements Scene {
 
-    Texture yellow = null;
+    Texture yellow = Assets.get("assets/textures/yellowSquare.jpg");
     private Renderer2D_3 renderer2D = new Renderer2D_3();
 
     @Override

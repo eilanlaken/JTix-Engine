@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
-import com.heavybox.jtix.application.Application;
+import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 
@@ -45,12 +45,12 @@ public class Main {
 
         //if (true) return;
 
-        ApplicationWindowAttributes config = new ApplicationWindowAttributes();
-        Application.create();
-        Application.launch(new ScreenLoading());
+//        ApplicationWindowAttributes config = new ApplicationWindowAttributes();
+//        Application.create();
+//        Application.launch(new ScreenLoading());
 
-//        Application.init();
-//        Application.launch(new SceneTest());
+        Application.init();
+        Application.launch(new SceneTestLoading());
 
     }
 

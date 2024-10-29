@@ -12,12 +12,11 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 // TODO:
-// need to change filter
-// need to put anisotropy in Graphics
 // need to implement LOD: GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
+// try to implement string constructor.
 public final class Texture implements MemoryResource {
 
-    private         int     handle;
+    private       int       handle;
     private       int       slot;
     public  final int       width;
     public  final int       height;
@@ -59,14 +58,13 @@ public final class Texture implements MemoryResource {
             this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
             this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
             this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
-            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            if (Graphics.isAnisotropicFilteringSupported()) GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
             this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
         } else {
             this.anisotropy = 1;
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
             GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
         }
-
     }
 
     void setSlot(final int slot) { this.slot = slot; }
