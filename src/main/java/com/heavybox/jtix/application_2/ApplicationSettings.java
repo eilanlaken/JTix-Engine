@@ -10,6 +10,7 @@ public final class ApplicationSettings {
     public int     minHeight              = -1;
     public int     maxWidth               = -1;
     public int     maxHeight              = -1;
+    public int     MSAA                   =  0; // TODO
     public boolean autoMinimized          = true;
     public boolean minimized              = false;
     public boolean maximized              = false;

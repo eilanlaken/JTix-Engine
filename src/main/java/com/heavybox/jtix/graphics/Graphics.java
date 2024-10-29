@@ -6,6 +6,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -211,6 +212,12 @@ public final class Graphics {
         }
 
         return anisotropicFilteringSupported == 1;
+    }
+
+    public static int getMaxMSAA() {
+        IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
+        GL11.glGetIntegerv(GL30.GL_MAX_SAMPLES, intBuffer);
+        return intBuffer.get(0);
     }
 
     public static int getMaxAnisotropy() {

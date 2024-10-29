@@ -40,10 +40,6 @@ public class Application {
     private static int     windowPosY                   = -1;
     private static int     windowWidth                  = 640*2;
     private static int     windowHeight                 = 480*2;
-    private static int     windowMinWidth               = -1;
-    private static int     windowMinHeight              = -1;
-    private static int     windowMaxWidth               = -1;
-    private static int     windowMaxHeight              = -1;
     private static boolean windowAutoMinimized          = true;
     private static boolean windowMinimized              = false;
     private static boolean windowMaximized              = false;
@@ -53,6 +49,7 @@ public class Application {
     private static boolean windowResizeable             = true;
     private static String  windowTitle                  = "HeavyBox Game";
     private static boolean windowVSyncEnabled           = false;
+    private static int     MSAA                         = 1;
 
     private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
 
@@ -158,6 +155,7 @@ public class Application {
         GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, settings.maximized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, settings.autoMinimized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, settings.MSAA);
 
         if (settings.title == null) settings.title = "";
         if (settings.fullScreen) {
@@ -336,10 +334,6 @@ public class Application {
     }
 
     public static void windowSetSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
-        windowMinWidth = minWidth;
-        windowMinHeight = minHeight;
-        windowMaxWidth = maxWidth;
-        windowMaxHeight = maxHeight;
         GLFW.glfwSetWindowSizeLimits(windowHandle, minWidth > -1 ? minWidth : GLFW.GLFW_DONT_CARE,
                 minHeight > -1 ? minHeight : GLFW.GLFW_DONT_CARE, maxWidth > -1 ? maxWidth : GLFW.GLFW_DONT_CARE,
                 maxHeight > -1 ? maxHeight : GLFW.GLFW_DONT_CARE);
@@ -392,6 +386,16 @@ public class Application {
 
     /* Getters */
 
+    public static boolean isWindowMinimized() {
+        return windowMinimized;
+    }
+
+    public static boolean isWindowMaximized() {
+        return windowMaximized;
+    }
+
+    public static String getWindowIconPath() { return windowIconPath; }
+
     public static long getWindowHandle() { return windowHandle; }
 
     public static int getWindowWidth() {
@@ -403,6 +407,7 @@ public class Application {
     }
 
     public static int getWindowPosX() { return windowPosX; }
+
     public static int getWindowPosY() { return windowPosY; }
 
     public String getWindowTitle() {
