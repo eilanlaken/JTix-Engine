@@ -197,8 +197,6 @@ public class Application {
         //
         GL.createCapabilities();
         Async.init();
-        Graphics.init();
-        //Input.init();
         initialized = true;
     }
 
@@ -382,6 +380,25 @@ public class Application {
     public static void windowSetTitle(final String title) {
         windowTitle = title;
         GLFW.glfwSetWindowTitle(windowHandle, title);
+    }
+
+    // TODO: test
+    public static void enableVSync() {
+        windowVSyncEnabled = true;
+        GLFW.glfwSwapInterval(1);
+        // need to restart.
+    }
+
+    // TODO: test
+    public static void disableVSync() {
+        windowVSyncEnabled = false;
+        GLFW.glfwSwapInterval(1);
+        // need to restart.
+    }
+
+    // TODO: test
+    public static boolean isVSyncEnabled() {
+        return windowVSyncEnabled;
     }
 
     /* Getters */

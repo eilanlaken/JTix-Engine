@@ -32,8 +32,6 @@ public final class Graphics {
     private static int     idleFps           = 10;
     private static int     maxTextureSize    = -1;
     private static int     maxAnisotropy     = 0;
-    private static float   contentScaleX     = Float.NaN;
-    private static float   contentScaleY     = Float.NaN;
     private static int     anisotropicFilteringSupported = -1;
 
     public static boolean justResized = false;
@@ -45,23 +43,9 @@ public final class Graphics {
 
         Graphics.window = window;
 
-        long monitor = GLFW.glfwGetPrimaryMonitor();
-        FloatBuffer px = BufferUtils.createFloatBuffer(1);
-        FloatBuffer py = BufferUtils.createFloatBuffer(1);
-        GLFW.glfwGetMonitorContentScale(monitor, px, py);
-        contentScaleX = px.get(0);
-        contentScaleY = py.get(0);
+
 
         initialized = true;
-    }
-
-    public static void init() {
-        long monitor = GLFW.glfwGetPrimaryMonitor();
-        FloatBuffer px = BufferUtils.createFloatBuffer(1);
-        FloatBuffer py = BufferUtils.createFloatBuffer(1);
-        GLFW.glfwGetMonitorContentScale(monitor, px, py);
-        contentScaleX = px.get(0);
-        contentScaleY = py.get(0);
     }
 
     public static void update() {
@@ -86,10 +70,20 @@ public final class Graphics {
     }
 
     public static float getContentScaleX() {
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        FloatBuffer px = BufferUtils.createFloatBuffer(1);
+        FloatBuffer py = BufferUtils.createFloatBuffer(1);
+        GLFW.glfwGetMonitorContentScale(monitor, px, py);
+        float contentScaleX = px.get(0);
         return contentScaleX;
     }
 
     public static float getContentScaleY() {
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        FloatBuffer px = BufferUtils.createFloatBuffer(1);
+        FloatBuffer py = BufferUtils.createFloatBuffer(1);
+        GLFW.glfwGetMonitorContentScale(monitor, px, py);
+        float contentScaleY = py.get(0);
         return contentScaleY;
     }
 
@@ -169,18 +163,23 @@ public final class Graphics {
         return getWindowWidth() / (float) getWindowHeight();
     }
 
-    public static int getWindowPositionX() {
-        return window.getPositionX();
-    }
-
-    public static int getWindowPositionY() {
-        return window.getPositionY();
-    }
-
+    // TODO: test
     public static void enableVSync() {
         int refreshRate = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).refreshRate();
         setTargetFps(refreshRate);
-        window.setVSync(true);
+        Application.enableVSync();
+    }
+
+    // TODO: test
+    public static void disableVSync() {
+        GLFW.glfwSwapInterval(1);
+        setTargetFps(prevTargetFps); // restore target refresh rate before vsync.
+        Application.disableVSync();
+    }
+
+    // TODO: test
+    public static boolean isVSyncEnabled() {
+        return Application.isVSyncEnabled();
     }
 
     public static int getMaxFragmentShaderTextureUnits() {
@@ -193,15 +192,6 @@ public final class Graphics {
         IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
         GL11.glGetIntegerv(GL20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, intBuffer);
         return intBuffer.get(0);
-    }
-
-    public static void disableVSync() {
-        window.setVSync(false);
-        setTargetFps(prevTargetFps); // restore target refresh rate before vsync.
-    }
-
-    public static boolean isVSyncEnabled() {
-        return window.attributes.vSyncEnabled;
     }
 
     public static boolean isAnisotropicFilteringSupported() {

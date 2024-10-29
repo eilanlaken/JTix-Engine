@@ -44,8 +44,6 @@ public class SceneRendering2D_Text_2 extends ApplicationScreen {
         if (Keyboard.isKeyJustPressed(Keyboard.Key.I)) {
             ApplicationUtils.windowSetIcon("assets/textures/icon-128.png");
             ApplicationUtils.windowSetTitle("Planes IO");
-            System.out.println(Graphics.getWindowPositionX());
-            System.out.println(Graphics.getWindowPositionY());
         }
 
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
