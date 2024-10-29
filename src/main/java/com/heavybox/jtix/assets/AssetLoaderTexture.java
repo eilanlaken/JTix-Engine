@@ -25,7 +25,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
             IntBuffer heightBuffer = stack.mallocInt(1);
             IntBuffer channelsBuffer = stack.mallocInt(1);
             buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
-            if (buffer == null) throw new RuntimeException("Failed to load a texture file. Check that the path is correct: " + path
+            if (buffer == null) throw new AssetException("Failed to load a texture file. Check that the path is correct: " + path
                     + System.lineSeparator() + "STBImage error: "
                     + STBImage.stbi_failure_reason());
             width = widthBuffer.get();

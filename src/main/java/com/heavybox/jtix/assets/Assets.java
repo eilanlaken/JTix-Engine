@@ -30,9 +30,6 @@ import java.util.*;
 
 public final class Assets {
 
-    @Deprecated private static boolean           initialized = false;
-    //@Deprecated private static ApplicationWindow window      = null;
-
     private static final HashMap<String, Asset>     store                = new HashMap<>();
     private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
     private static final Set<AssetStoreLoadingTask> storeCompletedBackgroundTasks = new HashSet<>();
@@ -41,16 +38,6 @@ public final class Assets {
     private static final Set<AssetStoreLoadingTask> storeCreateTasks = new HashSet<>();
 
     private Assets() {}
-
-    @Deprecated public static void init(final ApplicationWindow window) {
-        if (initialized) return;
-        //Assets.window = window;
-        initialized = true;
-    }
-
-    public static void init() {
-
-    }
 
     /* store */
     public static synchronized void update() {
