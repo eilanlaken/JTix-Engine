@@ -19,7 +19,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     private Map<String, Object>    data;
 
     @Override
-    public Array<AssetDescriptor> asyncLoad(final String path, @Nullable final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> backgroundLoad(final String path, @Nullable final HashMap<String, Object> options) {
         String yaml = Assets.getFileContent(path);
         data = Assets.yaml().load(yaml);
 

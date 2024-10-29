@@ -77,7 +77,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     private ModelArmatureData armatureData;
 
     @Override // TODO
-    public Array<AssetDescriptor> asyncLoad(String path, @Nullable final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> backgroundLoad(String path, @Nullable final HashMap<String, Object> options) {
         final int importFlags = // TODO: use the options here.
                 Assimp.aiProcess_Triangulate |
                         Assimp.aiProcess_ImproveCacheLocality |

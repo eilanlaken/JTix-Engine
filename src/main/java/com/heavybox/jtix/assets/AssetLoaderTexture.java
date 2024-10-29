@@ -18,7 +18,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     private HashMap<String, Object> options;
 
     @Override
-    public Array<AssetDescriptor> asyncLoad(String path, final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> backgroundLoad(String path, final HashMap<String, Object> options) {
         this.options = options;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);

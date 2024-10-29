@@ -35,8 +35,8 @@ public final class Assets {
 
     private static final HashMap<String, Asset>     store                = new HashMap<>();
     private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
-    private static final Set<AssetStoreLoadingTask> storeCompletedAsyncTasks = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask> storeAsyncTasks = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> storeCompletedBackgroundTasks = new HashSet<>();
+    private static final Set<AssetStoreLoadingTask> storeBackgroundTasks = new HashSet<>();
     private static final Set<AssetStoreLoadingTask> storeCompletedCreateTasks = new HashSet<>();
     private static final Set<AssetStoreLoadingTask> storeCreateTasks = new HashSet<>();
 
@@ -54,17 +54,17 @@ public final class Assets {
 
     /* store */
     public static synchronized void update() {
-        for (AssetStoreLoadingTask task : storeAsyncTasks) {
+        for (AssetStoreLoadingTask task : storeBackgroundTasks) {
             if (task.ready())  {
-                storeCompletedAsyncTasks.add(task);
+                storeCompletedBackgroundTasks.add(task);
                 storeCreateTasks.add(task);
             }
         }
 
-        storeAsyncTasks.removeAll(storeCompletedAsyncTasks);
+        storeBackgroundTasks.removeAll(storeCompletedBackgroundTasks);
         for (AssetDescriptor descriptor : storeLoadQueue) {
             AssetStoreLoadingTask task = new AssetStoreLoadingTask(descriptor);
-            storeAsyncTasks.add(task);
+            storeBackgroundTasks.add(task);
             AsyncTaskRunner.async(task);
         }
         storeLoadQueue.clear();
@@ -154,7 +154,7 @@ public final class Assets {
     }
 
     public static boolean isLoadingInProgress() {
-        return !storeLoadQueue.isEmpty() || !storeAsyncTasks.isEmpty() || !storeCreateTasks.isEmpty();
+        return !storeLoadQueue.isEmpty() || !storeBackgroundTasks.isEmpty() || !storeCreateTasks.isEmpty();
     }
 
     static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
