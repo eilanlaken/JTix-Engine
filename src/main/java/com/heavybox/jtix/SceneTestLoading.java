@@ -23,6 +23,7 @@ public class SceneTestLoading implements Scene {
     @Override
     public void start() {
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
+        Assets.loadTexture("assets/textures/pattern.png");
     }
 
     @Override
@@ -36,7 +37,6 @@ public class SceneTestLoading implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
-        System.out.println("loading? " + Assets.isLoadingInProgress());
         if (!Assets.isLoadingInProgress()) {
             Application.playScene(new SceneTest());
         }

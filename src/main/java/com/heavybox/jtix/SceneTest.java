@@ -19,17 +19,17 @@ import org.lwjgl.opengl.GL20;
 public class SceneTest implements Scene {
 
     Texture yellow = Assets.get("assets/textures/yellowSquare.jpg");
+    Texture pattern = Assets.get("assets/textures/pattern.png");
     private Renderer2D_3 renderer2D = new Renderer2D_3();
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     @Override
     public void setup() {
-        System.out.println("setup");
+
     }
 
     @Override
     public void start() {
-        System.out.println("start");
         componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
 
@@ -56,6 +56,7 @@ public class SceneTest implements Scene {
 
         renderer2D.drawLineThin(0,0,400,400);
         renderer2D.drawTexture(yellow,x,y,0,1,1);
+        renderer2D.drawTexture(pattern,x-200,y,0,1,1);
 
         renderer2D.end();
 
