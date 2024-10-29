@@ -127,6 +127,14 @@ public class Application {
         }
     };
 
+    private static final GLFWWindowPosCallback windowPositionCallback = new GLFWWindowPosCallback() {
+        @Override
+        public void invoke(long handle, int xPos, int yPos) {
+            windowPosX = xPos;
+            windowPosY = yPos;
+        }
+    };
+
     public static void init() {
         final ApplicationSettings config = new ApplicationSettings(); // defaults.
         init(config);
@@ -184,6 +192,7 @@ public class Application {
         GLFW.glfwSetWindowMaximizeCallback(windowHandle, windowMaximizedCallback);
         GLFW.glfwSetWindowCloseCallback(windowHandle, windowCloseCallback);
         GLFW.glfwSetDropCallback(windowHandle, windowFilesDroppedCallback);
+        GLFW.glfwSetWindowPosCallback(windowHandle, windowPositionCallback);
         GLFW.glfwMakeContextCurrent(windowHandle);
         GLFW.glfwSwapInterval(settings.vSyncEnabled ? 1 : 0);
         GLFW.glfwShowWindow(windowHandle);
@@ -253,6 +262,7 @@ public class Application {
         windowMaximizedCallback.free();
         windowCloseCallback.free();
         windowFilesDroppedCallback.free();
+        windowPositionCallback.free();
         GLFW.glfwTerminate();
         errorCallback.free();
     }
@@ -349,6 +359,10 @@ public class Application {
         windowMaximized = true;
     }
 
+    public static void setWindowPosition(int xPos, int yPos) {
+        GLFW.glfwSetWindowPos(windowHandle, xPos, yPos);
+    }
+
     public static void windowFocus() {
         windowFocused = true;
         GLFW.glfwFocusWindow(windowHandle);
@@ -387,6 +401,9 @@ public class Application {
     public static int getWindowHeight() {
         return windowHeight;
     }
+
+    public static int getWindowPosX() { return windowPosX; }
+    public static int getWindowPosY() { return windowPosY; }
 
     public String getWindowTitle() {
         return windowTitle;

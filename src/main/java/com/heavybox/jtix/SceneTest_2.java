@@ -1,5 +1,6 @@
 package com.heavybox.jtix;
 
+import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
@@ -47,6 +48,9 @@ public class SceneTest_2 implements Scene {
             componentGraphicsCamera.lens.unProject(screen);
             x = screen.x;
             y = screen.y;
+
+            //Application.setWindowPosition(300,300);
+            System.out.println(Application.getWindowPosX());
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
