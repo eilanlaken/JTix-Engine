@@ -5,6 +5,7 @@ import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.input_2.Input;
+import com.heavybox.jtix.math.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -47,9 +48,10 @@ public class Application {
     private static boolean windowVisible                = true;
     private static boolean windowFullScreen             = false;
     private static boolean windowResizeable             = true;
+    private static boolean windowDecorated              = true;
     private static String  windowTitle                  = "HeavyBox Game";
     private static boolean windowVSyncEnabled           = false;
-    private static int     MSAA                         = 1;
+    private static int     MSAA                         = 0;
 
     private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
 
@@ -133,8 +135,8 @@ public class Application {
     };
 
     public static void init() {
-        final ApplicationSettings config = new ApplicationSettings(); // defaults.
-        init(config);
+        final ApplicationSettings settings = new ApplicationSettings(); // defaults.
+        init(settings);
     }
 
     public static void init(final ApplicationSettings settings) {
@@ -157,7 +159,10 @@ public class Application {
         GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, settings.MSAA);
 
-        if (settings.title == null) settings.title = "";
+        if (settings.MSAA != 0) {
+            MSAA = MathUtils.clampInt(settings.MSAA, 0, Graphics.getMaxMSAA());
+            if (MSAA != 0) MSAA = MathUtils.nextPowerOf2i(MSAA);
+        }
         if (settings.fullScreen) {
             // compute and auxiliary buffers
             long monitor = GLFW.glfwGetPrimaryMonitor();
@@ -194,9 +199,13 @@ public class Application {
         GLFW.glfwMakeContextCurrent(windowHandle);
         GLFW.glfwSwapInterval(settings.vSyncEnabled ? 1 : 0);
         GLFW.glfwShowWindow(windowHandle);
+
+        // apply settings
+        windowSetTitle(settings.title);
+
         //
         GL.createCapabilities();
-        Async.init();
+        Async.init(); // TODO: probably remove.
         initialized = true;
     }
 
@@ -378,8 +387,8 @@ public class Application {
     }
 
     public static void windowSetTitle(final String title) {
-        windowTitle = title;
-        GLFW.glfwSetWindowTitle(windowHandle, title);
+        windowTitle = title == null ? "" : title;
+        GLFW.glfwSetWindowTitle(windowHandle, windowTitle);
     }
 
     // TODO: test

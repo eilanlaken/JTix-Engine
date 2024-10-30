@@ -2,14 +2,10 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import org.lwjgl.stb.STBImage;
-import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 // TODO:
 // need to implement LOD: GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
@@ -48,7 +44,7 @@ public final class Texture implements MemoryResource {
         this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
         this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
         this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
-        this.anisotropy = MathUtils.nextPowerOfTwo(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
+        this.anisotropy = MathUtils.nextPowerOf2i(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
         this.biasLOD = 0;
 
         TextureBinder.bind(this);

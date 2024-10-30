@@ -23,16 +23,30 @@ class MathUtilsTest {
     }
 
     @Test
-    void nextPowerOf2() {
-        Assertions.assertEquals(1, MathUtils.nextPowerOf2(1));
-        Assertions.assertEquals(2, MathUtils.nextPowerOf2(2));
-        Assertions.assertEquals(4, MathUtils.nextPowerOf2(3));
-        Assertions.assertEquals(4, MathUtils.nextPowerOf2(4));
-        Assertions.assertEquals(8, MathUtils.nextPowerOf2(5));
-        Assertions.assertEquals(16, MathUtils.nextPowerOf2(9));
-        Assertions.assertEquals(32, MathUtils.nextPowerOf2(22));
-        Assertions.assertEquals(1, MathUtils.nextPowerOf2(-1));
-        Assertions.assertEquals(1, MathUtils.nextPowerOf2(-2.4f));
+    void nextPowerOf2f() {
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2f(0));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2f(1));
+        Assertions.assertEquals(2, MathUtils.nextPowerOf2f(2));
+        Assertions.assertEquals(4, MathUtils.nextPowerOf2f(3));
+        Assertions.assertEquals(4, MathUtils.nextPowerOf2f(4));
+        Assertions.assertEquals(8, MathUtils.nextPowerOf2f(5));
+        Assertions.assertEquals(16, MathUtils.nextPowerOf2f(9));
+        Assertions.assertEquals(32, MathUtils.nextPowerOf2f(22));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2f(-1));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2f(-2.4f));
+    }
+
+    @Test
+    void nextPowerOf2i() {
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2i(1));
+        Assertions.assertEquals(2, MathUtils.nextPowerOf2i(2));
+        Assertions.assertEquals(4, MathUtils.nextPowerOf2i(3));
+        Assertions.assertEquals(4, MathUtils.nextPowerOf2i(4));
+        Assertions.assertEquals(8, MathUtils.nextPowerOf2i(5));
+        Assertions.assertEquals(16, MathUtils.nextPowerOf2i(9));
+        Assertions.assertEquals(32, MathUtils.nextPowerOf2i(22));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2i(-1));
+        Assertions.assertEquals(1, MathUtils.nextPowerOf2i(0));
     }
 
     @Test

@@ -293,13 +293,23 @@ public final class MathUtils {
         return Math.min(value, min);
     }
 
-    public static int nextPowerOfTwo(int x) {
-        int counter = 0;
-        while (x > 0) {
-            counter++;
-            x = x >> 1;
-        }
-        return 1 << counter;
+    public static int nextPowerOf2i(int i) {
+        if (i <= 0) return 1;
+        if ((i & (i - 1)) == 0) return i;
+        i--;
+        i |= i >> 1;
+        i |= i >> 2;
+        i |= i >> 4;
+        i |= i >> 8;
+        i |= i >> 16;
+        i++;
+        return i;
+    }
+
+    public static int nextPowerOf2f(float f) {
+        int power = 1;
+        while (power < f) power *= 2;
+        return power;
     }
 
     public static float atanUnchecked(double i) {
@@ -445,12 +455,6 @@ public final class MathUtils {
         double c9 = c7 * c2;
         double c11 = c9 * c2;
         return (float)(Math.signum(i) * (45.0 + (57.2944766070562 * c - 19.05792099799635 * c3 + 11.089223410359068 * c5 - 6.6711120475953765 * c7 + 3.016813013351768 * c9 - 0.6715752908287405 * c11)));
-    }
-
-    public static int nextPowerOf2(float n) {
-        int power = 1;
-        while (power < n) power *= 2;
-        return power;
     }
 
     public static float normalizeAngleDeg(float degrees) {

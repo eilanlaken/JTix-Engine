@@ -441,7 +441,7 @@ public class MapObjectObject<K, V> implements Iterable<MapObjectObject.Entry<K, 
 
     private static int tableSize(int capacity, float loadFactor) {
         if (capacity < 0) throw new IllegalArgumentException("capacity must be >= 0: " + capacity);
-        int tableSize = MathUtils.nextPowerOfTwo(Math.max(2, (int)Math.ceil(capacity / loadFactor)));
+        int tableSize = MathUtils.nextPowerOf2i(Math.max(2, (int)Math.ceil(capacity / loadFactor)));
         if (tableSize > 1 << 30) throw new IllegalArgumentException("The required capacity is too large: " + capacity);
         return tableSize;
     }

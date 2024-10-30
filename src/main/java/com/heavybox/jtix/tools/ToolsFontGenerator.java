@@ -159,8 +159,8 @@ public final class ToolsFontGenerator {
             }
         }
         atlasHeight += size * heightAdjustment;
-        atlasWidth = MathUtils.nextPowerOf2(atlasWidth);
-        atlasHeight = MathUtils.nextPowerOf2(atlasHeight);
+        atlasWidth = MathUtils.nextPowerOf2f(atlasWidth);
+        atlasHeight = MathUtils.nextPowerOf2f(atlasHeight);
 
         BufferedImage fontAtlas = new BufferedImage(atlasWidth, atlasHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D pen = fontAtlas.createGraphics();
