@@ -1,7 +1,6 @@
 package com.heavybox.jtix.assets;
 
 import com.google.gson.Gson;
-import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
@@ -32,16 +31,16 @@ public final class Assets {
 
     private static final HashMap<String, Asset>     store                = new HashMap<>();
     private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
-    private static final Set<AssetStoreLoadingTask> storeCompletedBackgroundTasks = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask> storeBackgroundTasks = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask> storeCompletedCreateTasks = new HashSet<>();
-    private static final Set<AssetStoreLoadingTask> storeCreateTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask> storeCompletedBackgroundTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask> storeBackgroundTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask> storeCompletedCreateTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask> storeCreateTasks = new HashSet<>();
 
     private Assets() {}
 
     /* store */
     public static synchronized void update() {
-        for (AssetStoreLoadingTask task : storeBackgroundTasks) {
+        for (AssetLoadingTask task : storeBackgroundTasks) {
             if (task.ready())  {
                 storeCompletedBackgroundTasks.add(task);
                 storeCreateTasks.add(task);
@@ -50,14 +49,14 @@ public final class Assets {
 
         storeBackgroundTasks.removeAll(storeCompletedBackgroundTasks);
         for (AssetDescriptor descriptor : storeLoadQueue) {
-            AssetStoreLoadingTask task = new AssetStoreLoadingTask(descriptor);
+            AssetLoadingTask task = new AssetLoadingTask(descriptor);
             storeBackgroundTasks.add(task);
             AsyncTaskRunner.async(task);
         }
         storeLoadQueue.clear();
 
         storeCreateTasks.removeAll(storeCompletedCreateTasks);
-        for (AssetStoreLoadingTask task : storeCreateTasks) {
+        for (AssetLoadingTask task : storeCreateTasks) {
             Asset asset = task.create();
             store.put(asset.descriptor.path, asset);
             storeCompletedCreateTasks.add(task);
@@ -87,6 +86,19 @@ public final class Assets {
         return store.get(path) != null;
     }
 
+    public static void loadTexturePack(final String path) {
+        load(TexturePack.class, path, null,false);
+    }
+
+    public static void loadTexturePack(final String path,
+                                       Texture.FilterMag magFilter, Texture.FilterMin minFilter,
+                                       int anisotropy) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("anisotropy", anisotropy);
+        options.put("magFilter", magFilter);
+        options.put("minFilter", minFilter);
+        load(Texture.class, path, options,false);
+    }
 
     public static void loadTexture(String path) {
         load(Texture.class, path, null,false);

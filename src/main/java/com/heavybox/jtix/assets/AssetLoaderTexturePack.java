@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: implement. Finalize AssetStore.
 public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
 
     private Array<AssetDescriptor> dependencies;

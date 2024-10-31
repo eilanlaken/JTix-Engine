@@ -38,7 +38,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     @Override
     public Texture create() {
-        final int anisotropy = options == null ? 16 : (int) options.get("anisotropy");
+        final int anisotropy = options == null ? Graphics.getMaxAnisotropy() : (int) options.get("anisotropy");
         final Texture.FilterMag magFilter = options == null ? null : (Texture.FilterMag) options.get("magFilter");
         final Texture.FilterMin minFilter = options == null ? null : (Texture.FilterMin) options.get("minFilter");
         final Texture.Wrap uWrap = options == null ? null : (Texture.Wrap) options.get("uWrap");

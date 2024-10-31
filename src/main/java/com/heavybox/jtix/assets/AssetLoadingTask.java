@@ -4,13 +4,13 @@ import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.memory.MemoryResource;
 
-public class AssetStoreLoadingTask extends AsyncTask {
+public class AssetLoadingTask extends AsyncTask {
 
     private final AssetDescriptor descriptor;
     private Array<AssetDescriptor> dependencies;
     private final AssetLoader<? extends MemoryResource> loader;
 
-    AssetStoreLoadingTask(AssetDescriptor descriptor) {
+    AssetLoadingTask(AssetDescriptor descriptor) {
         this.descriptor = descriptor;
         this.loader = Assets.getNewLoader(descriptor.type);
     }
