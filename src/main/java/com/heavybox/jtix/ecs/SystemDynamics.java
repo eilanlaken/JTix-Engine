@@ -10,11 +10,11 @@ Note that a transform may also be manipulated from a ComponentLogics.
  */
 public class SystemDynamics implements System {
 
-    private final Scene container;
+    private final EntityContainer container;
     private final Array<Entity2D> entities_2d = new Array<>(false, 10);
     private final Array<Entity3D> entities_3d = new Array<>(false, 10);
 
-    SystemDynamics(final Scene container) {
+    SystemDynamics(final EntityContainer container) {
         this.container = container;
     }
 

@@ -1,7 +1,7 @@
 package com.heavybox.jtix.application;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.ecs.Scene;
+import com.heavybox.jtix.ecs.EntityContainer;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
@@ -38,7 +38,7 @@ public class ApplicationWindow implements MemoryResource {
     // TODO: remove.
     private ApplicationScreen screen;
     // TODO: use this.
-    private Scene currentScene;
+    private EntityContainer currentEntityContainer;
 
     private final GLFWFramebufferSizeCallback resizeCallback = new GLFWFramebufferSizeCallback() {
         private volatile boolean requested;

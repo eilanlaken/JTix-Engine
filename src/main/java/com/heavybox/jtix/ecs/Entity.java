@@ -7,14 +7,14 @@ abstract class Entity {
     public static final int PHASE_BEFORE_CREATED  = -1;
     public static final int PHASE_AFTER_DESTROYED = -2;
 
-    Scene container = null;
+    EntityContainer container = null;
     int             handle    = PHASE_BEFORE_CREATED;
     int             bitmask   = 0;
 
     Entity() {} // default package-private constructor to prevent directly extending Entity.
 
-    public Scene getContainer() { return container; }
-    void setContainer(final Scene container) { this.container = container; }
+    public EntityContainer getContainer() { return container; }
+    void setContainer(final EntityContainer container) { this.container = container; }
 
     protected abstract ComponentTransform createComponentTransform();
     protected abstract ComponentAudio     createComponentAudio();

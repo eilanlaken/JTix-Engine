@@ -5,7 +5,7 @@ import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 
-public abstract class Scene implements MemoryResourceHolder {
+public abstract class EntityContainer implements MemoryResourceHolder {
 
     /* Entities */
     protected Array<Entity> entities = new Array<>(false, 200);
@@ -36,7 +36,7 @@ public abstract class Scene implements MemoryResourceHolder {
     /* global container services */
     protected final Renderer2D renderer2D = new Renderer2D();
 
-    public Scene() {
+    public EntityContainer() {
         systems.add(systemDynamics);
         systems.add(systemAudio);
         systems.add(systemGUI);

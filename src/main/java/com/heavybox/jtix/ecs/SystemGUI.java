@@ -6,11 +6,11 @@ public class SystemGUI implements System {
 
     public static final int SYSTEM_BITMASK = Component.Type.REGION.bitmask | Component.Type.RENDER.bitmask;
 
-    private final Scene container;
+    private final EntityContainer container;
 
     private final Array<Entity> entities = new Array<>(false, 10);
 
-    SystemGUI(final Scene container) {
+    SystemGUI(final EntityContainer container) {
         this.container = container;
     }
 

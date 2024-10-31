@@ -28,11 +28,11 @@ public class SceneRendering2D_ECS_1 extends ApplicationScreen {
 
     ComponentTransform t = new ComponentTransform();
 
-    private Scene container;
+    private EntityContainer container;
     Entity2D child5;
 
     public SceneRendering2D_ECS_1() {
-        container = new Scene() {
+        container = new EntityContainer() {
             @Override
             public void prepare() {
 

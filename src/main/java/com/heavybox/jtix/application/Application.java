@@ -1,6 +1,6 @@
 package com.heavybox.jtix.application;
 
-import com.heavybox.jtix.ecs.Scene;
+import com.heavybox.jtix.ecs.EntityContainer;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.async.Async;
@@ -44,7 +44,7 @@ public class Application {
     }
 
     // TODO: implement
-    public static void playScene(Scene scene) {
+    public static void playScene(EntityContainer entityContainer) {
 
     }
 

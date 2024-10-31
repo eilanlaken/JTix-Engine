@@ -7,7 +7,7 @@ public class SystemRendering implements System {
 
     public static final int SYSTEM_BITMASK = Component.Type.RENDER.bitmask | Component.Type.CAMERA.bitmask;
 
-    private final Scene container;
+    private final EntityContainer container;
 
     private final Array<Entity2D> renders_2d = new Array<>(false, 10);
     private final Array<Entity2D> cameras_2d = new Array<>(false, 10);
@@ -16,7 +16,7 @@ public class SystemRendering implements System {
 
     public final Color backgroundColor = new Color(0,0,0,0);
 
-    SystemRendering(final Scene container) {
+    SystemRendering(final EntityContainer container) {
         this.container = container;
     }
 

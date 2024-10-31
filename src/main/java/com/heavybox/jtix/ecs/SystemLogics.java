@@ -6,14 +6,14 @@ public class SystemLogics implements System {
 
     public static final int SYSTEM_BITMASK = Component.Type.LOGICS.bitmask;
 
-    private final Scene container;
+    private final EntityContainer container;
 
     private Array<Entity> entities = new Array<>(false, 10);
 
     private Array<Object> signalsToSend  = new Array<>(false, 5);
     private Array<Entity> signalsTargets = new Array<>(false, 5);
 
-    SystemLogics(final Scene container) {
+    SystemLogics(final EntityContainer container) {
         this.container = container;
     }
 
