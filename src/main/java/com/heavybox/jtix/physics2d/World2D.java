@@ -28,7 +28,7 @@ public class World2D {
     final MemoryPool<RayCasting2DIntersection> intersectionsPool = new MemoryPool<>(RayCasting2DIntersection.class,4);
 
     // bodies
-    private int               bodiesCreated  = 0;
+    private       int           bodiesCreated  = 0;
     public  final Array<Body2D> allBodies      = new Array<>(false, 500);
     private final Array<Body2D> bodiesToAdd    = new Array<>(false, 100);
     private final Array<Body2D> bodiesToRemove = new Array<>(false, 500);
@@ -37,39 +37,39 @@ public class World2D {
     private final Array<Collision2D.GridCell> spacePartition      = new Array<>(false, 1024);
     private final Array<Collision2D.GridCell> activeCells         = new Array<>();
     private final Set<Collision2D.Pair>       collisionCandidates = new HashSet<>();
-    private final Collision2DSolver collisionSolver     = new Collision2DSolver();
+    private final Collision2DSolver           collisionSolver     = new Collision2DSolver();
 
     // collision detection - narrow phase
-    private final Collision2D collision = new Collision2D(this);
+    private final Collision2D                collision = new Collision2D(this);
     private final Array<Collision2DManifold> manifolds = new Array<>(false, 20);
 
     // forces
-    public Vector2           gravity             = new Vector2();
+    public Vector2             gravity             = new Vector2();
     public Array<ForceField2D> allForceFields      = new Array<>(false, 4);
     public Array<ForceField2D> forceFieldsToAdd    = new Array<>(false, 2);
     public Array<ForceField2D> forceFieldsToRemove = new Array<>(false, 2);
 
     // constraints
-    public int               velocityIterations  = DEFAULT_VELOCITY_CONSTRAINT_SOLVER_ITERATIONS;
-    public int               positionIterations  = DEFAULT_POSITION_CONSTRAINT_SOLVER_ITERATIONS;
+    public int                 velocityIterations  = DEFAULT_VELOCITY_CONSTRAINT_SOLVER_ITERATIONS;
+    public int                 positionIterations  = DEFAULT_POSITION_CONSTRAINT_SOLVER_ITERATIONS;
     public Array<Constraint2D> allConstraints      = new Array<>(false, 10);
     public Array<Constraint2D> constraintsToAdd    = new Array<>(false, 5);
     public Array<Constraint2D> constraintsToRemove = new Array<>(false, 5);
 
     // ray casting
-    final RayCasting2D rayCasting    = new RayCasting2D(this);
+    final RayCasting2D                                   rayCasting    = new RayCasting2D(this);
     final HashMap<RayCasting2DRay, RayCasting2DCallback> allRays       = new HashMap<>(4);
     final HashMap<RayCasting2DRay, RayCasting2DCallback> raysToAdd     = new HashMap<>(4);
     final HashMap<RayCasting2DRay, RayCasting2DCallback> raysToRemove  = new HashMap<>(4);
-    final Array<RayCasting2DIntersection>              intersections = new Array<>(false, 10);
+    final Array<RayCasting2DIntersection>                intersections = new Array<>(false, 10);
 
     // debugger options
     private final World2DRenderer debugRenderer     = new World2DRenderer(this);
-    public        boolean       renderBodies      = true;
-    public        boolean       renderVelocities  = true;
-    public        boolean       renderConstraints = true;
-    public        boolean       renderRays        = true;
-    public        boolean       renderContacts    = true;
+    public        boolean         renderBodies      = true;
+    public        boolean         renderVelocities  = true;
+    public        boolean         renderConstraints = true;
+    public        boolean         renderRays        = true;
+    public        boolean         renderContacts    = true;
 
     public void update(float delta) {
         /* add and remove bodies */
@@ -332,8 +332,8 @@ public class World2D {
 
     /* Bodies and Colliders API */
 
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public Body2D createBody(Object owner,
                              Body2D.MotionType motionType,
                              Body2DCollider...colliders) {
@@ -349,8 +349,8 @@ public class World2D {
         return body;
     }
 
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public Body2D createBodyCircle(Object owner,
                                    Body2D.MotionType motionType,
                                    float x, float y, float angleDeg,
@@ -380,8 +380,8 @@ public class World2D {
         return body;
     }
 
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public Body2D createBodyCircle(Object owner,
                                    Body2D.MotionType motionType,
                                    float x, float y, float angleDeg,
@@ -412,8 +412,8 @@ public class World2D {
     }
 
     // TODO
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public Body2D createBodyRectangle(Object owner,
                                       Body2D.MotionType motionType,
                                       float x, float y, float angleDeg,
@@ -444,8 +444,8 @@ public class World2D {
     }
 
     // TODO
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public Body2D createBodyRectangle(Object owner,
                                       Body2D.MotionType motionType,
                                       float x, float y, float angleDeg,
@@ -476,8 +476,8 @@ public class World2D {
     }
 
     // TODO
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public Body2D createBodyPolygon(Object owner,
                                     Body2D.MotionType motionType,
                                     float x, float y, float angleDeg,
@@ -514,8 +514,9 @@ public class World2D {
 
     /* Force fields API */
 
+    @NotNull
     @Contract(pure = true)
-    @NotNull public ForceField2D createForceField(BiConsumer<Body2D, Vector2> forceFunction) {
+    public ForceField2D createForceField(BiConsumer<Body2D, Vector2> forceFunction) {
         ForceField2D forceField = new ForceField2D(this) {
             @Override
             public void calculateForce(Body2D body, Vector2 out) {
