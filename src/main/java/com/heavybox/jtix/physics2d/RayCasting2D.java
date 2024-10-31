@@ -6,7 +6,7 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.jetbrains.annotations.NotNull;
 
-public final class RayCasting2D {
+final class RayCasting2D {
 
     private final World2D world;
     private final MemoryPool<RayCasting2DIntersection> intersectionsPool;

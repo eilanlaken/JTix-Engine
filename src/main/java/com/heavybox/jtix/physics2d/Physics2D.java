@@ -6,9 +6,9 @@ import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
-public final class Physics2DUtils {
+public final class Physics2D {
 
-    private Physics2DUtils() {}
+    private Physics2D() {}
 
     public static float calculateMomentOfInertia(Body2DCollider collider) {
 

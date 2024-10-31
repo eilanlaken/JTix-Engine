@@ -72,7 +72,7 @@ public final class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
         for (Body2DCollider collider : colliders) {
             float shapeMass = collider.area() * collider.density;
             float d2 = Vector2.dst2(collider.localCenter().x, collider.localCenter().y, local_cmX, local_cmY);
-            float I = Physics2DUtils.calculateMomentOfInertia(collider) + shapeMass * d2;
+            float I = Physics2D.calculateMomentOfInertia(collider) + shapeMass * d2;
             totalInertia += I;
         }
 

@@ -2,8 +2,8 @@ package com.heavybox.jtix.input_2;
 
 public final class Input {
 
-    public static final Keyboard keyboard = new Keyboard();
-    public static final Mouse    mouse    = new Mouse();
+    public static final InputKeyboard keyboard = new InputKeyboard();
+    public static final InputMouse    mouse    = new InputMouse();
 
     private Input() {}
 

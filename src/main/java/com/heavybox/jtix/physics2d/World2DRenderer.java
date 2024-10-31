@@ -9,6 +9,7 @@ import com.heavybox.jtix.math.Vector2;
 
 import java.util.Set;
 
+// TODO: switch to newer 2d renderer.
 public class World2DRenderer {
 
     private static final float TINT_STATIC     = new Color(1,1,0,1).toFloatBits();

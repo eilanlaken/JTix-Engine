@@ -1,6 +1,6 @@
 package com.heavybox.jtix.application_2;
 
-public final class ApplicationSettings {
+public final class ApplicationSettings implements Cloneable {
 
     public int     posX                   = -1;
     public int     posY                   = -1;
@@ -24,6 +24,11 @@ public final class ApplicationSettings {
     public boolean resizable              = true;
     public boolean decorated              = true;
     public boolean floating               = false;
-    public boolean transparentWindow = false;
+    public boolean transparentWindow      = false;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 }

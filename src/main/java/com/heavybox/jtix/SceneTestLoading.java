@@ -7,7 +7,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.input_2.Mouse;
+import com.heavybox.jtix.input_2.InputMouse;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTestLoading implements Scene {
@@ -28,7 +28,7 @@ public class SceneTestLoading implements Scene {
 
     @Override
     public void update() {
-        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+        if (Input.mouse.isButtonClicked(InputMouse.Button.LEFT)) {
             Application.windowSetSizeLimits(100, 100, 200, 200);
             Application.windowFlash();
         }

@@ -23,6 +23,12 @@ import java.nio.IntBuffer;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 
+// TODO:
+// handle recreating the window
+// handle changing and saving settings
+// refactor a little-bit more (separate window creating into its own function, apply settings etc).
+// test: invisible frame buffer, resizeable windows, MSAA, vsync, etc.
+// IGNORE multi-window applications. Useful for no-one and will ruin important stuff.
 public class Application {
 
     @Deprecated private static boolean initialized = false;
@@ -33,7 +39,7 @@ public class Application {
     private static int     windowLastDragAndDropFileCount = 0;
     private static boolean windowRequestRendering = false;
 
-    private static final Array<Runnable> tasks                         = new Array<>();
+    private static final Array<Runnable> tasks                        = new Array<>();
     private static final Array<Runnable> windowTasks                  = new Array<>();
     private static final Array<String>   windowFilesDraggedAndDropped = new Array<>();
 

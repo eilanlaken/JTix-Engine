@@ -1,6 +1,7 @@
 package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.physics2d.RayCasting2DRay;
 
 /*
 The system responsible for updating the transforms (2d and 3d).
@@ -55,6 +56,12 @@ public class SystemDynamics implements System {
     @Override
     public String toString() {
         return "System Dynamics Entities : " + (entities_2d.size + entities_3d.size);
+    }
+
+    /* System API */
+
+    public void raycast(RayCasting2DRay ray) {
+        // TODO
     }
 
 }
