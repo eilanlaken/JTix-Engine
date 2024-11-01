@@ -3,7 +3,7 @@ package com.heavybox.jtix.ecs;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 
-public class SystemRendering implements System {
+public class SystemGraphics implements System {
 
     public static final int SYSTEM_BITMASK = Component.Type.RENDER.bitmask | Component.Type.CAMERA.bitmask;
 
@@ -16,7 +16,7 @@ public class SystemRendering implements System {
 
     public final Color backgroundColor = new Color(0,0,0,0);
 
-    SystemRendering(final EntityContainer container) {
+    SystemGraphics(final EntityContainer container) {
         this.container = container;
     }
 

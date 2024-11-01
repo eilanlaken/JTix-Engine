@@ -17,12 +17,12 @@ public abstract class EntityContainer implements MemoryResourceHolder {
     private float lag              = 0;
 
     /* Systems */
-    protected final Array<System>   systems         = new Array<>(true, 5);
-    protected final SystemDynamics  systemDynamics  = new SystemDynamics(this);
-    protected final SystemGUI       systemGUI       = new SystemGUI(this);
-    protected final SystemAudio     systemAudio     = new SystemAudio(this);
-    protected final SystemRendering systemRendering = new SystemRendering(this);
-    protected final SystemLogics    systemLogics    = new SystemLogics(this);
+    protected final Array<System>   systems        = new Array<>(true, 5);
+    protected final SystemDynamics  systemDynamics = new SystemDynamics(this);
+    protected final SystemGUI       systemGUI      = new SystemGUI(this);
+    protected final SystemAudio     systemAudio    = new SystemAudio(this);
+    protected final SystemGraphics  systemGraphics = new SystemGraphics(this);
+    protected final SystemLogics    systemLogics   = new SystemLogics(this);
 
     /* Component Store */
     protected Array<ComponentTransform> componentTransforms = new Array<>(false, 200);
@@ -40,7 +40,7 @@ public abstract class EntityContainer implements MemoryResourceHolder {
         systems.add(systemDynamics);
         systems.add(systemAudio);
         systems.add(systemGUI);
-        systems.add(systemRendering);
+        systems.add(systemGraphics);
         systems.add(systemLogics);
     }
 

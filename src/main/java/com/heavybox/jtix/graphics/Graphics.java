@@ -21,7 +21,7 @@ public final class Graphics {
 
     private static boolean isContinuous      = true;
     private static long    lastFrameTime     = -1;
-    private static float   deltaTime;
+    private static float   deltaTime; // TODO: maybe this belongs not in /graphics/ but in /application/
     private static boolean resetDeltaTime    = false;
     private static long    frameId           = 0;
     private static long    frameCounterStart = 0;
@@ -33,8 +33,6 @@ public final class Graphics {
     private static int     maxTextureSize    = -1;
     private static int     maxAnisotropy     = 0;
     private static int     anisotropicFilteringSupported = -1;
-
-    public static boolean justResized = false;
 
     private Graphics() {}
 
@@ -66,7 +64,6 @@ public final class Graphics {
         }
         frames++;
         frameId++;
-        justResized = false;
     }
 
     public static float getContentScaleX() {
@@ -74,8 +71,7 @@ public final class Graphics {
         FloatBuffer px = BufferUtils.createFloatBuffer(1);
         FloatBuffer py = BufferUtils.createFloatBuffer(1);
         GLFW.glfwGetMonitorContentScale(monitor, px, py);
-        float contentScaleX = px.get(0);
-        return contentScaleX;
+        return px.get(0);
     }
 
     public static float getContentScaleY() {
@@ -83,8 +79,7 @@ public final class Graphics {
         FloatBuffer px = BufferUtils.createFloatBuffer(1);
         FloatBuffer py = BufferUtils.createFloatBuffer(1);
         GLFW.glfwGetMonitorContentScale(monitor, px, py);
-        float contentScaleY = py.get(0);
-        return contentScaleY;
+        return py.get(0);
     }
 
     public static long getFrameId() { return frameId; }
