@@ -5,7 +5,7 @@ import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.lwjgl.opengl.GL11;
 
 import java.io.BufferedReader;
@@ -29,7 +29,7 @@ public class Renderer3D implements MemoryResourceHolder {
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private ComponentGraphicsCamera currentComponentGraphicsCamera = null;
+    private ComponentCamera2D currentComponentGraphicsCamera = null;
     private Texture       currentTexture = null;
     private Shader currentShader  = null;
     private boolean       drawing        = false;

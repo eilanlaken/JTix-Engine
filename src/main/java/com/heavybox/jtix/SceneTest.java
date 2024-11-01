@@ -9,7 +9,7 @@ import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputMouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest implements Scene {
@@ -17,7 +17,7 @@ public class SceneTest implements Scene {
     Texture yellow = Assets.get("assets/textures/yellowSquare.jpg");
     Texture pattern = Assets.get("assets/textures/pattern.png");
     private Renderer2D_3 renderer2D = new Renderer2D_3();
-    private ComponentGraphicsCamera componentGraphicsCamera;
+    private ComponentCamera2D componentGraphicsCamera;
 
     @Override
     public void setup() {
@@ -26,7 +26,7 @@ public class SceneTest implements Scene {
 
     @Override
     public void start() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
+        componentGraphicsCamera = new ComponentCamera2D(Graphics.getWindowWidth(), Graphics.getWindowHeight());
         componentGraphicsCamera.update();
 
     }

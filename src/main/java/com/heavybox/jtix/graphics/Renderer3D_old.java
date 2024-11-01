@@ -2,9 +2,9 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_ecs_old.ComponentTransform_1;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL30;
 
     private boolean drawing;
     private Shader currentShader;
-    private ComponentGraphicsCamera componentGraphicsCamera;
+    private ComponentCamera2D componentGraphicsCamera;
 
     public Renderer3D_old() {
         this.drawing = false;
@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL30;
         ShaderBinder.bind(shader);
     }
 
-    public void setCamera(final ComponentGraphicsCamera componentGraphicsCamera) {
+    public void setCamera(final ComponentCamera2D componentGraphicsCamera) {
         this.currentShader.bindUniform("u_camera_position", componentGraphicsCamera.position);
         this.currentShader.bindUniform("u_camera_combined", componentGraphicsCamera.lens.combined);
         this.componentGraphicsCamera = componentGraphicsCamera;
@@ -39,13 +39,17 @@ import org.lwjgl.opengl.GL30;
 
     }
 
-    public void draw(final ModelPart modelPart, final ComponentTransform_1 transform) {
+    public void draw(final ModelPart modelPart, final Matrix4x4 transform) {
         // TODO: maybe updating the bounding sphere should be somewhere else.
         float centerX = modelPart.mesh.boundingSphereCenter.x;
         float centerY = modelPart.mesh.boundingSphereCenter.y;
         float centerZ = modelPart.mesh.boundingSphereCenter.z;
-        Vector3 boundingSphereCenter = new Vector3(centerX + transform.x, centerY + transform.y, centerZ + transform.z);
-        float boundingSphereRadius = MathUtils.max(transform.scaleX, transform.scaleY, transform.scaleZ) * modelPart.mesh.boundingSphereRadius;
+        Vector3 position = new Vector3();
+        transform.getPosition(position);
+        Vector3 scale = new Vector3();
+        transform.getScale(scale);
+        Vector3 boundingSphereCenter = new Vector3(centerX + position.x, centerY + position.y, centerZ + position.z);
+        float boundingSphereRadius = MathUtils.max(scale.x, scale.y, scale.z) * modelPart.mesh.boundingSphereRadius;
         if (componentGraphicsCamera.lens.frustumIntersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
             System.out.println("intersects");
         } else {
@@ -55,7 +59,7 @@ import org.lwjgl.opengl.GL30;
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_CULL_FACE);
         // todo: see when it makes sense to compute the matrix transform
-        currentShader.bindUniform("u_body_transform", transform.world());
+        currentShader.bindUniform("u_body_transform", transform);
         ModelPartMaterial material = modelPart.material;
         //currentShader.bindUniforms(material.materialParams);
         currentShader.bindUniform("colorDiffuse", material.uniformParams.get("colorDiffuse"));

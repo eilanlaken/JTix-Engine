@@ -7,7 +7,7 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -62,7 +62,7 @@ Known bugs:
     /* defaults */
     private final Shader defaultShader = createDefaultShaderProgram();
     private final Texture       whitePixel    = createWhiteSinglePixelTexture();
-    private final ComponentGraphicsCamera defaultComponentGraphicsCamera = createDefaultCamera();
+    private final ComponentCamera2D defaultComponentGraphicsCamera = createDefaultCamera();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectorsPool    = new MemoryPool<>(Vector2.class, 10);
@@ -70,7 +70,7 @@ Known bugs:
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
-    private ComponentGraphicsCamera currentComponentGraphicsCamera = null;
+    private ComponentCamera2D currentComponentGraphicsCamera = null;
     private Texture       currentTexture = null;
     private Shader currentShader  = null;
     private float         currentTint    = WHITE_TINT;
@@ -105,7 +105,7 @@ Known bugs:
         GL30.glBindVertexArray(0);
     }
 
-    public ComponentGraphicsCamera getCurrentCamera() {
+    public ComponentCamera2D getCurrentCamera() {
         return currentComponentGraphicsCamera;
     }
 
@@ -117,7 +117,7 @@ Known bugs:
         begin(null);
     }
 
-    public void begin(ComponentGraphicsCamera componentGraphicsCamera) {
+    public void begin(ComponentCamera2D componentGraphicsCamera) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D_old.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -1898,8 +1898,8 @@ Known bugs:
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
-    private static ComponentGraphicsCamera createDefaultCamera() {
-        ComponentGraphicsCamera c = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
+    private static ComponentCamera2D createDefaultCamera() {
+        ComponentCamera2D c = new ComponentCamera2D(Graphics.getWindowWidth(), Graphics.getWindowHeight());
         c.update();
         System.out.println(Graphics.getWindowWidth());
         System.out.println(Graphics.getWindowHeight());

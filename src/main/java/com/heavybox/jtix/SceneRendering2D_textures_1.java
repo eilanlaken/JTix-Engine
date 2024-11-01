@@ -9,7 +9,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class SceneRendering2D_textures_1 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private ComponentGraphicsCamera componentGraphicsCamera;
+    private ComponentCamera2D componentGraphicsCamera;
 
     private Texture texture;
 
@@ -31,7 +31,7 @@ public class SceneRendering2D_textures_1 extends ApplicationScreen {
 
     @Override
     public void show() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
+        componentGraphicsCamera = new ComponentCamera2D(640f/32,480f/32);
         componentGraphicsCamera.update();
         texture = AssetStore.get("assets/textures/yellowSquare.png");
     }

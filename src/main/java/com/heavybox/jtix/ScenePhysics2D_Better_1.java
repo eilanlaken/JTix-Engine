@@ -8,7 +8,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.physics2d.Body2D;
 import com.heavybox.jtix.physics2d.World2D;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 public class ScenePhysics2D_Better_1 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private ComponentGraphicsCamera componentGraphicsCamera;
+    private ComponentCamera2D componentGraphicsCamera;
     private World2D world = new World2D();
 
     private Body2D body_a;
@@ -28,7 +28,7 @@ public class ScenePhysics2D_Better_1 extends ApplicationScreen {
 
     @Override
     public void show() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
+        componentGraphicsCamera = new ComponentCamera2D(640f/32,480f/32);
         componentGraphicsCamera.update();
 
         world.createBodyRectangle(null, Body2D.MotionType.STATIC,

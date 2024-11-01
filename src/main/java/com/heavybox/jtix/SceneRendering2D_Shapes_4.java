@@ -11,7 +11,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ecs.ComponentCamera2D;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class SceneRendering2D_Shapes_4 extends ApplicationScreen {
 
     private Renderer2D_old renderer2DOld;
-    private ComponentGraphicsCamera componentGraphicsCamera;
+    private ComponentCamera2D componentGraphicsCamera;
     private float red = new Color(1,0,0,1).toFloatBits();
     private float green = new Color(0,1,0,1f).toFloatBits();
     private float blue = new Color(0,0,1,0.4f).toFloatBits();
@@ -35,7 +35,7 @@ public class SceneRendering2D_Shapes_4 extends ApplicationScreen {
 
     @Override
     public void show() {
-        componentGraphicsCamera = new ComponentGraphicsCamera(640f/32,480f/32, 1);
+        componentGraphicsCamera = new ComponentCamera2D(640f/32,480f/32);
         componentGraphicsCamera.update();
         shaderYellow = AssetStore.get("assets/shaders/graphics-2d-shader-yellow");
 
