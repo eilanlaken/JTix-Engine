@@ -311,6 +311,7 @@ public final class Assets {
         return fileExists;
     }
 
+    // TODO: change to throws AssetsException
     public static void saveImage(final String directory, final String filename, BufferedImage image) throws IOException {
         if (!directoryExists(directory)) throw new AssetException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename + ".png";

@@ -1,6 +1,6 @@
 package com.heavybox.jtix.tools;
 
-import com.heavybox.jtix.z_old_assets.AssetUtils;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.GraphicsException;
 import com.heavybox.jtix.graphics.Graphics;
@@ -24,7 +24,7 @@ public final class ToolsTexturePacker {
 
     public static void packTextures(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
         if (directory == null) throw new IllegalArgumentException("Must provide non-null directory name.");
-        if (!AssetUtils.directoryExists(directory)) throw new IllegalArgumentException("The provided path: " + directory + " does not exist, or is not a directory");
+        if (!Assets.directoryExists(directory)) throw new IllegalArgumentException("The provided path: " + directory + " does not exist, or is not a directory");
         // TODO: ...
     }
 
@@ -73,9 +73,9 @@ public final class ToolsTexturePacker {
         yamlData.put("regions", allRegions.items);
         yamlData.put("options", optionsData);
         yamlData.put("textures", texturesData);
-        String content = AssetUtils.yaml().dump(yamlData);
+        String content = Assets.yaml().dump(yamlData);
         try {
-            AssetUtils.saveFile(outputDirectory, outputName + ".yml", content);
+            Assets.saveFile(outputDirectory, outputName + ".yml", content);
         } catch (Exception e) {
             throw new GraphicsException("Could not save texture pack data file. Exception: " + e.getMessage());
         }
@@ -123,7 +123,7 @@ public final class ToolsTexturePacker {
                     }
                 }
             }
-            AssetUtils.saveImage(outputDirectory, outputName + "_" + texturePackImage.index, texturePackImage);
+            Assets.saveImage(outputDirectory, outputName + "_" + texturePackImage.index, texturePackImage);
             graphics.dispose();
         }
     }
@@ -131,13 +131,13 @@ public final class ToolsTexturePacker {
     private static boolean alreadyPacked(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, final String ...texturePaths) {
         // check if the output directory or the texture map file is missing
         final String mapPath = outputDirectory + File.separator + outputName + ".yml";
-        if (!AssetUtils.fileExists(mapPath)) {
+        if (!Assets.fileExists(mapPath)) {
             return false;
         }
 
         // if we did find the map file, check for the presence of all required textures
-        String contents = AssetUtils.getFileContent(mapPath);
-        Map<String, Object> yamlData = AssetUtils.yaml().load(contents);
+        String contents = Assets.getFileContent(mapPath);
+        Map<String, Object> yamlData = Assets.yaml().load(contents);
 
         try {
             ArrayList<LinkedHashMap<String, Object>> regionsData = (ArrayList<LinkedHashMap<String, Object>>) yamlData.get("regions");
@@ -153,9 +153,9 @@ public final class ToolsTexturePacker {
 
             /* if we are packing the same textures, but one or more of the source textures was modified after our last
             packing, we need to pack again. */
-            Date lastPacked = AssetUtils.lastModified(mapPath);
+            Date lastPacked = Assets.lastModified(mapPath);
             for (String texturePath : packingNow) {
-                Date lastModified = AssetUtils.lastModified(texturePath);
+                Date lastModified = Assets.lastModified(texturePath);
                 if (lastModified.after(lastPacked)) return false;
             }
         } catch (Exception any) {

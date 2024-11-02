@@ -260,6 +260,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
+    /* Rendering 2D primitives - lines */
+
     public final void drawLineThin(float x1, float y1, float x2, float y2) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(2)) flush();
@@ -283,7 +285,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += 2;
     }
 
-    /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
+    /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
     private boolean ensureCapacity(int vertices) {
         return true; // TODO

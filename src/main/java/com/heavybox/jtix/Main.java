@@ -4,12 +4,20 @@ import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
+import com.heavybox.jtix.tools.ToolsTextureGenerator;
 
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+
+
+        try {
+            ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 1,false);
+        } catch (Exception e) {
+
+        }
 
         /* texture generator tests */
 //        try {
@@ -49,6 +57,7 @@ public class Main {
 //        Application.create();
 //        Application.launch(new ScreenLoading());
 
+        if (true) return;
         Application.init();
         Application.launch(new SceneTest_2());
 

@@ -1,6 +1,6 @@
 package com.heavybox.jtix.tools;
 
-import com.heavybox.jtix.z_old_assets.AssetUtils;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.GraphicsException;
 import com.heavybox.jtix.math.MathUtils;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +31,7 @@ public final class ToolsFontGenerator {
         Path font = Paths.get(fontPath);
         Path directory = font.getParent();
         String filename = font.getFileName().toString();
-        String filenameNoExtension = AssetUtils.removeExtension(filename);
+        String filenameNoExtension = Assets.removeExtension(filename);
         generateFontBitmap(directory.toString(), filenameNoExtension + "-" + size, fontPath, size, antialiasing, charset);
     }
 
@@ -46,7 +46,7 @@ public final class ToolsFontGenerator {
         long library = libPointerBuffer.get(0);
         ByteBuffer fontDataBuffer;
         try {
-            fontDataBuffer = AssetUtils.fileToByteBuffer(fontPath);
+            fontDataBuffer = Assets.fileToByteBuffer(fontPath);
         } catch (Exception e) {
             throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
         }
@@ -169,7 +169,7 @@ public final class ToolsFontGenerator {
             pen.drawImage(glyphData.bufferedImage, glyphData.atlasX, glyphData.atlasY, null); // Draw img1 at (100, 100) in img2
         }
         try {
-            AssetUtils.saveImage(directory, outputName, fontAtlas);
+            Assets.saveImage(directory, outputName, fontAtlas);
         } catch (Exception e) {
             throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + outputName + ". Exception: " + e.getMessage());
         }
@@ -180,7 +180,7 @@ public final class ToolsFontGenerator {
         {
             // meta-data
             Map<String, Object> metaData = new HashMap<>();
-            metaData.put("name", AssetUtils.removeExtension(Paths.get(fontPath).getFileName().toString()));
+            metaData.put("name", Assets.removeExtension(Paths.get(fontPath).getFileName().toString()));
             metaData.put("atlas", outputName + ".png");
 
             // options
@@ -193,9 +193,9 @@ public final class ToolsFontGenerator {
             yamlData.put("options", optionsData);
             yamlData.put("glyphs", glyphsData);
         }
-        String content = AssetUtils.yaml().dump(yamlData);
+        String content = Assets.yaml().dump(yamlData);
         try {
-            AssetUtils.saveFile(directory, outputName + ".yml", content);
+            Assets.saveFile(directory, outputName + ".yml", content);
         } catch (Exception e) {
             throw new GraphicsException("Could not save texture pack data file. Exception: " + e.getMessage());
         }
@@ -208,24 +208,24 @@ public final class ToolsFontGenerator {
     private static synchronized boolean alreadyGenerated(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
         try {
             String texturePath = Paths.get(directory, outputName + ".png").toString();
-            if (!AssetUtils.fileExists(texturePath)) return false;
+            if (!Assets.fileExists(texturePath)) return false;
 
             String dataPath = Paths.get(directory, outputName + ".yml").toString();
-            if (!AssetUtils.fileExists(dataPath)) return false;
+            if (!Assets.fileExists(dataPath)) return false;
 
-            Date lastGenerated = AssetUtils.lastModified(dataPath);
-            Date lastModified = AssetUtils.lastModified(fontPath);
+            Date lastGenerated = Assets.lastModified(dataPath);
+            Date lastModified = Assets.lastModified(fontPath);
             if (lastModified.after(lastGenerated)) return false;
 
-            String fontDataContent = AssetUtils.getFileContent(dataPath);
-            Map<String, Object> data = AssetUtils.yaml().load(fontDataContent);
+            String fontDataContent = Assets.getFileContent(dataPath);
+            Map<String, Object> data = Assets.yaml().load(fontDataContent);
 
             // compare 'meta' section
             Map<String, Object> meta = (Map<String, Object>) data.get("meta");
             String name = (String) meta.get("name");
             Path font = Paths.get(fontPath);
             String filename = font.getFileName().toString();
-            String filenameNoExtension = AssetUtils.removeExtension(filename);
+            String filenameNoExtension = Assets.removeExtension(filename);
             if (!Objects.equals(filenameNoExtension, name)) return false;
 
             // Extract 'options' section
