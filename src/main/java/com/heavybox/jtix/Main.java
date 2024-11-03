@@ -14,7 +14,7 @@ public class Main {
 
 
         try {
-            ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 1,false);
+            ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
         } catch (Exception e) {
 
         }

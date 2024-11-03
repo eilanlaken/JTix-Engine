@@ -114,9 +114,10 @@ public final class ToolsTextureGenerator {
                 };
 
                 Vector3 normal = sobel(convolution_kernel, strengthInv);
-                int mappedRed = map(normal.x);
-                int mappedGreen = map(normal.y);
-                int mappedBlue = map(normal.z);
+                // map normal -1..1 to rgb 0..255
+                int mappedRed = (int) ((normal.x + 1.0f) * (255.0f / 2.0f));
+                int mappedGreen = (int) ((normal.y + 1.0f) * (255.0f / 2.0f));
+                int mappedBlue = (int) ((normal.z + 1.0f) * (255.0f / 2.0f));
 
                 // Combine the mapped values into an RGB color
                 int rgb = (mappedRed << 16) | (mappedGreen << 8) | mappedBlue;
@@ -199,14 +200,7 @@ public final class ToolsTextureGenerator {
             y = tiled ? height + y : 0;
         }
 
-        System.out.println( (img.getRGB(x, y) & 0xFF) / 255f);
-        //return img.getRGB(x, y) & 0xFF;
         return (img.getRGB(x, y) & 0xFF) / 255f;
-    }
-
-    //transform -1..1 to 0..255
-    private static int map(float value) {
-        return (int) ((value + 1.0f) * (255.0f / 2.0f));
     }
 
 }
