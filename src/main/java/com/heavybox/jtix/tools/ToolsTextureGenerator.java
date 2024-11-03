@@ -67,6 +67,8 @@ public final class ToolsTextureGenerator {
     // https://codepen.io/BJS3D/pen/YzjXZgV?editors=1010
     // https://github.com/Theverat/NormalmapGenerator/blob/master/src_generators/normalmapgenerator.cpp#L142
     public static void generateTextureMapNormal(final String directory, final String outputName, final String sourcePath, float strength, boolean tiled) {
+        // TODO: check if already generated.
+
         /* get original image */
         BufferedImage imageInput = null;
         try {
@@ -135,6 +137,10 @@ public final class ToolsTextureGenerator {
 
     public static void generateTextureMapRoughness() {}
     public static void generateTextureMapMetallic() {}
+
+    public static void generateTextureMapSSAO() {
+
+    }
 
     private static float fade(float t) {
         return t * t * t * (t * (t * 6 - 15) + 10); // t^3 * (6 * t^2 - 16 * t + 10)
