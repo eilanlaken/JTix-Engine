@@ -5,7 +5,6 @@ import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
-import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.input_2.InputMouse;
@@ -67,14 +66,17 @@ public class SceneTest_2 implements Scene {
         renderer2D.begin(componentGraphicsCamera.lens.combined);
         renderer2D.drawRectangleThin(-200,-200,200,-200,200,200,-200,200);
 
+        renderer2D.setTint(Color.LIGHT_GRAY);
+        renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
+
         renderer2D.setTint(Color.MAGENTA);
         renderer2D.drawRectangleThin(300,150, 40, 2,0,0,deg,0.75f,1);
 
         renderer2D.setTint(Color.GREEN);
-        renderer2D.drawCircleBorder(150,10, deg,44,0,0,0,1,1);
+        renderer2D.drawCircleBorder(150,10, deg + 40,44,0,0,0,1,1);
 
         renderer2D.setTint(new Color(1,0,0,0.2f));
-        renderer2D.drawCircleFilled(50,44,deg,-200,0,0,1,1);
+        renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);
 
         renderer2D.setTint(null);
         renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
@@ -83,8 +85,13 @@ public class SceneTest_2 implements Scene {
         renderer2D.setTint(Color.BLUE);
         renderer2D.drawRectangleFilled(null, 100,200,50,-200,deg,1,1);
 
+        renderer2D.setTint(Color.LIGHT_GRAY);
+        renderer2D.drawRectangleFilled(200,100,10,5,300,-300,deg * 2,1,1);
+
         renderer2D.setTint(null);
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1,1);
+
+
 //
 //        renderer2D.drawLineThin(0,0,400,400);
 //        renderer2D.drawLineThin(0,0,400,-400);
