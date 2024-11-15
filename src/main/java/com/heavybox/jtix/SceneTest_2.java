@@ -78,6 +78,9 @@ public class SceneTest_2 implements Scene {
         renderer2D.setTint(new Color(1,0,0,0.2f));
         renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);
 
+        renderer2D.setTint(Color.CYAN);
+        renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
+
         renderer2D.setTint(null);
         renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
         renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);

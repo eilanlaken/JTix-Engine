@@ -1,5 +1,6 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.MathUtils;
@@ -1040,6 +1041,73 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
         vectors2Pool.free(corner);
         vertexIndex += refinement * 4;
+    }
+
+    public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float angleDeg, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(8)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        float widthHalf     = width     * 0.5f;
+        float heightHalf    = height    * 0.5f;
+        float thicknessHalf = thickness * 0.5f;
+
+        Array<Vector2> vertices = new Array<>(true, 8);
+        // inner vertices
+        Vector2 inner_vertex_0 = vectors2Pool.allocate().set(-widthHalf + thicknessHalf, heightHalf - thicknessHalf);
+        Vector2 inner_vertex_1 = vectors2Pool.allocate().set(-widthHalf + thicknessHalf, -heightHalf + thicknessHalf);
+        Vector2 inner_vertex_2 = vectors2Pool.allocate().set(widthHalf - thicknessHalf, -heightHalf + thicknessHalf);
+        Vector2 inner_vertex_3 = vectors2Pool.allocate().set(widthHalf - thicknessHalf, heightHalf - thicknessHalf);
+        // outer vertices
+        Vector2 outer_vertex_0 = vectors2Pool.allocate().set(-widthHalf - thicknessHalf, heightHalf + thicknessHalf);
+        Vector2 outer_vertex_1 = vectors2Pool.allocate().set(-widthHalf - thicknessHalf, -heightHalf - thicknessHalf);
+        Vector2 outer_vertex_2 = vectors2Pool.allocate().set(widthHalf + thicknessHalf, -heightHalf - thicknessHalf);
+        Vector2 outer_vertex_3 = vectors2Pool.allocate().set(widthHalf + thicknessHalf, heightHalf + thicknessHalf);
+
+        vertices.add(inner_vertex_0, inner_vertex_1, inner_vertex_2, inner_vertex_3);
+        vertices.add(outer_vertex_0, outer_vertex_1, outer_vertex_2, outer_vertex_3);
+
+        // transform each vertex, then put it in the buffer + tint + uv
+        for (int i = 0; i < vertices.size; i++) {
+            Vector2 vertex = vertices.get(i);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(angleDeg);
+            vertex.add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 4);
+        indices.put(startVertex + 5);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 5);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 5);
+        indices.put(startVertex + 6);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 6);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 6);
+        indices.put(startVertex + 7);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 7);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 7);
+        indices.put(startVertex + 4);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 4);
+        indices.put(startVertex + 0);
+        vertexIndex += 8;
+
+        vectors2Pool.freeAll(vertices);
     }
 
 
