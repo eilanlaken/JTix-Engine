@@ -57,8 +57,8 @@ public class Main {
 //        Application.create();
 //        Application.launch(new ScreenLoading());
 
-        if (true) return;
-        Application.init();
+        //if (true) return;
+        Application.init(); // can init with options.
         Application.launch(new SceneTest_2());
 
     }

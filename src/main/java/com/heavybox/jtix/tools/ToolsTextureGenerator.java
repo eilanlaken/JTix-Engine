@@ -66,6 +66,7 @@ public final class ToolsTextureGenerator {
     /* Maps */
     // https://codepen.io/BJS3D/pen/YzjXZgV?editors=1010
     // https://github.com/Theverat/NormalmapGenerator/blob/master/src_generators/normalmapgenerator.cpp#L142
+    // TODO
     public static void generateTextureMapNormal(final String directory, final String outputName, final String sourcePath, float strength, boolean tiled) {
         // TODO: check if already generated.
 
