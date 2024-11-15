@@ -4,10 +4,13 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input_2.Input;
+import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.input_2.InputMouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
@@ -37,7 +40,8 @@ public class SceneTest_2 implements Scene {
     }
 
     float x = 0, y = 0;
-
+    float u1,v1,u2 = 0.5f,v2 = 0.5f;
+    float deg = 0;
     @Override
     public void update() {
 
@@ -52,15 +56,38 @@ public class SceneTest_2 implements Scene {
             //Application.setWindowPosition(300,300);
             System.out.println(Application.getWindowPosX());
         }
-
+        if (Input.keyboard.isKeyPressed(InputKeyboard.Key.F)) {
+            u2 += 0.001f;
+            v2 += 0.001f;
+            deg += 1;
+        }
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
         renderer2D.begin(componentGraphicsCamera.lens.combined);
 
-        renderer2D.drawLineThin(0,0,400,400);
-        renderer2D.drawTexture(yellow,x,y,0,1,1);
-        renderer2D.drawTexture(pattern,x-200,y,0,1,1);
+        renderer2D.setTint(Color.GREEN);
+        renderer2D.drawCircleBorder(150,10, deg,44,0,0,0,1,1);
+
+        renderer2D.setTint(new Color(1,0,0,0.2f));
+        renderer2D.drawCircleFilled(50,44,deg,-200,0,0,1,1);
+
+        renderer2D.setTint(null);
+        renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
+        renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
+
+
+
+
+//
+//        renderer2D.drawLineThin(0,0,400,400);
+//        renderer2D.drawLineThin(0,0,400,-400);
+//        renderer2D.drawCircleThin(300, 10, 0, 200, 0,1,1);
+//
+//        renderer2D.drawTexture(yellow,x,y,0,1,1);
+
+        //renderer2D.drawTexture(pattern,x-200,y,0,1,1);
+
 
         renderer2D.end();
 
@@ -80,11 +107,6 @@ public class SceneTest_2 implements Scene {
     }
 
     @Override
-    public void windowFocused(boolean focus) {
-        System.out.println("focus: " + focus);
-    }
-
-    @Override
     public void windowMinimized(boolean minimized) {
         System.out.println(minimized);
     }
@@ -98,4 +120,5 @@ public class SceneTest_2 implements Scene {
     public void windowFilesDraggedAndDropped(Array<String> filePaths) {
         Scene.super.windowFilesDraggedAndDropped(filePaths);
     }
+
 }
