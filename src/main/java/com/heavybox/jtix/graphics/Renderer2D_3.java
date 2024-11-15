@@ -331,7 +331,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawTextureRegion(TexturePack.Region region, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawTextureRegion(TexturePack.Region region, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4)) flush();
 
@@ -359,8 +359,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         float localY3 = offsetY - originalHeightHalf;
 
         /* apply scale */
-        scaleX *= MathUtils.cosDeg(angleY);
-        scaleY *= MathUtils.cosDeg(angleX);
         localX1 *= scaleX;
         localX2 *= scaleX;
         localX3 *= scaleX;
@@ -371,8 +369,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         localY4 *= scaleY;
 
         /* apply rotation */
-        final float sin = MathUtils.sinDeg(angleZ);
-        final float cos = MathUtils.cosDeg(angleZ);
+        final float sin = MathUtils.sinDeg(degrees);
+        final float cos = MathUtils.cosDeg(degrees);
         float x1 = localX1 * cos - localY1 * sin;
         float y1 = localX1 * sin + localY1 * cos;
         float x2 = localX2 * cos - localY2 * sin;

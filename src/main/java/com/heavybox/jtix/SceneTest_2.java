@@ -4,10 +4,7 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D_3;
-import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
@@ -22,11 +19,13 @@ public class SceneTest_2 implements Scene {
     Texture pattern;
     private Renderer2D_3 renderer2D = new Renderer2D_3();
     private ComponentGraphicsCamera componentGraphicsCamera;
+    TexturePack pack;
 
     @Override
     public void setup() {
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadTexture("assets/textures/pattern.png");
+        Assets.loadTexturePack("assets/atlases/spots.yml");
         Assets.finishLoading();
     }
 
@@ -34,6 +33,7 @@ public class SceneTest_2 implements Scene {
     public void start() {
         yellow = Assets.get("assets/textures/yellowSquare.jpg");
         pattern = Assets.get("assets/textures/pattern.png");
+        pack = Assets.get("assets/atlases/spots.yml");
         componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
 
@@ -76,7 +76,7 @@ public class SceneTest_2 implements Scene {
         renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
         renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
-
+        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1,1);
 
 
 //
