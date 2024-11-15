@@ -1,5 +1,6 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.input_2.Input;
@@ -628,57 +629,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vectors2Pool.free(arm1);
     }
 
-
-    /*
-    public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        refinement = Math.max(3, refinement);
-        if ((vertexIndex + refinement * 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indices.limit() + (refinement - 1) * 6 > indices.capacity()) flush();
-
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
-
-        scaleX *= MathUtils.cosDeg(angleY);
-        scaleY *= MathUtils.cosDeg(angleX);
-
-        Vector2 arm0 = vectors2Pool.allocate();
-        Vector2 arm1 = vectors2Pool.allocate();
-        float da = angle / refinement;
-        float halfBorder = thickness * 0.5f;
-        // render arc segments.
-        for (int i = 0; i < refinement; i++) {
-            float currentAngle = da * i;
-
-            arm0.x = scaleX * (r - halfBorder) * MathUtils.cosDeg(currentAngle);
-            arm0.y = scaleY * (r - halfBorder) * MathUtils.sinDeg(currentAngle);
-            arm0.rotateDeg(angleZ);
-
-            arm1.x = scaleX * (r + halfBorder) * (MathUtils.cosDeg(currentAngle));
-            arm1.y = scaleY * (r + halfBorder) * (MathUtils.sinDeg(currentAngle));
-            arm1.rotateDeg(angleZ);
-
-            verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0.5f).put(0.5f);
-            verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0.5f).put(0.5f);
-        }
-
-        // put indices
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < (refinement - 1) * 2; i += 2) { // 012 213
-            indices.put(startVertex + i + 0);
-            indices.put(startVertex + i + 1);
-            indices.put(startVertex + i + 2);
-            indices.put(startVertex + i + 2);
-            indices.put(startVertex + i + 1);
-            indices.put(startVertex + i + 3);
-        }
-        vertexIndex += refinement * 2;
-
-        vectors2Pool.free(arm0);
-        vectors2Pool.free(arm1);
-    }
-*/
-
     /* Rendering 2D primitives - lines */
 
     public final void drawLineThin(float x1, float y1, float x2, float y2) {
@@ -702,6 +652,179 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         indices.put(startVertex);
         indices.put(startVertex + 1);
         vertexIndex += 2;
+    }
+
+    /* Rendering 2D primitives - Rectangles */
+
+    public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(4)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 0);
+
+        positions.put(x0).put(y0);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x1).put(y1);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x2).put(y2);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x3).put(y3);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        vertexIndex += 4;
+    }
+
+    public void drawRectangleThin(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(4)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
+
+        float widthHalf  = width  * scaleX * 0.5f;
+        float heightHalf = height * scaleY * 0.5f;
+
+        arm0.x = -widthHalf;
+        arm0.y = heightHalf;
+        arm0.rotateDeg(degrees);
+
+        arm1.x = -widthHalf;
+        arm1.y = -heightHalf;
+        arm1.rotateDeg(degrees);
+
+        arm2.x = widthHalf;
+        arm2.y = -heightHalf;
+        arm2.rotateDeg(degrees);
+
+        arm3.x = widthHalf;
+        arm3.y = heightHalf;
+        arm3.rotateDeg(degrees);
+
+        positions.put(arm0.x + x).put(arm0.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(arm1.x + x).put(arm1.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(arm2.x + x).put(arm2.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(arm3.x + x).put(arm3.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 0);
+        vertexIndex += 4;
+
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
+    }
+
+    public void drawRectangleThin(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement * 4)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        float widthHalf  = width  * 0.5f;
+        float heightHalf = height * 0.5f;
+        float da = 90.0f / (refinement - 1);
+
+        Vector2 corner = vectors2Pool.allocate();
+
+        // add upper left corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(-cornerRadius, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadius, heightHalf - cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(0, cornerRadius);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(cornerRadius, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(0, -cornerRadius);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement * 4; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + (i + 1) % (refinement*4));
+        }
+
+        vectors2Pool.free(corner);
+        vertexIndex += refinement * 4;
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
