@@ -67,7 +67,8 @@ public class SceneTest_2 implements Scene {
         renderer2D.begin(componentGraphicsCamera.lens.combined);
         renderer2D.drawRectangleThin(-200,-200,200,-200,200,200,-200,200);
 
-
+        renderer2D.setTint(Color.MAGENTA);
+        renderer2D.drawRectangleThin(300,150, 40, 2,0,0,deg,0.75f,1);
 
         renderer2D.setTint(Color.GREEN);
         renderer2D.drawCircleBorder(150,10, deg,44,0,0,0,1,1);
@@ -79,9 +80,11 @@ public class SceneTest_2 implements Scene {
         renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
         renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
+        renderer2D.setTint(Color.BLUE);
+        renderer2D.drawRectangleFilled(null, 100,200,50,-200,deg,1,1);
+
+        renderer2D.setTint(null);
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1,1);
-        renderer2D.setTint(Color.MAGENTA);
-        renderer2D.drawRectangleThin(300,150, 40, 6,0,0,deg,0.75f,1);
 //
 //        renderer2D.drawLineThin(0,0,400,400);
 //        renderer2D.drawLineThin(0,0,400,-400);

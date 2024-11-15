@@ -10,6 +10,7 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -655,8 +656,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     }
 
     /* Rendering 2D primitives - Rectangles */
-
-    public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
+    // TODO: delete. This is not necessarily a rectangle. This should be called from physics so simply replace the call.
+    @Deprecated public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4)) flush();
 
@@ -826,6 +827,76 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vectors2Pool.free(corner);
         vertexIndex += refinement * 4;
     }
+
+    public void drawRectangleFilled(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
+        drawRectangleFilled(null, width, height, x, y, degrees, scaleX, scaleY);
+    }
+
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(4)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        float widthHalf  = width  * scaleX * 0.5f;
+        float heightHalf = height * scaleY * 0.5f;
+
+        Vector2 arm0 = vectors2Pool.allocate();
+        Vector2 arm1 = vectors2Pool.allocate();
+        Vector2 arm2 = vectors2Pool.allocate();
+        Vector2 arm3 = vectors2Pool.allocate();
+
+        arm0.x = -widthHalf;
+        arm0.y =  heightHalf;
+        arm0.rotateDeg(degrees);
+
+        arm1.x = -widthHalf;
+        arm1.y = -heightHalf;
+        arm1.rotateDeg(degrees);
+
+        arm2.x =  widthHalf;
+        arm2.y = -heightHalf;
+        arm2.rotateDeg(degrees);
+
+        arm3.x = widthHalf;
+        arm3.y = heightHalf;
+        arm3.rotateDeg(degrees);
+
+        positions.put(arm0.x + x).put(arm0.y + y);
+        colors.put(currentTint);
+        textCoords.put(0).put(0);
+
+        positions.put(arm1.x + x).put(arm1.y + y);
+        colors.put(currentTint);
+        textCoords.put(0).put(1);
+
+        positions.put(arm2.x + x).put(arm2.y + y);
+        colors.put(currentTint);
+        textCoords.put(1).put(1);
+
+        positions.put(arm3.x + x).put(arm3.y + y);
+        colors.put(currentTint);
+        textCoords.put(1).put(0);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 0);
+        vertexIndex += 4;
+
+        /* free resources */
+        vectors2Pool.free(arm0);
+        vectors2Pool.free(arm1);
+        vectors2Pool.free(arm2);
+        vectors2Pool.free(arm3);
+    }
+
+    // TODO: with rounded corners.
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
