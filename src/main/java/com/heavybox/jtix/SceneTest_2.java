@@ -118,8 +118,12 @@ public class SceneTest_2 implements Scene {
         renderer2D.setTint(Color.LIGHT_GRAY);
         renderer2D.drawRectangleFilled(200,100,10,5,300,-300,deg * 2,1,1);
 
+        renderer2D.setTint(Color.BROWN);
+        renderer2D.drawLineFilled(0,0,-100,-100,10,0,0,deg,1,1);
+
         renderer2D.setTint(null);
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1,1);
+
 
 
 //

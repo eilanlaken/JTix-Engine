@@ -1313,6 +1313,213 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += 2;
     }
 
+    public final void drawLineThin(float p1X, float p1Y, float p2X, float p2Y, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(2)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        Vector2 vertex1 = vectors2Pool.allocate();
+        vertex1.set(p1X, p1Y);
+        vertex1.scl(scaleX, scaleY);
+        vertex1.rotateDeg(degrees);
+        vertex1.add(x, y);
+
+        Vector2 vertex2 = vectors2Pool.allocate();
+        vertex2.set(p2X, p2Y);
+        vertex2.scl(scaleX, scaleY);
+        vertex2.rotateDeg(degrees);
+        vertex2.add(x, y);
+
+        positions.put(vertex1.x).put(vertex1.y);
+        positions.put(vertex2.x).put(vertex2.y);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        vertexIndex += 2;
+
+        vectors2Pool.free(vertex1);
+        vectors2Pool.free(vertex2);
+    }
+
+    public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(4)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Vector2 dir = vectors2Pool.allocate();
+        dir.x = x2 - x1;
+        dir.y = y2 - y1;
+        dir.nor();
+        dir.scl(thickness * 0.5f);
+        dir.rotate90(1);
+
+        // put vertices for line segment
+        positions.put(x1 + dir.x).put(y1 + dir.y);
+        positions.put(x1 - dir.x).put(y1 - dir.y);
+        positions.put(x2 - dir.x).put(y2 - dir.y);
+        positions.put(x2 + dir.x).put(y2 + dir.y);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        vertexIndex += 4;
+
+        vectors2Pool.free(dir);
+    }
+
+    public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(4)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Vector2 dir = vectors2Pool.allocate();
+        dir.x = x2 - x1;
+        dir.y = y2 - y1;
+        dir.nor();
+        dir.scl(thickness * 0.5f);
+        dir.rotate90(1);
+
+        // put vertices for line segment
+        Vector2 vertex1 = vectors2Pool.allocate();
+        vertex1.set(x1 + dir.x, y1 + dir.y);
+        vertex1.scl(scaleX, scaleY);
+        vertex1.rotateDeg(degrees);
+        vertex1.add(x, y);
+        positions.put(vertex1.x).put(vertex1.y);
+
+        Vector2 vertex2 = vectors2Pool.allocate();
+        vertex2.set(x1 - dir.x, y1 - dir.y);
+        vertex2.scl(scaleX, scaleY);
+        vertex2.rotateDeg(degrees);
+        vertex2.add(x, y);
+        positions.put(vertex2.x).put(vertex2.y);
+
+        Vector2 vertex3 = vectors2Pool.allocate();
+        vertex3.set(x2 - dir.x, y2 - dir.y);
+        vertex3.scl(scaleX, scaleY);
+        vertex3.rotateDeg(degrees);
+        vertex3.add(x, y);
+        positions.put(vertex3.x).put(vertex3.y);
+
+        Vector2 vertex4 = vectors2Pool.allocate();
+        vertex4.set(x2 + dir.x, y2 + dir.y);
+        vertex4.scl(scaleX, scaleY);
+        vertex4.rotateDeg(degrees);
+        vertex4.add(x, y);
+        positions.put(vertex4.x).put(vertex4.y);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        vertexIndex += 4;
+
+        vectors2Pool.free(vertex1);
+        vectors2Pool.free(vertex2);
+        vectors2Pool.free(vertex3);
+        vectors2Pool.free(vertex4);
+        vectors2Pool.free(dir);
+    }
+
+    /* Rendering 2D primitives - curves */
+
+    public void drawCurveThin(final Vector2... values) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (values == null || values.length < 2) return;
+        if (!ensureCapacity(values.length)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        /* put vertices */
+        for (Vector2 value : values) {
+            positions.put(value.x).put(value.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < values.length - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
+        }
+        vertexIndex += values.length;
+    }
+
+    public void drawCurveThin(final Vector2[] values, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (values == null || values.length < 2) return;
+        if (!ensureCapacity(values.length)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        /* put vertices */
+        Vector2 vertex = vectors2Pool.allocate();
+        for (Vector2 value : values) {
+            vertex.set(value.x, value.y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < values.length - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
+        }
+        vertexIndex += values.length;
+    }
+
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
     private boolean ensureCapacity(int vertices) {

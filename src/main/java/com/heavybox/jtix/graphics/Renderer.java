@@ -1732,7 +1732,7 @@ public class Renderer implements MemoryResourceHolder {
         vertexIndex += 4;
     }
 
-    public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, int edgeRefinement) {
+    @Deprecated public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, int edgeRefinement) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4 + (1 + edgeRefinement) + (1 + edgeRefinement)) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + (edgeRefinement - 1) * 6 + 6 > indicesBuffer.capacity()) flush();
