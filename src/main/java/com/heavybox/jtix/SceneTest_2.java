@@ -4,10 +4,12 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.input_2.InputMouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
@@ -19,6 +21,14 @@ public class SceneTest_2 implements Scene {
     private Renderer2D_3 renderer2D = new Renderer2D_3();
     private ComponentGraphicsCamera componentGraphicsCamera;
     TexturePack pack;
+
+    float[] polygon = new float[] {-100,-100,
+            0,-100, // a degenerate (co-linear) vertex.
+            100,-100,
+            100,100,
+            -100,100
+    };
+    int[] polygonTriangles;
 
     @Override
     public void setup() {
@@ -33,6 +43,7 @@ public class SceneTest_2 implements Scene {
         yellow = Assets.get("assets/textures/yellowSquare.jpg");
         pattern = Assets.get("assets/textures/pattern.png");
         pack = Assets.get("assets/atlases/spots.yml");
+        polygonTriangles = MathUtils.polygonTriangulate(polygon);
         componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
         componentGraphicsCamera.update();
 
@@ -78,11 +89,10 @@ public class SceneTest_2 implements Scene {
         renderer2D.setTint(Color.CHARTREUSE);
         renderer2D.drawPolygonThin(new float[] {
                 -100,-100,
-                0,-100, // a degenerate (co-linear) vertex.
                 100,-100,
                 100,100,
                 -100,100,
-        }, true, 0,0,deg,1,1);
+        }, polygonTriangles, 0,0,deg,1,1);
 
         renderer2D.setTint(new Color(1,0,0,0.2f));
         renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);

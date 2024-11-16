@@ -1035,6 +1035,96 @@ public final class MathUtils {
         vectors2Pool.free(va_to_vc);
     }
 
+    public static int[] polygonTriangulate(float[] polygon) {
+        if (polygon.length < 6) throw new MathException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new MathException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even. Got: " + polygon.length);
+        ArrayFloat outVertices = new ArrayFloat(true, polygon.length);
+
+        polygonRemoveDegenerateVertices(polygon, outVertices);
+        if (outVertices.size < 6) throw new MathException("Polygon contains " + (polygon.length - outVertices.size) / 2 + " collinear vertices; When removed, that total vertex count is: " + outVertices.size / 2 + ". Must have at least 3 non-collinear vertices.");
+
+        int windingOrder = MathUtils.polygonWindingOrder(outVertices);
+        if (windingOrder > 0) {
+            int n = outVertices.size;
+            for (int i = 0; i < n / 2; i += 2) {
+                int j = n - i - 2;
+                float temp1 = outVertices.get(i);
+                float temp2 = outVertices.get(i + 1);
+                outVertices.set(i, outVertices.get(j));
+                outVertices.set(i + 1, outVertices.get(j + 1));
+                outVertices.set(j, temp1);
+                outVertices.set(j + 1, temp2);
+            }
+        }
+
+        indexList.clear();
+        for (int i = 0; i < outVertices.size / 2; i++) {
+            indexList.add(i);
+        }
+
+        int totalTriangleCount = outVertices.size / 2 - 2;
+        int totalTriangleIndexCount = totalTriangleCount * 3;
+
+        ArrayInt triangles = new ArrayInt(true, totalTriangleIndexCount);
+
+        Vector2 va_to_vb = vectors2Pool.allocate();
+        Vector2 va_to_vc = vectors2Pool.allocate();
+
+        while (indexList.size > 3) {
+            for (int i = 0; i < indexList.size; i++) {
+                int a = indexList.get(i);
+                int b = indexList.getCyclic(i - 1);
+                int c = indexList.getCyclic(i + 1);
+
+                float vax = outVertices.get(a*2);
+                float vay = outVertices.get(a*2+1);
+                float vbx = outVertices.get(b*2);
+                float vby = outVertices.get(b*2+1);
+                float vcx = outVertices.get(c*2);
+                float vcy = outVertices.get(c*2+1);
+
+                va_to_vb.x = vbx - vax;
+                va_to_vb.y = vby - vay;
+                va_to_vc.x = vcx - vax;
+                va_to_vc.y = vcy - vay;
+
+                // Is ear test vertex convex?
+                if (Vector2.crs(va_to_vb, va_to_vc) > 0f) continue;
+
+                // Does test ear contain any polygon vertices?
+                boolean isEar = true;
+                for (int j = 0; j < outVertices.size - 1; j+=2) {
+                    int index = j / 2;
+                    if (index == a || index == b || index == c) continue;
+                    float px = outVertices.get(j);
+                    float py = outVertices.get(j+1);
+                    if (pointInTriangle(px, py, vbx, vby, vax, vay, vcx, vcy)) {
+                        isEar = false;
+                        break;
+                    }
+                }
+
+                if (isEar) {
+                    triangles.add(b);
+                    triangles.add(a);
+                    triangles.add(c);
+                    indexList.removeIndex(i);
+                    break;
+                }
+            }
+        }
+
+        triangles.add(indexList.get(0));
+        triangles.add(indexList.get(1));
+        triangles.add(indexList.get(2));
+
+        /* free resources */
+        vectors2Pool.free(va_to_vb);
+        vectors2Pool.free(va_to_vc);
+
+        return triangles.pack();
+    }
+
     public static void polygonTriangulate(float[] polygon, @NotNull ArrayFloat outVertices, @NotNull ArrayInt outIndices) {
         if (polygon.length < 6) throw new MathException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new MathException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even. Got: " + polygon.length);
