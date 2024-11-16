@@ -1038,12 +1038,27 @@ public final class MathUtils {
     public static void polygonTriangulate(float[] polygon, @NotNull ArrayFloat outVertices, @NotNull ArrayInt outIndices) {
         if (polygon.length < 6) throw new MathException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new MathException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even. Got: " + polygon.length);
+
+        outVertices.clear();
+        outIndices.clear();
         polygonRemoveDegenerateVertices(polygon, outVertices);
         if (outVertices.size < 6) throw new MathException("Polygon contains " + (polygon.length - outVertices.size) / 2 + " collinear vertices; When removed, that total vertex count is: " + outVertices.size / 2 + ". Must have at least 3 non-collinear vertices.");
 
         int windingOrder = MathUtils.polygonWindingOrder(outVertices);
         if (windingOrder > 0) {
-            outVertices.reverseInPairs();
+            System.out.println("reversed");
+            //outVertices.reverseInPairs();
+            // reverse in pairs the [x,y] of the vertices array.
+            int n = outVertices.size;
+            for (int i = 0; i < n / 2; i += 2) {
+                int j = n - i - 2;
+                float temp1 = outVertices.get(i);
+                float temp2 = outVertices.get(i + 1);
+                outVertices.set(i, outVertices.get(j));
+                outVertices.set(i + 1, outVertices.get(j + 1));
+                outVertices.set(j, temp1);
+                outVertices.set(j + 1, temp2);
+            }
         }
 
         indexList.clear();
@@ -1054,7 +1069,6 @@ public final class MathUtils {
         int totalTriangleCount = outVertices.size / 2 - 2;
         int totalTriangleIndexCount = totalTriangleCount * 3;
 
-        outIndices.clear();
         outIndices.ensureCapacity(totalTriangleIndexCount);
 
         Vector2 va_to_vb = vectors2Pool.allocate();
@@ -1075,18 +1089,14 @@ public final class MathUtils {
 
                 va_to_vb.x = vbx - vax;
                 va_to_vb.y = vby - vay;
-
                 va_to_vc.x = vcx - vax;
                 va_to_vc.y = vcy - vay;
 
                 // Is ear test vertex convex?
-                if (Vector2.crs(va_to_vb, va_to_vc) > 0f) {
-                    continue;
-                }
-
-                boolean isEar = true;
+                if (Vector2.crs(va_to_vb, va_to_vc) > 0f) continue;
 
                 // Does test ear contain any polygon vertices?
+                boolean isEar = true;
                 for (int j = 0; j < outVertices.size - 1; j+=2) {
                     int index = j / 2;
                     if (index == a || index == b || index == c) continue;
@@ -1102,7 +1112,6 @@ public final class MathUtils {
                     outIndices.add(b);
                     outIndices.add(a);
                     outIndices.add(c);
-
                     indexList.removeIndex(i);
                     break;
                 }

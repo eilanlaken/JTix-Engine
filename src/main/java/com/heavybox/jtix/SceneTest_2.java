@@ -75,6 +75,15 @@ public class SceneTest_2 implements Scene {
         renderer2D.setTint(Color.GREEN);
         renderer2D.drawCircleBorder(150,10, deg + 40,44,0,0,0,1,1);
 
+        renderer2D.setTint(Color.CHARTREUSE);
+        renderer2D.drawPolygonThin(new float[] {
+                -100,-100,
+                0,-100, // a degenerate (co-linear) vertex.
+                100,-100,
+                100,100,
+                -100,100,
+        }, true, 0,0,deg,1,1);
+
         renderer2D.setTint(new Color(1,0,0,0.2f));
         renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);
 

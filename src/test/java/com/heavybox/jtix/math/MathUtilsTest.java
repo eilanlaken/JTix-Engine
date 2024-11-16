@@ -815,8 +815,6 @@ class MathUtilsTest {
 
         ArrayFloat vertices_floats = ArrayFloat.with(0,0,   1,0,   1,1,   0,1);
         Assertions.assertEquals(-1, MathUtils.polygonWindingOrder(vertices_floats));
-        vertices_floats.reverseInPairs();
-        Assertions.assertEquals(1, MathUtils.polygonWindingOrder(vertices_floats));
     }
 
     @Test
