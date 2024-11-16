@@ -709,31 +709,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vectors2Pool.free(arm1);
     }
 
-    /* Rendering 2D primitives - lines */
-
-    public final void drawLineThin(float x1, float y1, float x2, float y2) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(2)) flush();
-
-        setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
-
-        positions.put(x1).put(y1);
-        positions.put(x2).put(y2);
-
-        colors.put(currentTint);
-        colors.put(currentTint);
-
-        textCoords.put(0.5f).put(0.5f);
-        textCoords.put(0.5f).put(0.5f);
-
-        // put indices
-        int startVertex = this.vertexIndex;
-        indices.put(startVertex);
-        indices.put(startVertex + 1);
-        vertexIndex += 2;
-    }
-
     /* Rendering 2D primitives - Rectangles */
     // TODO: delete. This is not necessarily a rectangle. This should be called from physics so simply replace the call.
     @Deprecated public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
@@ -1230,6 +1205,112 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += polygon.length / 2;
 
         vectors2Pool.free(vertex);
+    }
+
+    public void drawPolygonFilled(float[] polygon, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if (!ensureCapacity(count)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        ArrayFloat vertices = arrayFloatPool.allocate();
+        ArrayInt triangles = arrayIntPool.allocate();
+        try {
+            MathUtils.polygonTriangulate(polygon, vertices, triangles);
+        } catch (Exception e) { // Probably the polygon has collapsed into a single point.
+            return;
+        }
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < vertices.size; i += 2) {
+            float poly_x = vertices.get(i);
+            float poly_y = vertices.get(i + 1);
+
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < triangles.size; i ++) {
+            indices.put(startVertex + triangles.get(i));
+        }
+
+        vertexIndex += count;
+        arrayFloatPool.free(vertices);
+        arrayIntPool.free(triangles);
+    }
+
+    public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if (!ensureCapacity(count)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < polygon.length; i += 2) {
+            float poly_x = polygon[i];
+            float poly_y = polygon[i + 1];
+
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(angleZ);
+            vertex.add(x, y);
+
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < triangles.length; i ++) {
+            indices.put(startVertex + indices.get(i));
+        }
+        vertexIndex += count;
+
+        vectors2Pool.free(vertex);
+    }
+
+    /* Rendering 2D primitives - lines */
+
+    // TODO: create a version with transform.
+    public final void drawLineThin(float x1, float y1, float x2, float y2) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(2)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        positions.put(x1).put(y1);
+        positions.put(x2).put(y2);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices.put(startVertex);
+        indices.put(startVertex + 1);
+        vertexIndex += 2;
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */

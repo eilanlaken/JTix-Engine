@@ -94,6 +94,14 @@ public class SceneTest_2 implements Scene {
                 -100,100,
         }, polygonTriangles, 0,0,deg,1,1);
 
+        renderer2D.setTint(Color.BLACK);
+        renderer2D.drawPolygonFilled(new float[] {
+                -100,-100,
+                100,-100,
+                100,100,
+                -100,100,
+        }, -200,0,deg,1,1);
+
         renderer2D.setTint(new Color(1,0,0,0.2f));
         renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);
 
@@ -116,7 +124,7 @@ public class SceneTest_2 implements Scene {
 
 //
 //        renderer2D.drawLineThin(0,0,400,400);
-//        renderer2D.drawLineThin(0,0,400,-400);
+        renderer2D.drawLineThin(0,0,400,-400);
 //        renderer2D.drawCircleThin(300, 10, 0, 200, 0,1,1);
 //
 //        renderer2D.drawTexture(yellow,x,y,0,1,1);
