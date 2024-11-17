@@ -3,8 +3,6 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
@@ -25,7 +23,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -1292,7 +1289,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - lines */
 
-    // TODO: create a version with transform.
     public final void drawLineThin(float x1, float y1, float x2, float y2) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(2)) flush();
@@ -1597,8 +1593,49 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     }
 
     // TODO
-    public void drawCurveFilled(float stroke, int smoothness, final Vector2... pointsInput) {
+    public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
 
+    }
+
+    /* Rendering 2D primitives - triangles */
+
+    // this method can cause very hard to debug bugs.
+    // it has the requirement of being called a multiple of 3 times in a row.
+    public void drawTriangleFilled(float x1, float y1, float c1,
+                                   float x2, float y2, float c2,
+                                   float x3, float y3, float c3) {
+        drawTriangleFilled(null,
+                x1, y1, c1, 0.5f, 0.5f,
+                x2, y2, c2, 0.5f, 0.5f,
+                x3, y3, c3, 0.5f, 0.5f
+        );
+    }
+
+    public void drawTriangleFilled(@Nullable Texture texture, float x1, float y1, float c1, float u1, float v1,
+                                   float x2, float y2, float c2, float u2, float v2,
+                                   float x3, float y3, float c3, float u3, float v3) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(1)) flush();
+
+        setTexture(texture);
+        setMode(GL11.GL_TRIANGLES);
+
+        positions.put(x1).put(y1);
+        positions.put(x2).put(y2);
+        positions.put(x3).put(y3);
+
+        colors.put(c1);
+        colors.put(c2);
+        colors.put(c3);
+
+        textCoords.put(u1).put(v1);
+        textCoords.put(u2).put(v2);
+        textCoords.put(u3).put(v3);
+
+        indices.put(vertexIndex);
+        indices.put(vertexIndex+1);
+        indices.put(vertexIndex+2);
+        vertexIndex += 3;
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */

@@ -9,7 +9,6 @@ import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.input_2.InputMouse;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
@@ -107,21 +106,11 @@ public class SceneTest_3 implements Scene {
 
         renderer2D.setTint(new Color(1,0,0,0.4f));
 
-        renderer2D.drawCurveFilled(0.5f, 10, new Vector2[]{
-                new Vector2(-3, 0),
-                new Vector2(0, 0),
-                new Vector2(0.2f, 0).rotateDeg(deg),
-
-        });
-
-        renderer2D.drawCurveFilled(0.5f, 10, new Vector2[]{
-                new Vector2(-3.2f, -3).rotateAroundDeg(new Vector2(-3,-3), deg),
-                new Vector2(-3, -3),
-                new Vector2(0, -3),
-                new Vector2(0.2f, -3).rotateDeg(deg),
-
-        });
-
+        renderer2D.drawTriangleFilled(
+                -1,0,Color.RED.toFloatBits(),
+                 0,1,Color.GREEN.toFloatBits(),
+                 1,0,Color.BLUE.toFloatBits()
+        );
 
         renderer2D.end();
 
