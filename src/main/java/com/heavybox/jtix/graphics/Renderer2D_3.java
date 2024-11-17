@@ -1594,13 +1594,11 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     // TODO
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
-
+        // TODO: maybe use the draw triangle filled here? drawTriangleFilled()
     }
 
     /* Rendering 2D primitives - triangles */
 
-    // this method can cause very hard to debug bugs.
-    // it has the requirement of being called a multiple of 3 times in a row.
     public void drawTriangleFilled(float x1, float y1, float c1,
                                    float x2, float y2, float c2,
                                    float x3, float y3, float c3) {
@@ -1615,7 +1613,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
                                    float x2, float y2, float c2, float u2, float v2,
                                    float x3, float y3, float c3, float u3, float v3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(1)) flush();
+        if (!ensureCapacity(3)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
@@ -1640,6 +1638,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
+    // TODO
     private boolean ensureCapacity(int vertices) {
         return true; // TODO
     }
