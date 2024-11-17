@@ -69,12 +69,12 @@ public class SceneTest_3 implements Scene {
         if (Input.keyboard.isKeyPressed(InputKeyboard.Key.W)) {
             u2 += 0.001f;
             v2 += 0.001f;
-            deg += 1;
+            deg += 0.1f;
         }
         if (Input.keyboard.isKeyPressed(InputKeyboard.Key.S)) {
             u2 += 0.001f;
             v2 += 0.001f;
-            deg -= 1;
+            deg -= 0.1f;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -106,10 +106,19 @@ public class SceneTest_3 implements Scene {
         renderer2D.drawLineThin(0,0,4,-4);
 
         renderer2D.setTint(new Color(1,0,0,0.4f));
+
         renderer2D.drawCurveFilled(0.5f, 10, new Vector2[]{
                 new Vector2(-3, 0),
                 new Vector2(0, 0),
                 new Vector2(0.2f, 0).rotateDeg(deg),
+
+        });
+
+        renderer2D.drawCurveFilled(0.5f, 10, new Vector2[]{
+                new Vector2(-3.2f, -3).rotateAroundDeg(new Vector2(-3,-3), deg),
+                new Vector2(-3, -3),
+                new Vector2(0, -3),
+                new Vector2(0.2f, -3).rotateDeg(deg),
 
         });
 
