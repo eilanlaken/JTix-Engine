@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 // https://math.stackexchange.com/questions/15815/how-to-union-many-polygons-efficiently
 // https://github.com/CrushedPixel/Polyline2D
 // https://github.com/tyt2y3/vaserenderer
-// https://www.codeproject.com/Articles/226569/Drawing-polylines-by-tessellation
 // https://hypertolosana.github.io/efficient-webgl-stroking/index.html
 // https://hypertolosana.github.io/efficient-webgl-stroking/stroking.js
 

@@ -1594,7 +1594,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     // TODO
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
-        // TODO: maybe use the draw triangle filled here? drawTriangleFilled()
+
     }
 
     /* Rendering 2D primitives - triangles */
