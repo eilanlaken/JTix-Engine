@@ -51,7 +51,7 @@ public class SceneTest_3 implements Scene {
 
     float x = 0, y = 0;
     float u1,v1,u2 = 0.5f,v2 = 0.5f;
-    float deg = 0;
+    float deg = 270;
     @Override
     public void update() {
 
@@ -66,10 +66,15 @@ public class SceneTest_3 implements Scene {
             //Application.setWindowPosition(300,300);
             System.out.println(Application.getWindowPosX());
         }
-        if (Input.keyboard.isKeyPressed(InputKeyboard.Key.F)) {
+        if (Input.keyboard.isKeyPressed(InputKeyboard.Key.W)) {
             u2 += 0.001f;
             v2 += 0.001f;
             deg += 1;
+        }
+        if (Input.keyboard.isKeyPressed(InputKeyboard.Key.S)) {
+            u2 += 0.001f;
+            v2 += 0.001f;
+            deg -= 1;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -80,10 +85,10 @@ public class SceneTest_3 implements Scene {
         //renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
 
         renderer2D.setTint(Color.GREEN);
-        renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);
+        //renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);
 
         renderer2D.setTint(new Color(1,0,0,0.2f));
-        renderer2D.drawCircleFilled(4,20,deg + 30,-2,0,0,1,1);
+        //renderer2D.drawCircleFilled(4,20,deg + 30,-2,0,0,1,1);
 
         renderer2D.setTint(Color.CYAN);
         renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
@@ -93,13 +98,20 @@ public class SceneTest_3 implements Scene {
         //renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
         renderer2D.setTint(Color.LIGHT_GRAY);
-        renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
+        //renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
 
         renderer2D.setTint(Color.BROWN);
-        renderer2D.drawLineFilled(0,0,6,3,0.3f,0,0,deg,1,1);
+        //renderer2D.drawLineFilled(0,0,6,3,0.3f,0,0,deg,1,1);
 
         renderer2D.drawLineThin(0,0,4,-4);
 
+        renderer2D.setTint(new Color(1,0,0,0.4f));
+        renderer2D.drawCurveFilled(0.5f, 10, new Vector2[]{
+                new Vector2(-3, 0),
+                new Vector2(0, 0),
+                new Vector2(1, 0).rotateDeg(deg),
+
+        });
 
 
         renderer2D.end();

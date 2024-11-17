@@ -1642,8 +1642,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             var p11 = vertices.get(vertices.size - 2);
             var p12 = pointsInput[0];
 
-            //createRoundCap(pointsInput[0], p00, p01, p02, smoothness, vertices);
-            //createRoundCap(pointsInput[1], p10, p11, p12, smoothness, vertices);
+            createRoundCap(pointsInput[0], p00, p01, p02, smoothness, vertices);
+            createRoundCap(pointsInput[1], p10, p11, p12, smoothness, vertices);
 
             vectors2Pool.free(t);
 
@@ -1755,7 +1755,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
                 Vector2 pI = vectors2Pool.allocate().set(p1).add(t0);
                 Vector2 pF = vectors2Pool.allocate().set(p1).add(t2);
 
-                //createRoundCap(p1, pI, pF, p2, smoothness, vertices);
+                createRoundCap(p1, pI, pF, p2, smoothness, vertices);
 
                 vertices.add(vectors2Pool.allocate().set(p2).add(t2));
                 vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
@@ -1775,8 +1775,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
                 var p11 = vertices.get(vertices.size - 3);
                 var p12 = pointsInput[pointsInput.length - 2];
 
-                //createRoundCap(pointsInput[0], p00, p01, p02, smoothness, vertices);
-                //createRoundCap(pointsInput[pointsInput.length - 1], p10, p11, p12, smoothness, vertices);
+                createRoundCap(pointsInput[0], p00, p01, p02, smoothness, vertices);
+                createRoundCap(pointsInput[pointsInput.length - 1], p10, p11, p12, smoothness, vertices);
             }
 
             /* free resources allocated in this scope */
@@ -1811,6 +1811,42 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vectors2Pool.freeAll(vertices);
     }
 
+    private void createRoundCap(Vector2 center, Vector2 pI, Vector2 pF, Vector2 pNext, int refinement, Array<Vector2> vertices) {
+        float radius = Vector2.len(center.x - pI.x, center.y - pI.y);
+        float angle0 = (float) Math.atan2((pF.y - center.y), (pF.x - center.x));
+        float angle1 = (float) Math.atan2((pI.y - center.y), (pI.x - center.x));
+        float orgAngle0 = angle0;
+
+        if (angle1 > angle0 && angle1 - angle0 >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
+            angle1 = angle1 - 2 * MathUtils.PI;
+        } else if (angle0 - angle1 >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
+            angle0 = angle0 - 2 * MathUtils.PI;
+        }
+
+        float angleDiff = angle1 - angle0;
+        if (Math.abs(angleDiff) >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR && Math.abs(angleDiff) <= Math.PI + MathUtils.FLOAT_ROUNDING_ERROR) {
+            float r1_x = center.x - pNext.x;
+            float r1_y = center.y - pNext.y;
+            if (MathUtils.isZero(r1_x) && r1_y > 0) {
+                angleDiff = -angleDiff;
+            } else if (r1_x >= -MathUtils.FLOAT_ROUNDING_ERROR) {
+                angleDiff= -angleDiff;
+            }
+        }
+
+        float da = angleDiff / refinement;
+        for (var i = 0; i < refinement; i++) {
+            vertices.add(vectors2Pool.allocate().set(center.x, center.y));
+            vertices.add(vectors2Pool.allocate().set(
+                    center.x + radius * MathUtils.cosRad(orgAngle0 + da * i),
+                    center.y + radius * MathUtils.sinRad(orgAngle0 + da * i)
+            ));
+            vertices.add(vectors2Pool.allocate().set(
+                    center.x + radius * MathUtils.cosRad(orgAngle0 + da * (1 + i)),
+                    center.y + radius * MathUtils.sinRad(orgAngle0 + da * (1 + i))
+            ));
+        }
+    }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
