@@ -118,19 +118,15 @@ public class SceneTest_3 implements Scene {
                  1,0,Color.BLUE.toFloatBits()
         );
 
-        Array<Vector2> vertices = renderer2D.drawCurveFilled(0.6f, 18,
+        renderer2D.drawCurveFilled(0.6f, 18,
                 new Vector2(-3,0),
                 new Vector2(0,0),
                 new Vector2(1,0).rotateDeg(deg)
-                );
+        );
 
-        for (Vector2 position : vertices) {
-            renderer2D.setColor(new Color(1,0,0,0.5f));
-            renderer2D.drawCircleFilled(0.02f, 40, position.x, position.y, 0, 1, 1);
-        }
+
 
         renderer2D.end();
-        System.out.println(renderer2D.getPerFrameDrawCalls());
 
     }
 

@@ -1592,8 +1592,23 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
+        Array<Vector2> vertices = drawCurveFilledGetVs(stroke, smoothness, points);
+
+        int i = 0;
+        for (Vector2 vertex : vertices) {
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+            indices.put(vertexIndex + i);
+            i++;
+        }
+
+        vertexIndex += vertices.size;
+    }
+
     // TODO
-    public Array<Vector2> drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
+    public Array<Vector2> drawCurveFilledGetVs(float stroke, int smoothness, final Vector2... points) {
         // trivial reject
         if (points.length < 2) {
             return null;
@@ -1842,7 +1857,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
-    // TODO
     private boolean ensureCapacity(int numVertices, int numIndices) {
         boolean hasSpaceVertices = VERTICES_CAPACITY - vertexIndex >= numVertices;
         boolean hasSpaceIndices  = indices.capacity() - indices.position() >= numIndices;
