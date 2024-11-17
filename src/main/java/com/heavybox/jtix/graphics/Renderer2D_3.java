@@ -1599,6 +1599,27 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - triangles */
 
+    public void drawTriangleFilled(@NotNull Texture texture,
+                                   float x1, float y1, float u1, float v1,
+                                   float x2, float y2, float u2, float v2,
+                                   float x3, float y3, float u3, float v3) {
+        drawTriangleFilled(texture,
+                x1, y1, currentTint, u1, v1,
+                x2, y2, currentTint, u2, v2,
+                x3, y3, currentTint, u3, v3
+        );
+    }
+
+    public void drawTriangleFilled(float x1, float y1,
+                                   float x2, float y2,
+                                   float x3, float y3) {
+        drawTriangleFilled(null,
+                x1, y1, currentTint, 0.5f, 0.5f,
+                x2, y2, currentTint, 0.5f, 0.5f,
+                x3, y3, currentTint, 0.5f, 0.5f
+        );
+    }
+
     public void drawTriangleFilled(float x1, float y1, float c1,
                                    float x2, float y2, float c2,
                                    float x3, float y3, float c3) {
@@ -1609,7 +1630,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         );
     }
 
-    public void drawTriangleFilled(@Nullable Texture texture, float x1, float y1, float c1, float u1, float v1,
+    public void drawTriangleFilled(@Nullable Texture texture,
+                                   float x1, float y1, float c1, float u1, float v1,
                                    float x2, float y2, float c2, float u2, float v2,
                                    float x3, float y3, float c3, float u3, float v3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
