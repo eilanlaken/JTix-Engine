@@ -75,7 +75,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         textCoords = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
         normals    = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
         tangents   = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
-        indices    = BufferUtils.createIntBuffer(VERTICES_CAPACITY);
+        indices    = BufferUtils.createIntBuffer(VERTICES_CAPACITY * 2);
 
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
@@ -146,7 +146,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         setShaderAttributes(null);
         setTexture(whitePixel);
         setMode(GL11.GL_TRIANGLES);
-        setTint(WHITE_TINT);
+        setColor(WHITE_TINT);
         this.drawing = true;
     }
 
@@ -188,12 +188,12 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         this.currentDFactor = dFactor;
     }
 
-    public void setTint(final Color color) {
-        if (color == null) setTint(Color.WHITE.toFloatBits());
-        else setTint(color.toFloatBits());
+    public void setColor(final Color color) {
+        if (color == null) setColor(Color.WHITE.toFloatBits());
+        else setColor(color.toFloatBits());
     }
 
-    public void setTint(float tintFloatBits) {
+    public void setColor(float tintFloatBits) {
         this.currentTint = tintFloatBits;
     }
 
@@ -203,7 +203,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawTexture(Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
@@ -270,7 +270,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawTexture(@NotNull Texture texture, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
-        if (!ensureCapacity(1 + refinement * 4)) flush();
+        if (!ensureCapacity(refinement * 4, 3 * (refinement * 4 - 2))) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
@@ -347,7 +347,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
@@ -414,7 +414,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawTextureRegion(TexturePack.Region region, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
@@ -505,7 +505,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
         refinement = Math.max(refinement, 3);
-        if (!ensureCapacity(refinement)) flush();
+        if (!ensureCapacity(refinement, 2 * (refinement + 1))) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -538,7 +538,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
         refinement = Math.max(refinement, 3);
-        if (!ensureCapacity(refinement)) flush();
+        if (!ensureCapacity(refinement, 3 * (refinement - 2))) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -547,7 +547,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         float da = 360f / refinement;
 
         /* put vertices */
-        for (int i = 0; i < refinement + 1; i++) {
+        for (int i = 0; i < refinement; i++) {
             arm.x = r * scaleX * MathUtils.cosDeg(da * i);
             arm.y = r * scaleY * MathUtils.sinDeg(da * i);
             arm.rotateDeg(degrees);
@@ -559,7 +559,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         }
 
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < refinement - 1; i++) {
+        for (int i = 0; i < refinement - 2; i++) {
             indices.put(startVertex);
             indices.put(startVertex + i + 1);
             indices.put(startVertex + i + 2);
@@ -572,7 +572,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCircleFilled(float r, int refinement, float angle, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(refinement, 3);
-        if (!ensureCapacity(refinement)) flush();
+        if (!ensureCapacity(refinement, 3 * (refinement - 2))) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -608,7 +608,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCircleBorder(float r, float thickness, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
-        if (!ensureCapacity(refinement * 2)) flush();
+        if (!ensureCapacity(refinement * 2, refinement * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -663,7 +663,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
-        if (!ensureCapacity(refinement * 2)) flush();
+        if (!ensureCapacity(refinement * 2, refinement * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -713,7 +713,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     // TODO: delete. This is not necessarily a rectangle. This should be called from physics so simply replace the call.
     @Deprecated public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -750,7 +750,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawRectangleThin(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -816,7 +816,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawRectangleThin(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
-        if (!ensureCapacity(refinement * 4)) flush();
+        if (!ensureCapacity(refinement * 4, refinement * 8)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -888,7 +888,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4,6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
@@ -953,7 +953,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawRectangleFilled(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
-        if (!ensureCapacity(1 + refinement * 4)) flush();
+        if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1021,7 +1021,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float angleDeg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(8)) flush();
+        if (!ensureCapacity(8, 24)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1094,7 +1094,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if (!ensureCapacity(count)) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1173,7 +1173,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if (!ensureCapacity(count)) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1213,7 +1213,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if (!ensureCapacity(count)) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1252,13 +1252,13 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         arrayIntPool.free(triangles);
     }
 
-    public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if (!ensureCapacity(count)) flush();
+        if (!ensureCapacity(count, triangles.length)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1270,7 +1270,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(angleZ);
+            vertex.rotateDeg(degrees);
             vertex.add(x, y);
 
             positions.put(vertex.x).put(vertex.y);
@@ -1279,8 +1279,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         }
 
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < triangles.length; i ++) {
-            indices.put(startVertex + indices.get(i));
+        for (int triangle : triangles) {
+            indices.put(startVertex + triangle);
         }
         vertexIndex += count;
 
@@ -1291,7 +1291,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public final void drawLineThin(float x1, float y1, float x2, float y2) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(2)) flush();
+        if (!ensureCapacity(2, 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1314,7 +1314,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public final void drawLineThin(float p1X, float p1Y, float p2X, float p2Y, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(2)) flush();
+        if (!ensureCapacity(2, 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1352,7 +1352,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1395,7 +1395,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4)) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1468,7 +1468,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCurveThin(final Vector2... values) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
-        if (!ensureCapacity(values.length)) flush();
+        if (!ensureCapacity(values.length, values.length * 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1492,7 +1492,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCurveThin(final Vector2[] values, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
-        if (!ensureCapacity(values.length)) flush();
+        if (!ensureCapacity(values.length, values.length * 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1522,7 +1522,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
-        if (!ensureCapacity(refinement)) flush();
+        if (!ensureCapacity(refinement, refinement * 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1557,7 +1557,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
-        if (!ensureCapacity(refinement)) flush();
+        if (!ensureCapacity(refinement, refinement * 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1593,8 +1593,190 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     }
 
     // TODO
-    public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
+    public Array<Vector2> drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
+        // trivial reject
+        if (points.length < 2) {
+            return null;
+        }
 
+        float lineWidth = Math.abs(stroke) * 0.5f;
+        Array<Vector2> vertices = new Array<>();
+        Array<Vector2> middlePoints = new Array<>();  // middle points per each line segment.
+        var closed= false;
+
+        if (points.length == 2) {
+            Vector2 midPoint = new Vector2();
+            Vector2.midPoint(points[0], points[1], midPoint);
+            createTriangles(points[0], midPoint, points[1], vertices, lineWidth, smoothness);
+        } else {
+            if (points[0].equals(points[points.length - 1])) {
+//                 var p0 = points.shift();
+//                 p0 = Point.Middle(p0, points[0]);
+//                 points.unshift(p0);
+//                 points.add(p0);
+//                 closed= true;
+            }
+
+            for (int i = 0; i < points.length - 1; i++) {
+                if (i == 0) {
+                    middlePoints.add(points[0]);
+                } else if (i == points.length - 2) {
+                    middlePoints.add(points[points.length - 1]);
+                } else {
+                    Vector2 mid = new Vector2();
+                    Vector2.midPoint(points[i], points[i + 1], mid);
+                    middlePoints.add(mid);
+                }
+            }
+
+            for (int i = 1; i < middlePoints.size; i++) {
+                createTriangles(middlePoints.get(i - 1), points[i], middlePoints.get(i), vertices, lineWidth, smoothness);
+            }
+        }
+
+        if (!closed) {
+            Vector2 p00 = vertices.get(0);
+            Vector2 p01 = vertices.get(1);
+            Vector2 p02 = points[1];
+            Vector2 p10 = vertices.get(vertices.size - 1);
+            Vector2 p11 = vertices.get(vertices.size - 3);
+            Vector2 p12 = points[points.length - 2];
+            createRoundCap(points[0], p00, p01, p02, smoothness, vertices);
+            createRoundCap(points[points.length - 1], p10, p11, p12, smoothness, vertices);
+        }
+
+        return vertices;
+    }
+
+    private void createTriangles(Vector2 p0, Vector2 p1, Vector2 p2, Array<Vector2> verts, float width, int refinement) {
+        var t0 = new Vector2(p1).sub(p0);
+        var t2 = new Vector2(p2).sub(p1);
+
+        t0.rotate90(1);
+        t2.rotate90(1);
+
+        // triangle composed by the 3 points if clockwise or couterclockwise.
+        // if counterclockwise, we must invert the line threshold points, otherwise the intersection point
+        // could be erroneous and lead to odd results.
+        if (MathUtils.areaTriangleSigned(p0, p1, p2) > 0) {
+            t0.flip();
+            t2.flip();
+        }
+
+        t0.nor();
+        t2.nor();
+        t0.scl(width);
+        t2.scl(width);
+
+        Vector2 pIntersection = new Vector2();
+        MathUtils.segmentsIntersection(new Vector2(t0).add(p0), new Vector2(t0).add(p1), new Vector2(t2).add(p2), new Vector2(t2).add(p1), pIntersection);
+
+        Vector2 anchor = new Vector2(pIntersection).sub(p1);
+        float anchorLength = anchor.len();
+        Vector2 p0p1 = new Vector2(p0).sub(p1);
+        float p0p1Length = p0p1.len();
+        Vector2 p1p2 = new Vector2(p1).sub(p2);
+        float p1p2Length = p1p2.len();
+
+        if (anchorLength > p0p1Length || anchorLength > p1p2Length) {
+
+            verts.add(new Vector2(p0).add(t0));
+            verts.add(new Vector2(p0).sub(t0));
+            verts.add(new Vector2(p1).add(t0));
+
+            verts.add(new Vector2(p0).sub(t0));
+            verts.add(new Vector2(p1).add(t0));
+            verts.add(new Vector2(p1).sub(t0));
+
+            createRoundCap(p1, new Vector2(p1).add(t0), new Vector2(p1).add(t2), p2, refinement, verts);
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(t2));
+            verts.add(new Vector2(p1).add(t2));
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(t2));
+            verts.add(new Vector2(p2).sub(t2));
+
+        } else {
+
+            verts.add(new Vector2(p0).add(t0));
+            verts.add(new Vector2(p0).sub(t0));
+            verts.add(new Vector2(p1).sub(anchor));
+
+            verts.add(new Vector2(p0).add(t0));
+            verts.add(new Vector2(p1).sub(anchor));
+            verts.add(new Vector2(p1).add(t0));
+
+            Vector2 _p0 = new Vector2(p1).add(t0);
+            Vector2 _p1 = new Vector2(p1).add(t2);
+            Vector2 _p2 = new Vector2(p1).sub(anchor);
+
+            Vector2 center = p1;
+
+            verts.add(_p0);
+            verts.add(center);
+            verts.add(_p2);
+
+            createRoundCap(center, _p0, _p1, _p2, refinement, verts);
+
+            verts.add(center);
+            verts.add(_p1);
+            verts.add(_p2);
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(anchor));
+            verts.add(new Vector2(p1).add(t2));
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(anchor));
+            verts.add(new Vector2(p2).sub(t2));
+        }
+    }
+
+    private void createRoundCap(Vector2 center, Vector2 _p0, Vector2 _p1, Vector2 nextPointInLine, int refinement, Array<Vector2> verts) {
+        float radius = new Vector2(center).sub(_p0).len();
+
+        float angle0 = MathUtils.atan2((_p1.y - center.y), (_p1.x - center.x));
+        float angle1 = MathUtils.atan2((_p0.y - center.y), (_p0.x - center.x));
+
+        float orgAngle0 = angle0;
+
+        if (angle1 > angle0) {
+            if (angle1 - angle0 >= MathUtils.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
+                angle1 = angle1 - 2 * MathUtils.PI;
+            }
+        } else {
+            if (angle0 - angle1 >= MathUtils.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
+                angle0 = angle0 - 2 * MathUtils.PI;
+            }
+        }
+
+        var angleDiff = angle1 - angle0;
+
+        if (Math.abs(angleDiff) >= MathUtils.PI - MathUtils.FLOAT_ROUNDING_ERROR && Math.abs(angleDiff) <= Math.PI + MathUtils.FLOAT_ROUNDING_ERROR) {
+            var r1 = new Vector2(center).sub(nextPointInLine);
+            if (r1.x == 0) {
+                if (r1.y > 0) {
+                    angleDiff = -angleDiff;
+                }
+            } else if (r1.x >= -MathUtils.FLOAT_ROUNDING_ERROR ) {
+                angleDiff = -angleDiff;
+            }
+        }
+
+        float da = angleDiff / refinement;
+        for (int i = 0; i < refinement; i++) {
+            verts.add(new Vector2(center.x, center.y));
+            verts.add(new Vector2(
+                    center.x + radius * MathUtils.cosRad(orgAngle0 + da * i),
+                    center.y + radius * MathUtils.sinRad(orgAngle0 + da * i)
+            ));
+            verts.add(new Vector2(
+                    center.x + radius * MathUtils.cosRad(orgAngle0 + da * (1 + i)),
+                    center.y + radius * MathUtils.sinRad(orgAngle0 + da * (1 + i))
+            ));
+        }
     }
 
     /* Rendering 2D primitives - triangles */
@@ -1635,7 +1817,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
                                    float x2, float y2, float c2, float u2, float v2,
                                    float x3, float y3, float c3, float u3, float v3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(3)) flush();
+        if (!ensureCapacity(3, 3)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
@@ -1661,8 +1843,10 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
     // TODO
-    private boolean ensureCapacity(int vertices) {
-        return true; // TODO
+    private boolean ensureCapacity(int numVertices, int numIndices) {
+        boolean hasSpaceVertices = VERTICES_CAPACITY - vertexIndex >= numVertices;
+        boolean hasSpaceIndices  = indices.capacity() - indices.position() >= numIndices;
+        return hasSpaceVertices && hasSpaceIndices;
     }
 
     private void flush() {

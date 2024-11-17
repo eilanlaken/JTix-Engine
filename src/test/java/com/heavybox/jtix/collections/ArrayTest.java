@@ -4,6 +4,8 @@ import com.heavybox.jtix.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 class ArrayTest {
 
     @Test
@@ -91,6 +93,10 @@ class ArrayTest {
 
     @Test
     void insert() {
+        Array<Integer> a1 = new Array<>();
+        a1.addAll(0,1,2,3,4);
+        a1.insert(0, -15);
+        System.out.println(a1);
     }
 
     @Test

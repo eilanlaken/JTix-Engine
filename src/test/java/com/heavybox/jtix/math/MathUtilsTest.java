@@ -818,6 +818,28 @@ class MathUtilsTest {
     }
 
     @Test
+    void testSignedArea() {
+        Vector2 p0 = new Vector2();
+        Vector2 p1 = new Vector2();
+        Vector2 p2 = new Vector2();
+
+        p0.set(0,0);
+        p1.set(1,1);
+        p2.set(2,2);
+        Assertions.assertEquals(0, MathUtils.areaTriangleSigned(p0, p1, p2), MathUtils.FLOAT_ROUNDING_ERROR);
+
+        p0.set(0,0);
+        p1.set(1,0);
+        p2.set(1,1);
+        Assertions.assertEquals(0.5f, MathUtils.areaTriangleSigned(p0, p1, p2), MathUtils.FLOAT_ROUNDING_ERROR);
+
+        p0.set(1,1);
+        p1.set(1,0);
+        p2.set(0,0);
+        Assertions.assertEquals(-0.5f, MathUtils.areaTriangleSigned(p0, p1, p2), MathUtils.FLOAT_ROUNDING_ERROR);
+    }
+
+    @Test
     void polygonRemoveDegenerateVertices() {
         Array<Vector2> polygon = new Array<>();
 

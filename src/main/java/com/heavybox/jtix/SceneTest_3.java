@@ -9,6 +9,7 @@ import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.input_2.InputMouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
@@ -29,6 +30,8 @@ public class SceneTest_3 implements Scene {
     };
     int[] polygonTriangles;
 
+    Vector2[] positions = new Vector2[10];
+
     @Override
     public void setup() {
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
@@ -46,6 +49,9 @@ public class SceneTest_3 implements Scene {
         componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowAspectRatio() * 10,10, 1);
         componentGraphicsCamera.update();
 
+        for (int i = 0; i < positions.length; i++) {
+            positions[i] = new Vector2(MathUtils.randomUniformFloat(-4,4), MathUtils.randomUniformFloat(-4,4));
+        }
     }
 
     float x = 0, y = 0;
@@ -80,31 +86,31 @@ public class SceneTest_3 implements Scene {
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
         renderer2D.begin(componentGraphicsCamera.lens.combined);
-        renderer2D.setTint(Color.LIGHT_GRAY);
+        renderer2D.setColor(Color.LIGHT_GRAY);
         //renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
 
-        renderer2D.setTint(Color.GREEN);
+        renderer2D.setColor(Color.GREEN);
         //renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);
 
-        renderer2D.setTint(new Color(1,0,0,0.2f));
+        renderer2D.setColor(new Color(1,0,0,0.2f));
         //renderer2D.drawCircleFilled(4,20,deg + 30,-2,0,0,1,1);
 
-        renderer2D.setTint(Color.CYAN);
-        renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
+        renderer2D.setColor(Color.CYAN);
+        //renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
 
 
-        renderer2D.setTint(null);
+        renderer2D.setColor(null);
         //renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
-        renderer2D.setTint(Color.LIGHT_GRAY);
+        renderer2D.setColor(Color.LIGHT_GRAY);
         //renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
 
-        renderer2D.setTint(Color.BROWN);
+        renderer2D.setColor(Color.BROWN);
         //renderer2D.drawLineFilled(0,0,6,3,0.3f,0,0,deg,1,1);
 
-        renderer2D.drawLineThin(0,0,4,-4);
+        //renderer2D.drawLineThin(0,0,4,-4);
 
-        renderer2D.setTint(new Color(1,0,0,0.4f));
+        renderer2D.setColor(new Color(1,0,0,0.5f));
 
         renderer2D.drawTriangleFilled(
                 -1,0,Color.RED.toFloatBits(),
@@ -112,8 +118,19 @@ public class SceneTest_3 implements Scene {
                  1,0,Color.BLUE.toFloatBits()
         );
 
-        renderer2D.end();
+        Array<Vector2> vertices = renderer2D.drawCurveFilled(0.6f, 18,
+                new Vector2(-3,0),
+                new Vector2(0,0),
+                new Vector2(1,0).rotateDeg(deg)
+                );
 
+        for (Vector2 position : vertices) {
+            renderer2D.setColor(new Color(1,0,0,0.5f));
+            renderer2D.drawCircleFilled(0.02f, 40, position.x, position.y, 0, 1, 1);
+        }
+
+        renderer2D.end();
+        System.out.println(renderer2D.getPerFrameDrawCalls());
 
     }
 

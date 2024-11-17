@@ -4,7 +4,6 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
@@ -78,16 +77,16 @@ public class SceneTest_2 implements Scene {
         renderer2D.begin(componentGraphicsCamera.lens.combined);
         renderer2D.drawRectangleThin(-200,-200,200,-200,200,200,-200,200);
 
-        renderer2D.setTint(Color.LIGHT_GRAY);
+        renderer2D.setColor(Color.LIGHT_GRAY);
         renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
 
-        renderer2D.setTint(Color.MAGENTA);
+        renderer2D.setColor(Color.MAGENTA);
         renderer2D.drawRectangleThin(300,150, 40, 2,0,0,deg,0.75f,1);
 
-        renderer2D.setTint(Color.GREEN);
+        renderer2D.setColor(Color.GREEN);
         renderer2D.drawCircleBorder(150,10, deg + 40,44,0,0,0,1,1);
 
-        renderer2D.setTint(Color.CHARTREUSE);
+        renderer2D.setColor(Color.CHARTREUSE);
         renderer2D.drawPolygonThin(new float[] {
                 -100,-100,
                 100,-100,
@@ -95,7 +94,7 @@ public class SceneTest_2 implements Scene {
                 -100,100,
         }, polygonTriangles, 0,0,deg,1,1);
 
-        renderer2D.setTint(Color.BLACK);
+        renderer2D.setColor(Color.BLACK);
         renderer2D.drawPolygonFilled(new float[] {
                 -100,-100,
                 100,-100,
@@ -103,10 +102,10 @@ public class SceneTest_2 implements Scene {
                 -100,100,
         }, -200,0,deg,1,1);
 
-        renderer2D.setTint(new Color(1,0,0,0.2f));
+        renderer2D.setColor(new Color(1,0,0,0.2f));
         renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);
 
-        renderer2D.setTint(Color.CYAN);
+        renderer2D.setColor(Color.CYAN);
         renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
 
         renderer2D.drawCurveThin(new Vector2[]{
@@ -123,20 +122,20 @@ public class SceneTest_2 implements Scene {
 
         renderer2D.drawCurveThin(-100,100,30, x -> 50 * MathUtils.sinRad(x));
 
-        renderer2D.setTint(null);
+        renderer2D.setColor(null);
         //renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
         renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
-        renderer2D.setTint(Color.BLUE);
+        renderer2D.setColor(Color.BLUE);
         renderer2D.drawRectangleFilled(null, 100,200,50,-200,deg,1,1);
 
-        renderer2D.setTint(Color.LIGHT_GRAY);
+        renderer2D.setColor(Color.LIGHT_GRAY);
         renderer2D.drawRectangleFilled(200,100,10,5,300,-300,deg * 2,1,1);
 
-        renderer2D.setTint(Color.BROWN);
+        renderer2D.setColor(Color.BROWN);
         renderer2D.drawLineFilled(0,0,-100,-100,10,0,0,deg,1,1);
 
-        renderer2D.setTint(null);
+        renderer2D.setColor(null);
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1,1);
 
         renderer2D.drawLineThin(0,0,400,-400);

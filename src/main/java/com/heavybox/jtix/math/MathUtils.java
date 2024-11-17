@@ -344,6 +344,10 @@ public final class MathUtils {
 
     public static float areaTriangleSigned(float x1, float y1, float x2, float y2, float x3, float y3) { return 0.5f * (x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2)); }
 
+    public static float areaTriangleSigned(Vector2 p0, Vector2 p1, Vector2 p2) {
+        return 0.5f * ((p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y));
+    }
+
     public static float max(float a, float b, float c) {
         return Math.max(a, Math.max(b, c));
     }
@@ -576,6 +580,8 @@ public final class MathUtils {
             }
 
             /* the lines coincide: either they are separate or they have an overlap. */
+
+            /* coincide */
             if (areCollinear(a1, a2, b1) && areCollinear(a1, a2, b2)) {
                 out.set((a1.x + a2.x + b1.x + b2.x) * 0.25f, (a1.y + a2.y + b1.y + b2.y) * 0.25f);
                 return -2;
