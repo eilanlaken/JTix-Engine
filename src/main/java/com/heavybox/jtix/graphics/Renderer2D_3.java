@@ -1594,6 +1594,224 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    public void drawCurveFilled(float stroke, int smoothness, final Vector2... pointsInput) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (pointsInput.length == 0) return;
+
+        final int maxExpectedVertices = 12 * (pointsInput.length + 2) + smoothness * 3 * (pointsInput.length + 1); // For every anchor, we expect to store 12 vertices
+        if (!ensureCapacity(maxExpectedVertices)) flush();
+
+        float width = Math.abs(stroke / 2);
+        smoothness = Math.max(1, smoothness);
+
+        if (pointsInput.length == 1 || (pointsInput.length == 2 && pointsInput[0].equals(pointsInput[1]))) {
+            drawCircleFilled(width, smoothness, pointsInput[0].x, pointsInput[0].y, 0, 1, 1);
+            return;
+        }
+
+        // (every anchor has 2 sides: left and right. Each side is made up of 2 triangles, each triangle is made up of 3 vertices). We have a maximum of pointInput.length + 2 anchors.
+        // So the first term in the sum is 12 * (pointsInput.length + 2).
+        // Additionally, for every anchor we have a round cap that will yield refinement * 3 vertices. We have pointInput.length + 1 corners at the maximum. So the second term is
+        // refinement * 3 * (pointInput.length + 1).
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Array<Vector2> vertices = new Array<>(true, maxExpectedVertices);
+        if (pointsInput.length == 2) { // handle separately
+
+            Vector2 p0 = pointsInput[0];
+            Vector2 p2 = pointsInput[1];
+
+            Vector2 t = vectors2Pool.allocate();
+            t.set(p2).sub(p0);
+            t.rotate90(1);
+            t.nor();
+            t.scl(width);
+
+            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).add(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).sub(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).sub(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).sub(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).add(t));
+            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).add(t));
+
+            var p00 = vertices.get(0);
+            var p01 = vertices.get(1);
+            var p02 = pointsInput[1];
+            var p10 = vertices.get(vertices.size - 3);
+            var p11 = vertices.get(vertices.size - 2);
+            var p12 = pointsInput[0];
+
+            //createRoundCap(pointsInput[0], p00, p01, p02, smoothness, vertices);
+            //createRoundCap(pointsInput[1], p10, p11, p12, smoothness, vertices);
+
+            vectors2Pool.free(t);
+
+        } else {
+            Array<Vector2> points    = new Array<>(true, pointsInput.length + 2);
+            Array<Vector2> midPoints = new Array<>(true,pointsInput.length + 2);
+            /* handle closed path scenario */
+            boolean closed = false;
+            if (pointsInput[0].equals(pointsInput[pointsInput.length - 1])) { // closed path
+                Vector2 midPoint = vectors2Pool.allocate();
+                Vector2.midPoint(pointsInput[0], pointsInput[1], midPoint);
+                points.add(midPoint);
+                for (int i = 1; i < pointsInput.length; i++) {
+                    Vector2 point = vectors2Pool.allocate();
+                    point.set(pointsInput[i]);
+                    points.add(point);
+                }
+                points.add(midPoint);
+                closed = true;
+            } else { // open path
+                for (Vector2 vector2 : pointsInput) {
+                    Vector2 point = vectors2Pool.allocate();
+                    point.set(vector2);
+                    points.add(point);
+                }
+            }
+
+            /* calculate mid-points of the path (between corner to corner) */
+            for (int i = 0; i < points.size - 1; i++) {
+                Vector2 midPoint = vectors2Pool.allocate();
+                if (i == 0) {
+                    midPoint.set(points.first());
+                } else if (i == points.size - 2) {
+                    midPoint.set(points.last());
+                } else {
+                    Vector2.midPoint(points.get(i), points.get(i + 1), midPoint);
+                }
+                midPoints.add(midPoint);
+            }
+
+            Vector2 intersection_1 = vectors2Pool.allocate();
+            Vector2 intersection_2 = vectors2Pool.allocate();
+            Vector2 intersection_3 = vectors2Pool.allocate();
+            Vector2 intersection_4 = vectors2Pool.allocate();
+            Vector2 t0 = vectors2Pool.allocate();
+            Vector2 t2 = vectors2Pool.allocate();
+
+            /* iterate over all the anchors. Anchor = <Midpoint L, Corner, Midpoint R> */
+            for (int i = 1; i < midPoints.size; i++) {
+                Vector2 p0 = midPoints.get(i - 1);
+                Vector2 p1 = points.get(i);
+                Vector2 p2 = midPoints.get(i);
+
+                t0.set(p1).sub(p0);
+                t2.set(p2).sub(p1);
+                t0.rotate90(1);
+                t2.rotate90(1);
+                if (MathUtils.areaTriangleSigned(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y) > 0) {
+                    t0.flip();
+                    t2.flip();
+                }
+                t0.nor();
+                t2.nor();
+                t0.scl(width);
+                t2.scl(width);
+
+                /* calculate all possible intersection. */
+                int result_1 = MathUtils.segmentsIntersection(
+                        p0.x - t0.x, p0.y - t0.y,
+                        p1.x - t0.x, p1.y - t0.y,
+                        p2.x - t2.x, p2.y - t2.y,
+                        p1.x - t2.x, p1.y - t2.y,
+                        intersection_1);
+                int result_2 = MathUtils.segmentsIntersection(
+                        p0.x - t0.x, p0.y - t0.y,
+                        p1.x - t0.x, p1.y - t0.y,
+                        p2.x - t2.x, p2.y - t2.y,
+                        p2.x + t2.x, p2.y + t2.y,
+                        intersection_2);
+                int result_3 = MathUtils.segmentsIntersection(
+                        p0.x - t0.x, p0.y - t0.y,
+                        p0.x + t0.x, p0.y + t0.y,
+                        p1.x - t2.x, p1.y - t2.y,
+                        p2.x - t2.x, p2.y - t2.y,
+                        intersection_3);
+                int result_4 = MathUtils.segmentsIntersection(
+                        p0.x - t0.x, p0.y - t0.y,
+                        p0.x + t0.x, p0.y + t0.y,
+                        p1.x - t2.x, p1.y - t2.y,
+                        p1.x + t2.x, p1.y + t2.y,
+                        intersection_4);
+
+                /* Store the unique intersection in "intersection" */
+                Vector2 intersection = vectors2Pool.allocate();
+                if      (result_1 == 0) intersection.set(intersection_1);
+                else if (result_2 == 0) intersection.set(intersection_2);
+                else if (result_3 == 0) intersection.set(intersection_3);
+                else if (result_4 == 0) intersection.set(intersection_4);
+
+                /* add the vertices for the current anchor. */
+                vertices.add(vectors2Pool.allocate().set(p0).add(t0));
+                vertices.add(vectors2Pool.allocate().set(p0).sub(t0));
+                vertices.add(vectors2Pool.allocate().set(p1).add(t0));
+
+                vertices.add(vectors2Pool.allocate().set(p0).sub(t0));
+                vertices.add(vectors2Pool.allocate().set(p1).add(t0));
+                vertices.add(vectors2Pool.allocate().set(p1).sub(t0));
+
+                Vector2 pI = vectors2Pool.allocate().set(p1).add(t0);
+                Vector2 pF = vectors2Pool.allocate().set(p1).add(t2);
+
+                //createRoundCap(p1, pI, pF, p2, smoothness, vertices);
+
+                vertices.add(vectors2Pool.allocate().set(p2).add(t2));
+                vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
+                vertices.add(vectors2Pool.allocate().set(p1).add(t2));
+
+                vertices.add(vectors2Pool.allocate().set(p2).add(t2));
+                vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
+                vertices.add(vectors2Pool.allocate().set(p2).sub(t2));
+            }
+
+            /* handle the case of closed paths */
+            if (!closed) {
+                var p00 = vertices.get(0);
+                var p01 = vertices.get(1);
+                var p02 = pointsInput[1];
+                var p10 = vertices.last();
+                var p11 = vertices.get(vertices.size - 3);
+                var p12 = pointsInput[pointsInput.length - 2];
+
+                //createRoundCap(pointsInput[0], p00, p01, p02, smoothness, vertices);
+                //createRoundCap(pointsInput[pointsInput.length - 1], p10, p11, p12, smoothness, vertices);
+            }
+
+            /* free resources allocated in this scope */
+            vectors2Pool.free(intersection_1);
+            vectors2Pool.free(intersection_2);
+            vectors2Pool.free(intersection_3);
+            vectors2Pool.free(intersection_4);
+            vectors2Pool.free(t0);
+            vectors2Pool.free(t2);
+            vectors2Pool.freeAll(points);
+            vectors2Pool.freeAll(midPoints);
+        }
+
+        /* put vertices and indices. */
+        int startVertex = this.vertexIndex;
+        int advance = 0;
+        for (int i = 0; i < vertices.size; i++) {
+            Vector2 vertex = vertices.get(i);
+            advance = i;
+            try {
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
+                indices.put(startVertex + i);
+            } catch (Exception e) {
+                break;
+            }
+        }
+        vertexIndex += advance;
+
+        /* free resources */
+        vectors2Pool.freeAll(vertices);
+    }
+
+
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
     private boolean ensureCapacity(int vertices) {

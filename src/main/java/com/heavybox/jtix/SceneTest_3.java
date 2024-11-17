@@ -4,7 +4,6 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
@@ -15,7 +14,7 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_2 implements Scene {
+public class SceneTest_3 implements Scene {
 
     Texture yellow;
     Texture pattern;
@@ -45,7 +44,7 @@ public class SceneTest_2 implements Scene {
         pattern = Assets.get("assets/textures/pattern.png");
         pack = Assets.get("assets/atlases/spots.yml");
         polygonTriangles = MathUtils.polygonTriangulate(polygon);
-        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1);
+        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowAspectRatio() * 10,10, 1);
         componentGraphicsCamera.update();
 
     }
@@ -72,74 +71,34 @@ public class SceneTest_2 implements Scene {
             v2 += 0.001f;
             deg += 1;
         }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
         renderer2D.begin(componentGraphicsCamera.lens.combined);
-        renderer2D.drawRectangleThin(-200,-200,200,-200,200,200,-200,200);
-
         renderer2D.setTint(Color.LIGHT_GRAY);
-        renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
-
-        renderer2D.setTint(Color.MAGENTA);
-        renderer2D.drawRectangleThin(300,150, 40, 2,0,0,deg,0.75f,1);
+        //renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
 
         renderer2D.setTint(Color.GREEN);
-        renderer2D.drawCircleBorder(150,10, deg + 40,44,0,0,0,1,1);
-
-        renderer2D.setTint(Color.CHARTREUSE);
-        renderer2D.drawPolygonThin(new float[] {
-                -100,-100,
-                100,-100,
-                100,100,
-                -100,100,
-        }, polygonTriangles, 0,0,deg,1,1);
-
-        renderer2D.setTint(Color.BLACK);
-        renderer2D.drawPolygonFilled(new float[] {
-                -100,-100,
-                100,-100,
-                100,100,
-                -100,100,
-        }, -200,0,deg,1,1);
+        renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);
 
         renderer2D.setTint(new Color(1,0,0,0.2f));
-        renderer2D.drawCircleFilled(50,44,deg + 30,-200,0,0,1,1);
+        renderer2D.drawCircleFilled(4,20,deg + 30,-2,0,0,1,1);
 
         renderer2D.setTint(Color.CYAN);
         renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
 
-        renderer2D.drawCurveThin(new Vector2[]{
-                new Vector2(-200,0),
-                new Vector2(-150,40),
-                new Vector2(-100,80),
-                new Vector2(-50,40),
-                new Vector2(0,0),
-                new Vector2(50,-40),
-                new Vector2(100,-80),
-                new Vector2(150,-40),
-                new Vector2(200,0),
-        }, 100 * MathUtils.cosDeg(deg), 100 * MathUtils.sinDeg(deg), 0, 1, 1);
-
-        renderer2D.drawCurveThin(-100,100,30, x -> 50 * MathUtils.sinRad(x));
 
         renderer2D.setTint(null);
-        //renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
-        renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
-
-        renderer2D.setTint(Color.BLUE);
-        renderer2D.drawRectangleFilled(null, 100,200,50,-200,deg,1,1);
+        //renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
         renderer2D.setTint(Color.LIGHT_GRAY);
-        renderer2D.drawRectangleFilled(200,100,10,5,300,-300,deg * 2,1,1);
+        renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
 
         renderer2D.setTint(Color.BROWN);
-        renderer2D.drawLineFilled(0,0,-100,-100,10,0,0,deg,1,1);
+        renderer2D.drawLineFilled(0,0,6,3,0.3f,0,0,deg,1,1);
 
-        renderer2D.setTint(null);
-        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1,1);
-
-        renderer2D.drawLineThin(0,0,400,-400);
+        renderer2D.drawLineThin(0,0,4,-4);
 
 
 
