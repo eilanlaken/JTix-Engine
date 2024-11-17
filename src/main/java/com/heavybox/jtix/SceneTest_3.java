@@ -109,7 +109,7 @@ public class SceneTest_3 implements Scene {
         renderer2D.drawCurveFilled(0.5f, 10, new Vector2[]{
                 new Vector2(-3, 0),
                 new Vector2(0, 0),
-                new Vector2(1, 0).rotateDeg(deg),
+                new Vector2(0.2f, 0).rotateDeg(deg),
 
         });
 

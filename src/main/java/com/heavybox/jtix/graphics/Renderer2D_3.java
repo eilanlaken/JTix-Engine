@@ -3,6 +3,8 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.input_2.Input;
+import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
@@ -1824,12 +1826,21 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         }
 
         float angleDiff = angle1 - angle0;
+
+        if (Input.keyboard.isKeyPressed(InputKeyboard.Key.ANY_KEY)) {
+            System.out.println("PI: " + pI);
+            System.out.println("PF: " + pF);
+        }
+
         if (Math.abs(angleDiff) >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR && Math.abs(angleDiff) <= Math.PI + MathUtils.FLOAT_ROUNDING_ERROR) {
+            if (Input.keyboard.isKeyPressed(InputKeyboard.Key.ANY_KEY)) System.out.println("inside");
             float r1_x = center.x - pNext.x;
             float r1_y = center.y - pNext.y;
             if (MathUtils.isZero(r1_x) && r1_y > 0) {
+                if (Input.keyboard.isKeyPressed(InputKeyboard.Key.ANY_KEY)) System.out.println("inside 1");
                 angleDiff = -angleDiff;
             } else if (r1_x >= -MathUtils.FLOAT_ROUNDING_ERROR) {
+                if (Input.keyboard.isKeyPressed(InputKeyboard.Key.ANY_KEY)) System.out.println("inside 2");
                 angleDiff= -angleDiff;
             }
         }
