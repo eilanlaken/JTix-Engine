@@ -10,6 +10,7 @@ import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.InputKeyboard;
 import com.heavybox.jtix.input_2.InputMouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
@@ -108,8 +109,22 @@ public class SceneTest_2 implements Scene {
         renderer2D.setTint(Color.CYAN);
         renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
 
+        renderer2D.drawCurveThin(new Vector2[]{
+                new Vector2(-200,0),
+                new Vector2(-150,40),
+                new Vector2(-100,80),
+                new Vector2(-50,40),
+                new Vector2(0,0),
+                new Vector2(50,-40),
+                new Vector2(100,-80),
+                new Vector2(150,-40),
+                new Vector2(200,0),
+        }, 100 * MathUtils.cosDeg(deg), 100 * MathUtils.sinDeg(deg), 0, 1, 1);
+
+        renderer2D.drawCurveThin(-100,100,30, x -> 50 * MathUtils.sinRad(x));
+
         renderer2D.setTint(null);
-        renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
+        //renderer2D.drawCircleFilled(30,44,0,0,deg,2,1);
         renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
         renderer2D.setTint(Color.BLUE);

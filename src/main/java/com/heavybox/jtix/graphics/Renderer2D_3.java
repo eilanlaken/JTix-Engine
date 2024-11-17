@@ -25,6 +25,7 @@ import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Renderer2D_3 implements MemoryResourceHolder {
@@ -1518,6 +1519,79 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             indices.put(startVertex + i + 1);
         }
         vertexIndex += values.length;
+    }
+
+    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        if (minX > maxX) {
+            float tmp = minX;
+            minX = maxX;
+            maxX = tmp;
+        }
+        float step = (maxX - minX) / refinement;
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < refinement; i++) {
+            vertex.x = minX + i * step;
+            vertex.y = f.apply(vertex.x);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
+        }
+
+        vertexIndex += refinement;
+    }
+
+    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        if (minX > maxX) {
+            float tmp = minX;
+            minX = maxX;
+            maxX = tmp;
+        }
+        float step = (maxX - minX) / refinement;
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < refinement; i++) {
+            vertex.x = minX + i * step;
+            vertex.y = f.apply(vertex.x);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
+        }
+
+        vertexIndex += refinement;
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
