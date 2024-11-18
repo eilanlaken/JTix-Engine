@@ -3,7 +3,7 @@ package com.heavybox.jtix.input_2;
 import com.heavybox.jtix.application_2.Application;
 import org.lwjgl.glfw.*;
 
-public class InputMouse {
+public class Mouse {
 
     /* mouse info */
     private float   sensitivity      = 1f; // goes from 0 to infinity. Default is 1.
@@ -22,7 +22,7 @@ public class InputMouse {
     private final int[] mouseButtonsPrevStates    = new int[5];
     private final int[] mouseButtonsCurrentStates = new int[5];
 
-    InputMouse() {
+    Mouse() {
         GLFW.glfwSetMouseButtonCallback(Application.getWindowHandle(), new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {

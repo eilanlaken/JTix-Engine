@@ -6,8 +6,8 @@ import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.input_2.InputKeyboard;
-import com.heavybox.jtix.input_2.InputMouse;
+import com.heavybox.jtix.input_2.Keyboard;
+import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
@@ -56,7 +56,7 @@ public class SceneTest_2 implements Scene {
     public void update() {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
-        if (Input.mouse.isButtonClicked(InputMouse.Button.LEFT)) {
+        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
             //Application.windowSetSizeLimits(100, 100, 200, 200);
             //Application.windowFlash();
             componentGraphicsCamera.lens.unProject(screen);
@@ -66,7 +66,7 @@ public class SceneTest_2 implements Scene {
             //Application.setWindowPosition(300,300);
             System.out.println(Application.getWindowPosX());
         }
-        if (Input.keyboard.isKeyPressed(InputKeyboard.Key.F)) {
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             u2 += 0.001f;
             v2 += 0.001f;
             deg += 1;

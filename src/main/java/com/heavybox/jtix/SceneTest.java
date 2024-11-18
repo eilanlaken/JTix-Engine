@@ -7,7 +7,7 @@ import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D_3;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.input_2.InputMouse;
+import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
@@ -37,7 +37,7 @@ public class SceneTest implements Scene {
     public void update() {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
-        if (Input.mouse.isButtonClicked(InputMouse.Button.LEFT)) {
+        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
             //Application.windowSetSizeLimits(100, 100, 200, 200);
             //Application.windowFlash();
             componentGraphicsCamera.lens.unProject(screen);

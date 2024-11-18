@@ -5,14 +5,14 @@ import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
-public final class InputKeyboard {
+public final class Keyboard {
 
     private final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
     private final ArrayInt keysPressed = new ArrayInt(12);
     private final ArrayInt keysHeld = new ArrayInt(12);
     private final ArrayInt keysJustPressed = new ArrayInt(12);
 
-    InputKeyboard() {
+    Keyboard() {
 
         GLFW.glfwSetKeyCallback(Application.getWindowHandle(), new GLFWKeyCallback() {
             @Override
