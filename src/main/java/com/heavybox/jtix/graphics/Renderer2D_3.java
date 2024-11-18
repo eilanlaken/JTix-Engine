@@ -1592,8 +1592,16 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    // TODO bug here: when vertices are co-linear and folding (opposite direction).
+    // TODO example input to reproduce error:
+    // TODO [{-3,0}, {0,0}, {-1,0}]
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
-        Array<Vector2> vertices = drawCurveFilledGetVs(stroke, smoothness, points);
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points);
+        if (!ensureCapacity(vertices.size, vertices.size)) flush();
 
         int i = 0;
         for (Vector2 vertex : vertices) {
@@ -1607,8 +1615,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += vertices.size;
     }
 
-    // TODO
-    public Array<Vector2> drawCurveFilledGetVs(float stroke, int smoothness, final Vector2... points) {
+    public Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
         // trivial reject
         if (points.length < 2) {
             return null;
@@ -1617,7 +1624,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         float lineWidth = Math.abs(stroke) * 0.5f;
         Array<Vector2> vertices = new Array<>();
         Array<Vector2> middlePoints = new Array<>();  // middle points per each line segment.
-        var closed= false;
+        boolean closed = false;
 
         if (points.length == 2) {
             Vector2 midPoint = new Vector2();
@@ -1625,11 +1632,14 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             createTriangles(points[0], midPoint, points[1], vertices, lineWidth, smoothness);
         } else {
             if (points[0].equals(points[points.length - 1])) {
-//                 var p0 = points.shift();
-//                 p0 = Point.Middle(p0, points[0]);
-//                 points.unshift(p0);
-//                 points.add(p0);
-//                 closed= true;
+                Vector2 p0 = new Vector2();
+                Vector2.midPoint(points[0], points[1], p0);
+                Vector2[] points2 = new Vector2[points.length + 1];
+                points2[0] = p0;
+                System.arraycopy(points, 1, points2, 1, points.length - 1);
+                points2[points.length] = p0;
+                points = points2;
+                closed = true;
             }
 
             for (int i = 0; i < points.length - 1; i++) {
@@ -1670,10 +1680,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         t0.rotate90(1);
         t2.rotate90(1);
 
-        // triangle composed by the 3 points if clockwise or couterclockwise.
-        // if counterclockwise, we must invert the line threshold points, otherwise the intersection point
-        // could be erroneous and lead to odd results.
-        if (MathUtils.areaTriangleSigned(p0, p1, p2) > 0) {
+        float signedTriangleArea = MathUtils.areaTriangleSigned(p0, p1, p2);
+        if (signedTriangleArea > 0) {
             t0.flip();
             t2.flip();
         }
