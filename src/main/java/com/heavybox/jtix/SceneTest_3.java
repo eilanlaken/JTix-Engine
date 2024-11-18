@@ -86,8 +86,10 @@ public class SceneTest_3 implements Scene {
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
 
         renderer2D.begin(componentGraphicsCamera.lens.combined);
-        renderer2D.setColor(Color.LIGHT_GRAY);
-        //renderer2D.drawTexture(yellow, 10,5,50,300,deg,1,1);
+
+        //renderer2D.drawTexture(yellow,0,0,deg,1/64f,1/64f);
+        //renderer2D.drawTexture(yellow, 15f, 10, 0,0,deg,1/32f,1/32f);
+        //renderer2D.drawTexture(yellow, 10,5,0,0,deg,0.1f,0.1f);
 
         renderer2D.setColor(Color.GREEN);
         //renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);

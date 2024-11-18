@@ -275,8 +275,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
 
-        float widthHalf  = texture.width  * scaleX * 0.5f;
-        float heightHalf = texture.height * scaleY * 0.5f;
+        float widthHalf  = texture.width  * 0.5f;
+        float heightHalf = texture.height * 0.5f;
         float da = 90.0f / (refinement - 1);
 
         Vector2 corner = vectors2Pool.allocate();
