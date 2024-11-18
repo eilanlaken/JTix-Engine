@@ -267,7 +267,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     }
 
 
-    public void drawTexture(@NotNull Texture texture, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawTexture(@NotNull Texture texture, float cornerRadiusPixels, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
         if (!ensureCapacity(refinement * 4, 3 * (refinement * 4 - 2))) flush();
@@ -282,9 +282,9 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         Vector2 corner = vectors2Pool.allocate();
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(-cornerRadius, 0);
+            corner.set(-cornerRadiusPixels, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadius,heightHalf - cornerRadius);
+            corner.add(-widthHalf + cornerRadiusPixels,heightHalf - cornerRadiusPixels);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -295,9 +295,9 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
         // add upper right corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(0, cornerRadius);
+            corner.set(0, cornerRadiusPixels);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
+            corner.add(widthHalf - cornerRadiusPixels, heightHalf - cornerRadiusPixels);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -308,9 +308,9 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
         // add lower right corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(cornerRadius, 0);
+            corner.set(cornerRadiusPixels, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
+            corner.add(widthHalf - cornerRadiusPixels, -heightHalf + cornerRadiusPixels);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -321,9 +321,9 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
         // add lower left corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(0, -cornerRadius);
+            corner.set(0, -cornerRadiusPixels);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
+            corner.add(-widthHalf + cornerRadiusPixels, -heightHalf + cornerRadiusPixels);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1616,7 +1616,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
     }
 
     public Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
-        // trivial reject
         if (points.length < 2) {
             return null;
         }
@@ -1631,6 +1630,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             Vector2.midPoint(points[0], points[1], midPoint);
             createTriangles(points[0], midPoint, points[1], vertices, lineWidth, smoothness);
         } else {
+
             if (points[0].equals(points[points.length - 1])) {
                 Vector2 p0 = new Vector2();
                 Vector2.midPoint(points[0], points[1], p0);

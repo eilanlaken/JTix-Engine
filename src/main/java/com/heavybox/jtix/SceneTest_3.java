@@ -89,7 +89,7 @@ public class SceneTest_3 implements Scene {
 
         //renderer2D.drawTexture(yellow,0,0,deg,1/64f,1/64f);
         //renderer2D.drawTexture(yellow, 15f, 10, 0,0,deg,1/32f,1/32f);
-        //renderer2D.drawTexture(yellow, 10,5,0,0,deg,0.1f,0.1f);
+        renderer2D.drawTexture(yellow, 10,5,0,0,deg,1/128f,1/128f);
 
         renderer2D.setColor(Color.GREEN);
         //renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);
@@ -105,7 +105,7 @@ public class SceneTest_3 implements Scene {
         //renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
 
         renderer2D.setColor(Color.LIGHT_GRAY);
-        //renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
+        renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
 
         renderer2D.setColor(Color.BROWN);
         //renderer2D.drawLineFilled(0,0,6,3,0.3f,0,0,deg,1,1);
@@ -120,16 +120,6 @@ public class SceneTest_3 implements Scene {
                  1,0,Color.BLUE.toFloatBits()
         );
 
-        System.out.println(deg);
-//        if (deg != 180) renderer2D.drawCurveFilled(0.6f, 18,
-//                new Vector2(-3,0),
-//                new Vector2(0,0),
-//                new Vector2(1,0).rotateDeg(deg)
-//        ); else {
-//            renderer2D.drawCurveFilled(0.6f, 18,
-//                    new Vector2(-3,0),
-//                    new Vector2(0,0));
-//        }
 
         renderer2D.drawCurveFilled(0.6f, 18,
                 new Vector2(-3,0),
