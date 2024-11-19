@@ -12,10 +12,12 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_old_assets.AssetUtils;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_3 implements Scene {
 
+    Shader alwaysYellow;
     Texture yellow;
     Texture pattern;
     private Renderer2D_3 renderer2D = new Renderer2D_3();
@@ -37,11 +39,13 @@ public class SceneTest_3 implements Scene {
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadTexture("assets/textures/pattern.png");
         Assets.loadTexturePack("assets/atlases/spots.yml");
+        Assets.loadShader("alwaysYellow", "assets/shaders/graphics-2d-shader-yellow.vert", "assets/shaders/graphics-2d-shader-yellow.frag");
         Assets.finishLoading();
     }
 
     @Override
     public void start() {
+        alwaysYellow = Assets.get("alwaysYellow");
         yellow = Assets.get("assets/textures/yellowSquare.jpg");
         pattern = Assets.get("assets/textures/pattern.png");
         pack = Assets.get("assets/atlases/spots.yml");
@@ -120,7 +124,7 @@ public class SceneTest_3 implements Scene {
                  1,0,Color.BLUE.toFloatBits()
         );
 
-
+        renderer2D.setShader(alwaysYellow);
         renderer2D.drawCurveFilled(0.6f, 18,
                 new Vector2(-3,0),
                 new Vector2(0,0),

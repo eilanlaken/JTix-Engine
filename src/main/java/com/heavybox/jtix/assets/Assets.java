@@ -114,13 +114,37 @@ public final class Assets {
         load(Texture.class, filepath, options,false);
     }
 
-    static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+    public static void loadShader(final String name,
+                                  final String vertexShaderFilepath,
+                                  final String fragmentShaderFilepath) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("vertexShaderFilepath", vertexShaderFilepath);
+        options.put("fragmentShaderFilepath", fragmentShaderFilepath);
+        load(Shader.class, name, null, options,false);
+    }
+
+    // TODO: better to use a load method that allows custom names for assets.
+    // TODO: implemented below. simply replace this one by the one right below it.
+    @Deprecated static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
         final Asset asset = store.get(filepath);
         if (asset != null) {
             if (isDependency) asset.refCount++;
             return;
         }
         if (!Assets.fileExists(filepath)) throw new AssetException("File not found: " + filepath);
+        AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
+        storeLoadQueue.addFirst(descriptor);
+    }
+
+    static void load(Class<? extends MemoryResource> type, @Nullable String name, @Nullable String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+        final Asset asset = store.get(name);
+        if (asset != null) {
+            if (isDependency) asset.refCount++;
+            return;
+        }
+        if (filepath != null && !Assets.fileExists(filepath)) throw new AssetException("File not found: " + filepath);
+        if (filepath == null) filepath = name;
+        if (name == null) name = filepath;
         AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
         storeLoadQueue.addFirst(descriptor);
     }
@@ -211,7 +235,7 @@ public final class Assets {
                 builder.append('\n');
             }
         } catch (IOException e) {
-            throw new AssetException("Filed to read " + String.class.getSimpleName() + " contents of file: " + path);
+            throw new AssetException("Failed to read " + String.class.getSimpleName() + " contents of file: " + path);
         }
         return builder.toString();
     }
