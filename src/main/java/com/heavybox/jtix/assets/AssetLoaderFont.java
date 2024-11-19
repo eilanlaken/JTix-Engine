@@ -36,7 +36,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
 
     @Override
     public Font create() {
-        String path = dependencies.first().path;
+        String path = dependencies.first().filepath;
         Map<String, Object> options = (Map<String, Object>) data.get("options");
         Texture atlas = Assets.get(path);
         String charset = (String) options.get("charset");

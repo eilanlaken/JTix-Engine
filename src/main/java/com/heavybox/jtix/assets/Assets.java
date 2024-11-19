@@ -5,10 +5,7 @@ import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Queue;
-import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.Model;
-import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.graphics.TexturePack;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
@@ -58,7 +55,7 @@ public final class Assets {
         storeCreateTasks.removeAll(storeCompletedCreateTasks);
         for (AssetLoadingTask task : storeCreateTasks) {
             Asset asset = task.create();
-            store.put(asset.descriptor.path, asset);
+            store.put(asset.descriptor.filepath, asset);
             storeCompletedCreateTasks.add(task);
         }
     }
@@ -67,7 +64,7 @@ public final class Assets {
         Array<Asset> assets = new Array<>();
         if (dependencies != null) {
             for (AssetDescriptor dependency : dependencies) {
-                assets.add(store.get(dependency.path));
+                assets.add(store.get(dependency.filepath));
             }
         }
         return assets;
@@ -76,7 +73,7 @@ public final class Assets {
     static synchronized boolean areLoaded(final Array<AssetDescriptor> dependencies) {
         if (dependencies == null || dependencies.size == 0) return true;
         for (AssetDescriptor dependency : dependencies) {
-            Asset asset = store.get(dependency.path);
+            Asset asset = store.get(dependency.filepath);
             if (asset == null) return false;
         }
         return true;
@@ -86,25 +83,25 @@ public final class Assets {
         return store.get(path) != null;
     }
 
-    public static void loadTexturePack(final String path) {
-        load(TexturePack.class, path, null,false);
+    public static void loadTexturePack(final String filepath) {
+        load(TexturePack.class, filepath, null,false);
     }
 
-    public static void loadTexturePack(final String path,
+    public static void loadTexturePack(final String filepath,
                                        Texture.FilterMag magFilter, Texture.FilterMin minFilter,
                                        int anisotropy) {
         final HashMap<String, Object> options = new HashMap<>();
         options.put("anisotropy", anisotropy);
         options.put("magFilter", magFilter);
         options.put("minFilter", minFilter);
-        load(Texture.class, path, options,false);
+        load(Texture.class, filepath, options,false);
     }
 
-    public static void loadTexture(String path) {
-        load(Texture.class, path, null,false);
+    public static void loadTexture(String filepath) {
+        load(Texture.class, filepath, null,false);
     }
 
-    public static void loadTexture(String path,
+    public static void loadTexture(String filepath,
                                    Texture.FilterMag magFilter, Texture.FilterMin minFilter,
                                    Texture.Wrap uWrap, Texture.Wrap vWrap,
                                    int anisotropy) {
@@ -114,17 +111,17 @@ public final class Assets {
         options.put("minFilter", minFilter);
         options.put("uWrap", uWrap);
         options.put("vWrap", vWrap);
-        load(Texture.class, path, options,false);
+        load(Texture.class, filepath, options,false);
     }
 
-    static void load(Class<? extends MemoryResource> type, String path, @Nullable final HashMap<String, Object> options, boolean isDependency) {
-        final Asset asset = store.get(path);
+    static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+        final Asset asset = store.get(filepath);
         if (asset != null) {
             if (isDependency) asset.refCount++;
             return;
         }
-        if (!Assets.fileExists(path)) throw new AssetException("File not found: " + path);
-        AssetDescriptor descriptor = new AssetDescriptor(type, path, options);
+        if (!Assets.fileExists(filepath)) throw new AssetException("File not found: " + filepath);
+        AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
         storeLoadQueue.addFirst(descriptor);
     }
 
@@ -165,6 +162,7 @@ public final class Assets {
 
     static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
         if (type == Texture.class)     return new AssetLoaderTexture();
+        if (type == Shader.class)      return new AssetLoaderShader();
         if (type == TexturePack.class) return new AssetLoaderTexturePack();
         if (type == Font.class)        return new AssetLoaderFont();
         if (type == Model.class)       return new AssetLoaderModel();

@@ -10,18 +10,16 @@ import java.util.Objects;
 public class AssetDescriptor {
 
     public final Class<? extends MemoryResource> type;
-    public final String                          path;
+    public final String                          filepath;
     public final long                            size;
     public final HashMap<String, Object>         options;
 
-    // TODO: add Options here in some way.
-
-    public AssetDescriptor(Class<? extends MemoryResource> type, String path, @Nullable final HashMap<String, Object> options) {
+    public AssetDescriptor(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options) {
         this.type = type;
-        this.path = path;
+        this.filepath = filepath;
         long s = 0;
         try {
-            s = Assets.getFileSize(path);
+            s = Assets.getFileSize(filepath);
         } catch (IOException e) {
             // TODO: see how to get the total file size for assets that are composed of multiple files.
             //throw new AssetsException(e.getMessage());
@@ -36,7 +34,7 @@ public class AssetDescriptor {
         if (!(obj instanceof AssetDescriptor)) return false;
         if (this == obj) return true;
         AssetDescriptor otherDescriptor = (AssetDescriptor) obj;
-        return Objects.equals(this.path, otherDescriptor.path) && this.type == otherDescriptor.type;
+        return Objects.equals(this.filepath, otherDescriptor.filepath) && this.type == otherDescriptor.type;
     }
 
 }
