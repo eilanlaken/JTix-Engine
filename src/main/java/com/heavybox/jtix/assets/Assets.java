@@ -26,16 +26,17 @@ import java.util.*;
 
 public final class Assets {
 
-    private static final HashMap<String, Asset>     store                = new HashMap<>();
-    private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
-    private static final Set<AssetLoadingTask> storeCompletedBackgroundTasks = new HashSet<>();
-    private static final Set<AssetLoadingTask> storeBackgroundTasks = new HashSet<>();
-    private static final Set<AssetLoadingTask> storeCompletedCreateTasks = new HashSet<>();
-    private static final Set<AssetLoadingTask> storeCreateTasks = new HashSet<>();
+    private static final HashMap<String, Asset> store                         = new HashMap<>();
+    private static final Queue<AssetDescriptor> storeLoadQueue                = new Queue<>();
+    private static final Set<AssetLoadingTask>  storeCompletedBackgroundTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask>  storeBackgroundTasks          = new HashSet<>();
+    private static final Set<AssetLoadingTask>  storeCompletedCreateTasks     = new HashSet<>();
+    private static final Set<AssetLoadingTask>  storeCreateTasks              = new HashSet<>();
 
     private Assets() {}
 
     /* store */
+
     public static synchronized void update() {
         for (AssetLoadingTask task : storeBackgroundTasks) {
             if (task.ready())  {
@@ -117,10 +118,13 @@ public final class Assets {
     public static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {
+        if (!Assets.fileExists(vertexShaderFilepath)) throw new AssetsException("File not found: " + vertexShaderFilepath);
+        if (!Assets.fileExists(fragmentShaderFilepath)) throw new AssetsException("File not found: " + fragmentShaderFilepath);
         final HashMap<String, Object> options = new HashMap<>();
         options.put("vertexShaderFilepath", vertexShaderFilepath);
         options.put("fragmentShaderFilepath", fragmentShaderFilepath);
         load(Shader.class, name, null, options,false);
+        //load(Shader.class, name, options,false);
     }
 
     // TODO: better to use a load method that allows custom names for assets.
@@ -131,7 +135,7 @@ public final class Assets {
             if (isDependency) asset.refCount++;
             return;
         }
-        if (!Assets.fileExists(filepath)) throw new AssetException("File not found: " + filepath);
+        if (!Assets.fileExists(filepath)) throw new AssetsException("File not found: " + filepath);
         AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
         storeLoadQueue.addFirst(descriptor);
     }
@@ -142,7 +146,7 @@ public final class Assets {
             if (isDependency) asset.refCount++;
             return;
         }
-        if (filepath != null && !Assets.fileExists(filepath)) throw new AssetException("File not found: " + filepath);
+        if (filepath != null && !Assets.fileExists(filepath)) throw new AssetsException("File not found: " + filepath);
         if (filepath == null) filepath = name;
         if (name == null) name = filepath;
         AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
@@ -155,7 +159,7 @@ public final class Assets {
 
     public static synchronized <T extends MemoryResource> T get(final String path) {
         var t = store.get(path);
-        if (t == null) throw new AssetException("File not loaded: " + path + System.lineSeparator() + "Make sure you spelled the file path correctly. You must " +
+        if (t == null) throw new AssetsException("File not loaded: " + path + System.lineSeparator() + "Make sure you spelled the file path correctly. You must " +
                 "provide the full relative path.");
         return (T) t.data;
     }
@@ -191,7 +195,7 @@ public final class Assets {
         if (type == Font.class)        return new AssetLoaderFont();
         if (type == Model.class)       return new AssetLoaderModel();
 
-        throw new AssetException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
+        throw new AssetsException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
                 "Type must be one of the following: " +
                 Texture.class.getSimpleName() + ", " +
                 TexturePack.class.getSimpleName() + ", " +
@@ -235,7 +239,7 @@ public final class Assets {
                 builder.append('\n');
             }
         } catch (IOException e) {
-            throw new AssetException("Failed to read " + String.class.getSimpleName() + " contents of file: " + path);
+            throw new AssetsException("Failed to read " + String.class.getSimpleName() + " contents of file: " + path);
         }
         return builder.toString();
     }
@@ -321,7 +325,7 @@ public final class Assets {
     }
 
     public static boolean saveFile(final String directory, final String filename, final String content) throws IOException {
-        if (!directoryExists(directory)) throw new AssetException("Directory: " + directory + " does not exist.");
+        if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename;
         File file = new File(filePath);
         boolean fileExists = file.exists();
@@ -335,7 +339,7 @@ public final class Assets {
 
     // TODO: change to throws AssetsException
     public static void saveImage(final String directory, final String filename, BufferedImage image) throws IOException {
-        if (!directoryExists(directory)) throw new AssetException("Directory: " + directory + " does not exist.");
+        if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename + ".png";
         File file = new File(filePath);
         ImageIO.write(image, "png", file);
