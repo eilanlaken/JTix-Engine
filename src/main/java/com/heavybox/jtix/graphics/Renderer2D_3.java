@@ -1603,16 +1603,28 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points);
         if (!ensureCapacity(vertices.size, vertices.size)) flush();
 
-        int i = 0;
-        for (Vector2 vertex : vertices) {
-            positions.put(vertex.x).put(vertex.y);
-            colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
-            indices.put(vertexIndex + i);
-            i++;
-        }
+        /*
+        In the case of curve rendering, we might have a case where the number of vertices exceeds the capacity of the entire batch.
+        In that case, we write triangle by triangle.
+        */
+        if (vertices.size > VERTICES_CAPACITY) {
+            for (int i = 0; i < vertices.size; i += 3) {
+                Vector2 p0 = vertices.get(i + 0);
+                Vector2 p1 = vertices.get(i + 1);
+                Vector2 p2 = vertices.get(i + 2);
+                drawTriangleFilled(p0, p1, p2);
+            }
+        } else {
+            for (int i = 0; i < vertices.size; i++) {
+                Vector2 vertex = vertices.get(i);
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
+                indices.put(vertexIndex + i);
+            }
 
-        vertexIndex += vertices.size;
+            vertexIndex += vertices.size;
+        }
     }
 
     public Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
@@ -1812,6 +1824,16 @@ public class Renderer2D_3 implements MemoryResourceHolder {
                 x1, y1, currentTint, u1, v1,
                 x2, y2, currentTint, u2, v2,
                 x3, y3, currentTint, u3, v3
+        );
+    }
+
+    public void drawTriangleFilled(Vector2 p0,
+                                   Vector2 p1,
+                                   Vector2 p2) {
+        drawTriangleFilled(null,
+                p0.x, p0.y, currentTint, 0.5f, 0.5f,
+                p1.x, p1.y, currentTint, 0.5f, 0.5f,
+                p2.x, p2.y, currentTint, 0.5f, 0.5f
         );
     }
 
