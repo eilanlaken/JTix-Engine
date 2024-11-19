@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 interface AssetLoader<T extends MemoryResource> {
 
+    void beforeLoad(final String path, final HashMap<String, Object> options);
     Array<AssetDescriptor> backgroundLoad(final String path, final HashMap<String, Object> options);
     T create();
 

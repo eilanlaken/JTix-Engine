@@ -76,6 +76,12 @@ import java.util.Map;
     private ModelPartData[] partsData;
     private ModelArmatureData armatureData;
 
+
+    @Override
+    public void beforeLoad(String path, HashMap<String, Object> options) {
+        if (!Assets.fileExists(path)) throw new AssetsException("File does not exist: " + path);
+    }
+
     @Override // TODO
     public Array<AssetDescriptor> backgroundLoad(String path, @Nullable final HashMap<String, Object> options) {
         final int importFlags = // TODO: use the options here.

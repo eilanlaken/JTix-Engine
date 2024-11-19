@@ -12,6 +12,15 @@ public class AssetLoaderShader implements AssetLoader<Shader> {
     private String fragmentShaderSrcCode;
 
     @Override
+    public void beforeLoad(String path, HashMap<String, Object> options) {
+        final String vertexShaderFilepath = (String) options.get("vertexShaderFilepath");
+        final String fragmentShaderFilepath = (String) options.get("fragmentShaderFilepath");
+
+        if (!Assets.fileExists(vertexShaderFilepath))   throw new AssetsException("File does not exist: " + vertexShaderFilepath);
+        if (!Assets.fileExists(fragmentShaderFilepath)) throw new AssetsException("File does not exist: " + fragmentShaderFilepath);
+    }
+
+    @Override
     public Array<AssetDescriptor> backgroundLoad(String path, final HashMap<String, Object> options) {
         final String vertexShaderFilepath = (String) options.get("vertexShaderFilepath");
         final String fragmentShaderFilepath = (String) options.get("fragmentShaderFilepath");

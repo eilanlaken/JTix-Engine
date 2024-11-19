@@ -19,6 +19,11 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     private Map<String, Object>    data;
 
     @Override
+    public void beforeLoad(String path, HashMap<String, Object> options) {
+        if (!Assets.fileExists(path)) throw new AssetsException("File does not exist: " + path);
+    }
+
+    @Override
     public Array<AssetDescriptor> backgroundLoad(final String path, @Nullable final HashMap<String, Object> options) {
         String yaml = Assets.getFileContent(path);
         data = Assets.yaml().load(yaml);

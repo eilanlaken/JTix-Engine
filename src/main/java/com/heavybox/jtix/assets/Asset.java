@@ -5,7 +5,7 @@ import com.heavybox.jtix.memory.MemoryResource;
 
 class Asset implements MemoryResource {
 
-    public int                   refCount;
+    public       int             refCount;
     public final MemoryResource  data;
     public final AssetDescriptor descriptor;
     public final Array<Asset>    dependencies;

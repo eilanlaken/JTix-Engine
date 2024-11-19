@@ -48,6 +48,7 @@ public final class Assets {
         storeBackgroundTasks.removeAll(storeCompletedBackgroundTasks);
         for (AssetDescriptor descriptor : storeLoadQueue) {
             AssetLoadingTask task = new AssetLoadingTask(descriptor);
+            task.loader.beforeLoad(descriptor.filepath, descriptor.options);
             storeBackgroundTasks.add(task);
             AsyncTaskRunner.async(task);
         }
@@ -118,40 +119,24 @@ public final class Assets {
     public static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {
-        if (!Assets.fileExists(vertexShaderFilepath)) throw new AssetsException("File not found: " + vertexShaderFilepath);
-        if (!Assets.fileExists(fragmentShaderFilepath)) throw new AssetsException("File not found: " + fragmentShaderFilepath);
         final HashMap<String, Object> options = new HashMap<>();
         options.put("vertexShaderFilepath", vertexShaderFilepath);
         options.put("fragmentShaderFilepath", fragmentShaderFilepath);
-        load(Shader.class, name, null, options,false);
-        //load(Shader.class, name, options,false);
+        load(Shader.class, name, options,false);
     }
 
-    // TODO: better to use a load method that allows custom names for assets.
-    // TODO: implemented below. simply replace this one by the one right below it.
-    @Deprecated static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+
+    static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
         final Asset asset = store.get(filepath);
         if (asset != null) {
             if (isDependency) asset.refCount++;
             return;
         }
-        if (!Assets.fileExists(filepath)) throw new AssetsException("File not found: " + filepath);
         AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
         storeLoadQueue.addFirst(descriptor);
     }
 
-    static void load(Class<? extends MemoryResource> type, @Nullable String name, @Nullable String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
-        final Asset asset = store.get(name);
-        if (asset != null) {
-            if (isDependency) asset.refCount++;
-            return;
-        }
-        if (filepath != null && !Assets.fileExists(filepath)) throw new AssetsException("File not found: " + filepath);
-        if (filepath == null) filepath = name;
-        if (name == null) name = filepath;
-        AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
-        storeLoadQueue.addFirst(descriptor);
-    }
+
 
     public static synchronized void unload(final String path) {
 
