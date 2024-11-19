@@ -6,8 +6,9 @@ import com.heavybox.jtix.memory.MemoryResource;
 
 public class AssetLoadingTask extends AsyncTask {
 
-    private final AssetDescriptor                       descriptor;
-    private       Array<AssetDescriptor>                dependencies;
+    private final AssetDescriptor        descriptor;
+    private       Array<AssetDescriptor> dependencies;
+
     final AssetLoader<? extends MemoryResource> loader;
 
     AssetLoadingTask(AssetDescriptor descriptor) {
