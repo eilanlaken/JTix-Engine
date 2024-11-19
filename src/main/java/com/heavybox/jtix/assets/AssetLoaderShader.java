@@ -5,7 +5,6 @@ import com.heavybox.jtix.graphics.Shader;
 
 import java.util.HashMap;
 
-@Deprecated
 public class AssetLoaderShader implements AssetLoader<Shader> {
 
     private String vertexShaderSrcCode;
@@ -21,7 +20,7 @@ public class AssetLoaderShader implements AssetLoader<Shader> {
     }
 
     @Override
-    public Array<AssetDescriptor> backgroundLoad(String path, final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> load(String path, final HashMap<String, Object> options) {
         final String vertexShaderFilepath = (String) options.get("vertexShaderFilepath");
         final String fragmentShaderFilepath = (String) options.get("fragmentShaderFilepath");
         vertexShaderSrcCode = Assets.getFileContent(vertexShaderFilepath);

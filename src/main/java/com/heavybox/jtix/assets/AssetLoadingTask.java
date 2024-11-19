@@ -18,7 +18,7 @@ public class AssetLoadingTask extends AsyncTask {
 
     @Override
     public void task() {
-        this.dependencies = loader.backgroundLoad(descriptor.filepath, descriptor.options);
+        this.dependencies = loader.load(descriptor.filepath, descriptor.options);
     }
 
     @Override

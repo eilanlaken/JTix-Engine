@@ -23,7 +23,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     }
 
     @Override
-    public Array<AssetDescriptor> backgroundLoad(String path, final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> load(String path, final HashMap<String, Object> options) {
         this.options = options;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);

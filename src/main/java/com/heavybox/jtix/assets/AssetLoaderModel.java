@@ -83,7 +83,7 @@ import java.util.Map;
     }
 
     @Override // TODO
-    public Array<AssetDescriptor> backgroundLoad(String path, @Nullable final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> load(String path, @Nullable final HashMap<String, Object> options) {
         final int importFlags = // TODO: use the options here.
                 Assimp.aiProcess_Triangulate |
                         Assimp.aiProcess_ImproveCacheLocality |
