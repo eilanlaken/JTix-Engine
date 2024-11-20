@@ -58,15 +58,10 @@ public final class ToolsTextureGenerator {
     public static void generateTextureNoiseValue() {}
     public static void generateTextureNoiseVornoi() {}
 
-    /* Patterns */
-    public static void generateTextureCheckers() {}
-    public static void generateTextureGradient() {}
-    public static void generateTextureWave() {}
-
     /* Maps */
     // https://codepen.io/BJS3D/pen/YzjXZgV?editors=1010
     // https://github.com/Theverat/NormalmapGenerator/blob/master/src_generators/normalmapgenerator.cpp#L142
-    // TODO
+
     public static void generateTextureMapNormal(final String directory, final String outputName, final String sourcePath, float strength, boolean tiled) {
         // TODO: check if already generated.
 
