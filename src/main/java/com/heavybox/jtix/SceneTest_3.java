@@ -50,7 +50,7 @@ public class SceneTest_3 implements Scene {
         pattern = Assets.get("assets/textures/pattern.png");
         pack = Assets.get("assets/atlases/spots.yml");
         polygonTriangles = MathUtils.polygonTriangulate(polygon);
-        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowAspectRatio() * 10,10, 1);
+        componentGraphicsCamera = new ComponentGraphicsCamera(Graphics.getWindowAspectRatio() * 15,15, 1);
         componentGraphicsCamera.update();
 
         for (int i = 0; i < positions.length; i++) {
@@ -138,7 +138,8 @@ public class SceneTest_3 implements Scene {
                 new Vector2(2,-2),
                 new Vector2(-3,-4)
         );
-
+        renderer2D.setShader(null);
+        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1/128f,1/128f);
 
         renderer2D.end();
 
