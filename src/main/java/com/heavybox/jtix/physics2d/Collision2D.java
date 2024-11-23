@@ -17,7 +17,7 @@ public final class Collision2D {
         this.world = world;
     }
 
-    protected Collision2DManifold detectCollision(Body2DCollider collider_a, Body2DCollider collider_b) {
+    Collision2DManifold detectCollision(Body2DCollider collider_a, Body2DCollider collider_b) {
 
         if (collider_a instanceof Body2DColliderCircle) {
             if (collider_b instanceof Body2DColliderCircle) return circleVsCircle(collider_a, collider_b);

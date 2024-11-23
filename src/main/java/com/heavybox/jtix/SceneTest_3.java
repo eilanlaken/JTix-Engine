@@ -139,7 +139,9 @@ public class SceneTest_3 implements Scene {
                 new Vector2(-3,-4)
         );
         renderer2D.setShader(null);
-        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,0,1/128f,1/128f);
+        renderer2D.setColor(null);
+
+        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,deg,1/64f,1/64f);
 
         renderer2D.end();
 

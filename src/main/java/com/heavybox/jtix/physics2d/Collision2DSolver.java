@@ -6,6 +6,7 @@ import com.heavybox.jtix.math.Vector2;
 
 public class Collision2DSolver {
 
+    // TODO
     protected void beginContact(Collision2DManifold manifold) {
 
     }
@@ -142,6 +143,7 @@ public class Collision2DSolver {
 
     }
 
+    // TODO
     protected void endContact(Collision2DManifold manifold) {
 
     }

@@ -5,7 +5,7 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.jetbrains.annotations.NotNull;
 
-public final class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
+public class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
 
     public final Array<Body2DCollider> colliders = new Array<>();
 
