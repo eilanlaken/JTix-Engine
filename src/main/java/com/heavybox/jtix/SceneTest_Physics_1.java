@@ -12,10 +12,9 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_4 implements Scene {
+public class SceneTest_Physics_1 implements Scene {
 
     Shader alwaysYellow;
     Texture yellow;

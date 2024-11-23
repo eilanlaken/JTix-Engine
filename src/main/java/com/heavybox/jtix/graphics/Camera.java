@@ -49,7 +49,7 @@ public class Camera {
 
     public void update(Vector3 position, Vector3 direction, Vector3 up) {
         switch (mode) {
-            case ORTHOGRAPHIC:
+            case ORTHOGRAPHIC: // TODO: probably better to use projection.setToOrthographicProjection(zoom * viewportWidth, zoom * viewportHeight)
                 projection.setToOrthographicProjection(zoom * -viewportWidth / 2.0f, zoom * (viewportWidth / 2.0f), zoom * -(viewportHeight / 2.0f), zoom * viewportHeight / 2.0f, 0, far);
                 break;
             case PERSPECTIVE: // TODO: consider zoom here: fov -> fov / zoom?
