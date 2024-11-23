@@ -17,6 +17,11 @@ class MathUtilsTest {
     }
 
     @Test
+    void testInfinity() {
+        Assertions.assertEquals(Float.NaN,-Float.POSITIVE_INFINITY / Float.POSITIVE_INFINITY);
+    }
+
+    @Test
     void getAreaTriangle() {
         Assertions.assertEquals(0.5f, MathUtils.getAreaTriangle(0.0f,0.0f,1.0f,0.0f,0.0f,1.0f), MathUtils.FLOAT_ROUNDING_ERROR);
         Assertions.assertEquals(0.5f, MathUtils.getAreaTriangle(1.0f,0.0f,0.0f,1.0f,1.0f,1.0f), MathUtils.FLOAT_ROUNDING_ERROR);

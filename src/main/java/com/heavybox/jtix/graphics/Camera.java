@@ -5,8 +5,7 @@ import com.heavybox.jtix.math.Vector3;
 
 public class Camera {
 
-    private final Vector3 tmp = new Vector3();
-
+    /* projection */
     public Mode      mode;
     public Matrix4x4 projection;
     public Matrix4x4 view;
@@ -57,7 +56,12 @@ public class Camera {
                 this.projection.setToPerspectiveProjection(Math.abs(near), Math.abs(far), fov, viewportWidth / viewportHeight);
                 break;
         }
-        view.setToLookAt(position, tmp.set(position).add(direction), up);
+
+        view.setToLookAt(
+                position.x, position.y, position.z,
+                position.x + direction.x, position.y + direction.y, position.z + direction.z,
+                up.x, up.y, up.z
+        ); // set to look at: position, position + direction, up
         combined.set(projection);
         Matrix4x4.mul(combined.val, view.val);
         invProjectionView.set(combined);

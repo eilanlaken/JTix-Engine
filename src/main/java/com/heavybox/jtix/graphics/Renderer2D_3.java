@@ -84,34 +84,26 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(0);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboColors = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColors); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colors, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, 0, 0);
-        //GL20.glEnableVertexAttribArray(1);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboTextCoords = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextCoords); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textCoords, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(2);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboNormals = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboNormals); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normals, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(3);
 
         this.vboTangents = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTangents); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, tangents, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(4, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(4);
 
         this.ebo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);

@@ -606,6 +606,44 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
+    /** Sets the matrix to an orthographic projection like glOrtho (http://www.opengl.org/sdk/docs/man/xhtml/glOrtho.xml) following
+     * the OpenGL equivalent
+     * @param viewportWidth The width of the viewport
+     * @param viewportHeight The height of the viewport
+     * @return This matrix for the purpose of chaining methods together. */
+    public Matrix4x4 setToOrthographicProjection(float viewportWidth, float viewportHeight) {
+        float left   = -viewportWidth * 0.5f;
+        float right  =  viewportWidth * 0.5f;
+        float bottom = -viewportHeight * 0.5f;
+        float top    =  viewportHeight * 0.5f;
+
+        float x_orth = 2 / (right - left);
+        float y_orth = 2 / (top - bottom);
+        float z_orth = 0;
+
+        float tx = -(right + left) / (right - left);
+        float ty = -(top + bottom) / (top - bottom);
+        float tz = -1;
+
+        val[M00] = x_orth;
+        val[M10] = 0;
+        val[M20] = 0;
+        val[M30] = 0;
+        val[M01] = 0;
+        val[M11] = y_orth;
+        val[M21] = 0;
+        val[M31] = 0;
+        val[M02] = 0;
+        val[M12] = 0;
+        val[M22] = z_orth;
+        val[M32] = 0;
+        val[M03] = tx;
+        val[M13] = ty;
+        val[M23] = tz;
+        val[M33] = 1;
+        return this;
+    }
+
     /** Sets the 4th column to the translation vector.
      * @param vector The translation vector
      * @return This matrix for the purpose of chaining methods together. */
@@ -829,6 +867,24 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
+    public Matrix4x4 setToLookAt(float dirX, float dirY, float dirZ,
+                                 float upX, float upY, float upZ) {
+        l_vez.set(dirX, dirY, dirZ).nor();
+        l_vex.set(dirX, dirY, dirZ).crs(upX, upY, upZ).nor();
+        l_vey.set(l_vex).crs(l_vez).nor();
+        idt();
+        val[M00] = l_vex.x;
+        val[M01] = l_vex.y;
+        val[M02] = l_vex.z;
+        val[M10] = l_vey.x;
+        val[M11] = l_vey.y;
+        val[M12] = l_vey.z;
+        val[M20] = -l_vez.x;
+        val[M21] = -l_vez.y;
+        val[M22] = -l_vez.z;
+        return this;
+    }
+
     /** Sets this matrix to a look at matrix with the given position, target and up vector.
      * @param position the position
      * @param target the target
@@ -838,6 +894,16 @@ public class Matrix4x4 implements MemoryPool.Reset {
         tmpVec.set(target).sub(position);
         setToLookAt(tmpVec, up);
         mul(tmpMat.setToTranslation(-position.x, -position.y, -position.z));
+        return this;
+    }
+
+    // TODO: test
+    public Matrix4x4 setToLookAt(float posX, float posY, float posZ,
+                                 float targetX, float targetY, float targetZ,
+                                 float upX, float upY, float upZ) {
+        tmpVec.set(targetX, targetY, targetZ).sub(posX, posY, posZ);
+        setToLookAt(tmpVec.x, tmpVec.y, tmpVec.z, upX, upY, upZ);
+        mul(tmpMat.setToTranslation(-posX, -posY, -posZ));
         return this;
     }
 

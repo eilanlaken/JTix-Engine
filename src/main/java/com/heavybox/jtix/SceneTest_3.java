@@ -65,6 +65,12 @@ public class SceneTest_3 implements Scene {
     public void update() {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
+            componentGraphicsCamera.position.x -= 0.01f;
+            componentGraphicsCamera.update();
+        }
+
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
             //Application.windowSetSizeLimits(100, 100, 200, 200);
             //Application.windowFlash();
