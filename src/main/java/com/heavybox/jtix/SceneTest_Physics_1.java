@@ -94,57 +94,8 @@ public class SceneTest_Physics_1 implements Scene {
 
         renderer2D.begin(combined);
 
-        //renderer2D.drawTexture(yellow,0,0,deg,1/64f,1/64f);
-        //renderer2D.drawTexture(yellow, 15f, 10, 0,0,deg,1/32f,1/32f);
-        renderer2D.drawTexture(yellow, 10,5,0,0,deg,1/128f,1/128f);
-
-        renderer2D.setColor(Color.GREEN);
-        //renderer2D.drawCircleBorder(2,0.1f, deg + 40,44,0,0,0,1,1);
-
-        renderer2D.setColor(new Color(1,0,0,0.2f));
-        //renderer2D.drawCircleFilled(4,20,deg + 30,-2,0,0,1,1);
-
-        renderer2D.setColor(Color.CYAN);
-        //renderer2D.drawRectangleBorder(200,100,30,5,300,-deg,1,1);
-
-
-        renderer2D.setColor(null);
-        //renderer2D.drawTexture(yellow,u1,v1,u2,v2,400,-200,0,0,30,1,1);
-
-        renderer2D.setColor(Color.LIGHT_GRAY);
         renderer2D.drawRectangleFilled(3,1,0.1f,5,0,-3,deg * 2,1,1);
 
-        renderer2D.setColor(Color.BROWN);
-        //renderer2D.drawLineFilled(0,0,6,3,0.3f,0,0,deg,1,1);
-
-        //renderer2D.drawLineThin(0,0,4,-4);
-
-        renderer2D.setColor(new Color(1,0,0,0.5f));
-
-        renderer2D.drawTriangleFilled(
-                -1,0,Color.RED.toFloatBits(),
-                 0,1,Color.GREEN.toFloatBits(),
-                 1,0,Color.BLUE.toFloatBits()
-        );
-
-        renderer2D.setShader(alwaysYellow);
-        renderer2D.drawCurveFilled(0.6f, 18,
-                new Vector2(-3,0),
-                new Vector2(0,0),
-                new Vector2(2,2),
-                new Vector2(-3,2)
-        );
-
-        renderer2D.drawCurveFilled(0.6f, 18,
-                new Vector2(-3,-4),
-                new Vector2(0,-4),
-                new Vector2(2,-2),
-                new Vector2(-3,-4)
-        );
-        renderer2D.setShader(null);
-        renderer2D.setColor(null);
-
-        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), 0,0,deg,1/64f,1/64f);
 
         renderer2D.end();
 
