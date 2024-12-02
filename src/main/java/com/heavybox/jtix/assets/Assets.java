@@ -28,28 +28,83 @@ public final class Assets {
 
     private static final HashMap<String, Asset> store                         = new HashMap<>();
     private static final Queue<AssetDescriptor> storeLoadQueue                = new Queue<>();
-    private static final Set<AssetLoadingTask>  storeCompletedBackgroundTasks = new HashSet<>();
-    private static final Set<AssetLoadingTask>  storeBackgroundTasks          = new HashSet<>();
-    private static final Set<AssetLoadingTask>  storeCompletedCreateTasks     = new HashSet<>();
+
+    private static final Set<AssetLoadingTask>  storeBeforeTasks              = new HashSet<>();
+    private static final Set<AssetLoadingTask>  storeCompletedBeforeTasks     = new HashSet<>();
+
+    private static final Set<AssetLoadingTask>  storeLoadTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask>  storeCompletedLoadTasks = new HashSet<>();
+
     private static final Set<AssetLoadingTask>  storeCreateTasks              = new HashSet<>();
+    private static final Set<AssetLoadingTask>  storeCompletedCreateTasks     = new HashSet<>();
 
     private Assets() {}
 
     /* store */
 
-    public static synchronized void update() {
-        for (AssetLoadingTask task : storeBackgroundTasks) {
-            if (task.ready())  {
-                storeCompletedBackgroundTasks.add(task);
-                storeCreateTasks.add(task);
-            }
-        }
-
-        storeBackgroundTasks.removeAll(storeCompletedBackgroundTasks);
+    public static synchronized void update2() {
+        /* create a loading task for every item in the load queue */
         for (AssetDescriptor descriptor : storeLoadQueue) {
             AssetLoadingTask task = new AssetLoadingTask(descriptor);
             task.loader.beforeLoad(descriptor.filepath, descriptor.options);
-            storeBackgroundTasks.add(task);
+            storeLoadTasks.add(task);
+        }
+        storeLoadQueue.clear();
+
+        for (AssetLoadingTask task : storeLoadTasks) {
+            if (!task.inProgress() && !task.isComplete()) { // task not started
+                AsyncTaskRunner.async(task);
+            } else if (task.readyToCreate()) { // task completed
+                storeCompletedLoadTasks.add(task);
+            }
+        }
+        storeLoadTasks.removeAll(storeCompletedLoadTasks);
+
+        for (AssetLoadingTask task : storeCompletedLoadTasks) {
+            Asset asset = task.create();
+            store.put(asset.descriptor.filepath, asset);
+        }
+        storeCompletedLoadTasks.clear();
+        /* OLD CODE */
+
+
+//        for (AssetLoadingTask task : storeLoadTasks) {
+//            if (task.ready())  {
+//                storeCompletedLoadTasks.add(task);
+//                storeCreateTasks.add(task);
+//            }
+//        }
+//        storeLoadTasks.removeAll(storeCompletedLoadTasks);
+//
+//        for (AssetDescriptor descriptor : storeLoadQueue) {
+//            AssetLoadingTask task = new AssetLoadingTask(descriptor);
+//            task.loader.beforeLoad(descriptor.filepath, descriptor.options);
+//            storeLoadTasks.add(task);
+//            AsyncTaskRunner.async(task);
+//        }
+//        storeLoadQueue.clear();
+//
+//        storeCreateTasks.removeAll(storeCompletedCreateTasks);
+//        for (AssetLoadingTask task : storeCreateTasks) {
+//            Asset asset = task.create();
+//            store.put(asset.descriptor.filepath, asset);
+//            storeCompletedCreateTasks.add(task);
+//        }
+    }
+
+    public static synchronized void update() {
+        for (AssetLoadingTask task : storeLoadTasks) {
+            if (task.readyToCreate())  {
+                storeCompletedLoadTasks.add(task);
+                storeCreateTasks.add(task);
+            }
+        }
+        storeLoadTasks.removeAll(storeCompletedLoadTasks);
+
+        for (AssetDescriptor descriptor : storeLoadQueue) {
+            AssetLoadingTask task = new AssetLoadingTask(descriptor);
+            task.loader.beforeLoad(descriptor.filepath, descriptor.options);
+            storeLoadTasks.add(task);
             AsyncTaskRunner.async(task);
         }
         storeLoadQueue.clear();
@@ -83,6 +138,27 @@ public final class Assets {
 
     public static synchronized boolean isLoaded(final String path) {
         return store.get(path) != null;
+    }
+
+    // for bitmap fonts
+    public static void loadFont(final String filepath) {
+        load(Font.class, filepath, null,false);
+    }
+
+    // TODO: test
+    // for loading .ttf etc
+    public static void loadFont(final String filepath, int size, boolean antialiasing, @Nullable String charset) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("size", size);
+        options.put("antialiasing", antialiasing);
+        options.put("charset", charset);
+        options.put("originalPath", filepath);
+
+        options.put("anisotropy", 0);
+        options.put("magFilter", Texture.FilterMag.LINEAR);
+        options.put("minFilter", Texture.FilterMin.NEAREST);
+
+        load(Font.class, filepath, options,false);
     }
 
     public static void loadTexturePack(final String filepath) {
@@ -156,7 +232,7 @@ public final class Assets {
 
     public static synchronized void finishLoading() {
         while (isLoadingInProgress()) {
-            update();
+            update2();
             Thread.yield();
         }
     }
@@ -170,7 +246,7 @@ public final class Assets {
     }
 
     public static boolean isLoadingInProgress() {
-        return !storeLoadQueue.isEmpty() || !storeBackgroundTasks.isEmpty() || !storeCreateTasks.isEmpty();
+        return !storeLoadQueue.isEmpty() || !storeLoadTasks.isEmpty() || !storeCreateTasks.isEmpty();
     }
 
     static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {
@@ -224,7 +300,7 @@ public final class Assets {
                 builder.append('\n');
             }
         } catch (IOException e) {
-            throw new AssetsException("Failed to read " + String.class.getSimpleName() + " contents of file: " + path);
+            throw new AssetsException("Failed to read " + String.class.getSimpleName() + " contents of file: " + path + ": " + e.getMessage());
         }
         return builder.toString();
     }
@@ -272,8 +348,8 @@ public final class Assets {
         return file.exists() && file.isFile();
     }
 
-    public static boolean directoryExists(final String dirpath) {
-        File directory = new File(dirpath);
+    public static boolean directoryExists(final String path) {
+        File directory = new File(path);
         return directory.exists() && directory.isDirectory();
     }
 

@@ -3,8 +3,10 @@ package com.heavybox.jtix.assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.tools.ToolsFontGenerator;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +20,43 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     private Array<AssetDescriptor> dependencies;
     private Map<String, Object>    data;
 
+    // TODO: possible generate fonts here.
     @Override
     public void beforeLoad(String path, HashMap<String, Object> options) {
-        if (!Assets.fileExists(path)) throw new AssetsException("File does not exist: " + path);
+        System.out.println("before load font");
+
+        if (options == null && !Assets.fileExists(path)) throw new AssetsException("File does not exist: " + path); // trying to load a bitmap font that does not exist
+
+        if (options != null) {
+            String originalFilepath = (String) options.get("originalPath");
+            if (!Assets.fileExists(originalFilepath)) throw new AssetsException("File does not exist: " + path); // trying to CREATE a bitmap font from a .ttf file that does not exist
+
+            String filename = Paths.get(originalFilepath).getFileName().toString();
+            String filenameNoExtension = Assets.removeExtension(filename);
+
+            int size = (int) options.get("size");
+            boolean antialiasing = (boolean) options.get("antialiasing");
+            String charset = (String) options.get("charset");
+
+            Path font = Paths.get(path);
+            Path directory = font.getParent();
+            String newFile = filenameNoExtension + "-" + size + ".yml";
+            String newFilepath = directory.resolve(newFile).toString();
+            options.put("newFilepath", newFilepath);
+
+            ToolsFontGenerator.generateFontBitmap(originalFilepath, size, antialiasing, charset);
+        }
     }
 
     @Override
     public Array<AssetDescriptor> load(final String path, @Nullable final HashMap<String, Object> options) {
-        String yaml = Assets.getFileContent(path);
+        String contentPath;
+        if (options == null) {
+            contentPath = path;
+        } else {
+            contentPath = (String) options.get("newFilepath");
+        }
+        String yaml = Assets.getFileContent(contentPath);
         data = Assets.yaml().load(yaml);
 
         Map<String, Object> meta = (Map<String, Object>) data.get("meta");
@@ -40,7 +71,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     }
 
     @Override
-    public Font create() {
+    public Font afterLoad() {
         String path = dependencies.first().filepath;
         Map<String, Object> options = (Map<String, Object>) data.get("options");
         Texture atlas = Assets.get(path);
@@ -52,12 +83,13 @@ public class AssetLoaderFont implements AssetLoader<Font> {
         List<Map<String, Object>> glyphsData = (List<Map<String, Object>>) data.get("glyphs");
         // Loop through the list of glyphs and print their data
         for (Map<String, Object> glyphData : glyphsData) {
-            float advanceX = (float) glyphData.get("advanceX");
-            float advanceY = (float) glyphData.get("advanceY");
+
+            float advanceX = ((Double) glyphData.get("advanceX")).floatValue();
+            float advanceY = ((Double) glyphData.get("advanceY")).floatValue();
             int atlasX = (int) glyphData.get("atlasX");
             int atlasY = (int) glyphData.get("atlasY");
-            float bearingX = (float) glyphData.get("bearingX");
-            float bearingY = (float) glyphData.get("bearingY");
+            float bearingX = ((Double) glyphData.get("bearingX")).floatValue();
+            float bearingY = ((Double) glyphData.get("bearingY")).floatValue();
             int character = (int) glyphData.get("character");
             int height = (int) glyphData.get("height");
             int width = (int) glyphData.get("width");

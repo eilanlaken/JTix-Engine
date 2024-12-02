@@ -14,7 +14,7 @@ public class Main {
 
 
         try {
-            ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
+            //ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
         } catch (Exception e) {
 
         }
@@ -59,7 +59,7 @@ public class Main {
 
         //if (true) return;
         Application.init(); // can init with options.
-        Application.launch(new SceneTest_3());
+        Application.launch(new SceneTest_Fonts_1());
 
     }
 

@@ -29,7 +29,7 @@ public class AssetLoaderShader implements AssetLoader<Shader> {
     }
 
     @Override
-    public Shader create() {
+    public Shader afterLoad() {
         return new Shader(vertexShaderSrcCode, fragmentShaderSrcCode);
     }
 

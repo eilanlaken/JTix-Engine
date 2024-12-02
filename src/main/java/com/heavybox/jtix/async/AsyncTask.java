@@ -50,7 +50,7 @@ public abstract class AsyncTask implements MemoryPool.Reset {
     public final boolean isComplete() {
         return complete;
     }
-    public final boolean isInProgress() { return inProgress; }
+    public final boolean inProgress() { return inProgress; }
 
     @Override
     public void reset() {

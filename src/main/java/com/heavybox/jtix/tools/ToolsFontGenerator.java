@@ -36,6 +36,7 @@ public final class ToolsFontGenerator {
     }
 
     private synchronized static void generateFontBitmap(final String directory, final String outputName, final String fontPath, int size, boolean antialiasing, @Nullable String charset) {
+        /* if already generated bitmap font using input parameters, pass. */
         if (alreadyGenerated(directory, outputName, fontPath, size, antialiasing, charset)) return;
 
         /* init font library */
@@ -154,11 +155,11 @@ public final class ToolsFontGenerator {
             x += data.width + padding;
             if (x > estimatedWidth) {
                 x = 0;
-                y += size * heightAdjustment;
-                atlasHeight += size * heightAdjustment;
+                y += (int) (size * heightAdjustment);
+                atlasHeight += (int) (size * heightAdjustment);
             }
         }
-        atlasHeight += size * heightAdjustment;
+        atlasHeight += (int) (size * heightAdjustment);
         atlasWidth = MathUtils.nextPowerOf2f(atlasWidth);
         atlasHeight = MathUtils.nextPowerOf2f(atlasHeight);
 

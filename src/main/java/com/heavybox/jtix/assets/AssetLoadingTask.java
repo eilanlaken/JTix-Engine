@@ -27,14 +27,14 @@ public class AssetLoadingTask extends AsyncTask {
         for (AssetDescriptor dependency : dependencies) Assets.load(dependency.type, dependency.filepath, dependency.options,true);
     }
 
-    boolean ready() {
+    boolean readyToCreate() {
         if (!isComplete()) return false;
         if (dependencies == null || dependencies.size == 0) return true;
         return Assets.areLoaded(dependencies);
     }
 
     Asset create() {
-        final MemoryResource data = loader.create();
+        final MemoryResource data = loader.afterLoad();
         final Array<Asset> assetDependencies = Assets.getDependencies(dependencies);
         return new Asset(data, descriptor, assetDependencies);
     }

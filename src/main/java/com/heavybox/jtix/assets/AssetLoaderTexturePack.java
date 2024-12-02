@@ -41,7 +41,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
     }
 
     @Override
-    public TexturePack create() {
+    public TexturePack afterLoad() {
         /* get Textures */
         Texture[] textures = new Texture[dependencies.size];
         for (int i = 0; i < textures.length; i++) {

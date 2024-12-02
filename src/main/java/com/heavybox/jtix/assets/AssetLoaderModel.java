@@ -135,7 +135,7 @@ import java.util.Map;
     // TODO: use ModelBuilder for this part.
     // TODO: use interleaved vertices.
     @Override
-    public Model create() {
+    public Model afterLoad() {
         ModelPart[] parts = new ModelPart[partsData.length];
         for (int i = 0; i < parts.length; i++) {
             // create material

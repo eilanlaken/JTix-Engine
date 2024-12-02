@@ -25,6 +25,8 @@ public class AsyncTaskRunner {
     }
 
     public static <T extends AsyncTask> Thread async(T task) {
+        //if (task.inProgress || task.complete) return null; // TODO: consider
+
         if (task.prerequisites != null && !task.prerequisites.isEmpty()) {
             List<Thread> pThreads = new ArrayList<>();
             for (AsyncTask prerequisite : task.prerequisites) {

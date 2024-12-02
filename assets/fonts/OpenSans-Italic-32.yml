@@ -4,51 +4,51 @@ meta:
 options:
   charset: null
   size: 32
-  antialiasing: true
+  antialiasing: false
 glyphs:
 - advanceX: 8.0
   advanceY: 0.0
   atlasX: 0
   atlasY: 35
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 32
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 2
+  atlasX: 3
   atlasY: 35
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 33
   height: 23
   kernings: {}
-  width: 9
+  width: 8
 - advanceX: 12.0
   advanceY: 0.0
   atlasX: 13
   atlasY: 35
-  bearingX: 3.0
+  bearingX: 4.0
   bearingY: 23.0
   character: 34
   height: 8
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 26
+  atlasX: 24
   atlasY: 35
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 35
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 49
+  atlasX: 46
   atlasY: 35
   bearingX: 1.0
   bearingY: 24.0
@@ -58,37 +58,37 @@ glyphs:
   width: 16
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 67
+  atlasX: 64
   atlasY: 35
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 37
   height: 23
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 91
+  atlasX: 87
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 38
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 7.0
   advanceY: 0.0
-  atlasX: 113
+  atlasX: 108
   atlasY: 35
-  bearingX: 3.0
+  bearingX: 4.0
   bearingY: 23.0
   character: 39
   height: 8
   kernings: {}
-  width: 5
+  width: 4
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 120
+  atlasX: 114
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -98,7 +98,7 @@ glyphs:
   width: 11
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 133
+  atlasX: 127
   atlasY: 35
   bearingX: -3.0
   bearingY: 23.0
@@ -108,27 +108,27 @@ glyphs:
   width: 11
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 146
+  atlasX: 140
   atlasY: 35
   bearingX: 3.0
   bearingY: 24.0
   character: 42
   height: 15
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 164
+  atlasX: 157
   atlasY: 35
-  bearingX: 1.0
-  bearingY: 19.0
+  bearingX: 2.0
+  bearingY: 18.0
   character: 43
-  height: 16
+  height: 14
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 182
+  atlasX: 173
   atlasY: 35
   bearingX: -2.0
   bearingY: 4.0
@@ -138,57 +138,57 @@ glyphs:
   width: 7
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 191
+  atlasX: 182
   atlasY: 35
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 10.0
   character: 45
-  height: 3
+  height: 2
   kernings: {}
-  width: 9
+  width: 8
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 202
+  atlasX: 192
   atlasY: 35
-  bearingX: 0.0
-  bearingY: 5.0
+  bearingX: 1.0
+  bearingY: 4.0
   character: 46
-  height: 5
+  height: 4
   kernings: {}
-  width: 5
+  width: 4
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 209
+  atlasX: 198
   atlasY: 35
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 47
   height: 23
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 227
+  atlasX: 215
   atlasY: 35
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 48
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 246
+  atlasX: 232
   atlasY: 35
-  bearingX: 4.0
+  bearingX: 5.0
   bearingY: 23.0
   character: 49
   height: 23
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 259
+  atlasX: 243
   atlasY: 35
   bearingX: 0.0
   bearingY: 23.0
@@ -198,157 +198,157 @@ glyphs:
   width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 278
+  atlasX: 262
   atlasY: 35
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 51
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 297
+  atlasX: 280
   atlasY: 35
   bearingX: 0.0
   bearingY: 23.0
   character: 52
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 317
+  atlasX: 299
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 53
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 336
+  atlasX: 317
   atlasY: 35
   bearingX: 2.0
   bearingY: 23.0
   character: 54
   height: 23
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 354
+  atlasX: 334
   atlasY: 35
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 55
   height: 23
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 372
+  atlasX: 351
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 56
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 391
+  atlasX: 369
   atlasY: 35
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 57
   height: 23
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 409
+  atlasX: 386
   atlasY: 35
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 58
   height: 17
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 419
+  atlasX: 394
   atlasY: 35
   bearingX: -2.0
   bearingY: 17.0
   character: 59
   height: 21
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 431
+  atlasX: 405
   atlasY: 35
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 19.0
   character: 60
   height: 15
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 449
+  atlasX: 421
   atlasY: 35
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 16.0
   character: 61
   height: 9
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 467
+  atlasX: 437
   atlasY: 35
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 19.0
   character: 62
   height: 15
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 485
+  atlasX: 453
   atlasY: 35
   bearingX: 2.0
   bearingY: 23.0
   character: 63
   height: 23
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 500
+  atlasX: 467
   atlasY: 35
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 64
   height: 26
   kernings: {}
-  width: 26
+  width: 24
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 528
+  atlasX: 493
   atlasY: 35
   bearingX: -2.0
   bearingY: 23.0
   character: 65
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 549
+  atlasX: 513
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -358,27 +358,27 @@ glyphs:
   width: 18
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 569
+  atlasX: 533
   atlasY: 35
   bearingX: 2.0
   bearingY: 23.0
   character: 67
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 590
+  atlasX: 553
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 68
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 612
+  atlasX: 574
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -388,7 +388,7 @@ glyphs:
   width: 17
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 631
+  atlasX: 593
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -398,17 +398,17 @@ glyphs:
   width: 17
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 650
+  atlasX: 612
   atlasY: 35
   bearingX: 2.0
   bearingY: 23.0
   character: 71
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 672
+  atlasX: 633
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -418,7 +418,7 @@ glyphs:
   width: 21
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 695
+  atlasX: 656
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -428,7 +428,7 @@ glyphs:
   width: 8
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 705
+  atlasX: 666
   atlasY: 35
   bearingX: -5.0
   bearingY: 23.0
@@ -438,7 +438,7 @@ glyphs:
   width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 721
+  atlasX: 682
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -448,17 +448,17 @@ glyphs:
   width: 20
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 743
+  atlasX: 704
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 76
   height: 23
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 758
+  atlasX: 718
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -468,7 +468,7 @@ glyphs:
   width: 26
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 786
+  atlasX: 746
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
@@ -478,337 +478,337 @@ glyphs:
   width: 22
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 810
+  atlasX: 770
   atlasY: 35
   bearingX: 2.0
   bearingY: 23.0
   character: 79
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 833
+  atlasX: 792
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 80
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 853
+  atlasX: 811
   atlasY: 35
   bearingX: 2.0
   bearingY: 23.0
   character: 81
   height: 28
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 876
+  atlasX: 833
   atlasY: 35
   bearingX: 1.0
   bearingY: 23.0
   character: 82
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 896
+  atlasX: 852
   atlasY: 35
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 83
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 915
+  atlasX: 870
   atlasY: 35
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 84
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 70
-  bearingX: 2.0
+  atlasX: 888
+  atlasY: 35
+  bearingX: 3.0
   bearingY: 23.0
   character: 85
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 22
-  atlasY: 70
-  bearingX: 2.0
+  atlasX: 909
+  atlasY: 35
+  bearingX: 3.0
   bearingY: 23.0
   character: 86
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 43
-  atlasY: 70
+  atlasX: 928
+  atlasY: 35
   bearingX: 3.0
   bearingY: 23.0
   character: 87
   height: 23
   kernings: {}
-  width: 28
+  width: 27
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 73
+  atlasX: 0
   atlasY: 70
   bearingX: -2.0
   bearingY: 23.0
   character: 88
   height: 23
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 97
+  atlasX: 23
   atlasY: 70
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 89
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 117
+  atlasX: 41
   atlasY: 70
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 90
   height: 23
   kernings: {}
-  width: 20
+  width: 18
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 139
+  atlasX: 61
   atlasY: 70
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 91
   height: 28
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 154
+  atlasX: 75
   atlasY: 70
   bearingX: 3.0
   bearingY: 23.0
   character: 92
   height: 23
   kernings: {}
-  width: 7
+  width: 6
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 163
+  atlasX: 83
   atlasY: 70
-  bearingX: -3.0
+  bearingX: -2.0
   bearingY: 23.0
   character: 93
   height: 28
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 178
+  atlasX: 97
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 94
   height: 14
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 197
+  atlasX: 114
   atlasY: 70
   bearingX: -3.0
   bearingY: -3.0
   character: 95
-  height: 3
+  height: 2
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 213
+  atlasX: 129
   atlasY: 70
-  bearingX: 8.0
+  bearingX: 9.0
   bearingY: 24.0
   character: 96
   height: 5
   kernings: {}
-  width: 7
+  width: 5
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 222
+  atlasX: 136
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 97
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 241
+  atlasX: 154
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 98
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 260
+  atlasX: 172
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 99
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 276
+  atlasX: 187
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 100
   height: 24
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 297
+  atlasX: 206
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 101
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 313
+  atlasX: 221
   atlasY: 70
   bearingX: -4.0
   bearingY: 24.0
   character: 102
   height: 32
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 334
+  atlasX: 241
   atlasY: 70
   bearingX: -2.0
   bearingY: 17.0
   character: 103
   height: 25
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 356
+  atlasX: 262
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 104
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 375
+  atlasX: 280
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 105
   height: 23
   kernings: {}
-  width: 9
+  width: 7
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 386
+  atlasX: 289
   atlasY: 70
-  bearingX: -5.0
+  bearingX: -4.0
   bearingY: 23.0
   character: 106
   height: 31
   kernings: {}
-  width: 14
+  width: 12
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 402
+  atlasX: 303
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 107
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 421
+  atlasX: 321
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 108
   height: 24
   kernings: {}
-  width: 9
+  width: 8
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 432
+  atlasX: 331
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 109
   height: 17
   kernings: {}
-  width: 27
+  width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 461
-  atlasY: 70
-  bearingX: 0.0
-  bearingY: 17.0
-  character: 110
-  height: 17
-  kernings: {}
-  width: 17
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 480
+  atlasX: 358
   atlasY: 70
   bearingX: 1.0
   bearingY: 17.0
-  character: 111
+  character: 110
   height: 17
   kernings: {}
   width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 498
+  atlasX: 376
+  atlasY: 70
+  bearingX: 2.0
+  bearingY: 17.0
+  character: 111
+  height: 17
+  kernings: {}
+  width: 14
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 392
   atlasY: 70
   bearingX: -1.0
   bearingY: 17.0
@@ -818,107 +818,107 @@ glyphs:
   width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 518
+  atlasX: 412
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 113
   height: 25
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 537
+  atlasX: 430
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 114
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 553
+  atlasX: 445
   atlasY: 70
   bearingX: 0.0
   bearingY: 17.0
   character: 115
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 569
+  atlasX: 460
   atlasY: 70
   bearingX: 1.0
   bearingY: 21.0
   character: 116
   height: 21
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 582
+  atlasX: 472
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 117
+  height: 17
+  kernings: {}
+  width: 15
+- advanceX: 15.0
+  advanceY: 0.0
+  atlasX: 489
+  atlasY: 70
+  bearingX: 2.0
+  bearingY: 17.0
+  character: 118
+  height: 17
+  kernings: {}
+  width: 14
+- advanceX: 23.0
+  advanceY: 0.0
+  atlasX: 505
+  atlasY: 70
+  bearingX: 2.0
+  bearingY: 17.0
+  character: 119
+  height: 17
+  kernings: {}
+  width: 22
+- advanceX: 15.0
+  advanceY: 0.0
+  atlasX: 529
+  atlasY: 70
+  bearingX: -1.0
+  bearingY: 17.0
+  character: 120
   height: 17
   kernings: {}
   width: 17
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 601
+  atlasX: 548
   atlasY: 70
-  bearingX: 1.0
-  bearingY: 17.0
-  character: 118
-  height: 17
-  kernings: {}
-  width: 16
-- advanceX: 23.0
-  advanceY: 0.0
-  atlasX: 619
-  atlasY: 70
-  bearingX: 1.0
-  bearingY: 17.0
-  character: 119
-  height: 17
-  kernings: {}
-  width: 24
-- advanceX: 15.0
-  advanceY: 0.0
-  atlasX: 645
-  atlasY: 70
-  bearingX: -2.0
-  bearingY: 17.0
-  character: 120
-  height: 17
-  kernings: {}
-  width: 19
-- advanceX: 15.0
-  advanceY: 0.0
-  atlasX: 666
-  atlasY: 70
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 17.0
   character: 121
   height: 25
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 689
+  atlasX: 569
   atlasY: 70
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 17.0
   character: 122
   height: 17
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 706
+  atlasX: 585
   atlasY: 70
   bearingX: 0.0
   bearingY: 23.0
@@ -928,7 +928,7 @@ glyphs:
   width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 721
+  atlasX: 600
   atlasY: 70
   bearingX: 8.0
   bearingY: 24.0
@@ -938,87 +938,87 @@ glyphs:
   width: 3
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 726
+  atlasX: 605
   atlasY: 70
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 125
   height: 28
   kernings: {}
-  width: 14
+  width: 12
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 742
+  atlasX: 619
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 13.0
   character: 126
   height: 4
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 760
+  atlasX: 636
   atlasY: 70
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 160
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 762
+  atlasX: 639
   atlasY: 70
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 17.0
   character: 161
   height: 23
   kernings: {}
-  width: 9
+  width: 8
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 773
+  atlasX: 649
   atlasY: 70
-  bearingX: 3.0
+  bearingX: 4.0
   bearingY: 23.0
   character: 162
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 789
+  atlasX: 664
   atlasY: 70
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 163
   height: 23
   kernings: {}
-  width: 20
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 811
+  atlasX: 684
   atlasY: 70
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 18.0
   character: 164
-  height: 15
+  height: 14
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 828
+  atlasX: 699
   atlasY: 70
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 165
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 849
+  atlasX: 719
   atlasY: 70
   bearingX: 8.0
   bearingY: 24.0
@@ -1028,17 +1028,17 @@ glyphs:
   width: 3
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 854
+  atlasX: 724
   atlasY: 70
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 167
   height: 24
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 872
+  atlasX: 741
   atlasY: 70
   bearingX: 7.0
   bearingY: 23.0
@@ -1048,7 +1048,7 @@ glyphs:
   width: 9
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 883
+  atlasX: 752
   atlasY: 70
   bearingX: 2.0
   bearingY: 23.0
@@ -1058,17 +1058,17 @@ glyphs:
   width: 24
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 909
+  atlasX: 778
   atlasY: 70
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 170
   height: 11
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 922
+  atlasX: 789
   atlasY: 70
   bearingX: 1.0
   bearingY: 15.0
@@ -1078,28 +1078,28 @@ glyphs:
   width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 105
-  bearingX: 1.0
+  atlasX: 805
+  atlasY: 70
+  bearingX: 2.0
   bearingY: 12.0
   character: 172
   height: 8
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 18
-  atlasY: 105
-  bearingX: 0.0
+  atlasX: 821
+  atlasY: 70
+  bearingX: 1.0
   bearingY: 10.0
   character: 173
-  height: 3
+  height: 2
   kernings: {}
-  width: 9
+  width: 8
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 29
-  atlasY: 105
+  atlasX: 831
+  atlasY: 70
   bearingX: 2.0
   bearingY: 23.0
   character: 174
@@ -1108,38 +1108,38 @@ glyphs:
   width: 24
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 55
-  atlasY: 105
-  bearingX: 3.0
+  atlasX: 857
+  atlasY: 70
+  bearingX: 4.0
   bearingY: 26.0
   character: 175
-  height: 3
+  height: 2
   kernings: {}
-  width: 14
+  width: 12
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 71
-  atlasY: 105
+  atlasX: 871
+  atlasY: 70
   bearingX: 3.0
   bearingY: 23.0
   character: 176
   height: 10
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 84
-  atlasY: 105
-  bearingX: 1.0
+  atlasX: 883
+  atlasY: 70
+  bearingX: 2.0
   bearingY: 18.0
   character: 177
   height: 18
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 102
-  atlasY: 105
+  atlasX: 899
+  atlasY: 70
   bearingX: 1.0
   bearingY: 23.0
   character: 178
@@ -1148,18 +1148,18 @@ glyphs:
   width: 11
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 115
-  atlasY: 105
-  bearingX: 1.0
+  atlasX: 912
+  atlasY: 70
+  bearingX: 2.0
   bearingY: 23.0
   character: 179
   height: 14
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 128
-  atlasY: 105
+  atlasX: 924
+  atlasY: 70
   bearingX: 8.0
   bearingY: 24.0
   character: 180
@@ -1168,7 +1168,7 @@ glyphs:
   width: 7
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 137
+  atlasX: 0
   atlasY: 105
   bearingX: -1.0
   bearingY: 17.0
@@ -1178,7 +1178,7 @@ glyphs:
   width: 19
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 158
+  atlasX: 21
   atlasY: 105
   bearingX: 3.0
   bearingY: 24.0
@@ -1188,47 +1188,47 @@ glyphs:
   width: 16
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 176
+  atlasX: 39
   atlasY: 105
-  bearingX: 2.0
-  bearingY: 15.0
+  bearingX: 3.0
+  bearingY: 14.0
   character: 183
-  height: 5
+  height: 4
   kernings: {}
-  width: 5
+  width: 4
 - advanceX: 7.0
   advanceY: 0.0
-  atlasX: 183
+  atlasX: 45
   atlasY: 105
   bearingX: -3.0
   bearingY: 0.0
   character: 184
   height: 8
   kernings: {}
-  width: 7
+  width: 6
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 192
+  atlasX: 53
   atlasY: 105
   bearingX: 4.0
   bearingY: 23.0
   character: 185
   height: 14
   kernings: {}
-  width: 7
+  width: 6
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 201
+  atlasX: 61
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 186
   height: 11
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 213
+  atlasX: 72
   atlasY: 105
   bearingX: 0.0
   bearingY: 15.0
@@ -1238,17 +1238,17 @@ glyphs:
   width: 14
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 229
+  atlasX: 88
   atlasY: 105
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 188
   height: 23
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 252
+  atlasX: 109
   atlasY: 105
   bearingX: 1.0
   bearingY: 23.0
@@ -1258,7 +1258,7 @@ glyphs:
   width: 22
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 276
+  atlasX: 133
   atlasY: 105
   bearingX: 1.0
   bearingY: 23.0
@@ -1268,37 +1268,37 @@ glyphs:
   width: 23
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 301
+  atlasX: 158
   atlasY: 105
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 17.0
   character: 191
   height: 23
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 316
+  atlasX: 172
   atlasY: 105
   bearingX: -2.0
   bearingY: 30.0
   character: 192
   height: 30
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 337
+  atlasX: 192
   atlasY: 105
   bearingX: -2.0
   bearingY: 30.0
   character: 193
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 359
+  atlasX: 213
   atlasY: 105
   bearingX: -2.0
   bearingY: 30.0
@@ -1308,17 +1308,17 @@ glyphs:
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 380
+  atlasX: 234
   atlasY: 105
   bearingX: -2.0
   bearingY: 29.0
   character: 195
   height: 29
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 403
+  atlasX: 256
   atlasY: 105
   bearingX: -2.0
   bearingY: 28.0
@@ -1328,37 +1328,37 @@ glyphs:
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 424
+  atlasX: 277
   atlasY: 105
   bearingX: -2.0
   bearingY: 28.0
   character: 197
   height: 28
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 445
+  atlasX: 297
   atlasY: 105
   bearingX: -2.0
   bearingY: 23.0
   character: 198
   height: 23
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 477
+  atlasX: 328
   atlasY: 105
   bearingX: 2.0
   bearingY: 23.0
   character: 199
   height: 31
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 498
+  atlasX: 348
   atlasY: 105
   bearingX: 1.0
   bearingY: 30.0
@@ -1368,7 +1368,7 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 517
+  atlasX: 367
   atlasY: 105
   bearingX: 1.0
   bearingY: 30.0
@@ -1378,7 +1378,7 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 536
+  atlasX: 386
   atlasY: 105
   bearingX: 1.0
   bearingY: 30.0
@@ -1388,7 +1388,7 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 555
+  atlasX: 405
   atlasY: 105
   bearingX: 1.0
   bearingY: 28.0
@@ -1398,27 +1398,27 @@ glyphs:
   width: 17
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 574
+  atlasX: 424
   atlasY: 105
   bearingX: 1.0
   bearingY: 30.0
   character: 204
   height: 30
   kernings: {}
-  width: 9
+  width: 8
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 585
+  atlasX: 434
   atlasY: 105
   bearingX: 1.0
   bearingY: 30.0
   character: 205
   height: 30
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 600
+  atlasX: 448
   atlasY: 105
   bearingX: 1.0
   bearingY: 30.0
@@ -1428,7 +1428,7 @@ glyphs:
   width: 12
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 614
+  atlasX: 462
   atlasY: 105
   bearingX: 1.0
   bearingY: 28.0
@@ -1438,17 +1438,17 @@ glyphs:
   width: 12
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 628
+  atlasX: 476
   atlasY: 105
   bearingX: 1.0
   bearingY: 23.0
   character: 208
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 650
+  atlasX: 497
   atlasY: 105
   bearingX: 1.0
   bearingY: 29.0
@@ -1458,307 +1458,307 @@ glyphs:
   width: 22
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 674
+  atlasX: 521
   atlasY: 105
   bearingX: 2.0
   bearingY: 30.0
   character: 210
   height: 30
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 697
+  atlasX: 543
   atlasY: 105
   bearingX: 2.0
   bearingY: 30.0
   character: 211
   height: 30
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 720
+  atlasX: 565
   atlasY: 105
   bearingX: 2.0
   bearingY: 30.0
   character: 212
   height: 30
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 743
+  atlasX: 587
   atlasY: 105
   bearingX: 2.0
   bearingY: 29.0
   character: 213
   height: 29
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 766
+  atlasX: 609
   atlasY: 105
   bearingX: 2.0
   bearingY: 28.0
   character: 214
   height: 28
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 789
+  atlasX: 631
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 18.0
   character: 215
   height: 13
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 805
+  atlasX: 646
   atlasY: 105
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 216
   height: 25
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 829
+  atlasX: 669
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 30.0
   character: 217
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 851
+  atlasX: 690
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 30.0
   character: 218
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 873
+  atlasX: 711
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 30.0
   character: 219
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 895
+  atlasX: 732
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 28.0
   character: 220
   height: 28
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 917
+  atlasX: 753
   atlasY: 105
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 30.0
   character: 221
   height: 30
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 140
+  atlasX: 771
+  atlasY: 105
   bearingX: 1.0
   bearingY: 23.0
   character: 222
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 19
-  atlasY: 140
+  atlasX: 789
+  atlasY: 105
   bearingX: -4.0
   bearingY: 24.0
   character: 223
   height: 32
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 43
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 812
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 24.0
   character: 224
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 62
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 830
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 24.0
   character: 225
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 81
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 848
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 24.0
   character: 226
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 100
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 866
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 23.0
   character: 227
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 119
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 884
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 23.0
   character: 228
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 138
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 902
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 26.0
   character: 229
   height: 26
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 157
-  atlasY: 140
-  bearingX: 1.0
+  atlasX: 920
+  atlasY: 105
+  bearingX: 2.0
   bearingY: 17.0
   character: 230
   height: 17
   kernings: {}
-  width: 25
+  width: 23
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 184
+  atlasX: 0
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 231
   height: 25
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 200
+  atlasX: 15
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 232
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 216
+  atlasX: 30
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 233
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 233
+  atlasX: 46
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 234
   height: 24
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 250
+  atlasX: 61
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 235
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 266
+  atlasX: 76
   atlasY: 140
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 236
   height: 24
   kernings: {}
-  width: 8
+  width: 7
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 276
+  atlasX: 85
   atlasY: 140
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 237
   height: 24
   kernings: {}
-  width: 12
+  width: 11
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 290
+  atlasX: 98
   atlasY: 140
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 238
   height: 24
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 304
+  atlasX: 110
   atlasY: 140
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 239
   height: 23
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 318
+  atlasX: 122
   atlasY: 140
   bearingX: 1.0
   bearingY: 24.0
@@ -1768,137 +1768,137 @@ glyphs:
   width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 337
+  atlasX: 141
   atlasY: 140
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 241
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 357
+  atlasX: 159
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 242
   height: 24
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 375
+  atlasX: 175
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 243
   height: 24
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 393
+  atlasX: 191
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 244
   height: 24
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 411
+  atlasX: 207
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 245
   height: 23
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 429
+  atlasX: 224
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 246
   height: 23
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 447
+  atlasX: 240
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 19.0
   character: 247
   height: 15
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 465
+  atlasX: 256
   atlasY: 140
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 18.0
   character: 248
   height: 19
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 485
+  atlasX: 274
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 249
   height: 24
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 504
+  atlasX: 291
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 250
   height: 24
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 523
+  atlasX: 308
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 251
   height: 24
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 542
+  atlasX: 325
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 252
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 561
+  atlasX: 342
   atlasY: 140
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 24.0
   character: 253
   height: 32
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 584
+  atlasX: 363
   atlasY: 140
   bearingX: -1.0
   bearingY: 24.0
@@ -1908,218 +1908,218 @@ glyphs:
   width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 604
+  atlasX: 383
   atlasY: 140
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 23.0
   character: 255
   height: 31
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 627
+  atlasX: 404
   atlasY: 140
   bearingX: -2.0
-  bearingY: 28.0
+  bearingY: 27.0
   character: 256
-  height: 28
+  height: 27
   kernings: {}
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 648
+  atlasX: 425
   atlasY: 140
-  bearingX: 1.0
-  bearingY: 22.0
+  bearingX: 2.0
+  bearingY: 21.0
   character: 257
-  height: 22
+  height: 21
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 667
+  atlasX: 443
   atlasY: 140
   bearingX: -2.0
   bearingY: 29.0
   character: 258
   height: 29
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 689
+  atlasX: 464
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 259
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 708
+  atlasX: 482
   atlasY: 140
   bearingX: -2.0
   bearingY: 23.0
   character: 260
   height: 30
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 729
+  atlasX: 502
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 261
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 748
+  atlasX: 520
   atlasY: 140
   bearingX: 2.0
   bearingY: 30.0
   character: 262
   height: 30
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 769
+  atlasX: 540
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 263
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 786
+  atlasX: 556
   atlasY: 140
   bearingX: 2.0
   bearingY: 30.0
   character: 264
   height: 30
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 807
+  atlasX: 576
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 265
   height: 24
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 824
+  atlasX: 591
   atlasY: 140
   bearingX: 2.0
   bearingY: 28.0
   character: 266
   height: 28
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 845
+  atlasX: 611
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 267
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 861
+  atlasX: 626
   atlasY: 140
   bearingX: 2.0
   bearingY: 30.0
   character: 268
   height: 30
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 882
+  atlasX: 646
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 269
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 899
+  atlasX: 662
   atlasY: 140
   bearingX: 1.0
   bearingY: 30.0
   character: 270
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 921
+  atlasX: 683
   atlasY: 140
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 271
   height: 24
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 175
+  atlasX: 707
+  atlasY: 140
   bearingX: 1.0
   bearingY: 23.0
   character: 272
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 22
-  atlasY: 175
-  bearingX: 1.0
+  atlasX: 728
+  atlasY: 140
+  bearingX: 2.0
   bearingY: 24.0
   character: 273
   height: 24
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 44
-  atlasY: 175
+  atlasX: 749
+  atlasY: 140
   bearingX: 1.0
-  bearingY: 28.0
+  bearingY: 27.0
   character: 274
-  height: 28
+  height: 27
   kernings: {}
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 63
-  atlasY: 175
-  bearingX: 1.0
-  bearingY: 22.0
+  atlasX: 768
+  atlasY: 140
+  bearingX: 2.0
+  bearingY: 21.0
   character: 275
-  height: 22
+  height: 21
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 80
-  atlasY: 175
+  atlasX: 783
+  atlasY: 140
   bearingX: 1.0
   bearingY: 29.0
   character: 276
@@ -2128,18 +2128,18 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 99
-  atlasY: 175
-  bearingX: 1.0
+  atlasX: 802
+  atlasY: 140
+  bearingX: 2.0
   bearingY: 23.0
   character: 277
   height: 23
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 116
-  atlasY: 175
+  atlasX: 818
+  atlasY: 140
   bearingX: 1.0
   bearingY: 28.0
   character: 278
@@ -2148,18 +2148,18 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 135
-  atlasY: 175
-  bearingX: 1.0
+  atlasX: 837
+  atlasY: 140
+  bearingX: 2.0
   bearingY: 23.0
   character: 279
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 151
-  atlasY: 175
+  atlasX: 852
+  atlasY: 140
   bearingX: 1.0
   bearingY: 23.0
   character: 280
@@ -2168,18 +2168,18 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 170
-  atlasY: 175
-  bearingX: 1.0
+  atlasX: 871
+  atlasY: 140
+  bearingX: 2.0
   bearingY: 17.0
   character: 281
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 186
-  atlasY: 175
+  atlasX: 886
+  atlasY: 140
   bearingX: 1.0
   bearingY: 30.0
   character: 282
@@ -2188,97 +2188,97 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 205
-  atlasY: 175
-  bearingX: 1.0
+  atlasX: 905
+  atlasY: 140
+  bearingX: 2.0
   bearingY: 24.0
   character: 283
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 222
-  atlasY: 175
+  atlasX: 921
+  atlasY: 140
   bearingX: 2.0
   bearingY: 30.0
   character: 284
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 244
+  atlasX: 0
   atlasY: 175
   bearingX: -2.0
   bearingY: 24.0
   character: 285
   height: 32
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 266
+  atlasX: 21
   atlasY: 175
   bearingX: 2.0
   bearingY: 29.0
   character: 286
   height: 29
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 288
+  atlasX: 42
   atlasY: 175
   bearingX: -2.0
   bearingY: 23.0
   character: 287
   height: 31
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 310
+  atlasX: 63
   atlasY: 175
   bearingX: 2.0
   bearingY: 28.0
   character: 288
   height: 28
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 332
+  atlasX: 84
   atlasY: 175
   bearingX: -2.0
   bearingY: 23.0
   character: 289
   height: 31
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 354
+  atlasX: 105
   atlasY: 175
   bearingX: 2.0
   bearingY: 23.0
   character: 290
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 376
+  atlasX: 126
   atlasY: 175
   bearingX: -2.0
   bearingY: 24.0
   character: 291
   height: 32
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 398
+  atlasX: 147
   atlasY: 175
   bearingX: 1.0
   bearingY: 30.0
@@ -2288,17 +2288,17 @@ glyphs:
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 421
+  atlasX: 170
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 30.0
   character: 293
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 440
+  atlasX: 188
   atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
@@ -2308,17 +2308,17 @@ glyphs:
   width: 23
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 465
+  atlasX: 213
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 295
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 484
+  atlasX: 231
   atlasY: 175
   bearingX: 1.0
   bearingY: 29.0
@@ -2328,77 +2328,77 @@ glyphs:
   width: 13
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 499
+  atlasX: 246
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 297
   height: 23
   kernings: {}
-  width: 13
-- advanceX: 9.0
-  advanceY: 0.0
-  atlasX: 514
-  atlasY: 175
-  bearingX: 1.0
-  bearingY: 28.0
-  character: 298
-  height: 28
-  kernings: {}
-  width: 12
-- advanceX: 8.0
-  advanceY: 0.0
-  atlasX: 528
-  atlasY: 175
-  bearingX: 0.0
-  bearingY: 22.0
-  character: 299
-  height: 22
-  kernings: {}
   width: 11
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 541
+  atlasX: 259
+  atlasY: 175
+  bearingX: 1.0
+  bearingY: 27.0
+  character: 298
+  height: 27
+  kernings: {}
+  width: 11
+- advanceX: 8.0
+  advanceY: 0.0
+  atlasX: 272
+  atlasY: 175
+  bearingX: 1.0
+  bearingY: 21.0
+  character: 299
+  height: 21
+  kernings: {}
+  width: 10
+- advanceX: 9.0
+  advanceY: 0.0
+  atlasX: 284
   atlasY: 175
   bearingX: 1.0
   bearingY: 29.0
   character: 300
   height: 29
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 556
+  atlasX: 298
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 301
   height: 23
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 570
+  atlasX: 310
   atlasY: 175
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 302
   height: 30
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 583
+  atlasX: 322
   atlasY: 175
   bearingX: -2.0
   bearingY: 23.0
   character: 303
   height: 30
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 596
+  atlasX: 334
   atlasY: 175
   bearingX: 1.0
   bearingY: 28.0
@@ -2408,17 +2408,17 @@ glyphs:
   width: 9
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 607
+  atlasX: 345
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 305
   height: 17
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 617
+  atlasX: 353
   atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
@@ -2428,37 +2428,37 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 636
+  atlasX: 372
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 307
   height: 31
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 655
+  atlasX: 390
   atlasY: 175
   bearingX: -5.0
   bearingY: 30.0
   character: 308
   height: 36
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 675
+  atlasX: 409
   atlasY: 175
-  bearingX: -5.0
+  bearingX: -4.0
   bearingY: 24.0
   character: 309
   height: 32
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 693
+  atlasX: 426
   atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
@@ -2468,57 +2468,57 @@ glyphs:
   width: 20
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 715
+  atlasX: 448
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 311
   height: 31
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 734
+  atlasX: 466
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 312
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 753
+  atlasX: 484
   atlasY: 175
   bearingX: 1.0
   bearingY: 30.0
   character: 313
   height: 30
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 768
+  atlasX: 498
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 30.0
   character: 314
   height: 30
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 783
+  atlasX: 512
   atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
   character: 315
   height: 30
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 798
+  atlasX: 526
   atlasY: 175
   bearingX: -2.0
   bearingY: 24.0
@@ -2528,7 +2528,7 @@ glyphs:
   width: 11
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 811
+  atlasX: 539
   atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
@@ -2538,17 +2538,17 @@ glyphs:
   width: 16
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 829
+  atlasX: 557
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 318
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 845
+  atlasX: 572
   atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
@@ -2558,37 +2558,37 @@ glyphs:
   width: 13
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 860
+  atlasX: 587
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 320
   height: 24
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 873
+  atlasX: 599
   atlasY: 175
   bearingX: 0.0
   bearingY: 23.0
   character: 321
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 889
+  atlasX: 614
   atlasY: 175
   bearingX: 0.0
   bearingY: 24.0
   character: 322
   height: 24
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 901
+  atlasX: 625
   atlasY: 175
   bearingX: 1.0
   bearingY: 30.0
@@ -2598,18 +2598,18 @@ glyphs:
   width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 925
+  atlasX: 649
   atlasY: 175
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 324
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 210
+  atlasX: 667
+  atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
   character: 325
@@ -2618,18 +2618,18 @@ glyphs:
   width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 24
-  atlasY: 210
-  bearingX: 0.0
+  atlasX: 691
+  atlasY: 175
+  bearingX: 1.0
   bearingY: 17.0
   character: 326
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 43
-  atlasY: 210
+  atlasX: 709
+  atlasY: 175
   bearingX: 1.0
   bearingY: 30.0
   character: 327
@@ -2638,18 +2638,18 @@ glyphs:
   width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 67
-  atlasY: 210
-  bearingX: 0.0
+  atlasX: 733
+  atlasY: 175
+  bearingX: 1.0
   bearingY: 24.0
   character: 328
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 86
-  atlasY: 210
+  atlasX: 751
+  atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
   character: 329
@@ -2658,8 +2658,8 @@ glyphs:
   width: 18
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 106
-  atlasY: 210
+  atlasX: 771
+  atlasY: 175
   bearingX: 1.0
   bearingY: 23.0
   character: 330
@@ -2668,78 +2668,78 @@ glyphs:
   width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 130
-  atlasY: 210
-  bearingX: 0.0
+  atlasX: 795
+  atlasY: 175
+  bearingX: 1.0
   bearingY: 17.0
   character: 331
   height: 25
   kernings: {}
-  width: 17
-- advanceX: 23.0
-  advanceY: 0.0
-  atlasX: 149
-  atlasY: 210
-  bearingX: 2.0
-  bearingY: 28.0
-  character: 332
-  height: 28
-  kernings: {}
-  width: 21
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 172
-  atlasY: 210
-  bearingX: 1.0
-  bearingY: 22.0
-  character: 333
-  height: 22
-  kernings: {}
   width: 16
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 190
-  atlasY: 210
+  atlasX: 813
+  atlasY: 175
+  bearingX: 2.0
+  bearingY: 27.0
+  character: 332
+  height: 27
+  kernings: {}
+  width: 20
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 835
+  atlasY: 175
+  bearingX: 2.0
+  bearingY: 21.0
+  character: 333
+  height: 21
+  kernings: {}
+  width: 14
+- advanceX: 23.0
+  advanceY: 0.0
+  atlasX: 851
+  atlasY: 175
   bearingX: 2.0
   bearingY: 29.0
   character: 334
   height: 29
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 213
-  atlasY: 210
-  bearingX: 1.0
+  atlasX: 873
+  atlasY: 175
+  bearingX: 2.0
   bearingY: 23.0
   character: 335
   height: 23
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 231
-  atlasY: 210
+  atlasX: 889
+  atlasY: 175
   bearingX: 2.0
   bearingY: 30.0
   character: 336
   height: 30
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 254
-  atlasY: 210
-  bearingX: 1.0
+  atlasX: 911
+  atlasY: 175
+  bearingX: 2.0
   bearingY: 24.0
   character: 337
   height: 24
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 274
-  atlasY: 210
+  atlasX: 929
+  atlasY: 175
   bearingX: 2.0
   bearingY: 23.0
   character: 338
@@ -2748,47 +2748,47 @@ glyphs:
   width: 27
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 303
+  atlasX: 0
   atlasY: 210
-  bearingX: 1.0
-  bearingY: 18.0
+  bearingX: 2.0
+  bearingY: 17.0
   character: 339
-  height: 19
+  height: 17
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 331
+  atlasX: 27
   atlasY: 210
   bearingX: 1.0
   bearingY: 30.0
   character: 340
   height: 30
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 351
+  atlasX: 46
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 341
   height: 24
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 368
+  atlasX: 61
   atlasY: 210
   bearingX: 1.0
   bearingY: 23.0
   character: 342
   height: 30
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 388
+  atlasX: 80
   atlasY: 210
   bearingX: -2.0
   bearingY: 17.0
@@ -2798,107 +2798,107 @@ glyphs:
   width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 406
+  atlasX: 98
   atlasY: 210
   bearingX: 1.0
   bearingY: 30.0
   character: 344
   height: 30
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 426
+  atlasX: 117
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 345
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 443
+  atlasX: 133
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 30.0
   character: 346
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 462
+  atlasX: 151
   atlasY: 210
   bearingX: 0.0
   bearingY: 24.0
   character: 347
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 479
+  atlasX: 167
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 30.0
   character: 348
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 498
+  atlasX: 185
   atlasY: 210
   bearingX: 0.0
   bearingY: 24.0
   character: 349
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 514
+  atlasX: 200
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 350
   height: 31
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 533
+  atlasX: 218
   atlasY: 210
   bearingX: 0.0
   bearingY: 17.0
   character: 351
   height: 25
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 549
+  atlasX: 233
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 30.0
   character: 352
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 568
+  atlasX: 251
   atlasY: 210
   bearingX: 0.0
   bearingY: 24.0
   character: 353
   height: 24
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 585
+  atlasX: 267
   atlasY: 210
   bearingX: 2.0
   bearingY: 23.0
@@ -2908,27 +2908,27 @@ glyphs:
   width: 17
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 604
+  atlasX: 286
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 21.0
   character: 355
   height: 29
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 618
+  atlasX: 298
   atlasY: 210
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 30.0
   character: 356
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 637
+  atlasX: 316
   atlasY: 210
   bearingX: 1.0
   bearingY: 24.0
@@ -2938,278 +2938,278 @@ glyphs:
   width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 653
+  atlasX: 332
   atlasY: 210
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 358
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 672
+  atlasX: 350
   atlasY: 210
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 21.0
   character: 359
   height: 21
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 686
+  atlasX: 362
   atlasY: 210
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 29.0
   character: 360
   height: 29
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 708
+  atlasX: 383
   atlasY: 210
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 361
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 727
+  atlasX: 401
   atlasY: 210
-  bearingX: 2.0
-  bearingY: 28.0
+  bearingX: 3.0
+  bearingY: 27.0
   character: 362
-  height: 28
+  height: 27
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 749
-  atlasY: 210
-  bearingX: 1.0
-  bearingY: 22.0
-  character: 363
-  height: 22
-  kernings: {}
-  width: 17
-- advanceX: 22.0
-  advanceY: 0.0
-  atlasX: 768
+  atlasX: 422
   atlasY: 210
   bearingX: 2.0
+  bearingY: 21.0
+  character: 363
+  height: 21
+  kernings: {}
+  width: 15
+- advanceX: 22.0
+  advanceY: 0.0
+  atlasX: 439
+  atlasY: 210
+  bearingX: 3.0
   bearingY: 29.0
   character: 364
   height: 29
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 790
+  atlasX: 460
   atlasY: 210
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 365
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 809
+  atlasX: 477
   atlasY: 210
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 32.0
   character: 366
-  height: 32
-  kernings: {}
-  width: 20
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 831
-  atlasY: 210
-  bearingX: 1.0
-  bearingY: 26.0
-  character: 367
-  height: 26
-  kernings: {}
-  width: 17
-- advanceX: 22.0
-  advanceY: 0.0
-  atlasX: 850
-  atlasY: 210
-  bearingX: 2.0
-  bearingY: 30.0
-  character: 368
-  height: 30
-  kernings: {}
-  width: 20
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 872
-  atlasY: 210
-  bearingX: 1.0
-  bearingY: 24.0
-  character: 369
-  height: 24
-  kernings: {}
-  width: 18
-- advanceX: 22.0
-  advanceY: 0.0
-  atlasX: 892
-  atlasY: 210
-  bearingX: 2.0
-  bearingY: 23.0
-  character: 370
-  height: 30
-  kernings: {}
-  width: 20
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 914
-  atlasY: 210
-  bearingX: 1.0
-  bearingY: 17.0
-  character: 371
-  height: 24
-  kernings: {}
-  width: 17
-- advanceX: 27.0
-  advanceY: 0.0
-  atlasX: 0
-  atlasY: 245
-  bearingX: 3.0
-  bearingY: 30.0
-  character: 372
-  height: 30
-  kernings: {}
-  width: 28
-- advanceX: 23.0
-  advanceY: 0.0
-  atlasX: 30
-  atlasY: 245
-  bearingX: 1.0
-  bearingY: 24.0
-  character: 373
-  height: 24
-  kernings: {}
-  width: 24
-- advanceX: 16.0
-  advanceY: 0.0
-  atlasX: 56
-  atlasY: 245
-  bearingX: 2.0
-  bearingY: 30.0
-  character: 374
-  height: 30
-  kernings: {}
-  width: 18
-- advanceX: 15.0
-  advanceY: 0.0
-  atlasX: 76
-  atlasY: 245
-  bearingX: -4.0
-  bearingY: 24.0
-  character: 375
-  height: 32
-  kernings: {}
-  width: 21
-- advanceX: 16.0
-  advanceY: 0.0
-  atlasX: 99
-  atlasY: 245
-  bearingX: 2.0
-  bearingY: 28.0
-  character: 376
-  height: 28
-  kernings: {}
-  width: 18
-- advanceX: 17.0
-  advanceY: 0.0
-  atlasX: 119
-  atlasY: 245
-  bearingX: -1.0
-  bearingY: 30.0
-  character: 377
-  height: 30
-  kernings: {}
-  width: 20
-- advanceX: 14.0
-  advanceY: 0.0
-  atlasX: 141
-  atlasY: 245
-  bearingX: -1.0
-  bearingY: 24.0
-  character: 378
-  height: 24
-  kernings: {}
-  width: 16
-- advanceX: 17.0
-  advanceY: 0.0
-  atlasX: 159
-  atlasY: 245
-  bearingX: -1.0
-  bearingY: 28.0
-  character: 379
-  height: 28
-  kernings: {}
-  width: 20
-- advanceX: 14.0
-  advanceY: 0.0
-  atlasX: 181
-  atlasY: 245
-  bearingX: -1.0
-  bearingY: 23.0
-  character: 380
-  height: 23
-  kernings: {}
-  width: 15
-- advanceX: 17.0
-  advanceY: 0.0
-  atlasX: 198
-  atlasY: 245
-  bearingX: -1.0
-  bearingY: 30.0
-  character: 381
-  height: 30
-  kernings: {}
-  width: 20
-- advanceX: 14.0
-  advanceY: 0.0
-  atlasX: 220
-  atlasY: 245
-  bearingX: -1.0
-  bearingY: 24.0
-  character: 382
-  height: 24
-  kernings: {}
-  width: 16
-- advanceX: 9.0
-  advanceY: 0.0
-  atlasX: 238
-  atlasY: 245
-  bearingX: -5.0
-  bearingY: 24.0
-  character: 383
   height: 32
   kernings: {}
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 259
-  atlasY: 245
+  atlasX: 498
+  atlasY: 210
+  bearingX: 2.0
+  bearingY: 26.0
+  character: 367
+  height: 26
+  kernings: {}
+  width: 15
+- advanceX: 22.0
+  advanceY: 0.0
+  atlasX: 515
+  atlasY: 210
+  bearingX: 3.0
+  bearingY: 30.0
+  character: 368
+  height: 30
+  kernings: {}
+  width: 19
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 536
+  atlasY: 210
+  bearingX: 2.0
+  bearingY: 24.0
+  character: 369
+  height: 24
+  kernings: {}
+  width: 17
+- advanceX: 22.0
+  advanceY: 0.0
+  atlasX: 555
+  atlasY: 210
+  bearingX: 3.0
+  bearingY: 23.0
+  character: 370
+  height: 30
+  kernings: {}
+  width: 19
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 576
+  atlasY: 210
+  bearingX: 2.0
+  bearingY: 17.0
+  character: 371
+  height: 24
+  kernings: {}
+  width: 15
+- advanceX: 27.0
+  advanceY: 0.0
+  atlasX: 593
+  atlasY: 210
+  bearingX: 3.0
+  bearingY: 30.0
+  character: 372
+  height: 30
+  kernings: {}
+  width: 27
+- advanceX: 23.0
+  advanceY: 0.0
+  atlasX: 622
+  atlasY: 210
+  bearingX: 2.0
+  bearingY: 24.0
+  character: 373
+  height: 24
+  kernings: {}
+  width: 22
+- advanceX: 16.0
+  advanceY: 0.0
+  atlasX: 646
+  atlasY: 210
+  bearingX: 3.0
+  bearingY: 30.0
+  character: 374
+  height: 30
+  kernings: {}
+  width: 16
+- advanceX: 15.0
+  advanceY: 0.0
+  atlasX: 664
+  atlasY: 210
+  bearingX: -3.0
+  bearingY: 24.0
+  character: 375
+  height: 32
+  kernings: {}
+  width: 19
+- advanceX: 16.0
+  advanceY: 0.0
+  atlasX: 685
+  atlasY: 210
+  bearingX: 3.0
+  bearingY: 28.0
+  character: 376
+  height: 28
+  kernings: {}
+  width: 16
+- advanceX: 17.0
+  advanceY: 0.0
+  atlasX: 703
+  atlasY: 210
+  bearingX: 0.0
+  bearingY: 30.0
+  character: 377
+  height: 30
+  kernings: {}
+  width: 18
+- advanceX: 14.0
+  advanceY: 0.0
+  atlasX: 723
+  atlasY: 210
+  bearingX: 0.0
+  bearingY: 24.0
+  character: 378
+  height: 24
+  kernings: {}
+  width: 15
+- advanceX: 17.0
+  advanceY: 0.0
+  atlasX: 740
+  atlasY: 210
+  bearingX: 0.0
+  bearingY: 28.0
+  character: 379
+  height: 28
+  kernings: {}
+  width: 18
+- advanceX: 14.0
+  advanceY: 0.0
+  atlasX: 760
+  atlasY: 210
+  bearingX: 0.0
+  bearingY: 23.0
+  character: 380
+  height: 23
+  kernings: {}
+  width: 14
+- advanceX: 17.0
+  advanceY: 0.0
+  atlasX: 776
+  atlasY: 210
+  bearingX: 0.0
+  bearingY: 30.0
+  character: 381
+  height: 30
+  kernings: {}
+  width: 18
+- advanceX: 14.0
+  advanceY: 0.0
+  atlasX: 796
+  atlasY: 210
+  bearingX: 0.0
+  bearingY: 24.0
+  character: 382
+  height: 24
+  kernings: {}
+  width: 15
+- advanceX: 9.0
+  advanceY: 0.0
+  atlasX: 813
+  atlasY: 210
+  bearingX: -4.0
+  bearingY: 24.0
+  character: 383
+  height: 32
+  kernings: {}
+  width: 18
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 833
+  atlasY: 210
   bearingX: 0.0
   bearingY: 23.0
   character: 402
   height: 31
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 279
-  atlasY: 245
+  atlasX: 852
+  atlasY: 210
   bearingX: 2.0
   bearingY: 24.0
   character: 416
@@ -3218,47 +3218,47 @@ glyphs:
   width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 306
-  atlasY: 245
-  bearingX: 1.0
+  atlasX: 879
+  atlasY: 210
+  bearingX: 2.0
   bearingY: 19.0
   character: 417
   height: 19
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 329
-  atlasY: 245
-  bearingX: 2.0
+  atlasX: 900
+  atlasY: 210
+  bearingX: 3.0
   bearingY: 24.0
   character: 431
   height: 24
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 357
-  atlasY: 245
-  bearingX: 1.0
+  atlasX: 927
+  atlasY: 210
+  bearingX: 2.0
   bearingY: 20.0
   character: 432
   height: 20
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 382
+  atlasX: 0
   atlasY: 245
-  bearingX: -5.0
+  bearingX: -4.0
   bearingY: 24.0
   character: 496
   height: 32
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 401
+  atlasX: 18
   atlasY: 245
   bearingX: -2.0
   bearingY: 31.0
@@ -3268,77 +3268,77 @@ glyphs:
   width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 423
+  atlasX: 40
   atlasY: 245
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 30.0
   character: 507
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 442
+  atlasX: 58
   atlasY: 245
   bearingX: -2.0
   bearingY: 30.0
   character: 508
   height: 30
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 474
+  atlasX: 89
   atlasY: 245
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 509
   height: 24
   kernings: {}
-  width: 25
+  width: 23
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 501
+  atlasX: 114
   atlasY: 245
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 30.0
   character: 510
   height: 31
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 525
+  atlasX: 137
   atlasY: 245
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 511
   height: 25
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 545
+  atlasX: 155
   atlasY: 245
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 536
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 564
+  atlasX: 173
   atlasY: 245
   bearingX: 0.0
   bearingY: 17.0
   character: 537
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 580
+  atlasX: 188
   atlasY: 245
   bearingX: 2.0
   bearingY: 23.0
@@ -3348,37 +3348,37 @@ glyphs:
   width: 17
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 599
+  atlasX: 207
   atlasY: 245
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 21.0
   character: 539
   height: 28
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 613
+  atlasX: 219
   atlasY: 245
-  bearingX: -5.0
+  bearingX: -4.0
   bearingY: 17.0
   character: 567
   height: 25
   kernings: {}
-  width: 13
+  width: 11
 - advanceX: 5.0
   advanceY: 0.0
-  atlasX: 628
+  atlasX: 232
   atlasY: 245
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 700
   height: 8
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 638
+  atlasX: 240
   atlasY: 245
   bearingX: 6.0
   bearingY: 24.0
@@ -3388,7 +3388,7 @@ glyphs:
   width: 10
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 650
+  atlasX: 252
   atlasY: 245
   bearingX: 7.0
   bearingY: 24.0
@@ -3398,57 +3398,57 @@ glyphs:
   width: 10
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 662
+  atlasX: 264
   atlasY: 245
   bearingX: 6.0
-  bearingY: 22.0
+  bearingY: 21.0
   character: 713
-  height: 3
+  height: 2
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 674
+  atlasX: 275
   atlasY: 245
   bearingX: 7.0
   bearingY: 23.0
   character: 728
   height: 4
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 686
+  atlasX: 286
   atlasY: 245
   bearingX: 5.0
   bearingY: 23.0
   character: 729
   height: 3
   kernings: {}
-  width: 4
+  width: 3
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 692
+  atlasX: 291
   atlasY: 245
-  bearingX: 8.0
+  bearingX: 9.0
   bearingY: 26.0
   character: 730
   height: 7
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 6.0
   advanceY: 0.0
-  atlasX: 702
+  atlasX: 299
   atlasY: 245
-  bearingX: -3.0
+  bearingX: -2.0
   bearingY: 0.0
   character: 731
   height: 7
   kernings: {}
-  width: 6
+  width: 5
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 710
+  atlasX: 306
   atlasY: 245
   bearingX: 5.0
   bearingY: 23.0
@@ -3458,7 +3458,7 @@ glyphs:
   width: 12
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 724
+  atlasX: 320
   atlasY: 245
   bearingX: 6.0
   bearingY: 24.0
@@ -3468,57 +3468,57 @@ glyphs:
   width: 12
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 738
+  atlasX: 334
   atlasY: 245
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: -2.0
   character: 755
-  height: 7
-  kernings: {}
-  width: 8
-- advanceX: 0.0
-  advanceY: 0.0
-  atlasX: 748
-  atlasY: 245
-  bearingX: -12.0
-  bearingY: 24.0
-  character: 768
-  height: 5
-  kernings: {}
-  width: 6
-- advanceX: 0.0
-  advanceY: 0.0
-  atlasX: 756
-  atlasY: 245
-  bearingX: -9.0
-  bearingY: 24.0
-  character: 769
-  height: 5
-  kernings: {}
-  width: 8
-- advanceX: 0.0
-  advanceY: 0.0
-  atlasX: 766
-  atlasY: 245
-  bearingX: -14.0
-  bearingY: 23.0
-  character: 771
-  height: 4
-  kernings: {}
-  width: 13
-- advanceX: 0.0
-  advanceY: 0.0
-  atlasX: 781
-  atlasY: 245
-  bearingX: -10.0
-  bearingY: 26.0
-  character: 777
   height: 7
   kernings: {}
   width: 7
 - advanceX: 0.0
   advanceY: 0.0
-  atlasX: 790
+  atlasX: 343
+  atlasY: 245
+  bearingX: -11.0
+  bearingY: 24.0
+  character: 768
+  height: 5
+  kernings: {}
+  width: 5
+- advanceX: 0.0
+  advanceY: 0.0
+  atlasX: 350
+  atlasY: 245
+  bearingX: -8.0
+  bearingY: 24.0
+  character: 769
+  height: 5
+  kernings: {}
+  width: 6
+- advanceX: 0.0
+  advanceY: 0.0
+  atlasX: 358
+  atlasY: 245
+  bearingX: -13.0
+  bearingY: 23.0
+  character: 771
+  height: 4
+  kernings: {}
+  width: 11
+- advanceX: 0.0
+  advanceY: 0.0
+  atlasX: 371
+  atlasY: 245
+  bearingX: -9.0
+  bearingY: 26.0
+  character: 777
+  height: 7
+  kernings: {}
+  width: 5
+- advanceX: 0.0
+  advanceY: 0.0
+  atlasX: 378
   atlasY: 245
   bearingX: -16.0
   bearingY: 24.0
@@ -3528,57 +3528,57 @@ glyphs:
   width: 11
 - advanceX: 0.0
   advanceY: 0.0
-  atlasX: 803
+  atlasX: 391
   atlasY: 245
-  bearingX: -14.0
+  bearingX: -13.0
   bearingY: -2.0
   character: 803
   height: 3
   kernings: {}
-  width: 4
+  width: 3
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 809
+  atlasX: 396
   atlasY: 245
-  bearingX: 9.0
+  bearingX: 10.0
   bearingY: 25.0
   character: 900
   height: 6
   kernings: {}
-  width: 7
+  width: 5
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 818
+  atlasX: 403
   atlasY: 245
   bearingX: 7.0
   bearingY: 27.0
   character: 901
   height: 7
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 830
+  atlasX: 414
   atlasY: 245
   bearingX: -2.0
   bearingY: 23.0
   character: 902
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 851
+  atlasX: 434
   atlasY: 245
-  bearingX: 2.0
-  bearingY: 15.0
+  bearingX: 3.0
+  bearingY: 14.0
   character: 903
-  height: 5
+  height: 4
   kernings: {}
-  width: 5
+  width: 4
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 858
+  atlasX: 440
   atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
@@ -3588,17 +3588,17 @@ glyphs:
   width: 19
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 879
+  atlasX: 461
   atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 905
   height: 23
   kernings: {}
-  width: 24
+  width: 23
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 905
+  atlasX: 486
   atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
@@ -3608,28 +3608,28 @@ glyphs:
   width: 11
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 918
+  atlasX: 499
   atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 908
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 280
+  atlasX: 523
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 910
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 25
-  atlasY: 280
+  atlasX: 547
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 911
@@ -3638,28 +3638,28 @@ glyphs:
   width: 23
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 50
-  atlasY: 280
-  bearingX: 1.0
+  atlasX: 572
+  atlasY: 245
+  bearingX: 2.0
   bearingY: 27.0
   character: 912
   height: 27
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 63
-  atlasY: 280
+  atlasX: 583
+  atlasY: 245
   bearingX: -2.0
   bearingY: 23.0
   character: 913
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 84
-  atlasY: 280
+  atlasX: 603
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 914
@@ -3668,8 +3668,8 @@ glyphs:
   width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 104
-  atlasY: 280
+  atlasX: 623
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 915
@@ -3678,8 +3678,8 @@ glyphs:
   width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 123
-  atlasY: 280
+  atlasX: 642
+  atlasY: 245
   bearingX: -1.0
   bearingY: 23.0
   character: 916
@@ -3688,8 +3688,8 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 142
-  atlasY: 280
+  atlasX: 661
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 917
@@ -3698,18 +3698,18 @@ glyphs:
   width: 17
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 161
-  atlasY: 280
-  bearingX: -1.0
+  atlasX: 680
+  atlasY: 245
+  bearingX: 0.0
   bearingY: 23.0
   character: 918
   height: 23
   kernings: {}
-  width: 20
+  width: 18
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 183
-  atlasY: 280
+  atlasX: 700
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 919
@@ -3718,18 +3718,18 @@ glyphs:
   width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 206
-  atlasY: 280
+  atlasX: 723
+  atlasY: 245
   bearingX: 2.0
   bearingY: 23.0
   character: 920
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 229
-  atlasY: 280
+  atlasX: 745
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 921
@@ -3738,8 +3738,8 @@ glyphs:
   width: 8
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 239
-  atlasY: 280
+  atlasX: 755
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 922
@@ -3748,18 +3748,18 @@ glyphs:
   width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 261
-  atlasY: 280
+  atlasX: 777
+  atlasY: 245
   bearingX: -2.0
   bearingY: 23.0
   character: 923
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 282
-  atlasY: 280
+  atlasX: 797
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 924
@@ -3768,8 +3768,8 @@ glyphs:
   width: 26
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 310
-  atlasY: 280
+  atlasX: 825
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 925
@@ -3778,28 +3778,28 @@ glyphs:
   width: 22
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 334
-  atlasY: 280
-  bearingX: -1.0
+  atlasX: 849
+  atlasY: 245
+  bearingX: 0.0
   bearingY: 23.0
   character: 926
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 355
-  atlasY: 280
+  atlasX: 869
+  atlasY: 245
   bearingX: 2.0
   bearingY: 23.0
   character: 927
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 378
-  atlasY: 280
+  atlasX: 891
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 928
@@ -3808,47 +3808,47 @@ glyphs:
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 401
-  atlasY: 280
+  atlasX: 914
+  atlasY: 245
   bearingX: 1.0
   bearingY: 23.0
   character: 929
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 421
+  atlasX: 0
   atlasY: 280
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 931
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 442
+  atlasX: 20
   atlasY: 280
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 932
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 461
+  atlasX: 38
   atlasY: 280
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 933
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 481
+  atlasX: 56
   atlasY: 280
   bearingX: 2.0
   bearingY: 23.0
@@ -3858,117 +3858,117 @@ glyphs:
   width: 21
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 504
+  atlasX: 79
   atlasY: 280
   bearingX: -2.0
   bearingY: 23.0
   character: 935
   height: 23
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 528
+  atlasX: 102
   atlasY: 280
   bearingX: 3.0
   bearingY: 23.0
   character: 936
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 553
+  atlasX: 126
   atlasY: 280
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 937
   height: 23
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 579
+  atlasX: 150
   atlasY: 280
   bearingX: 1.0
   bearingY: 28.0
   character: 938
   height: 28
   kernings: {}
-  width: 12
+  width: 11
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 593
+  atlasX: 163
   atlasY: 280
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 28.0
   character: 939
   height: 28
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 613
+  atlasX: 181
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 25.0
   character: 940
   height: 25
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 633
+  atlasX: 199
   atlasY: 280
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 25.0
   character: 941
   height: 25
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 650
+  atlasX: 214
   atlasY: 280
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 25.0
   character: 942
   height: 33
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 669
+  atlasX: 232
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 25.0
   character: 943
   height: 25
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 681
+  atlasX: 243
   atlasY: 280
   bearingX: 2.0
   bearingY: 27.0
   character: 944
   height: 27
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 699
+  atlasX: 260
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 945
   height: 17
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 719
+  atlasX: 278
   atlasY: 280
   bearingX: -1.0
   bearingY: 24.0
@@ -3978,17 +3978,17 @@ glyphs:
   width: 19
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 740
+  atlasX: 299
   atlasY: 280
   bearingX: 1.0
   bearingY: 17.0
   character: 947
   height: 25
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 758
+  atlasX: 316
   atlasY: 280
   bearingX: 1.0
   bearingY: 24.0
@@ -3998,77 +3998,77 @@ glyphs:
   width: 17
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 777
+  atlasX: 335
   atlasY: 280
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 949
   height: 17
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 794
+  atlasX: 350
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 950
   height: 30
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 812
+  atlasX: 367
   atlasY: 280
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 951
   height: 25
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 831
+  atlasX: 385
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 952
   height: 24
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 849
+  atlasX: 402
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 953
   height: 17
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 859
+  atlasX: 410
   atlasY: 280
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 954
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 878
+  atlasX: 428
   atlasY: 280
   bearingX: -2.0
   bearingY: 24.0
   character: 955
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 897
+  atlasX: 446
   atlasY: 280
   bearingX: -1.0
   bearingY: 17.0
@@ -4078,18 +4078,18 @@ glyphs:
   width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 918
+  atlasX: 467
   atlasY: 280
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 957
   height: 17
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 315
+  atlasX: 483
+  atlasY: 280
   bearingX: 1.0
   bearingY: 24.0
   character: 958
@@ -4098,18 +4098,18 @@ glyphs:
   width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 17
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 500
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 17.0
   character: 959
   height: 17
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 35
-  atlasY: 315
+  atlasX: 516
+  atlasY: 280
   bearingX: 1.0
   bearingY: 17.0
   character: 960
@@ -4118,8 +4118,8 @@ glyphs:
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 56
-  atlasY: 315
+  atlasX: 537
+  atlasY: 280
   bearingX: -1.0
   bearingY: 17.0
   character: 961
@@ -4128,68 +4128,68 @@ glyphs:
   width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 76
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 557
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 17.0
   character: 962
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 92
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 572
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 17.0
   character: 963
   height: 17
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 113
-  atlasY: 315
+  atlasX: 591
+  atlasY: 280
   bearingX: 1.0
   bearingY: 17.0
   character: 964
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 129
-  atlasY: 315
+  atlasX: 606
+  atlasY: 280
   bearingX: 2.0
   bearingY: 17.0
   character: 965
   height: 17
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 147
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 623
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 17.0
   character: 966
   height: 25
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 168
-  atlasY: 315
+  atlasX: 643
+  atlasY: 280
   bearingX: -4.0
   bearingY: 17.0
   character: 967
   height: 25
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 192
-  atlasY: 315
+  atlasX: 666
+  atlasY: 280
   bearingX: 2.0
   bearingY: 24.0
   character: 968
@@ -4198,98 +4198,98 @@ glyphs:
   width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 214
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 688
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 17.0
   character: 969
   height: 17
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 10.0
   advanceY: 0.0
-  atlasX: 237
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 710
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 23.0
   character: 970
   height: 23
   kernings: {}
-  width: 10
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 249
-  atlasY: 315
+  atlasX: 721
+  atlasY: 280
   bearingX: 2.0
   bearingY: 23.0
   character: 971
   height: 23
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 267
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 738
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 25.0
   character: 972
   height: 25
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 285
-  atlasY: 315
+  atlasX: 754
+  atlasY: 280
   bearingX: 2.0
   bearingY: 25.0
   character: 973
   height: 25
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 303
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 771
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 25.0
   character: 974
   height: 25
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 326
-  atlasY: 315
-  bearingX: 0.0
+  atlasX: 793
+  atlasY: 280
+  bearingX: 1.0
   bearingY: 24.0
   character: 977
   height: 24
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 347
-  atlasY: 315
-  bearingX: 2.0
+  atlasX: 813
+  atlasY: 280
+  bearingX: 3.0
   bearingY: 23.0
   character: 978
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 367
-  atlasY: 315
-  bearingX: 1.0
+  atlasX: 831
+  atlasY: 280
+  bearingX: 2.0
   bearingY: 17.0
   character: 982
   height: 17
   kernings: {}
-  width: 26
+  width: 24
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 395
-  atlasY: 315
+  atlasX: 857
+  atlasY: 280
   bearingX: 1.0
   bearingY: 30.0
   character: 1024
@@ -4298,8 +4298,8 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 414
-  atlasY: 315
+  atlasX: 876
+  atlasY: 280
   bearingX: 1.0
   bearingY: 28.0
   character: 1025
@@ -4308,18 +4308,18 @@ glyphs:
   width: 17
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 433
-  atlasY: 315
-  bearingX: 2.0
+  atlasX: 895
+  atlasY: 280
+  bearingX: 3.0
   bearingY: 23.0
   character: 1026
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 453
-  atlasY: 315
+  atlasX: 913
+  atlasY: 280
   bearingX: 1.0
   bearingY: 30.0
   character: 1027
@@ -4328,27 +4328,27 @@ glyphs:
   width: 17
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 472
+  atlasX: 0
   atlasY: 315
   bearingX: 2.0
   bearingY: 23.0
   character: 1028
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 493
+  atlasX: 20
   atlasY: 315
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 23.0
   character: 1029
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 512
+  atlasX: 38
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4358,17 +4358,17 @@ glyphs:
   width: 8
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 522
+  atlasX: 48
   atlasY: 315
   bearingX: 1.0
   bearingY: 28.0
   character: 1031
   height: 28
   kernings: {}
-  width: 12
+  width: 11
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 536
+  atlasX: 61
   atlasY: 315
   bearingX: -5.0
   bearingY: 23.0
@@ -4378,17 +4378,17 @@ glyphs:
   width: 14
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 552
+  atlasX: 77
   atlasY: 315
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 1033
   height: 23
   kernings: {}
-  width: 29
+  width: 28
 - advanceX: 29.0
   advanceY: 0.0
-  atlasX: 583
+  atlasX: 107
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4398,17 +4398,17 @@ glyphs:
   width: 26
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 611
+  atlasX: 135
   atlasY: 315
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 1035
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 631
+  atlasX: 153
   atlasY: 315
   bearingX: 1.0
   bearingY: 30.0
@@ -4418,27 +4418,27 @@ glyphs:
   width: 20
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 653
+  atlasX: 175
   atlasY: 315
   bearingX: 1.0
   bearingY: 30.0
   character: 1037
   height: 30
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 677
+  atlasX: 198
   atlasY: 315
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 30.0
   character: 1038
   height: 30
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 702
+  atlasX: 221
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4448,17 +4448,17 @@ glyphs:
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 725
+  atlasX: 244
   atlasY: 315
   bearingX: -2.0
   bearingY: 23.0
   character: 1040
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 746
+  atlasX: 264
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4468,7 +4468,7 @@ glyphs:
   width: 17
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 765
+  atlasX: 283
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4478,7 +4478,7 @@ glyphs:
   width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 785
+  atlasX: 303
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4488,7 +4488,7 @@ glyphs:
   width: 17
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 804
+  atlasX: 322
   atlasY: 315
   bearingX: -3.0
   bearingY: 23.0
@@ -4498,7 +4498,7 @@ glyphs:
   width: 23
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 829
+  atlasX: 347
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
@@ -4508,7 +4508,7 @@ glyphs:
   width: 17
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 848
+  atlasX: 366
   atlasY: 315
   bearingX: -2.0
   bearingY: 23.0
@@ -4518,38 +4518,38 @@ glyphs:
   width: 30
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 880
+  atlasX: 398
   atlasY: 315
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 1047
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 900
+  atlasX: 417
   atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1048
   height: 23
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 924
+  atlasX: 440
   atlasY: 315
   bearingX: 1.0
   bearingY: 30.0
   character: 1049
   height: 30
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 350
+  atlasX: 463
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1050
@@ -4558,18 +4558,18 @@ glyphs:
   width: 20
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 22
-  atlasY: 350
-  bearingX: -2.0
+  atlasX: 485
+  atlasY: 315
+  bearingX: -1.0
   bearingY: 23.0
   character: 1051
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 47
-  atlasY: 350
+  atlasX: 509
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1052
@@ -4578,8 +4578,8 @@ glyphs:
   width: 26
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 75
-  atlasY: 350
+  atlasX: 537
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1053
@@ -4588,18 +4588,18 @@ glyphs:
   width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 98
-  atlasY: 350
+  atlasX: 560
+  atlasY: 315
   bearingX: 2.0
   bearingY: 23.0
   character: 1054
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 121
-  atlasY: 350
+  atlasX: 582
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1055
@@ -4608,48 +4608,48 @@ glyphs:
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 144
-  atlasY: 350
+  atlasX: 605
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1056
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 164
-  atlasY: 350
+  atlasX: 624
+  atlasY: 315
   bearingX: 2.0
   bearingY: 23.0
   character: 1057
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 185
-  atlasY: 350
-  bearingX: 2.0
+  atlasX: 644
+  atlasY: 315
+  bearingX: 3.0
   bearingY: 23.0
   character: 1058
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 204
-  atlasY: 350
-  bearingX: -1.0
+  atlasX: 662
+  atlasY: 315
+  bearingX: 0.0
   bearingY: 23.0
   character: 1059
   height: 23
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 229
-  atlasY: 350
+  atlasX: 685
+  atlasY: 315
   bearingX: 2.0
   bearingY: 23.0
   character: 1060
@@ -4658,38 +4658,38 @@ glyphs:
   width: 21
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 252
-  atlasY: 350
+  atlasX: 708
+  atlasY: 315
   bearingX: -2.0
   bearingY: 23.0
   character: 1061
   height: 23
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 276
-  atlasY: 350
+  atlasX: 731
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1062
   height: 29
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 299
-  atlasY: 350
-  bearingX: 3.0
+  atlasX: 753
+  atlasY: 315
+  bearingX: 4.0
   bearingY: 23.0
   character: 1063
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 319
-  atlasY: 350
+  atlasX: 772
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1064
@@ -4698,8 +4698,8 @@ glyphs:
   width: 30
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 351
-  atlasY: 350
+  atlasX: 804
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1065
@@ -4708,28 +4708,28 @@ glyphs:
   width: 30
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 383
-  atlasY: 350
-  bearingX: 2.0
+  atlasX: 836
+  atlasY: 315
+  bearingX: 3.0
   bearingY: 23.0
   character: 1066
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 402
-  atlasY: 350
+  atlasX: 853
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1067
   height: 23
   kernings: {}
-  width: 25
+  width: 24
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 429
-  atlasY: 350
+  atlasX: 879
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1068
@@ -4738,8 +4738,8 @@ glyphs:
   width: 15
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 446
-  atlasY: 350
+  atlasX: 896
+  atlasY: 315
   bearingX: 0.0
   bearingY: 23.0
   character: 1069
@@ -4748,87 +4748,87 @@ glyphs:
   width: 18
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 466
-  atlasY: 350
+  atlasX: 916
+  atlasY: 315
   bearingX: 1.0
   bearingY: 23.0
   character: 1070
   height: 23
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 498
+  atlasX: 0
   atlasY: 350
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 1071
   height: 23
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 521
+  atlasX: 21
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 1072
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 540
+  atlasX: 39
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 1073
   height: 24
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 560
+  atlasX: 57
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 1074
   height: 17
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 578
+  atlasX: 73
   atlasY: 350
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1075
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 594
+  atlasX: 88
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 1076
   height: 24
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 612
+  atlasX: 105
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 1077
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 628
+  atlasX: 120
   atlasY: 350
   bearingX: -1.0
   bearingY: 17.0
@@ -4838,97 +4838,97 @@ glyphs:
   width: 29
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 659
+  atlasX: 151
   atlasY: 350
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 17.0
   character: 1079
+  height: 17
+  kernings: {}
+  width: 13
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 166
+  atlasY: 350
+  bearingX: 2.0
+  bearingY: 17.0
+  character: 1080
   height: 17
   kernings: {}
   width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 676
+  atlasX: 183
   atlasY: 350
-  bearingX: 1.0
-  bearingY: 17.0
-  character: 1080
-  height: 17
-  kernings: {}
-  width: 17
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 695
-  atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 1081
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 714
+  atlasX: 201
   atlasY: 350
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1082
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 733
+  atlasX: 219
   atlasY: 350
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 17.0
   character: 1083
   height: 17
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 754
+  atlasX: 238
   atlasY: 350
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1084
   height: 17
   kernings: {}
-  width: 22
+  width: 20
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 778
+  atlasX: 260
   atlasY: 350
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1085
   height: 17
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 799
+  atlasX: 279
+  atlasY: 350
+  bearingX: 2.0
+  bearingY: 17.0
+  character: 1086
+  height: 17
+  kernings: {}
+  width: 14
+- advanceX: 18.0
+  advanceY: 0.0
+  atlasX: 295
   atlasY: 350
   bearingX: 1.0
   bearingY: 17.0
-  character: 1086
+  character: 1087
   height: 17
   kernings: {}
   width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 817
-  atlasY: 350
-  bearingX: 0.0
-  bearingY: 17.0
-  character: 1087
-  height: 17
-  kernings: {}
-  width: 17
-- advanceX: 18.0
-  advanceY: 0.0
-  atlasX: 836
+  atlasX: 313
   atlasY: 350
   bearingX: -1.0
   bearingY: 17.0
@@ -4938,68 +4938,68 @@ glyphs:
   width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 856
+  atlasX: 333
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 1089
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 872
+  atlasX: 348
   atlasY: 350
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1090
   height: 17
   kernings: {}
-  width: 27
+  width: 25
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 901
+  atlasX: 375
   atlasY: 350
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 17.0
   character: 1091
   height: 25
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 924
+  atlasX: 396
   atlasY: 350
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 1092
   height: 32
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 385
-  bearingX: -2.0
+  atlasX: 416
+  atlasY: 350
+  bearingX: -1.0
   bearingY: 17.0
   character: 1093
   height: 17
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 21
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 435
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 17.0
   character: 1094
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 40
-  atlasY: 385
+  atlasX: 452
+  atlasY: 350
   bearingX: 2.0
   bearingY: 17.0
   character: 1095
@@ -5008,28 +5008,28 @@ glyphs:
   width: 15
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 57
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 469
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 17.0
   character: 1096
   height: 17
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 85
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 496
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 17.0
   character: 1097
   height: 23
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 113
-  atlasY: 385
+  atlasX: 523
+  atlasY: 350
   bearingX: 1.0
   bearingY: 17.0
   character: 1098
@@ -5038,18 +5038,18 @@ glyphs:
   width: 16
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 131
-  atlasY: 385
+  atlasX: 541
+  atlasY: 350
   bearingX: 2.0
   bearingY: 17.0
   character: 1099
   height: 17
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 154
-  atlasY: 385
+  atlasX: 563
+  atlasY: 350
   bearingX: 2.0
   bearingY: 17.0
   character: 1100
@@ -5058,28 +5058,28 @@ glyphs:
   width: 13
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 169
-  atlasY: 385
+  atlasX: 578
+  atlasY: 350
   bearingX: 0.0
   bearingY: 17.0
   character: 1101
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 185
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 593
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 17.0
   character: 1102
   height: 17
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 211
-  atlasY: 385
+  atlasX: 617
+  atlasY: 350
   bearingX: -1.0
   bearingY: 17.0
   character: 1103
@@ -5088,168 +5088,168 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 230
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 636
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 24.0
   character: 1104
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 246
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 651
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 23.0
   character: 1105
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 262
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 666
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 24.0
   character: 1106
   height: 32
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 281
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 684
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 24.0
   character: 1107
   height: 24
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 299
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 700
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 17.0
   character: 1108
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 315
-  atlasY: 385
+  atlasX: 715
+  atlasY: 350
   bearingX: 0.0
   bearingY: 17.0
   character: 1109
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 331
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 730
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 23.0
   character: 1110
   height: 23
   kernings: {}
-  width: 9
+  width: 7
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 342
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 739
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 23.0
   character: 1111
   height: 23
   kernings: {}
-  width: 12
+  width: 10
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 356
-  atlasY: 385
-  bearingX: -5.0
+  atlasX: 751
+  atlasY: 350
+  bearingX: -4.0
   bearingY: 23.0
   character: 1112
   height: 31
   kernings: {}
-  width: 14
+  width: 12
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 372
-  atlasY: 385
-  bearingX: -2.0
+  atlasX: 765
+  atlasY: 350
+  bearingX: -1.0
   bearingY: 17.0
   character: 1113
-  height: 18
+  height: 17
   kernings: {}
-  width: 25
+  width: 23
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 399
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 790
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 17.0
   character: 1114
   height: 17
   kernings: {}
-  width: 24
+  width: 23
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 425
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 815
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 24.0
   character: 1115
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 444
-  atlasY: 385
-  bearingX: 0.0
+  atlasX: 833
+  atlasY: 350
+  bearingX: 1.0
   bearingY: 24.0
   character: 1116
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 463
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 851
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 24.0
   character: 1117
   height: 24
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 482
-  atlasY: 385
-  bearingX: -4.0
+  atlasX: 868
+  atlasY: 350
+  bearingX: -3.0
   bearingY: 24.0
   character: 1118
   height: 32
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 505
-  atlasY: 385
-  bearingX: 1.0
+  atlasX: 889
+  atlasY: 350
+  bearingX: 2.0
   bearingY: 17.0
   character: 1119
   height: 25
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 524
-  atlasY: 385
+  atlasX: 906
+  atlasY: 350
   bearingX: 2.0
   bearingY: 23.0
   character: 1120
@@ -5258,17 +5258,17 @@ glyphs:
   width: 28
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 554
+  atlasX: 0
   atlasY: 385
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 1121
   height: 17
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 579
+  atlasX: 23
   atlasY: 385
   bearingX: 2.0
   bearingY: 24.0
@@ -5278,7 +5278,7 @@ glyphs:
   width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 597
+  atlasX: 41
   atlasY: 385
   bearingX: 1.0
   bearingY: 20.0
@@ -5288,27 +5288,27 @@ glyphs:
   width: 15
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 614
+  atlasX: 58
   atlasY: 385
   bearingX: 1.0
   bearingY: 23.0
   character: 1124
   height: 23
   kernings: {}
-  width: 29
+  width: 28
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 645
+  atlasX: 88
   atlasY: 385
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1125
   height: 17
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 670
+  atlasX: 111
   atlasY: 385
   bearingX: -2.0
   bearingY: 23.0
@@ -5318,47 +5318,47 @@ glyphs:
   width: 20
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 692
+  atlasX: 133
   atlasY: 385
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 17.0
   character: 1127
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 711
+  atlasX: 151
   atlasY: 385
   bearingX: 1.0
   bearingY: 23.0
   character: 1128
   height: 23
   kernings: {}
-  width: 25
+  width: 24
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 738
+  atlasX: 177
   atlasY: 385
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1129
   height: 17
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 761
+  atlasX: 199
   atlasY: 385
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 1130
   height: 23
   kernings: {}
-  width: 24
+  width: 23
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 787
+  atlasX: 224
   atlasY: 385
   bearingX: -2.0
   bearingY: 17.0
@@ -5368,7 +5368,7 @@ glyphs:
   width: 21
 - advanceX: 29.0
   advanceY: 0.0
-  atlasX: 810
+  atlasX: 247
   atlasY: 385
   bearingX: 1.0
   bearingY: 23.0
@@ -5378,48 +5378,48 @@ glyphs:
   width: 29
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 841
+  atlasX: 278
   atlasY: 385
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1133
   height: 17
   kernings: {}
-  width: 26
+  width: 24
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 869
+  atlasX: 304
   atlasY: 385
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 27.0
   character: 1134
   height: 34
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 890
+  atlasX: 324
   atlasY: 385
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 21.0
   character: 1135
   height: 27
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 909
+  atlasX: 341
   atlasY: 385
   bearingX: 3.0
   bearingY: 23.0
   character: 1136
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 420
+  atlasX: 365
+  atlasY: 385
   bearingX: 2.0
   bearingY: 24.0
   character: 1137
@@ -5428,38 +5428,38 @@ glyphs:
   width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 22
-  atlasY: 420
+  atlasX: 387
+  atlasY: 385
   bearingX: 2.0
   bearingY: 23.0
   character: 1138
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 45
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 409
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 17.0
   character: 1139
   height: 17
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 63
-  atlasY: 420
-  bearingX: 2.0
+  atlasX: 425
+  atlasY: 385
+  bearingX: 3.0
   bearingY: 23.0
   character: 1140
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 85
-  atlasY: 420
+  atlasX: 446
+  atlasY: 385
   bearingX: 1.0
   bearingY: 17.0
   character: 1141
@@ -5468,18 +5468,18 @@ glyphs:
   width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 103
-  atlasY: 420
-  bearingX: 2.0
+  atlasX: 464
+  atlasY: 385
+  bearingX: 3.0
   bearingY: 30.0
   character: 1142
   height: 30
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 125
-  atlasY: 420
+  atlasX: 485
+  atlasY: 385
   bearingX: 1.0
   bearingY: 24.0
   character: 1143
@@ -5488,28 +5488,28 @@ glyphs:
   width: 16
 - advanceX: 38.0
   advanceY: 0.0
-  atlasX: 143
-  atlasY: 420
+  atlasX: 503
+  atlasY: 385
   bearingX: 2.0
   bearingY: 23.0
   character: 1144
   height: 31
   kernings: {}
-  width: 38
+  width: 37
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 183
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 542
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 17.0
   character: 1145
   height: 25
   kernings: {}
-  width: 33
+  width: 32
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 218
-  atlasY: 420
+  atlasX: 576
+  atlasY: 385
   bearingX: 2.0
   bearingY: 25.0
   character: 1146
@@ -5518,18 +5518,18 @@ glyphs:
   width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 241
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 599
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 19.0
   character: 1147
   height: 21
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 259
-  atlasY: 420
+  atlasX: 616
+  atlasY: 385
   bearingX: 2.0
   bearingY: 33.0
   character: 1148
@@ -5538,18 +5538,18 @@ glyphs:
   width: 28
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 289
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 646
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 27.0
   character: 1149
   height: 27
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 313
-  atlasY: 420
+  atlasX: 669
+  atlasY: 385
   bearingX: 2.0
   bearingY: 28.0
   character: 1150
@@ -5558,78 +5558,78 @@ glyphs:
   width: 28
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 343
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 699
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 22.0
   character: 1151
   height: 22
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 368
-  atlasY: 420
+  atlasX: 722
+  atlasY: 385
   bearingX: 2.0
   bearingY: 23.0
   character: 1152
   height: 31
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 389
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 742
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 17.0
   character: 1153
   height: 25
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 405
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 757
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 20.0
   character: 1154
   height: 20
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 425
-  atlasY: 420
+  atlasX: 775
+  atlasY: 385
   bearingX: 5.0
   bearingY: 23.0
   character: 1155
   height: 5
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 440
-  atlasY: 420
-  bearingX: 5.0
+  atlasX: 789
+  atlasY: 385
+  bearingX: 6.0
   bearingY: 24.0
   character: 1156
   height: 4
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 455
-  atlasY: 420
-  bearingX: 9.0
+  atlasX: 803
+  atlasY: 385
+  bearingX: 10.0
   bearingY: 24.0
   character: 1157
   height: 5
   kernings: {}
-  width: 5
+  width: 4
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 462
-  atlasY: 420
+  atlasX: 809
+  atlasY: 385
   bearingX: 10.0
   bearingY: 24.0
   character: 1158
@@ -5638,48 +5638,48 @@ glyphs:
   width: 4
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 468
-  atlasY: 420
-  bearingX: 0.0
+  atlasX: 815
+  atlasY: 385
+  bearingX: 1.0
   bearingY: 22.0
   character: 1160
   height: 27
   kernings: {}
-  width: 32
+  width: 30
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 502
-  atlasY: 420
-  bearingX: 0.0
+  atlasX: 847
+  atlasY: 385
+  bearingX: 1.0
   bearingY: 23.0
   character: 1161
   height: 29
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 534
-  atlasY: 420
+  atlasX: 878
+  atlasY: 385
   bearingX: 1.0
   bearingY: 30.0
   character: 1162
   height: 36
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 558
-  atlasY: 420
-  bearingX: 1.0
+  atlasX: 901
+  atlasY: 385
+  bearingX: 2.0
   bearingY: 24.0
   character: 1163
   height: 30
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 577
-  atlasY: 420
+  atlasX: 919
+  atlasY: 385
   bearingX: 1.0
   bearingY: 23.0
   character: 1164
@@ -5688,27 +5688,27 @@ glyphs:
   width: 15
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 594
+  atlasX: 0
   atlasY: 420
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 1165
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 610
+  atlasX: 15
   atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
   character: 1166
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 630
+  atlasX: 34
   atlasY: 420
   bearingX: -1.0
   bearingY: 17.0
@@ -5718,7 +5718,7 @@ glyphs:
   width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 650
+  atlasX: 54
   atlasY: 420
   bearingX: 1.0
   bearingY: 28.0
@@ -5728,17 +5728,17 @@ glyphs:
   width: 18
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 670
+  atlasX: 74
   atlasY: 420
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 22.0
   character: 1169
   height: 22
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 687
+  atlasX: 90
   atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
@@ -5748,17 +5748,17 @@ glyphs:
   width: 17
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 706
+  atlasX: 109
   atlasY: 420
   bearingX: 0.0
   bearingY: 17.0
   character: 1171
   height: 17
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 722
+  atlasX: 124
   atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
@@ -5768,17 +5768,17 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 741
+  atlasX: 143
   atlasY: 420
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1173
   height: 25
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 757
+  atlasX: 158
   atlasY: 420
   bearingX: -2.0
   bearingY: 23.0
@@ -5788,7 +5788,7 @@ glyphs:
   width: 30
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 789
+  atlasX: 190
   atlasY: 420
   bearingX: -1.0
   bearingY: 17.0
@@ -5798,27 +5798,27 @@ glyphs:
   width: 29
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 820
+  atlasX: 221
   atlasY: 420
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 1176
   height: 30
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 840
+  atlasX: 240
   atlasY: 420
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 17.0
   character: 1177
   height: 24
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 857
+  atlasX: 255
   atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
@@ -5828,17 +5828,17 @@ glyphs:
   width: 20
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 879
+  atlasX: 277
   atlasY: 420
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1179
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 898
+  atlasX: 295
   atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
@@ -5848,18 +5848,18 @@ glyphs:
   width: 20
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 920
+  atlasX: 317
   atlasY: 420
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1181
   height: 17
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 455
+  atlasX: 335
+  atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
   character: 1182
@@ -5868,38 +5868,38 @@ glyphs:
   width: 20
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 22
-  atlasY: 455
-  bearingX: 0.0
+  atlasX: 357
+  atlasY: 420
+  bearingX: 1.0
   bearingY: 24.0
   character: 1183
   height: 24
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 41
-  atlasY: 455
-  bearingX: 2.0
+  atlasX: 375
+  atlasY: 420
+  bearingX: 3.0
   bearingY: 23.0
   character: 1184
   height: 23
   kernings: {}
-  width: 22
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 65
-  atlasY: 455
+  atlasX: 397
+  atlasY: 420
   bearingX: 1.0
   bearingY: 17.0
   character: 1185
   height: 17
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 86
-  atlasY: 455
+  atlasX: 417
+  atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
   character: 1186
@@ -5908,18 +5908,18 @@ glyphs:
   width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 109
-  atlasY: 455
-  bearingX: 0.0
+  atlasX: 440
+  atlasY: 420
+  bearingX: 1.0
   bearingY: 17.0
   character: 1187
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 130
-  atlasY: 455
+  atlasX: 459
+  atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
   character: 1188
@@ -5928,38 +5928,38 @@ glyphs:
   width: 26
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 158
-  atlasY: 455
-  bearingX: 0.0
+  atlasX: 487
+  atlasY: 420
+  bearingX: 1.0
   bearingY: 17.0
   character: 1189
   height: 17
   kernings: {}
-  width: 24
+  width: 23
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 184
-  atlasY: 455
+  atlasX: 512
+  atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
   character: 1190
   height: 31
   kernings: {}
-  width: 29
+  width: 28
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 215
-  atlasY: 455
-  bearingX: 0.0
+  atlasX: 542
+  atlasY: 420
+  bearingX: 1.0
   bearingY: 17.0
   character: 1191
   height: 25
   kernings: {}
-  width: 24
+  width: 23
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 241
-  atlasY: 455
+  atlasX: 567
+  atlasY: 420
   bearingX: 2.0
   bearingY: 23.0
   character: 1192
@@ -5968,128 +5968,128 @@ glyphs:
   width: 20
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 263
-  atlasY: 455
-  bearingX: 1.0
+  atlasX: 589
+  atlasY: 420
+  bearingX: 2.0
   bearingY: 17.0
   character: 1193
   height: 18
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 282
-  atlasY: 455
+  atlasX: 607
+  atlasY: 420
   bearingX: 2.0
   bearingY: 23.0
   character: 1194
   height: 30
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 303
-  atlasY: 455
-  bearingX: 1.0
+  atlasX: 627
+  atlasY: 420
+  bearingX: 2.0
   bearingY: 17.0
   character: 1195
   height: 24
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 319
-  atlasY: 455
-  bearingX: 2.0
+  atlasX: 642
+  atlasY: 420
+  bearingX: 3.0
   bearingY: 23.0
   character: 1196
   height: 29
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 338
-  atlasY: 455
-  bearingX: 0.0
+  atlasX: 660
+  atlasY: 420
+  bearingX: 1.0
   bearingY: 17.0
   character: 1197
   height: 23
   kernings: {}
-  width: 27
+  width: 26
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 367
-  atlasY: 455
-  bearingX: 2.0
+  atlasX: 688
+  atlasY: 420
+  bearingX: 3.0
   bearingY: 23.0
   character: 1198
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 387
-  atlasY: 455
-  bearingX: 1.0
+  atlasX: 706
+  atlasY: 420
+  bearingX: 2.0
   bearingY: 17.0
   character: 1199
   height: 25
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 405
-  atlasY: 455
-  bearingX: 1.0
+  atlasX: 722
+  atlasY: 420
+  bearingX: 2.0
   bearingY: 23.0
   character: 1200
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 426
-  atlasY: 455
-  bearingX: -1.0
+  atlasX: 741
+  atlasY: 420
+  bearingX: 0.0
   bearingY: 17.0
   character: 1201
   height: 25
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 446
-  atlasY: 455
+  atlasX: 759
+  atlasY: 420
   bearingX: -2.0
   bearingY: 23.0
   character: 1202
   height: 29
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 470
-  atlasY: 455
-  bearingX: -1.0
+  atlasX: 782
+  atlasY: 420
+  bearingX: 0.0
   bearingY: 17.0
   character: 1203
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 490
-  atlasY: 455
-  bearingX: 2.0
+  atlasX: 801
+  atlasY: 420
+  bearingX: 3.0
   bearingY: 23.0
   character: 1204
   height: 29
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 515
-  atlasY: 455
+  atlasX: 825
+  atlasY: 420
   bearingX: 1.0
   bearingY: 17.0
   character: 1205
@@ -6098,18 +6098,18 @@ glyphs:
   width: 19
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 536
-  atlasY: 455
-  bearingX: 3.0
+  atlasX: 846
+  atlasY: 420
+  bearingX: 4.0
   bearingY: 23.0
   character: 1206
   height: 29
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 556
-  atlasY: 455
+  atlasX: 865
+  atlasY: 420
   bearingX: 2.0
   bearingY: 17.0
   character: 1207
@@ -6118,18 +6118,18 @@ glyphs:
   width: 15
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 573
-  atlasY: 455
-  bearingX: 3.0
+  atlasX: 882
+  atlasY: 420
+  bearingX: 4.0
   bearingY: 23.0
   character: 1208
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 593
-  atlasY: 455
+  atlasX: 901
+  atlasY: 420
   bearingX: 2.0
   bearingY: 17.0
   character: 1209
@@ -6138,67 +6138,67 @@ glyphs:
   width: 15
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 610
-  atlasY: 455
+  atlasX: 918
+  atlasY: 420
   bearingX: 1.0
   bearingY: 23.0
   character: 1210
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 630
+  atlasX: 0
   atlasY: 455
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1211
   height: 17
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 648
+  atlasX: 16
   atlasY: 455
   bearingX: 2.0
   bearingY: 23.0
   character: 1212
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 673
+  atlasX: 40
   atlasY: 455
   bearingX: 1.0
   bearingY: 17.0
   character: 1213
   height: 17
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 693
+  atlasX: 59
   atlasY: 455
   bearingX: 2.0
   bearingY: 23.0
   character: 1214
   height: 29
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 718
+  atlasX: 83
   atlasY: 455
   bearingX: 1.0
   bearingY: 17.0
   character: 1215
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 738
+  atlasX: 102
   atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
@@ -6208,7 +6208,7 @@ glyphs:
   width: 8
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 748
+  atlasX: 112
   atlasY: 455
   bearingX: -2.0
   bearingY: 30.0
@@ -6218,7 +6218,7 @@ glyphs:
   width: 30
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 780
+  atlasX: 144
   atlasY: 455
   bearingX: -1.0
   bearingY: 24.0
@@ -6228,7 +6228,7 @@ glyphs:
   width: 29
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 811
+  atlasX: 175
   atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
@@ -6238,37 +6238,37 @@ glyphs:
   width: 20
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 833
+  atlasX: 197
   atlasY: 455
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1220
   height: 25
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 852
+  atlasX: 215
   atlasY: 455
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 23.0
   character: 1221
   height: 29
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 877
+  atlasX: 239
   atlasY: 455
-  bearingX: -2.0
+  bearingX: -1.0
   bearingY: 17.0
   character: 1222
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 898
+  atlasX: 258
   atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
@@ -6278,18 +6278,18 @@ glyphs:
   width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 921
+  atlasX: 281
   atlasY: 455
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 17.0
   character: 1224
   height: 25
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 490
+  atlasX: 300
+  atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
   character: 1225
@@ -6298,28 +6298,28 @@ glyphs:
   width: 21
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 23
-  atlasY: 490
-  bearingX: 0.0
+  atlasX: 323
+  atlasY: 455
+  bearingX: 1.0
   bearingY: 17.0
   character: 1226
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 44
-  atlasY: 490
-  bearingX: 3.0
+  atlasX: 342
+  atlasY: 455
+  bearingX: 4.0
   bearingY: 23.0
   character: 1227
   height: 29
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 64
-  atlasY: 490
+  atlasX: 361
+  atlasY: 455
   bearingX: 3.0
   bearingY: 17.0
   character: 1228
@@ -6328,8 +6328,8 @@ glyphs:
   width: 15
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 81
-  atlasY: 490
+  atlasX: 378
+  atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
   character: 1229
@@ -6338,18 +6338,18 @@ glyphs:
   width: 26
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 109
-  atlasY: 490
-  bearingX: 0.0
+  atlasX: 406
+  atlasY: 455
+  bearingX: 1.0
   bearingY: 17.0
   character: 1230
   height: 23
   kernings: {}
-  width: 22
+  width: 20
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 133
-  atlasY: 490
+  atlasX: 428
+  atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
   character: 1231
@@ -6358,8 +6358,8 @@ glyphs:
   width: 8
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 143
-  atlasY: 490
+  atlasX: 438
+  atlasY: 455
   bearingX: -2.0
   bearingY: 30.0
   character: 1232
@@ -6368,18 +6368,18 @@ glyphs:
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 166
-  atlasY: 490
-  bearingX: 1.0
+  atlasX: 461
+  atlasY: 455
+  bearingX: 2.0
   bearingY: 24.0
   character: 1233
   height: 24
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 186
-  atlasY: 490
+  atlasX: 479
+  atlasY: 455
   bearingX: -2.0
   bearingY: 28.0
   character: 1234
@@ -6388,38 +6388,38 @@ glyphs:
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 207
-  atlasY: 490
-  bearingX: 1.0
+  atlasX: 500
+  atlasY: 455
+  bearingX: 2.0
   bearingY: 23.0
   character: 1235
   height: 23
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 226
-  atlasY: 490
+  atlasX: 518
+  atlasY: 455
   bearingX: -2.0
   bearingY: 23.0
   character: 1236
   height: 23
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 258
-  atlasY: 490
-  bearingX: 1.0
+  atlasX: 549
+  atlasY: 455
+  bearingX: 2.0
   bearingY: 17.0
   character: 1237
   height: 17
   kernings: {}
-  width: 25
+  width: 23
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 285
-  atlasY: 490
+  atlasX: 574
+  atlasY: 455
   bearingX: 1.0
   bearingY: 30.0
   character: 1238
@@ -6428,58 +6428,58 @@ glyphs:
   width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 305
-  atlasY: 490
-  bearingX: 1.0
+  atlasX: 594
+  atlasY: 455
+  bearingX: 2.0
   bearingY: 24.0
   character: 1239
   height: 24
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 323
-  atlasY: 490
+  atlasX: 611
+  atlasY: 455
   bearingX: 1.0
   bearingY: 23.0
   character: 1240
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 345
-  atlasY: 490
-  bearingX: 0.0
+  atlasX: 632
+  atlasY: 455
+  bearingX: 1.0
   bearingY: 17.0
   character: 1241
   height: 17
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 362
-  atlasY: 490
+  atlasX: 647
+  atlasY: 455
   bearingX: 1.0
   bearingY: 28.0
   character: 1242
   height: 28
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 384
-  atlasY: 490
-  bearingX: 0.0
+  atlasX: 668
+  atlasY: 455
+  bearingX: 1.0
   bearingY: 23.0
   character: 1243
   height: 23
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 401
-  atlasY: 490
+  atlasX: 683
+  atlasY: 455
   bearingX: -2.0
   bearingY: 28.0
   character: 1244
@@ -6488,8 +6488,8 @@ glyphs:
   width: 30
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 433
-  atlasY: 490
+  atlasX: 715
+  atlasY: 455
   bearingX: -1.0
   bearingY: 23.0
   character: 1245
@@ -6498,147 +6498,147 @@ glyphs:
   width: 29
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 464
-  atlasY: 490
-  bearingX: -1.0
+  atlasX: 746
+  atlasY: 455
+  bearingX: 0.0
   bearingY: 28.0
   character: 1246
   height: 28
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 484
-  atlasY: 490
-  bearingX: -1.0
+  atlasX: 765
+  atlasY: 455
+  bearingX: 0.0
   bearingY: 23.0
   character: 1247
   height: 23
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 501
-  atlasY: 490
+  atlasX: 781
+  atlasY: 455
   bearingX: 0.0
   bearingY: 23.0
   character: 1248
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 521
-  atlasY: 490
-  bearingX: -3.0
+  atlasX: 800
+  atlasY: 455
+  bearingX: -2.0
   bearingY: 17.0
   character: 1249
   height: 25
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 541
-  atlasY: 490
+  atlasX: 818
+  atlasY: 455
   bearingX: 1.0
-  bearingY: 28.0
+  bearingY: 27.0
   character: 1250
-  height: 28
+  height: 27
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 565
-  atlasY: 490
-  bearingX: 1.0
-  bearingY: 22.0
+  atlasX: 841
+  atlasY: 455
+  bearingX: 2.0
+  bearingY: 21.0
   character: 1251
-  height: 22
+  height: 21
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 584
-  atlasY: 490
+  atlasX: 858
+  atlasY: 455
   bearingX: 1.0
   bearingY: 28.0
   character: 1252
   height: 28
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 608
-  atlasY: 490
-  bearingX: 1.0
+  atlasX: 881
+  atlasY: 455
+  bearingX: 2.0
   bearingY: 23.0
   character: 1253
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 627
-  atlasY: 490
+  atlasX: 898
+  atlasY: 455
   bearingX: 2.0
   bearingY: 28.0
   character: 1254
   height: 28
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 650
-  atlasY: 490
-  bearingX: 1.0
+  atlasX: 920
+  atlasY: 455
+  bearingX: 2.0
   bearingY: 23.0
   character: 1255
   height: 23
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 668
+  atlasX: 0
   atlasY: 490
   bearingX: 2.0
   bearingY: 23.0
   character: 1256
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 691
+  atlasX: 22
   atlasY: 490
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 1257
   height: 17
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 709
+  atlasX: 38
   atlasY: 490
   bearingX: 2.0
   bearingY: 28.0
   character: 1258
   height: 28
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 732
+  atlasX: 60
   atlasY: 490
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 23.0
   character: 1259
   height: 23
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 750
+  atlasX: 76
   atlasY: 490
   bearingX: 0.0
   bearingY: 28.0
@@ -6648,88 +6648,88 @@ glyphs:
   width: 18
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 770
+  atlasX: 96
   atlasY: 490
   bearingX: 0.0
   bearingY: 23.0
   character: 1261
   height: 23
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 786
+  atlasX: 111
   atlasY: 490
-  bearingX: -1.0
-  bearingY: 28.0
+  bearingX: 0.0
+  bearingY: 27.0
   character: 1262
-  height: 28
-  kernings: {}
-  width: 23
-- advanceX: 15.0
-  advanceY: 0.0
-  atlasX: 811
-  atlasY: 490
-  bearingX: -4.0
-  bearingY: 22.0
-  character: 1263
-  height: 30
+  height: 27
   kernings: {}
   width: 21
+- advanceX: 15.0
+  advanceY: 0.0
+  atlasX: 134
+  atlasY: 490
+  bearingX: -3.0
+  bearingY: 21.0
+  character: 1263
+  height: 29
+  kernings: {}
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 834
+  atlasX: 155
   atlasY: 490
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 28.0
   character: 1264
   height: 28
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 859
+  atlasX: 178
   atlasY: 490
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 23.0
   character: 1265
   height: 31
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 882
+  atlasX: 199
   atlasY: 490
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 30.0
   character: 1266
   height: 30
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 907
+  atlasX: 222
   atlasY: 490
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 24.0
   character: 1267
   height: 32
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 525
-  bearingX: 3.0
+  atlasX: 244
+  atlasY: 490
+  bearingX: 4.0
   bearingY: 28.0
   character: 1268
   height: 28
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 20
-  atlasY: 525
+  atlasX: 263
+  atlasY: 490
   bearingX: 2.0
   bearingY: 23.0
   character: 1269
@@ -6738,8 +6738,8 @@ glyphs:
   width: 15
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 37
-  atlasY: 525
+  atlasX: 280
+  atlasY: 490
   bearingX: 1.0
   bearingY: 23.0
   character: 1270
@@ -6748,38 +6748,38 @@ glyphs:
   width: 17
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 56
-  atlasY: 525
-  bearingX: 0.0
+  atlasX: 299
+  atlasY: 490
+  bearingX: 1.0
   bearingY: 17.0
   character: 1271
   height: 23
   kernings: {}
-  width: 14
+  width: 12
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 72
-  atlasY: 525
+  atlasX: 313
+  atlasY: 490
   bearingX: 1.0
   bearingY: 28.0
   character: 1272
   height: 28
   kernings: {}
-  width: 25
+  width: 24
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 99
-  atlasY: 525
+  atlasX: 339
+  atlasY: 490
   bearingX: 2.0
   bearingY: 23.0
   character: 1273
   height: 23
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 122
-  atlasY: 525
+  atlasX: 361
+  atlasY: 490
   bearingX: 0.0
   bearingY: 23.0
   character: 1274
@@ -6788,108 +6788,108 @@ glyphs:
   width: 18
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 142
-  atlasY: 525
-  bearingX: -1.0
+  atlasX: 381
+  atlasY: 490
+  bearingX: 0.0
   bearingY: 17.0
   character: 1275
   height: 23
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 159
-  atlasY: 525
+  atlasX: 396
+  atlasY: 490
   bearingX: -2.0
   bearingY: 23.0
   character: 1276
   height: 29
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 183
-  atlasY: 525
-  bearingX: -2.0
+  atlasX: 419
+  atlasY: 490
+  bearingX: -1.0
   bearingY: 17.0
   character: 1277
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 204
-  atlasY: 525
+  atlasX: 438
+  atlasY: 490
   bearingX: -2.0
   bearingY: 23.0
   character: 1278
   height: 23
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 228
-  atlasY: 525
-  bearingX: -2.0
+  atlasX: 461
+  atlasY: 490
+  bearingX: -1.0
   bearingY: 17.0
   character: 1279
   height: 17
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 249
-  atlasY: 525
+  atlasX: 480
+  atlasY: 490
   bearingX: 1.0
   bearingY: 23.0
   character: 1280
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 269
-  atlasY: 525
-  bearingX: 1.0
+  atlasX: 499
+  atlasY: 490
+  bearingX: 2.0
   bearingY: 24.0
   character: 1281
   height: 24
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 290
-  atlasY: 525
-  bearingX: 1.0
+  atlasX: 518
+  atlasY: 490
+  bearingX: 2.0
   bearingY: 23.0
   character: 1282
-  height: 24
+  height: 23
   kernings: {}
-  width: 25
+  width: 23
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 317
-  atlasY: 525
-  bearingX: 1.0
+  atlasX: 543
+  atlasY: 490
+  bearingX: 2.0
   bearingY: 24.0
   character: 1283
   height: 24
   kernings: {}
-  width: 25
+  width: 23
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 344
-  atlasY: 525
-  bearingX: 3.0
+  atlasX: 568
+  atlasY: 490
+  bearingX: 4.0
   bearingY: 23.0
   character: 1284
   height: 23
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 369
-  atlasY: 525
+  atlasX: 591
+  atlasY: 490
   bearingX: 2.0
   bearingY: 17.0
   character: 1285
@@ -6898,48 +6898,48 @@ glyphs:
   width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 391
-  atlasY: 525
-  bearingX: 3.0
+  atlasX: 613
+  atlasY: 490
+  bearingX: 4.0
   bearingY: 23.0
   character: 1286
   height: 29
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 407
-  atlasY: 525
+  atlasX: 628
+  atlasY: 490
   bearingX: 2.0
   bearingY: 17.0
   character: 1287
   height: 23
   kernings: {}
-  width: 12
+  width: 11
 - advanceX: 29.0
   advanceY: 0.0
-  atlasX: 421
-  atlasY: 525
-  bearingX: -2.0
+  atlasX: 641
+  atlasY: 490
+  bearingX: -1.0
   bearingY: 23.0
   character: 1288
   height: 23
   kernings: {}
-  width: 29
+  width: 28
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 452
-  atlasY: 525
-  bearingX: -2.0
+  atlasX: 671
+  atlasY: 490
+  bearingX: -1.0
   bearingY: 17.0
   character: 1289
-  height: 18
+  height: 17
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 480
-  atlasY: 525
+  atlasX: 698
+  atlasY: 490
   bearingX: 1.0
   bearingY: 23.0
   character: 1290
@@ -6948,48 +6948,48 @@ glyphs:
   width: 28
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 510
-  atlasY: 525
-  bearingX: 0.0
+  atlasX: 728
+  atlasY: 490
+  bearingX: 1.0
   bearingY: 17.0
   character: 1291
   height: 17
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 538
-  atlasY: 525
+  atlasX: 755
+  atlasY: 490
   bearingX: 2.0
   bearingY: 23.0
   character: 1292
   height: 23
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 560
-  atlasY: 525
-  bearingX: 1.0
+  atlasX: 776
+  atlasY: 490
+  bearingX: 2.0
   bearingY: 17.0
   character: 1293
   height: 17
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 21.0
   advanceY: 0.0
-  atlasX: 579
-  atlasY: 525
-  bearingX: 2.0
+  atlasX: 793
+  atlasY: 490
+  bearingX: 3.0
   bearingY: 23.0
   character: 1294
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 599
-  atlasY: 525
+  atlasX: 811
+  atlasY: 490
   bearingX: 1.0
   bearingY: 17.0
   character: 1295
@@ -6998,67 +6998,67 @@ glyphs:
   width: 16
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 617
-  atlasY: 525
-  bearingX: 1.0
+  atlasX: 829
+  atlasY: 490
+  bearingX: 2.0
   bearingY: 23.0
   character: 1296
   height: 23
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 14.0
   advanceY: 0.0
-  atlasX: 637
-  atlasY: 525
-  bearingX: 0.0
+  atlasX: 847
+  atlasY: 490
+  bearingX: 1.0
   bearingY: 17.0
   character: 1297
   height: 17
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 654
-  atlasY: 525
-  bearingX: -2.0
+  atlasX: 862
+  atlasY: 490
+  bearingX: -1.0
   bearingY: 23.0
   character: 1298
   height: 29
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 17.0
   advanceY: 0.0
-  atlasX: 679
-  atlasY: 525
-  bearingX: -2.0
+  atlasX: 886
+  atlasY: 490
+  bearingX: -1.0
   bearingY: 17.0
   character: 1299
   height: 23
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 700
-  atlasY: 525
+  atlasX: 905
+  atlasY: 490
   bearingX: -2.0
   bearingY: 23.0
   character: 7680
   height: 32
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 721
-  atlasY: 525
-  bearingX: 1.0
+  atlasX: 925
+  atlasY: 490
+  bearingX: 2.0
   bearingY: 17.0
   character: 7681
   height: 26
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 740
+  atlasX: 0
   atlasY: 525
   bearingX: 1.0
   bearingY: 30.0
@@ -7068,138 +7068,138 @@ glyphs:
   width: 26
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 768
+  atlasX: 28
   atlasY: 525
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 24.0
   character: 7743
   height: 24
   kernings: {}
-  width: 27
+  width: 25
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 797
+  atlasX: 55
   atlasY: 525
   bearingX: 3.0
   bearingY: 30.0
   character: 7808
   height: 30
   kernings: {}
-  width: 28
+  width: 27
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 827
+  atlasX: 84
   atlasY: 525
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 7809
   height: 24
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 853
+  atlasX: 108
   atlasY: 525
   bearingX: 3.0
   bearingY: 30.0
   character: 7810
   height: 30
   kernings: {}
-  width: 28
+  width: 27
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 883
+  atlasX: 137
   atlasY: 525
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 7811
   height: 24
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 27.0
   advanceY: 0.0
-  atlasX: 909
+  atlasX: 161
   atlasY: 525
   bearingX: 3.0
   bearingY: 28.0
   character: 7812
   height: 28
   kernings: {}
-  width: 28
+  width: 27
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 190
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 23.0
   character: 7813
   height: 23
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 26
-  atlasY: 560
+  atlasX: 214
+  atlasY: 525
   bearingX: -2.0
   bearingY: 23.0
   character: 7840
   height: 28
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 47
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 234
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 17.0
   character: 7841
   height: 22
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 66
-  atlasY: 560
+  atlasX: 252
+  atlasY: 525
   bearingX: -2.0
   bearingY: 32.0
   character: 7842
   height: 32
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 87
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 272
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 26.0
   character: 7843
   height: 26
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 106
-  atlasY: 560
+  atlasX: 290
+  atlasY: 525
   bearingX: -2.0
   bearingY: 32.0
   character: 7844
   height: 32
   kernings: {}
-  width: 24
+  width: 23
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 132
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 315
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 26.0
   character: 7845
   height: 26
   kernings: {}
-  width: 20
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 154
-  atlasY: 560
+  atlasX: 335
+  atlasY: 525
   bearingX: -2.0
   bearingY: 32.0
   character: 7846
@@ -7208,58 +7208,58 @@ glyphs:
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 175
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 356
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 26.0
   character: 7847
   height: 26
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 194
-  atlasY: 560
+  atlasX: 374
+  atlasY: 525
   bearingX: -2.0
   bearingY: 33.0
   character: 7848
   height: 33
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 219
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 398
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 27.0
   character: 7849
   height: 27
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 240
-  atlasY: 560
+  atlasX: 417
+  atlasY: 525
   bearingX: -2.0
   bearingY: 34.0
   character: 7850
   height: 34
   kernings: {}
-  width: 22
+  width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 264
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 440
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 28.0
   character: 7851
   height: 28
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 284
-  atlasY: 560
+  atlasX: 458
+  atlasY: 525
   bearingX: -2.0
   bearingY: 30.0
   character: 7852
@@ -7268,78 +7268,78 @@ glyphs:
   width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 305
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 479
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 24.0
   character: 7853
   height: 29
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 324
-  atlasY: 560
+  atlasX: 497
+  atlasY: 525
   bearingX: -2.0
   bearingY: 33.0
   character: 7854
   height: 33
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 346
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 518
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 27.0
   character: 7855
   height: 27
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 365
-  atlasY: 560
+  atlasX: 536
+  atlasY: 525
   bearingX: -2.0
   bearingY: 33.0
   character: 7856
   height: 33
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 387
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 557
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 27.0
   character: 7857
   height: 27
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 406
-  atlasY: 560
+  atlasX: 575
+  atlasY: 525
   bearingX: -2.0
   bearingY: 34.0
   character: 7858
   height: 34
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 428
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 596
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 28.0
   character: 7859
   height: 28
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 447
-  atlasY: 560
+  atlasX: 614
+  atlasY: 525
   bearingX: -2.0
   bearingY: 34.0
   character: 7860
@@ -7348,38 +7348,38 @@ glyphs:
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 470
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 637
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 28.0
   character: 7861
   height: 28
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 490
-  atlasY: 560
+  atlasX: 655
+  atlasY: 525
   bearingX: -2.0
   bearingY: 29.0
   character: 7862
   height: 34
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 512
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 676
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 23.0
   character: 7863
   height: 28
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 531
-  atlasY: 560
+  atlasX: 694
+  atlasY: 525
   bearingX: 1.0
   bearingY: 23.0
   character: 7864
@@ -7388,18 +7388,18 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 550
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 713
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 17.0
   character: 7865
   height: 22
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 566
-  atlasY: 560
+  atlasX: 728
+  atlasY: 525
   bearingX: 1.0
   bearingY: 32.0
   character: 7866
@@ -7408,58 +7408,58 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 585
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 747
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 26.0
   character: 7867
   height: 26
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 601
-  atlasY: 560
+  atlasX: 762
+  atlasY: 525
   bearingX: 1.0
   bearingY: 29.0
   character: 7868
   height: 29
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 621
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 781
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 23.0
   character: 7869
   height: 23
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 639
-  atlasY: 560
+  atlasX: 797
+  atlasY: 525
   bearingX: 1.0
   bearingY: 32.0
   character: 7870
   height: 32
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 662
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 819
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 26.0
   character: 7871
   height: 26
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 683
-  atlasY: 560
+  atlasX: 839
+  atlasY: 525
   bearingX: 1.0
   bearingY: 32.0
   character: 7872
@@ -7468,57 +7468,57 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 702
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 858
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 26.0
   character: 7873
   height: 26
   kernings: {}
-  width: 14
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 718
-  atlasY: 560
+  atlasX: 873
+  atlasY: 525
   bearingX: 1.0
   bearingY: 33.0
   character: 7874
   height: 33
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 740
-  atlasY: 560
-  bearingX: 1.0
+  atlasX: 894
+  atlasY: 525
+  bearingX: 2.0
   bearingY: 27.0
   character: 7875
   height: 27
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 760
-  atlasY: 560
+  atlasX: 913
+  atlasY: 525
   bearingX: 1.0
   bearingY: 34.0
   character: 7876
   height: 34
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 781
+  atlasX: 0
   atlasY: 560
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 28.0
   character: 7877
   height: 28
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 800
+  atlasX: 18
   atlasY: 560
   bearingX: 1.0
   bearingY: 30.0
@@ -7528,37 +7528,37 @@ glyphs:
   width: 17
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 819
+  atlasX: 37
   atlasY: 560
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 24.0
   character: 7879
   height: 29
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 836
+  atlasX: 52
   atlasY: 560
   bearingX: 1.0
   bearingY: 32.0
   character: 7880
   height: 32
   kernings: {}
-  width: 12
+  width: 11
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 850
+  atlasX: 65
   atlasY: 560
-  bearingX: 0.0
+  bearingX: 1.0
   bearingY: 26.0
   character: 7881
   height: 26
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 863
+  atlasX: 77
   atlasY: 560
   bearingX: 0.0
   bearingY: 23.0
@@ -7568,58 +7568,58 @@ glyphs:
   width: 9
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 874
+  atlasX: 88
   atlasY: 560
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 23.0
   character: 7883
   height: 28
   kernings: {}
-  width: 10
+  width: 8
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 886
+  atlasX: 98
   atlasY: 560
   bearingX: 2.0
   bearingY: 23.0
   character: 7884
   height: 28
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 909
+  atlasX: 120
   atlasY: 560
-  bearingX: 1.0
+  bearingX: 2.0
   bearingY: 17.0
   character: 7885
   height: 22
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 927
+  atlasX: 136
   atlasY: 560
   bearingX: 2.0
   bearingY: 32.0
   character: 7886
   height: 32
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 158
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 26.0
   character: 7887
   height: 26
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 18
-  atlasY: 595
+  atlasX: 174
+  atlasY: 560
   bearingX: 2.0
   bearingY: 32.0
   character: 7888
@@ -7628,98 +7628,98 @@ glyphs:
   width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 42
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 198
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 26.0
   character: 7889
   height: 26
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 63
-  atlasY: 595
+  atlasX: 218
+  atlasY: 560
   bearingX: 2.0
   bearingY: 32.0
   character: 7890
   height: 32
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 86
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 240
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 26.0
   character: 7891
   height: 26
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 104
-  atlasY: 595
+  atlasX: 256
+  atlasY: 560
   bearingX: 2.0
   bearingY: 33.0
   character: 7892
   height: 33
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 127
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 278
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 27.0
   character: 7893
   height: 27
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 147
-  atlasY: 595
+  atlasX: 297
+  atlasY: 560
   bearingX: 2.0
   bearingY: 34.0
   character: 7894
   height: 34
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 170
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 319
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 28.0
   character: 7895
   height: 28
   kernings: {}
-  width: 17
+  width: 16
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 189
-  atlasY: 595
+  atlasX: 337
+  atlasY: 560
   bearingX: 2.0
   bearingY: 30.0
   character: 7896
   height: 35
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 212
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 359
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 24.0
   character: 7897
   height: 29
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 230
-  atlasY: 595
+  atlasX: 375
+  atlasY: 560
   bearingX: 2.0
   bearingY: 30.0
   character: 7898
@@ -7728,18 +7728,18 @@ glyphs:
   width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 257
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 402
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 24.0
   character: 7899
   height: 24
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 280
-  atlasY: 595
+  atlasX: 423
+  atlasY: 560
   bearingX: 2.0
   bearingY: 30.0
   character: 7900
@@ -7748,18 +7748,18 @@ glyphs:
   width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 307
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 450
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 24.0
   character: 7901
   height: 24
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 330
-  atlasY: 595
+  atlasX: 471
+  atlasY: 560
   bearingX: 2.0
   bearingY: 32.0
   character: 7902
@@ -7768,18 +7768,18 @@ glyphs:
   width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 357
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 498
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 26.0
   character: 7903
   height: 26
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 380
-  atlasY: 595
+  atlasX: 519
+  atlasY: 560
   bearingX: 2.0
   bearingY: 29.0
   character: 7904
@@ -7788,18 +7788,18 @@ glyphs:
   width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 407
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 546
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 23.0
   character: 7905
   height: 23
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 430
-  atlasY: 595
+  atlasX: 567
+  atlasY: 560
   bearingX: 2.0
   bearingY: 24.0
   character: 7906
@@ -7808,428 +7808,428 @@ glyphs:
   width: 25
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 457
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 594
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 19.0
   character: 7907
   height: 24
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 480
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 615
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 23.0
   character: 7908
   height: 28
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 502
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 636
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 17.0
   character: 7909
   height: 22
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 22.0
   advanceY: 0.0
-  atlasX: 521
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 653
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 32.0
   character: 7910
   height: 32
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 543
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 674
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 26.0
   character: 7911
   height: 26
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 562
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 691
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 30.0
   character: 7912
   height: 30
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 590
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 718
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 24.0
   character: 7913
   height: 24
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 615
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 741
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 30.0
   character: 7914
   height: 30
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 643
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 768
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 24.0
   character: 7915
   height: 24
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 668
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 791
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 32.0
   character: 7916
   height: 32
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 696
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 818
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 26.0
   character: 7917
   height: 26
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 721
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 841
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 29.0
   character: 7918
   height: 29
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 749
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 868
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 23.0
   character: 7919
   height: 23
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 774
-  atlasY: 595
-  bearingX: 2.0
+  atlasX: 891
+  atlasY: 560
+  bearingX: 3.0
   bearingY: 24.0
   character: 7920
   height: 29
   kernings: {}
-  width: 26
+  width: 25
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 802
-  atlasY: 595
-  bearingX: 1.0
+  atlasX: 918
+  atlasY: 560
+  bearingX: 2.0
   bearingY: 20.0
   character: 7921
   height: 25
   kernings: {}
-  width: 23
+  width: 21
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 827
+  atlasX: 0
   atlasY: 595
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 30.0
   character: 7922
   height: 30
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 847
+  atlasX: 18
   atlasY: 595
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 24.0
   character: 7923
   height: 32
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 870
+  atlasX: 39
   atlasY: 595
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 23.0
   character: 7924
   height: 28
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 890
+  atlasX: 57
   atlasY: 595
-  bearingX: -4.0
+  bearingX: -3.0
   bearingY: 17.0
   character: 7925
   height: 25
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 913
+  atlasX: 78
   atlasY: 595
-  bearingX: 2.0
+  bearingX: 3.0
   bearingY: 32.0
   character: 7926
   height: 32
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 630
-  bearingX: -4.0
+  atlasX: 96
+  atlasY: 595
+  bearingX: -3.0
   bearingY: 26.0
   character: 7927
   height: 34
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 23
-  atlasY: 630
-  bearingX: 2.0
+  atlasX: 117
+  atlasY: 595
+  bearingX: 3.0
   bearingY: 29.0
   character: 7928
   height: 29
   kernings: {}
-  width: 18
+  width: 16
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 43
-  atlasY: 630
-  bearingX: -4.0
+  atlasX: 135
+  atlasY: 595
+  bearingX: -3.0
   bearingY: 23.0
   character: 7929
   height: 31
   kernings: {}
-  width: 21
+  width: 19
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 66
-  atlasY: 630
-  bearingX: -3.0
+  atlasX: 156
+  atlasY: 595
+  bearingX: -2.0
   bearingY: 23.0
   character: 8013
   height: 23
   kernings: {}
-  width: 27
+  width: 26
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 95
-  atlasY: 630
+  atlasX: 184
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8192
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 97
-  atlasY: 630
+  atlasX: 187
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8193
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 99
-  atlasY: 630
+  atlasX: 190
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8194
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 101
-  atlasY: 630
+  atlasX: 193
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8195
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 103
-  atlasY: 630
+  atlasX: 196
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8196
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 105
-  atlasY: 630
+  atlasX: 199
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8197
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 5.0
   advanceY: 0.0
-  atlasX: 107
-  atlasY: 630
+  atlasX: 202
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8198
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 109
-  atlasY: 630
+  atlasX: 205
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8199
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 111
-  atlasY: 630
+  atlasX: 208
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8200
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 6.0
   advanceY: 0.0
-  atlasX: 113
-  atlasY: 630
+  atlasX: 211
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8201
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 3.0
   advanceY: 0.0
-  atlasX: 115
-  atlasY: 630
+  atlasX: 214
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8202
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 0.0
   advanceY: 0.0
-  atlasX: 117
-  atlasY: 630
+  atlasX: 217
+  atlasY: 595
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 8203
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 119
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 220
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 10.0
   character: 8211
   height: 3
   kernings: {}
-  width: 15
+  width: 13
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 136
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 235
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 10.0
   character: 8212
   height: 3
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 31.0
   advanceY: 0.0
-  atlasX: 168
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 266
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 10.0
   character: 8213
   height: 3
   kernings: {}
-  width: 30
+  width: 29
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 200
-  atlasY: 630
-  bearingX: -4.0
+  atlasX: 297
+  atlasY: 595
+  bearingX: -3.0
   bearingY: -1.0
   character: 8215
-  height: 7
+  height: 6
   kernings: {}
-  width: 15
+  width: 14
 - advanceX: 5.0
   advanceY: 0.0
-  atlasX: 217
-  atlasY: 630
-  bearingX: 1.0
+  atlasX: 313
+  atlasY: 595
+  bearingX: 2.0
   bearingY: 23.0
   character: 8216
   height: 8
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 5.0
   advanceY: 0.0
-  atlasX: 227
-  atlasY: 630
-  bearingX: 1.0
+  atlasX: 321
+  atlasY: 595
+  bearingX: 2.0
   bearingY: 23.0
   character: 8217
   height: 8
   kernings: {}
-  width: 8
+  width: 6
 - advanceX: 8.0
   advanceY: 0.0
-  atlasX: 237
-  atlasY: 630
+  atlasX: 329
+  atlasY: 595
   bearingX: -2.0
   bearingY: 4.0
   character: 8218
@@ -8238,58 +8238,58 @@ glyphs:
   width: 7
 - advanceX: 5.0
   advanceY: 0.0
-  atlasX: 246
-  atlasY: 630
-  bearingX: 3.0
+  atlasX: 338
+  atlasY: 595
+  bearingX: 4.0
   bearingY: 23.0
   character: 8219
   height: 8
   kernings: {}
-  width: 4
+  width: 3
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 252
-  atlasY: 630
-  bearingX: 1.0
+  atlasX: 343
+  atlasY: 595
+  bearingX: 2.0
   bearingY: 23.0
   character: 8220
   height: 8
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 267
-  atlasY: 630
-  bearingX: 1.0
+  atlasX: 357
+  atlasY: 595
+  bearingX: 2.0
   bearingY: 23.0
   character: 8221
   height: 8
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 13.0
   advanceY: 0.0
-  atlasX: 282
-  atlasY: 630
+  atlasX: 371
+  atlasY: 595
   bearingX: -2.0
   bearingY: 4.0
   character: 8222
   height: 8
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 297
-  atlasY: 630
+  atlasX: 385
+  atlasY: 595
   bearingX: 3.0
   bearingY: 24.0
   character: 8224
   height: 24
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 312
-  atlasY: 630
+  atlasX: 399
+  atlasY: 595
   bearingX: 1.0
   bearingY: 24.0
   character: 8225
@@ -8298,58 +8298,58 @@ glyphs:
   width: 15
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 329
-  atlasY: 630
+  atlasX: 416
+  atlasY: 595
   bearingX: 3.0
   bearingY: 16.0
   character: 8226
   height: 8
   kernings: {}
-  width: 8
+  width: 7
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 339
-  atlasY: 630
-  bearingX: 0.0
-  bearingY: 5.0
+  atlasX: 425
+  atlasY: 595
+  bearingX: 1.0
+  bearingY: 4.0
   character: 8230
-  height: 5
+  height: 4
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 36.0
   advanceY: 0.0
-  atlasX: 362
-  atlasY: 630
-  bearingX: 2.0
+  atlasX: 447
+  atlasY: 595
+  bearingX: 3.0
   bearingY: 23.0
   character: 8240
   height: 23
   kernings: {}
-  width: 33
+  width: 31
 - advanceX: 7.0
   advanceY: 0.0
-  atlasX: 397
-  atlasY: 630
-  bearingX: 3.0
+  atlasX: 480
+  atlasY: 595
+  bearingX: 4.0
   bearingY: 23.0
   character: 8242
   height: 8
   kernings: {}
-  width: 5
+  width: 4
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 404
-  atlasY: 630
-  bearingX: 3.0
+  atlasX: 486
+  atlasY: 595
+  bearingX: 4.0
   bearingY: 23.0
   character: 8243
   height: 8
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 417
-  atlasY: 630
+  atlasX: 497
+  atlasY: 595
   bearingX: 1.0
   bearingY: 15.0
   character: 8249
@@ -8358,8 +8358,8 @@ glyphs:
   width: 8
 - advanceX: 9.0
   advanceY: 0.0
-  atlasX: 427
-  atlasY: 630
+  atlasX: 507
+  atlasY: 595
   bearingX: 0.0
   bearingY: 15.0
   character: 8250
@@ -8368,18 +8368,18 @@ glyphs:
   width: 8
 - advanceX: 15.0
   advanceY: 0.0
-  atlasX: 437
-  atlasY: 630
-  bearingX: -1.0
+  atlasX: 517
+  atlasY: 595
+  bearingX: 0.0
   bearingY: 23.0
   character: 8252
   height: 23
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 4.0
   advanceY: 0.0
-  atlasX: 457
-  atlasY: 630
+  atlasX: 536
+  atlasY: 595
   bearingX: -8.0
   bearingY: 23.0
   character: 8260
@@ -8388,8 +8388,8 @@ glyphs:
   width: 20
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 479
-  atlasY: 630
+  atlasX: 558
+  atlasY: 595
   bearingX: 2.0
   bearingY: 23.0
   character: 8304
@@ -8398,18 +8398,18 @@ glyphs:
   width: 10
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 491
-  atlasY: 630
+  atlasX: 570
+  atlasY: 595
   bearingX: 1.0
   bearingY: 23.0
   character: 8308
   height: 14
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 504
-  atlasY: 630
+  atlasX: 582
+  atlasY: 595
   bearingX: 2.0
   bearingY: 23.0
   character: 8309
@@ -8418,38 +8418,38 @@ glyphs:
   width: 10
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 516
-  atlasY: 630
-  bearingX: 2.0
+  atlasX: 594
+  atlasY: 595
+  bearingX: 3.0
   bearingY: 23.0
   character: 8310
   height: 14
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 529
-  atlasY: 630
-  bearingX: 2.0
+  atlasX: 605
+  atlasY: 595
+  bearingX: 3.0
   bearingY: 23.0
   character: 8311
   height: 14
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 542
-  atlasY: 630
+  atlasX: 617
+  atlasY: 595
   bearingX: 2.0
   bearingY: 23.0
   character: 8312
   height: 14
   kernings: {}
-  width: 11
+  width: 10
 - advanceX: 11.0
   advanceY: 0.0
-  atlasX: 555
-  atlasY: 630
+  atlasX: 629
+  atlasY: 595
   bearingX: 2.0
   bearingY: 23.0
   character: 8313
@@ -8458,68 +8458,68 @@ glyphs:
   width: 10
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 567
-  atlasY: 630
-  bearingX: 2.0
+  atlasX: 641
+  atlasY: 595
+  bearingX: 3.0
   bearingY: 23.0
   character: 8319
   height: 10
   kernings: {}
-  width: 11
+  width: 9
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 580
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 652
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 23.0
   character: 8355
   height: 23
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 601
-  atlasY: 630
-  bearingX: -1.0
+  atlasX: 672
+  atlasY: 595
+  bearingX: 0.0
   bearingY: 23.0
   character: 8356
   height: 23
   kernings: {}
-  width: 20
+  width: 18
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 623
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 692
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 23.0
   character: 8359
   height: 23
   kernings: {}
-  width: 23
+  width: 22
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 648
-  atlasY: 630
+  atlasX: 716
+  atlasY: 595
   bearingX: 0.0
   bearingY: 24.0
   character: 8363
-  height: 30
+  height: 29
   kernings: {}
   width: 21
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 671
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 739
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 23.0
   character: 8364
   height: 23
   kernings: {}
-  width: 20
+  width: 18
 - advanceX: 25.0
   advanceY: 0.0
-  atlasX: 693
-  atlasY: 630
+  atlasX: 759
+  atlasY: 595
   bearingX: 3.0
   bearingY: 23.0
   character: 8453
@@ -8528,68 +8528,68 @@ glyphs:
   width: 20
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 715
-  atlasY: 630
+  atlasX: 781
+  atlasY: 595
   bearingX: 2.0
   bearingY: 23.0
   character: 8467
   height: 23
   kernings: {}
-  width: 13
+  width: 12
 - advanceX: 30.0
   advanceY: 0.0
-  atlasX: 730
-  atlasY: 630
-  bearingX: 0.0
+  atlasX: 795
+  atlasY: 595
+  bearingX: 1.0
   bearingY: 23.0
   character: 8470
   height: 23
   kernings: {}
-  width: 30
+  width: 28
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 762
-  atlasY: 630
+  atlasX: 825
+  atlasY: 595
   bearingX: 1.0
   bearingY: 23.0
   character: 8480
   height: 11
   kernings: {}
-  width: 21
+  width: 20
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 785
-  atlasY: 630
-  bearingX: 1.0
+  atlasX: 847
+  atlasY: 595
+  bearingX: 2.0
   bearingY: 23.0
   character: 8482
   height: 11
   kernings: {}
-  width: 22
+  width: 20
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 809
-  atlasY: 630
-  bearingX: -1.0
+  atlasX: 869
+  atlasY: 595
+  bearingX: 0.0
   bearingY: 23.0
   character: 8486
   height: 23
   kernings: {}
-  width: 24
+  width: 22
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 835
-  atlasY: 630
-  bearingX: 1.0
+  atlasX: 893
+  atlasY: 595
+  bearingX: 2.0
   bearingY: 17.0
   character: 8494
   height: 18
   kernings: {}
-  width: 18
+  width: 17
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 855
-  atlasY: 630
+  atlasX: 912
+  atlasY: 595
   bearingX: 1.0
   bearingY: 23.0
   character: 8539
@@ -8598,7 +8598,7 @@ glyphs:
   width: 22
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 879
+  atlasX: 0
   atlasY: 630
   bearingX: 1.0
   bearingY: 23.0
@@ -8608,18 +8608,18 @@ glyphs:
   width: 24
 - advanceX: 26.0
   advanceY: 0.0
-  atlasX: 905
+  atlasX: 26
   atlasY: 630
   bearingX: 1.0
   bearingY: 23.0
   character: 8541
   height: 23
   kernings: {}
-  width: 25
+  width: 24
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 665
+  atlasX: 52
+  atlasY: 630
   bearingX: 1.0
   bearingY: 23.0
   character: 8542
@@ -8628,18 +8628,18 @@ glyphs:
   width: 22
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 24
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 76
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 23.0
   character: 8706
   height: 23
   kernings: {}
-  width: 17
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 43
-  atlasY: 665
+  atlasX: 93
+  atlasY: 630
   bearingX: -1.0
   bearingY: 23.0
   character: 8710
@@ -8648,108 +8648,108 @@ glyphs:
   width: 17
 - advanceX: 24.0
   advanceY: 0.0
-  atlasX: 62
-  atlasY: 665
-  bearingX: 3.0
+  atlasX: 112
+  atlasY: 630
+  bearingX: 4.0
   bearingY: 23.0
   character: 8719
   height: 31
   kernings: {}
-  width: 19
+  width: 17
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 83
-  atlasY: 665
+  atlasX: 131
+  atlasY: 630
   bearingX: 3.0
   bearingY: 23.0
   character: 8721
   height: 31
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 104
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 151
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 12.0
   character: 8722
-  height: 3
+  height: 2
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 122
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 167
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 26.0
   character: 8730
   height: 26
   kernings: {}
-  width: 19
+  width: 18
 - advanceX: 23.0
   advanceY: 0.0
-  atlasX: 143
-  atlasY: 665
+  atlasX: 187
+  atlasY: 630
   bearingX: 2.0
   bearingY: 16.0
   character: 8734
-  height: 11
+  height: 10
   kernings: {}
-  width: 20
+  width: 19
 - advanceX: 12.0
   advanceY: 0.0
-  atlasX: 165
-  atlasY: 665
-  bearingX: 0.0
+  atlasX: 208
+  atlasY: 630
+  bearingX: 1.0
   bearingY: 24.0
   character: 8747
   height: 32
   kernings: {}
-  width: 13
+  width: 11
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 180
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 221
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 16.0
   character: 8776
   height: 10
   kernings: {}
-  width: 16
+  width: 15
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 198
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 238
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 20.0
   character: 8800
   height: 17
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 216
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 254
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 19.0
   character: 8804
   height: 19
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 234
-  atlasY: 665
-  bearingX: 1.0
+  atlasX: 270
+  atlasY: 630
+  bearingX: 2.0
   bearingY: 19.0
   character: 8805
   height: 19
   kernings: {}
-  width: 16
+  width: 14
 - advanceX: 19.0
   advanceY: 0.0
-  atlasX: 252
-  atlasY: 665
+  atlasX: 286
+  atlasY: 630
   bearingX: 2.0
   bearingY: 23.0
   character: 9674
@@ -8758,18 +8758,18 @@ glyphs:
   width: 16
 - advanceX: 20.0
   advanceY: 0.0
-  atlasX: 270
-  atlasY: 665
+  atlasX: 304
+  atlasY: 630
   bearingX: -4.0
   bearingY: 24.0
   character: 64256
   height: 32
   kernings: {}
-  width: 29
+  width: 28
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 301
-  atlasY: 665
+  atlasX: 334
+  atlasY: 630
   bearingX: -4.0
   bearingY: 24.0
   character: 64257
@@ -8778,8 +8778,8 @@ glyphs:
   width: 23
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 326
-  atlasY: 665
+  atlasX: 359
+  atlasY: 630
   bearingX: -4.0
   bearingY: 24.0
   character: 64258
@@ -8788,8 +8788,8 @@ glyphs:
   width: 23
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 351
-  atlasY: 665
+  atlasX: 384
+  atlasY: 630
   bearingX: -4.0
   bearingY: 24.0
   character: 64259
@@ -8798,8 +8798,8 @@ glyphs:
   width: 33
 - advanceX: 28.0
   advanceY: 0.0
-  atlasX: 386
-  atlasY: 665
+  atlasX: 419
+  atlasY: 630
   bearingX: -4.0
   bearingY: 24.0
   character: 64260
@@ -8808,28 +8808,28 @@ glyphs:
   width: 33
 - advanceX: 0.0
   advanceY: 0.0
-  atlasX: 421
-  atlasY: 665
+  atlasX: 454
+  atlasY: 630
   bearingX: 0.0
-  bearingY: 0.0
+  bearingY: 1.0
   character: 65279
-  height: 0
+  height: 1
   kernings: {}
-  width: 0
+  width: 1
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 423
-  atlasY: 665
+  atlasX: 457
+  atlasY: 630
   bearingX: 1.0
   bearingY: 24.0
   character: 65532
   height: 30
   kernings: {}
-  width: 31
+  width: 30
 - advanceX: 32.0
   advanceY: 0.0
-  atlasX: 456
-  atlasY: 665
+  atlasX: 489
+  atlasY: 630
   bearingX: 1.0
   bearingY: 24.0
   character: 65533
