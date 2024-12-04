@@ -68,7 +68,7 @@ public class SceneTest_Fonts_1 implements Scene {
         // render font
         renderer2D.begin();
         renderer2D.drawTexture(font.fontAtlas,0,0,0,1,1);
-
+        renderer2D.drawTexture(yellow,0,0,0,1,1);
         renderer2D.end();
 
     }
