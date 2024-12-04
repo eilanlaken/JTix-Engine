@@ -231,7 +231,7 @@ public class Application {
             boolean windowRendered = windowRefresh();
             int targetFrameRate = Graphics.getTargetFps();
 
-            Assets.update2();
+            Assets.update();
             Input.update();
             GLFW.glfwPollEvents();
 
