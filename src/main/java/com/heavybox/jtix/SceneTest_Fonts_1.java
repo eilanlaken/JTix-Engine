@@ -5,6 +5,7 @@ import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
@@ -13,6 +14,8 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class SceneTest_Fonts_1 implements Scene {
 
@@ -30,7 +33,7 @@ public class SceneTest_Fonts_1 implements Scene {
 
     @Override
     public void setup() {
-        Assets.loadFont("assets/fonts/OpenSans-Italic.ttf", 32, false, null);
+        Assets.loadFont("assets/fonts/OpenSans-Italic-32.yml");
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadTexture("assets/textures/pattern.png");
         Assets.loadTexturePack("assets/atlases/spots.yml");
@@ -44,7 +47,7 @@ public class SceneTest_Fonts_1 implements Scene {
         yellow = Assets.get("assets/textures/yellowSquare.jpg");
         pattern = Assets.get("assets/textures/pattern.png");
         pack = Assets.get("assets/atlases/spots.yml");
-        font = Assets.get("assets/fonts/OpenSans-Italic.ttf");
+        font = Assets.get("assets/fonts/OpenSans-Italic-32.yml");
     }
 
 
@@ -58,6 +61,25 @@ public class SceneTest_Fonts_1 implements Scene {
 
 
         }
+
+        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+            EventQueue.invokeLater(() -> {
+                // Use AWT FileDialog for cross-platform native UI
+                FileDialog fileDialog = new FileDialog((Frame) null, "Open File", FileDialog.LOAD);
+                fileDialog.setVisible(true);
+
+                String directory = fileDialog.getDirectory();
+                String file = fileDialog.getFile();
+
+                if (directory != null && file != null) {
+                    System.out.println("Selected file: " + directory + file);
+                } else {
+                    System.out.println("No file selected.");
+                }
+            });
+        }
+        System.out.println("hi");
+        System.out.println("bye");
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0f,1);

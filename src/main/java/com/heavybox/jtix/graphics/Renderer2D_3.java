@@ -1894,8 +1894,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         setTexture(font.fontAtlas);
         setMode(GL11.GL_TRIANGLES);
 
-
-
         /* calculate the line total width */
         float total_width = 0;
         char prevChar = 0;
@@ -1927,8 +1925,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         }
         total_height = maxAscent + maxDescent;
 
-        System.out.println("width: " + total_width);
-        System.out.println("height: " + total_height);
 
         /* render a quad for every character */
         float penX = -total_width * 0.5f;

@@ -17,6 +17,7 @@ import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -267,6 +268,7 @@ public class Application {
         GLFW.glfwSetDropCallback(windowHandle, null);
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, null);
         GLFW.glfwDestroyWindow(windowHandle);
+
         windowResizeCallback.free();
         windowFocusChangeCallback.free();
         windowMinimizedCallback.free();
@@ -276,6 +278,15 @@ public class Application {
         windowPositionCallback.free();
         GLFW.glfwTerminate();
         errorCallback.free();
+
+        /* terminate any thread associated with AWT in a case it was spawned (for example, when opening a file dialog). */
+        EventQueue.invokeLater(() -> {
+            // Ensure AWT event queue is cleared
+            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+                    new java.awt.event.WindowEvent(new Frame(), java.awt.event.WindowEvent.WINDOW_CLOSING)
+            );
+        });
+        System.exit(0);
     }
 
     public static void playScene(@NotNull Scene scene) {

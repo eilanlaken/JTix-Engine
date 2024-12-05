@@ -5,6 +5,8 @@ import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Color;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
@@ -14,6 +16,8 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class SceneTest_3 implements Scene {
 
@@ -85,6 +89,8 @@ public class SceneTest_3 implements Scene {
             v2 += 0.001f;
             deg -= 3f;
         }
+
+
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.2f,0.1f,0.3f,1);
