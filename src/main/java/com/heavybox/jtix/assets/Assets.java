@@ -6,6 +6,7 @@ import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Queue;
 import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
@@ -16,6 +17,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Consumer;
 
 public final class Assets {
 
@@ -269,6 +272,34 @@ public final class Assets {
         return droppedFilesHistory;
     }
 
+    public static void showFileDialogLoad(final String title, final Consumer<String> callback) {
+        EventQueue.invokeLater(() -> {
+            // Use AWT FileDialog for cross-platform native UI
+            FileDialog fileDialog = new FileDialog((Frame) null, title, FileDialog.LOAD);
+            fileDialog.setVisible(true);
+
+            String directory = fileDialog.getDirectory();
+            String file = fileDialog.getFile();
+
+            Path fullPath = Paths.get(directory, file);
+            String fullPathString = fullPath.toString();
+            callback.accept(fullPathString);
+        });
+    }
+
+    public static void showFileDialogSave(final String title, final Consumer<String> callback) {
+        EventQueue.invokeLater(() -> {
+            FileDialog fileDialog = new FileDialog((Frame) null, title, FileDialog.SAVE);
+            fileDialog.setVisible(true);
+
+            String directory = fileDialog.getDirectory();
+            String file = fileDialog.getFile();
+            Path fullPath = Paths.get(directory, file);
+            String fullPathString = fullPath.toString();
+            callback.accept(fullPathString);
+        });
+    }
+
     public static long getFileSize(final String path) throws IOException {
         Path filePath = Paths.get(path);
         return Files.size(filePath);
@@ -330,17 +361,15 @@ public final class Assets {
         return false;
     }
 
-    public static boolean saveFile(final String directory, final String filename, final String content) throws IOException {
+    public static void saveFile(final String directory, final String filename, final String content) throws IOException {
         if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename;
         File file = new File(filePath);
-        boolean fileExists = file.exists();
         FileWriter fileWriter = new FileWriter(file, false);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write(content);
         bufferedWriter.close();
         fileWriter.close();
-        return fileExists;
     }
 
     // TODO: change to throws AssetsException

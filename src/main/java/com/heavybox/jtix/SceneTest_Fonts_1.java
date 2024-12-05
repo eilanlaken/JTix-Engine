@@ -16,6 +16,8 @@ import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SceneTest_Fonts_1 implements Scene {
 
@@ -63,23 +65,32 @@ public class SceneTest_Fonts_1 implements Scene {
         }
 
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            EventQueue.invokeLater(() -> {
-                // Use AWT FileDialog for cross-platform native UI
-                FileDialog fileDialog = new FileDialog((Frame) null, "Open File", FileDialog.LOAD);
-                fileDialog.setVisible(true);
-
-                String directory = fileDialog.getDirectory();
-                String file = fileDialog.getFile();
-
-                if (directory != null && file != null) {
-                    System.out.println("Selected file: " + directory + file);
-                } else {
-                    System.out.println("No file selected.");
-                }
+            Assets.showFileDialogLoad("hello", path -> {
+                Path fullPath = Paths.get(path);
+                String loaded = Assets.getFileContent(fullPath.toString());
+                System.out.println(loaded);
             });
         }
-        System.out.println("hi");
-        System.out.println("bye");
+        if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+            Assets.showFileDialogSave("hello", path -> {
+                // Convert the full path to a Path object
+                Path fullPath = Paths.get(path);
+                // Get the directory (parent)
+                Path directory = fullPath.getParent();
+                // Get the filename
+                Path fileName = fullPath.getFileName();
+
+                System.out.println(directory.toString());
+                System.out.println(fileName.toString());
+
+                try {
+                    Assets.saveFile(directory.toString(), fileName.toString(), "abc");
+                } catch (Exception e) {
+                    // ignore.
+                }
+            });
+
+        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0f,1);
