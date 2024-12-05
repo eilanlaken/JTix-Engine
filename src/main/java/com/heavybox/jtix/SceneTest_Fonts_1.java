@@ -45,8 +45,6 @@ public class SceneTest_Fonts_1 implements Scene {
         pattern = Assets.get("assets/textures/pattern.png");
         pack = Assets.get("assets/atlases/spots.yml");
         font = Assets.get("assets/fonts/OpenSans-Italic.ttf");
-
-
     }
 
 
@@ -62,13 +60,13 @@ public class SceneTest_Fonts_1 implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0.2f,0.1f,0.3f,1);
+        GL11.glClearColor(0f,0f,0f,1);
 
 
         // render font
         renderer2D.begin();
-        renderer2D.drawTexture(font.fontAtlas,0,0,0,1,1);
-        renderer2D.drawTexture(yellow,0,0,0,1,1);
+        //renderer2D.drawTexture(font.fontAtlas,0,0,0,1,1);
+        renderer2D.drawString("X", font);
         renderer2D.end();
 
     }

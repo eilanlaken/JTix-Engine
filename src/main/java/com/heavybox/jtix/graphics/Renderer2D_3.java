@@ -1885,6 +1885,81 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         vertexIndex += 3;
     }
 
+    /* Rendering 2D primitives - Strings */
+
+    public void drawString(final String text, final Font font) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
+
+        setTexture(font.fontAtlas);
+        setMode(GL11.GL_TRIANGLES);
+
+        float penX = 0;
+        float penY = 0;
+        char prevChar = 0;
+
+        /* render a quad for every character */
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.glyphs.get((int) c);
+            if (glyph == null) continue;
+
+            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
+
+            /* calculate the quad's x, y, width, height */
+            float x = penX + glyph.bearingX;
+            float y = penY - (glyph.height - glyph.bearingY);
+            float w = glyph.width;
+            float h = glyph.height;
+
+            /* calculate the quad's uv coordinates */
+            float u0 = glyph.atlasX * font.invAtlasWidth;
+            float v0 = (glyph.atlasY) * font.invAtlasHeight;
+            float u1 = (glyph.atlasX + glyph.width) * font.invAtlasWidth;
+            float v1 = (glyph.atlasY + glyph.height) * font.invAtlasHeight;
+
+            // (1,92) -> (20,70)
+            System.out.println("width : " + glyph.width);
+            System.out.println("height : " + glyph.height);
+
+            //u0 = 1;
+            //u1 = 20;
+
+            /* put vertices */
+            positions.put(x).put(y);
+            colors.put(currentTint);
+            textCoords.put(0.0009765625f).put(0.91015625f);
+
+            positions.put(x + w).put(y);
+            colors.put(currentTint);
+            textCoords.put(0.01953125f).put(0.91015625f);
+
+            positions.put(x + w).put(y + h);
+            colors.put(currentTint);
+            textCoords.put(0.0009765625f).put(0.931640625f);
+
+            positions.put(x).put(y + h);
+            colors.put(currentTint);
+            textCoords.put(0.01953125f).put(0.931640625f);
+
+            /* put indices */
+            int startVertex = this.vertexIndex;
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 4;
+
+            penX += glyph.advanceX;
+            penY += glyph.advanceY;
+            prevChar = c;
+        }
+
+        vertexIndex += 3;
+    }
+
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
     private boolean ensureCapacity(int numVertices, int numIndices) {
