@@ -1887,18 +1887,53 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
 
-    public void drawString(final String text, final Font font) {
+    public void drawString(final String text, final Font font, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
         setTexture(font.fontAtlas);
         setMode(GL11.GL_TRIANGLES);
 
-        float penX = 0;
-        float penY = 0;
+
+
+        /* calculate the line total width */
+        float total_width = 0;
         char prevChar = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.glyphs.get((int) c);
+            if (glyph == null) continue;
+            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
+            total_width += glyph.advanceX * 1;
+            prevChar = c;
+        }
+
+        /* calculate the line total height */
+        float maxAscent = 0;
+        float maxDescent = 0;
+        float total_height = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.glyphs.get((int) c);
+            if (glyph == null) continue;
+
+            // Update ascent (distance from baseline to top of glyph)
+            float ascent = glyph.bearingY * 1;
+            if (ascent > maxAscent) maxAscent = ascent;
+
+            // Update descent (distance below baseline)
+            float descent = (glyph.height - glyph.bearingY) * 1;
+            if (descent > maxDescent) maxDescent = descent;
+        }
+        total_height = maxAscent + maxDescent;
+
+        System.out.println("width: " + total_width);
+        System.out.println("height: " + total_height);
 
         /* render a quad for every character */
+        float penX = -total_width * 0.5f;
+        float penY = total_height * 0.5f;
+        prevChar = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.glyphs.get((int) c);
@@ -1907,8 +1942,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
 
             /* calculate the quad's x, y, width, height */
-            float x = penX + glyph.bearingX;
-            float y = penY - (glyph.height - glyph.bearingY);
+            float char_x = penX + glyph.bearingX;
+            float char_y = penY - (glyph.height - glyph.bearingY);
             float w = glyph.width;
             float h = glyph.height;
 
@@ -1919,22 +1954,22 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             float v1 = (glyph.atlasY + glyph.height) * font.invAtlasHeight;
 
             /* put vertices */
-            positions.put(x).put(y + h);
+            positions.put(char_x).put(char_y + h);
             colors.put(currentTint);
             //textCoords.put(0).put(0);
             textCoords.put(u0).put(v0);
 
-            positions.put(x).put(y);
+            positions.put(char_x).put(char_y);
             colors.put(currentTint);
             //textCoords.put(0).put(1);
             textCoords.put(u0).put(v1);
 
-            positions.put(x + w).put(y);
+            positions.put(char_x + w).put(char_y);
             colors.put(currentTint);
             //textCoords.put(1).put(1);
             textCoords.put(u1).put(v1);
 
-            positions.put(x + w).put(y + h);
+            positions.put(char_x + w).put(char_y + h);
             colors.put(currentTint);
             //textCoords.put(1).put(0);
             textCoords.put(u1).put(v0);
