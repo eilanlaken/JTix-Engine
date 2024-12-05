@@ -1918,29 +1918,26 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             float u1 = (glyph.atlasX + glyph.width) * font.invAtlasWidth;
             float v1 = (glyph.atlasY + glyph.height) * font.invAtlasHeight;
 
-            // (1,92) -> (20,70)
-            System.out.println("width : " + glyph.width);
-            System.out.println("height : " + glyph.height);
-
-            //u0 = 1;
-            //u1 = 20;
-
             /* put vertices */
+            positions.put(x).put(y + h);
+            colors.put(currentTint);
+            //textCoords.put(0).put(0);
+            textCoords.put(u0).put(v0);
+
             positions.put(x).put(y);
             colors.put(currentTint);
-            textCoords.put(0.0009765625f).put(0.91015625f);
+            //textCoords.put(0).put(1);
+            textCoords.put(u0).put(v1);
 
             positions.put(x + w).put(y);
             colors.put(currentTint);
-            textCoords.put(0.01953125f).put(0.91015625f);
+            //textCoords.put(1).put(1);
+            textCoords.put(u1).put(v1);
 
             positions.put(x + w).put(y + h);
             colors.put(currentTint);
-            textCoords.put(0.0009765625f).put(0.931640625f);
-
-            positions.put(x).put(y + h);
-            colors.put(currentTint);
-            textCoords.put(0.01953125f).put(0.931640625f);
+            //textCoords.put(1).put(0);
+            textCoords.put(u1).put(v0);
 
             /* put indices */
             int startVertex = this.vertexIndex;
@@ -1958,6 +1955,10 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         }
 
         vertexIndex += 3;
+    }
+
+    private void drawCharacter(final char c, final Font font, final float color, float x, float y, float deg, float scaleX, float scaleY) {
+
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
