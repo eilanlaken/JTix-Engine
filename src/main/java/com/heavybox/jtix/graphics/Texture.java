@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 // TODO:
 // need to implement LOD: GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
 // try to implement string constructor.
-public final class Texture implements MemoryResource {
+public class Texture implements MemoryResource {
 
     private       int       handle;
     private       int       slot;
@@ -26,6 +26,47 @@ public final class Texture implements MemoryResource {
     private       float     biasLOD; // higher LOD bias will sample from higher mip level, which means lower texture quality.
 
     private ByteBuffer bytes;
+
+    public Texture(int width, int height, ByteBuffer bytes, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy, boolean useAlpha) {
+        this.handle = GL11.glGenTextures();
+        this.slot = -1;
+
+        int maxTextureSize = Graphics.getMaxTextureSize();
+        if (width > maxTextureSize || height > maxTextureSize)
+            throw new IllegalStateException("Trying to create " + Texture.class + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+
+        this.width = width;
+        this.height = height;
+        this.invWidth = 1.0f / width;
+        this.invHeight = 1.0f / height;
+
+        this.filterMag = filterMag != null ? filterMag : FilterMag.NEAREST;
+        this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
+        this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.anisotropy = MathUtils.nextPowerOf2i(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
+        this.biasLOD = 0;
+
+        TextureBinder.bind(this);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        if (useAlpha) {
+            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bytes);
+        } else {
+            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height, 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, bytes);
+        }
+        if (this.filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
+                this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
+                this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
+                this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+            if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+        } else {
+            this.anisotropy = 1;
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
+        }
+    }
 
     public Texture(int width, int height, ByteBuffer bytes, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy) {
         this.handle = GL11.glGenTextures();

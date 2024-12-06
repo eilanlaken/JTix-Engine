@@ -579,6 +579,12 @@
             <artifactId>annotations</artifactId>
             <version>20.1.0</version>
         </dependency>
+        <!-- open-cv -->
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.9.0-0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
