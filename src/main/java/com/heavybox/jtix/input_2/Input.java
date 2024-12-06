@@ -13,4 +13,8 @@ public final class Input {
         mouse.update();
     }
 
+    public static void cleanup() {
+        webcam.deleteAll();
+    }
+
 }

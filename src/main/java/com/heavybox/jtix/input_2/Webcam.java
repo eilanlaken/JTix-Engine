@@ -17,25 +17,18 @@ import java.nio.ByteBuffer;
 
 public class Webcam implements MemoryResourceHolder {
 
+    private boolean      init      = false;
+    private VideoCapture capture   = null;
+    private Mat          mat       = null;
+    private Texture      feed      = null;
+    private byte[]       rgbData   = null;
+    private ByteBuffer   rgbBuffer = null;
 
-    private boolean      active  = false;
-    private boolean      init    = false;
-    private VideoCapture capture = null;
-    private Mat          mat     = null;
-
-    private Texture feed;
-    private ByteBuffer buffer;
-
-    private byte[] rgbData;
-
-    // move to separate thread.
     public void init() {
         if (init) return;
-
         OpenCV.loadShared();
         this.capture = new VideoCapture(0);
         this.mat = new Mat();
-
         init = true;
     }
 
@@ -46,14 +39,14 @@ public class Webcam implements MemoryResourceHolder {
             int height = mat.height();
             if (rgbData == null) {
                 rgbData = new byte[width * height * 3]; // Example RGB data
-                this.buffer = ByteBuffer.allocateDirect(640 * 480 * 3);
+                ByteBuffer buffer = ByteBuffer.allocateDirect(640 * 480 * 3);
                 this.feed = new Texture(width, height, buffer,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,false);
+                rgbBuffer = ByteBuffer.allocateDirect(width * height * 3);
             }
             mat.get(0,0, rgbData);
 
-            ByteBuffer rgbBuffer = ByteBuffer.allocateDirect(width * height * 3);
             rgbBuffer.put(rgbData);
             rgbBuffer.flip();
             TextureBinder.bind(feed);
@@ -75,8 +68,8 @@ public class Webcam implements MemoryResourceHolder {
 
     @Override
     public void deleteAll() {
-        capture.release();
-        feed.delete();
+        if (capture != null) capture.release();
+        if (feed != null) feed.delete();
     }
 
 }

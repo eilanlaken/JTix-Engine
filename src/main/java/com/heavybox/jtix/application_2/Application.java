@@ -261,6 +261,7 @@ public class Application {
         /* clean memory resources */ // TODO: clear Assets.
         currentScene.finish();
         Assets.clear(); // TODO: implement
+        Input.cleanup();
 
         GLFW.glfwSetWindowFocusCallback(windowHandle, null);
         GLFW.glfwSetWindowIconifyCallback(windowHandle, null);
