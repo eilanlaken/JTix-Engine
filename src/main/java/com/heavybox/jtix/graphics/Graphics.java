@@ -221,4 +221,10 @@ public final class Graphics {
         return maxAnisotropy;
     }
 
+    public static float getMaxLineWidth() {
+        float[] lineWidth = new float[2];
+        GL11.glGetFloatv(GL11.GL_LINE_WIDTH_RANGE, lineWidth);
+        return lineWidth[1];
+    }
+
 }

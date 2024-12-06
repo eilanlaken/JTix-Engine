@@ -1814,6 +1814,10 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         }
     }
 
+    /* Rendering 2D primitives - Bezier Curves */
+
+
+
     /* Rendering 2D primitives - triangles */
 
     public void drawTriangleFilled(@NotNull Texture texture,

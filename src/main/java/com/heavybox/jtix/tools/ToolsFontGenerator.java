@@ -167,7 +167,7 @@ public final class ToolsFontGenerator {
         Graphics2D pen = fontAtlas.createGraphics();
         for (GlyphData glyphData : glyphsData) {
             if (glyphData.bufferedImage == null) continue;
-            pen.drawImage(glyphData.bufferedImage, glyphData.atlasX, glyphData.atlasY, null); // Draw img1 at (100, 100) in img2
+            pen.drawImage(glyphData.bufferedImage, glyphData.atlasX, glyphData.atlasY, null);
         }
         try {
             Assets.saveImage(directory, outputName, fontAtlas);

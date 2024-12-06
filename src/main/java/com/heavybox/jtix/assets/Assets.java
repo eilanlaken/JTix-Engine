@@ -174,7 +174,7 @@ public final class Assets {
     }
 
     // TODO
-    public static synchronized void clear() {
+    public static synchronized void cleanup() {
 
     }
 

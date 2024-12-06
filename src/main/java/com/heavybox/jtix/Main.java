@@ -59,7 +59,7 @@ public class Main {
 
         //if (true) return;
         Application.init(); // can init with options.
-        Application.launch(new SceneTest_Fonts_2());
+        Application.launch(new SceneTest_Fonts_3());
 
     }
 

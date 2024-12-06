@@ -23,7 +23,6 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     // TODO: possible generate fonts here.
     @Override
     public void beforeLoad(String path, HashMap<String, Object> options) {
-        System.out.println("before load font");
 
         if (options == null && !Assets.fileExists(path)) throw new AssetsException("File does not exist: " + path); // trying to load a bitmap font that does not exist
 
