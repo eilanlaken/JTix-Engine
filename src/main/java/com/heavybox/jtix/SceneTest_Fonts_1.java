@@ -91,19 +91,13 @@ public class SceneTest_Fonts_1 implements Scene {
             });
         }
 
-        if (Input.mouse.isButtonClicked(Mouse.Button.MIDDLE)) {
-            Input.webcam.start();
-        }
-
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0f,1);
 
 
         // render font
         renderer2D.begin();
-        if (Input.webcam.isActive()) {
-            renderer2D.drawTexture(Input.webcam.getFeed(), 0,0,0,1,1);
-        }
+        renderer2D.drawTexture(Input.webcam.getFeed(), 0,0,0,1,1);
         renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1);
         renderer2D.end();
 
@@ -112,7 +106,6 @@ public class SceneTest_Fonts_1 implements Scene {
     @Override
     public void finish() {
         System.out.println("finish");
-        Input.webcam.end();
     }
 
 

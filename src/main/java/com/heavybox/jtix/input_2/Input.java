@@ -11,7 +11,6 @@ public final class Input {
     public static void update() {
         keyboard.update();
         mouse.update();
-        webcam.update();
     }
 
 }
