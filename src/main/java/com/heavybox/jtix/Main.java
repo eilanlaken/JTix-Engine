@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.application_2.ApplicationSettings;
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 import com.heavybox.jtix.tools.ToolsTextureGenerator;
@@ -58,7 +59,9 @@ public class Main {
 //        Application.launch(new ScreenLoading());
 
         //if (true) return;
-        Application.init(); // can init with options.
+        ApplicationSettings settings = new ApplicationSettings();
+        settings.decorated = false;
+        Application.init(settings); // can init with options.
         Application.launch(new SceneTest_Fonts_3());
 
     }
