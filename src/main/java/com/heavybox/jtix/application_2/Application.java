@@ -44,6 +44,7 @@ public class Application {
     private static final Array<Runnable> windowTasks                  = new Array<>();
     private static final Array<String>   windowFilesDraggedAndDropped = new Array<>();
 
+    /* window attributes */
     private static int     windowPosX                   = -1;
     private static int     windowPosY                   = -1;
     private static int     windowWidth                  = 640*2;
@@ -59,6 +60,13 @@ public class Application {
     private static String  windowTitle                  = "HeavyBox Game";
     private static boolean windowVSyncEnabled           = false;
     private static int     MSAA                         = 0;
+
+    /* custom cursors */
+    private static long cursorText;
+    private static long cursorPointer;
+    private static long cursorCross;
+    private static long cursorHorizontalResize;
+    private static long cursorVerticalResize;
 
     private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
 
@@ -195,6 +203,14 @@ public class Application {
             windowSetIcon(settings.iconPath);
         }
 
+        // create cursors
+        cursorText = glfwCreateStandardCursor(GLFW.GLFW_IBEAM_CURSOR);
+        cursorPointer = glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR);
+        cursorCross = glfwCreateStandardCursor(GLFW.GLFW_CROSSHAIR_CURSOR);
+        cursorHorizontalResize = glfwCreateStandardCursor(GLFW.GLFW_HRESIZE_CURSOR);
+        cursorVerticalResize = glfwCreateStandardCursor(GLFW.GLFW_VRESIZE_CURSOR);
+
+
         // register callbacks
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, windowResizeCallback);
         GLFW.glfwSetWindowFocusCallback(windowHandle, windowFocusChangeCallback);
@@ -269,6 +285,13 @@ public class Application {
         GLFW.glfwSetDropCallback(windowHandle, null);
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, null);
         GLFW.glfwDestroyWindow(windowHandle);
+
+        /* destroy cursors */
+        GLFW.glfwDestroyCursor(cursorText);
+        GLFW.glfwDestroyCursor(cursorPointer);
+        GLFW.glfwDestroyCursor(cursorCross);
+        GLFW.glfwDestroyCursor(cursorHorizontalResize);
+        GLFW.glfwDestroyCursor(cursorVerticalResize);
 
         windowResizeCallback.free();
         windowFocusChangeCallback.free();
@@ -466,6 +489,29 @@ public class Application {
         return windowFilesDraggedAndDropped;
     }
 
+    /* set cursor */
+    public static void setCursorDefault() {
+        GLFW.glfwSetCursor(windowHandle, 0);
+    }
 
+    public static void setCursorText() {
+        GLFW.glfwSetCursor(windowHandle, cursorText);
+    }
+
+    public static void setCursorPointer() {
+        GLFW.glfwSetCursor(windowHandle, cursorPointer);
+    }
+
+    public static void setCursorCross() {
+        GLFW.glfwSetCursor(windowHandle, cursorCross);
+    }
+
+    public static void setCursorResizeHorizontal() {
+        GLFW.glfwSetCursor(windowHandle, cursorHorizontalResize);
+    }
+
+    public static void setCursorResizeVertical() {
+        GLFW.glfwSetCursor(windowHandle, cursorVerticalResize);
+    }
 
 }

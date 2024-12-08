@@ -1,5 +1,6 @@
 package com.heavybox.jtix;
 
+import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
@@ -48,10 +49,11 @@ public class SceneTest_Fonts_3 implements Scene {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-
+            Application.setCursorCross();
         }
 
-        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+        if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+            Application.setCursorResizeVertical();
 
         }
         if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
@@ -81,6 +83,7 @@ public class SceneTest_Fonts_3 implements Scene {
         renderer2D.drawRectangleFilled(36, 36,-72,0,0,1,1);
         renderer2D.setColor(1,1,1,1);
         renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
+
 
         renderer2D.end();
 
