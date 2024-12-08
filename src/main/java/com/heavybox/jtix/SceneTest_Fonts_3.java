@@ -65,7 +65,22 @@ public class SceneTest_Fonts_3 implements Scene {
         // render font
         renderer2D.begin();
 
-        renderer2D.drawTexture(yellow, 0,0,0,1,1);
+        //renderer2D.drawTexture(yellow, 0,0,0,1,1);
+        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
+        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
+        renderer2D.setColor(1,1,1,1);
+        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,45,1,1);
+        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,-45,1,1);
+
+        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
+        renderer2D.drawRectangleFilled(36, 36,-36,0,0,1,1);
+        renderer2D.setColor(1,1,1,1);
+        renderer2D.drawRectangleThin(12f,12f,-36,0,0,1,1);
+
+        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
+        renderer2D.drawRectangleFilled(36, 36,-72,0,0,1,1);
+        renderer2D.setColor(1,1,1,1);
+        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
         renderer2D.end();
 

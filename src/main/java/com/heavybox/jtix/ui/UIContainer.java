@@ -11,7 +11,7 @@ public abstract class UIContainer extends UI {
         super(x, y, deg, sclX, sclY, bounds);
     }
 
-    private void addChild(UI element) {
+    protected void addChild(UI element) {
         if (element == null)                                                         throw new UserInterfaceException(UI.class.getSimpleName() + " element cannot be null");
         if (element == this)                                                         throw new UserInterfaceException("Trying to parent a " + UI.class.getSimpleName() + " to itself.");
         if (element.belongsTo(this))                                        throw new UserInterfaceException(UI.class.getSimpleName() + " element is already a descendant of parent.");
@@ -23,7 +23,7 @@ public abstract class UIContainer extends UI {
         element.parent = this;
     }
 
-    public void removeChild(UI element) {
+    protected void removeChild(UI element) {
         if (element.parent != this) throw new UserInterfaceException(UI.class.getSimpleName() + " element is not a child of this element to detach.");
         element.parent = null;
         children.remove(element);

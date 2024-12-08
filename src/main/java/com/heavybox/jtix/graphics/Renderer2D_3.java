@@ -193,6 +193,10 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         else setColor(color.toFloatBits());
     }
 
+    public void setColor(float r, float g, float b, float a) {
+        setColor(Color.toFloatBits(r,g,b,a));
+    }
+
     public void setColor(float tintFloatBits) {
         this.currentTint = tintFloatBits;
     }

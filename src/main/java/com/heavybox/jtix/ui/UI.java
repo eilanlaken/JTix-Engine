@@ -13,6 +13,11 @@ public abstract class UI {
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
     protected float[] boundsTransformed;
 
+    // attributes
+    public boolean visible = true;
+    public int     id;
+    public Style   style;
+
     protected UI(float x, float y, float deg, float sclX, float sclY, float[] bounds) {
         this.x = x;
         this.y = y;
