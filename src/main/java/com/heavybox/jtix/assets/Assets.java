@@ -104,7 +104,7 @@ public final class Assets {
 
         options.put("anisotropy", 0);
         options.put("magFilter", Texture.FilterMag.LINEAR);
-        options.put("minFilter", Texture.FilterMin.NEAREST);
+        options.put("minFilter", Texture.FilterMin.LINEAR);
 
         load(Font.class, filepath, options,false);
     }

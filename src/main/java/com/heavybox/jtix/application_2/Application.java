@@ -178,10 +178,7 @@ public class Application {
         GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, settings.transparentWindow ? GLFW.GLFW_TRUE : GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, settings.MSAA);
 
-        if (settings.MSAA != 0) {
-            MSAA = MathUtils.clampInt(settings.MSAA, 0, Graphics.getMaxMSAA());
-            if (MSAA != 0) MSAA = MathUtils.nextPowerOf2i(MSAA);
-        }
+
         if (settings.fullScreen) {
             // compute and auxiliary buffers
             long monitor = GLFW.glfwGetPrimaryMonitor();

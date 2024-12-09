@@ -6,6 +6,7 @@ import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
+import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
@@ -28,7 +29,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFont("assets/fonts/OpenSans-Regular-24.yml");
+        Assets.loadFont("assets/fonts/OpenSans-Regular-12.yml");
 
         Assets.finishLoading();
     }
@@ -36,9 +37,10 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void start() {
         //yellow = Assets.get("assets/textures/yellowSquare.jpg");
-        font = Assets.get("assets/fonts/OpenSans-Regular-24.yml");
+        font = Assets.get("assets/fonts/OpenSans-Regular-12.yml");
     }
 
+    float scale = 1;
 
     @Override
     public void update() {
@@ -56,13 +58,21 @@ public class SceneTest_Fonts_3 implements Scene {
             Application.setCursorNone();
         }
 
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            scale += 0.003f;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+            scale -= 0.003f;
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0f,1);
 
 
         // render font
         renderer2D.begin();
-
+        renderer2D.setColor(Color.GREEN);
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
 //        renderer2D.setColor(1,1,1,1);
@@ -79,12 +89,13 @@ public class SceneTest_Fonts_3 implements Scene {
 //        renderer2D.setColor(1,1,1,1);
 //        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
 
 
         renderer2D.end();
