@@ -28,7 +28,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFont("assets/fonts/OpenSans-Italic-72.yml");
+        Assets.loadFont("assets/fonts/OpenSans-Regular-24.yml");
 
         Assets.finishLoading();
     }
@@ -36,7 +36,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void start() {
         //yellow = Assets.get("assets/textures/yellowSquare.jpg");
-        font = Assets.get("assets/fonts/OpenSans-Italic-72.yml");
+        font = Assets.get("assets/fonts/OpenSans-Regular-24.yml");
     }
 
 
@@ -79,7 +79,12 @@ public class SceneTest_Fonts_3 implements Scene {
 //        renderer2D.setColor(1,1,1,1);
 //        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.2f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.5f);
 
 
         renderer2D.end();
@@ -88,23 +93,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
     @Override
     public void finish() {
-        System.out.println("finish");
-    }
 
-
-    @Override
-    public void windowResized(int width, int height) {
-        System.out.println("resized: " + width + ", " + height);
-    }
-
-    @Override
-    public void windowMinimized(boolean minimized) {
-        System.out.println(minimized);
-    }
-
-    @Override
-    public void windowMaximized(boolean maximized) {
-        Scene.super.windowMaximized(maximized);
     }
 
     @Override

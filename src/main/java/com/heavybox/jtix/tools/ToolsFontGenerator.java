@@ -78,7 +78,7 @@ public final class ToolsFontGenerator {
             glyphsData[i] = data;
 
             if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER);
-            else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
+            else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME | FreeType.FT_LOAD_FORCE_AUTOHINT);
 
             FT_GlyphSlot glyphSlot = ftFace.glyph();
             FT_Bitmap bitmap = glyphSlot.bitmap();
@@ -163,6 +163,7 @@ public final class ToolsFontGenerator {
         atlasWidth = MathUtils.nextPowerOf2f(atlasWidth);
         atlasHeight = MathUtils.nextPowerOf2f(atlasHeight);
 
+        /* create the font atlas and render each glyph to a dedicated slot */
         BufferedImage fontAtlas = new BufferedImage(atlasWidth, atlasHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D pen = fontAtlas.createGraphics();
         for (GlyphData glyphData : glyphsData) {

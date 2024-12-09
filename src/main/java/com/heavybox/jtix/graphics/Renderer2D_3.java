@@ -1987,8 +1987,6 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             penY += glyph.advanceY * pixelScale;
             prevChar = c;
         }
-
-        vertexIndex += 3;
     }
 
     private void drawCharacter(final char c, final Font font, final float color, float x, float y, float deg, float scaleX, float scaleY) {
