@@ -1,6 +1,7 @@
 package com.heavybox.jtix.application_2;
 
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.assets.AssetsException;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
@@ -20,6 +21,8 @@ import org.lwjgl.system.MemoryUtil;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
@@ -67,6 +70,7 @@ public class Application {
     private static long cursorCross;
     private static long cursorHorizontalResize;
     private static long cursorVerticalResize;
+    private static HashMap<String, Long> customCursors = new HashMap<>();
 
     private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
 
@@ -210,7 +214,6 @@ public class Application {
         cursorHorizontalResize = glfwCreateStandardCursor(GLFW.GLFW_HRESIZE_CURSOR);
         cursorVerticalResize = glfwCreateStandardCursor(GLFW.GLFW_VRESIZE_CURSOR);
 
-
         // register callbacks
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, windowResizeCallback);
         GLFW.glfwSetWindowFocusCallback(windowHandle, windowFocusChangeCallback);
@@ -292,6 +295,10 @@ public class Application {
         GLFW.glfwDestroyCursor(cursorCross);
         GLFW.glfwDestroyCursor(cursorHorizontalResize);
         GLFW.glfwDestroyCursor(cursorVerticalResize);
+        for (Map.Entry<String, Long> cursorEntry : customCursors.entrySet()) {
+            long cursor = cursorEntry.getValue();
+            GLFW.glfwDestroyCursor(cursor);
+        }
 
         windowResizeCallback.free();
         windowFocusChangeCallback.free();
@@ -512,6 +519,33 @@ public class Application {
 
     public static void setCursorResizeVertical() {
         GLFW.glfwSetCursor(windowHandle, cursorVerticalResize);
+    }
+
+    public static void setCursorCustom(final String path) {
+        Long cursor = customCursors.get(path);
+        if (cursor != null) {
+            GLFW.glfwSetCursor(windowHandle, cursor);
+        } else {
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                IntBuffer widthBuffer = stack.mallocInt(1);
+                IntBuffer heightBuffer = stack.mallocInt(1);
+                IntBuffer channelsBuffer = stack.mallocInt(1);
+                ByteBuffer buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
+                if (buffer == null) throw new ApplicationException("Failed to load a texture file for custom cursor. Check that the path is correct: " + path
+                        + System.lineSeparator() + "STBImage error: "
+                        + STBImage.stbi_failure_reason());
+                int width = widthBuffer.get();
+                int height = heightBuffer.get();
+                GLFWImage cursorImage = GLFWImage.malloc();
+                cursorImage.width(width);
+                cursorImage.height(height);
+                cursorImage.pixels(buffer);
+
+                long customCursor = glfwCreateCursor(cursorImage, width / 2, height / 2); // Hotspot at center
+                GLFW.glfwSetCursor(windowHandle, customCursor);
+                customCursors.put(path, customCursor);
+            }
+        }
     }
 
 }

@@ -49,7 +49,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            Application.setCursorCross();
+            Application.setCursorCustom("assets/textures/cursor-green.png");
         }
 
         if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
