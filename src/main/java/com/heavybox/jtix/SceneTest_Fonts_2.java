@@ -91,7 +91,7 @@ public class SceneTest_Fonts_2 implements Scene {
 
         // render font
         renderer2D.begin();
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 1);
         renderer2D.end();
 
     }

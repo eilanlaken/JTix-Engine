@@ -1895,7 +1895,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
 
-    public void drawString(final String text, final Font font, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawString(final String text, final Font font, float x, float y, float deg, float scaleX, float scaleY, float pixelScale) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
@@ -1909,47 +1909,46 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.glyphs.get((int) c);
             if (glyph == null) continue;
-            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
-            total_width += glyph.advanceX * 1;
+            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0) * pixelScale;
+            total_width += glyph.advanceX * pixelScale;
             prevChar = c;
         }
 
         /* calculate the line total height */
         float maxAscent = 0;
         float maxDescent = 0;
-        float total_height = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.glyphs.get((int) c);
             if (glyph == null) continue;
 
             // Update ascent (distance from baseline to top of glyph)
-            float ascent = glyph.bearingY * 1;
+            float ascent = glyph.bearingY;
             if (ascent > maxAscent) maxAscent = ascent;
 
             // Update descent (distance below baseline)
-            float descent = (glyph.height - glyph.bearingY) * 1;
+            float descent = (glyph.height - glyph.bearingY);
             if (descent > maxDescent) maxDescent = descent;
         }
-        total_height = maxAscent + maxDescent;
+        float total_height = (maxAscent + maxDescent) * pixelScale;
 
 
         /* render a quad for every character */
         float penX = -total_width * 0.5f;
-        float penY = total_height * 0.5f;
+        float penY = -total_height * 0.5f;
         prevChar = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.glyphs.get((int) c);
             if (glyph == null) continue;
 
-            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
+            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0) * pixelScale;
 
             /* calculate the quad's x, y, width, height */
-            float char_x = penX + glyph.bearingX;
-            float char_y = penY - (glyph.height - glyph.bearingY);
-            float w = glyph.width;
-            float h = glyph.height;
+            float char_x = penX + glyph.bearingX * pixelScale;
+            float char_y = penY - (glyph.height - glyph.bearingY) * pixelScale;
+            float w = glyph.width * pixelScale;
+            float h = glyph.height * pixelScale;
 
             /* calculate the quad's uv coordinates */
             float u0 = glyph.atlasX * font.invAtlasWidth;
@@ -1960,22 +1959,18 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             /* put vertices */
             positions.put(char_x).put(char_y + h);
             colors.put(currentTint);
-            //textCoords.put(0).put(0);
             textCoords.put(u0).put(v0);
 
             positions.put(char_x).put(char_y);
             colors.put(currentTint);
-            //textCoords.put(0).put(1);
             textCoords.put(u0).put(v1);
 
             positions.put(char_x + w).put(char_y);
             colors.put(currentTint);
-            //textCoords.put(1).put(1);
             textCoords.put(u1).put(v1);
 
             positions.put(char_x + w).put(char_y + h);
             colors.put(currentTint);
-            //textCoords.put(1).put(0);
             textCoords.put(u1).put(v0);
 
             /* put indices */
@@ -1988,8 +1983,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             indices.put(startVertex + 2);
             vertexIndex += 4;
 
-            penX += glyph.advanceX;
-            penY += glyph.advanceY;
+            penX += glyph.advanceX * pixelScale;
+            penY += glyph.advanceY * pixelScale;
             prevChar = c;
         }
 

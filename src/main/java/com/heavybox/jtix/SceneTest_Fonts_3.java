@@ -82,7 +82,7 @@ public class SceneTest_Fonts_3 implements Scene {
         renderer2D.setColor(1,1,1,1);
         renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 5);
 
 
         renderer2D.end();
