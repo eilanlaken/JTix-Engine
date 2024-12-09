@@ -36,7 +36,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
             width = widthBuffer.get();
             height = heightBuffer.get();
             int maxTextureSize = Graphics.getMaxTextureSize();
-            if (width > maxTextureSize || height > maxTextureSize) throw new IllegalStateException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+            if (width > maxTextureSize || height > maxTextureSize) throw new AssetsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
         }
         return null;
     }

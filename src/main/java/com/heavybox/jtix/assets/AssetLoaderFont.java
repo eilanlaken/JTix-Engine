@@ -48,7 +48,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
     }
 
     @Override
-    public Array<AssetDescriptor> load(final String path, @Nullable final HashMap<String, Object> options) {
+    public Array<AssetDescriptor> load(final String path, final HashMap<String, Object> options) {
         String contentPath;
         if (options == null) {
             contentPath = path;
@@ -65,7 +65,10 @@ public class AssetLoaderFont implements AssetLoader<Font> {
         String filePath = Paths.get(directoryPath, atlasName).toString();
         dependencies = new Array<>(false, 1);
 
-        dependencies.add(new AssetDescriptor(Texture.class, filePath, options));
+        HashMap<String, Object> textureLoadingOptions = new HashMap<>();
+        textureLoadingOptions.put("anisotropy", 0);
+        textureLoadingOptions.put("minFilter", Texture.FilterMin.LINEAR_MIPMAP_LINEAR);
+        dependencies.add(new AssetDescriptor(Texture.class, filePath, textureLoadingOptions));
         return dependencies;
     }
 

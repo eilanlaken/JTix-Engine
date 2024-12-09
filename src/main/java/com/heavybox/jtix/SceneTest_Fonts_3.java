@@ -23,14 +23,12 @@ public class SceneTest_Fonts_3 implements Scene {
 
     private Renderer2D_3 renderer2D = new Renderer2D_3();
 
-    Texture yellow;
-    String font_path = "assets/fonts/OpenSans-Italic-32.yml";
     Font font;
 
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFont("assets/fonts/OpenSans-Italic-32.yml");
+        Assets.loadFont("assets/fonts/OpenSans-Italic-72.yml");
 
         Assets.finishLoading();
     }
@@ -38,7 +36,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void start() {
         //yellow = Assets.get("assets/textures/yellowSquare.jpg");
-        font = Assets.get("assets/fonts/OpenSans-Italic-32.yml");
+        font = Assets.get("assets/fonts/OpenSans-Italic-72.yml");
     }
 
 
@@ -65,24 +63,23 @@ public class SceneTest_Fonts_3 implements Scene {
         // render font
         renderer2D.begin();
 
-        //renderer2D.drawTexture(yellow, 0,0,0,1,1);
-        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
-        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
-        renderer2D.setColor(1,1,1,1);
-        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,45,1,1);
-        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,-45,1,1);
+//        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
+//        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
+//        renderer2D.setColor(1,1,1,1);
+//        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,45,1,1);
+//        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,-45,1,1);
+//
+//        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
+//        renderer2D.drawRectangleFilled(36, 36,-36,0,0,1,1);
+//        renderer2D.setColor(1,1,1,1);
+//        renderer2D.drawRectangleThin(12f,12f,-36,0,0,1,1);
+//
+//        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
+//        renderer2D.drawRectangleFilled(36, 36,-72,0,0,1,1);
+//        renderer2D.setColor(1,1,1,1);
+//        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
-        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
-        renderer2D.drawRectangleFilled(36, 36,-36,0,0,1,1);
-        renderer2D.setColor(1,1,1,1);
-        renderer2D.drawRectangleThin(12f,12f,-36,0,0,1,1);
-
-        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
-        renderer2D.drawRectangleFilled(36, 36,-72,0,0,1,1);
-        renderer2D.setColor(1,1,1,1);
-        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
-
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 5);
+        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, 0.2f);
 
 
         renderer2D.end();
