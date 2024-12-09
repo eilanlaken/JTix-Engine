@@ -56,8 +56,8 @@ public class SceneTest_Fonts_3 implements Scene {
             Application.setCursorResizeVertical();
 
         }
-        if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-
+        if (Input.mouse.isButtonClicked(Mouse.Button.MIDDLE)) {
+            Application.setCursorNone();
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

@@ -498,30 +498,41 @@ public class Application {
 
     /* set cursor */
     public static void setCursorDefault() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, 0);
     }
 
     public static void setCursorText() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, cursorText);
     }
 
     public static void setCursorPointer() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, cursorPointer);
     }
 
     public static void setCursorCross() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, cursorCross);
     }
 
     public static void setCursorResizeHorizontal() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, cursorHorizontalResize);
     }
 
     public static void setCursorResizeVertical() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, cursorVerticalResize);
     }
 
+    public static void setCursorNone() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+    }
+
     public static void setCursorCustom(final String path) {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         Long cursor = customCursors.get(path);
         if (cursor != null) {
             GLFW.glfwSetCursor(windowHandle, cursor);
