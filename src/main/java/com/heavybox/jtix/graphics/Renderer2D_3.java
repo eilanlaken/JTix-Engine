@@ -1895,7 +1895,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
 
-    public void drawString(final String text, final Font font, float x, float y, float deg, float scaleX, float scaleY, float pixelScale) {
+    public void drawString(final String text, final Font font, float x, float y, float deg) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
@@ -1909,8 +1909,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.glyphs.get((int) c);
             if (glyph == null) continue;
-            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0) * pixelScale;
-            total_width += glyph.advanceX * pixelScale;
+            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
+            total_width += glyph.advanceX;
             prevChar = c;
         }
 
@@ -1930,7 +1930,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             float descent = (glyph.height - glyph.bearingY);
             if (descent > maxDescent) maxDescent = descent;
         }
-        float total_height = (maxAscent + maxDescent) * pixelScale;
+        float total_height = (maxAscent + maxDescent);
 
 
         /* render a quad for every character */
@@ -1942,13 +1942,13 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             final Font.Glyph glyph = font.glyphs.get((int) c);
             if (glyph == null) continue;
 
-            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0) * pixelScale;
+            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
 
             /* calculate the quad's x, y, width, height */
-            float char_x = penX + glyph.bearingX * pixelScale;
-            float char_y = penY - (glyph.height - glyph.bearingY) * pixelScale;
-            float w = glyph.width * pixelScale;
-            float h = glyph.height * pixelScale;
+            float char_x = penX + glyph.bearingX;
+            float char_y = penY - (glyph.height - glyph.bearingY);
+            float w = glyph.width;
+            float h = glyph.height;
 
             /* calculate the quad's uv coordinates */
             float u0 = glyph.atlasX * font.invAtlasWidth;
@@ -1983,8 +1983,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
             indices.put(startVertex + 2);
             vertexIndex += 4;
 
-            penX += glyph.advanceX * pixelScale;
-            penY += glyph.advanceY * pixelScale;
+            penX += glyph.advanceX;
+            penY += glyph.advanceY;
             prevChar = c;
         }
     }

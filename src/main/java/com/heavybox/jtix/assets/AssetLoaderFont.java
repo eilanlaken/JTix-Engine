@@ -67,7 +67,7 @@ public class AssetLoaderFont implements AssetLoader<Font> {
 
         HashMap<String, Object> textureLoadingOptions = new HashMap<>();
         textureLoadingOptions.put("anisotropy", 0);
-        textureLoadingOptions.put("minFilter", Texture.FilterMin.LINEAR_MIPMAP_LINEAR);
+        textureLoadingOptions.put("minFilter", Texture.FilterMin.NEAREST_MIPMAP_LINEAR);
         dependencies.add(new AssetDescriptor(Texture.class, filePath, textureLoadingOptions));
         return dependencies;
     }

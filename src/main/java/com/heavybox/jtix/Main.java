@@ -28,7 +28,7 @@ public class Main {
 //        }
 
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
-        ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 12, true, null);
+        ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 13, true, null);
 //        AsyncTask italic = new AsyncTask() {
 //            @Override
 //            public void task() {

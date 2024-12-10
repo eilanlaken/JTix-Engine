@@ -29,7 +29,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFont("assets/fonts/OpenSans-Regular-12.yml");
+        Assets.loadFont("assets/fonts/OpenSans-Regular-13.yml");
 
         Assets.finishLoading();
     }
@@ -37,7 +37,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void start() {
         //yellow = Assets.get("assets/textures/yellowSquare.jpg");
-        font = Assets.get("assets/fonts/OpenSans-Regular-12.yml");
+        font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");
     }
 
     float scale = 1;
@@ -72,7 +72,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
         // render font
         renderer2D.begin();
-        renderer2D.setColor(Color.GREEN);
+
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
 //        renderer2D.setColor(1,1,1,1);
@@ -89,7 +89,8 @@ public class SceneTest_Fonts_3 implements Scene {
 //        renderer2D.setColor(1,1,1,1);
 //        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
-        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+        renderer2D.drawString("Lorem Ipsum is simply dummy text of the printing and typesetting aaaaaaaaaa", font, 0,0,0);
+
 //        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
 //        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
 //        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
