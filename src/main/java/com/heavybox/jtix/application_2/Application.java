@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 
 // TODO:
 // handle recreating the window
@@ -70,7 +69,12 @@ public class Application {
     private static long cursorCross;
     private static long cursorHorizontalResize;
     private static long cursorVerticalResize;
-    private static HashMap<String, Long> customCursors = new HashMap<>();
+    private static long cursorNotAllowed;
+    private static long cursorPointingHand;
+    private static long cursorResizeNESW;
+    private static long cursorResizeNWSE;
+    private static long cursorResizeAll;
+    private static final HashMap<String, Long> customCursors = new HashMap<>();
 
     private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
 
@@ -210,6 +214,11 @@ public class Application {
         cursorCross = glfwCreateStandardCursor(GLFW.GLFW_CROSSHAIR_CURSOR);
         cursorHorizontalResize = glfwCreateStandardCursor(GLFW.GLFW_HRESIZE_CURSOR);
         cursorVerticalResize = glfwCreateStandardCursor(GLFW.GLFW_VRESIZE_CURSOR);
+        cursorNotAllowed = glfwCreateStandardCursor(GLFW.GLFW_NOT_ALLOWED_CURSOR);
+        cursorPointingHand = glfwCreateStandardCursor(GLFW.GLFW_POINTING_HAND_CURSOR);
+        cursorResizeNESW = glfwCreateStandardCursor(GLFW.GLFW_RESIZE_NESW_CURSOR);
+        cursorResizeNWSE = glfwCreateStandardCursor(GLFW.GLFW_RESIZE_NWSE_CURSOR);
+        cursorResizeAll = glfwCreateStandardCursor(GLFW.GLFW_RESIZE_ALL_CURSOR);
 
         // register callbacks
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, windowResizeCallback);
@@ -292,6 +301,13 @@ public class Application {
         GLFW.glfwDestroyCursor(cursorCross);
         GLFW.glfwDestroyCursor(cursorHorizontalResize);
         GLFW.glfwDestroyCursor(cursorVerticalResize);
+
+        GLFW.glfwDestroyCursor(cursorPointingHand);
+        GLFW.glfwDestroyCursor(cursorNotAllowed);
+        GLFW.glfwDestroyCursor(cursorResizeNESW);
+        GLFW.glfwDestroyCursor(cursorResizeNWSE);
+        GLFW.glfwDestroyCursor(cursorResizeAll);
+
         for (Map.Entry<String, Long> cursorEntry : customCursors.entrySet()) {
             long cursor = cursorEntry.getValue();
             GLFW.glfwDestroyCursor(cursor);
@@ -522,6 +538,31 @@ public class Application {
     public static void setCursorResizeVertical() {
         GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         GLFW.glfwSetCursor(windowHandle, cursorVerticalResize);
+    }
+
+    public static void setCursorNotAllowed() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        GLFW.glfwSetCursor(windowHandle, cursorNotAllowed);
+    }
+
+    public static void setCursorPointingHand() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        GLFW.glfwSetCursor(windowHandle, cursorPointingHand);
+    }
+
+    public static void setCursorResizeNESW() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        GLFW.glfwSetCursor(windowHandle, cursorResizeNESW);
+    }
+
+    public static void setCursorResizeNWSE() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        GLFW.glfwSetCursor(windowHandle, cursorResizeNWSE);
+    }
+
+    public static void setCursorResizeAll() {
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        GLFW.glfwSetCursor(windowHandle, cursorResizeAll);
     }
 
     public static void setCursorNone() {

@@ -50,6 +50,22 @@ public class SceneTest_Fonts_3 implements Scene {
             Application.setCursorCustom("assets/textures/cursor-green.png");
         }
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
+            Application.setCursorNotAllowed();
+        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
+            Application.setCursorPointingHand();
+        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
+            Application.setCursorResizeNESW();
+        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.R)) {
+            Application.setCursorResizeNWSE();
+        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.T)) {
+            Application.setCursorResizeAll();
+        }
+
         if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
             Application.setCursorResizeVertical();
 
