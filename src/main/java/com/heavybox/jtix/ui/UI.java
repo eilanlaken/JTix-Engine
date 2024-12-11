@@ -1,7 +1,6 @@
 package com.heavybox.jtix.ui;
 
 
-import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Renderer2D_3;
@@ -19,10 +18,7 @@ public abstract class UI {
     protected UIContainer parent;
     public final int id;
     public float x, y, deg, sclX, sclY;
-    public float global_x, global_y, global_deg, global_sclX, global_sclY;
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
-
-    protected float[] boundsTransformed;
 
     // global attributes
     public boolean visible = true;
@@ -47,25 +43,18 @@ public abstract class UI {
         this.sclX = sclX;
         this.sclY = sclY;
 
-        this.global_x = x;
-        this.global_y = y;
-        this.global_deg = deg;
-        this.global_sclX = sclX;
-        this.global_sclY = sclY;
 
         this.bounds = bounds;
-        this.boundsTransformed = new float[bounds.length];
-        updateBoundsTransformed();
-
+        updateBounds();
         uiCount++;
     }
 
     // tests if the "Pointer" (mouse curse, controller marker, tap-finger etc.) is within the bounds of the UI element.
     public boolean pointerInBounds(float x, float y) {
-        return MathUtils.polygonContainsPoint(boundsTransformed, x, y);
+        return MathUtils.polygonContainsPoint(bounds, x, y);
     }
 
-    private void updateBoundsTransformed() {
+    private void updateBounds() {
         Vector2 vertex = new Vector2();
         for (int i = 0; i < bounds.length; i += 2) {
             float poly_x = bounds[i];
@@ -75,8 +64,8 @@ public abstract class UI {
             vertex.scl(sclX, sclY);
             vertex.rotateDeg(deg);
             vertex.add(x, y);
-            boundsTransformed[i] = vertex.x;
-            boundsTransformed[i + 1] = vertex.y;
+            bounds[i] = vertex.x;
+            bounds[i + 1] = vertex.y;
         }
     }
 
