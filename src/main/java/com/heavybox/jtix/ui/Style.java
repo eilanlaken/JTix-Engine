@@ -1,12 +1,25 @@
 package com.heavybox.jtix.ui;
 
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Font;
+public final class Style {
 
-public class Style {
+    public enum AlignmentTextVertical {
 
-    public Font font;
-    public Color bgColor;
-    public Color textColor;
+    }
+
+    public enum AlignmentTextHorizontal {
+
+    }
+
+    public enum AlignmentChildrenVertical {
+
+    }
+
+    public enum AlignmentChildrenHorizontal {
+
+    }
+
+    public enum Cursor {
+
+    }
 
 }

@@ -74,3 +74,8 @@ U32 packNormalizedFloat_2_10_10_10_REV(float x, float y, float z, float w)
         xs <<  9 | ((U32)(x * 511 + (xs << 9)) & 511)
     );
 }
+
+Fonts and Text rendering
+
+https://medium.com/@evanwallace/easy-scalable-text-rendering-on-the-gpu-c3f4d782c5ac
+https://github.com/evanw/theta/blob/master/src/core/font.sk

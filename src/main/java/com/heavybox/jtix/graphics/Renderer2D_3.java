@@ -1256,6 +1256,43 @@ public class Renderer2D_3 implements MemoryResourceHolder {
         arrayIntPool.free(triangles);
     }
 
+    public void drawPolygonFilled(float[] polygon) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if (!ensureCapacity(count, count * 6)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        ArrayFloat vertices = arrayFloatPool.allocate();
+        ArrayInt triangles = arrayIntPool.allocate();
+        try {
+            MathUtils.polygonTriangulate(polygon, vertices, triangles);
+        } catch (Exception e) { // Probably the polygon has collapsed into a single point.
+            return;
+        }
+
+        for (int i = 0; i < vertices.size; i += 2) {
+            float poly_x = vertices.get(i);
+            float poly_y = vertices.get(i + 1);
+            positions.put(poly_x).put(poly_y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < triangles.size; i ++) {
+            indices.put(startVertex + triangles.get(i));
+        }
+
+        vertexIndex += count;
+        arrayFloatPool.free(vertices);
+        arrayIntPool.free(triangles);
+    }
+
     public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
@@ -1895,7 +1932,7 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
 
-    public void drawString(final String text, final Font font, float x, float y, float deg) {
+    public void drawString(final String text, final Font font, float x, float y) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
@@ -1934,8 +1971,8 @@ public class Renderer2D_3 implements MemoryResourceHolder {
 
 
         /* render a quad for every character */
-        float penX = -total_width * 0.5f;
-        float penY = -total_height * 0.5f;
+        float penX = x - total_width * 0.5f;
+        float penY = y - total_height * 0.5f;
         prevChar = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);

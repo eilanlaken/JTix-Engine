@@ -1,4 +1,4 @@
 package com.heavybox.jtix.ui;
 
-public class UIElementImage {
+public class UIImage {
 }

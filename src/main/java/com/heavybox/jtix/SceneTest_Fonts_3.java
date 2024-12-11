@@ -8,15 +8,11 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.ui.UIButton;
+import com.heavybox.jtix.ui.UserInterface;
 import org.lwjgl.opengl.GL11;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.lwjgl.opengl.GL11.GL_LINE_WIDTH_RANGE;
 import static org.lwjgl.opengl.GL11.glGetFloatv;
 
 public class SceneTest_Fonts_3 implements Scene {
@@ -25,6 +21,7 @@ public class SceneTest_Fonts_3 implements Scene {
     private Renderer2D_3 renderer2D = new Renderer2D_3();
 
     Font font;
+    UIButton button;
 
     @Override
     public void setup() {
@@ -32,12 +29,13 @@ public class SceneTest_Fonts_3 implements Scene {
         Assets.loadFont("assets/fonts/OpenSans-Regular-13.yml");
 
         Assets.finishLoading();
+        font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");
+
     }
 
     @Override
     public void start() {
-        //yellow = Assets.get("assets/textures/yellowSquare.jpg");
-        font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");
+        button = UserInterface.createButton(100,50, Color.RED, Color.WHITE, "hello", font);
     }
 
     float scale = 1;
@@ -88,6 +86,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
         // render font
         renderer2D.begin();
+        button.render(renderer2D);
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
@@ -105,7 +104,7 @@ public class SceneTest_Fonts_3 implements Scene {
 //        renderer2D.setColor(1,1,1,1);
 //        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
 
-        renderer2D.drawString("Lorem Ipsum is simply dummy text of the printing and typesetting aaaaaaaaaa", font, 0,0,0);
+        //renderer2D.drawString("Lorem Ipsum is simply dummy text of the printing and typesetting aaaaaaaaaa", font, 0,0,0);
 
 //        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
 //        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
