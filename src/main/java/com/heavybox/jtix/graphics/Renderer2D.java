@@ -34,8 +34,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* defaults */
     private final Shader    defaultShader = createDefaultShaderProgram();
-    private final Texture   whitePixel    = createWhiteSinglePixelTexture();
+    private final Texture defaultTexture = createDefaultTexture();
     private final Matrix4x4 defaultMatrix = createDefaultMatrix();
+    private final FontDynamic defaultFont = createDefaultFont();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
@@ -44,7 +45,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* state */
     private Matrix4x4 currentMatrix     = defaultMatrix;
-    private Texture   currentTexture    = whitePixel;
+    private Texture   currentTexture    = defaultTexture;
     private Shader    currentShader     = null;
     private float     currentTint       = WHITE_TINT;
     private boolean   drawing           = false;
@@ -144,7 +145,7 @@ public class Renderer2D implements MemoryResourceHolder {
         this.currentMatrix = combined != null ? combined : defaultMatrix.setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
         setShader(defaultShader);
         setShaderAttributes(null);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
         setMode(GL11.GL_TRIANGLES);
         setColor(WHITE_TINT);
         this.drawing = true;
@@ -163,7 +164,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void setTexture(Texture texture) {
-        if (texture == null) texture = whitePixel;
+        if (texture == null) texture = defaultTexture;
         if (currentTexture == texture) return;
         flush();
         currentTexture = texture;
@@ -512,7 +513,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement, 2 * (refinement + 1))) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
@@ -545,7 +546,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement, 3 * (refinement - 2))) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
@@ -579,7 +580,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement, 3 * (refinement - 2))) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 arm = vectors2Pool.allocate();
         positions.put(x).put(y);
@@ -615,7 +616,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement * 2, refinement * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 arm0 = vectors2Pool.allocate();
         Vector2 arm1 = vectors2Pool.allocate();
@@ -670,7 +671,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement * 2, refinement * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 arm0 = vectors2Pool.allocate();
         Vector2 arm1 = vectors2Pool.allocate();
@@ -720,7 +721,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         // put indices
         int startVertex = this.vertexIndex;
@@ -757,7 +758,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 arm0 = vectors2Pool.allocate();
         Vector2 arm1 = vectors2Pool.allocate();
@@ -823,7 +824,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement * 4, refinement * 8)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         float widthHalf  = width  * 0.5f;
         float heightHalf = height * 0.5f;
@@ -960,7 +961,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1028,7 +1029,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(8, 24)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         float widthHalf     = width     * 0.5f;
         float heightHalf    = height    * 0.5f;
@@ -1101,7 +1102,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         int startVertex = this.vertexIndex;
         if (!triangulated) {
@@ -1180,7 +1181,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
@@ -1220,7 +1221,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         ArrayFloat vertices = arrayFloatPool.allocate();
         ArrayInt triangles = arrayIntPool.allocate();
@@ -1265,7 +1266,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         ArrayFloat vertices = arrayFloatPool.allocate();
         ArrayInt triangles = arrayIntPool.allocate();
@@ -1302,7 +1303,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(count, triangles.length)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
@@ -1335,7 +1336,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(2, 2)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         positions.put(x1).put(y1);
         positions.put(x2).put(y2);
@@ -1358,7 +1359,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(2, 2)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 vertex1 = vectors2Pool.allocate();
         vertex1.set(p1X, p1Y);
@@ -1396,7 +1397,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 dir = vectors2Pool.allocate();
         dir.x = x2 - x1;
@@ -1439,7 +1440,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Vector2 dir = vectors2Pool.allocate();
         dir.x = x2 - x1;
@@ -1512,7 +1513,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(values.length, values.length * 2)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         /* put vertices */
         for (Vector2 value : values) {
@@ -1536,7 +1537,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(values.length, values.length * 2)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         /* put vertices */
         Vector2 vertex = vectors2Pool.allocate();
@@ -1566,7 +1567,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement, refinement * 2)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         if (minX > maxX) {
             float tmp = minX;
@@ -1601,7 +1602,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(refinement, refinement * 2)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         if (minX > maxX) {
             float tmp = minX;
@@ -1639,7 +1640,7 @@ public class Renderer2D implements MemoryResourceHolder {
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
+        setTexture(defaultTexture);
 
         Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points);
         if (!ensureCapacity(vertices.size, vertices.size)) flush();
@@ -1930,7 +1931,16 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 3;
     }
 
+    // TODO, maybe.
+    public void drawTextBlock() {
+
+    }
+
     /* Rendering 2D primitives - Strings */
+    // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>
+    public void drawTextLine(final String text, int size, final FontDynamic font, float x, float y) {
+
+    }
 
     public void drawString(final String text, final Font font, float x, float y) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
@@ -2100,7 +2110,7 @@ public class Renderer2D implements MemoryResourceHolder {
         GL30.glDeleteBuffers(vboNormals);
         GL30.glDeleteBuffers(vboTangents);
         GL30.glDeleteBuffers(ebo);
-        whitePixel.delete();
+        defaultTexture.delete();
     }
 
     /* Create defaults: shader, texture (single white pixel), camera */
@@ -2159,7 +2169,10 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
-    private static Texture createWhiteSinglePixelTexture() {
+    /*
+    creates a single-white-pixel texture.
+     */
+    private static Texture createDefaultTexture() {
         ByteBuffer buffer = ByteBuffer.allocateDirect(4);
         buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF)); // Red component
         buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));  // Green component
@@ -2174,6 +2187,10 @@ public class Renderer2D implements MemoryResourceHolder {
 
     private static Matrix4x4 createDefaultMatrix() {
         return new Matrix4x4().setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
+    }
+
+    private static FontDynamic createDefaultFont() {
+        return null;
     }
 
 }

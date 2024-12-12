@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.ApplicationSettings;
 import com.heavybox.jtix.async.AsyncTask;
+import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 import com.heavybox.jtix.tools.ToolsTextureGenerator;
 
@@ -35,6 +36,9 @@ public class Main {
 //                ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
 //            }
 //        };
+
+        System.out.println(Color.WHITE.toString());
+
 
 //        AsyncTask regular = new AsyncTask() {
 //            @Override
