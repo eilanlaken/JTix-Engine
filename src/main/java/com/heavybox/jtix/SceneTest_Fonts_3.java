@@ -11,7 +11,13 @@ import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.ui.UIButton;
 import com.heavybox.jtix.ui.UserInterface;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.freetype.FT_Face;
+import org.lwjgl.util.freetype.FreeType;
+
+import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.glGetFloatv;
 
@@ -20,22 +26,37 @@ public class SceneTest_Fonts_3 implements Scene {
 
     private Renderer2D renderer2D = new Renderer2D();
 
-    Font font;
-    UIButton button;
+    // free type library loading
+    PointerBuffer libPointerBuffer;
+
+    private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
 
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFontStatic("assets/fonts/OpenSans-Regular-13.yml");
+        //Assets.loadFontStatic("assets/fonts/OpenSans-Regular-13.yml");
 
         Assets.finishLoading();
-        font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");
+        //font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");
+        libPointerBuffer = BufferUtils.createPointerBuffer(1);
+        FreeType.FT_Init_FreeType(libPointerBuffer);
+        /* load .ttf file to bytebuffer */
+        long library = libPointerBuffer.get(0);
+        ByteBuffer fontDataBuffer;
+        try {
+            fontDataBuffer = Assets.fileToByteBuffer(fontPath);
+        } catch (Exception e) {
+            throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
+        }
+        PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
+        FreeType.FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
+        long face = facePointerBuffer.get(0);
+        FT_Face ftFace = FT_Face.create(face);
 
     }
 
     @Override
     public void start() {
-        button = UserInterface.createButton(100,50, Color.RED, Color.WHITE, "hello", font);
     }
 
     float scale = 1;
@@ -45,31 +66,31 @@ public class SceneTest_Fonts_3 implements Scene {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            Application.setCursorCustom("assets/textures/cursor-green.png");
+            Graphics.setCursorCustom("assets/textures/cursor-green.png");
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
-            Application.setCursorNotAllowed();
+            Graphics.setCursorNotAllowed();
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-            Application.setCursorPointingHand();
+            Graphics.setCursorPointingHand();
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
-            Application.setCursorResizeNESW();
+            Graphics.setCursorResizeNESW();
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.R)) {
-            Application.setCursorResizeNWSE();
+            Graphics.setCursorResizeNWSE();
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.T)) {
-            Application.setCursorResizeAll();
+            Graphics.setCursorResizeAll();
         }
 
         if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-            Application.setCursorResizeVertical();
+            Graphics.setCursorResizeVertical();
 
         }
         if (Input.mouse.isButtonClicked(Mouse.Button.MIDDLE)) {
-            Application.setCursorNone();
+            Graphics.setCursorNone();
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
@@ -86,7 +107,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
         // render font
         renderer2D.begin();
-        button.render(renderer2D);
+
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);

@@ -37,51 +37,45 @@ public class Application {
     @Deprecated private static boolean initialized = false;
     private static boolean running = false;
 
-    private static long    windowHandle;
-    private static boolean windowFocused = false;
-    private static int     windowLastDragAndDropFileCount = 0;
-    private static boolean windowRequestRendering = false;
-
-    private static final Array<Runnable> tasks                        = new Array<>();
-    private static final Array<Runnable> windowTasks                  = new Array<>();
-    private static final Array<String>   windowFilesDraggedAndDropped = new Array<>();
+    /* tasks */
+    private static final Array<Runnable> tasks       = new Array<>();
+    private static final Array<Runnable> windowTasks = new Array<>();
 
     /* window attributes */
-    private static int     windowPosX                   = -1;
-    private static int     windowPosY                   = -1;
-    private static int     windowWidth                  = 640*2;
-    private static int     windowHeight                 = 480*2;
-    private static boolean windowAutoMinimized          = true;
-    private static boolean windowMinimized              = false;
-    private static boolean windowMaximized              = false;
-    private static String  windowIconPath               = null;
-    private static boolean windowVisible                = true;
-    private static boolean windowFullScreen             = false;
-    private static boolean windowResizeable             = true;
-    private static boolean windowDecorated              = true;
-    private static String  windowTitle                  = "HeavyBox Game";
-    private static boolean windowVSyncEnabled           = false;
-    private static int     MSAA                         = 0;
+    private static long    windowHandle           = -1;
+    private static boolean windowFocused          = false; // TODO
+    private static boolean windowRequestRendering = false;
+    private static int     windowPosX             = -1;
+    private static int     windowPosY             = -1;
+    private static int     windowWidth            = 640*2;
+    private static int     windowHeight           = 480*2;
+    private static boolean windowMinimized        = false;
+    private static boolean windowMaximized        = false;
+    private static String  windowIconPath         = null;
+    private static String  windowTitle            = "HeavyBox Game";
+    private static boolean windowVSyncEnabled     = false;
+    private static int     MSAA                   = 0;
 
-    /* custom cursors */
-    private static long cursorText;
-    private static long cursorPointer;
-    private static long cursorCross;
-    private static long cursorHorizontalResize;
-    private static long cursorVerticalResize;
-    private static long cursorNotAllowed;
-    private static long cursorPointingHand;
-    private static long cursorResizeNESW;
-    private static long cursorResizeNWSE;
-    private static long cursorResizeAll;
-    private static final HashMap<String, Long> customCursors = new HashMap<>();
+    /*
+    private static boolean windowAutoMinimized    = true;
+    private static boolean windowVisible          = true;
+    private static boolean windowFullScreen       = false;
+    private static boolean windowResizeable       = true;
+    private static boolean windowDecorated        = true;
+     */
 
-    private static final GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+    // TODO: improve. Should be handled by the callback. Just invoke an Asset.draggedAndDroppedFiles callback or something.
+    private static final Array<String> windowFilesDraggedAndDropped   = new Array<>(); // TODO: improve
+    private static       int           windowLastDragAndDropFileCount = 0;
 
+
+
+    /* current Scene */
     private static Scene currentScene = null;
 
     /* GLFW Window callbacks */
-    private static final GLFWFramebufferSizeCallback windowResizeCallback = new GLFWFramebufferSizeCallback() {
+    private static final GLFWErrorCallback           errorCallback              = GLFWErrorCallback.createPrint(System.err);
+    private static final GLFWFramebufferSizeCallback windowResizeCallback       = new GLFWFramebufferSizeCallback() {
 
         private volatile boolean requested;
 
@@ -102,8 +96,7 @@ public class Application {
         }
 
     };
-
-    private static final GLFWWindowFocusCallback windowFocusChangeCallback = new GLFWWindowFocusCallback() {
+    private static final GLFWWindowFocusCallback     windowFocusChangeCallback  = new GLFWWindowFocusCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean focused) {
             windowTasks.add(() -> {
@@ -112,8 +105,7 @@ public class Application {
             });
         }
     };
-
-    private static final GLFWWindowIconifyCallback windowMinimizedCallback = new GLFWWindowIconifyCallback() {
+    private static final GLFWWindowIconifyCallback   windowMinimizedCallback    = new GLFWWindowIconifyCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean minimized) {
             windowTasks.add(() -> {
@@ -122,22 +114,19 @@ public class Application {
             });
         }
     };
-
-    private static final GLFWWindowMaximizeCallback windowMaximizedCallback = new GLFWWindowMaximizeCallback() {
+    private static final GLFWWindowMaximizeCallback  windowMaximizedCallback    = new GLFWWindowMaximizeCallback() {
         @Override
         public synchronized void invoke(long windowHandle, final boolean maximized) {
             windowTasks.add(() -> windowMaximized = maximized);
         }
     };
-
-    private static final GLFWWindowCloseCallback windowCloseCallback = new GLFWWindowCloseCallback() {
+    private static final GLFWWindowCloseCallback     windowCloseCallback        = new GLFWWindowCloseCallback() {
         @Override
         public synchronized void invoke(final long handle) {
             windowTasks.add(() -> GLFW.glfwSetWindowShouldClose(handle, false));
         }
     };
-
-    private static final GLFWDropCallback windowFilesDroppedCallback = new GLFWDropCallback() {
+    private static final GLFWDropCallback            windowFilesDroppedCallback = new GLFWDropCallback() {
         @Override
         public synchronized void invoke(final long windowHandle, final int count, final long names) {
             windowTasks.add(() -> {
@@ -148,8 +137,7 @@ public class Application {
             });
         }
     };
-
-    private static final GLFWWindowPosCallback windowPositionCallback = new GLFWWindowPosCallback() {
+    private static final GLFWWindowPosCallback       windowPositionCallback     = new GLFWWindowPosCallback() {
         @Override
         public void invoke(long handle, int xPos, int yPos) {
             windowPosX = xPos;
@@ -207,18 +195,6 @@ public class Application {
         if (settings.iconPath != null) {
             windowSetIcon(settings.iconPath);
         }
-
-        // create cursors
-        cursorText = glfwCreateStandardCursor(GLFW.GLFW_IBEAM_CURSOR);
-        cursorPointer = glfwCreateStandardCursor(GLFW.GLFW_HAND_CURSOR);
-        cursorCross = glfwCreateStandardCursor(GLFW.GLFW_CROSSHAIR_CURSOR);
-        cursorHorizontalResize = glfwCreateStandardCursor(GLFW.GLFW_HRESIZE_CURSOR);
-        cursorVerticalResize = glfwCreateStandardCursor(GLFW.GLFW_VRESIZE_CURSOR);
-        cursorNotAllowed = glfwCreateStandardCursor(GLFW.GLFW_NOT_ALLOWED_CURSOR);
-        cursorPointingHand = glfwCreateStandardCursor(GLFW.GLFW_POINTING_HAND_CURSOR);
-        cursorResizeNESW = glfwCreateStandardCursor(GLFW.GLFW_RESIZE_NESW_CURSOR);
-        cursorResizeNWSE = glfwCreateStandardCursor(GLFW.GLFW_RESIZE_NWSE_CURSOR);
-        cursorResizeAll = glfwCreateStandardCursor(GLFW.GLFW_RESIZE_ALL_CURSOR);
 
         // register callbacks
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, windowResizeCallback);
@@ -285,8 +261,10 @@ public class Application {
 
         /* clean memory resources */ // TODO: clear Assets.
         currentScene.finish();
+
         Assets.cleanup(); // TODO: implement
         Input.cleanup();
+        Graphics.cleanup();
 
         GLFW.glfwSetWindowFocusCallback(windowHandle, null);
         GLFW.glfwSetWindowIconifyCallback(windowHandle, null);
@@ -295,23 +273,7 @@ public class Application {
         GLFW.glfwSetFramebufferSizeCallback(windowHandle, null);
         GLFW.glfwDestroyWindow(windowHandle);
 
-        /* destroy cursors */
-        GLFW.glfwDestroyCursor(cursorText);
-        GLFW.glfwDestroyCursor(cursorPointer);
-        GLFW.glfwDestroyCursor(cursorCross);
-        GLFW.glfwDestroyCursor(cursorHorizontalResize);
-        GLFW.glfwDestroyCursor(cursorVerticalResize);
 
-        GLFW.glfwDestroyCursor(cursorPointingHand);
-        GLFW.glfwDestroyCursor(cursorNotAllowed);
-        GLFW.glfwDestroyCursor(cursorResizeNESW);
-        GLFW.glfwDestroyCursor(cursorResizeNWSE);
-        GLFW.glfwDestroyCursor(cursorResizeAll);
-
-        for (Map.Entry<String, Long> cursorEntry : customCursors.entrySet()) {
-            long cursor = cursorEntry.getValue();
-            GLFW.glfwDestroyCursor(cursor);
-        }
 
         windowResizeCallback.free();
         windowFocusChangeCallback.free();
@@ -509,92 +471,8 @@ public class Application {
         return windowFilesDraggedAndDropped;
     }
 
-    /* set cursor */
-    public static void setCursorDefault() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, 0);
-    }
 
-    public static void setCursorText() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorText);
-    }
 
-    public static void setCursorPointer() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorPointer);
-    }
 
-    public static void setCursorCross() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorCross);
-    }
-
-    public static void setCursorResizeHorizontal() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorHorizontalResize);
-    }
-
-    public static void setCursorResizeVertical() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorVerticalResize);
-    }
-
-    public static void setCursorNotAllowed() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorNotAllowed);
-    }
-
-    public static void setCursorPointingHand() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorPointingHand);
-    }
-
-    public static void setCursorResizeNESW() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorResizeNESW);
-    }
-
-    public static void setCursorResizeNWSE() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorResizeNWSE);
-    }
-
-    public static void setCursorResizeAll() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        GLFW.glfwSetCursor(windowHandle, cursorResizeAll);
-    }
-
-    public static void setCursorNone() {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
-    }
-
-    public static void setCursorCustom(final String path) {
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-        Long cursor = customCursors.get(path);
-        if (cursor != null) {
-            GLFW.glfwSetCursor(windowHandle, cursor);
-        } else {
-            try (MemoryStack stack = MemoryStack.stackPush()) {
-                IntBuffer widthBuffer = stack.mallocInt(1);
-                IntBuffer heightBuffer = stack.mallocInt(1);
-                IntBuffer channelsBuffer = stack.mallocInt(1);
-                ByteBuffer buffer = STBImage.stbi_load(path, widthBuffer, heightBuffer, channelsBuffer, 4);
-                if (buffer == null) throw new ApplicationException("Failed to load a texture file for custom cursor. Check that the path is correct: " + path
-                        + System.lineSeparator() + "STBImage error: "
-                        + STBImage.stbi_failure_reason());
-                int width = widthBuffer.get();
-                int height = heightBuffer.get();
-                GLFWImage cursorImage = GLFWImage.malloc();
-                cursorImage.width(width);
-                cursorImage.height(height);
-                cursorImage.pixels(buffer);
-
-                long customCursor = glfwCreateCursor(cursorImage, width / 2, height / 2); // Hotspot at center
-                GLFW.glfwSetCursor(windowHandle, customCursor);
-                customCursors.put(path, customCursor);
-            }
-        }
-    }
 
 }
