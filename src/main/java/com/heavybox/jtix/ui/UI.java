@@ -15,13 +15,14 @@ public abstract class UI {
 
     private static int uiCount = 0;
 
-    protected UIContainer parent;
+    protected UIContainer container;
     public final int id;
     public float x, y, deg, sclX, sclY;
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
 
-    // global attributes
+    // common attributes
     public boolean visible = true;
+    public boolean draggable = false;
     public Consumer<UI> onMouseEnter = ui -> {};
     public Consumer<UI> onMouseLeave = ui -> {};
     public BiConsumer<UI, Mouse.Button> onMouseClick = (ui, btn) -> {};
@@ -70,9 +71,9 @@ public abstract class UI {
     }
 
     public boolean belongsTo(UIContainer container) {
-        if (container.children.contains(this)) return true;
+        if (container.contents.contains(this)) return true;
         boolean result = false;
-        for (UI child : container.children) {
+        for (UI child : container.contents) {
             if (child instanceof UIContainer) {
                 UIContainer childContainer = (UIContainer) child;
                 result = result || belongsTo(childContainer);
