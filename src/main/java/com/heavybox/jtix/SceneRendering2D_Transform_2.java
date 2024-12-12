@@ -5,7 +5,7 @@ import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_ecs_old_1.ComponentTransform;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer;
+import com.heavybox.jtix.z_graphics_old.Renderer;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;

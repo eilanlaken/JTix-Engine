@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class SceneTest_Fonts_2 implements Scene {
 
 
-    private Renderer2D_3 renderer2D = new Renderer2D_3();
+    private Renderer2D renderer2D = new Renderer2D();
 
     Shader alwaysYellow;
     Texture yellow;

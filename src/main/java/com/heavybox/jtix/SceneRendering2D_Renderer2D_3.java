@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
 
-    private Renderer2D_3 renderer2D;
+    private Renderer2D renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
@@ -65,7 +65,7 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
                     }""";
 
     public SceneRendering2D_Renderer2D_3() {
-        renderer2D = new Renderer2D_3();
+        renderer2D = new Renderer2D();
         Shader shader = new Shader(vertexShader, fragmentShader);
 
         //System.out.println(shader.attributeLocations.get("a_position", -1));

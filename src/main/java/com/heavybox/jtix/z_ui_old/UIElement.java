@@ -1,6 +1,6 @@
 package com.heavybox.jtix.z_ui_old;
 
-import com.heavybox.jtix.graphics.Renderer2D_old;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 

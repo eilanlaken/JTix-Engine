@@ -5,7 +5,7 @@ import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Model;
-import com.heavybox.jtix.graphics.Renderer3D_old;
+import com.heavybox.jtix.z_graphics_old.Renderer3D_old;
 import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.memory.MemoryResource;

@@ -1,7 +1,7 @@
 package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Renderer2D_old;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;

@@ -8,9 +8,13 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -23,37 +27,10 @@ import java.util.HashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-// TODO: incorrect logic in Renderer2D.
-// TODO: implement a method of:
-// TODO: - creating the transform matrix
-// TODO: - applying it to all the vertices
-// TODO: only this way perspective rendering is possible.
-
-// TODO: RENDERING BUG S-O-L-V-E-D:
-// for a circle with high refinement for example, we don't do if (current > capacity) ... every time we
-// write to the buffer.
-
-// Lights: https://github.com/simondevyoutube/Shaders_RadianceCascades
-// https://tmpvar.com/poc/radiance-cascades/
-// https://tmpvar.com/poc/radiance-cascades/ssprobes-wsintervals/ssprobes-wsintervals.js
-// https://www.shadertoy.com/view/mlSfRD
-// https://tmpvar.com/poc/radiance-cascades/
-// Lights 1: https://mini.gmshaders.com/p/radiance-cascades
-// Lights 2: https://mini.gmshaders.com/p/radiance-cascades2
 public class Renderer2D implements MemoryResourceHolder {
 
-    /* constants */
-    private static final int   VERTEX_SIZE       = 5;    // A vertex is composed of 5 floats: x,y: position, t: color (as float bits) and u,v: texture coordinates.
-    private static final int   VERTICES_CAPACITY = 20000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
-    private static final int   INDICES_CAPACITY  = 20000;
+    private static final int   VERTICES_CAPACITY = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
-
-    /* buffers */
-    private final int         vao;
-    private final int         vbo;
-    private final int         ebo;
-    private final IntBuffer   indicesBuffer  = BufferUtils.createIntBuffer(INDICES_CAPACITY * 3);
-    private final FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * VERTEX_SIZE);
 
     /* defaults */
     private final Shader    defaultShader = createDefaultShaderProgram();
@@ -77,24 +54,69 @@ public class Renderer2D implements MemoryResourceHolder {
     private int       currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
     private int       perFrameDrawCalls = 0;
 
+    /* Vertex Buffers */
+    private final int         vao;
+    private final int         vboPositions;
+    private final int         vboColors;
+    private final int         vboTextCoords;
+    private final int         vboNormals;
+    private final int         vboTangents;
+    private final int         ebo;
+    private final FloatBuffer positions;
+    private final FloatBuffer colors;
+    private final FloatBuffer textCoords;
+    private final FloatBuffer normals;
+    private final FloatBuffer tangents;
+    private final IntBuffer   indices;
+
     public Renderer2D() {
+        positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
+        colors     = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 1);
+        textCoords = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
+        normals    = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
+        tangents   = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
+        indices    = BufferUtils.createIntBuffer(VERTICES_CAPACITY * 2);
+
         this.vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
-        {
-            this.vbo = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-            GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer.capacity(), GL15.GL_DYNAMIC_DRAW);
-            int vertexSizeBytes = VERTEX_SIZE * Float.BYTES;
-            GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, vertexSizeBytes, 0); // positions
-            GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, vertexSizeBytes, Float.BYTES * 2L); // colors
-            GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, true, vertexSizeBytes, Float.BYTES * 3L); // uvs
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glEnableVertexAttribArray(1);
-            GL20.glEnableVertexAttribArray(2);
-            this.ebo = GL15.glGenBuffers();
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
-            GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer.capacity(), GL15.GL_DYNAMIC_DRAW);
-        }
+
+        this.vboPositions = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions); // bind
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
+        GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 0, 0);
+        //GL20.glEnableVertexAttribArray(0);
+        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
+
+        this.vboColors = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColors); // bind
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colors, GL15.GL_DYNAMIC_DRAW);
+        GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, 0, 0);
+        //GL20.glEnableVertexAttribArray(1);
+        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
+
+        this.vboTextCoords = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextCoords); // bind
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textCoords, GL15.GL_DYNAMIC_DRAW);
+        GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
+        //GL20.glEnableVertexAttribArray(2);
+        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
+
+        this.vboNormals = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboNormals); // bind
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normals, GL15.GL_DYNAMIC_DRAW);
+        GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, 0, 0);
+        //GL20.glEnableVertexAttribArray(3);
+
+        this.vboTangents = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTangents); // bind
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, tangents, GL15.GL_DYNAMIC_DRAW);
+        GL20.glVertexAttribPointer(4, 2, GL11.GL_FLOAT, false, 0, 0);
+        //GL20.glEnableVertexAttribArray(4);
+
+        this.ebo = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
+
         GL30.glBindVertexArray(0);
     }
 
@@ -124,7 +146,7 @@ public class Renderer2D implements MemoryResourceHolder {
         setShaderAttributes(null);
         setTexture(whitePixel);
         setMode(GL11.GL_TRIANGLES);
-        setTint(WHITE_TINT);
+        setColor(WHITE_TINT);
         this.drawing = true;
     }
 
@@ -166,12 +188,16 @@ public class Renderer2D implements MemoryResourceHolder {
         this.currentDFactor = dFactor;
     }
 
-    public void setTint(final Color color) {
-        if (color == null) setTint(Color.WHITE.toFloatBits());
-        else setTint(color.toFloatBits());
+    public void setColor(final Color color) {
+        if (color == null) setColor(Color.WHITE.toFloatBits());
+        else setColor(color.toFloatBits());
     }
 
-    public void setTint(float tintFloatBits) {
+    public void setColor(float r, float g, float b, float a) {
+        setColor(Color.toFloatBits(r,g,b,a));
+    }
+
+    public void setColor(float tintFloatBits) {
         this.currentTint = tintFloatBits;
     }
 
@@ -179,10 +205,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Textures */
 
-    public void drawTexture(Texture texture, float x, float y, float angleDeg, float scaleX, float scaleY) {
+    public void drawTexture(Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
@@ -197,34 +222,45 @@ public class Renderer2D implements MemoryResourceHolder {
 
         arm0.x = -widthHalf;
         arm0.y =  heightHalf;
-        arm0.rotateDeg(angleDeg);
+        arm0.rotateDeg(degrees);
 
         arm1.x = -widthHalf;
         arm1.y = -heightHalf;
-        arm1.rotateDeg(angleDeg);
+        arm1.rotateDeg(degrees);
 
         arm2.x =  widthHalf;
         arm2.y = -heightHalf;
-        arm2.rotateDeg(angleDeg);
+        arm2.rotateDeg(degrees);
 
         arm3.x = widthHalf;
         arm3.y = heightHalf;
-        arm3.rotateDeg(angleDeg);
+        arm3.rotateDeg(degrees);
 
         /* put vertices */
-        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0).put(0); // V0
-        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0).put(1); // V1
-        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(1).put(1); // V2
-        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(1).put(0); // V3
+        positions.put(arm0.x + x).put(arm0.y + y);
+        colors.put(currentTint);
+        textCoords.put(0).put(0);
+
+        positions.put(arm1.x + x).put(arm1.y + y);
+        colors.put(currentTint);
+        textCoords.put(0).put(1);
+
+        positions.put(arm2.x + x).put(arm2.y + y);
+        colors.put(currentTint);
+        textCoords.put(1).put(1);
+
+        positions.put(arm3.x + x).put(arm3.y + y);
+        colors.put(currentTint);
+        textCoords.put(1).put(0);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
         vertexIndex += 4;
 
         /* free resources */
@@ -234,20 +270,94 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawTexture(Texture texture, float cornerRadius, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
-        drawRectangleFilled(texture, texture.width, texture.height, cornerRadius, refinement, x, y, deg, scaleX, scaleY);
+
+    public void drawTexture(@NotNull Texture texture, float cornerRadiusPixels, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement * 4, 3 * (refinement * 4 - 2))) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        float widthHalf  = texture.width  * 0.5f;
+        float heightHalf = texture.height * 0.5f;
+        float da = 90.0f / (refinement - 1);
+
+        Vector2 corner = vectors2Pool.allocate();
+        // add upper left corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(-cornerRadiusPixels, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusPixels,heightHalf - cornerRadiusPixels);
+            float u = (corner.x + widthHalf) / texture.width;
+            float v = 1 - (corner.y + heightHalf) / texture.height;
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(u).put(v);
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(0, cornerRadiusPixels);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusPixels, heightHalf - cornerRadiusPixels);
+            float u = (corner.x + widthHalf) / texture.width;
+            float v = 1 - (corner.y + heightHalf) / texture.height;
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(u).put(v);
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(cornerRadiusPixels, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusPixels, -heightHalf + cornerRadiusPixels);
+            float u = (corner.x + widthHalf) / texture.width;
+            float v = 1 - (corner.y + heightHalf) / texture.height;
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(u).put(v);
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(0, -cornerRadiusPixels);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusPixels, -heightHalf + cornerRadiusPixels);
+            float u = (corner.x + widthHalf) / texture.width;
+            float v = 1 - (corner.y + heightHalf) / texture.height;
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(u).put(v);
+        }
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement * 4 - 2; i++) {
+            indices.put(startVertex);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
+        }
+
+        vectors2Pool.free(corner);
+        vertexIndex += refinement * 4;
     }
 
-    public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float deg, float scaleX, float scaleY) {
+
+    public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE >  verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
-        float width  = texture.width  * scaleX;
-        float height = texture.height * scaleY;
+        float width  = texture.width  * scaleX * MathUtils.cosDeg(angleY);
+        float height = texture.height * scaleY * MathUtils.cosDeg(angleX);
         float widthHalf  = width * 0.5f;
         float heightHalf = height * 0.5f;
 
@@ -258,34 +368,45 @@ public class Renderer2D implements MemoryResourceHolder {
 
         arm0.x = -widthHalf + width * u1;
         arm0.y =  heightHalf - height * v1;
-        arm0.rotateDeg(deg);
+        arm0.rotateDeg(angleZ);
 
         arm1.x = -widthHalf + width * u1;
         arm1.y = -heightHalf + height * (1 - v2);
-        arm1.rotateDeg(deg);
+        arm1.rotateDeg(angleZ);
 
         arm2.x =  widthHalf - width * (1 - u2);
         arm2.y = -heightHalf + height * (1 - v2);
-        arm2.rotateDeg(deg);
+        arm2.rotateDeg(angleZ);
 
         arm3.x = widthHalf - width * (1 - u2);
         arm3.y = heightHalf - height * v1;
-        arm3.rotateDeg(deg);
+        arm3.rotateDeg(angleZ);
 
         /* put vertices */
-        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(u1).put(v1); // V0
-        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(u1).put(v2); // V1
-        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(u2).put(v2); // V2
-        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(u2).put(v1); // V3
+        positions.put(arm0.x + x).put(arm0.y + y);
+        colors.put(currentTint);
+        textCoords.put(u1).put(v1);
+
+        positions.put(arm1.x + x).put(arm1.y + y);
+        colors.put(currentTint);
+        textCoords.put(u1).put(v2);
+
+        positions.put(arm2.x + x).put(arm2.y + y);
+        colors.put(currentTint);
+        textCoords.put(u2).put(v2);
+
+        positions.put(arm3.x + x).put(arm3.y + y);
+        colors.put(currentTint);
+        textCoords.put(u2).put(v1);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
         vertexIndex += 4;
 
         /* free resources */
@@ -295,10 +416,9 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawTextureRegion(TexturePack.Region region, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawTextureRegion(TexturePack.Region region, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
@@ -334,8 +454,8 @@ public class Renderer2D implements MemoryResourceHolder {
         localY4 *= scaleY;
 
         /* apply rotation */
-        final float sin = MathUtils.sinDeg(deg);
-        final float cos = MathUtils.cosDeg(deg);
+        final float sin = MathUtils.sinDeg(degrees);
+        final float cos = MathUtils.cosDeg(degrees);
         float x1 = localX1 * cos - localY1 * sin;
         float y1 = localX1 * sin + localY1 * cos;
         float x2 = localX2 * cos - localY2 * sin;
@@ -356,167 +476,205 @@ public class Renderer2D implements MemoryResourceHolder {
         y4 += y;
 
         /* put vertices */
-        verticesBuffer.put(x1).put(y1).put(currentTint).put(ui).put(vi); // V1
-        verticesBuffer.put(x2).put(y2).put(currentTint).put(ui).put(vf); // V2
-        verticesBuffer.put(x3).put(y3).put(currentTint).put(uf).put(vf); // V3
-        verticesBuffer.put(x4).put(y4).put(currentTint).put(uf).put(vi); // V4
+        positions.put(x1).put(y1);
+        colors.put(currentTint);
+        textCoords.put(ui).put(vi);
+
+        positions.put(x2).put(y2);
+        colors.put(currentTint);
+        textCoords.put(ui).put(vf);
+
+        positions.put(x3).put(y3);
+        colors.put(currentTint);
+        textCoords.put(uf).put(vf);
+
+        positions.put(x4).put(y4);
+        colors.put(currentTint);
+        textCoords.put(uf).put(vi);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
         vertexIndex += 4;
     }
 
+    /* Rendering 2D primitives - circles */
 
-    /* Rendering 2D primitives - Circles */
-
-    public void drawCircleThin(float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawCircleThin(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + refinement) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + refinement * 2 + 2 > indicesBuffer.capacity()) flush();
+
+        refinement = Math.max(refinement, 3);
+        if (!ensureCapacity(refinement, 2 * (refinement + 1))) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
-        // put indices
-        int startVertex = this.vertexIndex;
-        for (int i = 1; i < refinement; i++) {
-            indicesBuffer.put(startVertex + i - 1);
-            indicesBuffer.put(startVertex + i);
-        }
-        indicesBuffer.put(startVertex + refinement - 1);
-        indicesBuffer.put(startVertex);
-
         Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
         for (int i = 0; i < refinement; i++) {
-            arm.x = r * scaleX * MathUtils.cosDeg(da * i);
-            arm.y = r * scaleY * MathUtils.sinDeg(da * i);
-            arm.rotateDeg(deg);
-            verticesBuffer
-                    .put(x + arm.x)
-                    .put(y + arm.y)
-                    .put(currentTint)
-                    .put(0.5f)
-                    .put(0.5f)
-            ;
+            arm.x = x + r * scaleX * MathUtils.cosDeg(da * i);
+            arm.y = y + r * scaleY * MathUtils.sinDeg(da * i);
+            arm.rotateDeg(degrees);
+            positions.put(arm.x).put(arm.y);
+            textCoords.put(0.5f).put(0.5f);
+            colors.put(currentTint);
         }
         vectors2Pool.free(arm);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        for (int i = 1; i < refinement; i++) {
+            indices.put(startVertex + i - 1);
+            indices.put(startVertex + i);
+        }
+        indices.put(startVertex + refinement - 1);
+        indices.put(startVertex);
 
         vertexIndex += refinement;
     }
 
-    public final void drawCircleFilled(@Nullable Texture texture, float r, int refinement, float angle, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawCircleFilled(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + refinement + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + refinement * 3> indicesBuffer.capacity()) flush();
 
-        if (texture == null) texture = whitePixel;
-        refinement = Math.max(3, refinement);
+        refinement = Math.max(refinement, 3);
+        if (!ensureCapacity(refinement, 3 * (refinement - 2))) flush();
+
         setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
+        setTexture(whitePixel);
 
-        // put vertices
         Vector2 arm = vectors2Pool.allocate();
-        float da = angle / refinement;
-        verticesBuffer.put(x).put(y).put(currentTint).put(0.5f).put(0.5f);
-        int i = 0;
-        while (i < refinement + 1) {
+        float da = 360f / refinement;
+
+        /* put vertices */
+        for (int i = 0; i < refinement; i++) {
             arm.x = r * scaleX * MathUtils.cosDeg(da * i);
             arm.y = r * scaleY * MathUtils.sinDeg(da * i);
-            arm.rotateDeg(deg);
+            arm.rotateDeg(degrees);
             float pointX = x + arm.x;
             float pointY = y + arm.y;
-            float u = arm.x / (2 * r * scaleX) + 0.5f;
-            float v = 1 - (arm.y / (2 * r * scaleY) + 0.5f);
-            verticesBuffer.put(pointX).put(pointY).put(currentTint).put(u).put(v);
-            i++;
+            positions.put(pointX).put(pointY);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement - 2; i++) {
+            indices.put(startVertex);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
+        }
+        vertexIndex += refinement;
+
+        vectors2Pool.free(arm);
+    }
+
+    public void drawCircleFilled(float r, int refinement, float angle, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinement = Math.max(refinement, 3);
+        if (!ensureCapacity(refinement, 3 * (refinement - 2))) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        Vector2 arm = vectors2Pool.allocate();
+        positions.put(x).put(y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+        float da = angle / refinement;
+
+        for (int i = 0; i < refinement + 1; i++) {
+            arm.x = r * scaleX * MathUtils.cosDeg(da * i);
+            arm.y = r * scaleY * MathUtils.sinDeg(da * i);
+            arm.rotateDeg(degrees);
+            float pointX = x + arm.x;
+            float pointY = y + arm.y;
+            positions.put(pointX).put(pointY);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
         vectors2Pool.free(arm);
 
         int startVertex = this.vertexIndex;
-        for (int index = 0; index < refinement; index++) {
-            indicesBuffer.put(startVertex);
-            indicesBuffer.put(startVertex + index + 1);
-            indicesBuffer.put(startVertex + index + 2);
+        for (int i = 0; i < refinement; i++) {
+            indices.put(startVertex);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
         }
+
         vertexIndex += refinement + 2;
     }
 
-    public final void drawCircleFilled(float r, int refinement, float angle, float x, float y, float deg, float scaleX, float scaleY) {
-        drawCircleFilled(null, r, refinement, angle, x, y, deg, scaleX, scaleY);
-    }
-
-    public final void drawCircleFilled(@Nullable Texture texture, float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
-        drawCircleFilled(texture, r, refinement, 360, x, y, deg, scaleX, scaleY);
-    }
-
-    public final void drawCircleFilled(float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
-        drawCircleFilled(null, r, refinement, 360, x, y, deg, scaleX, scaleY);
-    }
-
-    public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawCircleBorder(float r, float thickness, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
-        if ((vertexIndex + refinement * 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (refinement - 1) * 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(refinement * 2, refinement * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
         Vector2 arm0 = vectors2Pool.allocate();
         Vector2 arm1 = vectors2Pool.allocate();
-        float da = angle / refinement;
+        float da = 360f / refinement;
         float halfBorder = thickness * 0.5f;
-        // render arc segments.
+
         for (int i = 0; i < refinement; i++) {
             float currentAngle = da * i;
 
             arm0.x = scaleX * (r - halfBorder) * MathUtils.cosDeg(currentAngle);
             arm0.y = scaleY * (r - halfBorder) * MathUtils.sinDeg(currentAngle);
-            arm0.rotateDeg(deg);
+            arm0.rotateDeg(degrees);
 
-            arm1.x = scaleX * (r + halfBorder) * (MathUtils.cosDeg(currentAngle));
-            arm1.y = scaleY * (r + halfBorder) * (MathUtils.sinDeg(currentAngle));
-            arm1.rotateDeg(deg);
+            arm1.x = scaleX * (r + halfBorder) * MathUtils.cosDeg(currentAngle);
+            arm1.y = scaleY * (r + halfBorder) * MathUtils.sinDeg(currentAngle);
+            arm1.rotateDeg(degrees);
 
-            verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0.5f).put(0.5f);
-            verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0.5f).put(0.5f);
+            positions.put(arm0.x + x).put(arm0.y + y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            positions.put(arm1.x + x).put(arm1.y + y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
         int startVertex = this.vertexIndex;
         for (int i = 0; i < (refinement - 1) * 2; i += 2) { // 012 213
-            indicesBuffer.put(startVertex + i + 0);
-            indicesBuffer.put(startVertex + i + 1);
-            indicesBuffer.put(startVertex + i + 2);
-            indicesBuffer.put(startVertex + i + 2);
-            indicesBuffer.put(startVertex + i + 1);
-            indicesBuffer.put(startVertex + i + 3);
+            indices.put(startVertex + i + 0);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
+            indices.put(startVertex + i + 2);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 3);
         }
+        indices.put(startVertex + refinement * 2 - 2);
+        indices.put(startVertex + refinement * 2 - 1);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + refinement * 2 - 1);
+        indices.put(startVertex + 1);
         vertexIndex += refinement * 2;
 
         vectors2Pool.free(arm0);
         vectors2Pool.free(arm1);
     }
 
-    public void drawCircleBorder(float r, float thickness, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
-        if ((vertexIndex + refinement * 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (refinement - 1) * 6 + 6> indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(refinement * 2, refinement * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
         Vector2 arm0 = vectors2Pool.allocate();
         Vector2 arm1 = vectors2Pool.allocate();
-        float da = 360f / refinement;
+        float da = angle / refinement;
         float halfBorder = thickness * 0.5f;
         // render arc segments.
         for (int i = 0; i < refinement; i++) {
@@ -524,32 +682,31 @@ public class Renderer2D implements MemoryResourceHolder {
 
             arm0.x = scaleX * (r - halfBorder) * MathUtils.cosDeg(currentAngle);
             arm0.y = scaleY * (r - halfBorder) * MathUtils.sinDeg(currentAngle);
-            arm0.rotateDeg(deg);
+            arm0.rotateDeg(degrees);
 
-            arm1.x = scaleX * (r + halfBorder) * MathUtils.cosDeg(currentAngle);
-            arm1.y = scaleY * (r + halfBorder) * MathUtils.sinDeg(currentAngle);
-            arm1.rotateDeg(deg);
+            arm1.x = scaleX * (r + halfBorder) * (MathUtils.cosDeg(currentAngle));
+            arm1.y = scaleY * (r + halfBorder) * (MathUtils.sinDeg(currentAngle));
+            arm1.rotateDeg(degrees);
 
-            verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0.5f).put(0.5f);
-            verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0.5f).put(0.5f);
+            positions.put(arm0.x + x).put(arm0.y + y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            positions.put(arm1.x + x).put(arm1.y + y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
         int startVertex = this.vertexIndex;
         for (int i = 0; i < (refinement - 1) * 2; i += 2) { // 012 213
-            indicesBuffer.put(startVertex + i + 0);
-            indicesBuffer.put(startVertex + i + 1);
-            indicesBuffer.put(startVertex + i + 2);
-            indicesBuffer.put(startVertex + i + 2);
-            indicesBuffer.put(startVertex + i + 1);
-            indicesBuffer.put(startVertex + i + 3);
+            indices.put(startVertex + i + 0);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
+            indices.put(startVertex + i + 2);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 3);
         }
-        indicesBuffer.put(startVertex + refinement * 2 - 2);
-        indicesBuffer.put(startVertex + refinement * 2 - 1);
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 2 - 1);
-        indicesBuffer.put(startVertex + 1);
         vertexIndex += refinement * 2;
 
         vectors2Pool.free(arm0);
@@ -557,42 +714,47 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     /* Rendering 2D primitives - Rectangles */
-    // TODO: keep it. Used for physics renderer.
-    public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
+    // TODO: delete. This is not necessarily a rectangle. This should be called from physics so simply replace the call.
+    @Deprecated public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 8 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
         // put indices
         int startVertex = this.vertexIndex;
-        indicesBuffer
-                .put(startVertex + 0)
-                .put(startVertex + 1)
-                .put(startVertex + 1)
-                .put(startVertex + 2)
-                .put(startVertex + 2)
-                .put(startVertex + 3)
-                .put(startVertex + 3)
-                .put(startVertex + 0)
-        ;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 0);
 
-        verticesBuffer
-                .put(x0).put(y0).put(currentTint).put(0.5f).put(0.5f) // V0
-                .put(x1).put(y1).put(currentTint).put(0.5f).put(0.5f) // V1
-                .put(x2).put(y2).put(currentTint).put(0.5f).put(0.5f) // V2
-                .put(x3).put(y3).put(currentTint).put(0.5f).put(0.5f) // V3
-        ;
+        positions.put(x0).put(y0);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x1).put(y1);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x2).put(y2);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x3).put(y3);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
 
         vertexIndex += 4;
     }
 
-    public void drawRectangleThin(float width, float height, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawRectangleThin(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 8> indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -607,35 +769,46 @@ public class Renderer2D implements MemoryResourceHolder {
 
         arm0.x = -widthHalf;
         arm0.y = heightHalf;
-        arm0.rotateDeg(deg);
+        arm0.rotateDeg(degrees);
 
         arm1.x = -widthHalf;
         arm1.y = -heightHalf;
-        arm1.rotateDeg(deg);
+        arm1.rotateDeg(degrees);
 
         arm2.x = widthHalf;
         arm2.y = -heightHalf;
-        arm2.rotateDeg(deg);
+        arm2.rotateDeg(degrees);
 
         arm3.x = widthHalf;
         arm3.y = heightHalf;
-        arm3.rotateDeg(deg);
+        arm3.rotateDeg(degrees);
 
-        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0.5f).put(0.5f); // V0
-        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0.5f).put(0.5f); // V1
-        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(0.5f).put(0.5f); // V2
-        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(0.5f).put(0.5f); // V3
+        positions.put(arm0.x + x).put(arm0.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(arm1.x + x).put(arm1.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(arm2.x + x).put(arm2.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(arm3.x + x).put(arm3.y + y);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
 
         // put indices
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 0);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 0);
         vertexIndex += 4;
 
         vectors2Pool.free(arm0);
@@ -644,108 +817,82 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawRectangleThin(float width, float height, float r, int refinement, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawRectangleThin(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        refinement = Math.max(3, refinement);
-        if ((vertexIndex + refinement * 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + refinement * 8 + 2> indicesBuffer.capacity()) flush();
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement * 4, refinement * 8)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
         float widthHalf  = width  * 0.5f;
         float heightHalf = height * 0.5f;
-        float da = 90.0f / refinement;
+        float da = 90.0f / (refinement - 1);
 
-        // we store the vertices in this array and apply the transform after, then put them in the buffer
-        Array<Vector2> vertices = new Array<>(true, 1 + refinement * 4); // TODO: allocate a float array instead of this.
+        Vector2 corner = vectors2Pool.allocate();
 
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.set(-r, 0);
+            corner.set(-cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + r, heightHalf - r);
-            vertices.add(corner);
+            corner.add(-widthHalf + cornerRadius, heightHalf - cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // add upper right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.set(0, r);
+            corner.set(0, cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - r, heightHalf - r);
-            vertices.add(corner);
+            corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.set(r, 0);
+            corner.set(cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - r, -heightHalf + r);
-            vertices.add(corner);
+            corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.set(0, -r);
+            corner.set(0, -cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + r, -heightHalf + r);
-            vertices.add(corner);
-        }
-
-        // transform each vertex, then put it in the buffer + tint + uv
-        for (int i = 0; i < vertices.size; i++) {
-            Vector2 vertex = vertices.get(i).scl(scaleX, scaleY).rotateDeg(deg).add(x, y);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+            corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
         int startVertex = this.vertexIndex;
-        // upper left corner
-        indicesBuffer.put(startVertex + 0);
-        for (int i = 1; i < refinement * 4; i++) {
-            indicesBuffer.put(startVertex + i);
-            indicesBuffer.put(startVertex + i);
+        for (int i = 0; i < refinement * 4; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + (i + 1) % (refinement*4));
         }
-        indicesBuffer.put(startVertex + 0);
 
-        vectors2Pool.freeAll(vertices);
+        vectors2Pool.free(corner);
         vertexIndex += refinement * 4;
     }
 
-    public void drawRectangleFilled(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6> indicesBuffer.capacity()) flush();
-
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(whitePixel);
-
-        /* put vertices */
-        verticesBuffer.put(x0).put(y0).put(currentTint).put(0.5f).put(0.5f); // V0
-        verticesBuffer.put(x1).put(y1).put(currentTint).put(0.5f).put(0.5f); // V1
-        verticesBuffer.put(x2).put(y2).put(currentTint).put(0.5f).put(0.5f); // V2
-        verticesBuffer.put(x3).put(y3).put(currentTint).put(0.5f).put(0.5f); // V3
-
-        // put indices
-        int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 0);
-
-        vertexIndex += 4;
+    public void drawRectangleFilled(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
+        drawRectangleFilled(null, width, height, x, y, degrees, scaleX, scaleY);
     }
 
-    public void drawRectangleFilled(Texture texture, float width, float height, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4,6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
@@ -760,35 +907,44 @@ public class Renderer2D implements MemoryResourceHolder {
 
         arm0.x = -widthHalf;
         arm0.y =  heightHalf;
-        arm0.rotateDeg(deg);
+        arm0.rotateDeg(degrees);
 
         arm1.x = -widthHalf;
         arm1.y = -heightHalf;
-        arm1.rotateDeg(deg);
+        arm1.rotateDeg(degrees);
 
         arm2.x =  widthHalf;
         arm2.y = -heightHalf;
-        arm2.rotateDeg(deg);
+        arm2.rotateDeg(degrees);
 
         arm3.x = widthHalf;
         arm3.y = heightHalf;
-        arm3.rotateDeg(deg);
+        arm3.rotateDeg(degrees);
 
-        verticesBuffer.put(arm0.x + x).put(arm0.y + y).put(currentTint).put(0).put(0); // V0
-        verticesBuffer.put(arm1.x + x).put(arm1.y + y).put(currentTint).put(0).put(1); // V1
-        verticesBuffer.put(arm2.x + x).put(arm2.y + y).put(currentTint).put(1).put(1); // V2
-        verticesBuffer.put(arm3.x + x).put(arm3.y + y).put(currentTint).put(1).put(0); // V3
+        positions.put(arm0.x + x).put(arm0.y + y);
+        colors.put(currentTint);
+        textCoords.put(0).put(0);
+
+        positions.put(arm1.x + x).put(arm1.y + y);
+        colors.put(currentTint);
+        textCoords.put(0).put(1);
+
+        positions.put(arm2.x + x).put(arm2.y + y);
+        colors.put(currentTint);
+        textCoords.put(1).put(1);
+
+        positions.put(arm3.x + x).put(arm3.y + y);
+        colors.put(currentTint);
+        textCoords.put(1).put(0);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        indicesBuffer
-                .put(startVertex + 0)
-                .put(startVertex + 1)
-                .put(startVertex + 2)
-                .put(startVertex + 2)
-                .put(startVertex + 3)
-                .put(startVertex + 0)
-        ;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 0);
         vertexIndex += 4;
 
         /* free resources */
@@ -798,137 +954,78 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float cornerRadius, int refinement, float x, float y, float angleDeg, float scaleX, float scaleY) {
+    public void drawRectangleFilled(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        refinement = Math.max(3, refinement);
-        if ((vertexIndex + 1 + refinement * 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (refinement - 1) * 12 + 12 > indicesBuffer.capacity()) flush();
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
+        setTexture(whitePixel);
 
-        float widthHalf  = width  * 0.5f;
-        float heightHalf = height * 0.5f;
-        float da = 90.0f / refinement;
+        float widthHalf  = width  * scaleX * 0.5f;
+        float heightHalf = height * scaleY * 0.5f;
+        float da = 90.0f / (refinement - 1);
 
-        // we store the vertices in this array and apply the transform after, then put them in the buffer
-        Array<Vector2> vertices = new Array<>(true, 1 + refinement * 4);
-        Array<Vector2> uvs      = new Array<>(true, 1 + refinement * 4);
-
-        // add center vertex
-        vertices.add(vectors2Pool.allocate().set(0, 0)); // center vertex
-        uvs.add(vectors2Pool.allocate().set(0.5f, 0.5f));
-
+        Vector2 corner = vectors2Pool.allocate();
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
             corner.set(-cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius,heightHalf - cornerRadius);
-            vertices.add(corner);
-            float u = (corner.x + widthHalf) / width;
-            float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectors2Pool.allocate().set(u,v);
-            uvs.add(uv);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // add upper right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
             corner.set(0, cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
-            vertices.add(corner);
-            float u = (corner.x + widthHalf) / width;
-            float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectors2Pool.allocate().set(u,v);
-            uvs.add(uv);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower right corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
             corner.set(cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
-            vertices.add(corner);
-            float u = (corner.x + widthHalf) / width;
-            float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectors2Pool.allocate().set(u,v);
-            uvs.add(uv);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower left corner vertices
         for (int i = 0; i < refinement; i++) {
-            Vector2 corner = vectors2Pool.allocate();
             corner.set(0, -cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
-            vertices.add(corner);
-            float u = (corner.x + widthHalf) / width;
-            float v = 1 - (corner.y + heightHalf) / height;
-            Vector2 uv = vectors2Pool.allocate().set(u,v);
-            uvs.add(uv);
-        }
-
-        // transform each vertex, then put it in the buffer + tint + uv
-        for (int i = 0; i < vertices.size; i++) {
-            Vector2 vertex = vertices.get(i).scl(scaleX, scaleY).rotateDeg(angleDeg).add(x, y);
-            Vector2 uv = uvs.get(i);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(uv.x).put(uv.y);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
         int startVertex = this.vertexIndex;
-        // upper left corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 0 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 0 + i + 2);
+        for (int i = 0; i < refinement * 4 - 2; i++) {
+            indices.put(startVertex);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
         }
-        // upper triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 1 + 0);
-        indicesBuffer.put(startVertex + refinement * 1 + 1);
-        // upper right corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 1 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 1 + i + 2);
-        }
-        // right triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 2 + 0);
-        indicesBuffer.put(startVertex + refinement * 2 + 1);
-        // lower right corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 2 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 2 + i + 2);
-        }
-        // bottom triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 3 + 0);
-        indicesBuffer.put(startVertex + refinement * 3 + 1);
-        // lower left corner
-        for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + 0);
-            indicesBuffer.put(startVertex + refinement * 3 + i + 1);
-            indicesBuffer.put(startVertex + refinement * 3 + i + 2);
-        }
-        // right triangle
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + refinement * 4 + 0);
-        indicesBuffer.put(startVertex + refinement * 0 + 1);
 
-        vectors2Pool.freeAll(vertices);
-        vertexIndex += 1 + refinement * 4;
+        vectors2Pool.free(corner);
+        vertexIndex += refinement * 4;
     }
 
     public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float angleDeg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 8) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 24 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(8, 24)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -958,43 +1055,36 @@ public class Renderer2D implements MemoryResourceHolder {
             vertex.scl(scaleX, scaleY);
             vertex.rotateDeg(angleDeg);
             vertex.add(x, y);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
-
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 4);
-        indicesBuffer.put(startVertex + 5);
-
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 5);
-        indicesBuffer.put(startVertex + 1);
-
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 5);
-        indicesBuffer.put(startVertex + 6);
-
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 6);
-        indicesBuffer.put(startVertex + 2);
-
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 6);
-        indicesBuffer.put(startVertex + 7);
-
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 7);
-        indicesBuffer.put(startVertex + 3);
-
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 7);
-        indicesBuffer.put(startVertex + 4);
-
-        indicesBuffer.put(startVertex + 3);
-        indicesBuffer.put(startVertex + 4);
-        indicesBuffer.put(startVertex + 0);
-
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 4);
+        indices.put(startVertex + 5);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 5);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 5);
+        indices.put(startVertex + 6);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 6);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 6);
+        indices.put(startVertex + 7);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 7);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 7);
+        indices.put(startVertex + 4);
+        indices.put(startVertex + 3);
+        indices.put(startVertex + 4);
+        indices.put(startVertex + 0);
         vertexIndex += 8;
 
         vectors2Pool.freeAll(vertices);
@@ -1002,19 +1092,16 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Polygons */
 
-    public void drawPolygonThin(float[] polygon, boolean triangulated, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawPolygonThin(float[] polygon, boolean triangulated, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (count + 2) * (count + 2) > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
-
-        if (MathUtils.isZero(scaleX) || MathUtils.isZero(scaleY)) return;
 
         int startVertex = this.vertexIndex;
         if (!triangulated) {
@@ -1022,29 +1109,29 @@ public class Renderer2D implements MemoryResourceHolder {
             for (int i = 0; i < polygon.length; i += 2) {
                 float poly_x = polygon[i];
                 float poly_y = polygon[i + 1];
-
                 vertex.set(poly_x, poly_y);
                 vertex.scl(scaleX, scaleY);
-                vertex.rotateDeg(deg);
+                vertex.rotateDeg(degrees);
                 vertex.add(x, y);
-
-                verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
             }
             vectors2Pool.free(vertex);
 
             for (int i = 0; i < count - 1; i++) {
-                indicesBuffer.put(startVertex + i);
-                indicesBuffer.put(startVertex + i + 1);
+                indices.put(startVertex + i);
+                indices.put(startVertex + i + 1);
             }
-            indicesBuffer.put(startVertex + count - 1);
-            indicesBuffer.put(startVertex + 0);
+            indices.put(startVertex + count - 1);
+            indices.put(startVertex + 0);
             vertexIndex += count;
         } else {
-            ArrayFloat vertices = arrayFloatPool.allocate();
-            ArrayInt indices    = arrayIntPool.allocate();
+            ArrayFloat vertices  = arrayFloatPool.allocate();
+            ArrayInt   triangles = arrayIntPool.allocate();
             /* try to triangulate the polygon. We might have a polygon that is degenerate and the triangulation fails. In that case, it is okay to not render anything.*/
             try {
-                MathUtils.polygonTriangulate(polygon, vertices, indices);
+                MathUtils.polygonTriangulate(polygon, vertices, triangles);
             } catch (Exception e) {
                 /* Probably the polygon has collapsed into a single point. */
                 return;
@@ -1057,44 +1144,43 @@ public class Renderer2D implements MemoryResourceHolder {
 
                 vertex.set(poly_x, poly_y);
                 vertex.scl(scaleX, scaleY);
-                vertex.rotateDeg(deg);
+                vertex.rotateDeg(degrees);
                 vertex.add(x, y);
 
-                verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
             }
             vectors2Pool.free(vertex);
 
-            for (int i = 0; i < indices.size - 2; i += 3) {
-                indicesBuffer.put(startVertex + indices.get(i));
-                indicesBuffer.put(startVertex + indices.get(i + 1));
+            for (int i = 0; i < triangles.size - 2; i += 3) {
+                indices.put(startVertex + triangles.get(i));
+                indices.put(startVertex + triangles.get(i + 1));
 
-                indicesBuffer.put(startVertex + indices.get(i + 1));
-                indicesBuffer.put(startVertex + indices.get(i + 2));
+                indices.put(startVertex + triangles.get(i + 1));
+                indices.put(startVertex + triangles.get(i + 2));
 
-                indicesBuffer.put(startVertex + indices.get(i + 2));
-                indicesBuffer.put(startVertex + indices.get(i));
+                indices.put(startVertex + triangles.get(i + 2));
+                indices.put(startVertex + triangles.get(i));
             }
 
             vertexIndex += vertices.size / 2;
 
             arrayFloatPool.free(vertices);
-            arrayIntPool.free(indices);
+            arrayIntPool.free(triangles);
         }
     }
 
-    public void drawPolygonThin(float[] polygon, ArrayInt indices, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawPolygonThin(float[] polygon, int[] triangles, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (count + 2) * (count + 2) > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
-
-        if (MathUtils.isZero(scaleX) || MathUtils.isZero(scaleY)) return;
 
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
@@ -1103,41 +1189,43 @@ public class Renderer2D implements MemoryResourceHolder {
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(deg);
+            vertex.rotateDeg(degrees);
             vertex.add(x, y);
 
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < indices.size - 2; i += 3) {
-            indicesBuffer.put(startVertex + indices.get(i + 0));
-            indicesBuffer.put(startVertex + indices.get(i + 1));
-            indicesBuffer.put(startVertex + indices.get(i + 1));
-            indicesBuffer.put(startVertex + indices.get(i + 2));
-            indicesBuffer.put(startVertex + indices.get(i + 2));
-            indicesBuffer.put(startVertex + indices.get(i + 0));
+        for (int i = 0; i < triangles.length - 2; i += 3) {
+            indices.put(startVertex + triangles[i + 0]);
+            indices.put(startVertex + triangles[i + 1]);
+            indices.put(startVertex + triangles[i + 1]);
+            indices.put(startVertex + triangles[i + 2]);
+            indices.put(startVertex + triangles[i + 2]);
+            indices.put(startVertex + triangles[i + 0]);
         }
         vertexIndex += polygon.length / 2;
 
         vectors2Pool.free(vertex);
     }
 
-    public void drawPolygonFilled(float[] polygon, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawPolygonFilled(float[] polygon, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
         ArrayFloat vertices = arrayFloatPool.allocate();
-        ArrayInt indices = arrayIntPool.allocate();
+        ArrayInt triangles = arrayIntPool.allocate();
         try {
-            MathUtils.polygonTriangulate(polygon, vertices, indices);
+            MathUtils.polygonTriangulate(polygon, vertices, triangles);
         } catch (Exception e) { // Probably the polygon has collapsed into a single point.
             return;
         }
@@ -1149,30 +1237,69 @@ public class Renderer2D implements MemoryResourceHolder {
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(deg);
+            vertex.rotateDeg(degrees);
             vertex.add(x, y);
 
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
         vectors2Pool.free(vertex);
 
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < indices.size; i ++) {
-            indicesBuffer.put(startVertex + indices.get(i));
+        for (int i = 0; i < triangles.size; i ++) {
+            indices.put(startVertex + triangles.get(i));
         }
 
         vertexIndex += count;
         arrayFloatPool.free(vertices);
-        arrayIntPool.free(indices);
+        arrayIntPool.free(triangles);
     }
 
-    public void drawPolygonFilled(float[] polygon, ArrayInt indices, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawPolygonFilled(float[] polygon) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
 
         int count = polygon.length / 2;
-        if ((vertexIndex + count) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        if (!ensureCapacity(count, count * 6)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(whitePixel);
+
+        ArrayFloat vertices = arrayFloatPool.allocate();
+        ArrayInt triangles = arrayIntPool.allocate();
+        try {
+            MathUtils.polygonTriangulate(polygon, vertices, triangles);
+        } catch (Exception e) { // Probably the polygon has collapsed into a single point.
+            return;
+        }
+
+        for (int i = 0; i < vertices.size; i += 2) {
+            float poly_x = vertices.get(i);
+            float poly_y = vertices.get(i + 1);
+            positions.put(poly_x).put(poly_y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < triangles.size; i ++) {
+            indices.put(startVertex + triangles.get(i));
+        }
+
+        vertexIndex += count;
+        arrayFloatPool.free(vertices);
+        arrayIntPool.free(triangles);
+    }
+
+    public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if (!ensureCapacity(count, triangles.length)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1184,113 +1311,89 @@ public class Renderer2D implements MemoryResourceHolder {
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(deg);
+            vertex.rotateDeg(degrees);
             vertex.add(x, y);
 
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < indices.size; i ++) {
-            indicesBuffer.put(startVertex + indices.get(i));
+        for (int triangle : triangles) {
+            indices.put(startVertex + triangle);
         }
         vertexIndex += count;
 
         vectors2Pool.free(vertex);
     }
 
-    /* Rendering 2D primitives - Lines */
-
-    public final void drawLineThin(float x1, float y1, float x2, float y2, float x, float y, float deg, float sclX, float sclY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 2 > indicesBuffer.capacity()) flush();
-
-        setMode(GL11.GL_LINES);
-        setTexture(whitePixel);
-
-        Vector2 firstPoint = vectors2Pool.allocate().set(x1, y1).scl(sclX, sclY).rotateDeg(deg).add(x, y);
-        Vector2 secondPoint = vectors2Pool.allocate().set(x2, y2).scl(sclX, sclY).rotateDeg(deg).add(x, y);
-        verticesBuffer.put(firstPoint.x).put(firstPoint.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(secondPoint.x).put(secondPoint.y).put(currentTint).put(0.5f).put(0.5f);
-        vectors2Pool.free(firstPoint);
-        vectors2Pool.free(secondPoint);
-
-        // put indices
-        int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex);
-        indicesBuffer.put(startVertex + 1);
-
-        vertexIndex += 2;
-    }
+    /* Rendering 2D primitives - lines */
 
     public final void drawLineThin(float x1, float y1, float x2, float y2) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 2) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 2 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(2, 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
-        verticesBuffer.put(x1).put(y1).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x2).put(y2).put(currentTint).put(0.5f).put(0.5f);
+        positions.put(x1).put(y1);
+        positions.put(x2).put(y2);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
 
         // put indices
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex);
-        indicesBuffer.put(startVertex + 1);
-
+        indices.put(startVertex);
+        indices.put(startVertex + 1);
         vertexIndex += 2;
     }
 
-    public final void drawLineFilled(@Nullable Texture texture, float x1, float y1, float x2, float y2, float stroke, float x, float y, float deg, float sclX, float sclY) {
+    public final void drawLineThin(float p1X, float p1Y, float p2X, float p2Y, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(2, 2)) flush();
 
-        setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
-        Vector2 dir = vectors2Pool.allocate();
-        dir.x = x2 - x1;
-        dir.y = y2 - y1;
-        dir.nor();
-        dir.scl(stroke * 0.5f);
-        dir.rotate90(1);
+        Vector2 vertex1 = vectors2Pool.allocate();
+        vertex1.set(p1X, p1Y);
+        vertex1.scl(scaleX, scaleY);
+        vertex1.rotateDeg(degrees);
+        vertex1.add(x, y);
 
-        Vector2 v1 = vectors2Pool.allocate().set(x1 + dir.x, y1 + dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
-        Vector2 v2 = vectors2Pool.allocate().set(x1 - dir.x, y1 - dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
-        Vector2 v3 = vectors2Pool.allocate().set(x2 - dir.x, y2 - dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
-        Vector2 v4 = vectors2Pool.allocate().set(x2 + dir.x, y2 + dir.y).scl(sclX, sclY).rotateDeg(deg).add(x, y);
+        Vector2 vertex2 = vectors2Pool.allocate();
+        vertex2.set(p2X, p2Y);
+        vertex2.scl(scaleX, scaleY);
+        vertex2.rotateDeg(degrees);
+        vertex2.add(x, y);
 
-        // put vertices for line segment
-        verticesBuffer.put(x1 + dir.x).put(y1 + dir.y).put(currentTint).put(0).put(0);
-        verticesBuffer.put(x1 - dir.x).put(y1 - dir.y).put(currentTint).put(0).put(1);
-        verticesBuffer.put(x2 - dir.x).put(y2 - dir.y).put(currentTint).put(1).put(1);
-        verticesBuffer.put(x2 + dir.x).put(y2 + dir.y).put(currentTint).put(1).put(0);
+        positions.put(vertex1.x).put(vertex1.y);
+        positions.put(vertex2.x).put(vertex2.y);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
 
         // put indices
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 3);
-        vertexIndex += 4;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        vertexIndex += 2;
 
-        vectors2Pool.free(dir);
-        vectors2Pool.free(v1);
-        vectors2Pool.free(v2);
-        vectors2Pool.free(v3);
-        vectors2Pool.free(v4);
+        vectors2Pool.free(vertex1);
+        vectors2Pool.free(vertex2);
     }
 
-    // TODO: consider transform
     public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
@@ -1303,133 +1406,164 @@ public class Renderer2D implements MemoryResourceHolder {
         dir.rotate90(1);
 
         // put vertices for line segment
-        verticesBuffer.put(x1 + dir.x).put(y1 + dir.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x1 - dir.x).put(y1 - dir.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x2 - dir.x).put(y2 - dir.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x2 + dir.x).put(y2 + dir.y).put(currentTint).put(0.5f).put(0.5f);
+        positions.put(x1 + dir.x).put(y1 + dir.y);
+        positions.put(x1 - dir.x).put(y1 - dir.y);
+        positions.put(x2 - dir.x).put(y2 - dir.y);
+        positions.put(x2 + dir.x).put(y2 + dir.y);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
 
         // put indices
         int startVertex = this.vertexIndex;
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 3);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        vertexIndex += 4;
 
         vectors2Pool.free(dir);
-        vertexIndex += 4;
     }
 
-    public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, int edgeRefinement) {
+    public void drawLineFilled(float x1, float y1, float x2, float y2, float thickness, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if ((vertexIndex + 4 + (1 + edgeRefinement) + (1 + edgeRefinement)) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (edgeRefinement - 1) * 6 + 6 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(4, 6)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
-        final float r = thickness * 0.5f;
-        edgeRefinement = Math.max(3, edgeRefinement);
-        Vector2 p = vectors2Pool.allocate();
-        p.x = x2 - x1;
-        p.y = y2 - y1;
-        p.nor();
-        p.scl(r);
-        p.rotate90(1);
+        Vector2 dir = vectors2Pool.allocate();
+        dir.x = x2 - x1;
+        dir.y = y2 - y1;
+        dir.nor();
+        dir.scl(thickness * 0.5f);
+        dir.rotate90(1);
 
         // put vertices for line segment
-        verticesBuffer.put(x1 + p.x).put(y1 + p.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x1 - p.x).put(y1 - p.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x2 - p.x).put(y2 - p.y).put(currentTint).put(0.5f).put(0.5f);
-        verticesBuffer.put(x2 + p.x).put(y2 + p.y).put(currentTint).put(0.5f).put(0.5f);
+        Vector2 vertex1 = vectors2Pool.allocate();
+        vertex1.set(x1 + dir.x, y1 + dir.y);
+        vertex1.scl(scaleX, scaleY);
+        vertex1.rotateDeg(degrees);
+        vertex1.add(x, y);
+        positions.put(vertex1.x).put(vertex1.y);
 
-        /* put edge circles */
-        final float da = 180.0f / (edgeRefinement - 1);
-        Vector2 vertex = vectors2Pool.allocate();
-        /* circle 1: */
-        verticesBuffer.put(x1).put(y1).put(currentTint).put(0.5f).put(0.5f); // center point
-        /* put arc vertices */
-        for (int i = 0; i < edgeRefinement; i++) {
-            vertex.set(p);
-            vertex.rotateDeg(da * i);
-            verticesBuffer.put(x1 + vertex.x).put(y1 + vertex.y).put(currentTint).put(0.5f).put(0.5f);
-        }
-        /* circle 2: */
-        verticesBuffer.put(x2).put(y2).put(currentTint).put(0.5f).put(0.5f); // center point
-        /* put arc vertices */
-        for (int i = 0; i < edgeRefinement; i++) {
-            vertex.set(p);
-            vertex.rotateDeg(-da * i);
-            verticesBuffer.put(x2 + vertex.x).put(y2 + vertex.y).put(currentTint).put(0.5f).put(0.5f);
-        }
-        vectors2Pool.free(vertex);
+        Vector2 vertex2 = vectors2Pool.allocate();
+        vertex2.set(x1 - dir.x, y1 - dir.y);
+        vertex2.scl(scaleX, scaleY);
+        vertex2.rotateDeg(degrees);
+        vertex2.add(x, y);
+        positions.put(vertex2.x).put(vertex2.y);
 
+        Vector2 vertex3 = vectors2Pool.allocate();
+        vertex3.set(x2 - dir.x, y2 - dir.y);
+        vertex3.scl(scaleX, scaleY);
+        vertex3.rotateDeg(degrees);
+        vertex3.add(x, y);
+        positions.put(vertex3.x).put(vertex3.y);
+
+        Vector2 vertex4 = vectors2Pool.allocate();
+        vertex4.set(x2 + dir.x, y2 + dir.y);
+        vertex4.scl(scaleX, scaleY);
+        vertex4.rotateDeg(degrees);
+        vertex4.add(x, y);
+        positions.put(vertex4.x).put(vertex4.y);
+
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+        colors.put(currentTint);
+
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+        textCoords.put(0.5f).put(0.5f);
+
+        // put indices
         int startVertex = this.vertexIndex;
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 1);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 0);
+        indices.put(startVertex + 2);
+        indices.put(startVertex + 3);
+        vertexIndex += 4;
 
-        // put indices for line segment
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 1);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 0);
-        indicesBuffer.put(startVertex + 2);
-        indicesBuffer.put(startVertex + 3);
-
-        // put indices for circle 1
-        for (int i = 0; i < edgeRefinement - 1; i++) {
-            indicesBuffer.put(startVertex + 4);
-            indicesBuffer.put(startVertex + 4 + i + 1);
-            indicesBuffer.put(startVertex + 4 + i + 2);
-        }
-
-        // put indices for circle 2
-        for (int i = 0; i < edgeRefinement - 1; i++) {
-            indicesBuffer.put(startVertex + 4 + edgeRefinement + 1);
-            indicesBuffer.put(startVertex + 4 + edgeRefinement + 1 + i + 1);
-            indicesBuffer.put(startVertex + 4 + edgeRefinement + 1 + i + 2);
-        }
-
-        vectors2Pool.free(p);
-        vertexIndex += 4 + (1 + edgeRefinement) + (1 + edgeRefinement); // 4 vertices for the line segment, (1 + edgeRefinement) for each half-circle.
+        vectors2Pool.free(vertex1);
+        vectors2Pool.free(vertex2);
+        vectors2Pool.free(vertex3);
+        vectors2Pool.free(vertex4);
+        vectors2Pool.free(dir);
     }
 
-    /* Rendering 2D primitives - Curves */
-    /* TODO: implement a version of these methods with a transform. */
+    /* Rendering 2D primitives - curves */
 
-    public final void drawCurveThin(final Array<Vector2> points, float x, float y, float deg, float sclX, float sclY) {
+    public void drawCurveThin(final Vector2... values) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (points == null || points.size < 2) return;
-        if ((vertexIndex + points.size) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + (points.size - 1) * 2 > indicesBuffer.capacity()) flush();
+        if (values == null || values.length < 2) return;
+        if (!ensureCapacity(values.length, values.length * 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
 
         /* put vertices */
-        Vector2 point = vectors2Pool.allocate();
-        for (Vector2 value : points) {
-            point.set(value).scl(sclX, sclY).rotateDeg(deg).add(x, y);
-            verticesBuffer.put(point.x).put(point.y).put(currentTint).put(0.5f).put(0.5f);
+        for (Vector2 value : values) {
+            positions.put(value.x).put(value.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
-        vectors2Pool.free(point);
 
         /* put indices */
         int startVertex = this.vertexIndex;
-        for (int i = 0; i < points.size - 1; i++) {
-            indicesBuffer.put(startVertex + i);
-            indicesBuffer.put(startVertex + i + 1);
+        for (int i = 0; i < values.length - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
         }
-        vertexIndex += points.size;
+        vertexIndex += values.length;
     }
 
-    // TODO: create versions with transform 2d
-    // TODO: consider transform
-    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f,
-                              float x, float y, float deg, float sclX, float sclY) {
+    public void drawCurveThin(final Vector2[] values, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (values == null || values.length < 2) return;
+        if (!ensureCapacity(values.length, values.length * 2)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
+
+        /* put vertices */
+        Vector2 vertex = vectors2Pool.allocate();
+        for (Vector2 value : values) {
+            vertex.set(value.x, value.y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < values.length - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
+        }
+        vertexIndex += values.length;
+    }
+
+    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
-        if ((vertexIndex + refinement) * VERTEX_SIZE  > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + refinement * 2 > indicesBuffer.capacity()) flush();
+        if (!ensureCapacity(refinement, refinement * 2)) flush();
 
         setMode(GL11.GL_LINES);
         setTexture(whitePixel);
@@ -1441,384 +1575,507 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         float step = (maxX - minX) / refinement;
 
-        /* put vertices */
-        Vector2 point = vectors2Pool.allocate();
+        Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < refinement; i++) {
-            point.x = minX + i * step;
-            point.y = f.apply(point.x);
-            point.scl(sclX, sclY);
-            point.rotateDeg(deg);
-            point.add(x, y);
-            verticesBuffer.put(point.x).put(point.y).put(currentTint).put(0.5f).put(0.5f);
+            vertex.x = minX + i * step;
+            vertex.y = f.apply(vertex.x);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
         }
-        vectors2Pool.free(point);
+        vectors2Pool.free(vertex);
 
         /* put indices */
         int startVertex = this.vertexIndex;
         for (int i = 0; i < refinement - 1; i++) {
-            indicesBuffer.put(startVertex + i);
-            indicesBuffer.put(startVertex + i + 1);
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
         }
 
         vertexIndex += refinement;
     }
 
-    // TODO: bug here when rendering many points. Solution: flush after every triangle
-    // TODO: bug here: truncating unexpectedly
-    // TODO: consider transform
-    // TODO: consider opacity
-    public void drawCurveFilled(float stroke, int refinement, final Vector2... pointsInput) {
+    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (pointsInput.length == 0) return;
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement, refinement * 2)) flush();
 
-        final int maxExpectedVertices = 12 * (pointsInput.length + 2) + refinement * 3 * (pointsInput.length + 1); // For every anchor, we expect to store 12 vertices
-        if ((vertexIndex + maxExpectedVertices) * VERTEX_SIZE  > verticesBuffer.capacity()) flush();
-        if (indicesBuffer.limit() + maxExpectedVertices > indicesBuffer.capacity()) flush();
+        setMode(GL11.GL_LINES);
+        setTexture(whitePixel);
 
-        float width = Math.abs(stroke / 2);
-        refinement = Math.max(1, refinement);
+        if (minX > maxX) {
+            float tmp = minX;
+            minX = maxX;
+            maxX = tmp;
+        }
+        float step = (maxX - minX) / refinement;
 
-        if (pointsInput.length == 1 || (pointsInput.length == 2 && pointsInput[0].equals(pointsInput[1]))) {
-            drawCircleFilled(width, refinement, pointsInput[0].x, pointsInput[0].y, 0, 1, 1);
-            return;
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < refinement; i++) {
+            vertex.x = minX + i * step;
+            vertex.y = f.apply(vertex.x);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
         }
 
-        // (every anchor has 2 sides: left and right. Each side is made up of 2 triangles, each triangle is made up of 3 vertices). We have a maximum of pointInput.length + 2 anchors.
-        // So the first term in the sum is 12 * (pointsInput.length + 2).
-        // Additionally, for every anchor we have a round cap that will yield refinement * 3 vertices. We have pointInput.length + 1 corners at the maximum. So the second term is
-        // refinement * 3 * (pointInput.length + 1).
-        if ((vertexIndex + maxExpectedVertices) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        vertexIndex += refinement;
+    }
 
+    // TODO bug here: when vertices are co-linear and folding (opposite direction).
+    // TODO example input to reproduce error:
+    // TODO [{-3,0}, {0,0}, {-1,0}]
+    public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         setMode(GL11.GL_TRIANGLES);
         setTexture(whitePixel);
 
-        Array<Vector2> vertices = new Array<>(true, maxExpectedVertices);
-        if (pointsInput.length == 2) { // handle separately
+        Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points);
+        if (!ensureCapacity(vertices.size, vertices.size)) flush();
 
-            Vector2 p0 = pointsInput[0];
-            Vector2 p2 = pointsInput[1];
-
-            Vector2 t = vectors2Pool.allocate();
-            t.set(p2).sub(p0);
-            t.rotate90(1);
-            t.nor();
-            t.scl(width);
-
-            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).add(t));
-            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).sub(t));
-            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).sub(t));
-            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).sub(t));
-            vertices.add(vectors2Pool.allocate().set(pointsInput[1]).add(t));
-            vertices.add(vectors2Pool.allocate().set(pointsInput[0]).add(t));
-
-            var p00 = vertices.get(0);
-            var p01 = vertices.get(1);
-            var p02 = pointsInput[1];
-            var p10 = vertices.get(vertices.size - 3);
-            var p11 = vertices.get(vertices.size - 2);
-            var p12 = pointsInput[0];
-
-            createRoundCap(pointsInput[0], p00, p01, p02, refinement, vertices);
-            createRoundCap(pointsInput[1], p10, p11, p12, refinement, vertices);
-
-            vectors2Pool.free(t);
-
+        /*
+        In the case of curve rendering, we might have a case where the number of vertices exceeds the capacity of the entire batch.
+        In that case, we write triangle by triangle.
+        */
+        if (vertices.size > VERTICES_CAPACITY) {
+            for (int i = 0; i < vertices.size; i += 3) {
+                Vector2 p0 = vertices.get(i + 0);
+                Vector2 p1 = vertices.get(i + 1);
+                Vector2 p2 = vertices.get(i + 2);
+                drawTriangleFilled(p0, p1, p2);
+            }
         } else {
-            Array<Vector2> points    = new Array<>(true, pointsInput.length + 2);
-            Array<Vector2> midPoints = new Array<>(true,pointsInput.length + 2);
-            /* handle closed path scenario */
-            boolean closed = false;
-            if (pointsInput[0].equals(pointsInput[pointsInput.length - 1])) { // closed path
-                Vector2 midPoint = vectors2Pool.allocate();
-                Vector2.midPoint(pointsInput[0], pointsInput[1], midPoint);
-                points.add(midPoint);
-                for (int i = 1; i < pointsInput.length; i++) {
-                    Vector2 point = vectors2Pool.allocate();
-                    point.set(pointsInput[i]);
-                    points.add(point);
-                }
-                points.add(midPoint);
-                closed = true;
-            } else { // open path
-                for (Vector2 vector2 : pointsInput) {
-                    Vector2 point = vectors2Pool.allocate();
-                    point.set(vector2);
-                    points.add(point);
-                }
+            for (int i = 0; i < vertices.size; i++) {
+                Vector2 vertex = vertices.get(i);
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
+                indices.put(vertexIndex + i);
             }
 
-            /* calculate mid-points of the path (between corner to corner) */
-            for (int i = 0; i < points.size - 1; i++) {
-                Vector2 midPoint = vectors2Pool.allocate();
-                if (i == 0) {
-                    midPoint.set(points.first());
-                } else if (i == points.size - 2) {
-                    midPoint.set(points.last());
-                } else {
-                    Vector2.midPoint(points.get(i), points.get(i + 1), midPoint);
-                }
-                midPoints.add(midPoint);
-            }
-
-            Vector2 intersection_1 = vectors2Pool.allocate();
-            Vector2 intersection_2 = vectors2Pool.allocate();
-            Vector2 intersection_3 = vectors2Pool.allocate();
-            Vector2 intersection_4 = vectors2Pool.allocate();
-            Vector2 t0 = vectors2Pool.allocate();
-            Vector2 t2 = vectors2Pool.allocate();
-
-            /* iterate over all the anchors. Anchor = <Midpoint L, Corner, Midpoint R> */
-            for (int i = 1; i < midPoints.size; i++) {
-                Vector2 p0 = midPoints.get(i - 1);
-                Vector2 p1 = points.get(i);
-                Vector2 p2 = midPoints.get(i);
-
-                t0.set(p1).sub(p0);
-                t2.set(p2).sub(p1);
-                t0.rotate90(1);
-                t2.rotate90(1);
-                if (MathUtils.areaTriangleSigned(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y) > 0) {
-                    t0.flip();
-                    t2.flip();
-                }
-                t0.nor();
-                t2.nor();
-                t0.scl(width);
-                t2.scl(width);
-
-                /* calculate all possible intersection. */
-                int result_1 = MathUtils.segmentsIntersection(
-                        p0.x - t0.x, p0.y - t0.y,
-                        p1.x - t0.x, p1.y - t0.y,
-                        p2.x - t2.x, p2.y - t2.y,
-                        p1.x - t2.x, p1.y - t2.y,
-                        intersection_1);
-                int result_2 = MathUtils.segmentsIntersection(
-                        p0.x - t0.x, p0.y - t0.y,
-                        p1.x - t0.x, p1.y - t0.y,
-                        p2.x - t2.x, p2.y - t2.y,
-                        p2.x + t2.x, p2.y + t2.y,
-                        intersection_2);
-                int result_3 = MathUtils.segmentsIntersection(
-                        p0.x - t0.x, p0.y - t0.y,
-                        p0.x + t0.x, p0.y + t0.y,
-                        p1.x - t2.x, p1.y - t2.y,
-                        p2.x - t2.x, p2.y - t2.y,
-                        intersection_3);
-                int result_4 = MathUtils.segmentsIntersection(
-                        p0.x - t0.x, p0.y - t0.y,
-                        p0.x + t0.x, p0.y + t0.y,
-                        p1.x - t2.x, p1.y - t2.y,
-                        p1.x + t2.x, p1.y + t2.y,
-                        intersection_4);
-
-                /* Store the unique intersection in "intersection" */
-                Vector2 intersection = vectors2Pool.allocate();
-                if      (result_1 == 0) intersection.set(intersection_1);
-                else if (result_2 == 0) intersection.set(intersection_2);
-                else if (result_3 == 0) intersection.set(intersection_3);
-                else if (result_4 == 0) intersection.set(intersection_4);
-
-                /* add the vertices for the current anchor. */
-                vertices.add(vectors2Pool.allocate().set(p0).add(t0));
-                vertices.add(vectors2Pool.allocate().set(p0).sub(t0));
-                vertices.add(vectors2Pool.allocate().set(p1).add(t0));
-
-                vertices.add(vectors2Pool.allocate().set(p0).sub(t0));
-                vertices.add(vectors2Pool.allocate().set(p1).add(t0));
-                vertices.add(vectors2Pool.allocate().set(p1).sub(t0));
-
-                Vector2 pI = vectors2Pool.allocate().set(p1).add(t0);
-                Vector2 pF = vectors2Pool.allocate().set(p1).add(t2);
-                createRoundCap(p1, pI, pF, p2, refinement, vertices);
-
-                vertices.add(vectors2Pool.allocate().set(p2).add(t2));
-                vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
-                vertices.add(vectors2Pool.allocate().set(p1).add(t2));
-
-                vertices.add(vectors2Pool.allocate().set(p2).add(t2));
-                vertices.add(vectors2Pool.allocate().set(p1).sub(t2));
-                vertices.add(vectors2Pool.allocate().set(p2).sub(t2));
-            }
-
-            /* handle the case of closed paths */
-            if (!closed) {
-                var p00 = vertices.get(0);
-                var p01 = vertices.get(1);
-                var p02 = pointsInput[1];
-                var p10 = vertices.last();
-                var p11 = vertices.get(vertices.size - 3);
-                var p12 = pointsInput[pointsInput.length - 2];
-                createRoundCap(pointsInput[0], p00, p01, p02, refinement, vertices);
-                createRoundCap(pointsInput[pointsInput.length - 1], p10, p11, p12, refinement, vertices);
-            }
-
-            /* free resources allocated in this scope */
-            vectors2Pool.free(intersection_1);
-            vectors2Pool.free(intersection_2);
-            vectors2Pool.free(intersection_3);
-            vectors2Pool.free(intersection_4);
-            vectors2Pool.free(t0);
-            vectors2Pool.free(t2);
-            vectors2Pool.freeAll(points);
-            vectors2Pool.freeAll(midPoints);
+            vertexIndex += vertices.size;
         }
-
-        /* put vertices and indices. */
-        int startVertex = this.vertexIndex;
-        int advance = 0;
-        for (int i = 0; i < vertices.size; i++) {
-            Vector2 vertex = vertices.get(i);
-            advance = i;
-            try {
-                verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(0.5f).put(0.5f);
-                indicesBuffer.put(startVertex + i);
-            } catch (Exception e) {
-                break;
-            }
-        }
-        vertexIndex += advance;
-
-        /* free resources */
-        vectors2Pool.freeAll(vertices);
     }
 
-    private void createRoundCap(Vector2 center, Vector2 pI, Vector2 pF, Vector2 pNext, int refinement, Array<Vector2> vertices) {
-        float radius = Vector2.len(center.x - pI.x, center.y - pI.y);
-        float angle0 = (float) Math.atan2((pF.y - center.y), (pF.x - center.x));
-        float angle1 = (float) Math.atan2((pI.y - center.y), (pI.x - center.x));
-        float orgAngle0 = angle0;
-
-        if (angle1 > angle0 && angle1 - angle0 >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
-            angle1 = angle1 - 2 * MathUtils.PI;
-        } else if (angle0 - angle1 >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
-            angle0 = angle0 - 2 * MathUtils.PI;
+    public Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
+        if (points.length < 2) {
+            return null;
         }
 
-        float angleDiff = angle1 - angle0;
-        if (Math.abs(angleDiff) >= Math.PI - MathUtils.FLOAT_ROUNDING_ERROR && Math.abs(angleDiff) <= Math.PI + MathUtils.FLOAT_ROUNDING_ERROR) {
-            float r1_x = center.x - pNext.x;
-            float r1_y = center.y - pNext.y;
-            if (MathUtils.isZero(r1_x) && r1_y > 0) {
+        float lineWidth = Math.abs(stroke) * 0.5f;
+        Array<Vector2> vertices = new Array<>();
+        Array<Vector2> middlePoints = new Array<>();  // middle points per each line segment.
+        boolean closed = false;
+
+        if (points.length == 2) {
+            Vector2 midPoint = new Vector2();
+            Vector2.midPoint(points[0], points[1], midPoint);
+            createTriangles(points[0], midPoint, points[1], vertices, lineWidth, smoothness);
+        } else {
+
+            if (points[0].equals(points[points.length - 1])) {
+                Vector2 p0 = new Vector2();
+                Vector2.midPoint(points[0], points[1], p0);
+                Vector2[] points2 = new Vector2[points.length + 1];
+                points2[0] = p0;
+                System.arraycopy(points, 1, points2, 1, points.length - 1);
+                points2[points.length] = p0;
+                points = points2;
+                closed = true;
+            }
+
+            for (int i = 0; i < points.length - 1; i++) {
+                if (i == 0) {
+                    middlePoints.add(points[0]);
+                } else if (i == points.length - 2) {
+                    middlePoints.add(points[points.length - 1]);
+                } else {
+                    Vector2 mid = new Vector2();
+                    Vector2.midPoint(points[i], points[i + 1], mid);
+                    middlePoints.add(mid);
+                }
+            }
+
+            for (int i = 1; i < middlePoints.size; i++) {
+                createTriangles(middlePoints.get(i - 1), points[i], middlePoints.get(i), vertices, lineWidth, smoothness);
+            }
+        }
+
+        if (!closed) {
+            Vector2 p00 = vertices.get(0);
+            Vector2 p01 = vertices.get(1);
+            Vector2 p02 = points[1];
+            Vector2 p10 = vertices.get(vertices.size - 1);
+            Vector2 p11 = vertices.get(vertices.size - 3);
+            Vector2 p12 = points[points.length - 2];
+            createRoundCap(points[0], p00, p01, p02, smoothness, vertices);
+            createRoundCap(points[points.length - 1], p10, p11, p12, smoothness, vertices);
+        }
+
+        return vertices;
+    }
+
+    private void createTriangles(Vector2 p0, Vector2 p1, Vector2 p2, Array<Vector2> verts, float width, int refinement) {
+        var t0 = new Vector2(p1).sub(p0);
+        var t2 = new Vector2(p2).sub(p1);
+
+        t0.rotate90(1);
+        t2.rotate90(1);
+
+        float signedTriangleArea = MathUtils.areaTriangleSigned(p0, p1, p2);
+        if (signedTriangleArea > 0) {
+            t0.flip();
+            t2.flip();
+        }
+
+        t0.nor();
+        t2.nor();
+        t0.scl(width);
+        t2.scl(width);
+
+        Vector2 pIntersection = new Vector2();
+        MathUtils.segmentsIntersection(new Vector2(t0).add(p0), new Vector2(t0).add(p1), new Vector2(t2).add(p2), new Vector2(t2).add(p1), pIntersection);
+
+        Vector2 anchor = new Vector2(pIntersection).sub(p1);
+        float anchorLength = anchor.len();
+        Vector2 p0p1 = new Vector2(p0).sub(p1);
+        float p0p1Length = p0p1.len();
+        Vector2 p1p2 = new Vector2(p1).sub(p2);
+        float p1p2Length = p1p2.len();
+
+        if (anchorLength > p0p1Length || anchorLength > p1p2Length) {
+
+            verts.add(new Vector2(p0).add(t0));
+            verts.add(new Vector2(p0).sub(t0));
+            verts.add(new Vector2(p1).add(t0));
+
+            verts.add(new Vector2(p0).sub(t0));
+            verts.add(new Vector2(p1).add(t0));
+            verts.add(new Vector2(p1).sub(t0));
+
+            createRoundCap(p1, new Vector2(p1).add(t0), new Vector2(p1).add(t2), p2, refinement, verts);
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(t2));
+            verts.add(new Vector2(p1).add(t2));
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(t2));
+            verts.add(new Vector2(p2).sub(t2));
+
+        } else {
+
+            verts.add(new Vector2(p0).add(t0));
+            verts.add(new Vector2(p0).sub(t0));
+            verts.add(new Vector2(p1).sub(anchor));
+
+            verts.add(new Vector2(p0).add(t0));
+            verts.add(new Vector2(p1).sub(anchor));
+            verts.add(new Vector2(p1).add(t0));
+
+            Vector2 _p0 = new Vector2(p1).add(t0);
+            Vector2 _p1 = new Vector2(p1).add(t2);
+            Vector2 _p2 = new Vector2(p1).sub(anchor);
+
+            Vector2 center = p1;
+
+            verts.add(_p0);
+            verts.add(center);
+            verts.add(_p2);
+
+            createRoundCap(center, _p0, _p1, _p2, refinement, verts);
+
+            verts.add(center);
+            verts.add(_p1);
+            verts.add(_p2);
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(anchor));
+            verts.add(new Vector2(p1).add(t2));
+
+            verts.add(new Vector2(p2).add(t2));
+            verts.add(new Vector2(p1).sub(anchor));
+            verts.add(new Vector2(p2).sub(t2));
+        }
+    }
+
+    private void createRoundCap(Vector2 center, Vector2 _p0, Vector2 _p1, Vector2 nextPointInLine, int refinement, Array<Vector2> verts) {
+        float radius = new Vector2(center).sub(_p0).len();
+
+        float angle0 = MathUtils.atan2((_p1.y - center.y), (_p1.x - center.x));
+        float angle1 = MathUtils.atan2((_p0.y - center.y), (_p0.x - center.x));
+
+        float orgAngle0 = angle0;
+
+        if (angle1 > angle0) {
+            if (angle1 - angle0 >= MathUtils.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
+                angle1 = angle1 - 2 * MathUtils.PI;
+            }
+        } else {
+            if (angle0 - angle1 >= MathUtils.PI - MathUtils.FLOAT_ROUNDING_ERROR) {
+                angle0 = angle0 - 2 * MathUtils.PI;
+            }
+        }
+
+        var angleDiff = angle1 - angle0;
+
+        if (Math.abs(angleDiff) >= MathUtils.PI - MathUtils.FLOAT_ROUNDING_ERROR && Math.abs(angleDiff) <= Math.PI + MathUtils.FLOAT_ROUNDING_ERROR) {
+            var r1 = new Vector2(center).sub(nextPointInLine);
+            if (r1.x == 0) {
+                if (r1.y > 0) {
+                    angleDiff = -angleDiff;
+                }
+            } else if (r1.x >= -MathUtils.FLOAT_ROUNDING_ERROR ) {
                 angleDiff = -angleDiff;
-            } else if (r1_x >= -MathUtils.FLOAT_ROUNDING_ERROR) {
-                angleDiff= -angleDiff;
             }
         }
 
         float da = angleDiff / refinement;
-        for (var i = 0; i < refinement; i++) {
-            vertices.add(vectors2Pool.allocate().set(center.x, center.y));
-            vertices.add(vectors2Pool.allocate().set(
+        for (int i = 0; i < refinement; i++) {
+            verts.add(new Vector2(center.x, center.y));
+            verts.add(new Vector2(
                     center.x + radius * MathUtils.cosRad(orgAngle0 + da * i),
                     center.y + radius * MathUtils.sinRad(orgAngle0 + da * i)
             ));
-            vertices.add(vectors2Pool.allocate().set(
+            verts.add(new Vector2(
                     center.x + radius * MathUtils.cosRad(orgAngle0 + da * (1 + i)),
                     center.y + radius * MathUtils.sinRad(orgAngle0 + da * (1 + i))
             ));
         }
     }
 
-    /* Rendering 2D primitives - meshes */
+    /* Rendering 2D primitives - Bezier Curves */
 
-    public void drawMeshFilled(Array<Vector2> positions, ArrayFloat colors, Array<Vector2> uvs, @Nullable final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
+
+
+    /* Rendering 2D primitives - triangles */
+
+    public void drawTriangleFilled(@NotNull Texture texture,
+                                   float x1, float y1, float u1, float v1,
+                                   float x2, float y2, float u2, float v2,
+                                   float x3, float y3, float u3, float v3) {
+        drawTriangleFilled(texture,
+                x1, y1, currentTint, u1, v1,
+                x2, y2, currentTint, u2, v2,
+                x3, y3, currentTint, u3, v3
+        );
+    }
+
+    public void drawTriangleFilled(Vector2 p0,
+                                   Vector2 p1,
+                                   Vector2 p2) {
+        drawTriangleFilled(null,
+                p0.x, p0.y, currentTint, 0.5f, 0.5f,
+                p1.x, p1.y, currentTint, 0.5f, 0.5f,
+                p2.x, p2.y, currentTint, 0.5f, 0.5f
+        );
+    }
+
+    public void drawTriangleFilled(float x1, float y1,
+                                   float x2, float y2,
+                                   float x3, float y3) {
+        drawTriangleFilled(null,
+                x1, y1, currentTint, 0.5f, 0.5f,
+                x2, y2, currentTint, 0.5f, 0.5f,
+                x3, y3, currentTint, 0.5f, 0.5f
+        );
+    }
+
+    public void drawTriangleFilled(float x1, float y1, float c1,
+                                   float x2, float y2, float c2,
+                                   float x3, float y3, float c3) {
+        drawTriangleFilled(null,
+                x1, y1, c1, 0.5f, 0.5f,
+                x2, y2, c2, 0.5f, 0.5f,
+                x3, y3, c3, 0.5f, 0.5f
+        );
+    }
+
+    public void drawTriangleFilled(@Nullable Texture texture,
+                                   float x1, float y1, float c1, float u1, float v1,
+                                   float x2, float y2, float c2, float u2, float v2,
+                                   float x3, float y3, float c3, float u3, float v3) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (positions.size < 3)            throw new GraphicsException("Mesh must contain at least 3 vertices. Got: " + positions.size);
-        if (positions.size != colors.size) throw new GraphicsException("Mesh must contain the same number of positions, colors and uvs. Got: positions.size = " + positions.size + ", colors.size = " + colors.size + ", uvs.size = " + uvs.size);
-        if (positions.size != uvs.size)    throw new GraphicsException("Mesh must contain the same number of positions, colors and uvs. Got: positions.size = " + positions.size + ", colors.size = " + colors.size + ", uvs.size = " + uvs.size);
+        if (!ensureCapacity(3, 3)) flush();
 
-        if ((vertexIndex + positions.size) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
-        setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
+        setMode(GL11.GL_TRIANGLES);
 
-        Vector2 vertex = vectors2Pool.allocate();
-        for (int i = 0; i < positions.size; i ++) {
-            Vector2 position = positions.get(i);
-            float poly_x = position.x;
-            float poly_y = position.y;
-            vertex.set(poly_x, poly_y);
-            vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(deg);
-            vertex.add(x, y);
-            float color = colors.get(i);
-            Vector2 uv = uvs.getCyclic(i);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(color).put(uv.x).put(uv.y);
-        }
-        vectors2Pool.free(vertex);
+        positions.put(x1).put(y1);
+        positions.put(x2).put(y2);
+        positions.put(x3).put(y3);
 
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < positions.size; i ++) {
-            indicesBuffer.put(startVertex + i);
-        }
-        vertexIndex += positions.size;
+        colors.put(c1);
+        colors.put(c2);
+        colors.put(c3);
+
+        textCoords.put(u1).put(v1);
+        textCoords.put(u2).put(v2);
+        textCoords.put(u3).put(v3);
+
+        indices.put(vertexIndex);
+        indices.put(vertexIndex+1);
+        indices.put(vertexIndex+2);
+        vertexIndex += 3;
     }
 
-    public void drawMeshFilled(Array<Vector2> positions, Array<Vector2> uvs, final Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
+    /* Rendering 2D primitives - Strings */
+
+    public void drawString(final String text, final Font font, float x, float y) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (positions.size < 3)         throw new GraphicsException("Mesh must contain at least 3 vertices. Got: " + positions.size);
-        if (positions.size != uvs.size) throw new GraphicsException("Mesh must contain the same number of positions and uvs. Got: positions.size = " + positions.size + ", uvs.size = " + uvs.size);
+        if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
-        if ((vertexIndex + positions.size) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
+        setTexture(font.fontAtlas);
         setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
 
-        Vector2 vertex = vectors2Pool.allocate();
-        for (int i = 0; i < positions.size; i ++) {
-            Vector2 position = positions.get(i);
-            float poly_x = position.x;
-            float poly_y = position.y;
-            vertex.set(poly_x, poly_y);
-            vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(deg);
-            vertex.add(x, y);
-            Vector2 uv = uvs.getCyclic(i);
-            verticesBuffer.put(vertex.x).put(vertex.y).put(currentTint).put(uv.x).put(uv.y);
+        /* calculate the line total width */
+        float total_width = 0;
+        char prevChar = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.glyphs.get((int) c);
+            if (glyph == null) continue;
+            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
+            total_width += glyph.advanceX;
+            prevChar = c;
         }
-        vectors2Pool.free(vertex);
 
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < positions.size; i ++) {
-            indicesBuffer.put(startVertex + i);
+        /* calculate the line total height */
+        float maxAscent = 0;
+        float maxDescent = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.glyphs.get((int) c);
+            if (glyph == null) continue;
+
+            // Update ascent (distance from baseline to top of glyph)
+            float ascent = glyph.bearingY;
+            if (ascent > maxAscent) maxAscent = ascent;
+
+            // Update descent (distance below baseline)
+            float descent = (glyph.height - glyph.bearingY);
+            if (descent > maxDescent) maxDescent = descent;
         }
-        vertexIndex += positions.size;
+        float total_height = (maxAscent + maxDescent);
+
+
+        /* render a quad for every character */
+        float penX = x - total_width * 0.5f;
+        float penY = y - total_height * 0.5f;
+        prevChar = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.glyphs.get((int) c);
+            if (glyph == null) continue;
+
+            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
+
+            /* calculate the quad's x, y, width, height */
+            float char_x = penX + glyph.bearingX;
+            float char_y = penY - (glyph.height - glyph.bearingY);
+            float w = glyph.width;
+            float h = glyph.height;
+
+            /* calculate the quad's uv coordinates */
+            float u0 = glyph.atlasX * font.invAtlasWidth;
+            float v0 = (glyph.atlasY) * font.invAtlasHeight;
+            float u1 = (glyph.atlasX + glyph.width) * font.invAtlasWidth;
+            float v1 = (glyph.atlasY + glyph.height) * font.invAtlasHeight;
+
+            /* put vertices */
+            positions.put(char_x).put(char_y + h);
+            colors.put(currentTint);
+            textCoords.put(u0).put(v0);
+
+            positions.put(char_x).put(char_y);
+            colors.put(currentTint);
+            textCoords.put(u0).put(v1);
+
+            positions.put(char_x + w).put(char_y);
+            colors.put(currentTint);
+            textCoords.put(u1).put(v1);
+
+            positions.put(char_x + w).put(char_y + h);
+            colors.put(currentTint);
+            textCoords.put(u1).put(v0);
+
+            /* put indices */
+            int startVertex = this.vertexIndex;
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 4;
+
+            penX += glyph.advanceX;
+            penY += glyph.advanceY;
+            prevChar = c;
+        }
     }
 
-    /* Rendering 2D primitives - text */
-
-    public void drawText(final String text, final Font font, float x, float y, float angleZ, float scaleX, float scaleY) {
+    private void drawCharacter(final char c, final Font font, final float color, float x, float y, float deg, float scaleX, float scaleY) {
 
     }
 
-    // TODO probably use this for ComponentText
-    public void drawCharacter(char c, final Font font, float x, float y, float angleZ, float scaleX, float scaleY) {
+    /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
 
+    private boolean ensureCapacity(int numVertices, int numIndices) {
+        boolean hasSpaceVertices = VERTICES_CAPACITY - vertexIndex >= numVertices;
+        boolean hasSpaceIndices  = indices.capacity() - indices.position() >= numIndices;
+        return hasSpaceVertices && hasSpaceIndices;
     }
-
-    /* Rendering Ops: flush(), end(), deleteAll(), createDefaults...() */
 
     private void flush() {
-        if (verticesBuffer.position() == 0) return;
+        if (vertexIndex == 0) return;
 
-        verticesBuffer.flip();
-        indicesBuffer.flip();
         GL30.glBindVertexArray(vao);
-        {
-            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-            GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, verticesBuffer);
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
-            GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indicesBuffer);
-            GL20.glEnableVertexAttribArray(0);
-            GL20.glEnableVertexAttribArray(1);
-            GL20.glEnableVertexAttribArray(2);
-            GL11.glDrawElements(currentMode, indicesBuffer.limit(), GL11.GL_UNSIGNED_INT, 0);
-            GL20.glDisableVertexAttribArray(2);
-            GL20.glDisableVertexAttribArray(1);
-            GL20.glDisableVertexAttribArray(0);
+        positions.flip();
+        colors.flip();
+        textCoords.flip();
+        normals.flip();
+        tangents.flip();
+        indices.flip();
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, positions);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColors);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, colors);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextCoords);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, textCoords);
+
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
+        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indices);
+
+        for (VertexAttribute attribute : VertexAttribute.values()) {
+            final boolean hasAttribute = (currentShader.vertexAttributesBitmask & attribute.bitmask) != 0;
+            if (hasAttribute) GL20.glEnableVertexAttribArray(attribute.glslLocation); // enable attribute
+            else GL20.glDisableVertexAttribArray(attribute.glslLocation); // disable attribute
         }
+        GL11.glDrawElements(currentMode, indices.limit(), GL11.GL_UNSIGNED_INT, 0);
+
+
         GL30.glBindVertexArray(0);
-        verticesBuffer.clear();
-        indicesBuffer.clear();
+        positions.clear();
+        colors.clear();
+        textCoords.clear();
+        normals.clear();
+        tangents.clear();
+        indices.clear();
         vertexIndex = 0;
         perFrameDrawCalls++;
     }
@@ -1837,7 +2094,11 @@ public class Renderer2D implements MemoryResourceHolder {
     public void deleteAll() {
         defaultShader.delete();
         GL30.glDeleteVertexArrays(vao);
-        GL30.glDeleteBuffers(vbo);
+        GL30.glDeleteBuffers(vboPositions);
+        GL30.glDeleteBuffers(vboColors);
+        GL30.glDeleteBuffers(vboTextCoords);
+        GL30.glDeleteBuffers(vboNormals);
+        GL30.glDeleteBuffers(vboTangents);
         GL30.glDeleteBuffers(ebo);
         whitePixel.delete();
     }
@@ -1907,7 +2168,7 @@ public class Renderer2D implements MemoryResourceHolder {
         buffer.flip();
 
         return new Texture(1, 1, buffer,
-                Texture.FilterMag.NEAREST,  Texture.FilterMin.NEAREST,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 

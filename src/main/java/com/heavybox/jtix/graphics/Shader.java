@@ -177,7 +177,8 @@ public class Shader implements MemoryResource {
         return fragmentShaderSource;
     }
 
-    protected final void bindUniforms(final HashMap<String, Object> uniforms) {
+    // TODO: return back to protected
+    public final void bindUniforms(final HashMap<String, Object> uniforms) {
         if (uniforms == null) return;
         for (Map.Entry<String, Object> entry : uniforms.entrySet()) {
             final String name = entry.getKey();

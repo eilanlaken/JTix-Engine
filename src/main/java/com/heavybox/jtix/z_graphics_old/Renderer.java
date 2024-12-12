@@ -1,8 +1,9 @@
-package com.heavybox.jtix.graphics;
+package com.heavybox.jtix.z_graphics_old;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
@@ -49,7 +50,7 @@ public class Renderer implements MemoryResourceHolder {
 
     /* defaults */
     private final Shader defaultShader = createDefaultShaderProgram();
-    private final Texture       whitePixel    = createWhiteSinglePixelTexture();
+    private final Texture whitePixel    = createWhiteSinglePixelTexture();
     private final Matrix4x4     defaultMatrix = createDefaultMatrix();
 
     /* memory pools */

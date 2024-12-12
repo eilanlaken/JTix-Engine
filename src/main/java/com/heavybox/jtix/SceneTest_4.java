@@ -18,7 +18,7 @@ public class SceneTest_4 implements Scene {
 
     Texture yellow;
     Texture pattern;
-    private Renderer2D_3 renderer2D = new Renderer2D_3();
+    private Renderer2D renderer2D = new Renderer2D();
     private ComponentGraphicsCamera componentGraphicsCamera;
     TexturePack pack;
 

@@ -3,7 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Renderer2D_old;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.memory.MemoryResource;

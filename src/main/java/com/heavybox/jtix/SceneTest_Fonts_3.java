@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL11.glGetFloatv;
 public class SceneTest_Fonts_3 implements Scene {
 
 
-    private Renderer2D_3 renderer2D = new Renderer2D_3();
+    private Renderer2D renderer2D = new Renderer2D();
 
     Font font;
     UIButton button;

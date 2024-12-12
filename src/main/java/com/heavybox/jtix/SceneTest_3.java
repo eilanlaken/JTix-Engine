@@ -14,17 +14,14 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_old_assets.AssetUtils;
 import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
 
 public class SceneTest_3 implements Scene {
 
     Shader alwaysYellow;
     Texture yellow;
     Texture pattern;
-    private Renderer2D_3 renderer2D = new Renderer2D_3();
+    private Renderer2D renderer2D = new Renderer2D();
     private ComponentGraphicsCamera componentGraphicsCamera;
     TexturePack pack;
 

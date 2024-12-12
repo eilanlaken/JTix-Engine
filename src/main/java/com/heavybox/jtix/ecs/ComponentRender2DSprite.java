@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ecs;
 
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.z_graphics_old.Renderer2D;
 
 public final class ComponentRender2DSprite extends ComponentRender2D {
 
