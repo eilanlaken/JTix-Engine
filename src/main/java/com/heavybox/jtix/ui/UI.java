@@ -19,6 +19,8 @@ public abstract class UI {
     public final int id;
     public float x, y, deg, sclX, sclY;
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
+    protected Vector2 min = new Vector2();
+    protected Vector2 max = new Vector2();
 
     // common attributes
     public boolean visible = true;
@@ -67,6 +69,12 @@ public abstract class UI {
             vertex.add(x, y);
             bounds[i] = vertex.x;
             bounds[i + 1] = vertex.y;
+
+            // update bounding box
+            min.x = Math.min(min.x, vertex.x);
+            min.y = Math.min(min.y, vertex.y);
+            max.x = Math.max(max.x, vertex.x);
+            max.y = Math.max(max.y, vertex.y);
         }
     }
 
@@ -82,8 +90,16 @@ public abstract class UI {
         return result;
     }
 
-    private void updateInternal() {
+    public float getWidth() {
+        return Math.abs(max.x - min.x);
+    }
 
+    public float getHeight() {
+        return Math.abs(max.y - min.y);
+    }
+
+    private void updateInternal() {
+        // TODO ...
         update();
     }
 

@@ -89,13 +89,19 @@ public final class Assets {
     }
 
     // for bitmap fonts
-    public static void loadFont(final String filepath) {
+    public static void loadFontStatic(final String filepath) {
         load(Font.class, filepath, null,false);
+    }
+
+    // For any font file (.ttf) etc. This will load a dynamic font that will rasterize the characters on demand into a Texture and cache the results.
+    public static void loadFontDynamic(final String filepath) {
+        throw new UnsupportedOperationException();
     }
 
     // TODO: test
     // for loading .ttf etc
-    public static void loadFont(final String filepath, int size, boolean antialiasing, @Nullable String charset) {
+    // TODO: use a dedicated above method to load .ttf / .otf / ... fonts into a Font class that will use FreeType in real time with cache.
+    @Deprecated public static void loadFont(final String filepath, int size, boolean antialiasing, @Nullable String charset) {
         final HashMap<String, Object> options = new HashMap<>();
         options.put("size", size);
         options.put("antialiasing", antialiasing);

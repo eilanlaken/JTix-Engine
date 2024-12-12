@@ -29,7 +29,7 @@ public class SceneTest_Fonts_2 implements Scene {
 
     @Override
     public void setup() {
-        Assets.loadFont("assets/fonts/OpenSans-Italic-32.yml");
+        Assets.loadFontStatic("assets/fonts/OpenSans-Italic-32.yml");
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadTexture("assets/textures/pattern.png");
         Assets.loadTexturePack("assets/atlases/spots.yml");

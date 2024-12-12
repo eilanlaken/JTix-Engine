@@ -26,7 +26,7 @@ public class SceneTest_Fonts_3 implements Scene {
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFont("assets/fonts/OpenSans-Regular-13.yml");
+        Assets.loadFontStatic("assets/fonts/OpenSans-Regular-13.yml");
 
         Assets.finishLoading();
         font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");

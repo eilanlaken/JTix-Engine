@@ -1,21 +1,16 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -35,7 +30,7 @@ public class SceneTest_Fonts_1 implements Scene {
 
     @Override
     public void setup() {
-        Assets.loadFont("assets/fonts/OpenSans-Italic-32.yml");
+        Assets.loadFontStatic("assets/fonts/OpenSans-Italic-32.yml");
         Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadTexture("assets/textures/pattern.png");
         Assets.loadTexturePack("assets/atlases/spots.yml");

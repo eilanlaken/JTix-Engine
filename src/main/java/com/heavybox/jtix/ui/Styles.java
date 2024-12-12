@@ -2,28 +2,27 @@ package com.heavybox.jtix.ui;
 
 public final class Styles {
 
-    public enum AlignmentTextVertical {
-        TOP,
-        CENTER,
-        BOTTOM
+    public enum Positioning {
+        MANUAL,
+        CONTAINER,
     }
 
-    public enum AlignmentTextHorizontal {
+    public enum TextLayout {
         LEFT,
         CENTER,
         RIGHT,
-        JUSTIFY
+        NEWSPAPER
     }
 
-    public enum AlignmentChildrenVertical {
-
-    }
-
-    public enum AlignmentChildrenHorizontal {
+    public enum AlignmentContentVertical {
 
     }
 
-    public enum OverflowChildrenBehavior {
+    public enum AlignmentContentHorizontal {
+
+    }
+
+    public enum OverflowContentBehavior {
         DO_NOTHING,
         RESIZE_TO_FIT,
         TRUNCATE,
