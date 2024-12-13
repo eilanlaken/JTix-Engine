@@ -9,8 +9,11 @@ import com.heavybox.jtix.tools.ToolsFontGenerator;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.freetype.*;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -121,23 +124,40 @@ public class FontDynamic implements MemoryResource {
             }
             kerningVector.free();
 
-            ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
-            ftCharImageBuffer.flip();
 
+
+            ///////
+
+            ByteBuffer ftCharImageBuffer = bitmap.buffer(glyph_width * glyph_height);
+            // Allocate a ByteBuffer to hold the pixel data (width * height)
+            ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
+//
+//            // Copy the bitmap row by row
+//            for (int row = 0; row < data.height; row++) {
+//                int srcOffset = row * bitmap.pitch(); // Start of the row in the source buffer
+//                int destOffset = row * data.width; // Start of the row in the destination buffer
+//                for (int col = 0; col < data.width; col++) {
+//                    buffer.put(destOffset + col, ftCharImageBuffer.get(srcOffset + col));
+//                }
+//            }
+            buffer.put(ftCharImageBuffer);
+            buffer.flip();
+            ////////
             Texture page;
             int padding = 2;
             if (glyphsPages.size == 0 || penX + data.width >= texturesWidth || penY + data.height >= texturesHeight) {
-                ByteBuffer buffer = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
-                page = new Texture(texturesWidth, texturesHeight, buffer,
+                ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
+                page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
-                        Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,false);
-                penX = 0;
-                penY = 0;
+                        Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
+                penX = padding;
+                penY = padding;
                 glyphsPages.add(page);
             } else {
                 page = glyphsPages.last();
             }
             TextureBinder.bind(page);
+            System.out.println("hi: " + c);
             GL11.glTexSubImage2D(
                     GL11.GL_TEXTURE_2D,
                     0,
@@ -145,10 +165,12 @@ public class FontDynamic implements MemoryResource {
                     penY,
                     data.width,
                     data.height,
-                    GL11.GL_RGB,
+                    GL11.GL_RED,
                     GL11.GL_UNSIGNED_BYTE,
-                    ftCharImageBuffer          // Data
+                    buffer          // Data
             );
+            System.out.println("bye: " + c);
+
             data.atlasX = penX; // we need to set this
             data.atlasY = penY; // we need to set this
             // advance the pen

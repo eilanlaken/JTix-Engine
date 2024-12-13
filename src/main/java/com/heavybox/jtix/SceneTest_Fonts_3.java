@@ -32,6 +32,8 @@ public class SceneTest_Fonts_3 implements Scene {
     FontDynamic font;
     FontDynamic.Glyph g;
 
+    String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
@@ -45,21 +47,23 @@ public class SceneTest_Fonts_3 implements Scene {
 
     @Override
     public void start() {
-        g = font.getGlyph('A', 24);
+        g = font.getGlyph('A', 64);
     }
 
     float scale = 1;
+    int index = 0;
 
     @Override
     public void update() {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            Graphics.setCursorCustom("assets/textures/cursor-green.png");
+
         }
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
-            Graphics.setCursorNotAllowed();
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
+            g = font.getGlyph(chars.charAt(index), 64);
+            index++;
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
             Graphics.setCursorPointingHand();
@@ -97,6 +101,8 @@ public class SceneTest_Fonts_3 implements Scene {
         // render font
         renderer2D.begin();
         renderer2D.drawTexture(g.texture, 0,0,0,1,1);
+        renderer2D.setColor(Color.GREEN);
+        renderer2D.drawRectangleThin(256, 256,0,0,0,1,1);
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
