@@ -39,7 +39,7 @@ public class Webcam implements MemoryResourceHolder {
             int height = mat.height();
             if (rgbData == null) {
                 rgbData = new byte[width * height * 3]; // Example RGB data
-                ByteBuffer buffer = ByteBuffer.allocateDirect(640 * 480 * 3);
+                ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * 3);
                 this.feed = new Texture(width, height, buffer,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,false);

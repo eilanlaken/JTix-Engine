@@ -2,11 +2,13 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.Tuple2;
 import com.heavybox.jtix.collections.Tuple4;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.freetype.*;
 
 import java.io.Serializable;
@@ -19,13 +21,12 @@ import java.util.Map;
 
 public class FontDynamic implements MemoryResource {
 
-    //public final Map<Tuple3<Integer, Boolean, Boolean>, Glyph> glyphsCache = new HashMap<>();
 
     public FT_Face ftFace;
 
     public final Map<Integer, GlyphNotebook> glyphsNotebooks = new HashMap<>();
 
-    public final Map<Tuple4<Character, Integer, Boolean, Boolean>, Glyph> cache = new HashMap<>(); // <char, size, bold?, italic?> -> Glyph
+    public final Map<Tuple2<Character, Integer>, Glyph> cache = new HashMap<>(); // <char, size, bold?, italic?> -> Glyph
 
     public FontDynamic(final String fontPath) {
         long library = Graphics.getFreeType();
@@ -41,15 +42,15 @@ public class FontDynamic implements MemoryResource {
         ftFace = FT_Face.create(face);
     }
 
-    public Glyph getGlyph(final char c, int size, boolean bold, boolean italic) {
-        Tuple4<Character, Integer, Boolean, Boolean> props = new Tuple4<>(c,size,bold,italic);
+    public Glyph getGlyph(final char c, int size) {
+        Tuple2<Character, Integer> props = new Tuple2<>(c,size);
         Glyph glyph = cache.get(props);
         if (glyph != null) return glyph;
         // TODO: figure out the optimal page width and page height.
         int pageWidth = 256;
         int pageHeight = 256;
         GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageWidth, pageHeight)); // get notebook for given size
-        glyph = notebook.draw(c, size, bold, italic);
+        glyph = notebook.draw(c, size);
         cache.put(props, glyph);
         return glyph;
     }
@@ -67,7 +68,6 @@ public class FontDynamic implements MemoryResource {
 
     private final class GlyphNotebook {
 
-        // finals
         private final int texturesWidth;
         private final int texturesHeight;
 
@@ -75,14 +75,14 @@ public class FontDynamic implements MemoryResource {
         private int penY = 0;
         private int maxGlyphWidth = 0;
         private int maxGlyphHeight = 0;
-        private Array<Texture> glyphsPages = new Array<>(true,1);
+        private final Array<Texture> glyphsPages = new Array<>(true,1);
 
         private GlyphNotebook(int texturesWidth, int texturesHeight) {
             this.texturesWidth = texturesWidth;
             this.texturesHeight = texturesHeight;
         }
 
-        public Glyph draw(char c, int size, boolean bold, boolean italic) {
+        public Glyph draw(char c, int size) {
             FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
 
             /* get font supported characters && charset */
@@ -95,7 +95,6 @@ public class FontDynamic implements MemoryResource {
             }
 
             Glyph data = new Glyph();
-
             FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER);
 
             FT_GlyphSlot glyphSlot = ftFace.glyph();
@@ -103,9 +102,8 @@ public class FontDynamic implements MemoryResource {
             int glyph_width  = bitmap.width();
             int glyph_height = bitmap.rows();
             int glyph_pitch  = bitmap.pitch();
-
-            data.atlasX = -1;
-            data.atlasY = -1;
+            data.atlasX = -1; // we need to set this
+            data.atlasY = -1; // we need to set this
             data.width = glyph_width;
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
@@ -123,7 +121,49 @@ public class FontDynamic implements MemoryResource {
             }
             kerningVector.free();
 
-            return null;
+            ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
+            ftCharImageBuffer.flip();
+
+            Texture page;
+            int padding = 2;
+            if (glyphsPages.size == 0 || penX + data.width >= texturesWidth || penY + data.height >= texturesHeight) {
+                ByteBuffer buffer = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 3);
+                page = new Texture(texturesWidth, texturesHeight, buffer,
+                        Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                        Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,false);
+                penX = 0;
+                penY = 0;
+                glyphsPages.add(page);
+            } else {
+                page = glyphsPages.last();
+            }
+            TextureBinder.bind(page);
+            GL11.glTexSubImage2D(
+                    GL11.GL_TEXTURE_2D,
+                    0,
+                    penX,
+                    penY,
+                    data.width,
+                    data.height,
+                    GL11.GL_RGB,
+                    GL11.GL_UNSIGNED_BYTE,
+                    ftCharImageBuffer          // Data
+            );
+            data.atlasX = penX; // we need to set this
+            data.atlasY = penY; // we need to set this
+            // advance the pen
+
+            maxGlyphWidth = Math.max(data.width, maxGlyphWidth);
+            maxGlyphHeight = Math.max(data.height, maxGlyphHeight);
+
+            penX += maxGlyphWidth + padding;
+            if (penX > texturesWidth) {
+                penX = 0;
+                penY += maxGlyphHeight;
+            }
+
+            data.texture = page;
+            return data;
         }
 
         // todo: inline
@@ -135,7 +175,7 @@ public class FontDynamic implements MemoryResource {
 
     public static final class Glyph {
 
-        public Texture atlas;
+        public Texture texture;
         public int   width;
         public int   height;
         public float bearingX;
@@ -146,17 +186,6 @@ public class FontDynamic implements MemoryResource {
         public int   atlasY;
         public Map<Character, Integer> kernings;
 
-//        public Glyph(int width, int height, float bearingX, float bearingY, float advanceX, float advanceY, int atlasX, int atlasY, Map<Character, Integer> kernings) {
-//            this.width = width;
-//            this.height = height;
-//            this.bearingX = bearingX;
-//            this.bearingY = bearingY;
-//            this.advanceX = advanceX;
-//            this.advanceY = advanceY;
-//            this.atlasX = atlasX;
-//            this.atlasY = atlasY;
-//            this.kernings = kernings;
-//        }
 
     }
 
