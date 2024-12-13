@@ -37,11 +37,8 @@ public class SceneTest_Fonts_3 implements Scene {
         //Assets.loadFontStatic("assets/fonts/OpenSans-Regular-13.yml");
 
         Assets.finishLoading();
-        //font = Assets.get("assets/fonts/OpenSans-Regular-13.yml");
-        libPointerBuffer = BufferUtils.createPointerBuffer(1);
-        FreeType.FT_Init_FreeType(libPointerBuffer);
-        /* load .ttf file to bytebuffer */
-        long library = libPointerBuffer.get(0);
+
+        long library = Graphics.getFreeType();
         ByteBuffer fontDataBuffer;
         try {
             fontDataBuffer = Assets.fileToByteBuffer(fontPath);

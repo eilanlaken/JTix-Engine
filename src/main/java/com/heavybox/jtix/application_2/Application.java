@@ -68,8 +68,6 @@ public class Application {
     private static final Array<String> windowFilesDraggedAndDropped   = new Array<>(); // TODO: improve
     private static       int           windowLastDragAndDropFileCount = 0;
 
-
-
     /* current Scene */
     private static Scene currentScene = null;
 
@@ -296,7 +294,7 @@ public class Application {
     }
 
     public static void playScene(@NotNull Scene scene) {
-        if (!running) throw new ApplicationException("Application not running. Function run() must be called with the starting scene, after init.");
+        if (!running) throw new ApplicationException("Application not running. Function playScene() must be called with the starting scene, after init.");
         if (currentScene != null) {
             currentScene.finish();
         }

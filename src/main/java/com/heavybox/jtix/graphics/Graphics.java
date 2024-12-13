@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.ApplicationException;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL11;
@@ -11,6 +12,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.util.freetype.FreeType;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -54,6 +56,9 @@ public final class Graphics {
     private static long cursorResizeNWSE = -1;
     private static long cursorResizeAll = -1;
     private static final HashMap<String, Long> customCursors = new HashMap<>();
+
+    /* freetype library */
+    private static long freeType = -1;
 
     private Graphics() {}
 
@@ -366,4 +371,13 @@ public final class Graphics {
         }
     }
 
+    /* FreeType */
+
+    public static long getFreeType() {
+        if (freeType != -1) return freeType;
+        PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
+        FreeType.FT_Init_FreeType(libPointerBuffer);
+        freeType = libPointerBuffer.get(0);
+        return freeType;
+    }
 }
