@@ -26,10 +26,11 @@ public class SceneTest_Fonts_3 implements Scene {
 
     private Renderer2D renderer2D = new Renderer2D();
 
-    // free type library loading
-    PointerBuffer libPointerBuffer;
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
+
+    FontDynamic font;
+    FontDynamic.Glyph g;
 
     @Override
     public void setup() {
@@ -38,22 +39,13 @@ public class SceneTest_Fonts_3 implements Scene {
 
         Assets.finishLoading();
 
-        long library = Graphics.getFreeType();
-        ByteBuffer fontDataBuffer;
-        try {
-            fontDataBuffer = Assets.fileToByteBuffer(fontPath);
-        } catch (Exception e) {
-            throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
-        }
-        PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
-        FreeType.FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
-        long face = facePointerBuffer.get(0);
-        FT_Face ftFace = FT_Face.create(face);
+        font = new FontDynamic(fontPath);
 
     }
 
     @Override
     public void start() {
+        g = font.getGlyph('A', 24);
     }
 
     float scale = 1;
@@ -99,12 +91,12 @@ public class SceneTest_Fonts_3 implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0f,0f,0f,1);
+        GL11.glClearColor(1f,0f,0f,1);
 
 
         // render font
         renderer2D.begin();
-
+        renderer2D.drawTexture(g.texture, 0,0,0,1,1);
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
