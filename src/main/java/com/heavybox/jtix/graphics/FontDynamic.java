@@ -28,7 +28,6 @@ public class FontDynamic implements MemoryResource {
     public FT_Face ftFace;
 
     public final Map<Integer, GlyphNotebook> glyphsNotebooks = new HashMap<>();
-
     public final Map<Tuple2<Character, Integer>, Glyph> cache = new HashMap<>(); // <char, size, bold?, italic?> -> Glyph
 
     public FontDynamic(final String fontPath) {
@@ -69,16 +68,18 @@ public class FontDynamic implements MemoryResource {
         }
     }
 
-    private final class GlyphNotebook {
+    public final class GlyphNotebook {
+
+        private static final int PADDING = 2;
 
         private final int texturesWidth;
         private final int texturesHeight;
 
-        private int penX = 0;
-        private int penY = 0;
+        private int penX = PADDING;
+        private int penY = PADDING;
         private int maxGlyphWidth = 0;
         private int maxGlyphHeight = 0;
-        private final Array<Texture> glyphsPages = new Array<>(true,1);
+        public final Array<Texture> glyphsPages = new Array<>(true,1);
 
         private GlyphNotebook(int texturesWidth, int texturesHeight) {
             this.texturesWidth = texturesWidth;
@@ -86,6 +87,13 @@ public class FontDynamic implements MemoryResource {
         }
 
         public Glyph draw(char c, int size) {
+            if (glyphsPages.size == 0) {
+                ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
+                Texture page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
+                        Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                        Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
+                glyphsPages.add(page);
+            }
             FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
 
             /* get font supported characters && charset */
@@ -124,40 +132,17 @@ public class FontDynamic implements MemoryResource {
             }
             kerningVector.free();
 
+            System.out.println("----------------");
 
 
             ///////
 
-            ByteBuffer ftCharImageBuffer = bitmap.buffer(glyph_width * glyph_height);
-            // Allocate a ByteBuffer to hold the pixel data (width * height)
+            ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
-//
-//            // Copy the bitmap row by row
-//            for (int row = 0; row < data.height; row++) {
-//                int srcOffset = row * bitmap.pitch(); // Start of the row in the source buffer
-//                int destOffset = row * data.width; // Start of the row in the destination buffer
-//                for (int col = 0; col < data.width; col++) {
-//                    buffer.put(destOffset + col, ftCharImageBuffer.get(srcOffset + col));
-//                }
-//            }
             buffer.put(ftCharImageBuffer);
             buffer.flip();
-            ////////
-            Texture page;
-            int padding = 2;
-            if (glyphsPages.size == 0 || penX + data.width >= texturesWidth || penY + data.height >= texturesHeight) {
-                ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
-                page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
-                        Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
-                        Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
-                penX = padding;
-                penY = padding;
-                glyphsPages.add(page);
-            } else {
-                page = glyphsPages.last();
-            }
-            TextureBinder.bind(page);
-            System.out.println("hi: " + c);
+
+            TextureBinder.bind(glyphsPages.last());
             GL11.glTexSubImage2D(
                     GL11.GL_TEXTURE_2D,
                     0,
@@ -169,20 +154,41 @@ public class FontDynamic implements MemoryResource {
                     GL11.GL_UNSIGNED_BYTE,
                     buffer          // Data
             );
-            System.out.println("bye: " + c);
 
-            data.atlasX = penX; // we need to set this
-            data.atlasY = penY; // we need to set this
-            // advance the pen
-
+            ////////
+            Texture page;
+            int padding = 2;
             maxGlyphWidth = Math.max(data.width, maxGlyphWidth);
             maxGlyphHeight = Math.max(data.height, maxGlyphHeight);
-
-            penX += maxGlyphWidth + padding;
-            if (penX > texturesWidth) {
-                penX = 0;
-                penY += maxGlyphHeight;
+            if (penX + maxGlyphWidth + padding < texturesWidth && penY + maxGlyphHeight + padding < texturesHeight) {
+                penX += padding + data.width;
+                page = glyphsPages.last();
+                System.out.println("CASE 1");
+            } else if (penX + data.width + padding >= texturesWidth && penY + data.height + padding < texturesHeight) {
+                penX = padding;
+                penY += padding + maxGlyphHeight;
+                page = glyphsPages.last();
+                System.out.println("CASE 2");
+            } else {
+                ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
+                page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
+                        Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                        Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
+                penX = padding;
+                penY = padding;
+                glyphsPages.add(page);
+                System.out.println("CASE 3");
             }
+
+
+
+            System.out.println("char: " + c);
+            System.out.println("penX: " + penX);
+            System.out.println("penY: " + penY);
+
+
+            // advance the pen
+
 
             data.texture = page;
             return data;

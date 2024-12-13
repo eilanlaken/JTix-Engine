@@ -47,7 +47,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
     @Override
     public void start() {
-        g = font.getGlyph('A', 64);
+        g = font.getGlyph('a', 64);
     }
 
     float scale = 1;
@@ -97,12 +97,20 @@ public class SceneTest_Fonts_3 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1f,0f,0f,1);
 
+        Array<Texture> textures = font.glyphsNotebooks.get(64).glyphsPages;
 
         // render font
         renderer2D.begin();
-        renderer2D.drawTexture(g.texture, 0,0,0,1,1);
-        renderer2D.setColor(Color.GREEN);
-        renderer2D.drawRectangleThin(256, 256,0,0,0,1,1);
+
+        int start = -512;
+        for (int i = 0; i < textures.size; i++) {
+            Texture texture = textures.get(i);
+            renderer2D.setColor(Color.WHITE);
+            renderer2D.drawTexture(texture, start + texture.width * i,0,0,1,1);
+            renderer2D.setColor(Color.GREEN);
+            renderer2D.drawRectangleThin(256, 256,start + texture.width * i,0,0,1,1);
+        }
+
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);

@@ -173,7 +173,7 @@ public final class ToolsFontGenerator {
         try {
             Assets.saveImage(directory, outputName, fontAtlas);
         } catch (Exception e) {
-            throw new GraphicsException("Could not save font image to directory:" + directory + " with file name: " + outputName + ". Exception: " + e.getMessage());
+            throw new ToolsException("Could not save font image to directory:" + directory + " with file name: " + outputName + ". Exception: " + e.getMessage());
         }
         pen.dispose();
 
@@ -199,7 +199,7 @@ public final class ToolsFontGenerator {
         try {
             Assets.saveFile(directory, outputName + ".yml", content);
         } catch (Exception e) {
-            throw new GraphicsException("Could not save texture pack data file. Exception: " + e.getMessage());
+            throw new ToolsException("Could not save texture pack data file. Exception: " + e.getMessage());
         }
 
         /* free FreeType library and face */

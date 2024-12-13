@@ -1,6 +1,7 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.ApplicationWindowAttributes;
+import com.heavybox.jtix.application_2.AppLogger;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.ApplicationSettings;
 import com.heavybox.jtix.async.AsyncTask;
@@ -28,6 +29,9 @@ public class Main {
 //            throw e;
 //        }
 
+        String hi = "g";
+        System.out.println("jjj");
+        AppLogger.print(hi);
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
         //ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 13, true, null);
         ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 24, true, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
@@ -37,8 +41,6 @@ public class Main {
 //                ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Italic.ttf", 32, true, null);
 //            }
 //        };
-
-        System.out.println(Color.WHITE.toString());
 
 
 //        AsyncTask regular = new AsyncTask() {
