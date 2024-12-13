@@ -127,7 +127,7 @@ public class FontDynamic implements MemoryResource {
             Texture page;
             int padding = 2;
             if (glyphsPages.size == 0 || penX + data.width >= texturesWidth || penY + data.height >= texturesHeight) {
-                ByteBuffer buffer = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 3);
+                ByteBuffer buffer = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
                 page = new Texture(texturesWidth, texturesHeight, buffer,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,false);
