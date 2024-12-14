@@ -86,7 +86,7 @@ public class SceneTest_Fonts_3 implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1f,0f,0f,1);
+        GL11.glClearColor(0f,0f,0f,1);
 
         FontDynamic.GlyphNotebook notebook = font.glyphsNotebooks.get(74);
         Array<Texture> textures = notebook.pages;

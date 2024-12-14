@@ -99,7 +99,9 @@ public class FontDynamic implements MemoryResource {
                 nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
             }
             /* rasterize the character */
-            FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER);
+            //FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_FORCE_AUTOHINT);
+            FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
+
             FT_GlyphSlot glyphSlot = ftFace.glyph();
             FT_Bitmap bitmap = glyphSlot.bitmap();
             int glyph_width  = bitmap.width();
@@ -127,15 +129,36 @@ public class FontDynamic implements MemoryResource {
 
             /* get the bitmap ByteBuffer and create our own RGBA byte buffer (for antialiased fonts) */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
-            ByteBuffer buffer = MemoryUtil.memAlloc(Math.abs(glyph_pitch) * data.height * 4);
-            for (int i = 0; i < data.width * data.height; i++) {
-                byte redValue = ftCharImageBuffer.get(i);
-                buffer.put(redValue); // Red
-                buffer.put(redValue); // Green (replicating red)
-                buffer.put(redValue); // Blue (replicating red)
-                buffer.put(redValue);; // Alpha (fully opaque)
+            ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
+
+//            for (int i = 0; i < data.width * data.height; i++) {
+//                byte value = ftCharImageBuffer.get(i);
+//                buffer.put((byte) 255); // Red
+//                buffer.put((byte) 255); // Green
+//                buffer.put((byte) 255); // Blue
+//                buffer.put(value); // Alpha
+//            }
+            // no anti alising
+            for (int y = 0; y < data.height; y++) {
+                for (int x = 0; x < data.width; x++) {
+                    // Calculate the byte and bit positions in the monochrome buffer
+                    int byteIndex = y * Math.abs(glyph_pitch) + (x / 8);
+                    int bitIndex = 7 - (x % 8); // Bits are stored high-to-low in each byte
+                    boolean isOn = (ftCharImageBuffer.get(byteIndex) & (1 << bitIndex)) != 0;
+
+                    // RGBA for the current pixel
+                    byte r = (byte) (isOn ? 255 : 0); // Red channel
+                    byte g = (byte) (isOn ? 255 : 0); // Green channel
+                    byte b = (byte) (isOn ? 255 : 0); // Blue channel
+                    byte a = (byte) (isOn ? 255 : 0); // Alpha channel (255 for opaque, 0 for transparent)
+
+                    // Write RGBA to the buffer
+                    buffer.put(r); // Red
+                    buffer.put(g); // Green
+                    buffer.put(b); // Blue
+                    buffer.put(a); // Alpha
+                }
             }
-            //buffer.put(ftCharImageBuffer);
             buffer.flip();
 
             maxGlyphHeight = Math.max(maxGlyphHeight, data.height);
