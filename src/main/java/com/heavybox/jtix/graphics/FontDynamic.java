@@ -3,18 +3,13 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Tuple2;
-import com.heavybox.jtix.collections.Tuple4;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.tools.ToolsFontGenerator;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.freetype.*;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -62,7 +57,7 @@ public class FontDynamic implements MemoryResource {
         FreeType.FT_Done_Face(ftFace);
         for (Map.Entry<Integer, GlyphNotebook> entry : glyphsNotebooks.entrySet()) {
             GlyphNotebook value = entry.getValue();
-            for (Texture page : value.glyphsPages) {
+            for (Texture page : value.pages_antialiasing) {
                 page.delete();
             }
         }
@@ -79,7 +74,8 @@ public class FontDynamic implements MemoryResource {
         private int penY = PADDING;
         private int maxGlyphWidth = 0;
         private int maxGlyphHeight = 0;
-        public final Array<Texture> glyphsPages = new Array<>(true,1);
+        public final Array<Texture> pages_antialiasing = new Array<>(true,1);
+        //public final Array<Texture> pages_no_antialiasing = new Array<>(true,1); // TODO
 
         private GlyphNotebook(int texturesWidth, int texturesHeight) {
             this.texturesWidth = texturesWidth;
@@ -87,12 +83,12 @@ public class FontDynamic implements MemoryResource {
         }
 
         public Glyph draw(char c, int size) {
-            if (glyphsPages.size == 0) {
+            if (pages_antialiasing.size == 0) {
                 ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
                 Texture page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
-                glyphsPages.add(page);
+                pages_antialiasing.add(page);
             }
             FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
 
@@ -113,8 +109,8 @@ public class FontDynamic implements MemoryResource {
             int glyph_width  = bitmap.width();
             int glyph_height = bitmap.rows();
             int glyph_pitch  = bitmap.pitch();
-            data.atlasX = -1; // we need to set this
-            data.atlasY = -1; // we need to set this
+            //data.atlasX = -1; // we need to set this
+            //data.atlasY = -1; // we need to set this
             data.width = glyph_width;
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
@@ -142,33 +138,47 @@ public class FontDynamic implements MemoryResource {
             buffer.put(ftCharImageBuffer);
             buffer.flip();
 
-            TextureBinder.bind(glyphsPages.last());
-            GL11.glTexSubImage2D(
-                    GL11.GL_TEXTURE_2D,
-                    0,
-                    penX,
-                    penY,
-                    data.width,
-                    data.height,
-                    GL11.GL_RED,
-                    GL11.GL_UNSIGNED_BYTE,
-                    buffer          // Data
-            );
-
             ////////
             Texture page;
             int padding = 2;
             maxGlyphWidth = Math.max(data.width, maxGlyphWidth);
             maxGlyphHeight = Math.max(data.height, maxGlyphHeight);
+            System.out.println("mgh: " + maxGlyphHeight);
             if (penX + maxGlyphWidth + padding < texturesWidth && penY + maxGlyphHeight + padding < texturesHeight) {
+                TextureBinder.bind(pages_antialiasing.last());
+                GL11.glTexSubImage2D(
+                        GL11.GL_TEXTURE_2D,
+                        0,
+                        penX,
+                        penY,
+                        data.width,
+                        data.height,
+                        GL11.GL_RED,
+                        GL11.GL_UNSIGNED_BYTE,
+                        buffer          // Data
+                );
+
                 penX += padding + data.width;
-                page = glyphsPages.last();
+                page = pages_antialiasing.last();
                 System.out.println("CASE 1");
             } else if (penX + data.width + padding >= texturesWidth && penY + data.height + padding < texturesHeight) {
                 penX = padding;
                 penY += padding + maxGlyphHeight;
-                page = glyphsPages.last();
+                page = pages_antialiasing.last();
                 System.out.println("CASE 2");
+                TextureBinder.bind(pages_antialiasing.last());
+                GL11.glTexSubImage2D(
+                        GL11.GL_TEXTURE_2D,
+                        0,
+                        penX,
+                        penY,
+                        data.width,
+                        data.height,
+                        GL11.GL_RED,
+                        GL11.GL_UNSIGNED_BYTE,
+                        buffer          // Data
+                );
+                penX += padding + data.width;
             } else {
                 ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
                 page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
@@ -176,8 +186,21 @@ public class FontDynamic implements MemoryResource {
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
                 penX = padding;
                 penY = padding;
-                glyphsPages.add(page);
+                pages_antialiasing.add(page);
                 System.out.println("CASE 3");
+                TextureBinder.bind(pages_antialiasing.last());
+                GL11.glTexSubImage2D(
+                        GL11.GL_TEXTURE_2D,
+                        0,
+                        penX,
+                        penY,
+                        data.width,
+                        data.height,
+                        GL11.GL_RED,
+                        GL11.GL_UNSIGNED_BYTE,
+                        buffer          // Data
+                );
+                penX += padding + data.width;
             }
 
 

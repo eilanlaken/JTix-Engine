@@ -1,6 +1,5 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
@@ -9,15 +8,7 @@ import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.ui.UIButton;
-import com.heavybox.jtix.ui.UserInterface;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.freetype.FT_Face;
-import org.lwjgl.util.freetype.FreeType;
-
-import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.glGetFloatv;
 
@@ -97,7 +88,8 @@ public class SceneTest_Fonts_3 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1f,0f,0f,1);
 
-        Array<Texture> textures = font.glyphsNotebooks.get(64).glyphsPages;
+        FontDynamic.GlyphNotebook notebook = font.glyphsNotebooks.get(64);
+        Array<Texture> textures = notebook.pages_antialiasing;
 
         // render font
         renderer2D.begin();
@@ -109,6 +101,8 @@ public class SceneTest_Fonts_3 implements Scene {
             renderer2D.drawTexture(texture, start + texture.width * i,0,0,1,1);
             renderer2D.setColor(Color.GREEN);
             renderer2D.drawRectangleThin(256, 256,start + texture.width * i,0,0,1,1);
+            //renderer2D.setColor(Color.BLUE);
+            //renderer2D.drawCircleFilled(5, 5,start + texture.width * i + penX,penY - 256/2f,0,1,1);
         }
 
 
