@@ -3,6 +3,7 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Tuple2;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
@@ -44,9 +45,9 @@ public class FontDynamic implements MemoryResource {
         Glyph glyph = cache.get(props);
         if (glyph != null) return glyph;
         // TODO: figure out the optimal page width and page height.
-        int pageWidth = 256;
-        int pageHeight = 256;
-        GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageWidth, pageHeight)); // get notebook for given size
+        int pageSize = Math.min(2048, MathUtils.nextPowerOf2i(size * 5));
+        System.out.println(pageSize);
+        GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageSize)); // get notebook for given size
         glyph = notebook.draw(c, size);
         cache.put(props, glyph);
         return glyph;
@@ -67,26 +68,23 @@ public class FontDynamic implements MemoryResource {
 
         private static final int PADDING = 2;
 
-        private final int texturesWidth;
-        private final int texturesHeight;
+        private final int pageSize;
 
         private int penX = PADDING;
         private int penY = PADDING;
-        private int maxGlyphWidth = 0;
         private int maxGlyphHeight = 0;
         public final Array<Texture> pages_antialiasing = new Array<>(true,1);
         //public final Array<Texture> pages_no_antialiasing = new Array<>(true,1); // TODO
 
-        private GlyphNotebook(int texturesWidth, int texturesHeight) {
-            this.texturesWidth = texturesWidth;
-            this.texturesHeight = texturesHeight;
+        private GlyphNotebook(int pageSize) {
+            this.pageSize = pageSize;
         }
 
         public Glyph draw(char c, int size) {
             /* if size is use for the first time, create the first texture */
             if (pages_antialiasing.size == 0) {
-                ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
-                Texture page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
+                ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(pageSize * pageSize * 4);
+                Texture page = new Texture(pageSize, pageSize, bufferEmpty,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
                 pages_antialiasing.add(page);
@@ -109,13 +107,7 @@ public class FontDynamic implements MemoryResource {
             int glyph_width  = bitmap.width();
             int glyph_height = bitmap.rows();
             int glyph_pitch  = bitmap.pitch();
-            /* create the Glyph and get basic metrics:
-            * width, height,
-            * bearingX, bearingY,
-            * advanceX, advanceY,
-            * kernings
-            * (atlasX and atlasY will be set later)
-            *  */
+            /* create the Glyph and get basic metrics (atlasX and atlasY will be set later */
             Glyph data = new Glyph();
             data.atlasX = -1; // we need to set this to wherever we draw the glyph x
             data.atlasY = -1; // we need to set this to wherever we draw the glyph y
@@ -135,86 +127,15 @@ public class FontDynamic implements MemoryResource {
             }
             kerningVector.free();
 
-            System.out.println("----------------");
-
             /* get the bitmap ByteBuffer and create our own RGBA byte buffer (for antialiased fonts) */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
             buffer.put(ftCharImageBuffer);
             buffer.flip();
 
-            if (false) {
-                Texture page;
-                int padding = 2;
-                maxGlyphWidth = Math.max(data.width, maxGlyphWidth);
-                maxGlyphHeight = Math.max(data.height, maxGlyphHeight);
-                System.out.println("mgh: " + maxGlyphHeight);
-                if (penX + maxGlyphWidth + padding < texturesWidth && penY + maxGlyphHeight + padding < texturesHeight) {
-                    TextureBinder.bind(pages_antialiasing.last());
-                    GL11.glTexSubImage2D(
-                            GL11.GL_TEXTURE_2D,
-                            0,
-                            penX,
-                            penY,
-                            data.width,
-                            data.height,
-                            GL11.GL_RED,
-                            GL11.GL_UNSIGNED_BYTE,
-                            buffer          // Data
-                    );
-
-                    penX += padding + data.width;
-                    page = pages_antialiasing.last();
-                    System.out.println("CASE 1");
-                } else if (penX + data.width + padding >= texturesWidth && penY + data.height + padding < texturesHeight) {
-                    penX = padding;
-                    penY += padding + maxGlyphHeight;
-                    page = pages_antialiasing.last();
-                    System.out.println("CASE 2");
-                    TextureBinder.bind(pages_antialiasing.last());
-                    GL11.glTexSubImage2D(
-                            GL11.GL_TEXTURE_2D,
-                            0,
-                            penX,
-                            penY,
-                            data.width,
-                            data.height,
-                            GL11.GL_RED,
-                            GL11.GL_UNSIGNED_BYTE,
-                            buffer          // Data
-                    );
-                    penX += padding + data.width;
-                } else {
-                    ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
-                    page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
-                            Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
-                            Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1, true);
-                    penX = padding;
-                    penY = padding;
-                    pages_antialiasing.add(page);
-                    System.out.println("CASE 3");
-                    TextureBinder.bind(pages_antialiasing.last());
-                    GL11.glTexSubImage2D(
-                            GL11.GL_TEXTURE_2D,
-                            0,
-                            penX,
-                            penY,
-                            data.width,
-                            data.height,
-                            GL11.GL_RED,
-                            GL11.GL_UNSIGNED_BYTE,
-                            buffer          // Data
-                    );
-                    penX += padding + data.width;
-                }
-                System.out.println("char: " + c);
-                System.out.println("penX: " + penX);
-                System.out.println("penY: " + penY);
-            }
-
             maxGlyphHeight = Math.max(maxGlyphHeight, data.height);
 
-            if (penX + PADDING + data.width < texturesWidth && penY + PADDING + data.height < texturesHeight) {
+            if (penX + PADDING + data.width < pageSize && penY + PADDING + data.height < pageSize) {
                 TextureBinder.bind(pages_antialiasing.last());
                 GL11.glTexSubImage2D(
                         GL11.GL_TEXTURE_2D,
@@ -235,7 +156,7 @@ public class FontDynamic implements MemoryResource {
                 return data;
             }
 
-            if (penX + PADDING + data.width >= texturesWidth && penY + maxGlyphHeight + PADDING + data.height < texturesHeight) {
+            if (penX + PADDING + data.width >= pageSize && penY + maxGlyphHeight + PADDING + data.height < pageSize) {
                 penX = PADDING;
                 penY += maxGlyphHeight + PADDING;
 
@@ -260,8 +181,8 @@ public class FontDynamic implements MemoryResource {
             }
 
             // flip page
-            ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(texturesWidth * texturesHeight * 4);
-            Texture page = new Texture(texturesWidth, texturesHeight, bufferEmpty,
+            ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(pageSize * pageSize * 4);
+            Texture page = new Texture(pageSize, pageSize, bufferEmpty,
                     Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                     Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1, true);
             penX = PADDING;
@@ -280,6 +201,10 @@ public class FontDynamic implements MemoryResource {
                     GL11.GL_UNSIGNED_BYTE,
                     buffer          // Data
             );
+            data.atlasX = penX;
+            data.atlasY = penY;
+            data.texture = pages_antialiasing.last();
+
             penX += PADDING + data.width;
             return data;
         }

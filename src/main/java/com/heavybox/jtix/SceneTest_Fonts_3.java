@@ -94,13 +94,13 @@ public class SceneTest_Fonts_3 implements Scene {
         // render font
         renderer2D.begin();
 
-        int start = -512;
+        int start = 0;
         for (int i = 0; i < textures.size; i++) {
             Texture texture = textures.get(i);
             renderer2D.setColor(Color.WHITE);
             renderer2D.drawTexture(texture, start + texture.width * i,0,0,1,1);
             renderer2D.setColor(Color.GREEN);
-            renderer2D.drawRectangleThin(256, 256,start + texture.width * i,0,0,1,1);
+            renderer2D.drawRectangleThin(texture.width, texture.height,start + texture.width * i,0,0,1,1);
             //renderer2D.setColor(Color.BLUE);
             //renderer2D.drawCircleFilled(5, 5,start + texture.width * i + penX,penY - 256/2f,0,1,1);
         }
