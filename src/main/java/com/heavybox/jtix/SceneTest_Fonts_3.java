@@ -38,7 +38,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
     @Override
     public void start() {
-        g = font.getGlyph('a', 74);
+        g = font.getGlyph('a', 74, false);
     }
 
     float scale = 1;
@@ -53,11 +53,11 @@ public class SceneTest_Fonts_3 implements Scene {
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
-            g = font.getGlyph(chars.charAt(index), 74);
+            g = font.getGlyph(chars.charAt(index), 74, false);
             index++;
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-            Graphics.setCursorPointingHand();
+            g = font.getGlyph(chars.charAt(index), 74, true);
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
             Graphics.setCursorResizeNESW();

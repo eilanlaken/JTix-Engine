@@ -3,6 +3,7 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Tuple2;
+import com.heavybox.jtix.collections.Tuple3;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
@@ -24,7 +25,7 @@ public class FontDynamic implements MemoryResource {
     public FT_Face ftFace;
 
     public final Map<Integer, GlyphNotebook> glyphsNotebooks = new HashMap<>();
-    public final Map<Tuple2<Character, Integer>, Glyph> cache = new HashMap<>(); // <char, size, bold?, italic?> -> Glyph
+    public final Map<Tuple3<Character, Integer, Boolean>, Glyph> cache = new HashMap<>(); // <char, size, bold?, italic?> -> Glyph
 
     public FontDynamic(final String fontPath) {
         long library = Graphics.getFreeType();
@@ -40,15 +41,15 @@ public class FontDynamic implements MemoryResource {
         ftFace = FT_Face.create(face);
     }
 
-    public Glyph getGlyph(final char c, int size) {
-        Tuple2<Character, Integer> props = new Tuple2<>(c,size);
+    public Glyph getGlyph(final char c, int size, boolean antialiasing) {
+        Tuple3<Character, Integer, Boolean> props = new Tuple3<>(c,size,antialiasing);
         Glyph glyph = cache.get(props);
         if (glyph != null) return glyph;
-        // TODO: figure out the optimal page width and page height.
+
         int pageSize = Math.min(2048, MathUtils.nextPowerOf2i(size * 5));
-        System.out.println(pageSize);
+
         GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageSize)); // get notebook for given size
-        glyph = notebook.draw(c, size);
+        glyph = notebook.draw(c, size, antialiasing);
         cache.put(props, glyph);
         return glyph;
     }
@@ -66,7 +67,7 @@ public class FontDynamic implements MemoryResource {
 
     public final class GlyphNotebook {
 
-        private static final int PADDING = 2;
+        private static final int PADDING = 5;
 
         private final int            pageSize;
         private       int            penX           = PADDING;
@@ -78,7 +79,7 @@ public class FontDynamic implements MemoryResource {
             this.pageSize = pageSize;
         }
 
-        public Glyph draw(char c, int size) {
+        public Glyph draw(char c, int size, boolean antialiasing) {
             /* if size is use for the first time, create the first texture */
             if (pages.size == 0) {
                 ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(pageSize * pageSize * 4);
@@ -99,8 +100,8 @@ public class FontDynamic implements MemoryResource {
                 nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
             }
             /* rasterize the character */
-            //FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_FORCE_AUTOHINT);
-            FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
+            if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_FORCE_AUTOHINT);
+            else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
 
             FT_GlyphSlot glyphSlot = ftFace.glyph();
             FT_Bitmap bitmap = glyphSlot.bitmap();
@@ -131,36 +132,38 @@ public class FontDynamic implements MemoryResource {
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
 
-//            for (int i = 0; i < data.width * data.height; i++) {
-//                byte value = ftCharImageBuffer.get(i);
-//                buffer.put((byte) 255); // Red
-//                buffer.put((byte) 255); // Green
-//                buffer.put((byte) 255); // Blue
-//                buffer.put(value); // Alpha
-//            }
-            // no anti alising
-            for (int y = 0; y < data.height; y++) {
-                for (int x = 0; x < data.width; x++) {
-                    // Calculate the byte and bit positions in the monochrome buffer
-                    int byteIndex = y * Math.abs(glyph_pitch) + (x / 8);
-                    int bitIndex = 7 - (x % 8); // Bits are stored high-to-low in each byte
-                    boolean isOn = (ftCharImageBuffer.get(byteIndex) & (1 << bitIndex)) != 0;
+            if (antialiasing) {
+                for (int i = 0; i < data.width * data.height; i++) {
+                    byte value = ftCharImageBuffer.get(i);
+                    buffer.put((byte) 255); // Red
+                    buffer.put((byte) 255); // Green
+                    buffer.put((byte) 255); // Blue
+                    buffer.put(value); // Alpha
+                }
+            } else {
+                // no anti alising
+                for (int y = 0; y < data.height; y++) {
+                    for (int x = 0; x < data.width; x++) {
+                        // Calculate the byte and bit positions in the monochrome buffer
+                        int byteIndex = y * Math.abs(glyph_pitch) + (x / 8);
+                        int bitIndex = 7 - (x % 8); // Bits are stored high-to-low in each byte
+                        boolean isOn = (ftCharImageBuffer.get(byteIndex) & (1 << bitIndex)) != 0;
 
-                    // RGBA for the current pixel
-                    byte r = (byte) (isOn ? 255 : 0); // Red channel
-                    byte g = (byte) (isOn ? 255 : 0); // Green channel
-                    byte b = (byte) (isOn ? 255 : 0); // Blue channel
-                    byte a = (byte) (isOn ? 255 : 0); // Alpha channel (255 for opaque, 0 for transparent)
+                        // RGBA for the current pixel
+                        byte r = (byte) (isOn ? 255 : 0); // Red channel
+                        byte g = (byte) (isOn ? 255 : 0); // Green channel
+                        byte b = (byte) (isOn ? 255 : 0); // Blue channel
+                        byte a = (byte) (isOn ? 255 : 0); // Alpha channel (255 for opaque, 0 for transparent)
 
-                    // Write RGBA to the buffer
-                    buffer.put(r); // Red
-                    buffer.put(g); // Green
-                    buffer.put(b); // Blue
-                    buffer.put(a); // Alpha
+                        // Write RGBA to the buffer
+                        buffer.put(r); // Red
+                        buffer.put(g); // Green
+                        buffer.put(b); // Blue
+                        buffer.put(a); // Alpha
+                    }
                 }
             }
             buffer.flip();
-
             maxGlyphHeight = Math.max(maxGlyphHeight, data.height);
 
             if (penX + PADDING + data.width < pageSize && penY + PADDING + data.height < pageSize) {
