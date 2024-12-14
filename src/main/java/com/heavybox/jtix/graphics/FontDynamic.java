@@ -58,7 +58,7 @@ public class FontDynamic implements MemoryResource {
         FreeType.FT_Done_Face(ftFace);
         for (Map.Entry<Integer, GlyphNotebook> entry : glyphsNotebooks.entrySet()) {
             GlyphNotebook value = entry.getValue();
-            for (Texture page : value.pages_antialiasing) {
+            for (Texture page : value.pages) {
                 page.delete();
             }
         }
@@ -68,13 +68,11 @@ public class FontDynamic implements MemoryResource {
 
         private static final int PADDING = 2;
 
-        private final int pageSize;
-
-        private int penX = PADDING;
-        private int penY = PADDING;
-        private int maxGlyphHeight = 0;
-        public final Array<Texture> pages_antialiasing = new Array<>(true,1);
-        //public final Array<Texture> pages_no_antialiasing = new Array<>(true,1); // TODO
+        private final int            pageSize;
+        private       int            penX           = PADDING;
+        private       int            penY           = PADDING;
+        private       int            maxGlyphHeight = 0;
+        public  final Array<Texture> pages          = new Array<>(true,1);
 
         private GlyphNotebook(int pageSize) {
             this.pageSize = pageSize;
@@ -82,12 +80,12 @@ public class FontDynamic implements MemoryResource {
 
         public Glyph draw(char c, int size) {
             /* if size is use for the first time, create the first texture */
-            if (pages_antialiasing.size == 0) {
+            if (pages.size == 0) {
                 ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(pageSize * pageSize * 4);
                 Texture page = new Texture(pageSize, pageSize, bufferEmpty,
                         Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                         Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1,true);
-                pages_antialiasing.add(page);
+                pages.add(page);
             }
 
             /* set the face size */
@@ -129,14 +127,21 @@ public class FontDynamic implements MemoryResource {
 
             /* get the bitmap ByteBuffer and create our own RGBA byte buffer (for antialiased fonts) */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
-            ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
-            buffer.put(ftCharImageBuffer);
+            ByteBuffer buffer = MemoryUtil.memAlloc(Math.abs(glyph_pitch) * data.height * 4);
+            for (int i = 0; i < data.width * data.height; i++) {
+                byte redValue = ftCharImageBuffer.get(i);
+                buffer.put(redValue); // Red
+                buffer.put(redValue); // Green (replicating red)
+                buffer.put(redValue); // Blue (replicating red)
+                buffer.put(redValue);; // Alpha (fully opaque)
+            }
+            //buffer.put(ftCharImageBuffer);
             buffer.flip();
 
             maxGlyphHeight = Math.max(maxGlyphHeight, data.height);
 
             if (penX + PADDING + data.width < pageSize && penY + PADDING + data.height < pageSize) {
-                TextureBinder.bind(pages_antialiasing.last());
+                TextureBinder.bind(pages.last());
                 GL11.glTexSubImage2D(
                         GL11.GL_TEXTURE_2D,
                         0,
@@ -144,13 +149,13 @@ public class FontDynamic implements MemoryResource {
                         penY,
                         data.width,
                         data.height,
-                        GL11.GL_RED,
+                        GL11.GL_RGBA,
                         GL11.GL_UNSIGNED_BYTE,
                         buffer          // Data
                 );
                 data.atlasX = penX;
                 data.atlasY = penY;
-                data.texture = pages_antialiasing.last();
+                data.texture = pages.last();
 
                 penX += PADDING + data.width;
                 return data;
@@ -160,7 +165,7 @@ public class FontDynamic implements MemoryResource {
                 penX = PADDING;
                 penY += maxGlyphHeight + PADDING;
 
-                TextureBinder.bind(pages_antialiasing.last());
+                TextureBinder.bind(pages.last());
                 GL11.glTexSubImage2D(
                         GL11.GL_TEXTURE_2D,
                         0,
@@ -168,13 +173,13 @@ public class FontDynamic implements MemoryResource {
                         penY,
                         data.width,
                         data.height,
-                        GL11.GL_RED,
+                        GL11.GL_RGBA,
                         GL11.GL_UNSIGNED_BYTE,
                         buffer          // Data
                 );
                 data.atlasX = penX;
                 data.atlasY = penY;
-                data.texture = pages_antialiasing.last();
+                data.texture = pages.last();
 
                 penX += PADDING + data.width;
                 return data;
@@ -187,9 +192,9 @@ public class FontDynamic implements MemoryResource {
                     Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1, true);
             penX = PADDING;
             penY = PADDING;
-            pages_antialiasing.add(page);
+            pages.add(page);
 
-            TextureBinder.bind(pages_antialiasing.last());
+            TextureBinder.bind(pages.last());
             GL11.glTexSubImage2D(
                     GL11.GL_TEXTURE_2D,
                     0,
@@ -197,13 +202,13 @@ public class FontDynamic implements MemoryResource {
                     penY,
                     data.width,
                     data.height,
-                    GL11.GL_RED,
+                    GL11.GL_RGBA,
                     GL11.GL_UNSIGNED_BYTE,
                     buffer          // Data
             );
             data.atlasX = penX;
             data.atlasY = penY;
-            data.texture = pages_antialiasing.last();
+            data.texture = pages.last();
 
             penX += PADDING + data.width;
             return data;

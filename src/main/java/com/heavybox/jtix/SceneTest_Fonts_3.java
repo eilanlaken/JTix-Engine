@@ -38,7 +38,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
     @Override
     public void start() {
-        g = font.getGlyph('a', 64);
+        g = font.getGlyph('a', 74);
     }
 
     float scale = 1;
@@ -53,7 +53,7 @@ public class SceneTest_Fonts_3 implements Scene {
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
-            g = font.getGlyph(chars.charAt(index), 64);
+            g = font.getGlyph(chars.charAt(index), 74);
             index++;
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
@@ -88,8 +88,8 @@ public class SceneTest_Fonts_3 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1f,0f,0f,1);
 
-        FontDynamic.GlyphNotebook notebook = font.glyphsNotebooks.get(64);
-        Array<Texture> textures = notebook.pages_antialiasing;
+        FontDynamic.GlyphNotebook notebook = font.glyphsNotebooks.get(74);
+        Array<Texture> textures = notebook.pages;
 
         // render font
         renderer2D.begin();
