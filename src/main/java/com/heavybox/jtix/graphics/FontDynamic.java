@@ -2,7 +2,6 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.Tuple2;
 import com.heavybox.jtix.collections.Tuple3;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;

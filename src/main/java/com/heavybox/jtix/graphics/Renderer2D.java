@@ -1938,11 +1938,101 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
     // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>
-    public void drawTextLine(final String text, int size, final FontDynamic font, float x, float y) {
+    public void drawTextLine(final String text, int size, final FontDynamic font, boolean antialiasing, float x, float y) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
+        setMode(GL11.GL_TRIANGLES);
+
+        /* calculate the line total width */
+        float total_width = 0;
+        char prevChar = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final FontDynamic.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
+            total_width += glyph.advanceX;
+            prevChar = c;
+        }
+
+        /* calculate the line total height */
+        float maxAscent = 0;
+        float maxDescent = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final FontDynamic.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+
+            // Update ascent (distance from baseline to top of glyph)
+            float ascent = glyph.bearingY;
+            if (ascent > maxAscent) maxAscent = ascent;
+
+            // Update descent (distance below baseline)
+            float descent = (glyph.height - glyph.bearingY);
+            if (descent > maxDescent) maxDescent = descent;
+        }
+        float total_height = (maxAscent + maxDescent);
+
+        /* render a quad for every character */
+        float penX = x - total_width * 0.5f;
+        float penY = y - total_height * 0.5f;
+        prevChar = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final FontDynamic.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+
+            setTexture(glyph.texture);
+
+            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
+
+            /* calculate the quad's x, y, width, height */
+            float char_x = penX + glyph.bearingX;
+            float char_y = penY - (glyph.height - glyph.bearingY);
+            float w = glyph.width;
+            float h = glyph.height;
+
+            /* calculate the quad's uv coordinates */
+            float u0 = glyph.atlasX * glyph.texture.invWidth;
+            float v0 = (glyph.atlasY) * glyph.texture.invHeight;
+            float u1 = (glyph.atlasX + glyph.width) * glyph.texture.invWidth;
+            float v1 = (glyph.atlasY + glyph.height) * glyph.texture.invHeight;
+
+            /* put vertices */
+            positions.put(char_x).put(char_y + h);
+            colors.put(currentTint);
+            textCoords.put(u0).put(v0);
+
+            positions.put(char_x).put(char_y);
+            colors.put(currentTint);
+            textCoords.put(u0).put(v1);
+
+            positions.put(char_x + w).put(char_y);
+            colors.put(currentTint);
+            textCoords.put(u1).put(v1);
+
+            positions.put(char_x + w).put(char_y + h);
+            colors.put(currentTint);
+            textCoords.put(u1).put(v0);
+
+            /* put indices */
+            int startVertex = this.vertexIndex;
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 4;
+
+            penX += glyph.advanceX;
+            penY += glyph.advanceY;
+            prevChar = c;
+        }
     }
 
-    public void drawString(final String text, final Font font, float x, float y) {
+    @Deprecated public void drawString(final String text, final Font font, float x, float y) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 

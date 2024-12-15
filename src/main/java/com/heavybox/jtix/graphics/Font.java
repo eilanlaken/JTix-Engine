@@ -6,6 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 
+@Deprecated
 public class Font implements MemoryResource {
 
     public final Texture fontAtlas;
