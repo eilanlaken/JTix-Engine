@@ -17,6 +17,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
@@ -33,10 +34,10 @@ public class Renderer2D implements MemoryResourceHolder {
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
 
     /* defaults */
-    private final Shader    defaultShader = createDefaultShaderProgram();
-    private final Texture defaultTexture = createDefaultTexture();
-    private final Matrix4x4 defaultMatrix = createDefaultMatrix();
-    private final Font defaultFont = createDefaultFont();
+    private final Shader    defaultShader  = createDefaultShaderProgram();
+    private final Texture   defaultTexture = createDefaultTexture();
+    private final Matrix4x4 defaultMatrix  = createDefaultMatrix();
+    private final Font      defaultFont    = createDefaultFont();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
@@ -1938,9 +1939,10 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
     // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>
-    public void drawTextLine(final String text, int size, final Font font, boolean antialiasing, float x, float y) {
+    public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
+        if (font == null) font = defaultFont;
 
         setMode(GL11.GL_TRIANGLES);
 
@@ -2182,7 +2184,17 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     private static Font createDefaultFont() {
-        return null;
+        try (InputStream inputStream = Renderer2D.class.getClassLoader().getResourceAsStream("LiberationSans-Regular.ttf")) {
+            if (inputStream == null) throw new GraphicsException("Resource not found: " + "LiberationSans-Regular.ttf");
+            /* Read the InputStream into a ByteBuffer */
+            byte[] bytes = inputStream.readAllBytes();
+            ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
+            buffer.put(bytes);
+            buffer.flip(); // Prepare the buffer for reading
+            return new Font(buffer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -21,10 +21,9 @@ import java.util.Map;
 public class Font implements MemoryResource {
 
 
-    public FT_Face ftFace;
-
-    public final Map<Integer, GlyphNotebook> glyphsNotebooks = new HashMap<>();
-    public final Map<Tuple3<Character, Integer, Boolean>, Glyph> cache = new HashMap<>(); // <char, size, bold?, italic?> -> Glyph
+    public final FT_Face                                         ftFace;
+    public final Map<Integer, GlyphNotebook>                     glyphsNotebooks = new HashMap<>();
+    public final Map<Tuple3<Character, Integer, Boolean>, Glyph> cache           = new HashMap<>(); // <char, size, antialiasing?> -> Glyph
 
     public Font(final String fontPath) {
         long library = Graphics.getFreeType();
@@ -52,9 +51,7 @@ public class Font implements MemoryResource {
         Tuple3<Character, Integer, Boolean> props = new Tuple3<>(c,size,antialiasing);
         Glyph glyph = cache.get(props);
         if (glyph != null) return glyph;
-
         int pageSize = Math.min(2048, MathUtils.nextPowerOf2i(size * 5));
-
         GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageSize)); // get notebook for given size
         glyph = notebook.draw(c, size, antialiasing);
         cache.put(props, glyph);
@@ -88,7 +85,7 @@ public class Font implements MemoryResource {
 
         // TODO: add SDF using
         // TODO: https://stackoverflow.com/questions/71185718/how-to-use-ft-render-mode-sdf-in-freetype
-        // FT_RENDER_MODE_SDF
+        // TODO: FT_RENDER_MODE_SDF
         public Glyph draw(char c, int size, boolean antialiasing) {
             /* if size is use for the first time, create the first texture */
             if (pages.size == 0) {
@@ -253,17 +250,16 @@ public class Font implements MemoryResource {
 
     public static final class Glyph {
 
-        public Texture texture;
-        public int   width;
-        public int   height;
-        public float bearingX;
-        public float bearingY;
-        public float advanceX;
-        public float advanceY;
-        public int   atlasX;
-        public int   atlasY;
+        public Texture                 texture;
+        public int                     width;
+        public int                     height;
+        public float                   bearingX;
+        public float                   bearingY;
+        public float                   advanceX;
+        public float                   advanceY;
+        public int                     atlasX;
+        public int                     atlasY;
         public Map<Character, Integer> kernings;
-
 
     }
 
