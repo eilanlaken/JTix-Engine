@@ -135,7 +135,7 @@ public class FontDynamic implements MemoryResource {
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
             ByteBuffer buffer = MemoryUtil.memAlloc(data.width * data.height * 4);
 
-            if (antialiasing) {
+            if (antialiasing) { // antialiasing
                 for (int i = 0; i < data.width * data.height; i++) {
                     byte value = ftCharImageBuffer.get(i);
                     buffer.put((byte) 255); // Red
@@ -143,8 +143,7 @@ public class FontDynamic implements MemoryResource {
                     buffer.put((byte) 255); // Blue
                     buffer.put(value); // Alpha
                 }
-            } else {
-                // no anti alising
+            } else { // no antialiasing
                 for (int y = 0; y < data.height; y++) {
                     for (int x = 0; x < data.width; x++) {
                         // Calculate the byte and bit positions in the monochrome buffer
