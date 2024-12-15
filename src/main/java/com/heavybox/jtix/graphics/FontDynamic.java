@@ -79,6 +79,9 @@ public class FontDynamic implements MemoryResource {
             this.pageSize = pageSize;
         }
 
+        // TODO: add SDF using
+        // TODO: https://stackoverflow.com/questions/71185718/how-to-use-ft-render-mode-sdf-in-freetype
+        // FT_RENDER_MODE_SDF
         public Glyph draw(char c, int size, boolean antialiasing) {
             /* if size is use for the first time, create the first texture */
             if (pages.size == 0) {
@@ -238,11 +241,6 @@ public class FontDynamic implements MemoryResource {
 
             penX += PADDING + data.width;
             return data;
-        }
-
-        // todo: inline
-        private void flipPage() {
-
         }
 
     }
