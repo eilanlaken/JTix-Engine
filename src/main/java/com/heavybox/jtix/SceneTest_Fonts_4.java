@@ -3,16 +3,14 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
-import com.heavybox.jtix.graphics.FontDynamic;
+import com.heavybox.jtix.graphics.Font;
 
 public class SceneTest_Fonts_4 implements Scene {
 
@@ -22,23 +20,24 @@ public class SceneTest_Fonts_4 implements Scene {
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
 
-    FontDynamic font;
+    Font font;
 
     String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        //Assets.loadFontStatic("assets/fonts/OpenSans-Regular-13.yml");
+        Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
 
         Assets.finishLoading();
 
-        font = new FontDynamic(fontPath);
 
     }
 
     @Override
     public void start() {
+
+        font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
 
     }
 
@@ -92,7 +91,7 @@ public class SceneTest_Fonts_4 implements Scene {
         renderer2D.begin();
 
         renderer2D.drawTextLine("Hello world", 54, font, false,0, 0);
-        renderer2D.drawTextLine("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~", 24, font, true,0, 80);
+        renderer2D.drawTextLine("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~", 12, font, true,0, 80);
 
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);

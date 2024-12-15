@@ -1,7 +1,7 @@
 package com.heavybox.jtix.z_ui_old;
 
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Font;
+import com.heavybox.jtix.z_graphics_old.Font;
 import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.graphics.Texture;
 

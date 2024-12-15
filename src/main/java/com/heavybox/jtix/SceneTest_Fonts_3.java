@@ -20,8 +20,8 @@ public class SceneTest_Fonts_3 implements Scene {
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
 
-    FontDynamic font;
-    FontDynamic.Glyph g;
+    Font font;
+    Font.Glyph g;
 
     String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
@@ -32,7 +32,7 @@ public class SceneTest_Fonts_3 implements Scene {
 
         Assets.finishLoading();
 
-        font = new FontDynamic(fontPath);
+        font = new Font(fontPath);
 
     }
 
@@ -88,7 +88,7 @@ public class SceneTest_Fonts_3 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0f,0f,0f,1);
 
-        FontDynamic.GlyphNotebook notebook = font.glyphsNotebooks.get(74);
+        Font.GlyphNotebook notebook = font.glyphsNotebooks.get(74);
         Array<Texture> textures = notebook.pages;
 
         // render font

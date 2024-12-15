@@ -34,7 +34,7 @@ public abstract class UI {
     // style
     public Color styleColorBackground;
     public Color styleColorText;
-    public Font  styleFont;
+    public Font styleFont;
     public float stylePadding;
     public float styleMargin;
 

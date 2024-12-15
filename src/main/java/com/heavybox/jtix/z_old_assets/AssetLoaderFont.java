@@ -1,7 +1,7 @@
 package com.heavybox.jtix.z_old_assets;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Font;
+import com.heavybox.jtix.z_graphics_old.Font;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Texture;
 
