@@ -21,6 +21,7 @@ public class SceneTest_Fonts_4 implements Scene {
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
 
     Font font;
+    Font font2;
 
     String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
@@ -28,6 +29,7 @@ public class SceneTest_Fonts_4 implements Scene {
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
+        Assets.loadFont("C:\\Windows\\Fonts\\ariali.ttf");
 
         Assets.finishLoading();
 
@@ -38,6 +40,7 @@ public class SceneTest_Fonts_4 implements Scene {
     public void start() {
 
         font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
+        font2 = Assets.get("C:\\Windows\\Fonts\\ariali.ttf");
 
     }
 
@@ -90,7 +93,7 @@ public class SceneTest_Fonts_4 implements Scene {
         // render font
         renderer2D.begin();
 
-        renderer2D.drawTextLine("Hello world", 54, null, true,0, 0);
+        renderer2D.drawTextLine("שלום", 54, font2, true,0, 0);
         renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
         renderer2D.drawTextLine("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~", 12, font, true,0, 80);
 

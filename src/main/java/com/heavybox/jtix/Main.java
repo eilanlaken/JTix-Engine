@@ -4,12 +4,15 @@ import com.heavybox.jtix.application.ApplicationWindowAttributes;
 import com.heavybox.jtix.application_2.AppLogger;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.ApplicationSettings;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 import com.heavybox.jtix.tools.ToolsTextureGenerator;
 
+import java.awt.*;
 import java.io.IOException;
+import java.util.Map;
 
 public class Main {
 
@@ -22,6 +25,8 @@ public class Main {
 
         }
 
+        Map<String, String> osFonts = Assets.getOSFonts();
+        System.out.println(osFonts);
         /* texture generator tests */
 //        try {
 //            TextureGenerator.generateTextureNoisePerlin(128, 128, "assets/textures", "hi", false);

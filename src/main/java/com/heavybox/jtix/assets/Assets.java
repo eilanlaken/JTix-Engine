@@ -355,7 +355,6 @@ public final class Assets {
         fileWriter.close();
     }
 
-    // TODO: change to throws AssetsException
     public static void saveImage(final String directory, final String filename, BufferedImage image) throws IOException {
         if (!directoryExists(directory)) throw new AssetsException("Directory: " + directory + " does not exist.");
         String filePath = directory + File.separator + filename + ".png";
@@ -404,31 +403,38 @@ public final class Assets {
         return buffer;
     }
 
-}
+    public static Map<String, String> getOSFonts() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        String[] fontFamilies = ge.getAvailableFontFamilyNames();
 
-/*
-public static synchronized void update() {
-        for (AssetLoadingTask task : storeLoadTasks) {
-            if (task.readyToCreate())  {
-                storeCompletedLoadTasks.add(task);
-                storeCreateTasks.add(task);
+        // Specify OS-specific font directories
+        String[] fontDirs;
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            fontDirs = new String[]{"C:\\Windows\\Fonts"};
+        } else if (os.contains("mac")) {
+            fontDirs = new String[]{"/System/Library/Fonts", "/Library/Fonts", System.getProperty("user.home") + "/Library/Fonts"};
+        } else {
+            fontDirs = new String[]{"/usr/share/fonts", "/usr/local/share/fonts", System.getProperty("user.home") + "/.fonts"};
+        }
+
+        Map<String, String> fontFamilyPaths = new HashMap<>();
+        // Search for font files in the font directories
+        for (String fontFamily : fontFamilies) {
+            for (String fontDir : fontDirs) {
+                File dir = new File(fontDir);
+                File[] fontFiles = dir.listFiles((file, name) -> name.toLowerCase().endsWith(".ttf") || name.toLowerCase().endsWith(".otf"));
+                if (fontFiles != null) {
+                    for (File fontFile : fontFiles) {
+                        if (fontFile.getName().toLowerCase().contains(fontFamily.toLowerCase())) {
+                            fontFamilyPaths.put(fontFamily, fontFile.getAbsolutePath());
+                        }
+                    }
+                }
             }
         }
-        storeLoadTasks.removeAll(storeCompletedLoadTasks);
 
-        for (AssetDescriptor descriptor : storeLoadQueue) {
-            AssetLoadingTask task = new AssetLoadingTask(descriptor);
-            task.loader.beforeLoad(descriptor.filepath, descriptor.options);
-            storeLoadTasks.add(task);
-            AsyncTaskRunner.async(task);
-        }
-        storeLoadQueue.clear();
-
-        storeCreateTasks.removeAll(storeCompletedCreateTasks);
-        for (AssetLoadingTask task : storeCreateTasks) {
-            Asset asset = task.create();
-            store.put(asset.descriptor.filepath, asset);
-            storeCompletedCreateTasks.add(task);
-        }
+        return fontFamilyPaths;
     }
- */
+
+}
