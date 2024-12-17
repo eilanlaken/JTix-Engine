@@ -1939,7 +1939,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
     // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>
-    public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y) {
+    public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
         if (font == null) font = defaultFont;
@@ -1948,14 +1948,12 @@ public class Renderer2D implements MemoryResourceHolder {
 
         /* calculate the line total width */
         float total_width = 0;
-        char prevChar = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
             if (glyph == null) continue;
             //if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
             total_width += glyph.advanceX;
-            prevChar = c;
         }
 
         /* calculate the line total height */
@@ -1977,8 +1975,8 @@ public class Renderer2D implements MemoryResourceHolder {
         float total_height = (maxAscent + maxDescent);
 
         /* render a quad for every character */
-        float penX = x - total_width * 0.5f;
-        float penY = y - total_height * 0.5f;
+        float penX = centralize ? x - total_width * 0.5f : x;
+        float penY = centralize ? y - total_height * 0.5f : y;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);

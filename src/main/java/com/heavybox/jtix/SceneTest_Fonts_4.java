@@ -102,9 +102,9 @@ public class SceneTest_Fonts_4 implements Scene {
         // render font
         renderer2D.begin();
 
-        renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
-        renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
-        renderer2D.drawTextLine(text.toString(), 14, font, true,0, 80);
+        //renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
+        //renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
+        renderer2D.drawTextLine(text.toString(), 255, font, true,0, 0, false);
 
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
