@@ -12,8 +12,11 @@ import com.heavybox.jtix.tools.ToolsTextureGenerator;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.SharedLibrary;
+import org.lwjgl.system.SharedLibraryUtil;
 import org.lwjgl.util.freetype.FT_Face;
 import org.lwjgl.util.freetype.FreeType;
+import org.lwjgl.util.harfbuzz.HarfBuzz;
 import org.lwjgl.util.harfbuzz.hb_glyph_info_t;
 import org.lwjgl.util.harfbuzz.hb_glyph_position_t;
 
@@ -80,7 +83,7 @@ public class Main {
 //        Application.launch(new ScreenLoading());
 
 
-        //if (true) return;
+
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.

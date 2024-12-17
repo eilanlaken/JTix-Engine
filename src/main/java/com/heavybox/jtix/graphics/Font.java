@@ -347,8 +347,53 @@ private static void harfbuzz() {
             FT_Done_FreeType(library);
                     } catch (Exception e) {
                     e.printStackTrace();
-            }
-    }
+                    }
+                            }
 
+
+ */
+
+/*
+simpler HB example - does not work on Hebrew or Russian, for example.
+
+private void harfbuzz_example() {
+
+long buf = hb_buffer_create();
+        hb_buffer_add_utf8(buf, "aloha", 0, "Hello".length());
+
+// If you know the direction, script, and language
+//        hb_buffer_set_direction(buf, HB_DIRECTION_LTR);
+//        hb_buffer_set_script(buf, HB_SCRIPT_LATIN);
+//        hb_buffer_set_language(buf, hb_language_from_string("en"));
+
+// If you don't know the direction, script, and language
+hb_buffer_guess_segment_properties(buf);
+
+        long blob = hb_blob_create_from_file("C:\\Windows\\Fonts\\ahronbd.ttf");
+long face = hb_face_create(blob, 0);
+long font = hb_font_create(face);
+
+hb_shape(font, buf, null);
+
+var glyph_infos = hb_buffer_get_glyph_infos(buf);
+var glyph_poses = hb_buffer_get_glyph_positions(buf);
+
+        while (glyph_infos.remaining() > 0) {
+var info = glyph_infos.get();
+            System.out.println("codepoint: " + info.codepoint());
+        }
+
+        while (glyph_poses.remaining() > 0) {
+var pos = glyph_poses.get();
+            System.out.println("codepoint: " + pos.x_advance() / 64);
+        }
+
+// tidy up
+hb_buffer_destroy(buf);
+hb_font_destroy(font);
+hb_face_destroy(face);
+hb_blob_destroy(blob);
+
+}
 
  */
