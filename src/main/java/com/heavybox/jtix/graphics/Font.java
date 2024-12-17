@@ -110,14 +110,6 @@ public class Font implements MemoryResource {
             //FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
             //FreeType.nFT_Set_Char_Size(ftFace.address(), size, size, Graphics.getWindowWidth(), Graphics.getWindowHeight());
 
-            /* get font supported characters && charset */
-            List<Character> supportedCharacters = new ArrayList<>();
-            IntBuffer intBuffer = BufferUtils.createIntBuffer(1);
-            long nextChar = FreeType.FT_Get_First_Char(ftFace, intBuffer);
-            while (nextChar != 0) {
-                supportedCharacters.add((char) nextChar);
-                nextChar = FreeType.FT_Get_Next_Char(ftFace, nextChar, intBuffer);
-            }
             /* rasterize the character */
             if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_FORCE_AUTOHINT);
             else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME);
