@@ -1976,7 +1976,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         /* render a quad for every character */
         float penX = centralize ? x - total_width * 0.5f : x;
-        float penY = centralize ? y - total_height * 0.5f : y;
+        float penY = centralize ? y - total_height * 0.5f : y - size * 0.5f;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
