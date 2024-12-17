@@ -6,6 +6,7 @@ import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
+import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,12 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
+    private final MemoryPool<Vector4>    vectors4Pool   = new MemoryPool<>(Vector4.class, 10);
     private final MemoryPool<ArrayFloat> arrayFloatPool = new MemoryPool<>(ArrayFloat.class, 20);
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
 
     /* state */
+    private final Stack<Vector4> pixelBounds  = new Stack<>(); // the head of the stack stores the current rectangle bounds for rendering as a Vector4 (x = min_x, y = min_y, z = max_x, w = max_y)
     private Matrix4x4 currentMatrix     = defaultMatrix;
     private Texture   currentTexture    = defaultTexture;
     private Shader    currentShader     = null;
@@ -141,6 +145,13 @@ public class Renderer2D implements MemoryResourceHolder {
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
+
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        while (!pixelBounds.isEmpty()) {
+            Vector4 bounds = pixelBounds.pop();
+            vectors4Pool.free(bounds);
+        }
+
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.perFrameDrawCalls = 0;
         this.currentMatrix = combined != null ? combined : defaultMatrix.setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
@@ -201,6 +212,52 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void setColor(float tintFloatBits) {
         this.currentTint = tintFloatBits;
+    }
+
+    public void pushPixelBounds(int min_x, int min_y, int max_x, int max_y) {
+        flush();
+        if (pixelBounds.isEmpty()) {
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            Vector4 newBounds = vectors4Pool.allocate();
+            newBounds.x = min_x;
+            newBounds.y = min_y;
+            newBounds.z = max_x;
+            newBounds.w = max_y;
+            pixelBounds.push(newBounds);
+        } else {
+            Vector4 currentBounds = pixelBounds.peek();
+            Vector4 newBounds = vectors4Pool.allocate();
+            newBounds.x = Math.max(min_x, currentBounds.x);
+            newBounds.y = Math.max(min_y, currentBounds.y);
+            newBounds.z = Math.min(max_x, currentBounds.z);
+            newBounds.w = Math.min(max_y, currentBounds.w);
+            pixelBounds.push(newBounds);
+        }
+
+        Vector4 currentBounds = pixelBounds.peek();
+        int x = (int) currentBounds.x;
+        int y = (int) currentBounds.y;
+        int width = (int) (currentBounds.z - currentBounds.x);
+        int height = (int) (currentBounds.w - currentBounds.y);
+        GL11.glScissor(x, y, width, height);
+    }
+
+    public void popPixelBounds() {
+        flush();
+        if (pixelBounds.isEmpty()) throw new GraphicsException("Trying to popPixelBound() without a matching pushPixelBound()");
+        Vector4 bounds = pixelBounds.pop();
+        vectors4Pool.free(bounds);
+        if (pixelBounds.isEmpty()) {
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            return;
+        }
+
+        Vector4 currentBounds = pixelBounds.peek();
+        int x = (int) currentBounds.x;
+        int y = (int) currentBounds.y;
+        int width = (int) (currentBounds.z - currentBounds.x);
+        int height = (int) (currentBounds.w - currentBounds.y);
+        GL11.glScissor(x, y, width, height);
     }
 
     /* Rendering API */

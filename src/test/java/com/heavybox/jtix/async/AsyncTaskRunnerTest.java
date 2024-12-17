@@ -2,7 +2,6 @@ package com.heavybox.jtix.async;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
-import com.heavybox.jtix.collections.ArrayFloatConcurrent;
 import com.heavybox.jtix.math.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,19 +9,17 @@ import org.junit.jupiter.api.Test;
 
 class AsyncTaskRunnerTest {
 
-    private static ArrayFloat arrayFloat  = new ArrayFloat();
-    private static ArrayFloat arrayFloat2 = new ArrayFloat();
-    private static ArrayFloatConcurrent arrayFloat3 = new ArrayFloatConcurrent();
+    private static final ArrayFloat arrayFloat  = new ArrayFloat();
+    private static final ArrayFloat arrayFloat2 = new ArrayFloat();
+    private static final ArrayFloat arrayFloat3 = new ArrayFloat();
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
         arrayFloat.clear();
         arrayFloat.add(1,2,3);
         arrayFloat.add(-1,-2,-3);
-
         arrayFloat2.clear();
         arrayFloat2.add(3,3,3);
-
         arrayFloat3.clear();
     }
 
