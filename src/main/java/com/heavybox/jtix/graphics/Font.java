@@ -10,6 +10,8 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.freetype.*;
+import org.lwjgl.util.harfbuzz.hb_glyph_info_t;
+import org.lwjgl.util.harfbuzz.hb_glyph_position_t;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.lwjgl.util.harfbuzz.HarfBuzz.*;
 
 public class Font implements MemoryResource {
 
@@ -97,7 +101,10 @@ public class Font implements MemoryResource {
             }
 
             /* set the face size */
-            FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
+            FreeType.FT_Set_Pixel_Sizes(ftFace, size, size);
+            //FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
+            //FreeType.nFT_Set_Char_Size(ftFace.address(), size, size, Graphics.getWindowWidth(), Graphics.getWindowHeight());
+
             /* get font supported characters && charset */
             List<Character> supportedCharacters = new ArrayList<>();
             IntBuffer intBuffer = BufferUtils.createIntBuffer(1);

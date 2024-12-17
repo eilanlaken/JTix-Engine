@@ -93,7 +93,7 @@ public class SceneTest_Fonts_4 implements Scene {
         // render font
         renderer2D.begin();
 
-        renderer2D.drawTextLine("שלום", 54, font2, true,0, 0);
+        renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
         renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
         renderer2D.drawTextLine("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~", 12, font, true,0, 80);
 

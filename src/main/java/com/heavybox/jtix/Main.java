@@ -25,8 +25,6 @@ public class Main {
 
         }
 
-        Map<String, String> osFonts = Assets.getOSFonts();
-        System.out.println(osFonts);
         /* texture generator tests */
 //        try {
 //            TextureGenerator.generateTextureNoisePerlin(128, 128, "assets/textures", "hi", false);

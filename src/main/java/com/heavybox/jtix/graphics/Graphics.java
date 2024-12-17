@@ -11,8 +11,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.Library;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.util.freetype.FreeType;
+import org.lwjgl.util.harfbuzz.HarfBuzz;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -380,4 +382,5 @@ public final class Graphics {
         freeType = libPointerBuffer.get(0);
         return freeType;
     }
+
 }
