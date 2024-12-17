@@ -22,6 +22,11 @@ import java.util.Map;
 
 import static org.lwjgl.util.harfbuzz.HarfBuzz.*;
 
+/*
+TODO:
+harfbuzz example:
+https://github.com/tangrams/harfbuzz-example/blob/master/src/main.cpp
+ */
 public class Font implements MemoryResource {
 
 
@@ -271,3 +276,79 @@ public class Font implements MemoryResource {
     }
 
 }
+
+/*
+HarfBuzz non-working example:
+
+private static void harfbuzz() {
+
+        try {
+            // Step 1: Initialize FreeType
+            PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
+            FreeType.FT_Init_FreeType(libPointerBuffer);
+            long library = libPointerBuffer.get(0);
+
+            // Load the font file
+            String fontPath = "C:\\Windows\\Fonts\\ahronbd.ttf"; // Update to your font file
+            PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
+            System.out.println("hi1");
+            ByteBuffer fontDataBuffer = Assets.fileToByteBuffer(fontPath);
+            if (FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer) != 0) {
+                throw new RuntimeException("Failed to load font");
+            }
+            long face = facePointerBuffer.get(0);
+            FT_Face ftFace = FT_Face.create(face);
+            System.out.println("hi2");
+
+            // Set font size
+            FT_Set_Char_Size(ftFace, 0, 16 * 64, 96, 96);
+            System.out.println("hi");
+            // Step 2: Initialize HarfBuzz
+
+            System.out.println("bye");
+
+
+            long hbBuffer = hb_buffer_create(); // Create HarfBuzz buffer
+            long blob = hb_blob_create_from_file("C:\\Windows\\Fonts\\ahronbd.ttf"); /* or hb_blob_create_from_file_or_fail()
+            long hb_face = hb_face_create(blob, 0);
+            long hb_font = hb_font_create(hb_face);
+
+            // Step 3: Add text to buffer
+            String text = "bbb bbb"; // Hebrew text
+            hb_buffer_add_utf8(hbBuffer, text, 0, text.length());
+            hb_buffer_set_direction(hbBuffer, HB_DIRECTION_RTL); // Set RTL direction
+            hb_buffer_set_script(hbBuffer, HB_SCRIPT_HEBREW);    // Set script
+            hb_buffer_set_language(hbBuffer, hb_language_from_string("he")); // Hebrew language
+
+            // Step 4: Shape the text
+            hb_shape(hb_font, hbBuffer, null);
+
+            // Step 5: Retrieve shaped glyphs
+            int glyphCount = hb_buffer_get_length(hbBuffer);
+            hb_glyph_info_t.Buffer glyphInfos = hb_buffer_get_glyph_infos(hbBuffer);
+            hb_glyph_position_t.Buffer glyphPositions = hb_buffer_get_glyph_positions(hbBuffer);
+
+                        System.out.println("Shaped Glyphs:");
+                        for (int i = 0; i < glyphCount; i++) {
+            hb_glyph_info_t glyphInfo = glyphInfos.get(i);
+            hb_glyph_position_t glyphPos = glyphPositions.get(i);
+
+                            System.out.printf("Glyph %d: ID=%d, xAdvance=%d, xOffset=%d%n",
+                                              i,
+                                              glyphInfo.codepoint(),
+                                    glyphPos.x_advance() / 64, // Divide to convert from 26.6 fixed-point
+                    glyphPos.x_offset() / 64);
+                    }
+
+            // Cleanup
+            hb_buffer_destroy(hbBuffer);
+            hb_font_destroy(hb_font);
+            FT_Done_Face(ftFace);
+            FT_Done_FreeType(library);
+                    } catch (Exception e) {
+                    e.printStackTrace();
+            }
+    }
+
+
+ */

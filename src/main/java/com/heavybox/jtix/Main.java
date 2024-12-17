@@ -9,10 +9,23 @@ import com.heavybox.jtix.async.AsyncTask;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.tools.ToolsFontGenerator;
 import com.heavybox.jtix.tools.ToolsTextureGenerator;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.util.freetype.FT_Face;
+import org.lwjgl.util.freetype.FreeType;
+import org.lwjgl.util.harfbuzz.hb_glyph_info_t;
+import org.lwjgl.util.harfbuzz.hb_glyph_position_t;
 
 import java.awt.*;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
+
+import static org.lwjgl.util.freetype.FreeType.*;
+import static org.lwjgl.util.harfbuzz.HarfBuzz.*;
 
 public class Main {
 
@@ -66,6 +79,7 @@ public class Main {
 //        Application.create();
 //        Application.launch(new ScreenLoading());
 
+
         //if (true) return;
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
@@ -73,5 +87,7 @@ public class Main {
         Application.launch(new SceneTest_Fonts_4());
 
     }
+
+
 
 }

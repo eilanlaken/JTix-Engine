@@ -29,7 +29,7 @@ public class SceneTest_Fonts_4 implements Scene {
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
-        Assets.loadFont("C:\\Windows\\Fonts\\ariali.ttf");
+        Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
 
         Assets.finishLoading();
 
@@ -40,7 +40,7 @@ public class SceneTest_Fonts_4 implements Scene {
     public void start() {
 
         font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
-        font2 = Assets.get("C:\\Windows\\Fonts\\ariali.ttf");
+        font2 = Assets.get("C:\\Windows\\Fonts\\ahronbd.ttf");
 
     }
 
