@@ -1953,7 +1953,7 @@ public class Renderer2D implements MemoryResourceHolder {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
             if (glyph == null) continue;
-            if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
+            //if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
             total_width += glyph.advanceX;
             prevChar = c;
         }
@@ -1979,15 +1979,12 @@ public class Renderer2D implements MemoryResourceHolder {
         /* render a quad for every character */
         float penX = x - total_width * 0.5f;
         float penY = y - total_height * 0.5f;
-        prevChar = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
             if (glyph == null) continue;
 
             setTexture(glyph.texture);
-
-            if (prevChar != 0) penX += glyph.kernings.getOrDefault(prevChar,0);
 
             /* calculate the quad's x, y, width, height */
             float char_x = penX + glyph.bearingX;
@@ -2030,7 +2027,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
             penX += glyph.advanceX;
             penY += glyph.advanceY;
-            prevChar = c;
         }
     }
 

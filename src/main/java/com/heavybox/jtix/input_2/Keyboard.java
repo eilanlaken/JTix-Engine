@@ -3,6 +3,7 @@ package com.heavybox.jtix.input_2;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCharCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
 public final class Keyboard {
@@ -11,6 +12,8 @@ public final class Keyboard {
     private final ArrayInt keysPressed = new ArrayInt(12);
     private final ArrayInt keysHeld = new ArrayInt(12);
     private final ArrayInt keysJustPressed = new ArrayInt(12);
+
+    private final ArrayInt codepointPressed = new ArrayInt(false, 5);
 
     Keyboard() {
 
@@ -39,6 +42,15 @@ public final class Keyboard {
                 }
             }
         });
+
+        // Set the character callback
+        GLFW.glfwSetCharCallback(Application.getWindowHandle(), new GLFWCharCallback() {
+            @Override
+            public void invoke(long window, int codepoint) {
+                //System.out.printf("Codepoint: U+%04X, Character: %c%n", codepoint, (char) codepoint);
+                codepointPressed.add(codepoint);
+            }
+        });
     }
 
     public boolean isKeyPressed(final Key key) {
@@ -61,9 +73,15 @@ public final class Keyboard {
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
+    public ArrayInt getCodepointPressed() {
+        return codepointPressed;
+    }
+
     void update() {
         /* reset internal state */
         keysJustPressed.clear();
+
+        codepointPressed.clear();
     }
 
     public enum Key {

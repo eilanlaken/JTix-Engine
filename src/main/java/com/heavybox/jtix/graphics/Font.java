@@ -78,7 +78,7 @@ public class Font implements MemoryResource {
         }
     }
 
-    public final class GlyphNotebook {
+    private final class GlyphNotebook {
 
         private static final int PADDING = 5;
 
@@ -95,7 +95,7 @@ public class Font implements MemoryResource {
         // TODO: add SDF using
         // TODO: https://stackoverflow.com/questions/71185718/how-to-use-ft-render-mode-sdf-in-freetype
         // TODO: FT_RENDER_MODE_SDF
-        public Glyph draw(char c, int size, boolean antialiasing) {
+        private Glyph draw(char c, int size, boolean antialiasing) {
             /* if size is use for the first time, create the first texture */
             if (pages.size == 0) {
                 ByteBuffer bufferEmpty = ByteBuffer.allocateDirect(pageSize * pageSize * 4);
@@ -137,15 +137,6 @@ public class Font implements MemoryResource {
             data.bearingY = glyphSlot.bitmap_top();
             data.advanceX = glyphSlot.advance().x() >> 6; // FreeType gives the advance in x64 units, so we divide by 64.
             data.advanceY = glyphSlot.advance().y() >> 6; // FreeType gives the advance in x64 units, so we divide by 64.
-            data.kernings = new HashMap<>();
-            FT_Vector kerningVector = FT_Vector.malloc();
-            for (char rightChar : supportedCharacters) {
-                int result = FreeType.FT_Get_Kerning(ftFace, c, rightChar, FreeType.FT_KERNING_DEFAULT, kerningVector);
-                if (result == 0) continue;
-                int kerningValue = (int) kerningVector.x() >> 6;
-                data.kernings.put(rightChar, kerningValue);
-            }
-            kerningVector.free();
 
             /* get the bitmap ByteBuffer and create our own RGBA byte buffer (for antialiased fonts) */
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
@@ -260,18 +251,17 @@ public class Font implements MemoryResource {
 
     }
 
-    public static final class Glyph {
+    static final class Glyph {
 
-        public Texture                 texture;
-        public int                     width;
-        public int                     height;
-        public float                   bearingX;
-        public float                   bearingY;
-        public float                   advanceX;
-        public float                   advanceY;
-        public int                     atlasX;
-        public int                     atlasY;
-        public Map<Character, Integer> kernings;
+        public Texture texture;
+        public int     width;
+        public int     height;
+        public float   bearingX;
+        public float   bearingY;
+        public float   advanceX;
+        public float   advanceY;
+        public int     atlasX;
+        public int     atlasY;
 
     }
 

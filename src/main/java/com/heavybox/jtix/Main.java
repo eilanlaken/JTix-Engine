@@ -35,11 +35,11 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        try {
-            //ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
-        } catch (Exception e) {
-
-        }
+//        try {
+//            //ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
+//        } catch (Exception e) {
+//
+//        }
 
         /* texture generator tests */
 //        try {

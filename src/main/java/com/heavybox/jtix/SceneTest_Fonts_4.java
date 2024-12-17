@@ -3,6 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input_2.Input;
@@ -47,12 +48,20 @@ public class SceneTest_Fonts_4 implements Scene {
     float scale = 1;
     int index = 0;
 
+    StringBuffer text = new StringBuffer();
+
     @Override
     public void update() {
 
         Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
 
+        }
+
+        ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
+        for (int i = 0; i < codepointsPressed.size; i++) {
+            int codepoint = codepointsPressed.get(i);
+            text.append((char)  codepoint);
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
@@ -95,7 +104,7 @@ public class SceneTest_Fonts_4 implements Scene {
 
         renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
         renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
-        renderer2D.drawTextLine("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~", 12, font, true,0, 80);
+        renderer2D.drawTextLine(text.toString(), 14, font, true,0, 80);
 
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
