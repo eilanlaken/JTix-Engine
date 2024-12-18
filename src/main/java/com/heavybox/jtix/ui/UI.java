@@ -13,14 +13,17 @@ import java.util.function.Consumer;
 
 public abstract class UI {
 
-    private static int uiCount = 0;
+    private static int uiCount = 0; // TODO: why do I need this?
 
     protected UIContainer container;
     public final int id;
     public float x, y, deg, sclX, sclY;
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
-    protected Vector2 min = new Vector2();
-    protected Vector2 max = new Vector2();
+
+    protected int min_x;
+    protected int min_y;
+    protected int max_x;
+    protected int max_y;
 
     // common attributes
     public boolean visible = true;
@@ -37,6 +40,8 @@ public abstract class UI {
     public Font styleFont;
     public float stylePadding;
     public float styleMargin;
+    public Styles.Overflow styleOverflow;
+    public int styleFontSize = 18;
 
     protected UI(float x, float y, float deg, float sclX, float sclY, float[] bounds) {
         this.id = uiCount;
@@ -71,10 +76,10 @@ public abstract class UI {
             bounds[i + 1] = vertex.y;
 
             // update bounding box
-            min.x = Math.min(min.x, vertex.x);
-            min.y = Math.min(min.y, vertex.y);
-            max.x = Math.max(max.x, vertex.x);
-            max.y = Math.max(max.y, vertex.y);
+            min_x = (int) Math.min(min_x, vertex.x);
+            min_y = (int) Math.min(min_y, vertex.y);
+            max_x = (int) Math.max(max_x, vertex.x);
+            max_y = (int) Math.max(max_y, vertex.y);
         }
     }
 
@@ -91,11 +96,11 @@ public abstract class UI {
     }
 
     public float getWidth() {
-        return Math.abs(max.x - min.x);
+        return Math.abs(max_x - min_x);
     }
 
     public float getHeight() {
-        return Math.abs(max.y - min.y);
+        return Math.abs(max_y - min_y);
     }
 
     private void updateInternal() {

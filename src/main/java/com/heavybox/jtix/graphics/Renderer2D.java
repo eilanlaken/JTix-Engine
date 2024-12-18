@@ -1990,7 +1990,25 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     // TODO, maybe.
-    public void drawTextBlock() {
+    public void drawTextBlock(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
+
+        /* calculate the line total height */
+        float maxAscent = 0;
+        float maxDescent = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+
+            // Update ascent (distance from baseline to top of glyph)
+            float ascent = glyph.bearingY;
+            if (ascent > maxAscent) maxAscent = ascent;
+
+            // Update descent (distance below baseline)
+            float descent = (glyph.height - glyph.bearingY);
+            if (descent > maxDescent) maxDescent = descent;
+        }
+        float total_height = (maxAscent + maxDescent);
 
     }
 
@@ -2013,27 +2031,9 @@ public class Renderer2D implements MemoryResourceHolder {
             total_width += glyph.advanceX;
         }
 
-        /* calculate the line total height */
-        float maxAscent = 0;
-        float maxDescent = 0;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
-            if (glyph == null) continue;
-
-            // Update ascent (distance from baseline to top of glyph)
-            float ascent = glyph.bearingY;
-            if (ascent > maxAscent) maxAscent = ascent;
-
-            // Update descent (distance below baseline)
-            float descent = (glyph.height - glyph.bearingY);
-            if (descent > maxDescent) maxDescent = descent;
-        }
-        float total_height = (maxAscent + maxDescent);
-
         /* render a quad for every character */
         float penX = centralize ? x - total_width * 0.5f : x;
-        float penY = centralize ? y - total_height * 0.5f : y - size * 0.5f;
+        float penY = y - size * 0.5f;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);

@@ -18,7 +18,7 @@ public class UIButton extends UI {
         renderer2D.setColor(styleColorBackground);
         renderer2D.drawPolygonFilled(bounds); // bounds are already transformed.
         renderer2D.setColor(styleColorText);
-        renderer2D.drawTextLine(text, 24, styleFont, true, x, y, true);
+        renderer2D.drawTextLine(text, styleFontSize, styleFont, true, x, y, true);
     }
 
 }

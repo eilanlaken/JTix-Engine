@@ -22,7 +22,7 @@ public final class Styles {
 
     }
 
-    public enum OverflowContentBehavior {
+    public enum Overflow {
         DO_NOTHING,
         RESIZE_TO_FIT,
         TRUNCATE,

@@ -46,9 +46,24 @@ public abstract class UIContainer extends UI {
 
     @Override
     public void render(Renderer2D renderer2D) {
-        renderContainer(renderer2D); // use scissor test here
-        for (UI ui : contents) {
-            ui.render(renderer2D);
+        if (styleOverflow == Styles.Overflow.TRUNCATE) {
+            renderContainer(renderer2D);
+            renderer2D.pushPixelBounds(min_x, min_y, max_x, max_y);
+            for (UI ui : contents) {
+                ui.render(renderer2D);
+            }
+            renderer2D.popPixelBounds();
+        } else if (styleOverflow == Styles.Overflow.DO_NOTHING) {
+            renderContainer(renderer2D);
+            for (UI ui : contents) {
+                ui.render(renderer2D);
+            }
+        } else if (styleOverflow == Styles.Overflow.RESIZE_TO_FIT) {
+            renderContainer(renderer2D);
+            // TODO...
+        } else if (styleOverflow == Styles.Overflow.TRUNCATE_WITH_SCROLLBAR) {
+            renderContainer(renderer2D);
+            // TODO...
         }
     }
 
