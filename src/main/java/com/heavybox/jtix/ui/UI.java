@@ -34,14 +34,7 @@ public abstract class UI {
     public BiConsumer<UI, Mouse.Button> onMousePress = (ui, btn) -> {};
     public BiConsumer<UI, Mouse.Button> onMouseRelease = (ui, btn) -> {};
 
-    // style
-    public Color styleColorBackground;
-    public Color styleColorText;
-    public Font styleFont;
-    public float stylePadding;
-    public float styleMargin;
-    public Styles.Overflow styleOverflow;
-    public int styleFontSize = 18;
+    public Style style = new Style();
 
     protected UI(float x, float y, float deg, float sclX, float sclY, float[] bounds) {
         this.id = uiCount;
