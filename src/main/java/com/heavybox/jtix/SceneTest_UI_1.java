@@ -122,12 +122,25 @@ public class SceneTest_UI_1 implements Scene {
         renderer2D.setColor(Color.WHITE);
         renderer2D.drawCircleFilled(15,40,0,0,0,1,1);
 
-        renderer2D.setColor(Color.RED);
-        renderer2D.drawTextLine(text.toString(), 64, null, true,0, 0, false);
+
 
         renderer2D.setColor(0.090f, 0.090f, 0.090f,1);
-        renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,0,20,0,0,0,1,1);
+        //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
+        renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,
+                0,
+                0,
+                0,
+                0,
 
+                1,
+                2,
+                20,
+                2,
+
+                0,0,0,1,1);
+
+        renderer2D.setColor(Color.RED);
+        renderer2D.drawTextLine(text.toString(), 64, null, true,0, 0, false);
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
 //        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);

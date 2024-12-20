@@ -1083,6 +1083,90 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement * 4;
     }
 
+    public void drawRectangleFilled(float width, float height,
+                                    float cornerRadiusTopLeft,
+                                    float cornerRadiusTopRight,
+                                    float cornerRadiusBottomRight,
+                                    float cornerRadiusBottomLeft,
+                                    int refinementTopLeft,
+                                    int refinementTopRight,
+                                    int refinementBottomRight,
+                                    int refinementBottomLeft,
+                                    float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinementTopLeft = Math.max(2, refinementTopLeft);
+        refinementTopRight = Math.max(2, refinementTopRight);
+        refinementBottomRight = Math.max(2, refinementBottomRight);
+        refinementBottomLeft = Math.max(2, refinementBottomLeft);
+        int maxRefinement = (int) MathUtils.max(refinementTopLeft, refinementTopRight, refinementBottomRight, refinementBottomLeft);
+        if (!ensureCapacity(maxRefinement, maxRefinement * 3)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(defaultTexture);
+
+        float widthHalf  = width  * scaleX * 0.5f;
+        float heightHalf = height * scaleY * 0.5f;
+        float da = 90.0f / (refinementTopLeft - 1);
+
+        Vector2 corner = vectors2Pool.allocate();
+        // add upper left corner vertices
+        for (int i = 0; i < refinementTopLeft; i++) {
+            corner.set(-cornerRadiusTopLeft, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < refinementTopRight; i++) {
+            corner.set(0, cornerRadiusTopRight);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < refinementBottomRight; i++) {
+            corner.set(cornerRadiusBottomRight, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < refinementBottomLeft; i++) {
+            corner.set(0, -cornerRadiusBottomLeft);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        int totalRefinement = refinementTopLeft + refinementTopRight
+                + refinementBottomRight + refinementBottomLeft;
+        for (int i = 0; i < (totalRefinement) - 2; i++) {
+            indices.put(startVertex);
+            indices.put(startVertex + i + 1);
+            indices.put(startVertex + i + 2);
+        }
+
+        vectors2Pool.free(corner);
+        vertexIndex += totalRefinement;
+    }
+
     public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float angleDeg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(8, 24)) flush();

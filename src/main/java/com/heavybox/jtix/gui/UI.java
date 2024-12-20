@@ -3,8 +3,6 @@ package com.heavybox.jtix.gui;
 
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input_2.Mouse;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -12,9 +10,9 @@ import java.util.function.Consumer;
 public abstract class UI {
 
     private static int uiCount = 0; // TODO: why do I need this?
+    public final int id;
 
     protected UIContainer container;
-    public final int id;
 
     protected int min_x;
     protected int min_y;
@@ -33,6 +31,13 @@ public abstract class UI {
     public Style style = new Style();
 
     public String text;
+
+    // calculated transform and size
+    float x;
+    float y;
+    float deg;
+    float width;
+    float height;
 
     protected UI() {
         this.id = uiCount;
@@ -61,6 +66,25 @@ public abstract class UI {
         return Math.abs(max_y - min_y);
     }
 
+
+    public void update() {
+        /* calculate width and height */
+        if (style.shape != null) {
+            if (style.shape.length < 6) throw new GUIException("Bad formatted style.shape: should be a flat array [x0,y0,  x1,y1,  x2,y2,  ...] " + "of polygon vertices, and include at least 6 values. Got: style.shape.length = " + style.shape.length);
+            if (style.shape.length % 2 != 0) throw new GUIException("Bad formatted style.shape: should be a flat array [x0,y0,  x1,y1,  x2,y2,  ...] " + "of polygon vertices, and include an EVEN number of values. Got: style.shape.length = " + style.shape.length);
+
+        }
+        /* calculate transform */
+        if (style.position == Style.Position.IMPLICIT) {
+
+            return;
+        }
+
+        if (style.position == Style.Position.EXPLICIT) {
+
+            return;
+        }
+    }
 
 
 

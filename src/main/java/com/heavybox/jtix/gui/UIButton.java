@@ -5,7 +5,6 @@ import com.heavybox.jtix.graphics.Renderer2D;
 public class UIButton extends UI {
 
     /* attributes */
-    public String text;
     public boolean enabled = true;
 
     public UIButton(String text) {
