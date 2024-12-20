@@ -1,4 +1,4 @@
-package com.heavybox.jtix.ui;
+package com.heavybox.jtix.gui;
 
 import com.heavybox.jtix.graphics.Renderer2D;
 
@@ -8,8 +8,7 @@ public class UIButton extends UI {
     public String text;
     public boolean enabled = true;
 
-    public UIButton(float x, float y, float[] bounds, String text) {
-        super(x, y, 0, 1, 1, bounds);
+    public UIButton(String text) {
         this.text = text;
     }
 
@@ -18,7 +17,7 @@ public class UIButton extends UI {
         renderer2D.setColor(style.backgroundColor);
         renderer2D.drawPolygonFilled(bounds); // bounds are already transformed.
         renderer2D.setColor(style.textColor);
-        renderer2D.drawTextLine(text, style.fontSize, style.font, true, x, y, true);
+        renderer2D.drawTextLine(text, style.fontSize, style.font, true, style.x, style.y, true);
     }
 
 }

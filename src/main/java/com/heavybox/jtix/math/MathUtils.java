@@ -1227,6 +1227,8 @@ public final class MathUtils {
         polygonTriangulate(polygon.items, outVertices, outIndices);
     }
 
+
+
     public static boolean polygonContainsPoint(float[] polygon, float px, float py) {
         if (polygon.length < 6) throw new MathException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new MathException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even. Got: " + polygon.length);

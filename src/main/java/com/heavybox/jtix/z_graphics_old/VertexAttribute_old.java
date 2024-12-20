@@ -1,4 +1,4 @@
-package com.heavybox.jtix.graphics;
+package com.heavybox.jtix.z_graphics_old;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;

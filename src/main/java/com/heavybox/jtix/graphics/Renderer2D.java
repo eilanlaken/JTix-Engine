@@ -26,6 +26,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -1989,30 +1990,12 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 3;
     }
 
-    // TODO, maybe.
-    public void drawTextBlock(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
+    /* Rendering 2D primitives - Strings */
 
-        /* calculate the line total height */
-        float maxAscent = 0;
-        float maxDescent = 0;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
-            if (glyph == null) continue;
-
-            // Update ascent (distance from baseline to top of glyph)
-            float ascent = glyph.bearingY;
-            if (ascent > maxAscent) maxAscent = ascent;
-
-            // Update descent (distance below baseline)
-            float descent = (glyph.height - glyph.bearingY);
-            if (descent > maxDescent) maxDescent = descent;
-        }
-        float total_height = (maxAscent + maxDescent);
-
+    public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, float deg) {
+        // TODO
     }
 
-    /* Rendering 2D primitives - Strings */
     // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>
     public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
@@ -2027,13 +2010,12 @@ public class Renderer2D implements MemoryResourceHolder {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
             if (glyph == null) continue;
-            //if (prevChar != 0) total_width += glyph.kernings.getOrDefault(prevChar,0);
             total_width += glyph.advanceX;
         }
 
         /* render a quad for every character */
         float penX = centralize ? x - total_width * 0.5f : x;
-        float penY = y - size * 0.5f;
+        float penY = centralize ? y - size * 0.25f : y - size * 0.5f;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
@@ -2083,6 +2065,29 @@ public class Renderer2D implements MemoryResourceHolder {
             penX += glyph.advanceX;
             penY += glyph.advanceY;
         }
+    }
+
+    // TODO, maybe.
+    public void drawTextBlock(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
+
+        /* calculate the line total height */
+        float maxAscent = 0;
+        float maxDescent = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+
+            // Update ascent (distance from baseline to top of glyph)
+            float ascent = glyph.bearingY;
+            if (ascent > maxAscent) maxAscent = ascent;
+
+            // Update descent (distance below baseline)
+            float descent = (glyph.height - glyph.bearingY);
+            if (descent > maxDescent) maxDescent = descent;
+        }
+        float total_height = (maxAscent + maxDescent);
+
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
@@ -2246,6 +2251,21 @@ public class Renderer2D implements MemoryResourceHolder {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /* auxiliary methods */
+
+    // TODO: see if it belongs here.
+    public float getTextLineWidth(Font font, final String text, int size, boolean antialiasing) {
+        font = Objects.requireNonNullElse(font, defaultFont);
+        float total_width = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+            total_width += glyph.advanceX;
+        }
+        return total_width;
     }
 
 }

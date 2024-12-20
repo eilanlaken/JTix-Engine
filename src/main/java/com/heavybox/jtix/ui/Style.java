@@ -2,12 +2,14 @@ package com.heavybox.jtix.ui;
 
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
+import com.heavybox.jtix.graphics.Texture;
 
 public class Style {
 
     // style - let's start with styling a round button
-    public Color colorBackground;
-    public Color colorText;
+    public Color backgroundColor;
+    public Texture backgroundImage;
+    public Color textColor;
     public Overflow overflow;
     public Font font;
     public int fontSize = 18;
@@ -21,7 +23,6 @@ public class Style {
         DO_NOTHING,
         RESIZE_TO_FIT,
         TRUNCATE,
-        TRUNCATE_WITH_SCROLLBAR
     }
 
 }

@@ -1,8 +1,6 @@
-package com.heavybox.jtix.ui;
+package com.heavybox.jtix.gui;
 
 
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.MathUtils;
@@ -17,7 +15,6 @@ public abstract class UI {
 
     protected UIContainer container;
     public final int id;
-    public float x, y, deg, sclX, sclY;
     protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
 
     protected int min_x;
@@ -38,17 +35,8 @@ public abstract class UI {
 
     public String text;
 
-    protected UI(float x, float y, float deg, float sclX, float sclY, float[] bounds) {
+    protected UI() {
         this.id = uiCount;
-        this.x = x;
-        this.y = y;
-        this.deg = deg;
-        this.sclX = sclX;
-        this.sclY = sclY;
-
-
-        this.bounds = bounds;
-        updateBounds();
         uiCount++;
     }
 
@@ -64,9 +52,9 @@ public abstract class UI {
             float poly_y = bounds[i + 1];
 
             vertex.set(poly_x, poly_y);
-            vertex.scl(sclX, sclY);
-            vertex.rotateDeg(deg);
-            vertex.add(x, y);
+            vertex.scl(style.sclX, style.sclY);
+            vertex.rotateDeg(style.deg);
+            vertex.add(style.x, style.y);
             bounds[i] = vertex.x;
             bounds[i + 1] = vertex.y;
 
@@ -107,7 +95,7 @@ public abstract class UI {
 
     // will render the background according to the styling applied
     public void renderBackground(Renderer2D renderer2D) {
-
+        
     }
 
     public abstract void render(Renderer2D renderer2D);

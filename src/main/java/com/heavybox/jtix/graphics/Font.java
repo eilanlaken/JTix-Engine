@@ -82,11 +82,12 @@ public class Font implements MemoryResource {
 
         private static final int PADDING = 5;
 
+        private int penX           = PADDING;
+        private int penY           = PADDING;
+        private int maxGlyphHeight = 0;
+
+        public  final Array<Texture> pages = new Array<>(true,1);
         private final int            pageSize;
-        private       int            penX           = PADDING;
-        private       int            penY           = PADDING;
-        private       int            maxGlyphHeight = 0;
-        public  final Array<Texture> pages          = new Array<>(true,1);
 
         private GlyphNotebook(int pageSize) {
             this.pageSize = pageSize;

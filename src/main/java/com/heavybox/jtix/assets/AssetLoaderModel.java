@@ -7,6 +7,7 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryUtils;
+import com.heavybox.jtix.z_graphics_old.*;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;

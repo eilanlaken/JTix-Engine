@@ -1,5 +1,6 @@
-package com.heavybox.jtix.graphics;
+package com.heavybox.jtix.z_graphics_old;
 
+import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.memory.MemoryResource;
 
 public class ModelPart implements MemoryResource {

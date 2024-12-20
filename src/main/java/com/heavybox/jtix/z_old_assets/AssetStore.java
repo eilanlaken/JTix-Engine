@@ -4,7 +4,7 @@ import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Queue;
 import com.heavybox.jtix.z_graphics_old.Font;
-import com.heavybox.jtix.graphics.Model;
+import com.heavybox.jtix.z_graphics_old.Model;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.memory.MemoryResource;

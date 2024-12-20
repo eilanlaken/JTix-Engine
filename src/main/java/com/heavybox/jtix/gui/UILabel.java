@@ -1,4 +1,4 @@
-package com.heavybox.jtix.ui;
+package com.heavybox.jtix.gui;
 
 public class UILabel {
 
