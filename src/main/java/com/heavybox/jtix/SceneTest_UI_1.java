@@ -108,7 +108,7 @@ public class SceneTest_UI_1 implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0f,0f,0f,1);
+        GL11.glClearColor(0.129f, 0.129f, 0.129f,1);
 
 
         // render font
@@ -124,6 +124,9 @@ public class SceneTest_UI_1 implements Scene {
 
         renderer2D.setColor(Color.RED);
         renderer2D.drawTextLine(text.toString(), 64, null, true,0, 0, false);
+
+        renderer2D.setColor(0.090f, 0.090f, 0.090f,1);
+        renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,0,20,0,0,0,1,1);
 
 
 //        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);

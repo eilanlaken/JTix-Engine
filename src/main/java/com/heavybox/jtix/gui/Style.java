@@ -26,9 +26,12 @@ public class Style {
     public int borderRadius = 0;
     public float transitionSeconds = 0;
 
+    // width and height - ?
+    public float width;
+    public float height;
+
     public enum Overflow {
         DO_NOTHING,
-        RESIZE_TO_FIT,
         TRUNCATE,
     }
 
@@ -40,8 +43,13 @@ public class Style {
     }
 
     public enum Position {
-        IMPLICIT,  // positioned by its container layout. If the container is null, then behaves like EXPLICIT
+        IMPLICIT,  // positioned by its container layout, ignoring x, y, deg, scaleX and scaleY. If the container is null, then behaves like EXPLICIT
         EXPLICIT,  // positioned x, y, deg relative to its container's center
+    }
+
+    public enum Size {
+        FIXED,
+        FLEXIBLE,
     }
 
 }

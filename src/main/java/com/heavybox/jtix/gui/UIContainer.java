@@ -59,9 +59,6 @@ public abstract class UIContainer extends UI {
             for (UI ui : contents) {
                 ui.render(renderer2D);
             }
-        } else if (style.overflow == Style.Overflow.RESIZE_TO_FIT) {
-            renderContainer(renderer2D);
-            // TODO...
         }
     }
 

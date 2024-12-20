@@ -15,7 +15,6 @@ public abstract class UI {
 
     protected UIContainer container;
     public final int id;
-    protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
 
     protected int min_x;
     protected int min_y;
@@ -40,10 +39,42 @@ public abstract class UI {
         uiCount++;
     }
 
-    // tests if the "Pointer" (mouse curse, controller marker, tap-finger etc.) is within the bounds of the UI element.
+    public abstract void render(Renderer2D renderer2D);
+
+    public boolean belongsTo(UIContainer container) {
+        if (container.contents.contains(this)) return true;
+        boolean result = false;
+        for (UI child : container.contents) {
+            if (child instanceof UIContainer) {
+                UIContainer childContainer = (UIContainer) child;
+                result = result || belongsTo(childContainer);
+            }
+        }
+        return result;
+    }
+
+    public float getWidth() {
+        return Math.abs(max_x - min_x);
+    }
+
+    public float getHeight() {
+        return Math.abs(max_y - min_y);
+    }
+
+
+
+
+
+}
+
+/*
+
+// tests if the "Pointer" (mouse curse, controller marker, tap-finger etc.) is within the bounds of the UI element.
     public boolean pointerInBounds(float x, float y) {
         return MathUtils.polygonContainsPoint(bounds, x, y);
     }
+
+    protected float[] bounds; // represent the flat [x0,y0, x1,y1, ...] polygon that bounds the UI element.
 
     private void updateBounds() {
         Vector2 vertex = new Vector2();
@@ -66,40 +97,4 @@ public abstract class UI {
         }
     }
 
-    public boolean belongsTo(UIContainer container) {
-        if (container.contents.contains(this)) return true;
-        boolean result = false;
-        for (UI child : container.contents) {
-            if (child instanceof UIContainer) {
-                UIContainer childContainer = (UIContainer) child;
-                result = result || belongsTo(childContainer);
-            }
-        }
-        return result;
-    }
-
-    public float getWidth() {
-        return Math.abs(max_x - min_x);
-    }
-
-    public float getHeight() {
-        return Math.abs(max_y - min_y);
-    }
-
-    private void updateInternal() {
-        // TODO ...
-        update();
-    }
-
-    public void update() {}
-
-    // will render the background according to the styling applied
-    public void renderBackground(Renderer2D renderer2D) {
-        
-    }
-
-    public abstract void render(Renderer2D renderer2D);
-
-
-
-}
+ */
