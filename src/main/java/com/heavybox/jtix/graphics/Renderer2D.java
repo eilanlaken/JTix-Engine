@@ -563,7 +563,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 4;
     }
 
-    /* Rendering 2D primitives - circles */
+    /* Rendering 2D primitives - Circles */
 
     public void drawCircleThin(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
@@ -1083,7 +1083,8 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement * 4;
     }
 
-    public void drawRectangleFilled(float width, float height,
+    // TODO
+    public void drawRectangleFilled(float width, float height, Texture texture,
                                     float cornerRadiusTopLeft,
                                     float cornerRadiusTopRight,
                                     float cornerRadiusBottomRight,
@@ -1102,7 +1103,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(maxRefinement, maxRefinement * 3)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(defaultTexture);
+        setTexture(texture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1114,10 +1115,14 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(-cornerRadiusTopLeft, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
+            float u = 0.5f + (corner.x * texture.invWidth);
+            float v = 0.5f - (corner.y * texture.invHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
+            //textCoords.put(0.5f).put(0.5f);
         }
 
         // add upper right corner vertices
@@ -1125,10 +1130,14 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, cornerRadiusTopRight);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+            float u = 0.5f + (corner.x * texture.invWidth);
+            float v = 0.5f - (corner.y * texture.invHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
+            //textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower right corner vertices
@@ -1136,10 +1145,14 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(cornerRadiusBottomRight, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+            float u = 0.5f + (corner.x * texture.invWidth);
+            float v = 0.5f - (corner.y * texture.invHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
+            //textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower left corner vertices
@@ -1147,10 +1160,13 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, -cornerRadiusBottomLeft);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+            float u = 0.5f + (corner.x * texture.invWidth);
+            float v = 0.5f - (corner.y * texture.invHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
@@ -1400,6 +1416,55 @@ public class Renderer2D implements MemoryResourceHolder {
         arrayIntPool.free(triangles);
     }
 
+    // TODO: take into account different cameras
+    public void drawPolygonFilled(float[] polygon, Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.length / 2;
+        if (!ensureCapacity(count, count * 6)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        ArrayFloat vertices = arrayFloatPool.allocate();
+        ArrayInt triangles = arrayIntPool.allocate();
+        try {
+            MathUtils.polygonTriangulate(polygon, vertices, triangles);
+        } catch (Exception e) { // Probably the polygon has collapsed into a single point.
+            return;
+        }
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < vertices.size; i += 2) {
+            float poly_x = vertices.get(i);
+            float poly_y = vertices.get(i + 1);
+
+            vertex.set(poly_x, poly_y);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+
+            float u = 0.5f + (poly_x * texture.invWidth);
+            float v = 0.5f - (poly_y * texture.invHeight);
+            textCoords.put(u).put(v);
+        }
+        vectors2Pool.free(vertex);
+
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < triangles.size; i ++) {
+            indices.put(startVertex + triangles.get(i));
+        }
+
+        vertexIndex += count;
+        arrayFloatPool.free(vertices);
+        arrayIntPool.free(triangles);
+    }
+
     public void drawPolygonFilled(float[] polygon) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
@@ -1437,7 +1502,7 @@ public class Renderer2D implements MemoryResourceHolder {
         arrayIntPool.free(triangles);
     }
 
-    public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawPolygonFilled(float[] polygon, int[] triangles, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
@@ -1455,7 +1520,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(degrees);
+            vertex.rotateDeg(deg);
             vertex.add(x, y);
 
             positions.put(vertex.x).put(vertex.y);
@@ -1998,10 +2063,6 @@ public class Renderer2D implements MemoryResourceHolder {
             ));
         }
     }
-
-    /* Rendering 2D primitives - Bezier Curves */
-
-
 
     /* Rendering 2D primitives - triangles */
 

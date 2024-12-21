@@ -77,16 +77,16 @@ public abstract class UI {
         /* calculate transform */
         if (style.position == Style.Position.IMPLICIT) {
 
-            return;
-        }
 
-        if (style.position == Style.Position.EXPLICIT) {
+        } else if (style.position == Style.Position.EXPLICIT) {
 
-            return;
+
         }
     }
 
+    protected void renderBackground(Renderer2D renderer2D) {
 
+    }
 
 
 }

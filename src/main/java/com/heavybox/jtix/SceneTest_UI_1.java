@@ -4,10 +4,7 @@ import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
@@ -24,6 +21,8 @@ public class SceneTest_UI_1 implements Scene {
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
 
+    Texture flower;
+
     Font font;
     Font font2;
 
@@ -35,6 +34,8 @@ public class SceneTest_UI_1 implements Scene {
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
 
+        Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+
         Assets.finishLoading();
 
 
@@ -45,6 +46,7 @@ public class SceneTest_UI_1 implements Scene {
     @Override
     public void start() {
 
+        flower = Assets.get("assets/textures/flower.png");
         font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
         font2 = Assets.get("C:\\Windows\\Fonts\\ahronbd.ttf");
 
@@ -126,7 +128,7 @@ public class SceneTest_UI_1 implements Scene {
 
         renderer2D.setColor(0.090f, 0.090f, 0.090f,1);
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
-        renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,
+        if (false) renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f, flower,
                 0,
                 0,
                 0,
@@ -142,32 +144,36 @@ public class SceneTest_UI_1 implements Scene {
         renderer2D.setColor(Color.RED);
         renderer2D.drawTextLine(text.toString(), 64, null, true,0, 0, false);
 
-//        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
-//        renderer2D.drawRectangleFilled(36, 36,0,Graphics.getWindowHeight()/2f - 36 /2f,0,1,1);
-//        renderer2D.setColor(1,1,1,1);
-//        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,45,1,1);
-//        renderer2D.drawLineFilled(-8,0,8,0,1,0,Graphics.getWindowHeight()/2f - 36/2f,-45,1,1);
-//
-//        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
-//        renderer2D.drawRectangleFilled(36, 36,-36,0,0,1,1);
-//        renderer2D.setColor(1,1,1,1);
-//        renderer2D.drawRectangleThin(12f,12f,-36,0,0,1,1);
+        renderer2D.setColor(Color.WHITE);
+        //renderer2D.drawTexture(flower, 0,0,0,1,1);
 
-//
-//        renderer2D.setColor(0.1686f, 0.1686f,0.1686f,1);
-//        renderer2D.drawRectangleFilled(36, 36,-72,0,0,1,1);
-//        renderer2D.setColor(1,1,1,1);
-//        renderer2D.drawLineFilled(-8,0,8,0,1,-72,0,0,1,1);
+        renderer2D.setColor(Color.WHITE);
+//        renderer2D.drawPolygonFilled(new float[] {
+//                -300, 0,
+//                -100, -100,
+//                -200, -300,
+//                0, -200,
+//                0, -200,
+//                100, -100,
+//                300, 0,
+//                100, 100,
+//                0, 300,
+//                -100, 100
+//        }, flower, 200,0,0,1,1);
 
-        //renderer2D.drawString("Lorem Ipsum is simply dummy text of the printing and typesetting aaaaaaaaaa", font, 0,0,0);
 
-//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
-//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
-//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
-//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
-//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
-//        renderer2D.drawString("What, Cunt?!", font, 0,0,0,1,1, scale);
+        renderer2D.drawRectangleFilled(250,100, flower,
+                0,
+                20,
+                0,
+                0,
 
+                1,
+                2,
+                20,
+                2,
+
+                0,0,0,1,1);
 
         renderer2D.end();
 
