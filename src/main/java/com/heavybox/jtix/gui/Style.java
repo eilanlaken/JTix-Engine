@@ -21,6 +21,12 @@ public class Style {
     public Overflow   overflow        = Overflow.TRUNCATE;
     public Font       font            = null;
     public int        fontSize        = 18;
+
+    public float      marginTop       = 0;
+    public float      marginBottom    = 0;
+    public float      marginLeft      = 0;
+    public float      marginRight     = 0;
+
     public float      paddingTop      = 0;
     public float      paddingBottom   = 0;
     public float      paddingLeft     = 0;
@@ -36,9 +42,8 @@ public class Style {
     public int borderRefinementBottomRight = 20;
     public int borderRefinementBottomLeft = 20;
 
-    public float transitionSeconds = 0;
 
-    public float[] shape = null;
+    public float[] clipPath = null;
 
     // width and height - ?
     public float width;
@@ -58,7 +63,7 @@ public class Style {
 
     public enum Position {
         IMPLICIT,  // positioned by its container layout, ignoring x, y, deg, scaleX and scaleY. If the container is null, then behaves like EXPLICIT
-        EXPLICIT,  // positioned x, y, deg relative to its container's center
+        EXPLICIT,  // positioned x, y, deg relative to its container's center. If the container is null, x, y and deg are calculated relative to the window.
     }
 
     public enum Size {
