@@ -87,7 +87,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneTest_UI_1());
+        Application.launch(new SceneTest_UI_2());
 
     }
 

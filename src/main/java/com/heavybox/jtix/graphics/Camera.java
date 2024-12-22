@@ -7,6 +7,7 @@ public class Camera {
 
     private final Vector3 tmp = new Vector3();
 
+    /* lens metrics */
     public Mode      mode;
     public Matrix4x4 projection;
     public Matrix4x4 view;
@@ -23,6 +24,11 @@ public class Camera {
     private final Vector3[] frustumCorners;
     private final Vector3[] frustumNormals;
     private final float[]   frustumPlaneDs;
+
+    /* position, direction, up [note: will be updated from the component camera] */
+    public final Vector3 position  = new Vector3(0,0,0);
+    public final Vector3 direction = new Vector3(0,0,-1);
+    public final Vector3 up        = new Vector3(0,1,0);
 
     public Camera(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.mode = mode;
@@ -48,7 +54,48 @@ public class Camera {
         this.frustumPlaneDs = new float[6];
     }
 
-    public void update(Vector3 position, Vector3 direction, Vector3 up) {
+    public void setTransform(Vector3 position, Vector3 direction, Vector3 up) {
+        this.position.set(position);
+        this.direction.set(direction);
+        this.up.set(up);
+    }
+
+    public void update() {
+        switch (mode) {
+            case ORTHOGRAPHIC:
+                projection.setToOrthographicProjection(zoom * -viewportWidth / 2.0f, zoom * (viewportWidth / 2.0f), zoom * -(viewportHeight / 2.0f), zoom * viewportHeight / 2.0f, 0, far);
+                break;
+            case PERSPECTIVE: // TODO: consider zoom here: fov -> fov / zoom?
+                this.projection.setToPerspectiveProjection(Math.abs(near), Math.abs(far), fov, viewportWidth / viewportHeight);
+                break;
+        }
+        view.setToLookAt(position, tmp.set(position).add(direction), up);
+        combined.set(projection);
+        Matrix4x4.mul(combined.val, view.val);
+        invProjectionView.set(combined);
+        Matrix4x4.inv(invProjectionView.val);
+
+        /* Update frustum corners by taking the canonical cube and un-projecting it. */
+        /* The canonical cube is a cube, centered at the origin, with 8 corners: (+-1, +-1, +-1). Also known as OpenGL "clipping volume".*/
+        frustumCorners[0].set(-1,-1,-1).prj(invProjectionView);
+        frustumCorners[1].set( 1,-1,-1).prj(invProjectionView);
+        frustumCorners[2].set( 1, 1,-1).prj(invProjectionView);
+        frustumCorners[3].set(-1, 1,-1).prj(invProjectionView);
+        frustumCorners[4].set(-1,-1, 1).prj(invProjectionView);
+        frustumCorners[5].set( 1,-1, 1).prj(invProjectionView);
+        frustumCorners[6].set( 1, 1, 1).prj(invProjectionView);
+        frustumCorners[7].set(-1, 1, 1).prj(invProjectionView);
+
+        /* Update the frustum's clipping plane normal and d values. */
+        frustumSetClippingPlane(0, frustumCorners[1], frustumCorners[0], frustumCorners[2]); // near
+        frustumSetClippingPlane(1, frustumCorners[4], frustumCorners[5], frustumCorners[7]); // far
+        frustumSetClippingPlane(2, frustumCorners[0], frustumCorners[4], frustumCorners[3]); // left
+        frustumSetClippingPlane(3, frustumCorners[5], frustumCorners[1], frustumCorners[6]); // right
+        frustumSetClippingPlane(4, frustumCorners[2], frustumCorners[3], frustumCorners[6]); // top
+        frustumSetClippingPlane(5, frustumCorners[4], frustumCorners[0], frustumCorners[1]); // bottom
+    }
+
+    @Deprecated public void update(Vector3 position, Vector3 direction, Vector3 up) {
         switch (mode) {
             case ORTHOGRAPHIC:
                 projection.setToOrthographicProjection(zoom * -viewportWidth / 2.0f, zoom * (viewportWidth / 2.0f), zoom * -(viewportHeight / 2.0f), zoom * viewportHeight / 2.0f, 0, far);

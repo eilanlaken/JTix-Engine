@@ -4,7 +4,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryPool;
@@ -31,10 +30,8 @@ import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.heavybox.jtix.math.Matrix4x4.*;
-
 // TODO: important task: refactor Texture parameter from primitive drawings.
-public class Renderer2D implements MemoryResourceHolder {
+public class Renderer2D_2 implements MemoryResourceHolder {
 
     private static final int   VERTICES_CAPACITY = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
@@ -42,7 +39,7 @@ public class Renderer2D implements MemoryResourceHolder {
     /* defaults */
     private final Shader    defaultShader  = createDefaultShaderProgram();
     private final Texture   defaultTexture = createDefaultTexture();
-    private final Matrix4x4 defaultMatrix  = createDefaultMatrix();
+    private final Camera    defaultCamera  = createDefaultCamera();
     private final Font      defaultFont    = createDefaultFont();
 
     /* memory pools */
@@ -53,7 +50,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* state */
     private final Stack<Vector4> pixelBounds  = new Stack<>(); // the head of the stack stores the current rectangle bounds for rendering as a Vector4 (x = min_x, y = min_y, z = max_x, w = max_y)
-    private Matrix4x4 currentMatrix     = defaultMatrix;
+    private Camera    currentCamera     = defaultCamera;
     private Texture   currentTexture    = defaultTexture;
     private Shader    currentShader     = null;
     private float     currentTint       = WHITE_TINT;
@@ -63,6 +60,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private int       currentSFactor    = GL11.GL_SRC_ALPHA;
     private int       currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
     private int       perFrameDrawCalls = 0;
+    private float     pixelScaleWidth   = 1;
+    private float     pixelScaleHeight  = 1;
 
     /* Vertex Buffers */
     private final int         vao;
@@ -79,7 +78,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private final FloatBuffer tangents;
     private final IntBuffer   indices;
 
-    public Renderer2D() {
+    public Renderer2D_2() {
         positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
         colors     = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 1);
         textCoords = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
@@ -130,8 +129,8 @@ public class Renderer2D implements MemoryResourceHolder {
         GL30.glBindVertexArray(0);
     }
 
-    public Matrix4x4 getCurrentMatrix() {
-        return currentMatrix;
+    public Camera getCurrentCamera() {
+        return currentCamera;
     }
 
     public boolean isDrawing() {
@@ -144,8 +143,8 @@ public class Renderer2D implements MemoryResourceHolder {
         begin(null);
     }
 
-    public void begin(Matrix4x4 combined) {
-        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
+    public void begin(Camera camera) {
+        if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D_2.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
@@ -158,7 +157,19 @@ public class Renderer2D implements MemoryResourceHolder {
 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.perFrameDrawCalls = 0;
-        this.currentMatrix = combined != null ? combined : defaultMatrix.setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
+
+        // set camera
+        if (camera == null) {
+            currentCamera = defaultCamera;
+            currentCamera.viewportWidth = Graphics.getWindowWidth();
+            currentCamera.viewportHeight = Graphics.getWindowHeight();
+        } else {
+            currentCamera = camera;
+        }
+        pixelScaleWidth = Graphics.getWindowWidth() / currentCamera.viewportWidth;
+        pixelScaleHeight = Graphics.getWindowHeight() / currentCamera.viewportHeight;
+        currentCamera.update();
+
         setShader(defaultShader);
         setShaderAttributes(null);
         setTexture(defaultTexture);
@@ -174,9 +185,23 @@ public class Renderer2D implements MemoryResourceHolder {
         if (currentShader == shader) return;
         flush();
         ShaderBinder.bind(shader);
-        shader.bindUniform("u_camera_combined", currentMatrix);
+        shader.bindUniform("u_camera_combined", currentCamera.combined);
         shader.bindUniform("u_texture", currentTexture);
         currentShader = shader;
+    }
+
+    // TODO: remove
+    @Deprecated public void setCamera(Camera camera) {
+        if (camera == null) {
+            currentCamera = defaultCamera;
+            currentCamera.viewportWidth = Graphics.getWindowWidth();
+            currentCamera.viewportHeight = Graphics.getWindowHeight();
+        } else {
+            currentCamera = camera;
+        }
+        currentCamera.update(); // TODO: maybe. If not, just update default.
+        flush();
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined);
     }
 
     public void setTexture(Texture texture) {
@@ -1431,27 +1456,12 @@ public class Renderer2D implements MemoryResourceHolder {
             return;
         }
 
-        float width = Graphics.getWindowWidth();
-        float height = Graphics.getWindowHeight();
-
-        {
-            float left = -(1 + currentMatrix.val[M30] / currentMatrix.val[M00]);
-            float right = (1 - currentMatrix.val[M30] / currentMatrix.val[M00]);
-            float bottom = -(1 + currentMatrix.val[M31] / currentMatrix.val[M11]);
-            float top = (1 - currentMatrix.val[M31] / currentMatrix.val[M11]);
-
-            System.out.println(left);
-            System.out.println(right);
-            System.out.println(bottom);
-            System.out.println(top);
-        }
-
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < vertices.size; i += 2) {
             float poly_x = vertices.get(i);
             float poly_y = vertices.get(i + 1);
-            float u = 0.5f + (poly_x * currentTexture.invWidth);
-            float v = 0.5f - (poly_y * currentTexture.invHeight);
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY).rotateDeg(deg).add(x, y);
@@ -2255,11 +2265,11 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void end() {
-        if (!drawing) throw new GraphicsException("Called " + Renderer2D.class.getSimpleName() + ".end() without calling " + Renderer2D.class.getSimpleName() + ".begin() first.");
+        if (!drawing) throw new GraphicsException("Called " + Renderer2D_2.class.getSimpleName() + ".end() without calling " + Renderer2D_2.class.getSimpleName() + ".begin() first.");
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        currentMatrix = null;
+        currentCamera = null;
         currentShader = null;
         drawing = false;
     }
@@ -2280,9 +2290,9 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Create defaults: shader, texture (single white pixel), camera */
 
     private static Shader createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D_2.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D_2.class.getClassLoader().getResourceAsStream("graphics-2d-default-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
@@ -2349,12 +2359,12 @@ public class Renderer2D implements MemoryResourceHolder {
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
-    private static Matrix4x4 createDefaultMatrix() {
-        return new Matrix4x4().setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
+    private static Camera createDefaultCamera() {
+        return new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 80);
     }
 
     private static Font createDefaultFont() {
-        try (InputStream inputStream = Renderer2D.class.getClassLoader().getResourceAsStream("LiberationSans-Regular.ttf")) {
+        try (InputStream inputStream = Renderer2D_2.class.getClassLoader().getResourceAsStream("LiberationSans-Regular.ttf")) {
             if (inputStream == null) throw new GraphicsException("Resource not found: " + "LiberationSans-Regular.ttf");
             /* Read the InputStream into a ByteBuffer */
             byte[] bytes = inputStream.readAllBytes();

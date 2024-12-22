@@ -11,12 +11,13 @@ import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_1 implements Scene {
+public class SceneTest_UI_2 implements Scene {
 
 
-    private Renderer2D renderer2D = new Renderer2D();
+    private Renderer2D_2 renderer2D = new Renderer2D_2();
 
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
@@ -26,7 +27,8 @@ public class SceneTest_UI_1 implements Scene {
     Font font;
     Font font2;
 
-    String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+    Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth() / 32f, Graphics.getWindowHeight() / 32f, 1, 0, 100, 70);
+
 
     @Override
     public void setup() {
@@ -102,11 +104,11 @@ public class SceneTest_UI_1 implements Scene {
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            scale += 0.003f;
+            camera.zoom += 0.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            scale -= 0.003f;
+            camera.zoom -= 0.01f;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -114,23 +116,36 @@ public class SceneTest_UI_1 implements Scene {
 
 
         // render font
-        renderer2D.begin();
+        renderer2D.begin(camera);
 
 
         //renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
         //renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
 
-
-        renderer2D.setColor(Color.WHITE);
-        renderer2D.drawCircleFilled(15,40,0,200,0,1,1);
-
-
-
-        renderer2D.setColor(0.090f, 0.090f, 0.090f,1);
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
-        if (false) renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f, flower,
+
+
+
+
+        renderer2D.setColor(Color.WHITE);
+        renderer2D.setTexture(flower);
+        renderer2D.drawPolygonFilled(new float[] {
+                -300 / 32f, 0,
+                -100 / 32f, -100 / 32f,
+                -200 / 32f, -300 / 32f,
+                0, -200 / 32f,
+                0, -200 / 32f,
+                100 / 32f, -100 / 32f,
+                300 / 32f, 0,
+                100 / 32f, 100 / 32f,
+                0, 300 / 32f,
+                -100 / 32f, 100 / 32f
+        }, 200 / 32f,0,0,1,1);
+
+
+        if (false) renderer2D.drawRectangleFilled(2.5f,1, flower,
                 0,
-                0,
+                0.2f,
                 0,
                 0,
 
@@ -141,39 +156,8 @@ public class SceneTest_UI_1 implements Scene {
 
                 0,0,0,1,1);
 
-        renderer2D.setColor(Color.RED);
-        renderer2D.drawTextLine(text.toString(), 64, null, true,0, 0, false);
-
-        renderer2D.setColor(Color.WHITE);
-        //renderer2D.drawTexture(flower, 0,0,0,1,1);
-
-        renderer2D.setColor(Color.WHITE);
-//        renderer2D.drawPolygonFilled(new float[] {
-//                -300, 0,
-//                -100, -100,
-//                -200, -300,
-//                0, -200,
-//                0, -200,
-//                100, -100,
-//                300, 0,
-//                100, 100,
-//                0, 300,
-//                -100, 100
-//        }, flower, 200,0,0,1,1);
-
-
-        renderer2D.drawRectangleFilled(250,100, flower,
-                0,
-                20,
-                0,
-                0,
-
-                1,
-                2,
-                20,
-                2,
-
-                0,0,0,1,1);
+        //renderer2D.setColor(Color.RED);
+        //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
 
         renderer2D.end();
 
