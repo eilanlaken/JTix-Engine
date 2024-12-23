@@ -7,7 +7,7 @@ import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 public class SceneTest_UI_Buttons implements Scene {
 
 
-    private Renderer2D renderer2D = new Renderer2D();
+    private Renderer2D_4 renderer2D = new Renderer2D_4();
 
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";

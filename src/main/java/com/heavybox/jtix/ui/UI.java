@@ -1,9 +1,7 @@
 package com.heavybox.jtix.ui;
 
 
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
@@ -106,11 +104,11 @@ public abstract class UI {
     public void update() {}
 
     // will render the background according to the styling applied
-    public void renderBackground(Renderer2D renderer2D) {
+    public void renderBackground(Renderer2D_4 renderer2D) {
 
     }
 
-    public abstract void render(Renderer2D renderer2D);
+    public abstract void render(Renderer2D_4 renderer2D);
 
 
 

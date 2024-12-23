@@ -11,13 +11,12 @@ import com.heavybox.jtix.input_2.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_2 implements Scene {
 
 
-    private Renderer2D_2 renderer2D = new Renderer2D_2();
+    private Renderer2D renderer2D = new Renderer2D();
 
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";

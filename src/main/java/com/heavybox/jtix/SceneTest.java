@@ -4,7 +4,7 @@ import com.heavybox.jtix.application_2.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Mouse;
@@ -16,7 +16,7 @@ public class SceneTest implements Scene {
 
     Texture yellow = Assets.get("assets/textures/yellowSquare.jpg");
     Texture pattern = Assets.get("assets/textures/pattern.png");
-    private Renderer2D renderer2D = new Renderer2D();
+    private Renderer2D_4 renderer2D = new Renderer2D_4();
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     @Override

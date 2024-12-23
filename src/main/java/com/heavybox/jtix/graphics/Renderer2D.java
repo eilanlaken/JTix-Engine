@@ -4,7 +4,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryPool;
@@ -31,19 +30,16 @@ import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.heavybox.jtix.math.Matrix4x4.*;
-
-// TODO: important task: refactor Texture parameter from primitive drawings.
 public class Renderer2D implements MemoryResourceHolder {
 
     private static final int   VERTICES_CAPACITY = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
 
     /* defaults */
-    private final Shader    defaultShader  = createDefaultShaderProgram();
-    private final Texture   defaultTexture = createDefaultTexture();
-    private final Matrix4x4 defaultMatrix  = createDefaultMatrix();
-    private final Font      defaultFont    = createDefaultFont();
+    private final Shader  defaultShader  = createDefaultShaderProgram();
+    private final Texture defaultTexture = createDefaultTexture();
+    private final Camera  defaultCamera  = createDefaultCamera();
+    private final Font    defaultFont    = createDefaultFont();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
@@ -53,16 +49,20 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* state */
     private final Stack<Vector4> pixelBounds  = new Stack<>(); // the head of the stack stores the current rectangle bounds for rendering as a Vector4 (x = min_x, y = min_y, z = max_x, w = max_y)
-    private Matrix4x4 currentMatrix     = defaultMatrix;
-    private Texture   currentTexture    = defaultTexture;
-    private Shader    currentShader     = null;
-    private float     currentTint       = WHITE_TINT;
-    private boolean   drawing           = false;
-    private int       vertexIndex       = 0;
-    private int       currentMode       = GL11.GL_TRIANGLES;
-    private int       currentSFactor    = GL11.GL_SRC_ALPHA;
-    private int       currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
-    private int       perFrameDrawCalls = 0;
+    private Camera    currentCamera       = defaultCamera;
+    private Texture   currentTexture      = defaultTexture;
+    private Shader    currentShader       = null;
+    private float     currentTint         = WHITE_TINT;
+    private boolean   drawing             = false;
+    private int       vertexIndex         = 0;
+    private int       currentMode         = GL11.GL_TRIANGLES;
+    private int       currentSFactor      = GL11.GL_SRC_ALPHA;
+    private int       currentDFactor      = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    private int       perFrameDrawCalls   = 0;
+    private float     pixelScaleWidth     = 1;
+    private float     pixelScaleWidthInv  = 1;
+    private float     pixelScaleHeight    = 1;
+    private float     pixelScaleHeightInv = 1;
 
     /* Vertex Buffers */
     private final int         vao;
@@ -94,34 +94,26 @@ public class Renderer2D implements MemoryResourceHolder {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(0);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboColors = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColors); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colors, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, 0, 0);
-        //GL20.glEnableVertexAttribArray(1);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboTextCoords = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextCoords); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textCoords, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(2);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboNormals = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboNormals); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normals, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(3);
 
         this.vboTangents = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTangents); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, tangents, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(4, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(4);
 
         this.ebo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -130,8 +122,8 @@ public class Renderer2D implements MemoryResourceHolder {
         GL30.glBindVertexArray(0);
     }
 
-    public Matrix4x4 getCurrentMatrix() {
-        return currentMatrix;
+    public Camera getCurrentCamera() {
+        return currentCamera;
     }
 
     public boolean isDrawing() {
@@ -144,7 +136,7 @@ public class Renderer2D implements MemoryResourceHolder {
         begin(null);
     }
 
-    public void begin(Matrix4x4 combined) {
+    public void begin(Camera camera) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -158,7 +150,21 @@ public class Renderer2D implements MemoryResourceHolder {
 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.perFrameDrawCalls = 0;
-        this.currentMatrix = combined != null ? combined : defaultMatrix.setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
+
+        // set camera
+        if (camera == null) {
+            currentCamera = defaultCamera;
+            currentCamera.viewportWidth = Graphics.getWindowWidth();
+            currentCamera.viewportHeight = Graphics.getWindowHeight();
+        } else {
+            currentCamera = camera;
+        }
+        pixelScaleWidth = Graphics.getWindowWidth() / currentCamera.viewportWidth;
+        pixelScaleHeight = Graphics.getWindowHeight() / currentCamera.viewportHeight;
+        pixelScaleWidthInv = 1.0f / pixelScaleWidth;
+        pixelScaleHeightInv = 1.0f / pixelScaleHeight;
+        currentCamera.update();
+
         setShader(defaultShader);
         setShaderAttributes(null);
         setTexture(defaultTexture);
@@ -174,9 +180,23 @@ public class Renderer2D implements MemoryResourceHolder {
         if (currentShader == shader) return;
         flush();
         ShaderBinder.bind(shader);
-        shader.bindUniform("u_camera_combined", currentMatrix);
+        shader.bindUniform("u_camera_combined", currentCamera.combined);
         shader.bindUniform("u_texture", currentTexture);
         currentShader = shader;
+    }
+
+    // TODO: remove
+    @Deprecated public void setCamera(Camera camera) {
+        if (camera == null) {
+            currentCamera = defaultCamera;
+            currentCamera.viewportWidth = Graphics.getWindowWidth();
+            currentCamera.viewportHeight = Graphics.getWindowHeight();
+        } else {
+            currentCamera = camera;
+        }
+        currentCamera.update(); // TODO: maybe. If not, just update default.
+        flush();
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined);
     }
 
     public void setTexture(Texture texture) {
@@ -268,7 +288,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Textures */
 
-    public void drawTexture(Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawTexture(@NotNull Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4, 6)) flush();
 
@@ -344,6 +364,8 @@ public class Renderer2D implements MemoryResourceHolder {
 
         float widthHalf  = texture.width  * 0.5f;
         float heightHalf = texture.height * 0.5f;
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
         float da = 90.0f / (refinement - 1);
 
         Vector2 corner = vectors2Pool.allocate();
@@ -411,16 +433,18 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement * 4;
     }
 
-
-    public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawTexture(@NotNull Texture texture, float u1, float v1, float u2, float v2, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4, 6)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
-        float width  = texture.width  * scaleX * MathUtils.cosDeg(angleY);
-        float height = texture.height * scaleY * MathUtils.cosDeg(angleX);
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
+
+        float width = texture.width * scaleX;
+        float height = texture.height * scaleY;
         float widthHalf  = width * 0.5f;
         float heightHalf = height * 0.5f;
 
@@ -431,19 +455,19 @@ public class Renderer2D implements MemoryResourceHolder {
 
         arm0.x = -widthHalf + width * u1;
         arm0.y =  heightHalf - height * v1;
-        arm0.rotateDeg(angleZ);
+        arm0.rotateDeg(deg);
 
         arm1.x = -widthHalf + width * u1;
         arm1.y = -heightHalf + height * (1 - v2);
-        arm1.rotateDeg(angleZ);
+        arm1.rotateDeg(deg);
 
         arm2.x =  widthHalf - width * (1 - u2);
         arm2.y = -heightHalf + height * (1 - v2);
-        arm2.rotateDeg(angleZ);
+        arm2.rotateDeg(deg);
 
         arm3.x = widthHalf - width * (1 - u2);
         arm3.y = heightHalf - height * v1;
-        arm3.rotateDeg(angleZ);
+        arm3.rotateDeg(deg);
 
         /* put vertices */
         positions.put(arm0.x + x).put(arm0.y + y);
@@ -485,6 +509,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
+
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
 
         final float ui = region.u1;
         final float vi = region.v1;
@@ -601,6 +628,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleFilled(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
@@ -636,6 +664,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm);
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleFilled(float r, int refinement, float angle, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(refinement, 3);
@@ -672,6 +701,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement + 2;
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleBorder(float r, float thickness, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
@@ -727,6 +757,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm1);
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
@@ -1018,12 +1049,16 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void drawRectangleFilled(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+        drawRectangleFilled(null, width, height, cornerRadius, refinement, x, y, degrees, scaleX, scaleY);
+    }
+
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
         if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(defaultTexture);
+        setTexture(texture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1035,10 +1070,13 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(-cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius,heightHalf - cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // add upper right corner vertices
@@ -1046,10 +1084,13 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower right corner vertices
@@ -1057,10 +1098,13 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower left corner vertices
@@ -1068,10 +1112,13 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, -cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
@@ -1086,8 +1133,23 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement * 4;
     }
 
-    // TODO - remove this.
-    @Deprecated public void drawRectangleFilled(float width, float height, Texture texture,
+    public void drawRectangleFilled(float width, float height,
+                                    float cornerRadiusTopLeft,
+                                    float cornerRadiusTopRight,
+                                    float cornerRadiusBottomRight,
+                                    float cornerRadiusBottomLeft,
+                                    int refinementTopLeft,
+                                    int refinementTopRight,
+                                    int refinementBottomRight,
+                                    int refinementBottomLeft,
+                                    float x, float y, float degrees, float scaleX, float scaleY) {
+        drawRectangleFilled(null, width, height,
+                cornerRadiusTopLeft, cornerRadiusTopRight, cornerRadiusBottomRight, cornerRadiusBottomLeft,
+                refinementTopLeft, refinementTopRight, refinementBottomRight, refinementBottomLeft,
+                x, y, degrees, scaleX, scaleY);
+    }
+
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height,
                                     float cornerRadiusTopLeft,
                                     float cornerRadiusTopRight,
                                     float cornerRadiusBottomRight,
@@ -1118,8 +1180,8 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(-cornerRadiusTopLeft, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1133,8 +1195,8 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, cornerRadiusTopRight);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1148,8 +1210,8 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(cornerRadiusBottomRight, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1163,8 +1225,8 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, -cornerRadiusBottomLeft);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1186,7 +1248,8 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += totalRefinement;
     }
 
-    public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float angleDeg, float scaleX, float scaleY) {
+    // TODO: maybe also create a version w or w/o Texture
+    public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(8, 24)) flush();
 
@@ -1215,12 +1278,18 @@ public class Renderer2D implements MemoryResourceHolder {
         // transform each vertex, then put it in the buffer + tint + uv
         for (int i = 0; i < vertices.size; i++) {
             Vector2 vertex = vertices.get(i);
+
+            float poly_x = vertex.x;
+            float poly_y = vertex.y;
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(angleDeg);
+            vertex.rotateDeg(deg);
             vertex.add(x, y);
             positions.put(vertex.x).put(vertex.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
@@ -1343,12 +1412,14 @@ public class Renderer2D implements MemoryResourceHolder {
         if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(defaultTexture);
 
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
             float poly_x = polygon[i];
             float poly_y = polygon[i + 1];
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
@@ -1357,7 +1428,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
             positions.put(vertex.x).put(vertex.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
@@ -1396,8 +1466,8 @@ public class Renderer2D implements MemoryResourceHolder {
         for (int i = 0; i < vertices.size; i += 2) {
             float poly_x = vertices.get(i);
             float poly_y = vertices.get(i + 1);
-            float u = 0.5f + (poly_x * currentTexture.invWidth);
-            float v = 0.5f - (poly_y * currentTexture.invHeight);
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
             positions.put(poly_x).put(poly_y);
             colors.put(currentTint);
@@ -1431,27 +1501,12 @@ public class Renderer2D implements MemoryResourceHolder {
             return;
         }
 
-        float width = Graphics.getWindowWidth();
-        float height = Graphics.getWindowHeight();
-
-        {
-            float left = -(1 + currentMatrix.val[M30] / currentMatrix.val[M00]);
-            float right = (1 - currentMatrix.val[M30] / currentMatrix.val[M00]);
-            float bottom = -(1 + currentMatrix.val[M31] / currentMatrix.val[M11]);
-            float top = (1 - currentMatrix.val[M31] / currentMatrix.val[M11]);
-
-            System.out.println(left);
-            System.out.println(right);
-            System.out.println(bottom);
-            System.out.println(top);
-        }
-
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < vertices.size; i += 2) {
             float poly_x = vertices.get(i);
             float poly_y = vertices.get(i + 1);
-            float u = 0.5f + (poly_x * currentTexture.invWidth);
-            float v = 0.5f - (poly_y * currentTexture.invHeight);
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY).rotateDeg(deg).add(x, y);
@@ -1486,8 +1541,8 @@ public class Renderer2D implements MemoryResourceHolder {
         for (int i = 0; i < polygon.length; i += 2) {
             float poly_x = polygon[i];
             float poly_y = polygon[i + 1];
-            float u = 0.5f + (poly_x * currentTexture.invWidth);
-            float v = 0.5f - (poly_y * currentTexture.invHeight);
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
@@ -2259,7 +2314,7 @@ public class Renderer2D implements MemoryResourceHolder {
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        currentMatrix = null;
+        currentCamera = null;
         currentShader = null;
         drawing = false;
     }
@@ -2349,8 +2404,8 @@ public class Renderer2D implements MemoryResourceHolder {
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
-    private static Matrix4x4 createDefaultMatrix() {
-        return new Matrix4x4().setToOrthographicProjection(-Graphics.getWindowWidth() / 2.0f, Graphics.getWindowWidth() / 2.0f, -Graphics.getWindowHeight() / 2.0f, Graphics.getWindowHeight() / 2.0f, 0, 100);
+    private static Camera createDefaultCamera() {
+        return new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 80);
     }
 
     private static Font createDefaultFont() {

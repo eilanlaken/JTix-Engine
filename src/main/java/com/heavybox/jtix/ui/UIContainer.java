@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ui;
 
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,7 +46,7 @@ public abstract class UIContainer extends UI {
     }
 
     @Override
-    public void render(Renderer2D renderer2D) {
+    public void render(Renderer2D_4 renderer2D) {
         if (style.overflow == Style.Overflow.TRUNCATE) {
             renderContainer(renderer2D);
             renderer2D.pushPixelBounds(min_x, min_y, max_x, max_y);
@@ -65,5 +65,5 @@ public abstract class UIContainer extends UI {
         }
     }
 
-    public abstract void renderContainer(Renderer2D renderer2D);
+    public abstract void renderContainer(Renderer2D_4 renderer2D);
 }

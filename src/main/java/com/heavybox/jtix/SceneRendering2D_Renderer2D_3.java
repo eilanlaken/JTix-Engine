@@ -7,6 +7,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import org.lwjgl.opengl.GL11;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 
 public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
 
-    private Renderer2D renderer2D;
+    private Renderer2D_4 renderer2D;
     private ComponentGraphicsCamera componentGraphicsCamera;
 
     Texture yellowSquare;
@@ -65,7 +66,7 @@ public class SceneRendering2D_Renderer2D_3 extends ApplicationScreen {
                     }""";
 
     public SceneRendering2D_Renderer2D_3() {
-        renderer2D = new Renderer2D();
+        renderer2D = new Renderer2D_4();
         Shader shader = new Shader(vertexShader, fragmentShader);
 
         //System.out.println(shader.attributeLocations.get("a_position", -1));

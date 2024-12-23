@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ui;
 
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 
 public class UIButton extends UI {
 
@@ -14,7 +14,7 @@ public class UIButton extends UI {
     }
 
     @Override
-    public void render(Renderer2D renderer2D) {
+    public void render(Renderer2D_4 renderer2D) {
         renderer2D.setColor(style.backgroundColor);
         renderer2D.drawPolygonFilled(bounds); // bounds are already transformed.
         renderer2D.setColor(style.textColor);
