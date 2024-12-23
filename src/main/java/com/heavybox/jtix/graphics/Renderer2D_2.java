@@ -511,6 +511,9 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
 
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
+
         final float ui = region.u1;
         final float vi = region.v1;
         final float uf = region.u2;
@@ -626,6 +629,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleFilled(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
@@ -661,6 +665,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vectors2Pool.free(arm);
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleFilled(float r, int refinement, float angle, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(refinement, 3);
@@ -697,6 +702,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vertexIndex += refinement + 2;
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleBorder(float r, float thickness, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
@@ -752,6 +758,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vectors2Pool.free(arm1);
     }
 
+    // TODO: fix uv mappings?
     public void drawCircleBorder(float r, float thickness, float angle, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(3, refinement);
@@ -1043,11 +1050,16 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     }
 
     public void drawRectangleFilled(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+        drawRectangleFilled(null, width, height, cornerRadius, refinement, x, y, degrees, scaleX, scaleY);
+    }
+
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
         if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1122,8 +1134,23 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vertexIndex += refinement * 4;
     }
 
-    // TODO - remove this.
-    @Deprecated public void drawRectangleFilled(float width, float height,
+    public void drawRectangleFilled(float width, float height,
+                                    float cornerRadiusTopLeft,
+                                    float cornerRadiusTopRight,
+                                    float cornerRadiusBottomRight,
+                                    float cornerRadiusBottomLeft,
+                                    int refinementTopLeft,
+                                    int refinementTopRight,
+                                    int refinementBottomRight,
+                                    int refinementBottomLeft,
+                                    float x, float y, float degrees, float scaleX, float scaleY) {
+        drawRectangleFilled(null, width, height,
+                cornerRadiusTopLeft, cornerRadiusTopRight, cornerRadiusBottomRight, cornerRadiusBottomLeft,
+                refinementTopLeft, refinementTopRight, refinementBottomRight, refinementBottomLeft,
+                x, y, degrees, scaleX, scaleY);
+    }
+
+    public void drawRectangleFilled(@Nullable Texture texture, float width, float height,
                                     float cornerRadiusTopLeft,
                                     float cornerRadiusTopRight,
                                     float cornerRadiusBottomRight,
@@ -1142,6 +1169,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         if (!ensureCapacity(maxRefinement, maxRefinement * 3)) flush();
 
         setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1221,7 +1249,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vertexIndex += totalRefinement;
     }
 
-    public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float angleDeg, float scaleX, float scaleY) {
+    // TODO: maybe also create a version w or w/o Texture
+    public void drawRectangleBorder(float width, float height, float thickness, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(8, 24)) flush();
 
@@ -1258,7 +1287,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             textCoords.put(u).put(v);
 
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(angleDeg);
+            vertex.rotateDeg(deg);
             vertex.add(x, y);
             positions.put(vertex.x).put(vertex.y);
             colors.put(currentTint);
@@ -1513,8 +1542,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         for (int i = 0; i < polygon.length; i += 2) {
             float poly_x = polygon[i];
             float poly_y = polygon[i + 1];
-            float u = 0.5f + (poly_x * currentTexture.invWidth);
-            float v = 0.5f - (poly_y * currentTexture.invHeight);
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);

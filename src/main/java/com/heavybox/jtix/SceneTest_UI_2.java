@@ -27,6 +27,9 @@ public class SceneTest_UI_2 implements Scene {
     Font font;
     Font font2;
 
+    TexturePack pack;
+
+
     Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth() / 32f, Graphics.getWindowHeight() / 32f, 1, 0, 100, 70);
 
 
@@ -35,7 +38,7 @@ public class SceneTest_UI_2 implements Scene {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
-
+        Assets.loadTexturePack("assets/atlases/spots.yml");
         Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.finishLoading();
@@ -51,6 +54,9 @@ public class SceneTest_UI_2 implements Scene {
         font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
         font2 = Assets.get("C:\\Windows\\Fonts\\ahronbd.ttf");
 
+        pack = Assets.get("assets/atlases/spots.yml");
+
+
         positions = new Vector2[40];
         colors = new Color[40];
         for (int i = 0; i < 40; i++) {
@@ -64,6 +70,8 @@ public class SceneTest_UI_2 implements Scene {
     int index = 0;
 
     StringBuffer text = new StringBuffer();
+
+    float x = 0, y = 0, deg = 0;
 
     @Override
     public void update() {
@@ -103,11 +111,15 @@ public class SceneTest_UI_2 implements Scene {
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            camera.zoom += 0.01f;
+            x += 0.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            camera.zoom -= 0.01f;
+            x -= 0.01f;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+            deg += 1;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -158,6 +170,9 @@ public class SceneTest_UI_2 implements Scene {
         //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
         renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
                 0,0,0,1,1);
+
+        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
+
 
         //renderer2D.setColor(Color.RED);
         //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
