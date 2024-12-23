@@ -40,7 +40,6 @@ public class SceneTest_UI_2 implements Scene {
 
         Assets.finishLoading();
 
-
     }
 
     Vector2[] positions;
@@ -129,21 +128,21 @@ public class SceneTest_UI_2 implements Scene {
 
         renderer2D.setColor(Color.WHITE);
         renderer2D.setTexture(flower);
-        renderer2D.drawPolygonFilled(new float[] {
-                -300 / 32f, 0,
-                -100 / 32f, -100 / 32f,
-                -200 / 32f, -300 / 32f,
-                0, -200 / 32f,
-                0, -200 / 32f,
-                100 / 32f, -100 / 32f,
-                300 / 32f, 0,
-                100 / 32f, 100 / 32f,
-                0, 300 / 32f,
-                -100 / 32f, 100 / 32f
+        if (false) renderer2D.drawPolygonFilled(new float[] {
+                -300, 0,
+                -100, -100,
+                -200, -300,
+                0, -200 ,
+                0, -200 ,
+                100 , -100,
+                300 , 0,
+                100 , 100 ,
+                0, 300 ,
+                -100 , 100
         }, 200 / 32f,0,0,1,1);
 
-
-        if (false) renderer2D.drawRectangleFilled(2.5f,1, flower,
+        renderer2D.setTexture(flower);
+        if (false) renderer2D.drawRectangleFilled(2.5f,1,
                 0,
                 0.2f,
                 0,
@@ -154,6 +153,10 @@ public class SceneTest_UI_2 implements Scene {
                 20,
                 2,
 
+                0,0,0,1,1);
+
+        //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
+        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
                 0,0,0,1,1);
 
         //renderer2D.setColor(Color.RED);

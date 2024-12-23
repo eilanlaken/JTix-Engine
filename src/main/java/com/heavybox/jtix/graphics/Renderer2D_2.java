@@ -50,18 +50,20 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
     /* state */
     private final Stack<Vector4> pixelBounds  = new Stack<>(); // the head of the stack stores the current rectangle bounds for rendering as a Vector4 (x = min_x, y = min_y, z = max_x, w = max_y)
-    private Camera    currentCamera     = defaultCamera;
-    private Texture   currentTexture    = defaultTexture;
-    private Shader    currentShader     = null;
-    private float     currentTint       = WHITE_TINT;
-    private boolean   drawing           = false;
-    private int       vertexIndex       = 0;
-    private int       currentMode       = GL11.GL_TRIANGLES;
-    private int       currentSFactor    = GL11.GL_SRC_ALPHA;
-    private int       currentDFactor    = GL11.GL_ONE_MINUS_SRC_ALPHA;
-    private int       perFrameDrawCalls = 0;
-    private float     pixelScaleWidth   = 1;
-    private float     pixelScaleHeight  = 1;
+    private Camera    currentCamera       = defaultCamera;
+    private Texture   currentTexture      = defaultTexture;
+    private Shader    currentShader       = null;
+    private float     currentTint         = WHITE_TINT;
+    private boolean   drawing             = false;
+    private int       vertexIndex         = 0;
+    private int       currentMode         = GL11.GL_TRIANGLES;
+    private int       currentSFactor      = GL11.GL_SRC_ALPHA;
+    private int       currentDFactor      = GL11.GL_ONE_MINUS_SRC_ALPHA;
+    private int       perFrameDrawCalls   = 0;
+    private float     pixelScaleWidth     = 1;
+    private float     pixelScaleWidthInv  = 1;
+    private float     pixelScaleHeight    = 1;
+    private float     pixelScaleHeightInv = 1;
 
     /* Vertex Buffers */
     private final int         vao;
@@ -93,34 +95,26 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboPositions); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, positions, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(0);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboColors = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboColors); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, colors, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, 0, 0);
-        //GL20.glEnableVertexAttribArray(1);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboTextCoords = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTextCoords); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, textCoords, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(2, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(2);
-        //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
 
         this.vboNormals = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboNormals); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normals, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(3);
 
         this.vboTangents = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboTangents); // bind
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, tangents, GL15.GL_DYNAMIC_DRAW);
         GL20.glVertexAttribPointer(4, 2, GL11.GL_FLOAT, false, 0, 0);
-        //GL20.glEnableVertexAttribArray(4);
 
         this.ebo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -168,6 +162,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         }
         pixelScaleWidth = Graphics.getWindowWidth() / currentCamera.viewportWidth;
         pixelScaleHeight = Graphics.getWindowHeight() / currentCamera.viewportHeight;
+        pixelScaleWidthInv = 1.0f / pixelScaleWidth;
+        pixelScaleHeightInv = 1.0f / pixelScaleHeight;
         currentCamera.update();
 
         setShader(defaultShader);
@@ -293,7 +289,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Textures */
 
-    public void drawTexture(Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawTexture(@NotNull Texture texture, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4, 6)) flush();
 
@@ -369,6 +365,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
         float widthHalf  = texture.width  * 0.5f;
         float heightHalf = texture.height * 0.5f;
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
         float da = 90.0f / (refinement - 1);
 
         Vector2 corner = vectors2Pool.allocate();
@@ -436,16 +434,18 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         vertexIndex += refinement * 4;
     }
 
-
-    public void drawTexture(Texture texture, float u1, float v1, float u2, float v2, float x, float y, float angleX, float angleY, float angleZ, float scaleX, float scaleY) {
+    public void drawTexture(@NotNull Texture texture, float u1, float v1, float u2, float v2, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4, 6)) flush();
 
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
-        float width  = texture.width  * scaleX * MathUtils.cosDeg(angleY);
-        float height = texture.height * scaleY * MathUtils.cosDeg(angleX);
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
+
+        float width = texture.width * scaleX;
+        float height = texture.height * scaleY;
         float widthHalf  = width * 0.5f;
         float heightHalf = height * 0.5f;
 
@@ -456,19 +456,19 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
         arm0.x = -widthHalf + width * u1;
         arm0.y =  heightHalf - height * v1;
-        arm0.rotateDeg(angleZ);
+        arm0.rotateDeg(deg);
 
         arm1.x = -widthHalf + width * u1;
         arm1.y = -heightHalf + height * (1 - v2);
-        arm1.rotateDeg(angleZ);
+        arm1.rotateDeg(deg);
 
         arm2.x =  widthHalf - width * (1 - u2);
         arm2.y = -heightHalf + height * (1 - v2);
-        arm2.rotateDeg(angleZ);
+        arm2.rotateDeg(deg);
 
         arm3.x = widthHalf - width * (1 - u2);
         arm3.y = heightHalf - height * v1;
-        arm3.rotateDeg(angleZ);
+        arm3.rotateDeg(deg);
 
         /* put vertices */
         positions.put(arm0.x + x).put(arm0.y + y);
@@ -1048,7 +1048,6 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(defaultTexture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1060,10 +1059,13 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(-cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius,heightHalf - cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // add upper right corner vertices
@@ -1071,10 +1073,13 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(0, cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower right corner vertices
@@ -1082,10 +1087,13 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // add lower left corner vertices
@@ -1093,10 +1101,13 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(0, -cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
@@ -1112,7 +1123,7 @@ public class Renderer2D_2 implements MemoryResourceHolder {
     }
 
     // TODO - remove this.
-    @Deprecated public void drawRectangleFilled(float width, float height, Texture texture,
+    @Deprecated public void drawRectangleFilled(float width, float height,
                                     float cornerRadiusTopLeft,
                                     float cornerRadiusTopRight,
                                     float cornerRadiusBottomRight,
@@ -1131,7 +1142,6 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         if (!ensureCapacity(maxRefinement, maxRefinement * 3)) flush();
 
         setMode(GL11.GL_TRIANGLES);
-        setTexture(texture);
 
         float widthHalf  = width  * scaleX * 0.5f;
         float heightHalf = height * scaleY * 0.5f;
@@ -1143,8 +1153,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(-cornerRadiusTopLeft, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1158,8 +1168,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(0, cornerRadiusTopRight);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1173,8 +1183,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(cornerRadiusBottomRight, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1188,8 +1198,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
             corner.set(0, -cornerRadiusBottomLeft);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
-            float u = 0.5f + (corner.x * texture.invWidth);
-            float v = 0.5f - (corner.y * texture.invHeight);
+            float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
 
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -1240,12 +1250,18 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         // transform each vertex, then put it in the buffer + tint + uv
         for (int i = 0; i < vertices.size; i++) {
             Vector2 vertex = vertices.get(i);
+
+            float poly_x = vertex.x;
+            float poly_y = vertex.y;
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+
             vertex.scl(scaleX, scaleY);
             vertex.rotateDeg(angleDeg);
             vertex.add(x, y);
             positions.put(vertex.x).put(vertex.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
@@ -1368,12 +1384,14 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         if (!ensureCapacity(count, count * 6)) flush();
 
         setMode(GL11.GL_LINES);
-        setTexture(defaultTexture);
 
         Vector2 vertex = vectors2Pool.allocate();
         for (int i = 0; i < polygon.length; i += 2) {
             float poly_x = polygon[i];
             float poly_y = polygon[i + 1];
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
 
             vertex.set(poly_x, poly_y);
             vertex.scl(scaleX, scaleY);
@@ -1382,7 +1400,6 @@ public class Renderer2D_2 implements MemoryResourceHolder {
 
             positions.put(vertex.x).put(vertex.y);
             colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
         }
 
         int startVertex = this.vertexIndex;
@@ -1421,8 +1438,8 @@ public class Renderer2D_2 implements MemoryResourceHolder {
         for (int i = 0; i < vertices.size; i += 2) {
             float poly_x = vertices.get(i);
             float poly_y = vertices.get(i + 1);
-            float u = 0.5f + (poly_x * currentTexture.invWidth);
-            float v = 0.5f - (poly_y * currentTexture.invHeight);
+            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
             positions.put(poly_x).put(poly_y);
             colors.put(currentTint);
