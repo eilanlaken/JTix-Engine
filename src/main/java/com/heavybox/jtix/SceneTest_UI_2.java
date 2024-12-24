@@ -71,6 +71,7 @@ public class SceneTest_UI_2 implements Scene {
     StringBuffer text = new StringBuffer();
 
     float x = 0, y = 0, deg = 0;
+    Vector2 v = new Vector2(1, 0);
 
     @Override
     public void update() {
@@ -121,6 +122,10 @@ public class SceneTest_UI_2 implements Scene {
             deg += 1;
         }
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
+            v.rotateDeg(10);
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         //GL11.glClearColor(0.129f, 0.129f, 0.129f,1);
 
@@ -164,16 +169,31 @@ public class SceneTest_UI_2 implements Scene {
                 0,0,0,1,1);
 
         //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
-        renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
+        //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
 
-        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
-                0,0,0,1,1);
+//        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
+//                0,0,0,1,1);
 
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
 
         renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
         //renderer2D.setColor(Color.RED);
         //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
+
+        renderer2D.setColor(1,0,0,0.3f);
+//        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
+//                new Vector2(-5,0),
+//                new Vector2(2.5f,0),
+//                new Vector2(1,2),
+//                new Vector2(2, 2),
+//                v
+//        });
+
+        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
+                new Vector2(-3,0),
+                new Vector2(0f,0),
+                v
+        });
 
         renderer2D.end();
 

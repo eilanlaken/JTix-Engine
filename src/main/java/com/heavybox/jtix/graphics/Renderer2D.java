@@ -1794,9 +1794,6 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += values.length;
     }
 
-    // TODO bug here: when vertices are co-linear and folding (opposite direction).
-    // TODO example input to reproduce error:
-    // TODO [{-3,0}, {0,0}, {-1,0}]
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         setMode(GL11.GL_TRIANGLES);
