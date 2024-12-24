@@ -174,7 +174,7 @@ public class SceneTest_UI_2 implements Scene {
 //        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
 //                0,0,0,1,1);
 
-        renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
+        //renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
 
         renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
         //renderer2D.setColor(Color.RED);
@@ -193,7 +193,13 @@ public class SceneTest_UI_2 implements Scene {
                 new Vector2(-3,0),
                 new Vector2(0f,0),
                 v
-        });
+        }, 4, -4, 30, 1,1);
+
+        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
+                new Vector2(-3,0),
+                new Vector2(0f,0),
+                v
+        }, 4, 4, 30, 1,1);
 
         renderer2D.end();
 

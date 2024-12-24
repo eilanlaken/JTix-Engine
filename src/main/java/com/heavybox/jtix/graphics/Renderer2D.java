@@ -1795,11 +1795,28 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
+        drawCurveFilled(stroke, smoothness, points, 0, 0, 0, 1, 1);
+    }
+
+    // TODO: optimize: remove *new* operator.
+    public void drawCurveFilled(float stroke, int smoothness, final Vector2[] points, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         setMode(GL11.GL_TRIANGLES);
         setTexture(defaultTexture);
 
-        Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points);
+        Vector2[] points_transformed = new Vector2[points.length];
+        /* transform vertices */
+        for (int i = 0; i < points_transformed.length; i++) {
+            Vector2 vertex = new Vector2(points[i]);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(deg);
+            vertex.add(x, y);
+            points_transformed[i] = vertex;
+        }
+
+        Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points_transformed);
+
+
         if (!ensureCapacity(vertices.size, vertices.size)) flush();
 
         /*
@@ -1826,7 +1843,7 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
-    public Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
+    private Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
         if (points.length < 2) {
             return null;
         }
@@ -2228,8 +2245,23 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
-    public void drawFunctionFilled(int widthPixels, float thickness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawFunctionFilled(int widthPixels, float strokePixels, int smoothness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y) {
+        drawFunctionFilled(widthPixels, strokePixels, smoothness, minX, maxX, refinement, f, x, y, 0, 1, 1);
+    }
 
+    public void drawFunctionFilled(int widthPixels, float strokePixels, int smoothness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
+        refinement = Math.max(2, refinement);
+
+        if (minX > maxX) {
+            float tmp = minX;
+            minX = maxX;
+            maxX = tmp;
+        }
+        float domainLength = maxX - minX;
+        float domainLengthInv = 1 / domainLength;
+        scaleX = scaleX * widthPixels * domainLengthInv * pixelScaleWidthInv;
+        scaleY = scaleY * widthPixels * domainLengthInv * pixelScaleHeightInv;
+        float step = domainLength / refinement;
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
