@@ -131,7 +131,7 @@ public class SceneTest_UI_2 implements Scene {
 
 
         // render font
-        renderer2D.begin();
+        renderer2D.begin(camera);
 
 
         //renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
@@ -201,7 +201,7 @@ public class SceneTest_UI_2 implements Scene {
 //                v
 //        }, 4, 4, 30, 1,1);
 
-        renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,30,1,1);
+        renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,0,1,1);
 
         renderer2D.end();
 

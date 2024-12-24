@@ -2271,7 +2271,7 @@ public class Renderer2D implements MemoryResourceHolder {
             points[i] = vertex;
         }
 
-        drawCurveFilled(strokePixels, smoothness, points, x, y, deg, scaleX, scaleY);
+        drawCurveFilled(strokePixels * pixelScaleHeightInv, smoothness, points, x, y, deg, scaleX, scaleY);
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
