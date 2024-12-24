@@ -131,7 +131,7 @@ public class SceneTest_UI_2 implements Scene {
 
 
         // render font
-        renderer2D.begin(camera);
+        renderer2D.begin();
 
 
         //renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
@@ -180,7 +180,7 @@ public class SceneTest_UI_2 implements Scene {
         //renderer2D.setColor(Color.RED);
         //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
 
-        renderer2D.setColor(1,0,0,0.3f);
+        renderer2D.setColor(1,0,0,1f);
 //        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
 //                new Vector2(-5,0),
 //                new Vector2(2.5f,0),
@@ -189,17 +189,19 @@ public class SceneTest_UI_2 implements Scene {
 //                v
 //        });
 
-        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
-                new Vector2(-3,0),
-                new Vector2(0f,0),
-                v
-        }, 4, -4, 30, 1,1);
+//        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
+//                new Vector2(-3,0),
+//                new Vector2(0f,0),
+//                v
+//        }, 4, -4, 30, 1,1);
+//
+//        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
+//                new Vector2(-3,0),
+//                new Vector2(0f,0),
+//                v
+//        }, 4, 4, 30, 1,1);
 
-        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
-                new Vector2(-3,0),
-                new Vector2(0f,0),
-                v
-        }, 4, 4, 30, 1,1);
+        renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,30,1,1);
 
         renderer2D.end();
 

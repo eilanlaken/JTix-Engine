@@ -2245,11 +2245,11 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += refinement;
     }
 
-    public void drawFunctionFilled(int widthPixels, float strokePixels, int smoothness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y) {
+    public void drawFunctionFilled(int widthPixels, int strokePixels, int smoothness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y) {
         drawFunctionFilled(widthPixels, strokePixels, smoothness, minX, maxX, refinement, f, x, y, 0, 1, 1);
     }
 
-    public void drawFunctionFilled(int widthPixels, float strokePixels, int smoothness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawFunctionFilled(int widthPixels, int strokePixels, int smoothness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float deg, float scaleX, float scaleY) {
         refinement = Math.max(2, refinement);
 
         if (minX > maxX) {
@@ -2262,6 +2262,16 @@ public class Renderer2D implements MemoryResourceHolder {
         scaleX = scaleX * widthPixels * domainLengthInv * pixelScaleWidthInv;
         scaleY = scaleY * widthPixels * domainLengthInv * pixelScaleHeightInv;
         float step = domainLength / refinement;
+
+        Vector2[] points = new Vector2[refinement];
+        for (int i = 0; i < refinement; i++) {
+            Vector2 vertex = new Vector2();
+            vertex.x = minX + i * step;
+            vertex.y = f.apply(vertex.x);
+            points[i] = vertex;
+        }
+
+        drawCurveFilled(strokePixels, smoothness, points, x, y, deg, scaleX, scaleY);
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
