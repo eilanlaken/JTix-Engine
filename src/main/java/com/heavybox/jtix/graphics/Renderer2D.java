@@ -1836,7 +1836,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         float lineWidth = Math.abs(stroke) * 0.5f;
         Array<Vector2> vertices = new Array<>();
-        Array<Vector2> middlePoints = new Array<>();  // middle points per each line segment.
+        Array<Vector2> middlePoints = new Array<>();  // middle points: one for each line segment.
         boolean closed = false;
 
         if (points.length == 2) {
@@ -2229,6 +2229,10 @@ public class Renderer2D implements MemoryResourceHolder {
         }
 
         vertexIndex += refinement;
+    }
+
+    public void drawFunctionFilled(int widthPixels, float thickness, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
+
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */

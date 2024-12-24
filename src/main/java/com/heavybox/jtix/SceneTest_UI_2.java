@@ -171,7 +171,7 @@ public class SceneTest_UI_2 implements Scene {
 
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
 
-        renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,0,1,1);
+        renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
         //renderer2D.setColor(Color.RED);
         //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
 
