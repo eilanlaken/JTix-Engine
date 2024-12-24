@@ -135,10 +135,8 @@ public class SceneTest_UI_2 implements Scene {
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
 
-
-
         renderer2D.setColor(Color.WHITE);
-        renderer2D.setTexture(flower);
+        //renderer2D.setTexture(flower);
         if (false) renderer2D.drawPolygonFilled(new float[] {
                 -300, 0,
                 -100, -100,
@@ -152,7 +150,6 @@ public class SceneTest_UI_2 implements Scene {
                 -100 , 100
         }, 200 / 32f,0,0,1,1);
 
-        renderer2D.setTexture(flower);
         if (false) renderer2D.drawRectangleFilled(2.5f,1,
                 0,
                 0.2f,
@@ -167,12 +164,14 @@ public class SceneTest_UI_2 implements Scene {
                 0,0,0,1,1);
 
         //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
+        renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
+
         renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
                 0,0,0,1,1);
 
         renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
 
-
+        renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,0,1,1);
         //renderer2D.setColor(Color.RED);
         //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
 

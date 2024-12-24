@@ -199,7 +199,7 @@ public class Renderer2D implements MemoryResourceHolder {
         currentShader.bindUniform("u_camera_combined", currentCamera.combined);
     }
 
-    public void setTexture(Texture texture) {
+    private void setTexture(Texture texture) {
         if (texture == null) texture = defaultTexture;
         if (currentTexture == texture) return;
         flush();
@@ -295,6 +295,8 @@ public class Renderer2D implements MemoryResourceHolder {
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
+        scaleX = scaleX * pixelScaleWidthInv;
+        scaleY = scaleY * pixelScaleHeightInv;
         float widthHalf  = texture.width  * scaleX * 0.5f;
         float heightHalf = texture.height * scaleY * 0.5f;
 
@@ -442,7 +444,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
         scaleX = scaleX * pixelScaleWidthInv;
         scaleY = scaleY * pixelScaleHeightInv;
-
         float width = texture.width * scaleX;
         float height = texture.height * scaleY;
         float widthHalf  = width * 0.5f;
@@ -1739,7 +1740,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - curves */
 
-    public void drawCurveThin(final Vector2... values) {
+    public void drawFunctionThin(final Vector2... values) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
         if (!ensureCapacity(values.length, values.length * 2)) flush();
@@ -1763,7 +1764,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += values.length;
     }
 
-    public void drawCurveThin(final Vector2[] values, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawFunctionThin(final Vector2[] values, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
         if (!ensureCapacity(values.length, values.length * 2)) flush();
@@ -1791,79 +1792,6 @@ public class Renderer2D implements MemoryResourceHolder {
             indices.put(startVertex + i + 1);
         }
         vertexIndex += values.length;
-    }
-
-    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        refinement = Math.max(2, refinement);
-        if (!ensureCapacity(refinement, refinement * 2)) flush();
-
-        setMode(GL11.GL_LINES);
-        setTexture(defaultTexture);
-
-        if (minX > maxX) {
-            float tmp = minX;
-            minX = maxX;
-            maxX = tmp;
-        }
-        float step = (maxX - minX) / refinement;
-
-        Vector2 vertex = vectors2Pool.allocate();
-        for (int i = 0; i < refinement; i++) {
-            vertex.x = minX + i * step;
-            vertex.y = f.apply(vertex.x);
-            positions.put(vertex.x).put(vertex.y);
-            colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
-        }
-        vectors2Pool.free(vertex);
-
-        /* put indices */
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < refinement - 1; i++) {
-            indices.put(startVertex + i);
-            indices.put(startVertex + i + 1);
-        }
-
-        vertexIndex += refinement;
-    }
-
-    public void drawCurveThin(float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        refinement = Math.max(2, refinement);
-        if (!ensureCapacity(refinement, refinement * 2)) flush();
-
-        setMode(GL11.GL_LINES);
-        setTexture(defaultTexture);
-
-        if (minX > maxX) {
-            float tmp = minX;
-            minX = maxX;
-            maxX = tmp;
-        }
-        float step = (maxX - minX) / refinement;
-
-        Vector2 vertex = vectors2Pool.allocate();
-        for (int i = 0; i < refinement; i++) {
-            vertex.x = minX + i * step;
-            vertex.y = f.apply(vertex.x);
-            vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(degrees);
-            vertex.add(x, y);
-            positions.put(vertex.x).put(vertex.y);
-            colors.put(currentTint);
-            textCoords.put(0.5f).put(0.5f);
-        }
-        vectors2Pool.free(vertex);
-
-        /* put indices */
-        int startVertex = this.vertexIndex;
-        for (int i = 0; i < refinement - 1; i++) {
-            indices.put(startVertex + i);
-            indices.put(startVertex + i + 1);
-        }
-
-        vertexIndex += refinement;
     }
 
     // TODO bug here: when vertices are co-linear and folding (opposite direction).
@@ -1914,7 +1842,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (points.length == 2) {
             Vector2 midPoint = new Vector2();
             Vector2.midPoint(points[0], points[1], midPoint);
-            createTriangles(points[0], midPoint, points[1], vertices, lineWidth, smoothness);
+            createTriangles(points[0], midPoint, points[1], lineWidth, smoothness, vertices);
         } else {
 
             if (points[0].equals(points[points.length - 1])) {
@@ -1941,7 +1869,7 @@ public class Renderer2D implements MemoryResourceHolder {
             }
 
             for (int i = 1; i < middlePoints.size; i++) {
-                createTriangles(middlePoints.get(i - 1), points[i], middlePoints.get(i), vertices, lineWidth, smoothness);
+                createTriangles(middlePoints.get(i - 1), points[i], middlePoints.get(i), lineWidth, smoothness, vertices);
             }
         }
 
@@ -1959,7 +1887,7 @@ public class Renderer2D implements MemoryResourceHolder {
         return vertices;
     }
 
-    private void createTriangles(Vector2 p0, Vector2 p1, Vector2 p2, Array<Vector2> verts, float width, int refinement) {
+    private void createTriangles(Vector2 p0, Vector2 p1, Vector2 p2, float width, int refinement, Array<Vector2> out) {
         var t0 = new Vector2(p1).sub(p0);
         var t2 = new Vector2(p2).sub(p1);
 
@@ -1989,33 +1917,33 @@ public class Renderer2D implements MemoryResourceHolder {
 
         if (anchorLength > p0p1Length || anchorLength > p1p2Length) {
 
-            verts.add(new Vector2(p0).add(t0));
-            verts.add(new Vector2(p0).sub(t0));
-            verts.add(new Vector2(p1).add(t0));
+            out.add(new Vector2(p0).add(t0));
+            out.add(new Vector2(p0).sub(t0));
+            out.add(new Vector2(p1).add(t0));
 
-            verts.add(new Vector2(p0).sub(t0));
-            verts.add(new Vector2(p1).add(t0));
-            verts.add(new Vector2(p1).sub(t0));
+            out.add(new Vector2(p0).sub(t0));
+            out.add(new Vector2(p1).add(t0));
+            out.add(new Vector2(p1).sub(t0));
 
-            createRoundCap(p1, new Vector2(p1).add(t0), new Vector2(p1).add(t2), p2, refinement, verts);
+            createRoundCap(p1, new Vector2(p1).add(t0), new Vector2(p1).add(t2), p2, refinement, out);
 
-            verts.add(new Vector2(p2).add(t2));
-            verts.add(new Vector2(p1).sub(t2));
-            verts.add(new Vector2(p1).add(t2));
+            out.add(new Vector2(p2).add(t2));
+            out.add(new Vector2(p1).sub(t2));
+            out.add(new Vector2(p1).add(t2));
 
-            verts.add(new Vector2(p2).add(t2));
-            verts.add(new Vector2(p1).sub(t2));
-            verts.add(new Vector2(p2).sub(t2));
+            out.add(new Vector2(p2).add(t2));
+            out.add(new Vector2(p1).sub(t2));
+            out.add(new Vector2(p2).sub(t2));
 
         } else {
 
-            verts.add(new Vector2(p0).add(t0));
-            verts.add(new Vector2(p0).sub(t0));
-            verts.add(new Vector2(p1).sub(anchor));
+            out.add(new Vector2(p0).add(t0));
+            out.add(new Vector2(p0).sub(t0));
+            out.add(new Vector2(p1).sub(anchor));
 
-            verts.add(new Vector2(p0).add(t0));
-            verts.add(new Vector2(p1).sub(anchor));
-            verts.add(new Vector2(p1).add(t0));
+            out.add(new Vector2(p0).add(t0));
+            out.add(new Vector2(p1).sub(anchor));
+            out.add(new Vector2(p1).add(t0));
 
             Vector2 _p0 = new Vector2(p1).add(t0);
             Vector2 _p1 = new Vector2(p1).add(t2);
@@ -2023,27 +1951,27 @@ public class Renderer2D implements MemoryResourceHolder {
 
             Vector2 center = p1;
 
-            verts.add(_p0);
-            verts.add(center);
-            verts.add(_p2);
+            out.add(_p0);
+            out.add(center);
+            out.add(_p2);
 
-            createRoundCap(center, _p0, _p1, _p2, refinement, verts);
+            createRoundCap(center, _p0, _p1, _p2, refinement, out);
 
-            verts.add(center);
-            verts.add(_p1);
-            verts.add(_p2);
+            out.add(center);
+            out.add(_p1);
+            out.add(_p2);
 
-            verts.add(new Vector2(p2).add(t2));
-            verts.add(new Vector2(p1).sub(anchor));
-            verts.add(new Vector2(p1).add(t2));
+            out.add(new Vector2(p2).add(t2));
+            out.add(new Vector2(p1).sub(anchor));
+            out.add(new Vector2(p1).add(t2));
 
-            verts.add(new Vector2(p2).add(t2));
-            verts.add(new Vector2(p1).sub(anchor));
-            verts.add(new Vector2(p2).sub(t2));
+            out.add(new Vector2(p2).add(t2));
+            out.add(new Vector2(p1).sub(anchor));
+            out.add(new Vector2(p2).sub(t2));
         }
     }
 
-    private void createRoundCap(Vector2 center, Vector2 _p0, Vector2 _p1, Vector2 nextPointInLine, int refinement, Array<Vector2> verts) {
+    private void createRoundCap(Vector2 center, Vector2 _p0, Vector2 _p1, Vector2 nextPointInLine, int refinement, Array<Vector2> out) {
         float radius = new Vector2(center).sub(_p0).len();
 
         float angle0 = MathUtils.atan2((_p1.y - center.y), (_p1.x - center.x));
@@ -2076,12 +2004,12 @@ public class Renderer2D implements MemoryResourceHolder {
 
         float da = angleDiff / refinement;
         for (int i = 0; i < refinement; i++) {
-            verts.add(new Vector2(center.x, center.y));
-            verts.add(new Vector2(
+            out.add(new Vector2(center.x, center.y));
+            out.add(new Vector2(
                     center.x + radius * MathUtils.cosRad(orgAngle0 + da * i),
                     center.y + radius * MathUtils.sinRad(orgAngle0 + da * i)
             ));
-            verts.add(new Vector2(
+            out.add(new Vector2(
                     center.x + radius * MathUtils.cosRad(orgAngle0 + da * (1 + i)),
                     center.y + radius * MathUtils.sinRad(orgAngle0 + da * (1 + i))
             ));
@@ -2161,12 +2089,12 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
 
-    public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, float deg) {
+    public void drawStringLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, float deg) {
         // TODO
     }
 
     // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>
-    public void drawTextLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
+    public void drawStringLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
         if (font == null) font = defaultFont;
@@ -2237,7 +2165,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     // TODO, maybe.
-    public void drawTextBlock(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
+    public void drawStringBlock(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
 
         /* calculate the line total height */
         float maxAscent = 0;
@@ -2257,6 +2185,50 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         float total_height = (maxAscent + maxDescent);
 
+    }
+
+    /* Rendering primitives: Functions */
+
+    public void drawFunctionThin(int widthPixels, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        refinement = Math.max(2, refinement);
+        if (!ensureCapacity(refinement, refinement * 2)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(defaultTexture);
+
+        if (minX > maxX) {
+            float tmp = minX;
+            minX = maxX;
+            maxX = tmp;
+        }
+        float domainLength = maxX - minX;
+        float domainLengthInv = 1 / (maxX - minX);
+        scaleX = scaleX * widthPixels * domainLengthInv * pixelScaleWidthInv;
+        scaleY = scaleY * widthPixels * domainLengthInv * pixelScaleHeightInv;
+        float step = domainLength / refinement;
+
+        Vector2 vertex = vectors2Pool.allocate();
+        for (int i = 0; i < refinement; i++) {
+            vertex.x = minX + i * step;
+            vertex.y = f.apply(vertex.x);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(degrees);
+            vertex.add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+        vectors2Pool.free(vertex);
+
+        /* put indices */
+        int startVertex = this.vertexIndex;
+        for (int i = 0; i < refinement - 1; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + i + 1);
+        }
+
+        vertexIndex += refinement;
     }
 
     /* Rendering Ops: ensureCapacity(), flush(), end(), deleteAll(), createDefaults...() */
