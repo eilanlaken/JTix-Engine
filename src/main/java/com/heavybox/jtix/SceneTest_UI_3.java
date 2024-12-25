@@ -6,7 +6,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
+import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input_2.Input;
 import com.heavybox.jtix.input_2.Keyboard;
 import com.heavybox.jtix.input_2.Mouse;
@@ -16,10 +16,10 @@ import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 import com.heavybox.jtix.graphics.Font;
 
-public class SceneTest_Fonts_4 implements Scene {
+public class SceneTest_UI_3 implements Scene {
 
 
-    private Renderer2D_4 renderer2D = new Renderer2D_4();
+    private Renderer2D renderer2D = new Renderer2D();
 
 
     private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
@@ -129,7 +129,7 @@ public class SceneTest_Fonts_4 implements Scene {
             renderer2D.drawCircleFilled(60,40,positions[i].x,positions[i].y,0,1,1);
         }
         renderer2D.setColor(Color.CYAN);
-        renderer2D.drawTextLine(text.toString(), 64, font, true,0, 0, true);
+        renderer2D.drawStringLine(text.toString(), 64, font, true,0, 0, true);
         renderer2D.popPixelBounds();
 
         for (int i = 25; i < 40; i++) {

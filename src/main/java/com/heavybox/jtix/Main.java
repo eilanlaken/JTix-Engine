@@ -1,34 +1,9 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application.ApplicationWindowAttributes;
-import com.heavybox.jtix.application_2.AppLogger;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.application_2.ApplicationSettings;
-import com.heavybox.jtix.assets.Assets;
-import com.heavybox.jtix.async.AsyncTask;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.tools.ToolsFontGenerator;
-import com.heavybox.jtix.tools.ToolsTextureGenerator;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.SharedLibrary;
-import org.lwjgl.system.SharedLibraryUtil;
-import org.lwjgl.util.freetype.FT_Face;
-import org.lwjgl.util.freetype.FreeType;
-import org.lwjgl.util.harfbuzz.HarfBuzz;
-import org.lwjgl.util.harfbuzz.hb_glyph_info_t;
-import org.lwjgl.util.harfbuzz.hb_glyph_position_t;
 
-import java.awt.*;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import static org.lwjgl.util.freetype.FreeType.*;
-import static org.lwjgl.util.harfbuzz.HarfBuzz.*;
 
 public class Main {
 

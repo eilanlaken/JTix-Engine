@@ -135,42 +135,22 @@ public class SceneTest_UI_2 implements Scene {
 
 
         // render font
-        renderer2D.begin(camera);
+        renderer2D.begin();
 
-
-        //renderer2D.drawTextLine("מה נשמע", 54, font2, true,0, 0);
-        //renderer2D.drawTextLine("Hello world", 54, font, true,0, -54);
+        // TODO: bug here.
+        //renderer2D.drawStringLine(text.toString(), 20, font, true,0,0, true);
+        //renderer2D.drawStringLine(text.toString(), 20, null, true,0,0, true);
+        //renderer2D.drawStringLine(text.toString(), 64, font, true,0,0, true);
+        renderer2D.drawStringLine(text.toString(), 64, null, true,0,0, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
 
         renderer2D.setColor(Color.WHITE);
         //renderer2D.setTexture(flower);
-        if (false) renderer2D.drawPolygonFilled(new float[] {
-                -300, 0,
-                -100, -100,
-                -200, -300,
-                0, -200 ,
-                0, -200 ,
-                100 , -100,
-                300 , 0,
-                100 , 100 ,
-                0, 300 ,
-                -100 , 100
-        }, 200 / 32f,0,0,1,1);
 
-        if (false) renderer2D.drawRectangleFilled(2.5f,1,
-                0,
-                0.2f,
-                0,
-                0,
 
-                1,
-                2,
-                20,
-                2,
 
-                0,0,0,1,1);
 
         //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
         //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
@@ -180,32 +160,10 @@ public class SceneTest_UI_2 implements Scene {
 
         //renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
 
-        renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
-        //renderer2D.setColor(Color.RED);
-        //renderer2D.drawCircleFilled(0.5f,40,0,0,0,1,1);
+        //renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
 
-        renderer2D.setColor(1,0,0,1f);
-//        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
-//                new Vector2(-5,0),
-//                new Vector2(2.5f,0),
-//                new Vector2(1,2),
-//                new Vector2(2, 2),
-//                v
-//        });
 
-//        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
-//                new Vector2(-3,0),
-//                new Vector2(0f,0),
-//                v
-//        }, 4, -4, 30, 1,1);
-//
-//        renderer2D.drawCurveFilled(1, 10, new Vector2[]{
-//                new Vector2(-3,0),
-//                new Vector2(0f,0),
-//                v
-//        }, 4, 4, 30, 1,1);
-
-        renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,0,1,1);
+        //renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,0,1,1);
 
         renderer2D.end();
 
