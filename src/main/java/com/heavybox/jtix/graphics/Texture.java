@@ -7,9 +7,7 @@ import org.lwjgl.opengl.*;
 
 import java.nio.ByteBuffer;
 
-// TODO:
-// need to implement LOD: GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
-// try to implement string constructor.
+// TODO: from String (filepath) constructor.
 public class Texture implements MemoryResource {
 
     private       int       handle;

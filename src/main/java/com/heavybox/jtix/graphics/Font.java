@@ -10,17 +10,10 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.freetype.*;
-import org.lwjgl.util.harfbuzz.hb_glyph_info_t;
-import org.lwjgl.util.harfbuzz.hb_glyph_position_t;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static org.lwjgl.util.harfbuzz.HarfBuzz.*;
 
 /*
 TODO:
@@ -30,29 +23,28 @@ https://github.com/tangrams/harfbuzz-example/blob/master/src/main.cpp
 public class Font implements MemoryResource {
 
 
-    public final FT_Face                                         ftFace;
-    public final Map<Integer, GlyphNotebook>                     glyphsNotebooks = new HashMap<>();
-    public final Map<Tuple3<Character, Integer, Boolean>, Glyph> cache           = new HashMap<>(); // <char, size, antialiasing?> -> Glyph
-
+    private final FT_Face                                         ftFace;
+    private final Map<Integer, GlyphNotebook>                     glyphsNotebooks = new HashMap<>();
+    private final Map<Tuple3<Character, Integer, Boolean>, Glyph> cache           = new HashMap<>(); // <char, size, antialiasing?> -> Glyph
+    private final ByteBuffer                                      buffer;
     // TODO: just to be on the safe side. I want to keep a reference so that the GC does not delete
     // TODO: the ByteBuffer while it is still being used by FreeType.
-    private final ByteBuffer fontDataBuffer;
 
     public Font(final String fontPath) {
         long library = Graphics.getFreeType();
         try {
-            this.fontDataBuffer = Assets.fileToByteBuffer(fontPath);
+            this.buffer = Assets.fileToByteBuffer(fontPath);
         } catch (Exception e) {
             throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
         }
         PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
-        FreeType.FT_New_Memory_Face(library, fontDataBuffer, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
+        FreeType.FT_New_Memory_Face(library, buffer, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
         long face = facePointerBuffer.get(0);
         ftFace = FT_Face.create(face);
     }
 
     public Font(final ByteBuffer bytes) {
-        this.fontDataBuffer = bytes;
+        this.buffer = bytes;
         long library = Graphics.getFreeType();
         PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_New_Memory_Face(library, bytes, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
@@ -86,9 +78,9 @@ public class Font implements MemoryResource {
 
         private static final int PADDING = 5;
 
-        private int penX           = PADDING;
-        private int penY           = PADDING;
-        private int maxGlyphHeight = 0;
+        private int penX = PADDING;
+        private int penY = PADDING;
+        private int span = 0; // The vertical span of the current written line
 
         public  final Array<Texture> pages = new Array<>(true,1);
         private final int            pageSize;
@@ -170,7 +162,7 @@ public class Font implements MemoryResource {
                 }
             }
             buffer.flip();
-            maxGlyphHeight = Math.max(maxGlyphHeight, data.height);
+            span = Math.max(span, data.height);
 
             if (penX + PADDING + data.width < pageSize && penY + PADDING + data.height < pageSize) {
                 TextureBinder.bind(pages.last());
@@ -193,9 +185,9 @@ public class Font implements MemoryResource {
                 return data;
             }
 
-            if (penX + PADDING + data.width >= pageSize && penY + maxGlyphHeight + PADDING + data.height < pageSize) {
+            if (penX + PADDING + data.width >= pageSize && penY + span + PADDING + data.height < pageSize) {
                 penX = PADDING;
-                penY += maxGlyphHeight + PADDING;
+                penY += span + PADDING;
 
                 TextureBinder.bind(pages.last());
                 GL11.glTexSubImage2D(
