@@ -1,4 +1,4 @@
-package com.heavybox.jtix.application_2;
+package com.heavybox.jtix.application;
 
 import java.lang.reflect.Field;
 

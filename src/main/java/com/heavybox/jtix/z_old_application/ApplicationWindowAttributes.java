@@ -1,6 +1,6 @@
-package com.heavybox.jtix.application_2;
+package com.heavybox.jtix.z_old_application;
 
-public final class ApplicationSettings implements Cloneable {
+public class ApplicationWindowAttributes {
 
     public int     posX                   = -1;
     public int     posY                   = -1;
@@ -10,25 +10,17 @@ public final class ApplicationSettings implements Cloneable {
     public int     minHeight              = -1;
     public int     maxWidth               = -1;
     public int     maxHeight              = -1;
-    public int     MSAA                   =  0; // TODO
     public boolean autoMinimized          = true;
+    public boolean resizable              = true;
+    public boolean decorated              = true;
     public boolean minimized              = false;
     public boolean maximized              = false;
     public String  iconPath               = null;
     public boolean visible                = true;
     public boolean fullScreen             = false;
     public String  title                  = "JTix Game";
-    public boolean vSyncEnabled           = false;
-
     public boolean initialVisible         = true;
-    public boolean resizable              = true;
-    public boolean decorated              = true;
-    public boolean floating               = false;
-    public boolean transparentWindow      = false;
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+    public boolean vSyncEnabled           = false;
+    public boolean transparentFrameBuffer = false;
 
 }

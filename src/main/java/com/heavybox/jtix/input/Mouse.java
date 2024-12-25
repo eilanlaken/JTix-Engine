@@ -1,6 +1,6 @@
 package com.heavybox.jtix.input;
 
-import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.application.Application;
 import org.lwjgl.glfw.*;
 
 public class Mouse {

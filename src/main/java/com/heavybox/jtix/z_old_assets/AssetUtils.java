@@ -1,8 +1,8 @@
 package com.heavybox.jtix.z_old_assets;
 
 import com.google.gson.Gson;
-import com.heavybox.jtix.application.ApplicationWindow;
-import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.z_old_application.ApplicationWindow;
+import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.collections.Array;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;

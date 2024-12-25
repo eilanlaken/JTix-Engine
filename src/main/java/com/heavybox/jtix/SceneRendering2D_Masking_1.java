@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application.ApplicationScreen;
-import com.heavybox.jtix.application.ApplicationUtils;
+import com.heavybox.jtix.z_old_application.ApplicationScreen;
+import com.heavybox.jtix.z_old_application.ApplicationUtils;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;

@@ -1,7 +1,7 @@
 package com.heavybox.jtix.assets;
 
 import com.google.gson.Gson;
-import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.async.AsyncTaskRunner;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Queue;

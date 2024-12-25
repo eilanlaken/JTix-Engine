@@ -1,7 +1,7 @@
 package com.heavybox.jtix.z_old_input;
 
-import com.heavybox.jtix.application.ApplicationWindow;
-import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.z_old_application.ApplicationWindow;
+import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;

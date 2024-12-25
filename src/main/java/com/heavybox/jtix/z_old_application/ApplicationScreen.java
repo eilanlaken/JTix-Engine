@@ -1,4 +1,4 @@
-package com.heavybox.jtix.application;
+package com.heavybox.jtix.z_old_application;
 
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.memory.MemoryResourceHolder;

@@ -1,6 +1,6 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application.ApplicationScreen;
+import com.heavybox.jtix.z_old_application.ApplicationScreen;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.z_old_input.Keyboard;
 import com.heavybox.jtix.z_old_input.Mouse;

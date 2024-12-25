@@ -1,6 +1,6 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application.ApplicationScreen;
+import com.heavybox.jtix.z_old_application.ApplicationScreen;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.z_old_input.Keyboard;

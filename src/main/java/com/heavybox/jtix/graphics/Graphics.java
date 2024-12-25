@@ -1,8 +1,8 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.application.ApplicationWindow;
-import com.heavybox.jtix.application_2.Application;
-import com.heavybox.jtix.application_2.ApplicationException;
+import com.heavybox.jtix.z_old_application.ApplicationWindow;
+import com.heavybox.jtix.application.Application;
+import com.heavybox.jtix.application.ApplicationException;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
@@ -11,10 +11,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
-import org.lwjgl.system.Library;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.util.freetype.FreeType;
-import org.lwjgl.util.harfbuzz.HarfBuzz;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

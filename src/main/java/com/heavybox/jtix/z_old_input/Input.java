@@ -1,6 +1,6 @@
 package com.heavybox.jtix.z_old_input;
 
-import com.heavybox.jtix.application_2.Application;
+import com.heavybox.jtix.application.Application;
 
 public class Input {
 

@@ -1,7 +1,7 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.application_2.Application;
-import com.heavybox.jtix.application_2.ApplicationSettings;
+import com.heavybox.jtix.application.Application;
+import com.heavybox.jtix.application.ApplicationSettings;
 
 import java.io.IOException;
 
