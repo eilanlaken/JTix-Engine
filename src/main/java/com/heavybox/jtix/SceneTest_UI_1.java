@@ -68,7 +68,7 @@ public class SceneTest_UI_1 implements Scene {
     @Override
     public void update() {
 
-        Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
+        Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
 
         }

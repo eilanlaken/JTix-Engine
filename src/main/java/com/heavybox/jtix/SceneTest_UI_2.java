@@ -76,7 +76,7 @@ public class SceneTest_UI_2 implements Scene {
     @Override
     public void update() {
 
-        Vector3 screen = new Vector3(Input.mouse.getCursorX(), Input.mouse.getCursorY(), 0);
+        Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
 
         }
@@ -112,6 +112,10 @@ public class SceneTest_UI_2 implements Scene {
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
             x += 0.01f;
+        }
+
+        if (Input.mouse.moved()) {
+            System.out.println("moved");
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {

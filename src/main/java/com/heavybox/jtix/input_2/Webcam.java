@@ -15,6 +15,7 @@ import org.opencv.videoio.VideoCapture;
 
 import java.nio.ByteBuffer;
 
+// TODO: add functionality to test if webcam is even available
 public class Webcam implements MemoryResourceHolder {
 
     private boolean      init      = false;

@@ -93,32 +93,36 @@ public class Mouse {
         return sensitivity;
     }
 
-    public int getPrevCursorX() {
+    public int getXPrev() {
         return prevCursorX;
     }
 
-    public int getPrevCursorY() {
+    public int getYPrev() {
         return prevCursorY;
     }
 
-    public int getCursorX() {
+    public int getX() {
         return cursorX;
     }
 
-    public int getCursorY() {
+    public int getY() {
         return cursorY;
     }
 
-    public int getCursorDeltaX() {
+    public int getXDelta() {
         return cursorDeltaX;
     }
 
-    public int getCursorDeltaY() {
+    public int geYDelta() {
         return cursorDeltaY;
     }
 
     public boolean isCursorInWindow() {
         return cursorInWindow;
+    }
+
+    public boolean moved() {
+        return cursorDeltaX != 0 || cursorDeltaY != 0;
     }
 
     public boolean isButtonPressed(final Button button) {
