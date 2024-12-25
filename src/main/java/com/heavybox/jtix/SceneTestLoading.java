@@ -6,8 +6,8 @@ import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
 import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.input_2.Mouse;
+import com.heavybox.jtix.input.Input;
+import com.heavybox.jtix.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTestLoading implements Scene {

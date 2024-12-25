@@ -4,7 +4,7 @@ import com.heavybox.jtix.application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.z_graphics_old.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.z_old_input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;

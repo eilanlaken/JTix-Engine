@@ -1,12 +1,10 @@
 package com.heavybox.jtix.application_2;
 
 import com.heavybox.jtix.assets.Assets;
-import com.heavybox.jtix.assets.AssetsException;
 import com.heavybox.jtix.async.Async;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.input_2.Input;
-import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.input.Input;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -21,8 +19,6 @@ import org.lwjgl.system.MemoryUtil;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 

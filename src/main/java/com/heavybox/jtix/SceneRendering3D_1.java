@@ -7,7 +7,7 @@ import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.z_graphics_old.Model;
 import com.heavybox.jtix.z_graphics_old.Renderer3D_old;
 import com.heavybox.jtix.graphics.Shader;
-import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.z_old_input.Keyboard;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_ecs_old.Component;
 import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;

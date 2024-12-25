@@ -1,66 +1,25 @@
 package com.heavybox.jtix.input;
 
-import com.heavybox.jtix.application.ApplicationWindow;
 import com.heavybox.jtix.application_2.Application;
 import com.heavybox.jtix.collections.ArrayInt;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCharCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
-public class Keyboard {
+public final class Keyboard {
 
-    private static Application application = null;
-    private static boolean     initialized = false;
+    private final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
+    private final ArrayInt keysPressed = new ArrayInt(12);
+    private final ArrayInt keysHeld = new ArrayInt(12);
+    private final ArrayInt keysJustPressed = new ArrayInt(12);
 
-    private static final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
-    private static final int[] keysPrevState = new int[keysCurrentState.length];
-    private static final ArrayInt keysPressed = new ArrayInt(12);
-    private static final ArrayInt keysHeld = new ArrayInt(12);
-    private static final ArrayInt keysJustPressed = new ArrayInt(12);
+    private final ArrayInt codepointPressed = new ArrayInt(false, 5);
 
-    private Keyboard() {}
-
-    // TODO: change window to application context.
-    @Deprecated public static void init(ApplicationWindow window) {
-        if (initialized)
-            throw new IllegalStateException("Device input " + Keyboard.class.getSimpleName() + " already initialized.");
-
-        GLFW.glfwSetKeyCallback(window.getHandle(), new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scanCode, int action, int mods) {
-                keysPrevState[key] = keysCurrentState[key];
-                keysCurrentState[key] = action;
-                switch (action) {
-                    case GLFW.GLFW_PRESS: {
-                        if (!keysPressed.contains(key)) keysPressed.add(key);
-                        keysJustPressed.removeValue(key);
-                        break;
-                    }
-                    case GLFW.GLFW_REPEAT: {
-                        if (!keysPressed.contains(key)) keysPressed.add(key);
-                        if (!keysHeld.contains(key)) keysHeld.add(key);
-                        keysJustPressed.removeValue(key);
-                        break;
-                    }
-                    case GLFW.GLFW_RELEASE: {
-                        keysJustPressed.add(key);
-                        keysPressed.removeValue(key);
-                        keysHeld.removeValue(key);
-                        break;
-                    }
-                }
-            }
-        });
-
-        initialized = true;
-    }
-
-    public static void init() {
-        if (initialized) throw new IllegalStateException("Device input " + Keyboard.class.getSimpleName() + " already initialized.");
+    Keyboard() {
 
         GLFW.glfwSetKeyCallback(Application.getWindowHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
-                keysPrevState[key] = keysCurrentState[key];
                 keysCurrentState[key] = action;
                 switch (action) {
                     case GLFW.GLFW_PRESS: {
@@ -84,32 +43,45 @@ public class Keyboard {
             }
         });
 
-        initialized = true;
+        // Set the character callback
+        GLFW.glfwSetCharCallback(Application.getWindowHandle(), new GLFWCharCallback() {
+            @Override
+            public void invoke(long window, int codepoint) {
+                //System.out.printf("Codepoint: U+%04X, Character: %c%n", codepoint, (char) codepoint);
+                codepointPressed.add(codepoint);
+            }
+        });
     }
 
-    public static boolean isKeyPressed(final Key key) {
+    public boolean isKeyPressed(final Key key) {
         if (key == Key.ANY_KEY) return keysPressed.size > 0;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_PRESS || keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public static boolean isKeyReleased(final Key key) {
+    public boolean isKeyReleased(final Key key) {
         if (key.glfwCode == Key.ANY_KEY.glfwCode) return true;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public static boolean isKeyJustPressed(final Key key) {
+    public boolean isKeyJustPressed(final Key key) {
         if (key == Key.ANY_KEY) return keysJustPressed.size > 0;
         else return keysJustPressed.contains(key.glfwCode);
     }
 
-    public static boolean isKeyHeld(final Key key) {
+    public boolean isKeyHeld(final Key key) {
         if (key == Key.ANY_KEY) return keysHeld.size > 0;
         return keysCurrentState[key.glfwCode] == GLFW.GLFW_REPEAT;
     }
 
-    public static void update() {
+    public ArrayInt getCodepointPressed() {
+        return codepointPressed;
+    }
+
+    void update() {
         /* reset internal state */
         keysJustPressed.clear();
+
+        codepointPressed.clear();
     }
 
     public enum Key {

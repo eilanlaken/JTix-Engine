@@ -1,27 +1,20 @@
 package com.heavybox.jtix.input;
 
-import com.heavybox.jtix.application_2.Application;
+public final class Input {
 
-public class Input {
+    public static final Keyboard keyboard = new Keyboard();
+    public static final Mouse    mouse    = new Mouse();
+    public static final Webcam   webcam   = new Webcam();
 
-    private static Application application = null;
-    private static boolean     initialized = false;
+    private Input() {}
 
-    //public static final Mouse mouse = new Mouse();
-    //public static final Keyboard keyboard = new Keyboard();
-
-    public static void init(final Application application) {
-        if (initialized) return;
-        Input.application = application;
-        Mouse.init(application);
-        Keyboard.init();
-        initialized = true;
+    public static void update() {
+        keyboard.update();
+        mouse.update();
     }
 
-    // TODO
-    public void update() {
-
+    public static void cleanup() {
+        webcam.deleteAll();
     }
-
 
 }
