@@ -10,6 +10,7 @@ import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.z_graphics_old.Model;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.MemoryUtil;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.introspector.Property;
@@ -398,7 +399,7 @@ public final class Assets {
     public static ByteBuffer fileToByteBuffer(String filePath) throws IOException {
         Path path = Path.of(filePath);
         byte[] fileBytes = Files.readAllBytes(path);
-        ByteBuffer buffer = ByteBuffer.allocateDirect(fileBytes.length);
+        ByteBuffer buffer = MemoryUtil.memAlloc(fileBytes.length);
         buffer.put(fileBytes);
         buffer.flip(); // Prepare the buffer for reading
         return buffer;

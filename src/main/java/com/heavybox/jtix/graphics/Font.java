@@ -59,7 +59,11 @@ public class Font implements MemoryResource {
     public Glyph getGlyph(final char c, int size, boolean antialiasing) {
         Tuple3<Character, Integer, Boolean> props = new Tuple3<>(c,size,antialiasing);
         Glyph glyph = cache.get(props);
-        if (glyph != null) return glyph;
+        if (glyph != null) {
+            System.out.println("found");
+            return glyph;
+        }
+        System.out.println("NOT FOUND");
         int pageSize = Math.min(2048, MathUtils.nextPowerOf2i(size * 5));
         GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageSize)); // get notebook for given size
         glyph = notebook.draw(c, size, antialiasing);

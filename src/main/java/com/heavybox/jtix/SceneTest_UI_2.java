@@ -23,6 +23,7 @@ public class SceneTest_UI_2 implements Scene {
 
     Texture flower;
 
+    Font aabb = new Font("assets/fonts/OpenSans-Regular.ttf");
     Font font;
     Font font2;
 
@@ -35,8 +36,8 @@ public class SceneTest_UI_2 implements Scene {
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
-        Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
+        //Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
+        //Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
         Assets.loadTexturePack("assets/atlases/spots.yml");
         Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
@@ -50,8 +51,10 @@ public class SceneTest_UI_2 implements Scene {
     public void start() {
 
         flower = Assets.get("assets/textures/flower.png");
-        font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
-        font2 = Assets.get("C:\\Windows\\Fonts\\ahronbd.ttf");
+
+
+        //font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
+        //font2 = Assets.get("C:\\Windows\\Fonts\\ahronbd.ttf");
 
         pack = Assets.get("assets/atlases/spots.yml");
 
@@ -114,10 +117,6 @@ public class SceneTest_UI_2 implements Scene {
             x += 0.01f;
         }
 
-        if (Input.mouse.moved()) {
-            System.out.println("moved");
-        }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
             x -= 0.01f;
         }
@@ -141,7 +140,7 @@ public class SceneTest_UI_2 implements Scene {
         //renderer2D.drawStringLine(text.toString(), 20, font, true,0,0, true);
         //renderer2D.drawStringLine(text.toString(), 20, null, true,0,0, true);
         //renderer2D.drawStringLine(text.toString(), 64, font, true,0,0, true);
-        renderer2D.drawStringLine(text.toString(), 64, null, true,0,0, true);
+        renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
