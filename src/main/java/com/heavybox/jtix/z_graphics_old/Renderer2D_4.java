@@ -2279,7 +2279,8 @@ import static com.heavybox.jtix.math.Matrix4x4.*;
             ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
             buffer.put(bytes);
             buffer.flip(); // Prepare the buffer for reading
-            return new com.heavybox.jtix.graphics.Font(buffer);
+            //return new com.heavybox.jtix.graphics.Font(buffer);
+            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

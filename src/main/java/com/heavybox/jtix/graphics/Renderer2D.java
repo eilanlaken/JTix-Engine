@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.system.MemoryUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -2426,9 +2427,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private static Font createDefaultFont() {
         try (InputStream inputStream = Renderer2D.class.getClassLoader().getResourceAsStream("LiberationSans-Regular.ttf")) {
             if (inputStream == null) throw new GraphicsException("Resource not found: " + "LiberationSans-Regular.ttf");
-            /* Read the InputStream into a ByteBuffer */
             byte[] bytes = inputStream.readAllBytes();
-            ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
+            ByteBuffer buffer = MemoryUtil.memAlloc(bytes.length);
             buffer.put(bytes);
             buffer.flip(); // Prepare the buffer for reading
             return new Font(buffer);

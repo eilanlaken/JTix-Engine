@@ -141,6 +141,7 @@ public class SceneTest_UI_2 implements Scene {
         //renderer2D.drawStringLine(text.toString(), 20, null, true,0,0, true);
         //renderer2D.drawStringLine(text.toString(), 64, font, true,0,0, true);
         renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
+        renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 

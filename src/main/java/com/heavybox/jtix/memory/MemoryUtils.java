@@ -27,12 +27,6 @@ public final class MemoryUtils {
         return buffer;
     }
 
-    public static FloatBuffer createFloatBuffer(final int capacity) {
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(capacity * Float.BYTES);
-        byteBuffer.order(ByteOrder.nativeOrder()); // Set the byte order to native (usually little-endian or big-endian)
-        return byteBuffer.asFloatBuffer();
-    }
-
     public static FloatBuffer store(final float[] data, FloatBuffer target) {
         target.put(data);
         return target.flip();

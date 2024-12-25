@@ -34,11 +34,14 @@ public class Font implements MemoryResource {
     public final Map<Integer, GlyphNotebook>                     glyphsNotebooks = new HashMap<>();
     public final Map<Tuple3<Character, Integer, Boolean>, Glyph> cache           = new HashMap<>(); // <char, size, antialiasing?> -> Glyph
 
+    // TODO: just to be on the safe side. I want to keep a reference so that the GC does not delete
+    // TODO: the ByteBuffer while it is still being used by FreeType.
+    private final ByteBuffer fontDataBuffer;
+
     public Font(final String fontPath) {
         long library = Graphics.getFreeType();
-        ByteBuffer fontDataBuffer;
         try {
-            fontDataBuffer = Assets.fileToByteBuffer(fontPath);
+            this.fontDataBuffer = Assets.fileToByteBuffer(fontPath);
         } catch (Exception e) {
             throw new GraphicsException("Could not read " + fontPath + " into ByteBuffer. Exception: " + e.getMessage());
         }
@@ -49,6 +52,7 @@ public class Font implements MemoryResource {
     }
 
     public Font(final ByteBuffer bytes) {
+        this.fontDataBuffer = bytes;
         long library = Graphics.getFreeType();
         PointerBuffer facePointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_New_Memory_Face(library, bytes, 0, facePointerBuffer); // each ttf file may have multiple indices / multiple faces. Guarantees to have 0
@@ -59,11 +63,7 @@ public class Font implements MemoryResource {
     public Glyph getGlyph(final char c, int size, boolean antialiasing) {
         Tuple3<Character, Integer, Boolean> props = new Tuple3<>(c,size,antialiasing);
         Glyph glyph = cache.get(props);
-        if (glyph != null) {
-            System.out.println("found");
-            return glyph;
-        }
-        System.out.println("NOT FOUND");
+        if (glyph != null) return glyph;
         int pageSize = Math.min(2048, MathUtils.nextPowerOf2i(size * 5));
         GlyphNotebook notebook = glyphsNotebooks.computeIfAbsent(size, k -> new GlyphNotebook(pageSize)); // get notebook for given size
         glyph = notebook.draw(c, size, antialiasing);
