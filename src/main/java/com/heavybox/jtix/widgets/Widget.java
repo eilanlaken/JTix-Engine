@@ -13,11 +13,11 @@ public abstract class Widget {
     private final Set<Region> included = new HashSet<>();
     private final Set<Region> excluded = new HashSet<>();
 
-    float x    = 0;
-    float y    = 0;
-    float deg  = 0;
-    float sclX = 1;
-    float sclY = 1;
+    public float x    = 0;
+    public float y    = 0;
+    public float deg  = 0;
+    public float sclX = 1;
+    public float sclY = 1;
 
     // should be either set by container or calculated.
     float boxWidth;
@@ -33,6 +33,10 @@ public abstract class Widget {
         if (toInclude == null || toInclude.length == 0) throw new WidgetsException("Must include at least 1 region in toInclude array. To create regions, you can use helper methods in the class " + Widgets.class.getSimpleName());
         included.addAll(Arrays.asList(toInclude));
         if (toExclude != null && toExclude.length != 0) excluded.addAll(Arrays.asList(toExclude));
+    }
+
+    public void update() {
+        applyTransform();
     }
 
     private void applyTransform() {

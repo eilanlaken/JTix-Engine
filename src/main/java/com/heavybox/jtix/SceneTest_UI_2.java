@@ -11,13 +11,18 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.widgets.Region;
+import com.heavybox.jtix.widgets.Widget;
 import com.heavybox.jtix.widgets.WidgetButton;
+import com.heavybox.jtix.widgets.Widgets;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_2 implements Scene {
 
 
-    WidgetButton btn = new WidgetButton(200, 120, "hello");
+    //WidgetButton btn = new WidgetButton(200, 120, "hello");
+
+    Widget custom;
 
     private Renderer2D renderer2D = new Renderer2D();
 
@@ -45,6 +50,15 @@ public class SceneTest_UI_2 implements Scene {
         Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.finishLoading();
+
+        Region[] include = new Region[] {Widgets.regionCreateRectangle(200,130)};
+        Region[] exclude = new Region[] {Widgets.regionCreateCircle(100,20)};
+        custom = new Widget(include, exclude) {
+            @Override
+            public void render(Renderer2D renderer2D) {
+
+            }
+        };
 
     }
 
@@ -93,58 +107,39 @@ public class SceneTest_UI_2 implements Scene {
             text.append((char)  codepoint);
         }
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
-            index++;
-        }
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-        }
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
-            Graphics.setCursorResizeNESW();
-        }
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.R)) {
-            Graphics.setCursorResizeNWSE();
-        }
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.T)) {
-            Graphics.setCursorResizeAll();
+
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
+            x += 1;
         }
 
-        if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-            Graphics.setCursorResizeVertical();
-
-        }
-        if (Input.mouse.isButtonClicked(Mouse.Button.MIDDLE)) {
-            Graphics.setCursorNone();
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            x += 0.01f;
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            x -= 0.01f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
+            x -= 1;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
             deg += 1;
         }
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
-            v.rotateDeg(10);
-        }
-
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         //GL11.glClearColor(0.129f, 0.129f, 0.129f,1);
+
+//        btn.update();
+//        btn.x = 200;
+
+        custom.x = x;
+        custom.y = y;
+        custom.deg = deg;
+        custom.update();
+
 
 
         // render font
         renderer2D.begin();
 
         // TODO: bug here.
-        //renderer2D.drawStringLine(text.toString(), 20, font, true,0,0, true);
-        //renderer2D.drawStringLine(text.toString(), 20, null, true,0,0, true);
-        //renderer2D.drawStringLine(text.toString(), 64, font, true,0,0, true);
-        renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
-        renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
+        //renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
+        //renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
@@ -152,8 +147,10 @@ public class SceneTest_UI_2 implements Scene {
         renderer2D.setColor(Color.WHITE);
         //renderer2D.setTexture(flower);
 
+//        btn.deg = deg;
+//        btn.renderDebug(renderer2D);
 
-        btn.renderDebug(renderer2D);
+        custom.renderDebug(renderer2D);
 
         //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
         //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
