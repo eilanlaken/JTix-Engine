@@ -11,10 +11,13 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.widgets.WidgetButton;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_2 implements Scene {
 
+
+    WidgetButton btn = new WidgetButton(200, 120, "hello");
 
     private Renderer2D renderer2D = new Renderer2D();
 
@@ -150,7 +153,7 @@ public class SceneTest_UI_2 implements Scene {
         //renderer2D.setTexture(flower);
 
 
-
+        btn.renderDebug(renderer2D);
 
         //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
         //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);

@@ -122,23 +122,23 @@ public class ArrayFloat implements MemoryPool.Reset {
         return items[index];
     }
 
-    public void set (int index, float value) {
+    public void set(int index, float value) {
         if (index >= size) throw new CollectionsException("index can't be >= size: " + index + " >= " + size);
         items[index] = value;
     }
 
-    public void mul (int index, float value) {
+    public void mul(int index, float value) {
         if (index >= size) throw new CollectionsException("index can't be >= size: " + index + " >= " + size);
         items[index] *= value;
     }
 
-    public void mul (float value) {
+    public void mul(float value) {
         float[] items = this.items;
         for (int i = 0, n = size; i < n; i++)
             items[i] *= value;
     }
 
-    public void insert (int index, float value) {
+    public void insert(int index, float value) {
         if (index > size) throw new CollectionsException("index can't be > size: " + index + " > " + size);
         float[] items = this.items;
         if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));

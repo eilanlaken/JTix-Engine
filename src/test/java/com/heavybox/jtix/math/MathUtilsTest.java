@@ -94,7 +94,7 @@ class MathUtilsTest {
     // TODO: add more tests.
     @Test
     void polygonContainsPoint() {
-        // Square polygon
+        // Square polygon - clockwise
         float[] p1 = new float[] {
                 0.0f, 0.0f, // Bottom left
                 0.0f, 1.0f, // Top left
@@ -111,16 +111,32 @@ class MathUtilsTest {
         Assertions.assertFalse(MathUtils.polygonContainsPoint(p1,Float.POSITIVE_INFINITY,0.1f));
 
         // Triangle polygon
-        float[] trianglePolygon = new float[] {
+        float[] p2 = new float[] {
                 0.0f, 0.0f, // Left corner
                 1.0f, 0.0f, // Right corner
                 0.5f, 1.0f  // Top corner
         };
 
-        Assertions.assertTrue(MathUtils.polygonContainsPoint(trianglePolygon, 0.5f, 0.5f));
-        Assertions.assertTrue(MathUtils.polygonContainsPoint(trianglePolygon, 0.5f, 0.0f));
-        Assertions.assertTrue(MathUtils.polygonContainsPoint(trianglePolygon, 0.0f, 0.0f));
-        Assertions.assertFalse(MathUtils.polygonContainsPoint(trianglePolygon, 1.0f, 1.0f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p2, 0.5f, 0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p2, 0.5f, 0.0f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p2, 0.0f, 0.0f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p2, 1.0f, 1.0f));
+
+        // Square polygon - counter-clockwise
+        float[] p3 = new float[] {
+                1.0f, 0.0f,  // Bottom right
+                1.0f, 1.0f, // Top right
+                0.0f, 1.0f, // Top left
+                0.0f, 0.0f, // Bottom left
+        };
+
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p3,0.5f,0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p3,0.2f,0.9f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p3,0.9f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,-1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,Float.POSITIVE_INFINITY,0.1f));
     }
 
     @Test
