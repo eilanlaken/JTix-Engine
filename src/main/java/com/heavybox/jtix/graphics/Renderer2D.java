@@ -1062,8 +1062,10 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
 
-        float widthHalf  = width  * scaleX * 0.5f;
-        float heightHalf = height * scaleY * 0.5f;
+//        float widthHalf  = width  * scaleX * 0.5f;
+//        float heightHalf = height * scaleY * 0.5f;
+        float widthHalf  = width   * 0.5f;
+        float heightHalf = height  * 0.5f;
         float da = 90.0f / (refinement - 1);
 
         Vector2 corner = vectors2Pool.allocate();
@@ -1136,30 +1138,24 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void drawRectangleFilled(float width, float height,
-                                    float cornerRadiusTopLeft,
-                                    float cornerRadiusTopRight,
-                                    float cornerRadiusBottomRight,
-                                    float cornerRadiusBottomLeft,
-                                    int refinementTopLeft,
-                                    int refinementTopRight,
-                                    int refinementBottomRight,
-                                    int refinementBottomLeft,
+                                    float cornerRadiusTopLeft, int refinementTopLeft,
+                                    float cornerRadiusTopRight, int refinementTopRight,
+                                    float cornerRadiusBottomRight, int refinementBottomRight,
+                                    float cornerRadiusBottomLeft, int refinementBottomLeft,
                                     float x, float y, float degrees, float scaleX, float scaleY) {
         drawRectangleFilled(null, width, height,
-                cornerRadiusTopLeft, cornerRadiusTopRight, cornerRadiusBottomRight, cornerRadiusBottomLeft,
-                refinementTopLeft, refinementTopRight, refinementBottomRight, refinementBottomLeft,
+                cornerRadiusTopLeft, refinementTopLeft,
+                cornerRadiusTopRight, refinementTopRight,
+                cornerRadiusBottomRight, refinementBottomRight,
+                cornerRadiusBottomLeft, refinementBottomLeft,
                 x, y, degrees, scaleX, scaleY);
     }
 
     public void drawRectangleFilled(@Nullable Texture texture, float width, float height,
-                                    float cornerRadiusTopLeft,
-                                    float cornerRadiusTopRight,
-                                    float cornerRadiusBottomRight,
-                                    float cornerRadiusBottomLeft,
-                                    int refinementTopLeft,
-                                    int refinementTopRight,
-                                    int refinementBottomRight,
-                                    int refinementBottomLeft,
+                                    float cornerRadiusTopLeft, int refinementTopLeft,
+                                    float cornerRadiusTopRight, int refinementTopRight,
+                                    float cornerRadiusBottomRight, int refinementBottomRight,
+                                    float cornerRadiusBottomLeft, int refinementBottomLeft,
                                     float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinementTopLeft = Math.max(2, refinementTopLeft);
@@ -1172,8 +1168,10 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
 
-        float widthHalf  = width  * scaleX * 0.5f;
-        float heightHalf = height * scaleY * 0.5f;
+        //float widthHalf  = width  * scaleX * 0.5f; // TODO: this is a bug. scaling twice.
+        //float heightHalf = height * scaleY * 0.5f;
+        float widthHalf  = width   * 0.5f;
+        float heightHalf = height  * 0.5f;
         float da = 90.0f / (refinementTopLeft - 1);
 
         Vector2 corner = vectors2Pool.allocate();

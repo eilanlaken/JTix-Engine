@@ -6,7 +6,6 @@ import org.lwjgl.glfw.*;
 public class Mouse {
 
     /* mouse info */
-    private float   sensitivity      = 1f; // goes from 0 to infinity. Default is 1.
     private int     prevCursorX      = 0;
     private int     prevCursorY      = 0;
     private int     cursorX          = 0;
@@ -85,13 +84,9 @@ public class Mouse {
         return true;
     }
 
-    public void setMouseSensitivity(float sensitivity) {
-        sensitivity = sensitivity;
-    }
+    public int getX() { return cursorX; }
 
-    public float getMouseSensitivity() {
-        return sensitivity;
-    }
+    public int getY() { return cursorY; }
 
     public int getXPrev() {
         return prevCursorX;
@@ -101,21 +96,9 @@ public class Mouse {
         return prevCursorY;
     }
 
-    public int getX() {
-        return cursorX;
-    }
+    public int getXDelta() { return cursorDeltaX; }
 
-    public int getY() {
-        return cursorY;
-    }
-
-    public int getXDelta() {
-        return cursorDeltaX;
-    }
-
-    public int geYDelta() {
-        return cursorDeltaY;
-    }
+    public int geYDelta() { return cursorDeltaY; }
 
     public boolean isCursorInWindow() {
         return cursorInWindow;

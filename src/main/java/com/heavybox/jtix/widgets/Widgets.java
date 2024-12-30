@@ -1,8 +1,11 @@
 package com.heavybox.jtix.widgets;
 
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 
 // TODO: add: polygons, rectangles with rounded corners, circles with refinement
 public final class Widgets {
@@ -19,6 +22,125 @@ public final class Widgets {
         return new Region(rectangle);
     }
 
+    public static Region regionCreateRectangle(float width, float height, float cornerRadius, int refinement) {
+        refinement = Math.max(2, refinement);
+
+        float widthHalf  = width  * 0.5f;
+        float heightHalf = height * 0.5f;
+        float da = 90.0f / (refinement - 1);
+        float[] rectangleRC = new float[refinement * 4 * 2]; // round corners rectangle: 4 corners, 2 components for each vertex (x, y) and 'refinement' vertices for every corner
+
+        Vector2 corner = vectors2Pool.allocate();
+        int index = 0;
+        // add upper left corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(-cornerRadius, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadius, heightHalf - cornerRadius);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(0, cornerRadius);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(cornerRadius, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < refinement; i++) {
+            corner.set(0, -cornerRadius);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        vectors2Pool.free(corner);
+        return new Region(rectangleRC);
+    }
+
+    public static Region regionCreateRectangle(float width, float height,
+                                    float cornerRadiusTopLeft, int refinementTopLeft,
+                                    float cornerRadiusTopRight, int refinementTopRight,
+                                    float cornerRadiusBottomRight, int refinementBottomRight,
+                                    float cornerRadiusBottomLeft, int refinementBottomLeft) {
+
+        refinementTopLeft = Math.max(2, refinementTopLeft);
+        refinementTopRight = Math.max(2, refinementTopRight);
+        refinementBottomRight = Math.max(2, refinementBottomRight);
+        refinementBottomLeft = Math.max(2, refinementBottomLeft);
+
+        int totalRefinement = refinementTopLeft + refinementTopRight
+                + refinementBottomRight + refinementBottomLeft;
+
+        float widthHalf  = width  * 0.5f;
+        float heightHalf = height * 0.5f;
+        float da = 90.0f / (refinementTopLeft - 1);
+        float[] rectangleRC = new float[totalRefinement * 2]; // round corners rectangle: 4 corners, 2 components for each vertex (x, y) and 'refinement' vertices for every corner
+
+        Vector2 corner = vectors2Pool.allocate();
+        int index = 0;
+        // add upper left corner vertices
+        for (int i = 0; i < refinementTopLeft; i++) {
+            corner.set(-cornerRadiusTopLeft, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < refinementTopRight; i++) {
+            corner.set(0, cornerRadiusTopRight);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < refinementBottomRight; i++) {
+            corner.set(cornerRadiusBottomRight, 0);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < refinementBottomLeft; i++) {
+            corner.set(0, -cornerRadiusBottomLeft);
+            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+            rectangleRC[index] = corner.x;
+            rectangleRC[index + 1] = corner.y;
+            index += 2;
+        }
+
+        vectors2Pool.free(corner);
+        return new Region(rectangleRC);
+    }
+
     public static Region regionCreateCircle(float r, int refinement) {
         refinement = Math.max(refinement, 3);
 
@@ -31,5 +153,7 @@ public final class Widgets {
 
         return new Region(circle);
     }
+
+
 
 }

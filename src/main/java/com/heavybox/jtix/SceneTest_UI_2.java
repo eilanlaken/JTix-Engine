@@ -13,7 +13,6 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets.Region;
 import com.heavybox.jtix.widgets.Widget;
-import com.heavybox.jtix.widgets.WidgetButton;
 import com.heavybox.jtix.widgets.Widgets;
 import org.lwjgl.opengl.GL11;
 
@@ -51,9 +50,13 @@ public class SceneTest_UI_2 implements Scene {
 
         Assets.finishLoading();
 
-        Region[] include = new Region[] {Widgets.regionCreateRectangle(200,130)};
-        Region[] exclude = new Region[] {Widgets.regionCreateCircle(100,20)};
-        custom = new Widget(include, exclude) {
+        Region[] include = new Region[] {Widgets.regionCreateRectangle(200,400,
+                0, 0,
+                30,2,
+                0,2,
+                0,4)};
+        //Region[] exclude = new Region[] {Widgets.regionCreateCircle(100,20)};
+        custom = new Widget(include, null) {
             @Override
             public void render(Renderer2D renderer2D) {
 
@@ -130,7 +133,7 @@ public class SceneTest_UI_2 implements Scene {
         custom.x = x;
         custom.y = y;
         custom.deg = deg;
-        custom.update();
+        custom.frameUpdate();
 
 
 
@@ -139,7 +142,7 @@ public class SceneTest_UI_2 implements Scene {
 
         // TODO: bug here.
         //renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
-        //renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
+        renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
