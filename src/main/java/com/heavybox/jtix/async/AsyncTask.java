@@ -3,7 +3,7 @@ package com.heavybox.jtix.async;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.memory.MemoryPool;
 
-public abstract class AsyncTask implements MemoryPool.Reset {
+public abstract class AsyncTask {
 
     protected Array<AsyncTask> prerequisites = new Array<>();
     protected boolean          inProgress    = false;
@@ -51,12 +51,5 @@ public abstract class AsyncTask implements MemoryPool.Reset {
         return complete;
     }
     public final boolean inProgress() { return inProgress; }
-
-    @Override
-    public void reset() {
-        prerequisites.clear();
-        inProgress = false;
-        complete = false;
-    }
 
 }

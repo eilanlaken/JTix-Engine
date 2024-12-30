@@ -29,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
 
+// TODO: potential deadlock issue here.
 public final class Assets {
 
     private static final HashMap<String, Asset> store                     = new HashMap<>();
@@ -40,7 +41,7 @@ public final class Assets {
 
     /* store */
 
-    public static synchronized void update() {
+    public static void update() {
         /* create a loading task for every item in the load queue */
         for (AssetDescriptor descriptor : storeLoadQueue) {
             AssetLoadingTask task = new AssetLoadingTask(descriptor);
@@ -64,8 +65,6 @@ public final class Assets {
         }
         storeCompletedLoadTasks.clear();
     }
-
-
 
     static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
         Array<Asset> assets = new Array<>();
@@ -134,7 +133,7 @@ public final class Assets {
         load(Shader.class, name, options,false);
     }
 
-
+    // TODO: added synchronized here.
     static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
         final Asset asset = store.get(filepath);
         if (asset != null) {
@@ -163,7 +162,8 @@ public final class Assets {
 
     }
 
-    public static synchronized void finishLoading() {
+    // TODO: removed synchronized; Possible deadlock here.
+    public static void finishLoading() {
         while (isLoadingInProgress()) {
             update();
             Thread.yield();
