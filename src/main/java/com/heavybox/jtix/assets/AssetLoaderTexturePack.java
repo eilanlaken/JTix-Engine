@@ -45,7 +45,7 @@ public class AssetLoaderTexturePack implements AssetLoader<TexturePack> {
         /* get Textures */
         Texture[] textures = new Texture[dependencies.size];
         for (int i = 0; i < textures.length; i++) {
-            String path = dependencies.get(i).filepath;
+            String path = dependencies.get(i).path;
             Texture texture = Assets.get(path);
             textures[i] = texture;
         }

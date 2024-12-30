@@ -42,11 +42,11 @@ public class SceneTest_UI_2 implements Scene {
 
     @Override
     public void setup() {
-        //Assets.loadTexture("assets/textures/yellowSquare.jpg");
-        //Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
+        Assets.loadTexture("assets/textures/yellowSquare.jpg");
+        Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         //Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
         Assets.loadTexturePack("assets/atlases/spots.yml");
-        //Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.finishLoading();
 

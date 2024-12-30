@@ -32,45 +32,82 @@ import java.util.function.Consumer;
 // TODO: potential deadlock issue here.
 public final class Assets {
 
-    private static final HashMap<String, Asset> store                     = new HashMap<>();
-    private static final Queue<AssetDescriptor> storeLoadQueue            = new Queue<>();
-    private static final Set<AssetLoadingTask>  storeLoadTasks            = new HashSet<>();
-    private static final Set<AssetLoadingTask>  storeCompletedLoadTasks   = new HashSet<>();
+//    private static final HashMap<String, Asset> store                     = new HashMap<>();
+//    private static final Queue<AssetDescriptor> storeLoadQueue            = new Queue<>();
+//    private static final Set<AssetLoadingTask>  storeLoadTasks            = new HashSet<>();
+//    private static final Set<AssetLoadingTask>  storeCompletedLoadTasks   = new HashSet<>();
+
+    // compare to:
+
+    private static final HashMap<String, Asset>     store                = new HashMap<>();
+    private static final Queue<AssetDescriptor>     storeLoadQueue = new Queue<>();
+
+    private static final Set<AssetLoadingTask> storeAsyncTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask> storeCompletedAsyncTasks = new HashSet<>();
+
+    private static final Set<AssetLoadingTask> storeCreateTasks = new HashSet<>();
+    private static final Set<AssetLoadingTask> storeCompletedCreateTasks = new HashSet<>();
+
 
     private Assets() {}
 
     /* store */
 
     public static synchronized void update() {
-        /* create a loading task for every item in the load queue */
+        for (AssetLoadingTask task : storeAsyncTasks) {
+            if (task.readyToCreate())  {
+                storeCompletedAsyncTasks.add(task);
+                storeCreateTasks.add(task);
+            }
+        }
+
+        storeAsyncTasks.removeAll(storeCompletedAsyncTasks);
         for (AssetDescriptor descriptor : storeLoadQueue) {
             AssetLoadingTask task = new AssetLoadingTask(descriptor);
-            task.loader.beforeLoad(descriptor.filepath, descriptor.options);
-            storeLoadTasks.add(task);
+            storeAsyncTasks.add(task);
+            AsyncTaskRunner.async(task);
         }
         storeLoadQueue.clear();
 
-        for (AssetLoadingTask task : storeLoadTasks) {
-            if (!task.inProgress() && !task.isComplete()) { // task not started
-                AsyncTaskRunner.async(task);
-            } else if (task.readyToCreate()) { // task completed
-                storeCompletedLoadTasks.add(task);
-            }
-        }
-        storeLoadTasks.removeAll(storeCompletedLoadTasks);
-
-        for (AssetLoadingTask task : storeCompletedLoadTasks) {
+        storeCreateTasks.removeAll(storeCompletedCreateTasks);
+        for (AssetLoadingTask task : storeCreateTasks) {
             Asset asset = task.create();
-            store.put(asset.descriptor.filepath, asset);
+            store.put(asset.descriptor.path, asset);
+            storeCompletedCreateTasks.add(task);
         }
-        storeCompletedLoadTasks.clear();
     }
+
+    // FIXME?
+//    @Deprecated public static synchronized void update() {
+//        /* create a loading task for every item in the load queue */
+//        for (AssetDescriptor descriptor : storeLoadQueue) {
+//            AssetLoadingTask task = new AssetLoadingTask(descriptor);
+//            task.loader.beforeLoad(descriptor.path, descriptor.options);
+//            storeLoadTasks.add(task);
+//        }
+//        storeLoadQueue.clear();
+//
+//        for (AssetLoadingTask task : storeLoadTasks) {
+//            if (!task.inProgress() && !task.isComplete()) { // task not started
+//                AsyncTaskRunner.async(task);
+//            } else if (task.readyToCreate()) { // task completed
+//                storeCompletedLoadTasks.add(task);
+//            }
+//        }
+//        storeLoadTasks.removeAll(storeCompletedLoadTasks);
+//
+//        for (AssetLoadingTask task : storeCompletedLoadTasks) {
+//            Asset asset = task.create();
+//            store.put(asset.descriptor.path, asset);
+//        }
+//        storeCompletedLoadTasks.clear();
+//    }
 
     static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
         Array<Asset> assets = new Array<>();
         if (dependencies != null) {
             for (AssetDescriptor dependency : dependencies) {
-                assets.add(store.get(dependency.filepath));
+                assets.add(store.get(dependency.path));
             }
         }
         return assets;
@@ -79,7 +116,7 @@ public final class Assets {
     static synchronized boolean areLoaded(final Array<AssetDescriptor> dependencies) {
         if (dependencies == null || dependencies.size == 0) return true;
         for (AssetDescriptor dependency : dependencies) {
-            Asset asset = store.get(dependency.filepath);
+            Asset asset = store.get(dependency.path);
             if (asset == null) return false;
         }
         return true;
@@ -177,7 +214,8 @@ public final class Assets {
     }
 
     public static synchronized boolean isLoadingInProgress() {
-        return !storeLoadQueue.isEmpty() || !storeLoadTasks.isEmpty();
+        //return !storeLoadQueue.isEmpty() || !storeLoadTasks.isEmpty(); // TODO: was
+        return !storeLoadQueue.isEmpty() || !storeAsyncTasks.isEmpty() || !storeCreateTasks.isEmpty();
     }
 
     static synchronized AssetLoader<? extends MemoryResource> getNewLoader(Class<? extends MemoryResource> type) {

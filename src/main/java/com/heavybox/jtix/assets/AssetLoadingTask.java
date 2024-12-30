@@ -18,13 +18,13 @@ public class AssetLoadingTask extends AsyncTask {
 
     @Override
     public void task() {
-        this.dependencies = loader.load(descriptor.filepath, descriptor.options);
+        this.dependencies = loader.load(descriptor.path, descriptor.options);
     }
 
     @Override
     public void onComplete() {
         if (dependencies == null) return;
-        for (AssetDescriptor dependency : dependencies) Assets.load(dependency.type, dependency.filepath, dependency.options,true);
+        for (AssetDescriptor dependency : dependencies) Assets.load(dependency.type, dependency.path, dependency.options,true);
     }
 
     boolean readyToCreate() {

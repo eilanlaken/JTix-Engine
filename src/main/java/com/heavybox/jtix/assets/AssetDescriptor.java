@@ -10,13 +10,13 @@ import java.util.Objects;
 public class AssetDescriptor {
 
     public final Class<? extends MemoryResource> type;
-    public final String                          filepath;
+    public final String                          path;
     public final long                            size;
     public final HashMap<String, Object>         options;
 
     public AssetDescriptor(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options) {
         this.type = type;
-        this.filepath = filepath;
+        this.path = filepath;
         long s = 0;
         try {
             s = Assets.getFileSize(filepath);
@@ -34,7 +34,7 @@ public class AssetDescriptor {
         if (!(obj instanceof AssetDescriptor)) return false;
         if (this == obj) return true;
         AssetDescriptor otherDescriptor = (AssetDescriptor) obj;
-        return Objects.equals(this.filepath, otherDescriptor.filepath) && this.type == otherDescriptor.type;
+        return Objects.equals(this.path, otherDescriptor.path) && this.type == otherDescriptor.type;
     }
 
 }
