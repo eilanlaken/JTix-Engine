@@ -1,5 +1,6 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.z_old_assets.AssetUtils;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.yaml.snakeyaml.Yaml;
@@ -9,17 +10,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: add string constructor.
 public final class TexturePack implements MemoryResource {
 
     public final Texture[]               textures;
     public final HashMap<String, Region> namedRegions;
+
+    // TODO: continue.
+    public TexturePack(final String path) {
+        String yamlString = Assets.getFileContent(path);
+        Yaml yaml = Assets.yaml();
+
+        Map<String, Object> data = yaml.load(yamlString);
+
+        // TODO
+        textures = null;
+        namedRegions = null;
+    }
 
     @SuppressWarnings("unchecked")
     public TexturePack(Texture[] textures, String yamlString) {
         this.textures = textures;
         this.namedRegions = new HashMap<>();
         try {
-            Yaml yaml = AssetUtils.yaml();
+            Yaml yaml = Assets.yaml();
             Map<String, Object> data = yaml.load(yamlString);
             List<Map<String, Object>> regions = (List<Map<String, Object>>) data.get("regions");
             for (Map<String, Object> regionData : regions) {
@@ -37,9 +51,9 @@ public final class TexturePack implements MemoryResource {
                 namedRegions.put(name, region);
             }
         } catch (YAMLException e) {
-            throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName() + " from invalid yaml: " + yamlString);
+            throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName() + " from invalid yaml: " + yamlString + "\n Error: " + e.getMessage());
         } catch (Exception e) {
-            throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName());
+            throw new GraphicsException("Failed to create " + TexturePack.class.getSimpleName() + "\n Error: " + e.getMessage());
         }
     }
 

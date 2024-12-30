@@ -46,7 +46,7 @@ public class SceneTest_UI_2 implements Scene {
         //Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         //Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
         Assets.loadTexturePack("assets/atlases/spots.yml");
-        Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        //Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.finishLoading();
 
@@ -70,7 +70,7 @@ public class SceneTest_UI_2 implements Scene {
     @Override
     public void start() {
 
-        flower = Assets.get("assets/textures/flower.png");
+        flower = new Texture("assets/textures/flower.png");//Assets.get("assets/textures/flower.png");
 
 
         //font = Assets.get("assets/fonts/OpenSans-Regular.ttf");
