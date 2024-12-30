@@ -155,7 +155,8 @@ public class SceneTest_UI_2 implements Scene {
 
         custom.renderDebug(renderer2D);
 
-        //renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
+        renderer2D.setColor(Color.WHITE);
+        renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
         //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
 
 //        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,

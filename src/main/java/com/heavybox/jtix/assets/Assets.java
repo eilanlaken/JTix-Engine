@@ -41,7 +41,7 @@ public final class Assets {
 
     /* store */
 
-    public static void update() {
+    public static synchronized void update() {
         /* create a loading task for every item in the load queue */
         for (AssetDescriptor descriptor : storeLoadQueue) {
             AssetLoadingTask task = new AssetLoadingTask(descriptor);
@@ -89,15 +89,15 @@ public final class Assets {
         return store.get(path) != null;
     }
 
-    public static void loadFont(final String filepath) {
+    public synchronized static void loadFont(final String filepath) {
         load(Font.class, filepath, null,false);
     }
 
-    public static void loadTexturePack(final String filepath) {
+    public synchronized static void loadTexturePack(final String filepath) {
         load(TexturePack.class, filepath, null,false);
     }
 
-    public static void loadTexturePack(final String filepath,
+    public synchronized static void loadTexturePack(final String filepath,
                                        Texture.FilterMag magFilter, Texture.FilterMin minFilter,
                                        int anisotropy) {
         final HashMap<String, Object> options = new HashMap<>();
@@ -107,11 +107,11 @@ public final class Assets {
         load(Texture.class, filepath, options,false);
     }
 
-    public static void loadTexture(String filepath) {
+    public synchronized static void loadTexture(String filepath) {
         load(Texture.class, filepath, null,false);
     }
 
-    public static void loadTexture(String filepath,
+    public synchronized static void loadTexture(String filepath,
                                    Texture.FilterMag magFilter, Texture.FilterMin minFilter,
                                    Texture.Wrap uWrap, Texture.Wrap vWrap,
                                    int anisotropy) {
@@ -124,7 +124,7 @@ public final class Assets {
         load(Texture.class, filepath, options,false);
     }
 
-    public static void loadShader(final String name,
+    public synchronized static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {
         final HashMap<String, Object> options = new HashMap<>();
@@ -134,7 +134,7 @@ public final class Assets {
     }
 
     // TODO: added synchronized here.
-    static void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
+    static synchronized void load(Class<? extends MemoryResource> type, String filepath, @Nullable final HashMap<String, Object> options, boolean isDependency) {
         final Asset asset = store.get(filepath);
         if (asset != null) {
             if (isDependency) asset.refCount++;
@@ -143,8 +143,6 @@ public final class Assets {
         AssetDescriptor descriptor = new AssetDescriptor(type, filepath, options);
         storeLoadQueue.addFirst(descriptor);
     }
-
-
 
     public static synchronized void unload(final String path) {
 
@@ -178,7 +176,7 @@ public final class Assets {
         return total;
     }
 
-    public static boolean isLoadingInProgress() {
+    public static synchronized boolean isLoadingInProgress() {
         return !storeLoadQueue.isEmpty() || !storeLoadTasks.isEmpty();
     }
 
