@@ -296,8 +296,6 @@ public class Renderer2D implements MemoryResourceHolder {
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
-        scaleX = scaleX * pixelScaleWidthInv;
-        scaleY = scaleY * pixelScaleHeightInv;
         float widthHalf  = texture.width  * scaleX * 0.5f;
         float heightHalf = texture.height * scaleY * 0.5f;
 
@@ -367,8 +365,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
         float widthHalf  = texture.width  * 0.5f;
         float heightHalf = texture.height * 0.5f;
-        scaleX = scaleX * pixelScaleWidthInv;
-        scaleY = scaleY * pixelScaleHeightInv;
         float da = 90.0f / (refinement - 1);
 
         Vector2 corner = vectors2Pool.allocate();
@@ -443,8 +439,6 @@ public class Renderer2D implements MemoryResourceHolder {
         setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
-        scaleX = scaleX * pixelScaleWidthInv;
-        scaleY = scaleY * pixelScaleHeightInv;
         float width = texture.width * scaleX;
         float height = texture.height * scaleY;
         float widthHalf  = width * 0.5f;
@@ -511,9 +505,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
         setTexture(region.texture);
         setMode(GL11.GL_TRIANGLES);
-
-        scaleX = scaleX * pixelScaleWidthInv;
-        scaleY = scaleY * pixelScaleHeightInv;
 
         final float ui = region.u1;
         final float vi = region.v1;
@@ -1739,7 +1730,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - curves */
 
-    public void drawFunctionThin(final Vector2... values) {
+    public void drawCurveThin(final Vector2... values) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
         if (!ensureCapacity(values.length, values.length * 2)) flush();
@@ -1763,7 +1754,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += values.length;
     }
 
-    public void drawFunctionThin(final Vector2[] values, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawCurveThin(final Vector2[] values, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (values == null || values.length < 2) return;
         if (!ensureCapacity(values.length, values.length * 2)) flush();
@@ -1776,7 +1767,7 @@ public class Renderer2D implements MemoryResourceHolder {
         for (Vector2 value : values) {
             vertex.set(value.x, value.y);
             vertex.scl(scaleX, scaleY);
-            vertex.rotateDeg(degrees);
+            vertex.rotateDeg(deg);
             vertex.add(x, y);
             positions.put(vertex.x).put(vertex.y);
             colors.put(currentTint);
@@ -1813,7 +1804,7 @@ public class Renderer2D implements MemoryResourceHolder {
             points_transformed[i] = vertex;
         }
 
-        Array<Vector2> vertices = drawCurveFilledGetVertices(stroke, smoothness, points_transformed);
+        Array<Vector2> vertices = getCurveVertices(stroke, smoothness, points_transformed);
 
 
         if (!ensureCapacity(vertices.size, vertices.size)) flush();
@@ -1842,7 +1833,7 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
-    private Array<Vector2> drawCurveFilledGetVertices(float stroke, int smoothness, Vector2... points) {
+    public Array<Vector2> getCurveVertices(float stroke, int smoothness, Vector2... points) {
         if (points.length < 2) {
             return null;
         }

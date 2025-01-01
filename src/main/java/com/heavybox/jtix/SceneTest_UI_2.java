@@ -140,7 +140,6 @@ public class SceneTest_UI_2 implements Scene {
         // render font
         renderer2D.begin();
 
-        // TODO: bug here.
         //renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
         renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
 

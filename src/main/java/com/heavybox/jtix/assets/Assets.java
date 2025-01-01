@@ -32,13 +32,6 @@ import java.util.function.Consumer;
 // TODO: potential deadlock issue here.
 public final class Assets {
 
-//    private static final HashMap<String, Asset> store                     = new HashMap<>();
-//    private static final Queue<AssetDescriptor> storeLoadQueue            = new Queue<>();
-//    private static final Set<AssetLoadingTask>  storeLoadTasks            = new HashSet<>();
-//    private static final Set<AssetLoadingTask>  storeCompletedLoadTasks   = new HashSet<>();
-
-    // compare to:
-
     private static final HashMap<String, Asset> store                        = new HashMap<>();
     private static final Queue<AssetDescriptor> storeLoadQueue               = new Queue<>();
     private static final Set<AssetLoadingTask>  storeLoadTasks               = new HashSet<>();
@@ -73,32 +66,6 @@ public final class Assets {
             storeCompletedAfterLoadTasks.add(task);
         }
     }
-
-    // FIXME?
-//    @Deprecated public static synchronized void update() {
-//        /* create a loading task for every item in the load queue */
-//        for (AssetDescriptor descriptor : storeLoadQueue) {
-//            AssetLoadingTask task = new AssetLoadingTask(descriptor);
-//            task.loader.beforeLoad(descriptor.path, descriptor.options);
-//            storeLoadTasks.add(task);
-//        }
-//        storeLoadQueue.clear();
-//
-//        for (AssetLoadingTask task : storeLoadTasks) {
-//            if (!task.inProgress() && !task.isComplete()) { // task not started
-//                AsyncTaskRunner.async(task);
-//            } else if (task.readyToCreate()) { // task completed
-//                storeCompletedLoadTasks.add(task);
-//            }
-//        }
-//        storeLoadTasks.removeAll(storeCompletedLoadTasks);
-//
-//        for (AssetLoadingTask task : storeCompletedLoadTasks) {
-//            Asset asset = task.create();
-//            store.put(asset.descriptor.path, asset);
-//        }
-//        storeCompletedLoadTasks.clear();
-//    }
 
     static synchronized Array<Asset> getDependencies(final Array<AssetDescriptor> dependencies) {
         Array<Asset> assets = new Array<>();
