@@ -10,6 +10,8 @@ import org.lwjgl.opengl.GL11;
 // TODO: add: polygons, rectangles with rounded corners, circles with refinement
 public final class Widgets {
 
+    private static int widgetsCount = 0;
+
     private static final MemoryPool<Vector2> vectors2Pool = new MemoryPool<>(Vector2.class, 4);
 
     public static Region regionCreateRectangle(float width, float height) {
@@ -154,6 +156,9 @@ public final class Widgets {
         return new Region(circle);
     }
 
-
+    public static int getID() {
+        widgetsCount++;
+        return widgetsCount - 1;
+    }
 
 }

@@ -130,9 +130,9 @@ public class SceneTest_UI_2 implements Scene {
 //        btn.update();
 //        btn.x = 200;
 
-        custom.x = x;
-        custom.y = y;
-        custom.deg = deg;
+//        custom.x = x;
+//        custom.y = y;
+//        custom.deg = deg;
         custom.frameUpdate();
 
 
