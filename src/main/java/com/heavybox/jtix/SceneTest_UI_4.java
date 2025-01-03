@@ -52,18 +52,7 @@ public class SceneTest_UI_4 implements Scene {
 
         Assets.finishLoading();
 
-        Region[] include = new Region[] {Widgets.regionCreateRectangle(200,400,
-                0, 0,
-                30,2,
-                0,2,
-                0,4)};
-        //Region[] exclude = new Region[] {Widgets.regionCreateCircle(100,20)};
-        custom = new Widget(include, null) {
-            @Override
-            protected void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY) {
 
-            }
-        };
 
     }
 
@@ -135,7 +124,7 @@ public class SceneTest_UI_4 implements Scene {
 //        custom.x = x;
 //        custom.y = y;
 //        custom.deg = deg;
-        custom.frameUpdate();
+
 
 
 
