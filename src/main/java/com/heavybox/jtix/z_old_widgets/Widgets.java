@@ -1,4 +1,4 @@
-package com.heavybox.jtix.widgets;
+package com.heavybox.jtix.z_old_widgets;
 
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
@@ -8,7 +8,6 @@ import com.heavybox.jtix.memory.MemoryPool;
 public final class Widgets {
 
     private static int widgetsCount = 0;
-    public  static boolean debug = true;
 
     private static final MemoryPool<Vector2> vectors2Pool = new MemoryPool<>(Vector2.class, 4);
 
@@ -20,20 +19,6 @@ public final class Widgets {
           -width,  height,
         };
         return new Region(rectangle);
-    }
-
-    public static void regionSetToRectangle(float width, float height, Region out) {
-        out.pointsOriginal.clear();
-        out.pointsTransformed.clear();
-
-        out.pointsOriginal.add(-width, -height);
-        out.pointsOriginal.add( width, -height);
-        out.pointsOriginal.add( width,  height);
-        out.pointsOriginal.add(-width,  height);
-
-        out.pointsOriginal.pack();
-        out.pointsTransformed.addAll(out.pointsOriginal);
-        out.pointsTransformed.pack();
     }
 
     public static Region regionCreateRectangle(float width, float height, float cornerRadius, int refinement) {
@@ -91,10 +76,10 @@ public final class Widgets {
     }
 
     public static Region regionCreateRectangle(float width, float height,
-                                               float cornerRadiusTopLeft, int refinementTopLeft,
-                                               float cornerRadiusTopRight, int refinementTopRight,
-                                               float cornerRadiusBottomRight, int refinementBottomRight,
-                                               float cornerRadiusBottomLeft, int refinementBottomLeft) {
+                                    float cornerRadiusTopLeft, int refinementTopLeft,
+                                    float cornerRadiusTopRight, int refinementTopRight,
+                                    float cornerRadiusBottomRight, int refinementBottomRight,
+                                    float cornerRadiusBottomLeft, int refinementBottomLeft) {
 
         refinementTopLeft = Math.max(2, refinementTopLeft);
         refinementTopRight = Math.max(2, refinementTopRight);
@@ -167,8 +152,6 @@ public final class Widgets {
 
         return new Region(circle);
     }
-
-
 
     public static int getID() {
         widgetsCount++;

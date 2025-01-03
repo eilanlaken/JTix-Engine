@@ -26,9 +26,7 @@ import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_AN
 
 public final class Graphics {
 
-    @Deprecated private static ApplicationWindow window      = null;
-    @Deprecated private static boolean           initialized = false;
-
+    /* graphics state and parameters */
     private static boolean isContinuous      = true;
     private static long    lastFrameTime     = -1;
     private static float   deltaTime;
@@ -45,29 +43,22 @@ public final class Graphics {
     private static int     anisotropicFilteringSupported = -1;
 
     /* custom cursors */
-    private static long cursorText = -1;
-    private static long cursorPointer = -1;
-    private static long cursorCross = -1;
-    private static long cursorHorizontalResize = -1;
-    private static long cursorVerticalResize = -1;
-    private static long cursorNotAllowed = -1;
-    private static long cursorPointingHand = -1;
-    private static long cursorResizeNESW = -1;
-    private static long cursorResizeNWSE = -1;
-    private static long cursorResizeAll = -1;
     private static final HashMap<String, Long> customCursors = new HashMap<>();
+    private static long cursorText             = -1;
+    private static long cursorPointer          = -1;
+    private static long cursorCross            = -1;
+    private static long cursorHorizontalResize = -1;
+    private static long cursorVerticalResize   = -1;
+    private static long cursorNotAllowed       = -1;
+    private static long cursorPointingHand     = -1;
+    private static long cursorResizeNESW       = -1;
+    private static long cursorResizeNWSE       = -1;
+    private static long cursorResizeAll        = -1;
 
     /* freetype library */
     private static long freeType = -1;
 
     private Graphics() {}
-
-    // TODO: delete.
-    @Deprecated public static void init(final ApplicationWindow window) {
-        if (initialized) return;
-        Graphics.window = window;
-        initialized = true;
-    }
 
     public static void update() {
         long time = System.nanoTime();

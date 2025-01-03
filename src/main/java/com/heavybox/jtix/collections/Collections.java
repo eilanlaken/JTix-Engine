@@ -8,7 +8,7 @@ import java.util.Comparator;
 public final class Collections {
 
     private static Collections.CollectionsSorterArray arraySorter = new CollectionsSorterArray();
-    private static Collections.CollectionsSorterArrayComparable arraySorterComparable = new CollectionsSorterArrayComparable();
+    private static final Collections.CollectionsSorterArrayComparable arraySorterComparable = new CollectionsSorterArrayComparable();
 
     private Collections() {}
 
@@ -120,8 +120,8 @@ public final class Collections {
          * with a command line flag. If you modify this class, please do test the asserts! */
         private static final boolean DEBUG = false;
 
-        protected CollectionsSorterArray() {
-            tmp = (T[])new Object[INITIAL_TMP_STORAGE_LENGTH];
+        private CollectionsSorterArray() {
+            tmp = (T[]) new Object[INITIAL_TMP_STORAGE_LENGTH];
             runBase = new int[40];
             runLen = new int[40];
         }
@@ -210,11 +210,11 @@ public final class Collections {
          * obeys the contract of the public method with the same signature in java.util.Arrays.
          */
 
-        protected static <T> void sort(T[] a, Comparator<? super T> c) {
+        private static <T> void sort(T[] a, Comparator<? super T> c) {
             sort(a, 0, a.length, c);
         }
 
-        protected static <T> void sort(T[] a, int lo, int hi, Comparator<? super T> c) {
+        private static <T> void sort(T[] a, int lo, int hi, Comparator<? super T> c) {
             if (c == null) {
                 Arrays.sort(a, lo, hi);
                 return;

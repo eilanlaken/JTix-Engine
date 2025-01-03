@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class ArrayFloat implements MemoryPool.Reset {
 
     public float[] items;
-    public int size;
+    public int     size;
     public boolean ordered;
 
     /** Creates an ordered array with a capacity of 16. */

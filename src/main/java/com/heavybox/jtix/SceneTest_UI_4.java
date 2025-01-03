@@ -11,10 +11,8 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets.Region;
-import com.heavybox.jtix.widgets.Widget;
-import com.heavybox.jtix.widgets.WidgetButton;
-import com.heavybox.jtix.widgets.Widgets;
+import com.heavybox.jtix.z_old_widgets.Widget;
+import com.heavybox.jtix.z_old_widgets.WidgetButton;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_4 implements Scene {
@@ -40,7 +38,7 @@ public class SceneTest_UI_4 implements Scene {
 
     Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 70);
 
-    WidgetButton btn = new WidgetButton(220,140, "Press Here");
+    WidgetButton btn = new WidgetButton(220,140, "File");
 
     @Override
     public void setup() {
@@ -52,7 +50,7 @@ public class SceneTest_UI_4 implements Scene {
 
         Assets.finishLoading();
 
-
+        btn.bgColor = Color.valueOf("#474747");
 
     }
 

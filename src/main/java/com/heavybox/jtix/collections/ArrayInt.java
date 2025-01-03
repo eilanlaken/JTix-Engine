@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 public class ArrayInt implements MemoryPool.Reset {
 
-    public int[] items;
-    public int size;
+    public int[]   items;
+    public int     size;
     public boolean ordered;
 
     public ArrayInt() {

@@ -1,6 +1,5 @@
-package com.heavybox.jtix.widgets;
+package com.heavybox.jtix.z_old_widgets;
 
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
@@ -18,11 +17,11 @@ import java.util.Set;
 
 public abstract class Widget {
 
-    public    final int           id       = Widgets.getID();
-    protected final Array<Region> included = new Array<>(false, 1);
-    protected final Array<Region> excluded = new Array<>(false, 1);
-    protected        Widget       parent   = null;
-    protected final Set<Widget>   children = new HashSet<>();
+    public  final int         id       = Widgets.getID();
+    private final Set<Region> included = new HashSet<>();
+    private final Set<Region> excluded = new HashSet<>();
+    private       Widget      parent   = null;
+    private final Set<Widget> children = new HashSet<>();
 
     /* box-styling */
     public final Style style = new Style();
@@ -39,14 +38,14 @@ public abstract class Widget {
     public float   height   = 0;
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
-    protected int   screenZIndex = 0;
-    protected float screenX      = 0;
-    protected float screenY      = 0;
-    protected float screenDeg    = 0;
-    protected float screenSclX   = 1;
-    protected float screenSclY   = 1;
-    protected float boxWidth     = 0;
-    protected float boxHeight    = 0;
+    private int   screenZIndex = 0;
+    private float screenX      = 0;
+    private float screenY      = 0;
+    private float screenDeg    = 0;
+    private float screenSclX   = 1;
+    private float screenSclY   = 1;
+    private float boxWidth     = 0;
+    private float boxHeight    = 0;
 
     /* input handling */
     private boolean mouseInside         = false;
@@ -56,9 +55,7 @@ public abstract class Widget {
     private boolean dragJustEntered     = false;
 
     /* callbacks */
-    protected Widget() {
 
-    }
 
     // 99% cases usage
     protected Widget(@NotNull Region region) {
@@ -68,8 +65,8 @@ public abstract class Widget {
     // 1% cases usage (for example, a button that is a hollow circle, for some reason)
     protected Widget(@NotNull Region[] toInclude, @Nullable Region[] toExclude) {
         if (toInclude == null || toInclude.length == 0) throw new WidgetsException("Must include at least 1 region in toInclude array. To create regions, you can use helper methods in the class " + Widgets.class.getSimpleName());
-        included.addAll(toInclude);
-        if (toExclude != null && toExclude.length != 0) excluded.addAll(toExclude);
+        included.addAll(Arrays.asList(toInclude));
+        if (toExclude != null && toExclude.length != 0) excluded.addAll(Arrays.asList(toExclude));
     }
 
     public void frameUpdate() {
@@ -93,6 +90,8 @@ public abstract class Widget {
             this.screenSclX = this.sclX * parent.screenSclX;
             this.screenSclY = this.sclY * parent.screenSclY;
         }
+        setChildrenPositions(); // only after resolving its own position, we can set the position of the children. Note: only touch the x,y,... not the screenX, screenY,... .
+        setChildrenBoxDimensions();
 
         /* apply transform */
         for (Region region : included) {
@@ -120,10 +119,10 @@ public abstract class Widget {
             onClick();
         }
         if (mouseJustEntered) {
-            onMouseOver();
+            System.out.println("entered");
         }
         if (mouseJustLeft) {
-            onMouseOut();
+            System.out.println("left");
         }
 
     }
@@ -142,7 +141,16 @@ public abstract class Widget {
         return false;
     }
 
-    protected abstract void render(Renderer2D renderer2D);
+    protected abstract void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY);
+
+    public void draw(Renderer2D renderer2D) {
+        if (style.overflow == Style.Overflow.TRIM) renderer2D.pushPixelBounds(0, 0, 1800, 1800); // TODO: calc min and max.
+        this.render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
+        for (Widget widget : children) {
+            widget.render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
+        }
+        if (style.overflow == Style.Overflow.TRIM) renderer2D.popPixelBounds();
+    }
 
     public void renderDebug(Renderer2D renderer2D) {
         /* render included regions */
@@ -156,28 +164,36 @@ public abstract class Widget {
         }
     }
 
-    public void addChild(Widget widget) {
-        if (widget == null)                   throw new GUIException(Widget.class.getSimpleName() + " element cannot be null.");
-        if (widget == this)                   throw new GUIException("Trying to parent a " + Widget.class.getSimpleName() + " to itself.");
-        if (widget.descendantOf(this)) throw new GUIException(Widget.class.getSimpleName() + " element is already a descendant of parent.");
-        if (this.descendantOf(widget))        throw new GUIException("Trying to create circular dependency in Widgets elements tree.");
+    public void insert(Widget widget) {
+        if (widget == null)                throw new GUIException(Widget.class.getSimpleName() + " element cannot be null.");
+        if (widget == this)                throw new GUIException("Trying to parent a " + Widget.class.getSimpleName() + " to itself.");
+        if (widget.belongsTo(this)) throw new GUIException(Widget.class.getSimpleName() + " element is already a descendant of parent.");
+        if (this.belongsTo(widget))        throw new GUIException("Trying to create circular dependency in Widgets elements tree.");
 
-        if (widget.parent != null) widget.parent.removeChild(widget);
+        if (widget.parent != null) widget.parent.remove(widget);
         children.add(widget);
         widget.parent = this;
     }
 
-    protected void removeChild(Widget widget) {
+    protected void setChildrenPositions() {
+
+    }
+
+    protected void setChildrenBoxDimensions() {
+
+    }
+
+    protected void remove(Widget widget) {
         if (widget.parent != this) throw new GUIException(Widget.class.getSimpleName() + " element is not a child of this element to detach.");
         widget.parent = null;
         children.remove(widget);
     }
 
-    public boolean descendantOf(Widget widget) {
+    public boolean belongsTo(Widget widget) {
         if (widget.children.contains(this)) return true;
         boolean result = false;
         for (Widget child : widget.children) {
-            result = result || descendantOf(child);
+            result = result || belongsTo(child);
         }
         return result;
     }

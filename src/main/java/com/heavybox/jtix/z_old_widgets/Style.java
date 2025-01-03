@@ -1,13 +1,9 @@
-package com.heavybox.jtix.widgets;
-
-import com.heavybox.jtix.graphics.Font;
+package com.heavybox.jtix.z_old_widgets;
 
 public class Style {
 
-    public Position position      = Position.CONTAINER; // TODO: move to widget
-    public Overflow overflow      = Overflow.TRIM; // TODO: move to container
-    public Font     font          = null;
-    public int      fontSize      = 18;
+    public Position position      = Position.CONTAINER;
+    public Overflow overflow      = Overflow.TRIM;
     public float    marginTop     = 0;
     public float    marginBottom  = 0;
     public float    marginLeft    = 0;

@@ -1,4 +1,4 @@
-package com.heavybox.jtix.widgets;
+package com.heavybox.jtix.z_old_widgets;
 
 import com.heavybox.jtix.graphics.Renderer2D;
 

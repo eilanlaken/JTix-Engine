@@ -36,7 +36,7 @@ public class Application {
         GL.createCapabilities();
         Async.init();
         ApplicationUtils.init(window);
-        Graphics.init(window);
+        //Graphics.init(window);
         AssetUtils.init(window); // TODO: replace
         Mouse.init(window);
         Keyboard.init(window);

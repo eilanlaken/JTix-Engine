@@ -11,34 +11,20 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_old_widgets.Region;
-import com.heavybox.jtix.z_old_widgets.Widget;
-import com.heavybox.jtix.z_old_widgets.Widgets;
+import com.heavybox.jtix.widgets.WidgetButton;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_2 implements Scene {
+public class SceneTest_UI_5 implements Scene {
 
 
-    //WidgetButton btn = new WidgetButton(200, 120, "hello");
-
-    Widget custom;
-
-    private Renderer2D renderer2D = new Renderer2D();
-
-
-    private String fontPath = "assets/fonts/OpenSans-Italic.ttf";
+    private final Renderer2D renderer2D = new Renderer2D();
 
     Texture flower;
 
-    Font aabb = new Font("assets/fonts/OpenSans-Regular.ttf");
-    Font font;
-    Font font2;
-
     TexturePack pack;
 
-
-    Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth() / 32f, Graphics.getWindowHeight() / 32f, 1, 0, 100, 70);
-
+    Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 70);
+    WidgetButton btn = new WidgetButton(220,140, "File");
 
     @Override
     public void setup() {
@@ -50,18 +36,7 @@ public class SceneTest_UI_2 implements Scene {
 
         Assets.finishLoading();
 
-        Region[] include = new Region[] {Widgets.regionCreateRectangle(200,400,
-                0, 0,
-                30,2,
-                0,2,
-                0,4)};
-        //Region[] exclude = new Region[] {Widgets.regionCreateCircle(100,20)};
-        custom = new Widget(include, null) {
-            @Override
-            protected void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY) {
-
-            }
-        };
+        btn.bgColor = Color.valueOf("#474747");
 
     }
 
@@ -133,7 +108,7 @@ public class SceneTest_UI_2 implements Scene {
 //        custom.x = x;
 //        custom.y = y;
 //        custom.deg = deg;
-        custom.frameUpdate();
+
 
 
 
@@ -141,32 +116,12 @@ public class SceneTest_UI_2 implements Scene {
         renderer2D.begin();
 
         //renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
-        renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
-
-        renderer2D.setColor(Color.WHITE);
-        //renderer2D.setTexture(flower);
-
-//        btn.deg = deg;
-//        btn.renderDebug(renderer2D);
-
-        custom.renderDebug(renderer2D);
-
-        renderer2D.setColor(Color.WHITE);
-        renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
-        //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
-
-//        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
-//                0,0,0,1,1);
-
-        //renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
-
-        //renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
+        btn.render(renderer2D);
 
 
-        //renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,0,1,1);
 
         renderer2D.end();
 

@@ -8,8 +8,8 @@ import java.util.Arrays;
 public class ArrayBoolean implements MemoryPool.Reset {
 
     public boolean[] items;
-    public int size;
-    public boolean ordered;
+    public int       size;
+    public boolean   ordered;
 
     /** Creates an ordered array with a capacity of 16. */
     public ArrayBoolean() {
