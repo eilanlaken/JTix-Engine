@@ -109,7 +109,8 @@ public class SceneTest_UI_5 implements Scene {
 //        custom.y = y;
 //        custom.deg = deg;
 
-
+        btn.frameUpdate(Graphics.getDeltaTime());
+        btn.fixedUpdate(Graphics.getDeltaTime());
 
 
         // render font
@@ -119,7 +120,7 @@ public class SceneTest_UI_5 implements Scene {
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
-        btn.render(renderer2D);
+        btn.draw(renderer2D);
 
 
 

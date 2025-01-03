@@ -24,7 +24,12 @@ public class WidgetButton extends Widget {
     }
 
     @Override
-    public void render(Renderer2D renderer2D) {
+    protected void update(float delta) {
+        System.out.println("hi");
+    }
+
+    @Override
+    protected void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY) {
         float width = renderer2D.getTextLineWidth(style.font, text, style.fontSize, true);
         float height = style.fontSize;
 

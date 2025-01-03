@@ -39,14 +39,14 @@ public abstract class Widget {
     public float   height   = 0;
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
-    protected int   screenZIndex = 0;
-    protected float screenX      = 0;
-    protected float screenY      = 0;
-    protected float screenDeg    = 0;
-    protected float screenSclX   = 1;
-    protected float screenSclY   = 1;
-    protected float boxWidth     = 0;
-    protected float boxHeight    = 0;
+    private int   screenZIndex = 0;
+    private float screenX      = 0;
+    private float screenY      = 0;
+    private float screenDeg    = 0;
+    private float screenSclX   = 1;
+    private float screenSclY   = 1;
+    private float boxWidth     = 0;
+    private float boxHeight    = 0;
 
     /* input handling */
     private boolean mouseInside         = false;
@@ -72,7 +72,37 @@ public abstract class Widget {
         if (toExclude != null && toExclude.length != 0) excluded.addAll(toExclude);
     }
 
-    public void frameUpdate() {
+    public void frameUpdate(float delta) { // will be used to detect double clicks. TODO.
+        /* handle input */
+        float xMouse = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
+        float yMouse = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
+        float xMousePrev = Input.mouse.getXPrev() - Graphics.getWindowWidth() * 0.5f;
+        float yMousePrev = Graphics.getWindowHeight() * 0.5f - Input.mouse.getYPrev();
+        mouseInside = containsPoint(xMouse, yMouse);
+        boolean mousePrevInside = containsPoint(xMousePrev, yMousePrev);
+        mouseJustEntered = !mousePrevInside && mouseInside;
+        mouseJustLeft = !mouseInside && mousePrevInside;
+        if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
+            mouseRegisterClicks = mouseInside;
+        }
+
+        /* invoke event callbacks */
+        if (mouseRegisterClicks && Input.mouse.isButtonClicked(Mouse.Button.LEFT) && mouseInside) {
+            onClick();
+        }
+        if (mouseJustEntered) {
+            onMouseOver();
+        }
+        if (mouseJustLeft) {
+            onMouseOut();
+        }
+    }
+
+    public void fixedUpdate(float delta) {
+        update(delta);
+
+        /* update Region or Regions (included, excluded) based on border radius, padding, clip-paths etc. */ // TODO.
+
         /* update screen positions */
         if (style.position == Style.Position.ABSOLUTE || parent == null) {
             this.screenZIndex = zIndex;
@@ -101,35 +131,6 @@ public abstract class Widget {
         for (Region region : excluded) {
             region.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
         }
-
-        /* handle input */
-        float xMouse = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
-        float yMouse = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
-        float xMousePrev = Input.mouse.getXPrev() - Graphics.getWindowWidth() * 0.5f;
-        float yMousePrev = Graphics.getWindowHeight() * 0.5f - Input.mouse.getYPrev();
-        mouseInside = containsPoint(xMouse, yMouse);
-        boolean mousePrevInside = containsPoint(xMousePrev, yMousePrev);
-        mouseJustEntered = !mousePrevInside && mouseInside;
-        mouseJustLeft = !mouseInside && mousePrevInside;
-        if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
-            mouseRegisterClicks = mouseInside;
-        }
-
-        /* invoke event callbacks */
-        if (mouseRegisterClicks && Input.mouse.isButtonClicked(Mouse.Button.LEFT) && mouseInside) {
-            onClick();
-        }
-        if (mouseJustEntered) {
-            onMouseOver();
-        }
-        if (mouseJustLeft) {
-            onMouseOut();
-        }
-
-    }
-
-    public void fixedUpdate(float delta) {
-
     }
 
     public final boolean containsPoint(float x, float y) {
@@ -142,19 +143,22 @@ public abstract class Widget {
         return false;
     }
 
-    protected abstract void render(Renderer2D renderer2D);
-
-    public void renderDebug(Renderer2D renderer2D) {
-        /* render included regions */
-        renderer2D.setColor(Color.GREEN);
-        for (Region include : included) {
-            renderer2D.drawPolygonThin(include.pointsTransformed.items, false,0,0,0, 1,1); // transform is already applied
-        }
-        renderer2D.setColor(Color.RED);
-        for (Region exclude : excluded) {
-            renderer2D.drawPolygonThin(exclude.pointsTransformed.items, false,0,0,0, 1,1); // transform is already applied
+    public void draw(Renderer2D renderer2D) {
+        render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
+        if (Widgets.debug) {
+            renderer2D.setColor(Color.GREEN);
+            for (Region include : included) {
+                renderer2D.drawPolygonThin(include.pointsTransformed.items, false,0,0,0, 1,1); // transform is already applied
+            }
+            renderer2D.setColor(Color.RED);
+            for (Region exclude : excluded) {
+                renderer2D.drawPolygonThin(exclude.pointsTransformed.items, false,0,0,0, 1,1); // transform is already applied
+            }
         }
     }
+
+    protected abstract void update(float delta);
+    protected abstract void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY);
 
     public void addChild(Widget widget) {
         if (widget == null)                   throw new GUIException(Widget.class.getSimpleName() + " element cannot be null.");

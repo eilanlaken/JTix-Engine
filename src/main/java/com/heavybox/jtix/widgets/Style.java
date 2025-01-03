@@ -1,5 +1,6 @@
 package com.heavybox.jtix.widgets;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Font;
 
 public class Style {
@@ -16,6 +17,19 @@ public class Style {
     public float    paddingBottom = 0;
     public float    paddingLeft   = 0;
     public float    paddingRight  = 0;
+
+    public float borderRadiusTopLeft = 0;
+    public float borderRadiusTopRight = 0;
+    public float borderRadiusBottomRight = 0;
+    public float borderRadiusBottomLeft = 0;
+
+    public int borderRefinementTopLeft = 20;
+    public int borderRefinementTopRight = 20;
+    public int borderRefinementBottomRight = 20;
+    public int borderRefinementBottomLeft = 20;
+
+    public Array<Region> regionsInclude = new Array<>(); // clip path but not affecting rendering - only input
+    public Array<Region> regionsExclude = new Array<>(); // clip path but not affecting rendering - only input
 
     /* controls how it renders the contents of the widget that overflow the box */
     public enum Overflow {
