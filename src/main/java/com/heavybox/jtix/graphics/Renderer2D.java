@@ -2094,7 +2094,7 @@ public class Renderer2D implements MemoryResourceHolder {
     /* Rendering 2D primitives - Strings */
 
     public void drawStringLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, float deg) {
-        // TODO
+        throw new UnsupportedOperationException();
     }
 
     // allows text markup modifiers: <b> <i> <h> <ul> <del> <sup> <sub> <color=#fff>

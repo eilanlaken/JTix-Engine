@@ -12,7 +12,7 @@ public class WidgetLabel extends Widget {
     }
 
     @Override
-    public void render(Renderer2D renderer2D) {
+    protected void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY) {
 
     }
 

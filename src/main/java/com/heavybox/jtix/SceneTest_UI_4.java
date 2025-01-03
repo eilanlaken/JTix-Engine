@@ -13,10 +13,11 @@ import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets.Region;
 import com.heavybox.jtix.widgets.Widget;
+import com.heavybox.jtix.widgets.WidgetButton;
 import com.heavybox.jtix.widgets.Widgets;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_2 implements Scene {
+public class SceneTest_UI_4 implements Scene {
 
 
     //WidgetButton btn = new WidgetButton(200, 120, "hello");
@@ -37,8 +38,9 @@ public class SceneTest_UI_2 implements Scene {
     TexturePack pack;
 
 
-    Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth() / 32f, Graphics.getWindowHeight() / 32f, 1, 0, 100, 70);
+    Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 70);
 
+    WidgetButton btn = new WidgetButton(220,140, "Press Here");
 
     @Override
     public void setup() {
@@ -141,32 +143,12 @@ public class SceneTest_UI_2 implements Scene {
         renderer2D.begin();
 
         //renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
-        renderer2D.drawStringLine(text.toString(), 64, null, true,0,120, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
-
-        renderer2D.setColor(Color.WHITE);
-        //renderer2D.setTexture(flower);
-
-//        btn.deg = deg;
-//        btn.renderDebug(renderer2D);
-
-        custom.renderDebug(renderer2D);
-
-        renderer2D.setColor(Color.WHITE);
-        renderer2D.drawTexture(flower, 30, 10, 20,0,0,1,1);
-        //renderer2D.drawTexture(flower, -5, 0, 0, 1,1);
-
-//        renderer2D.drawTexture(flower, 0.5f,0.5f,1,1,
-//                0,0,0,1,1);
-
-        //renderer2D.drawTextureRegion(pack.getRegion("assets/textures/red30x30.png"), x,y,deg,1,1);
-
-        //renderer2D.drawFunctionThin(300, -3, 3, 30, MathUtils::sinRad, 10,0,90,1,1);
+        btn.draw(renderer2D);
 
 
-        //renderer2D.drawFunctionFilled(400, 20, 10, -10, 10, 50, MathUtils::sinRad, 0,0,0,1,1);
 
         renderer2D.end();
 

@@ -7,7 +7,6 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.z_old_gui.GUIException;
-import com.heavybox.jtix.z_old_gui.UI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,10 +27,7 @@ public abstract class Widget {
     public final Style style = new Style();
 
     /* global attributes - set by the programmer directly */
-    public boolean hidden   = false;
-    public boolean drawBg   = true;
-    public boolean drawText = true;
-    public String  text     = "";
+    public boolean active = false;
     public int     zIndex   = 0;
     public float   x        = 0;
     public float   y        = 0;
@@ -42,14 +38,14 @@ public abstract class Widget {
     public float   height   = 0;
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
-    int   screenZIndex    = 0;
-    float screenX         = 0;
-    float screenY         = 0;
-    float screenDeg       = 0;
-    float screenSclX      = 1;
-    float screenSclY      = 1;
-    float boxWidth        = 0;
-    float boxHeight       = 0;
+    private int   screenZIndex = 0;
+    private float screenX      = 0;
+    private float screenY      = 0;
+    private float screenDeg    = 0;
+    private float screenSclX   = 1;
+    private float screenSclY   = 1;
+    private float boxWidth     = 0;
+    private float boxHeight    = 0;
 
     /* input handling */
     private boolean mouseInside         = false;
@@ -95,6 +91,7 @@ public abstract class Widget {
             this.screenSclY = this.sclY * parent.screenSclY;
         }
         setChildrenPositions(); // only after resolving its own position, we can set the position of the children. Note: only touch the x,y,... not the screenX, screenY,... .
+        setChildrenBoxDimensions();
 
         /* apply transform */
         for (Region region : included) {
@@ -144,22 +141,13 @@ public abstract class Widget {
         return false;
     }
 
-    protected abstract void render(Renderer2D renderer2D);
+    protected abstract void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY);
 
     public void draw(Renderer2D renderer2D) {
-        // we probably don't need this.
-        // we can also remove useless bg attributes like border radius etc.
-        if (drawBg) {
-
-        }
-        if (drawText) {
-
-        }
-
         if (style.overflow == Style.Overflow.TRIM) renderer2D.pushPixelBounds(0, 0, 1800, 1800); // TODO: calc min and max.
-        render(renderer2D);
+        this.render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
         for (Widget widget : children) {
-            widget.render(renderer2D);
+            widget.render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
         }
         if (style.overflow == Style.Overflow.TRIM) renderer2D.popPixelBounds();
     }
@@ -188,6 +176,10 @@ public abstract class Widget {
     }
 
     protected void setChildrenPositions() {
+
+    }
+
+    protected void setChildrenBoxDimensions() {
 
     }
 
