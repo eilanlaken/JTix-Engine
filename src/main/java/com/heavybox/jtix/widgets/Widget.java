@@ -7,6 +7,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.z_old_gui.GUIException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,6 +46,8 @@ public abstract class Widget {
     private float screenDeg    = 0;
     private float screenSclX   = 1;
     private float screenSclY   = 1;
+
+    // let's see.
     private float boxWidth     = 0;
     private float boxHeight    = 0;
 
@@ -61,12 +64,12 @@ public abstract class Widget {
     }
 
     // 99% cases usage
-    protected Widget(@NotNull Region region) {
+    @Deprecated protected Widget(@NotNull Region region) {
         included.add(region);
     }
 
     // 1% cases usage (for example, a button that is a hollow circle, for some reason)
-    protected Widget(@NotNull Region[] toInclude, @Nullable Region[] toExclude) {
+    @Deprecated protected Widget(@NotNull Region[] toInclude, @Nullable Region[] toExclude) {
         if (toInclude == null || toInclude.length == 0) throw new WidgetsException("Must include at least 1 region in toInclude array. To create regions, you can use helper methods in the class " + Widgets.class.getSimpleName());
         included.addAll(toInclude);
         if (toExclude != null && toExclude.length != 0) excluded.addAll(toExclude);
@@ -159,6 +162,9 @@ public abstract class Widget {
 
     protected abstract void update(float delta);
     protected abstract void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY);
+    // let's see
+    protected abstract float calculateInnerWidth();
+    protected abstract float calculateInnerHeight();
 
     public void addChild(Widget widget) {
         if (widget == null)                   throw new GUIException(Widget.class.getSimpleName() + " element cannot be null.");

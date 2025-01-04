@@ -10,6 +10,7 @@ public class WidgetButton extends Widget {
     public String text     = "Button";
     public Color textColor = Color.WHITE;
 
+    @Deprecated
     public WidgetButton(float width, float height, String text) {
         super(Widgets.regionCreateRectangle(width, height));
         this.width = width;
@@ -25,12 +26,12 @@ public class WidgetButton extends Widget {
 
     @Override
     protected void update(float delta) {
-        System.out.println("hi");
+
     }
 
     @Override
     protected void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY) {
-        float width = renderer2D.getTextLineWidth(style.font, text, style.fontSize, true);
+        float width = renderer2D.getTextLineWidth(style.font, text, style.fontSize,true);
         float height = style.fontSize;
 
         renderer2D.setColor(bgColor);
@@ -40,4 +41,14 @@ public class WidgetButton extends Widget {
         renderer2D.drawStringLine(text, style.fontSize, true, screenX, screenY, true);
     }
 
+    @Override
+    protected float calculateInnerWidth() {
+        //return renderer2D.getTextLineWidth(style.font, text, style.fontSize,true);;
+        return 0;
+    }
+
+    @Override
+    protected float calculateInnerHeight() {
+        return 0;
+    }
 }

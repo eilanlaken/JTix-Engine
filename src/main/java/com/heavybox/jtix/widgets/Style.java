@@ -1,6 +1,7 @@
 package com.heavybox.jtix.widgets;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
 
 public class Style {
@@ -9,6 +10,8 @@ public class Style {
     public Overflow overflow      = Overflow.TRIM; // TODO: move to container
     public Font     font          = null;
     public int      fontSize      = 18;
+    public Color    bgColor       = new Color(Color.RED);
+    public Color    textColor     = new Color(Color.WHITE);
     public float    marginTop     = 0;
     public float    marginBottom  = 0;
     public float    marginLeft    = 0;
