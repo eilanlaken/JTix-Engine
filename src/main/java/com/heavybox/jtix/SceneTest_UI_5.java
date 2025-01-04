@@ -36,8 +36,8 @@ public class SceneTest_UI_5 implements Scene {
 
         Assets.finishLoading();
 
-        btn.style.paddingLeft = 10;
-        btn.style.paddingRight = 10;
+//        btn.style.paddingLeft = 10;
+//        btn.style.paddingRight = 10;
 
     }
 

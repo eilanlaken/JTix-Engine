@@ -41,7 +41,9 @@ public class WidgetButton extends Widget {
                 screenX, screenY, screenDeg, screenSclX, screenSclY);
         renderer2D.setColor(style.textColor);
         renderer2D.setFont(style.font);
-        renderer2D.drawStringLine(text, style.fontSize, true, screenX, screenY, true);
+        // draw content. in that case, it is text.
+
+        renderer2D.drawStringLine(text, style.fontSize, true, screenX + innerOffsetX, screenY + innerOffsetY, true);
     }
 
     @Override

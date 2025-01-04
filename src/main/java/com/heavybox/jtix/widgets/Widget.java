@@ -46,6 +46,9 @@ public abstract class Widget {
     // this will be calculated from the style paddings etc.
     protected int boxWidth     = 0; // TODO: change back to private.
     protected int boxHeight    = 0;
+    protected int innerBoxMinX = 0; // calculated based on the box and the padding values.
+    protected int innerOffsetX = 0;
+    protected int innerOffsetY = 0;
 
     /* input handling */
     private boolean mouseInside         = false;
@@ -105,6 +108,9 @@ public abstract class Widget {
         boxHeight = (style.height >= 0 ? style.height : getInnerHeight()) + style.paddingTop + style.paddingBottom;
         boxWidth = MathUtils.clampInt(boxWidth, style.widthMin, style.widthMax);
         boxHeight = MathUtils.clampInt(boxHeight, style.heightMin, style.heightMax);
+        innerBoxMinX = style.paddingLeft - (int) (boxWidth * 0.5f);
+        innerOffsetX = style.paddingLeft - (style.paddingLeft + style.paddingRight)/ 2;
+        innerOffsetY = style.paddingBottom - (style.paddingBottom + style.paddingTop)/ 2;
 
         /* update Region or Regions (included, excluded) based on border radius, padding, clip-paths etc. */ // TODO.
         regionsIn.clear();

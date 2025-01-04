@@ -13,28 +13,28 @@ public class Style {
     public Color    backgroudColor = Color.valueOf("#007BFF");
     public Color    textColor      = new Color(Color.WHITE);
 
-    public int    marginTop      = 0;
-    public int    marginBottom   = 0;
-    public int    marginLeft     = 0;
-    public int    marginRight    = 0;
+    public int      marginTop      = 0;
+    public int      marginBottom   = 0;
+    public int      marginLeft     = 0;
+    public int      marginRight    = 0;
 
-    public int    paddingTop     = 5;
-    public int    paddingBottom  = 5;
-    public int    paddingLeft    = 10;
-    public int    paddingRight   = 10;
+    public int      paddingTop     = 5;
+    public int      paddingBottom  = 50;
+    public int      paddingLeft    = 10;
+    public int      paddingRight   = 10;
 
-    public int borderRadiusTopLeft = 0;
-    public int borderRadiusTopRight = 0;
-    public int borderRadiusBottomRight = 0;
-    public int borderRadiusBottomLeft = 0;
+    public int      borderRadiusTopLeft = 0;
+    public int      borderRadiusTopRight = 0;
+    public int      borderRadiusBottomRight = 0;
+    public int      borderRadiusBottomLeft = 0;
 
-    public int borderRefinementTopLeft = 10;
-    public int borderRefinementTopRight = 10;
-    public int borderRefinementBottomRight = 10;
-    public int borderRefinementBottomLeft = 10;
+    public int      borderRefinementTopLeft = 10;
+    public int      borderRefinementTopRight = 10;
+    public int      borderRefinementBottomRight = 10;
+    public int      borderRefinementBottomLeft = 10;
 
     /* if width and height are NOT set, the widget will resize to fit its contents. */
-    public int width = 50;
+    public int width = -1;
     public int height = -1;
     public int widthMin = 0;
     public int widthMax = Integer.MAX_VALUE;
