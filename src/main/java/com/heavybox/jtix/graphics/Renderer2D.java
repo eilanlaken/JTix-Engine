@@ -36,11 +36,11 @@ public class Renderer2D implements MemoryResourceHolder {
     private static final int   VERTICES_CAPACITY = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
     private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
 
-    /* defaults */
-    private final Shader  defaultShader  = createDefaultShaderProgram();
-    private final Texture defaultTexture = createDefaultTexture();
-    private final Camera  defaultCamera  = createDefaultCamera();
-    private final Font    defaultFont    = createDefaultFont();
+    /* defaults */ // TODO: maybe make them static?
+    private static final Shader  defaultShader  = createDefaultShaderProgram();
+    private static final Texture defaultTexture = createDefaultTexture();
+    private static final Camera  defaultCamera  = createDefaultCamera();
+    private static final Font    defaultFont    = createDefaultFont();
 
     /* memory pools */
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
@@ -1054,8 +1054,13 @@ public class Renderer2D implements MemoryResourceHolder {
         drawRectangleFilled(null, width, height, cornerRadius, refinement, x, y, degrees, scaleX, scaleY);
     }
 
+    // TODO: test
     public void drawRectangleFilled(@Nullable Texture texture, float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (cornerRadius == 0) { // TODO: test
+            drawRectangleFilled(texture, width, height, x, y, degrees, scaleX, scaleY);
+            return;
+        }
         refinement = Math.max(2, refinement);
         if (!ensureCapacity(refinement * 4, refinement * 12)) flush();
 
@@ -1151,6 +1156,7 @@ public class Renderer2D implements MemoryResourceHolder {
                 x, y, degrees, scaleX, scaleY);
     }
 
+    // TODO: test
     public void drawRectangleFilled(@Nullable Texture texture, float width, float height,
                                     float cornerRadiusTopLeft, int refinementTopLeft,
                                     float cornerRadiusTopRight, int refinementTopRight,
@@ -1158,6 +1164,12 @@ public class Renderer2D implements MemoryResourceHolder {
                                     float cornerRadiusBottomLeft, int refinementBottomLeft,
                                     float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (cornerRadiusTopLeft == 0 && cornerRadiusTopRight == 0 // TODO: test
+                && cornerRadiusBottomRight == 0 && cornerRadiusBottomLeft == 0) {
+            drawRectangleFilled(texture, width, height, x, y, degrees, scaleX, scaleY);
+            return;
+        }
+
         refinementTopLeft = Math.max(2, refinementTopLeft);
         refinementTopRight = Math.max(2, refinementTopRight);
         refinementBottomRight = Math.max(2, refinementBottomRight);
@@ -2414,6 +2426,7 @@ public class Renderer2D implements MemoryResourceHolder {
         GL30.glDeleteBuffers(vboTangents);
         GL30.glDeleteBuffers(ebo);
         defaultTexture.delete();
+        defaultFont.delete();
     }
 
     /* Create defaults: shader, texture (single white pixel), camera */
@@ -2508,7 +2521,8 @@ public class Renderer2D implements MemoryResourceHolder {
     /* auxiliary methods */
 
     // TODO: see if it belongs here.
-    public float getTextLineWidth(@Nullable Font font, final String text, int size, boolean antialiasing) {
+    // TODO: change to int
+    @Deprecated public static float getTextLineWidth(@Nullable Font font, final String text, int size, boolean antialiasing) {
         font = Objects.requireNonNullElse(font, defaultFont);
         float total_width = 0;
         for (int i = 0; i < text.length(); i++) {
@@ -2518,6 +2532,18 @@ public class Renderer2D implements MemoryResourceHolder {
             total_width += glyph.advanceX;
         }
         return total_width;
+    }
+
+    // TODO: change to int
+    @Deprecated public static float getTextBlockHeight(@Nullable Font font, final String text, int size, boolean antialiasing) {
+        font = Objects.requireNonNullElse(font, defaultFont);
+        // calculates the text block height based on the newline '\n' character count.
+        return 0;
+    }
+
+    // TODO: change to int
+    public static void getTextBlockDimensions(@Nullable Font font, final String text, int size, boolean antialiasing, Vector2 out) {
+
     }
 
 }

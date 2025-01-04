@@ -6,33 +6,42 @@ import com.heavybox.jtix.graphics.Font;
 
 public class Style {
 
-    public Position position      = Position.CONTAINER; // TODO: move to widget
-    public Overflow overflow      = Overflow.TRIM; // TODO: move to container
-    public Font     font          = null;
-    public int      fontSize      = 18;
-    public Color    bgColor       = new Color(Color.RED);
-    public Color    textColor     = new Color(Color.WHITE);
-    public float    marginTop     = 0;
-    public float    marginBottom  = 0;
-    public float    marginLeft    = 0;
-    public float    marginRight   = 0;
-    public float    paddingTop    = 0;
-    public float    paddingBottom = 0;
-    public float    paddingLeft   = 0;
-    public float    paddingRight  = 0;
+    public Position position       = Position.CONTAINER;
+    public Overflow overflow       = Overflow.TRIM;
+    public Font     font           = null;
+    public int      fontSize       = 18;
+    public Color    backgroudColor = Color.valueOf("#007BFF");
+    public Color    textColor      = new Color(Color.WHITE);
 
-    public float borderRadiusTopLeft = 0;
-    public float borderRadiusTopRight = 0;
-    public float borderRadiusBottomRight = 0;
-    public float borderRadiusBottomLeft = 0;
+    public int    marginTop      = 0;
+    public int    marginBottom   = 0;
+    public int    marginLeft     = 0;
+    public int    marginRight    = 0;
 
-    public int borderRefinementTopLeft = 20;
-    public int borderRefinementTopRight = 20;
-    public int borderRefinementBottomRight = 20;
-    public int borderRefinementBottomLeft = 20;
+    public int    paddingTop     = 5;
+    public int    paddingBottom  = 5;
+    public int    paddingLeft    = 10;
+    public int    paddingRight   = 10;
 
-    public Array<Region> regionsInclude = new Array<>(); // clip path but not affecting rendering - only input
-    public Array<Region> regionsExclude = new Array<>(); // clip path but not affecting rendering - only input
+    public int borderRadiusTopLeft = 0;
+    public int borderRadiusTopRight = 0;
+    public int borderRadiusBottomRight = 0;
+    public int borderRadiusBottomLeft = 0;
+
+    public int borderRefinementTopLeft = 10;
+    public int borderRefinementTopRight = 10;
+    public int borderRefinementBottomRight = 10;
+    public int borderRefinementBottomLeft = 10;
+
+    /* if width and height are NOT set, the widget will resize to fit its contents. */
+    public int width = 50;
+    public int height = -1;
+    public int widthMin = 0;
+    public int widthMax = Integer.MAX_VALUE;
+    public int heightMin = 0;
+    public int heightMax = Integer.MAX_VALUE;
+    public Array<Region> regionsIn  = new Array<>(); // clip path, not affecting rendering - only input
+    public Array<Region> regionsOut = new Array<>(); // clip path, not affecting rendering - only input
 
     /* controls how it renders the contents of the widget that overflow the box */
     public enum Overflow {

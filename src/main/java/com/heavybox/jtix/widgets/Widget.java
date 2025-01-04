@@ -7,12 +7,10 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.z_old_gui.GUIException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,8 +18,8 @@ import java.util.Set;
 public abstract class Widget {
 
     public    final int           id       = Widgets.getID();
-    protected final Array<Region> included = new Array<>(false, 1);
-    protected final Array<Region> excluded = new Array<>(false, 1);
+    protected final Array<Region> regionsIn  = new Array<>(false, 1);
+    protected final Array<Region> regionsOut = new Array<>(false, 1);
     protected        Widget       parent   = null;
     protected final Set<Widget>   children = new HashSet<>();
 
@@ -36,8 +34,6 @@ public abstract class Widget {
     public float   deg      = 0;
     public float   sclX     = 1;
     public float   sclY     = 1;
-    public float   width    = 0;
-    public float   height   = 0;
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
     private int   screenZIndex = 0;
@@ -47,9 +43,9 @@ public abstract class Widget {
     private float screenSclX   = 1;
     private float screenSclY   = 1;
 
-    // let's see.
-    private float boxWidth     = 0;
-    private float boxHeight    = 0;
+    // this will be calculated from the style paddings etc.
+    protected int boxWidth     = 0; // TODO: change back to private.
+    protected int boxHeight    = 0;
 
     /* input handling */
     private boolean mouseInside         = false;
@@ -65,17 +61,17 @@ public abstract class Widget {
 
     // 99% cases usage
     @Deprecated protected Widget(@NotNull Region region) {
-        included.add(region);
+        regionsIn.add(region);
     }
 
     // 1% cases usage (for example, a button that is a hollow circle, for some reason)
     @Deprecated protected Widget(@NotNull Region[] toInclude, @Nullable Region[] toExclude) {
         if (toInclude == null || toInclude.length == 0) throw new WidgetsException("Must include at least 1 region in toInclude array. To create regions, you can use helper methods in the class " + Widgets.class.getSimpleName());
-        included.addAll(toInclude);
-        if (toExclude != null && toExclude.length != 0) excluded.addAll(toExclude);
+        regionsIn.addAll(toInclude);
+        if (toExclude != null && toExclude.length != 0) regionsOut.addAll(toExclude);
     }
 
-    public void frameUpdate(float delta) { // will be used to detect double clicks. TODO.
+    public void frameUpdate(float delta) { // TODO: delta will be used to detect double clicks.
         /* handle input */
         float xMouse = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
         float yMouse = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
@@ -104,7 +100,18 @@ public abstract class Widget {
     public void fixedUpdate(float delta) {
         update(delta);
 
+        /* update box model */
+        boxWidth = (style.width >= 0 ? style.width : getInnerWidth()) + style.paddingLeft + style.paddingRight;
+        boxHeight = (style.height >= 0 ? style.height : getInnerHeight()) + style.paddingTop + style.paddingBottom;
+        boxWidth = MathUtils.clampInt(boxWidth, style.widthMin, style.widthMax);
+        boxHeight = MathUtils.clampInt(boxHeight, style.heightMin, style.heightMax);
+
         /* update Region or Regions (included, excluded) based on border radius, padding, clip-paths etc. */ // TODO.
+        regionsIn.clear();
+        regionsOut.clear();
+        if (style.regionsIn.size != 0) {
+
+        }
 
         /* update screen positions */
         if (style.position == Style.Position.ABSOLUTE || parent == null) {
@@ -128,19 +135,19 @@ public abstract class Widget {
         }
 
         /* apply transform */
-        for (Region region : included) {
+        for (Region region : regionsIn) {
             region.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
         }
-        for (Region region : excluded) {
+        for (Region region : regionsOut) {
             region.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
         }
     }
 
     public final boolean containsPoint(float x, float y) {
-        for (Region region : excluded) {
+        for (Region region : regionsOut) {
             if (region.containsPoint(x, y)) return false;
         }
-        for (Region region : included) {
+        for (Region region : regionsIn) {
             if (region.containsPoint(x, y)) return true;
         }
         return false;
@@ -150,11 +157,11 @@ public abstract class Widget {
         render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
         if (Widgets.debug) {
             renderer2D.setColor(Color.GREEN);
-            for (Region include : included) {
+            for (Region include : regionsIn) {
                 renderer2D.drawPolygonThin(include.pointsTransformed.items, false,0,0,0, 1,1); // transform is already applied
             }
             renderer2D.setColor(Color.RED);
-            for (Region exclude : excluded) {
+            for (Region exclude : regionsOut) {
                 renderer2D.drawPolygonThin(exclude.pointsTransformed.items, false,0,0,0, 1,1); // transform is already applied
             }
         }
@@ -163,8 +170,8 @@ public abstract class Widget {
     protected abstract void update(float delta);
     protected abstract void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY);
     // let's see
-    protected abstract float calculateInnerWidth();
-    protected abstract float calculateInnerHeight();
+    protected abstract int getInnerWidth();
+    protected abstract int getInnerHeight();
 
     public void addChild(Widget widget) {
         if (widget == null)                   throw new GUIException(Widget.class.getSimpleName() + " element cannot be null.");

@@ -5,15 +5,19 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.Tuple3;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.memory.MemoryResource;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.freetype.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /*
 TODO:
@@ -21,7 +25,6 @@ harfbuzz example:
 https://github.com/tangrams/harfbuzz-example/blob/master/src/main.cpp
  */
 public class Font implements MemoryResource {
-
 
     private final FT_Face                                         ftFace;
     private final Map<Integer, GlyphNotebook>                     glyphsNotebooks = new HashMap<>();
@@ -52,7 +55,7 @@ public class Font implements MemoryResource {
         ftFace = FT_Face.create(face);
     }
 
-    public Glyph getGlyph(final char c, int size, boolean antialiasing) {
+    Glyph getGlyph(final char c, int size, boolean antialiasing) {
         Tuple3<Character, Integer, Boolean> props = new Tuple3<>(c,size,antialiasing);
         Glyph glyph = cache.get(props);
         if (glyph != null) return glyph;
@@ -245,10 +248,10 @@ public class Font implements MemoryResource {
         public Texture texture;
         public int     width;
         public int     height;
-        public float   bearingX;
-        public float   bearingY;
-        public float   advanceX;
-        public float   advanceY;
+        public float   bearingX; // TODO: change to int
+        public float   bearingY; // TODO: change to int
+        public float   advanceX; // TODO: change to int
+        public float   advanceY; // TODO: change to int
         public int     atlasX;
         public int     atlasY;
 

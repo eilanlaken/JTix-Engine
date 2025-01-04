@@ -3,11 +3,12 @@ package com.heavybox.jtix.widgets;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
+import com.heavybox.jtix.memory.MemoryPool;
 
 /*
 Represents
  */
-public class Region {
+public class Region implements MemoryPool.Reset {
 
     final ArrayFloat pointsOriginal    = new ArrayFloat(true, 8);
     final ArrayFloat pointsTransformed = new ArrayFloat(true, 8);
@@ -35,6 +36,12 @@ public class Region {
 
     public boolean containsPoint(float x, float y) {
         return MathUtils.polygonContainsPoint(pointsTransformed.items, x, y);
+    }
+
+    @Override
+    public void reset() {
+        pointsOriginal.clear();
+        pointsTransformed.clear();
     }
 
 }

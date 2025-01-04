@@ -36,7 +36,8 @@ public class SceneTest_UI_5 implements Scene {
 
         Assets.finishLoading();
 
-        btn.bgColor = Color.valueOf("#474747");
+        btn.style.paddingLeft = 10;
+        btn.style.paddingRight = 10;
 
     }
 
@@ -76,7 +77,7 @@ public class SceneTest_UI_5 implements Scene {
 
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-
+            btn.text = "this is a new longer text";
         }
 
         ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
