@@ -8,11 +8,11 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.ui.Node;
 import com.heavybox.jtix.ui.NodeText;
-import com.heavybox.jtix.widgets.WidgetButton;
+import com.heavybox.jtix.ui.Style;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_6 implements Scene {
@@ -26,7 +26,10 @@ public class SceneTest_UI_6 implements Scene {
 
     Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 70);
 
-    NodeText btn = new NodeText("hello");
+    NodeText nodeText1 = new NodeText("parent");
+    NodeText nodeText2 = new NodeText("child");
+    Array<Node> uiNodes = new Array<>();
+
 
     @Override
     public void setup() {
@@ -38,8 +41,9 @@ public class SceneTest_UI_6 implements Scene {
 
         Assets.finishLoading();
 
-//        btn.style.paddingLeft = 10;
-//        btn.style.paddingRight = 10;
+        nodeText2.style.position = Style.Position.RELATIVE;
+        nodeText2.style.x = 300;
+        nodeText1.addChild(nodeText2);
 
     }
 
@@ -56,13 +60,7 @@ public class SceneTest_UI_6 implements Scene {
 
         pack = Assets.get("assets/atlases/spots.yml");
 
-
-        positions = new Vector2[40];
-        colors = new Color[40];
-        for (int i = 0; i < 40; i++) {
-            positions[i] = new Vector2(MathUtils.randomUniformFloat(-640,640), MathUtils.randomUniformFloat(-480,480));
-            colors[i] = new Color(MathUtils.randomUniformFloat(0f,1f), MathUtils.randomUniformFloat(0,1), MathUtils.randomUniformFloat(0,1), 1);
-        }
+        uiNodes.add(nodeText1);
     }
 
 
@@ -91,11 +89,11 @@ public class SceneTest_UI_6 implements Scene {
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            x += 1;
+            nodeText1.style.x += 1;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            x -= 1;
+            nodeText1.style.x -= 1;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
@@ -112,9 +110,11 @@ public class SceneTest_UI_6 implements Scene {
 //        custom.y = y;
 //        custom.deg = deg;
 
-        btn.fixedUpdate(Graphics.getDeltaTime());
+        for (Node node : uiNodes) {
+            node.fixedUpdate(Graphics.getDeltaTime());
+            node.handleInput();
+        }
 
-        btn.handleInput();
 
         // render font
         renderer2D.begin();
@@ -122,10 +122,9 @@ public class SceneTest_UI_6 implements Scene {
         //renderer2D.drawStringLine(text.toString(), 64, aabb, true,0,0, true);
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
-
-        btn.draw(renderer2D);
-
-
+        for (Node node : uiNodes) {
+            node.draw(renderer2D);
+        }
 
         renderer2D.end();
 

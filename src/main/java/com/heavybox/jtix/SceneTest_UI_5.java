@@ -11,6 +11,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.ui.Node;
 import com.heavybox.jtix.widgets.WidgetButton;
 import org.lwjgl.opengl.GL11;
 
@@ -24,7 +25,9 @@ public class SceneTest_UI_5 implements Scene {
     TexturePack pack;
 
     Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 70);
-    WidgetButton btn = new WidgetButton(220,140, "File");
+    WidgetButton nodeText = new WidgetButton(220,140, "File");
+
+    Array<Node> uiNodes = new Array<>();
 
     @Override
     public void setup() {
@@ -38,6 +41,7 @@ public class SceneTest_UI_5 implements Scene {
 
 //        btn.style.paddingLeft = 10;
 //        btn.style.paddingRight = 10;
+
 
     }
 
@@ -77,7 +81,7 @@ public class SceneTest_UI_5 implements Scene {
 
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            btn.text = "this is a new longer text";
+            nodeText.text = "this is a new longer text";
         }
 
         ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
@@ -110,8 +114,8 @@ public class SceneTest_UI_5 implements Scene {
 //        custom.y = y;
 //        custom.deg = deg;
 
-        btn.frameUpdate(Graphics.getDeltaTime());
-        btn.fixedUpdate(Graphics.getDeltaTime());
+        nodeText.frameUpdate(Graphics.getDeltaTime());
+        nodeText.fixedUpdate(Graphics.getDeltaTime());
 
 
         // render font
@@ -121,7 +125,7 @@ public class SceneTest_UI_5 implements Scene {
 
         //renderer2D.drawRectangleFilled(250,Graphics.getWindowHeight() * 0.9f,40,1,0,0,0,1,1);
 
-        btn.draw(renderer2D);
+        nodeText.draw(renderer2D);
 
 
 

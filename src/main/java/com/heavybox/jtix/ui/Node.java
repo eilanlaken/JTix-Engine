@@ -20,7 +20,7 @@ public abstract class Node {
     public boolean active = true;
 
     /* box-styling */
-    protected final Style style = getDefaultStyle();
+    public final Style style = new Style();
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
     private int   screenZIndex = 0;
@@ -47,7 +47,7 @@ public abstract class Node {
 
     /* callbacks */
     protected Node() {
-
+        setDefaultStyle();
     }
 
 
@@ -77,18 +77,8 @@ public abstract class Node {
             this.screenDeg = style.deg;
             this.screenSclX = style.sclX;
             this.screenSclY = style.sclY;
-        } else if (style.position == Style.Position.RELATIVE) { // TODO: wrong. In the case of containers, this ignores their effect.
-            float cos = MathUtils.cosDeg(parent.screenDeg);
-            float sin = MathUtils.sinDeg(parent.screenDeg);
-            float offsetX = this.style.x * cos - this.style.y * sin;
-            float offsetY = this.style.x * sin + this.style.y * cos;
-            this.screenX = parent.screenX + offsetX * parent.screenSclX;
-            this.screenY = parent.screenY + offsetY * parent.screenSclY;
-            this.screenZIndex = parent.screenZIndex + style.zIndex;
-            this.screenDeg  = this.style.deg + parent.screenDeg;
-            this.screenSclX = this.style.sclX * parent.screenSclX;
-            this.screenSclY = this.style.sclY * parent.screenSclY;
         }
+        setChildrenTransforms();
 
         /* apply transform */
         area.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
@@ -176,7 +166,7 @@ public abstract class Node {
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
     protected abstract int getInnerWidth();
     protected abstract int getInnerHeight();
-    protected abstract Style getDefaultStyle();
+    protected abstract void setDefaultStyle();
 
     public void addChild(Node widget) {
         if (widget == null)                   throw new GUIException(Node.class.getSimpleName() + " element cannot be null.");

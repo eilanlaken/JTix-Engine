@@ -11,22 +11,20 @@ public class NodeText extends Node {
     }
 
     @Override
-    protected Style getDefaultStyle() {
-        Style defaultStyle = new Style();
-        defaultStyle.renderBackground = false;
-        defaultStyle.overflow = Style.Overflow.IGNORE;
-        defaultStyle.paddingRight = 0;
-        defaultStyle.paddingLeft = 0;
-        defaultStyle.paddingTop = 0;
-        defaultStyle.paddingBottom = 0;
-        return defaultStyle;
+    protected void setDefaultStyle() {
+        style.renderBackground = false;
+        style.overflow = Style.Overflow.IGNORE;
+        style.paddingRight = 0;
+        style.paddingLeft = 0;
+        style.paddingTop = 0;
+        style.paddingBottom = 0;
     }
 
     @Override
-    protected void render(Renderer2D renderer2D, float screenX, float screenY, float screenDeg, float screenSclX, float screenSclY) {
+    protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
         renderer2D.setColor(style.textColor);
         renderer2D.setFont(style.font);
-        renderer2D.drawStringLine(text, style.fontSize, true, screenX, screenY,true); // TODO: consider angle and scale
+        renderer2D.drawStringLine(text, style.fontSize, true, x, y,true); // TODO: consider angle and scale
     }
 
     @Override
