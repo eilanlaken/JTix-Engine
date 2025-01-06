@@ -37,7 +37,7 @@ draw():
 public abstract class Node {
 
     public final int           id       = UI.getID();
-    public final Area area = new Area();
+    public final Region region = new Region();
     protected Node parent   = null;
     protected final Set<Node>   children = new HashSet<>();
     public boolean active = true;
@@ -84,14 +84,13 @@ public abstract class Node {
     }
 
 
-
     public void fixedUpdate(float delta) {
         update(delta);
 
         /* calculate the total box width of the node */
         screenWidth = (style.width >= 0 ? style.width : getInnerWidth()); // calculate internal width based on style and component specifics
         screenWidth = MathUtils.clampInt(screenWidth, style.widthMin, style.widthMax); // clamp based on styling
-        screenHeight += style.paddingLeft + style.paddingRight; // add padding.
+        screenWidth += style.paddingLeft + style.paddingRight; // add padding.
         /* calculate the total box height of the node */
         screenHeight = (style.height >= 0 ? style.height : getInnerHeight());
         screenHeight = MathUtils.clampInt(screenHeight, style.heightMin, style.heightMax);
@@ -142,7 +141,7 @@ public abstract class Node {
         setChildrenMetrics();
 
         /* apply transform */
-        area.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
+        region.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
 
         // handle children input
         for (Node child : children) {
@@ -157,8 +156,8 @@ public abstract class Node {
         float yMouse = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
         float xMousePrev = Input.mouse.getXPrev() - Graphics.getWindowWidth() * 0.5f;
         float yMousePrev = Graphics.getWindowHeight() * 0.5f - Input.mouse.getYPrev();
-        mouseInside = area.containsPoint(xMouse, yMouse);
-        boolean mousePrevInside = area.containsPoint(xMousePrev, yMousePrev);
+        mouseInside = region.containsPoint(xMouse, yMouse);
+        boolean mousePrevInside = region.containsPoint(xMousePrev, yMousePrev);
         mouseJustEntered = !mousePrevInside && mouseInside;
         mouseJustLeft = !mouseInside && mousePrevInside;
         if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
@@ -199,12 +198,12 @@ public abstract class Node {
         // TODO: apply content clipping using glScissors.
         // push pixel bounds if overflow != IGNORE
         render(renderer2D, screenX + innerOffsetX, screenY + innerOffsetY, screenDeg, screenSclX, screenSclY);
+        // pop pixel bounds if overflow != IGNORE
         for (Node child : children) {
             child.draw(renderer2D);
         }
-        // pop pixel bounds if overflow != IGNORE
 
-        if (UI.debug) area.draw(renderer2D);
+        if (UI.debug) region.draw(renderer2D);
     }
 
     // containers will override this.

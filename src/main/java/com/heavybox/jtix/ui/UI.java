@@ -12,17 +12,17 @@ public final class UI {
 
     private static final MemoryPool<Vector2> vectors2Pool = new MemoryPool<>(Vector2.class, 4);
 
-    public static Area.Region regionCreateRectangle(float width, float height) {
+    public static Region.Polygon regionCreateRectangle(float width, float height) {
         float[] rectangle = new float[] {
           -width, -height,
            width, -height,
            width,  height,
           -width,  height,
         };
-        return new Area.Region(rectangle);
+        return new Region.Polygon(rectangle);
     }
 
-    public static void regionSetToRectangle(float width, float height, Area.Region out) {
+    public static void regionSetToRectangle(float width, float height, Region.Polygon out) {
         out.pointsOriginal.clear();
         out.pointsTransformed.clear();
 
@@ -36,7 +36,7 @@ public final class UI {
         out.pointsTransformed.pack();
     }
 
-    public static Area.Region regionCreateRectangle(float width, float height, float cornerRadius, int refinement) {
+    public static Region.Polygon regionCreateRectangle(float width, float height, float cornerRadius, int refinement) {
         refinement = Math.max(2, refinement);
 
         float widthHalf  = width  * 0.5f;
@@ -87,14 +87,14 @@ public final class UI {
         }
 
         vectors2Pool.free(corner);
-        return new Area.Region(rectangleRC);
+        return new Region.Polygon(rectangleRC);
     }
 
-    public static Area.Region regionCreateRectangle(float width, float height,
-                                                    float cornerRadiusTopLeft, int refinementTopLeft,
-                                                    float cornerRadiusTopRight, int refinementTopRight,
-                                                    float cornerRadiusBottomRight, int refinementBottomRight,
-                                                    float cornerRadiusBottomLeft, int refinementBottomLeft) {
+    public static Region.Polygon regionCreateRectangle(float width, float height,
+                                                       float cornerRadiusTopLeft, int refinementTopLeft,
+                                                       float cornerRadiusTopRight, int refinementTopRight,
+                                                       float cornerRadiusBottomRight, int refinementBottomRight,
+                                                       float cornerRadiusBottomLeft, int refinementBottomLeft) {
 
         refinementTopLeft = Math.max(2, refinementTopLeft);
         refinementTopRight = Math.max(2, refinementTopRight);
@@ -152,10 +152,10 @@ public final class UI {
         }
 
         vectors2Pool.free(corner);
-        return new Area.Region(rectangleRC);
+        return new Region.Polygon(rectangleRC);
     }
 
-    public static Area.Region regionCreateCircle(float r, int refinement) {
+    public static Region.Polygon regionCreateCircle(float r, int refinement) {
         refinement = Math.max(refinement, 3);
 
         float[] circle = new float[refinement * 2];
@@ -165,7 +165,7 @@ public final class UI {
             circle[2*i + 1] = r * MathUtils.sinDeg(da * i);
         }
 
-        return new Area.Region(circle);
+        return new Region.Polygon(circle);
     }
 
 
