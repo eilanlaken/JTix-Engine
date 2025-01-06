@@ -5,7 +5,7 @@ import com.heavybox.jtix.graphics.Font;
 
 public final class Style implements Cloneable {
 
-    public Position position       = Position.RELATIVE;
+    public Position position = Position.RELATIVE;
     public Overflow overflow       = Overflow.IGNORE;
     public Font     font           = null;
     public int      fontSize       = 18;
@@ -121,6 +121,12 @@ public final class Style implements Cloneable {
     public enum Position {
         ABSOLUTE,  // positioned x, y, deg, sclX, sclY from the window's center
         RELATIVE,  // positioned x, y, deg, sclX, sclY relative to its parent's center. If the container is null, x, y and deg are calculated relative to the window (effectively ABSOLUTE).
+    }
+
+    public enum Size {
+        GAS,    // occupies all available space
+        LIQUID, // conforms to fit container content
+        SOLID,  // explicitly set by width and height
     }
 
 }
