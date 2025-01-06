@@ -9,7 +9,7 @@ public abstract class NodeContainer extends Node {
 
     }
 
-    public abstract void setChildrenTransforms();
+    public abstract void setChildrenMetrics();
 
     @Override
     protected int getInnerWidth() {

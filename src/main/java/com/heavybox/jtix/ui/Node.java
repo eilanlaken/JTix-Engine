@@ -5,12 +5,35 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.z_old_gui.GUIException;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/*
+Follows CSS' box model, without borders.
+
+draw():
+ ----------------------------------------------------------------
+|                         margin top                             |
+|          --------------------------------------                |
+|         |               padding top            |               |
+|         |            ----------------          |               |
+|         |  padding  |                | padding |               |
+| margin  |   left    |                |  right  |   margin      |
+|  left   |           |    content     |         |    right      |
+|         |           |    render()    |         |               |
+|         |           |                |         |               |
+|         |            ----------------          |               |
+|         |              padding bottom          |               |
+|          --------------------------------------                |
+|                                                                |
+|                       margin bottom                            |
+ ----------------------------------------------------------------
+
+ */
 public abstract class Node {
 
     public final int           id       = UI.getID();
@@ -30,13 +53,23 @@ public abstract class Node {
     private float screenSclX   = 1;
     private float screenSclY   = 1;
 
+    protected float availableWidth  = 0; // set by parent
+    protected float availableHeight = 0; // set by parent
+    protected int screenWidth = 0; // TODO: change back to private.
+    protected int screenHeight = 0;
+    protected int boxWidth = 0; // total box width: screen + marginLeft + marginRight
+    protected int boxHeight = 0; // total box height: screen + marginTop + marginBottom
+
     // this will be calculated from the style paddings etc.
-    private int innerWidth = 0;
-    private int innerHeight = 0;
+    protected Vector2 innerCornerTL = new Vector2();
+    protected Vector2 innerCornerTR = new Vector2();
+    protected Vector2 innerCornerBR = new Vector2();
+    protected Vector2 innerCornerBL = new Vector2();
+
     protected int innerOffsetX = 0;
     protected int innerOffsetY = 0;
-    protected int outerWidth = 0; // TODO: change back to private.
-    protected int outerHeight = 0;
+
+
 
     /* input handling */
     private boolean mouseInside         = false;
@@ -56,13 +89,13 @@ public abstract class Node {
         update(delta);
 
         /* calculate the total box width of the node */
-        outerWidth = (style.width >= 0 ? style.width : getInnerWidth()); // calculate internal width based on style and component specifics
-        outerWidth = MathUtils.clampInt(outerWidth, style.widthMin, style.widthMax); // clamp based on styling
-        outerHeight += style.paddingLeft + style.paddingRight; // add padding.
+        screenWidth = (style.width >= 0 ? style.width : getInnerWidth()); // calculate internal width based on style and component specifics
+        screenWidth = MathUtils.clampInt(screenWidth, style.widthMin, style.widthMax); // clamp based on styling
+        screenHeight += style.paddingLeft + style.paddingRight; // add padding.
         /* calculate the total box height of the node */
-        outerHeight = (style.height >= 0 ? style.height : getInnerHeight());
-        outerHeight = MathUtils.clampInt(outerHeight, style.heightMin, style.heightMax);
-        outerHeight += style.paddingTop + style.paddingBottom;
+        screenHeight = (style.height >= 0 ? style.height : getInnerHeight());
+        screenHeight = MathUtils.clampInt(screenHeight, style.heightMin, style.heightMax);
+        screenHeight += style.paddingTop + style.paddingBottom;
 
         innerOffsetX = style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
         innerOffsetY = style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
@@ -78,7 +111,35 @@ public abstract class Node {
             this.screenSclX = style.sclX;
             this.screenSclY = style.sclY;
         }
-        setChildrenTransforms();
+
+        if (parent == null) {
+            availableWidth = Graphics.getWindowWidth();
+            availableHeight = Graphics.getWindowHeight();
+        }
+
+        switch (style.sizeWidth) {
+            case GAS: // make it so that the component fill the space
+
+                break;
+            case LIQUID: // make it so that the component container conforms to its content
+
+                break;
+            case SOLID: // the component size is fixed.
+
+                break;
+        }
+        switch (style.sizeHeight) {
+            case GAS: // make it so that the component fill the space
+
+                break;
+            case LIQUID: // make it so that the component container conforms to its content
+                break;
+            case SOLID: // the component size is fixed.
+
+                break;
+        }
+
+        setChildrenMetrics();
 
         /* apply transform */
         area.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
@@ -125,7 +186,7 @@ public abstract class Node {
     public void draw(Renderer2D renderer2D) {
         if (style.renderBackground) {
             renderer2D.setColor(style.backgroudColor);
-            renderer2D.drawRectangleFilled(outerWidth, outerHeight,
+            renderer2D.drawRectangleFilled(screenWidth, screenHeight,
 
                     style.borderRadiusTopLeft, style.borderRefinementTopLeft,
                     style.borderRadiusTopRight, style.borderRefinementTopRight,
@@ -147,7 +208,8 @@ public abstract class Node {
     }
 
     // containers will override this.
-    protected void setChildrenTransforms() {
+    protected void setChildrenMetrics() {
+        // set transforms
         for (Node child : children) {
             float cos = MathUtils.cosDeg(this.screenDeg);
             float sin = MathUtils.sinDeg(this.screenDeg);
@@ -160,6 +222,7 @@ public abstract class Node {
             child.screenSclX = child.style.sclX * this.screenSclX;
             child.screenSclY = child.style.sclY * this.screenSclY;
         }
+        // set dimensions - irrelevant for non containers.
     }
 
     protected void update(float delta) {};
@@ -171,7 +234,6 @@ public abstract class Node {
     public void addChild(Node widget) {
         if (widget == null)                   throw new GUIException(Node.class.getSimpleName() + " element cannot be null.");
         if (widget == this)                   throw new GUIException("Trying to parent a " + Node.class.getSimpleName() + " to itself.");
-        if (widget.descendantOf(this)) throw new GUIException(Node.class.getSimpleName() + " element is already a descendant of parent.");
         if (this.descendantOf(widget))        throw new GUIException("Trying to create circular dependency in Widgets elements tree.");
 
         if (widget.parent != null) widget.parent.removeChild(widget);

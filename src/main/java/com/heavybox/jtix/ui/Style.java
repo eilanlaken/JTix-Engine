@@ -5,13 +5,15 @@ import com.heavybox.jtix.graphics.Font;
 
 public final class Style implements Cloneable {
 
-    public Position position = Position.RELATIVE;
-    public Overflow overflow       = Overflow.IGNORE;
-    public Font     font           = null;
-    public int      fontSize       = 18;
+    public Position position         = Position.RELATIVE;
+    public Size     sizeWidth        = Size.LIQUID;
+    public Size     sizeHeight       = Size.LIQUID;
+    public Overflow overflow         = Overflow.IGNORE;
+    public Font     font             = null;
+    public int      fontSize         = 18;
     public boolean  renderBackground = true;
-    public Color    backgroudColor = Color.valueOf("#007BFF");
-    public Color    textColor      = new Color(Color.WHITE);
+    public Color    backgroudColor   = Color.valueOf("#007BFF");
+    public Color    textColor        = new Color(Color.WHITE);
 
     public int     zIndex   = 0;
     public float   x        = 0;
