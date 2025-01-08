@@ -33,7 +33,8 @@ public abstract class NodeContainer extends Node {
     @Override
     protected void setDefaultStyle() {
         style.renderBackground = true;
-        style.overflow = Style.Overflow.TRIM;
+        style.overflowVertical = Style.Overflow.SCROLLBAR;
+        style.overflowHorizontal = Style.Overflow.SCROLLBAR;
         style.backgroudColor = Color.YELLOW;
         style.paddingRight = 10;
         style.paddingLeft = 10;

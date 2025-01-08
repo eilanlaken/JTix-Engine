@@ -96,6 +96,11 @@ public abstract class Node {
         setDefaultStyle();
     }
 
+    protected Node(final Style inherited) {
+        this.style.set(inherited);
+        setDefaultStyle();
+    }
+
 
     public void fixedUpdate(float delta) {
         update(delta);
@@ -238,9 +243,13 @@ public abstract class Node {
         }
     }
 
+    protected void renderForeground(Renderer2D renderer2D) {
+        // render scrollbars if needed.
+
+    }
+
 
     protected void update(float delta) {}
-    protected void renderForeground(Renderer2D renderer2D) {}
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
     protected abstract int getContentWidth();
     protected abstract int getContentHeight();

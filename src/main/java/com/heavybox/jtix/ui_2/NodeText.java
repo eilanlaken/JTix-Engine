@@ -1,6 +1,5 @@
 package com.heavybox.jtix.ui_2;
 
-import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
 
 public class NodeText extends Node {
@@ -14,7 +13,8 @@ public class NodeText extends Node {
     @Override
     protected void setDefaultStyle() {
         style.renderBackground = true;
-        style.overflow = Style.Overflow.IGNORE;
+        style.overflowVertical = Style.Overflow.IGNORE;
+        style.overflowHorizontal = Style.Overflow.IGNORE;
         style.sizeWidth = Style.Size.GAS;
         style.sizeHeight = Style.Size.LIQUID;
         style.paddingRight = 3;

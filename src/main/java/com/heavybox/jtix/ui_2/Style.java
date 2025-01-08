@@ -8,7 +8,8 @@ public final class Style implements Cloneable {
     public Position position         = Position.RELATIVE;
     public Size     sizeWidth        = Size.LIQUID;
     public Size     sizeHeight       = Size.LIQUID;
-    public Overflow overflow         = Overflow.IGNORE;
+    public Overflow overflowVertical = Overflow.IGNORE;
+    public Overflow overflowHorizontal = Overflow.IGNORE;
     public Font     font             = null;
     public int      fontSize         = 18;
     public boolean  renderBackground = true;
@@ -54,7 +55,8 @@ public final class Style implements Cloneable {
 
     public void set(final Style style) {
         this.position = style.position;
-        this.overflow = style.overflow;
+        this.overflowVertical = style.overflowVertical;
+        this.overflowHorizontal = style.overflowHorizontal;
         this.font = style.font;
         this.fontSize = style.fontSize;
         this.backgroudColor = style.backgroudColor;
