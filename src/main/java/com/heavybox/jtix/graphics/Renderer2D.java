@@ -81,6 +81,10 @@ public class Renderer2D implements MemoryResourceHolder {
     private final FloatBuffer tangents;
     private final IntBuffer   indices;
 
+    /* masking */
+    private boolean drawingMask = false;
+    private boolean incrementStencil = true;
+
     public Renderer2D() {
         positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
         colors     = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 1);
@@ -140,6 +144,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void begin(Camera camera) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
+        GL11.glColorMask(true, true, true, true); // Disable color buffer writes
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
@@ -175,6 +180,8 @@ public class Renderer2D implements MemoryResourceHolder {
         this.drawing = true;
     }
 
+
+
     /* State */
 
     public void setShader(Shader shader) {
@@ -187,20 +194,6 @@ public class Renderer2D implements MemoryResourceHolder {
         currentShader = shader;
     }
 
-    // TODO: remove
-    @Deprecated public void setCamera(Camera camera) {
-        if (camera == null) {
-            currentCamera = defaultCamera;
-            currentCamera.viewportWidth = Graphics.getWindowWidth();
-            currentCamera.viewportHeight = Graphics.getWindowHeight();
-        } else {
-            currentCamera = camera;
-        }
-        currentCamera.update(); // TODO: maybe. If not, just update default.
-        flush();
-        currentShader.bindUniform("u_camera_combined", currentCamera.combined);
-    }
-
     private void setTexture(@Nullable Texture texture) {
         if (texture == null) texture = defaultTexture;
         if (currentTexture == texture) return;
@@ -209,7 +202,6 @@ public class Renderer2D implements MemoryResourceHolder {
         currentShader.bindUniform("u_texture", currentTexture);
     }
 
-    // TODO: test
     public void setFont(Font font) {
         if (font == null) font = defaultFont;
         if (currentFont == font) return;
@@ -292,6 +284,65 @@ public class Renderer2D implements MemoryResourceHolder {
         int width = (int) (currentBounds.z - currentBounds.x);
         int height = (int) (currentBounds.w - currentBounds.y);
         GL11.glScissor(x, y, width, height);
+    }
+
+
+    public void stencilMaskBegin() {
+        if (drawingMask) throw new GraphicsException("call to beginMask() must be followed by a call to endMask() before subsequent calls to beginMask()");
+        drawingMask = true;
+        flush();
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glColorMask(false, false, false, false); // Disable color buffer writes
+        GL11.glDepthMask(false);                              // Disable depth buffer writes
+        setStencilModeIncrement();
+    }
+
+    public void setStencilModeIncrement() {
+        if (!drawingMask) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (!incrementStencil) flush();
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
+        GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);   // Replace stencil value with ref (1)
+        incrementStencil = true;
+    }
+
+    public void setStencilModeDecrement() {
+        if (!drawingMask) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (incrementStencil) flush();
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
+        GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);   // Replace stencil value with ref (1)
+        incrementStencil = false;
+    }
+
+    // TODO
+    public void setStencilModeReplace() {}
+
+    public void stencilMaskEnd() {
+        if (!drawingMask) throw new GraphicsException("call to beginMask() expected before endMask()");
+        flush();
+        GL11.glColorMask(true, true, true, true); // Disable color buffer writes
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP); // Do not modify stencil values
+        drawingMask = false;
+    }
+
+    public void applyMaskBegin(int index) {
+        if (drawingMask) throw new GraphicsException("""
+                Cannot apply mask when drawing to a stencil buffer;
+                 \
+                This is not allowed:\s
+                stencilMaskBegin();
+                ...
+                applyMaskBegin(index);
+                ...
+                stencilMaskEnd();
+                """);
+        flush();
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilFunc(GL11.GL_EQUAL, index, 0xFF); // Only render where stencil == 1
+    }
+
+    public void applyMaskEnd() {
+        flush();
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
     }
 
     /* Rendering API */

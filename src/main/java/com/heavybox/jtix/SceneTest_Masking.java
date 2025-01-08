@@ -3,16 +3,9 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.Vector2;
-import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.ui_2.Node;
-import com.heavybox.jtix.ui_2.NodeText;
-import com.heavybox.jtix.ui_2.Style;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_Masking implements Scene {
@@ -62,14 +55,23 @@ public class SceneTest_Masking implements Scene {
 
         }
 
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
 
         // render font
         renderer2D.begin();
 
+        renderer2D.stencilMaskBegin();
+        renderer2D.drawCircleFilled(50,10,0,0,0,1,1);
+        renderer2D.drawCircleFilled(50,10,25,0,0,1,1);
+        renderer2D.stencilMaskEnd();
 
+        renderer2D.applyMaskBegin(5);
         renderer2D.setColor(Color.MAROON);
-        renderer2D.drawRectangleBorder(200,150,2,0,0,0,1,1);
+        renderer2D.drawRectangleFilled(200,150,0,0,0,1,1);
+        renderer2D.applyMaskEnd();
+
+        renderer2D.setColor(Color.RED);
+        renderer2D.drawRectangleBorder(200,150, 5,0,0,0,1,1);
 
         renderer2D.end();
 
