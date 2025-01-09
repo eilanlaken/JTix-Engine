@@ -37,6 +37,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private static final float WHITE_TINT                = Color.WHITE.toFloatBits();
     private static final int   STENCIL_MODE_INCREMENT    = 0;
     private static final int   STENCIL_MODE_DECREMENT    = 1;
+    private static final int   STENCIL_MODE_REPLACE_1    = 2;
+    private static final int   STENCIL_MODE_REPLACE_0    = 3;
 
     /* defaults */ // TODO: maybe make them static?
     private static final Shader  defaultShader  = createDefaultShaderProgram();
@@ -87,7 +89,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private boolean drawingToStencil = false;
     private int     stencilMode      = STENCIL_MODE_INCREMENT;
     private boolean maskingEnabled   = false;
-    private int     maskingLevel     = 0;
+    private int maskingRef = 0;
     private int     maskingFunction  = GL11.GL_GEQUAL;
 
 
@@ -167,7 +169,7 @@ public class Renderer2D implements MemoryResourceHolder {
         drawingToStencil = false;
         stencilMode = STENCIL_MODE_INCREMENT;
         maskingEnabled = false;
-        maskingLevel = 0;
+        maskingRef = 0;
         maskingFunction = GL11.GL_GEQUAL;
 
         /* init blend function with default */
@@ -300,6 +302,7 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glScissor(x, y, width, height);
     }
 
+    /* masking and stencil testing */
 
     public void stencilMaskBegin() {
         if (drawingToStencil) throw new GraphicsException("call to beginMask() must be followed by a call to endMask() before subsequent calls to beginMask()");
@@ -310,7 +313,23 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glStencilMask(0xFF);
         GL11.glColorMask(false, false, false, false); // Disable color buffer writes
         GL11.glDepthMask(false);                              // Disable depth buffer writes
-        setStencilModeIncrement();
+        setStencilModeOnes();
+    }
+
+    public void setStencilModeOnes() {
+        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (stencilMode != STENCIL_MODE_REPLACE_1) flush();
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
+        stencilMode = STENCIL_MODE_REPLACE_1;
+    }
+
+    public void setStencilModeZeros() {
+        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (stencilMode != STENCIL_MODE_REPLACE_0) flush();
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 0, 0xFF); // Always pass, ref value = 1
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
+        stencilMode = STENCIL_MODE_REPLACE_0;
     }
 
     public void setStencilModeIncrement() {
@@ -342,31 +361,55 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
     }
 
-    // level = 0, 1, 2, ...
-    // lower level means more regions included in the union.
-    public void enableMaskLessEquals(int level) {
+    // enable disable masking
+    public void enableMasking() {
         if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
-        if (!maskingEnabled || level != maskingLevel || maskingFunction != GL11.GL_LEQUAL) flush();
         maskingEnabled = true;
-        maskingLevel = level;
-        maskingFunction = GL11.GL_LEQUAL;
         GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glStencilFunc(GL11.GL_LEQUAL, level, 0xFF);
     }
 
-    // level = 0, 1, 2, ...
-    // higher level means less regions included in the intersection ( = bigger area).
-    public void enableMaskGreaterEquals(int level) { // SUB?
-        if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
-        if (!maskingEnabled || level != maskingLevel || maskingFunction != GL11.GL_GEQUAL) flush();
-        maskingEnabled = true;
-        maskingLevel = level;
-        maskingFunction = GL11.GL_GEQUAL;
-        GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glStencilFunc(GL11.GL_GEQUAL, level, 0xFF);
+    private void setMaskingFunction(int glStencilFunc, int reference) {
+        if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
+        if (!maskingEnabled) throw new GraphicsException("setMaskingFunction() should be called only between enableMasking() and disableMasking().");
+        if (reference != maskingRef || maskingFunction != glStencilFunc) flush();
+        maskingRef = reference;
+        maskingFunction = glStencilFunc;
+        GL11.glStencilFunc(glStencilFunc, reference, 0xFF);
     }
 
-    public void disableMask() {
+    public void setMaskingFunctionNever(int reference) {
+        setMaskingFunction(GL11.GL_NEVER, reference);
+    }
+
+    public void setMaskingFunctionAlways(int reference) {
+        setMaskingFunction(GL11.GL_ALWAYS, reference);
+    }
+
+    public void setMaskingFunctionEquals(int reference) {
+        setMaskingFunction(GL11.GL_EQUAL, reference);
+    }
+
+    public void setMaskingFunctionNotEquals(int reference) {
+        setMaskingFunction(GL11.GL_NOTEQUAL, reference);
+    }
+
+    public void setMaskingFunctionLess(int reference) {
+        setMaskingFunction(GL11.GL_LESS, reference);
+    }
+
+    public void setMaskingFunctionLessEquals(int reference) {
+        setMaskingFunction(GL11.GL_LEQUAL, reference);
+    }
+
+    public void setMaskingFunctionGreater(int reference) {
+        setMaskingFunction(GL11.GL_GREATER, reference);
+    }
+
+    public void setMaskingFunctionGreaterEquals(int reference) {
+        setMaskingFunction(GL11.GL_GEQUAL, reference);
+    }
+
+    public void disableMasking() {
         if (!maskingEnabled) return;
         flush();
         maskingEnabled = false;

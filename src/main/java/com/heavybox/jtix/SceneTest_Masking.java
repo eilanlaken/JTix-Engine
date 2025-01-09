@@ -79,12 +79,13 @@ public class SceneTest_Masking implements Scene {
 //        renderer2D.drawRectangleFilled(200,150,0,0,0,1,1);
 //        renderer2D.applyMaskEnd();
 //
-        renderer2D.enableMaskLessEquals(level);
+        renderer2D.enableMasking();
+        renderer2D.setMaskingFunctionLessEquals(level);
         //renderer2D.setColor(Color.RED);
         //renderer2D.drawRectangleFilled(200,150,0,0,0,1,1);
         renderer2D.setColor(null);
         renderer2D.drawTexture(flower,0,0,0,1,1);
-        renderer2D.disableMask();
+        renderer2D.disableMasking();
 
         renderer2D.end();
 
