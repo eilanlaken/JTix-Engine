@@ -2381,29 +2381,6 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
-    // TODO, maybe.
-    public void drawStringBlock(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, boolean centralize) {
-
-        /* calculate the line total height */
-        float maxAscent = 0;
-        float maxDescent = 0;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
-            if (glyph == null) continue;
-
-            // Update ascent (distance from baseline to top of glyph)
-            float ascent = glyph.bearingY;
-            if (ascent > maxAscent) maxAscent = ascent;
-
-            // Update descent (distance below baseline)
-            float descent = (glyph.height - glyph.bearingY);
-            if (descent > maxDescent) maxDescent = descent;
-        }
-        float total_height = (maxAscent + maxDescent);
-
-    }
-
     /* Rendering primitives: Functions */
 
     public void drawFunctionThin(int widthPixels, float minX, float maxX, int refinement, Function<Float, Float> f, float x, float y, float degrees, float scaleX, float scaleY) {
