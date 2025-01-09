@@ -33,8 +33,10 @@ import java.util.stream.Collectors;
 
 public class Renderer2D implements MemoryResourceHolder {
 
-    private static final int   VERTICES_CAPACITY = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
-    private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
+    private static final int   VERTICES_CAPACITY         = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
+    private static final float WHITE_TINT                = Color.WHITE.toFloatBits();
+    private static final int   STENCIL_MODE_INCREMENT    = 0;
+    private static final int   STENCIL_MODE_DECREMENT    = 1;
 
     /* defaults */ // TODO: maybe make them static?
     private static final Shader  defaultShader  = createDefaultShaderProgram();
@@ -82,8 +84,12 @@ public class Renderer2D implements MemoryResourceHolder {
     private final IntBuffer   indices;
 
     /* masking */
-    private boolean drawingMask = false;
-    private boolean incrementStencil = true;
+    private boolean drawingToStencil = false;
+    private int     stencilMode      = STENCIL_MODE_INCREMENT;
+    private boolean maskingEnabled   = false;
+    private int     maskingLevel     = 0;
+    private int     maskingFunction  = GL11.GL_GEQUAL;
+
 
     public Renderer2D() {
         positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
@@ -144,17 +150,27 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void begin(Camera camera) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
         GL11.glColorMask(true, true, true, true); // Disable color buffer writes
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
 
+        /* init pixel bounds */
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         while (!pixelBounds.isEmpty()) {
             Vector4 bounds = pixelBounds.pop();
             vectors4Pool.free(bounds);
         }
 
+        /* stencil buffer and masking */
+        drawingToStencil = false;
+        stencilMode = STENCIL_MODE_INCREMENT;
+        maskingEnabled = false;
+        maskingLevel = 0;
+        maskingFunction = GL11.GL_GEQUAL;
+
+        /* init blend function with default */
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         this.perFrameDrawCalls = 0;
 
@@ -179,8 +195,6 @@ public class Renderer2D implements MemoryResourceHolder {
         setColor(WHITE_TINT);
         this.drawing = true;
     }
-
-
 
     /* State */
 
@@ -288,60 +302,74 @@ public class Renderer2D implements MemoryResourceHolder {
 
 
     public void stencilMaskBegin() {
-        if (drawingMask) throw new GraphicsException("call to beginMask() must be followed by a call to endMask() before subsequent calls to beginMask()");
-        drawingMask = true;
+        if (drawingToStencil) throw new GraphicsException("call to beginMask() must be followed by a call to endMask() before subsequent calls to beginMask()");
+        if (maskingEnabled) throw new GraphicsException("Stencil and Masking blocks must be separated and not nested: cannot call stencilMaskBegin() while masking is enabled.");
+        drawingToStencil = true;
         flush();
         GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilMask(0xFF);
         GL11.glColorMask(false, false, false, false); // Disable color buffer writes
         GL11.glDepthMask(false);                              // Disable depth buffer writes
         setStencilModeIncrement();
     }
 
     public void setStencilModeIncrement() {
-        if (!drawingMask) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (!incrementStencil) flush();
+        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (stencilMode != STENCIL_MODE_INCREMENT) flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);   // Replace stencil value with ref (1)
-        incrementStencil = true;
+        stencilMode = STENCIL_MODE_INCREMENT;
     }
 
     public void setStencilModeDecrement() {
-        if (!drawingMask) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (incrementStencil) flush();
+        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (stencilMode != STENCIL_MODE_DECREMENT) flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);   // Replace stencil value with ref (1)
-        incrementStencil = false;
+        stencilMode = STENCIL_MODE_DECREMENT;
     }
 
-    // TODO
-    public void setStencilModeReplace() {}
-
     public void stencilMaskEnd() {
-        if (!drawingMask) throw new GraphicsException("call to beginMask() expected before endMask()");
+        if (!drawingToStencil) throw new GraphicsException("call to beginMask() expected before endMask()");
         flush();
         GL11.glColorMask(true, true, true, true); // Disable color buffer writes
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP); // Do not modify stencil values
-        drawingMask = false;
+        drawingToStencil = false;
     }
 
-    public void applyMaskBegin(int index) {
-        if (drawingMask) throw new GraphicsException("""
-                Cannot apply mask when drawing to a stencil buffer;
-                 \
-                This is not allowed:\s
-                stencilMaskBegin();
-                ...
-                applyMaskBegin(index);
-                ...
-                stencilMaskEnd();
-                """);
-        flush();
+    public void clearStencil() {
+        if (drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call stencilMaskEnd() first.");
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+    }
+
+    // level = 0, 1, 2, ...
+    // lower level means more regions included in the union.
+    public void enableMaskLessEquals(int level) {
+        if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
+        if (!maskingEnabled || level != maskingLevel || maskingFunction != GL11.GL_LEQUAL) flush();
+        maskingEnabled = true;
+        maskingLevel = level;
+        maskingFunction = GL11.GL_LEQUAL;
         GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glStencilFunc(GL11.GL_EQUAL, index, 0xFF); // Only render where stencil == 1
+        GL11.glStencilFunc(GL11.GL_LEQUAL, level, 0xFF);
     }
 
-    public void applyMaskEnd() {
+    // level = 0, 1, 2, ...
+    // higher level means less regions included in the intersection ( = bigger area).
+    public void enableMaskGreaterEquals(int level) { // SUB?
+        if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
+        if (!maskingEnabled || level != maskingLevel || maskingFunction != GL11.GL_GEQUAL) flush();
+        maskingEnabled = true;
+        maskingLevel = level;
+        maskingFunction = GL11.GL_GEQUAL;
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilFunc(GL11.GL_GEQUAL, level, 0xFF);
+    }
+
+    public void disableMask() {
+        if (!maskingEnabled) return;
         flush();
+        maskingEnabled = false;
         GL11.glDisable(GL11.GL_STENCIL_TEST);
     }
 
@@ -2458,6 +2486,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void end() {
         if (!drawing) throw new GraphicsException("Called " + Renderer2D.class.getSimpleName() + ".end() without calling " + Renderer2D.class.getSimpleName() + ".begin() first.");
+        if (drawingToStencil) throw new GraphicsException("Called end() while still drawing to stencil. Must call stencilMaskEnd() after stencilMaskBegin() and before end().");
         flush();
         GL20.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);

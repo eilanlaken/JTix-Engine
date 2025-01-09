@@ -37,18 +37,18 @@ public class SceneTest_Masking implements Scene {
 
     }
 
-
+    int level = 0;
     @Override
     public void update() {
 
 
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.D)) {
+            level++;
         }
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
+            level--;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
@@ -61,17 +61,30 @@ public class SceneTest_Masking implements Scene {
         renderer2D.begin();
 
         renderer2D.stencilMaskBegin();
+        renderer2D.setStencilModeIncrement();
+        renderer2D.setColor(0.8f,1,0.1f,0.2f);
         renderer2D.drawCircleFilled(50,10,0,0,0,1,1);
-        renderer2D.drawCircleFilled(50,10,25,0,0,1,1);
+        renderer2D.setColor(0.8f,0.1f,1f,0.2f);
+        renderer2D.setStencilModeIncrement();
+        renderer2D.drawCircleFilled(50,10,49,0,0,1,1);
         renderer2D.stencilMaskEnd();
-
-        renderer2D.applyMaskBegin(5);
-        renderer2D.setColor(Color.MAROON);
-        renderer2D.drawRectangleFilled(200,150,0,0,0,1,1);
-        renderer2D.applyMaskEnd();
-
-        renderer2D.setColor(Color.RED);
-        renderer2D.drawRectangleBorder(200,150, 5,0,0,0,1,1);
+//
+//        renderer2D.stencilMaskBegin();
+//        renderer2D.drawCircleFilled(50,10,0,0,0,1,1);
+//        renderer2D.drawCircleFilled(50,10,25,0,0,1,1);
+//        renderer2D.stencilMaskEnd();
+//
+//        renderer2D.applyMaskBegin(5);
+//        renderer2D.setColor(Color.MAROON);
+//        renderer2D.drawRectangleFilled(200,150,0,0,0,1,1);
+//        renderer2D.applyMaskEnd();
+//
+        renderer2D.enableMaskLessEquals(level);
+        //renderer2D.setColor(Color.RED);
+        //renderer2D.drawRectangleFilled(200,150,0,0,0,1,1);
+        renderer2D.setColor(null);
+        renderer2D.drawTexture(flower,0,0,0,1,1);
+        renderer2D.disableMask();
 
         renderer2D.end();
 
