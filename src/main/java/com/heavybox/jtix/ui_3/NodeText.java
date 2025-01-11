@@ -15,8 +15,8 @@ public class NodeText extends Node {
         style.backgroundEnabled = true;
         style.contentOverflowY = Style.Overflow.IGNORE;
         style.contentOverflowX = Style.Overflow.IGNORE;
-        style.sizeWidth = Style.Sizing.GAS;
-        style.sizeHeight = Style.Sizing.LIQUID;
+        style.sizingWidth = Style.Sizing.GAS;
+        style.sizingHeight = Style.Sizing.LIQUID;
         style.paddingRight = 3;
         style.paddingLeft = 10;
         style.paddingTop = 0;

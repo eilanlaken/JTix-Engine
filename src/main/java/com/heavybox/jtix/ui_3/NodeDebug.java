@@ -7,8 +7,8 @@ public class NodeDebug extends Node {
 
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
-        //renderer2D.setColor(Color.YELLOW);
-        //renderer2D.drawRectangleFilled(300, 150, x,y,deg,sclX,sclY);
+        renderer2D.setColor(Color.YELLOW);
+        renderer2D.drawRectangleFilled(300, 150, x,y,deg,sclX,sclY);
     }
 
     @Override

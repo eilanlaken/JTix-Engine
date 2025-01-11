@@ -5,21 +5,21 @@ import com.heavybox.jtix.graphics.Font;
 
 public final class Style implements Cloneable {
 
-    public Transform           transform         = Transform.RELATIVE;
-    public Sizing              sizeWidth         = Sizing.LIQUID;
-    public Sizing              sizeHeight        = Sizing.LIQUID;
-    public Font                textFont          = null;
-    public Color               textColor         = new Color(Color.WHITE);
-    public int                 textSize          = 18;
-    public float               textLineHeight    = 1.2f;
-    public boolean             textAntialiasing  = true;
-    public boolean             textWrapEnabled   = true;
-    public Overflow            contentOverflowX  = Overflow.IGNORE;
-    public Overflow            contentOverflowY  = Overflow.IGNORE;
-    public AlignmentHorizontal contentAlignmentX = AlignmentHorizontal.CENTER;
-    public AlignmentVertical   contentAlignmentY = AlignmentVertical.CENTER;
-    public Color               backgroudColor    = Color.valueOf("#007BFF");
-    public boolean             backgroundEnabled = true;
+    public Transform transform         = Transform.RELATIVE;
+    public Sizing    sizingWidth       = Sizing.LIQUID;
+    public Sizing    sizingHeight      = Sizing.LIQUID;
+    public Font      textFont          = null;
+    public Color     textColor         = new Color(Color.WHITE);
+    public int       textSize          = 18;
+    public float     textLineHeight    = 1.2f;
+    public boolean   textAntialiasing  = true;
+    public boolean   textWrapEnabled   = true;
+    public Overflow  contentOverflowX  = Overflow.IGNORE;
+    public Overflow  contentOverflowY  = Overflow.IGNORE;
+    public Alignment contentAlignmentX = Alignment.MIDDLE;
+    public Alignment contentAlignmentY = Alignment.MIDDLE;
+    public Color     backgroudColor    = Color.valueOf("#007BFF");
+    public boolean   backgroundEnabled = true;
 
     public int     zIndex   = 0;
     public float   x        = 0;
@@ -49,17 +49,8 @@ public final class Style implements Cloneable {
     public int cornerSegmentsBottomLeft = 10;
 
     // borders
-    public int borderSizeLeft = 0;
-    public int borderSizeTop = 0;
-    public int borderSizeRight = 0;
-    public int borderSizeBottom = 0;
-
-    public Color borderColorLeft = new Color(Color.BLACK);
-    public Color borderColorTop = new Color(Color.BLACK);
-    public Color borderColorRight = new Color(Color.BLACK);
-    public Color borderColorBottom = new Color(Color.BLACK);
-
-    /* if width and height are NOT set, the widget will resize to fit its contents. */
+    public int   borderSize  = 0;
+    public Color borderColor = new Color(Color.BLACK);
 
     public int width = 100;
     public int height = 100;
@@ -72,12 +63,18 @@ public final class Style implements Cloneable {
 
     public void set(final Style style) {
         this.transform = style.transform;
+        this.sizingWidth = style.sizingWidth;
+        this.sizingHeight = style.sizingHeight;
         this.contentOverflowY = style.contentOverflowY;
         this.contentOverflowX = style.contentOverflowX;
+        this.contentAlignmentX = style.contentAlignmentX;
+        this.contentAlignmentY = style.contentAlignmentY;
         this.textFont = style.textFont;
         this.textSize = style.textSize;
-        this.backgroudColor = style.backgroudColor;
-        this.textColor = style.textColor;
+        this.textLineHeight = style.textLineHeight;
+        this.textWrapEnabled = style.textWrapEnabled;
+        this.backgroudColor.set(style.backgroudColor);
+        this.textColor.set(style.textColor);
 
         this.x = style.x;
         this.y = style.y;
@@ -112,6 +109,9 @@ public final class Style implements Cloneable {
         this.widthMax = style.widthMax;
         this.heightMin = style.heightMin;
         this.heightMax = style.heightMax;
+
+        this.borderSize = style.borderSize;
+        this.backgroudColor.set(style.borderColor);
     }
 
     @Override
@@ -130,14 +130,6 @@ public final class Style implements Cloneable {
         SCROLLBAR,
     }
 
-    /* controls how a text attribute is laid-out inside the widget */
-    public enum TextLayout {
-        CENTER,
-        LEFT,
-        RIGHT,
-        NEWSPAPER,
-    }
-
     /* controls how the final transform of the widget is calculated. */
     public enum Transform {
         ABSOLUTE,  // positioned x, y, deg, sclX, sclY from the container's center (or window, if container is null).
@@ -150,16 +142,10 @@ public final class Style implements Cloneable {
         SOLID,  // explicitly set by width and height
     }
 
-    public enum AlignmentVertical {
-        TOP,
-        CENTER,
-        BOTTOM,
-    }
-
-    public enum AlignmentHorizontal {
-        LEFT,
-        CENTER,
-        RIGHT,
+    public enum Alignment {
+        START,    // Equivalent to TOP or LEFT
+        MIDDLE,   // Works for both vertical and horizontal centering
+        END       // Equivalent to BOTTOM or RIGHT
     }
 
 }

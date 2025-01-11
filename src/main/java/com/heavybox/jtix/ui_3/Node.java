@@ -115,7 +115,7 @@ public abstract class Node {
 
 
 
-        switch (style.sizeWidth) {
+        switch (style.sizingWidth) {
             case GAS: // make it so that the component fill the space
                 backgroundRegionWidth = boxRegionWidth - (style.marginLeft + style.marginRight);
                 backgroundX = boxRegionCenterX + style.marginLeft - (style.marginLeft + style.marginRight) / 2;
@@ -139,7 +139,7 @@ public abstract class Node {
                 break;
         }
 
-        switch (style.sizeHeight) {
+        switch (style.sizingHeight) {
             case GAS: // make it so that the component fill the space
                 backgroundRegionHeight = boxRegionHeight - (style.marginTop + style.marginBottom);
                 System.out.println(backgroundRegionHeight);
