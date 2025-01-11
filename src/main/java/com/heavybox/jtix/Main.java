@@ -62,7 +62,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneTest_UI_Text_layout());
+        Application.launch(new SceneTest_UI_Borders());
 
     }
 

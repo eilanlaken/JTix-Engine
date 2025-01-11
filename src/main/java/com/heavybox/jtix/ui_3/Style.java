@@ -1,4 +1,4 @@
-package com.heavybox.jtix.ui_2;
+package com.heavybox.jtix.ui_3;
 
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
@@ -45,7 +45,7 @@ public final class Style implements Cloneable {
 
     public int cornerSegmentsTopLeft = 10;
     public int cornerSegmentsTopRight = 10;
-    public int cornerSegmentBottomRight = 10;
+    public int cornerSegmentsBottomRight = 10;
     public int cornerSegmentsBottomLeft = 10;
 
     // borders
@@ -103,7 +103,7 @@ public final class Style implements Cloneable {
 
         this.cornerSegmentsTopLeft = style.cornerSegmentsTopLeft;
         this.cornerSegmentsTopRight = style.cornerSegmentsTopRight;
-        this.cornerSegmentBottomRight = style.cornerSegmentBottomRight;
+        this.cornerSegmentsBottomRight = style.cornerSegmentsBottomRight;
         this.cornerSegmentsBottomLeft = style.cornerSegmentsBottomLeft;
 
         this.width = style.width;
