@@ -234,10 +234,10 @@ public abstract class Node {
             renderer2D.setColor(style.backgroudColor);
             renderer2D.drawRectangleFilled(actualBackgroundWidth, actualBackgroundHeight,
 
-                    style.borderRadiusTopLeft, style.borderRefinementTopLeft,
-                    style.borderRadiusTopRight, style.borderRefinementTopRight,
-                    style.borderRadiusBottomRight, style.borderRefinementBottomRight,
-                    style.borderRadiusBottomLeft, style.borderRefinementBottomLeft,
+                    style.borderRadiusTopLeft, style.borderSegmentsTopLeft,
+                    style.borderRadiusTopRight, style.borderSegmentsTopRight,
+                    style.borderRadiusBottomRight, style.borderSegmentBottomRight,
+                    style.borderRadiusBottomLeft, style.borderSegmentsBottomLeft,
 
                     actualBackgroundX, actualBackgroundY, screenDeg, screenSclX, screenSclY);
         }

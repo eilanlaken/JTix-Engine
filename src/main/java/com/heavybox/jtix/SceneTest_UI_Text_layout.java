@@ -6,7 +6,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -14,7 +13,11 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.ui_2.Style;
+import com.heavybox.jtix.ui_2.UI;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Arrays;
 
 public class SceneTest_UI_Text_layout implements Scene {
 
@@ -36,6 +39,8 @@ public class SceneTest_UI_Text_layout implements Scene {
 
     }
 
+    Style style = new Style();
+
     Vector2[] positions;
     Color[] colors;
     @Override
@@ -50,13 +55,21 @@ public class SceneTest_UI_Text_layout implements Scene {
             positions[i] = new Vector2(MathUtils.randomUniformFloat(-640,640), MathUtils.randomUniformFloat(-480,480));
             colors[i] = new Color(MathUtils.randomUniformFloat(0f,1f), MathUtils.randomUniformFloat(0,1), MathUtils.randomUniformFloat(0,1), 1);
         }
+
+        text.append("      hellow");
+
+
     }
 
 
     float scale = 1;
     int index = 0;
+    ArrayInt arr = new ArrayInt();
+    Array<String> lines = new Array<>();
 
     StringBuffer text = new StringBuffer();
+
+    float x = 0, y = 0, deg = 0, sclX = 1, sclY = 1;
 
     @Override
     public void update() {
@@ -72,6 +85,8 @@ public class SceneTest_UI_Text_layout implements Scene {
             text.append((char)  codepoint);
         }
 
+
+
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.A)) {
             index++;
         }
@@ -81,11 +96,27 @@ public class SceneTest_UI_Text_layout implements Scene {
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            scale += 0.003f;
+            y += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            scale -= 0.003f;
+            y -= 3;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+            deg += 3;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
+            deg -= 3;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
+            sclX *= 1.01f;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {
+            sclX *= 0.99f;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -96,8 +127,21 @@ public class SceneTest_UI_Text_layout implements Scene {
         renderer2D.begin();
         renderer2D.setColor(Color.MAROON);
         renderer2D.drawRectangleBorder(200,150,2,0,0,0,1,1);
+
         renderer2D.setColor(Color.CYAN);
-        renderer2D.drawStringLine(text.toString(), 32, font, true,0, 0, true);
+        renderer2D.setFont(font);
+
+        UI.calculateLineBreakdown(text.toString(), 200, style, lines);
+
+        UI.wordWrap(text.toString(), 200, style);
+
+
+
+        for (int i = 0; i < lines.size; i++) {
+            String line = lines.get(i);
+            renderer2D.drawStringLine(line, style.fontSize, style.fontAntialiasing, 0, line.length(), 0, 0, 0, -style.fontHeight * style.fontSize * i, 0,1,1);
+        }
+//        renderer2D.drawStringLine(text.toString(), style.fontSize, style.fontAntialiasing, 0, text.length(), 0, 0, 0, 0,0,1,1);
 
         renderer2D.end();
 

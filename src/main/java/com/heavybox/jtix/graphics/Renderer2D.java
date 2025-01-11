@@ -46,11 +46,12 @@ public class Renderer2D implements MemoryResourceHolder {
     private static final Camera  defaultCamera  = createDefaultCamera();
     private static final Font    defaultFont    = createDefaultFont();
 
-    /* memory pools */
+    /* memory pools */ // TODO: remove all these memory pools. Replace with static? arrays.
     private final MemoryPool<Vector2>    vectors2Pool   = new MemoryPool<>(Vector2.class, 10);
     private final MemoryPool<Vector4>    vectors4Pool   = new MemoryPool<>(Vector4.class, 10);
     private final MemoryPool<ArrayFloat> arrayFloatPool = new MemoryPool<>(ArrayFloat.class, 20);
     private final MemoryPool<ArrayInt>   arrayIntPool   = new MemoryPool<>(ArrayInt.class, 20);
+    private final Array<Vector2>         vertices       = new Array<>(true, 50);
 
     /* state */
     private final Stack<Vector4> pixelBounds  = new Stack<>(); // the head of the stack stores the current rectangle bounds for rendering as a Vector4 (x = min_x, y = min_y, z = max_x, w = max_y)
@@ -89,9 +90,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private boolean drawingToStencil = false;
     private int     stencilMode      = STENCIL_MODE_INCREMENT;
     private boolean maskingEnabled   = false;
-    private int maskingRef = 0;
+    private int     maskingRef       = 0;
     private int     maskingFunction  = GL11.GL_GEQUAL;
-
 
     public Renderer2D() {
         positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
@@ -2240,8 +2240,99 @@ public class Renderer2D implements MemoryResourceHolder {
         throw new UnsupportedOperationException();
     }
 
+    public void drawStringLine(final String line, int size, boolean antialiasing, int startIndex, int endIndex, float offsetX, float offsetY, float x, float y, float deg, float sclX, float sclY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(line.length() * 4, line.length() * 4)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+
+        /* calculate the line total width */
+        float total_width = 0;
+        for (int i = startIndex; i < endIndex; i++) {
+            char c = line.charAt(i);
+            final Font.Glyph glyph = currentFont.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+            total_width += glyph.advanceX;
+        }
+
+        vertices.clear();
+
+        /* render a quad for every character */
+        float penX = -total_width * 0.5f;
+        float penY = -size * 0.25f;
+        for (int i = startIndex; i < endIndex; i++) {
+            char c = line.charAt(i);
+            final Font.Glyph glyph = currentFont.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+
+            setTexture(glyph.texture);
+
+            /* calculate the quad's x, y, width, height */
+            float char_x = penX + glyph.bearingX;
+            float char_y = penY - (glyph.height - glyph.bearingY);
+            float w = glyph.width;
+            float h = glyph.height;
+
+            /* calculate the quad's uv coordinates */
+            float u0 = glyph.atlasX * glyph.texture.invWidth;
+            float v0 = (glyph.atlasY) * glyph.texture.invHeight;
+            float u1 = (glyph.atlasX + glyph.width) * glyph.texture.invWidth;
+            float v1 = (glyph.atlasY + glyph.height) * glyph.texture.invHeight;
+
+            /* put vertices */
+            Vector2 vertex_1 = vectors2Pool.allocate();
+            vertex_1.set(char_x + offsetX, char_y + h + offsetY);
+            colors.put(currentTint);
+            textCoords.put(u0).put(v0);
+
+            Vector2 vertex_2 = vectors2Pool.allocate();
+            vertex_2.set(char_x + offsetX, char_y + offsetY);
+            colors.put(currentTint);
+            textCoords.put(u0).put(v1);
+
+            Vector2 vertex_3 = vectors2Pool.allocate();
+            vertex_3.set(char_x + w + offsetX, char_y + offsetY);
+            colors.put(currentTint);
+            textCoords.put(u1).put(v1);
+
+            Vector2 vertex_4 = vectors2Pool.allocate();
+            vertex_4.set(char_x + w + offsetX, char_y + h + offsetY);
+            colors.put(currentTint);
+            textCoords.put(u1).put(v0);
+
+            vertices.add(vertex_1);
+            vertices.add(vertex_2);
+            vertices.add(vertex_3);
+            vertices.add(vertex_4);
+
+            /* put indices */
+            int startVertex = this.vertexIndex;
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 3);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 4;
+
+            penX += glyph.advanceX;
+            penY += glyph.advanceY;
+        }
+
+        for (Vector2 vertex : vertices) {
+            vertex.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(vertex.x).put(vertex.y);
+        }
+
+        vectors2Pool.freeAll(vertices);
+    }
+
+    public void drawStringLine(final String line, int size, boolean antialiasing, float x, float y, float deg, float sclX, float sclY) {
+        drawStringLine(line, size, antialiasing, 0, line.length(),0, 0, x, y, deg, sclX, sclY);
+    }
+
     // TODO: test
-    public void drawStringLine(final String text, int size, boolean antialiasing, float x, float y, boolean centralize) {
+    @Deprecated public void drawStringLine(final String text, int size, boolean antialiasing, float x, float y, boolean centralize) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(text.length() * 4, text.length() * 4)) flush();
 
@@ -2622,12 +2713,24 @@ public class Renderer2D implements MemoryResourceHolder {
 
     // TODO: see if it belongs here.
     // TODO: change to int
-    public static float getTextLineWidth(@Nullable Font font, final String text, int size, boolean antialiasing) {
+    @Deprecated public static float getTextLineWidth(@Nullable Font font, final String text, int size, boolean antialiasing) {
         font = Objects.requireNonNullElse(font, defaultFont);
         float total_width = 0;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             final Font.Glyph glyph = font.getGlyph(c, size, antialiasing);
+            if (glyph == null) continue;
+            total_width += glyph.advanceX;
+        }
+        return total_width;
+    }
+
+    public static float calculateStringLineWidth(final String line, int fromIndex, int toIndex, @Nullable Font font, int fontSize, boolean antialiasing) {
+        font = Objects.requireNonNullElse(font, defaultFont);
+        float total_width = 0;
+        for (int i = fromIndex; i < toIndex; i++) {
+            char c = line.charAt(i);
+            final Font.Glyph glyph = font.getGlyph(c, fontSize, antialiasing);
             if (glyph == null) continue;
             total_width += glyph.advanceX;
         }

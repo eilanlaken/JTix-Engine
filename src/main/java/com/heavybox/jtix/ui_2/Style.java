@@ -5,16 +5,20 @@ import com.heavybox.jtix.graphics.Font;
 
 public final class Style implements Cloneable {
 
-    public Position position         = Position.RELATIVE;
-    public Size     sizeWidth        = Size.LIQUID;
-    public Size     sizeHeight       = Size.LIQUID;
-    public Overflow overflowVertical = Overflow.IGNORE;
-    public Overflow overflowHorizontal = Overflow.IGNORE;
-    public Font     font             = null;
-    public int      fontSize         = 18;
-    public boolean  renderBackground = true;
-    public Color    backgroudColor   = Color.valueOf("#007BFF");
-    public Color    textColor        = new Color(Color.WHITE);
+    public Position            position            = Position.RELATIVE;
+
+    public Overflow            overflowVertical    = Overflow.IGNORE;
+    public Overflow            overflowHorizontal  = Overflow.IGNORE;
+    public Font                font                = null;
+    public int                 fontSize            = 18;
+    public float               fontHeight          = 1.2f;
+    public boolean             fontAntialiasing    = true;
+    public AlignmentVertical   alignmentVertical   = AlignmentVertical.CENTER;
+    public AlignmentHorizontal alignmentHorizontal = AlignmentHorizontal.CENTER;
+    public boolean             textWrapEnabled     = true;
+    public boolean             renderBackground    = true;
+    public Color               backgroudColor      = Color.valueOf("#007BFF");
+    public Color               textColor           = new Color(Color.WHITE);
 
     public int     zIndex   = 0;
     public float   x        = 0;
@@ -38,12 +42,25 @@ public final class Style implements Cloneable {
     public int      borderRadiusBottomRight = 0;
     public int      borderRadiusBottomLeft = 0;
 
-    public int      borderRefinementTopLeft = 10;
-    public int      borderRefinementTopRight = 10;
-    public int      borderRefinementBottomRight = 10;
-    public int      borderRefinementBottomLeft = 10;
+    public int      borderSegmentsTopLeft = 10;
+    public int      borderSegmentsTopRight = 10;
+    public int      borderSegmentBottomRight = 10;
+    public int      borderSegmentsBottomLeft = 10;
+
+    public int borderSizeLeft = 0;
+    public int borderSizeTop = 0;
+    public int borderSizeRight = 0;
+    public int borderSizeBottom = 0;
+
+    public Color borderColorLeft = new Color(Color.BLACK);
+    public Color borderColorTop = new Color(Color.BLACK);
+    public Color borderColorRight = new Color(Color.BLACK);
+    public Color borderColorBottom = new Color(Color.BLACK);
+
 
     /* if width and height are NOT set, the widget will resize to fit its contents. */
+    public Size                sizeWidth           = Size.LIQUID;
+    public Size                sizeHeight          = Size.LIQUID;
     public int width = 100;
     public int height = 100;
     public int widthMin = 0;
@@ -84,10 +101,10 @@ public final class Style implements Cloneable {
         this.borderRadiusBottomRight = style.borderRadiusBottomRight;
         this.borderRadiusBottomLeft = style.borderRadiusBottomLeft;
 
-        this.borderRefinementTopLeft = style.borderRefinementTopLeft;
-        this.borderRefinementTopRight = style.borderRefinementTopRight;
-        this.borderRefinementBottomRight = style.borderRefinementBottomRight;
-        this.borderRefinementBottomLeft = style.borderRefinementBottomLeft;
+        this.borderSegmentsTopLeft = style.borderSegmentsTopLeft;
+        this.borderSegmentsTopRight = style.borderSegmentsTopRight;
+        this.borderSegmentBottomRight = style.borderSegmentBottomRight;
+        this.borderSegmentsBottomLeft = style.borderSegmentsBottomLeft;
 
         this.width = style.width;
         this.height = style.height;
@@ -131,6 +148,18 @@ public final class Style implements Cloneable {
         GAS,    // occupies all available space
         LIQUID, // conforms to fit container content
         SOLID,  // explicitly set by width and height
+    }
+
+    public enum AlignmentVertical {
+        TOP,
+        CENTER,
+        BOTTOM,
+    }
+
+    public enum AlignmentHorizontal {
+        LEFT,
+        CENTER,
+        RIGHT,
     }
 
 }
