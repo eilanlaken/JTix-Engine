@@ -4,10 +4,7 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -32,12 +29,22 @@ public class SceneTest_UI_Borders implements Scene {
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
 
+        Assets.loadTexturePack("assets/atlases/pack.yml");
+
         Assets.finishLoading();
 
     }
 
     @Override
     public void start() {
+        TexturePack pack = Assets.get("assets/atlases/pack.yml");
+        TextureRegion region = pack.getRegion("assets/textures/stones512.jpg");
+        System.out.println(region.u1);
+        System.out.println(region.v1);
+
+        System.out.println(region.u2);
+        System.out.println(region.v2);
+
         nodeDebug.style.cornerRadiusTopLeft = 20;
         nodeDebug.style.cornerSegmentsTopLeft = 20;
 

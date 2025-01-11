@@ -1,5 +1,6 @@
 package com.heavybox.jtix;
 
+import com.heavybox.jtix.graphics.TextureRegion;
 import com.heavybox.jtix.z_old_application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
@@ -22,9 +23,9 @@ public class SceneRendering2D_textures_3 extends ApplicationScreen {
 
     private TexturePack pack;
 
-    TexturePack.Region region_red;
-    TexturePack.Region region_green;
-    TexturePack.Region region_blue;
+    TextureRegion region_red;
+    TextureRegion region_green;
+    TextureRegion region_blue;
 
     public SceneRendering2D_textures_3() {
         renderer2DOld = new Renderer2D_old();

@@ -1,5 +1,6 @@
 package com.heavybox.jtix;
 
+import com.heavybox.jtix.graphics.TextureRegion;
 import com.heavybox.jtix.z_old_application.ApplicationScreen;
 import com.heavybox.jtix.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
@@ -26,9 +27,9 @@ public class SceneRendering2D_ECS_CTransform_1 extends ApplicationScreen {
 
     private TexturePack pack;
 
-    TexturePack.Region region_red;
-    TexturePack.Region region_green;
-    TexturePack.Region region_blue;
+    TextureRegion region_red;
+    TextureRegion region_green;
+    TextureRegion region_blue;
 
     Texture yellowSquare;
 

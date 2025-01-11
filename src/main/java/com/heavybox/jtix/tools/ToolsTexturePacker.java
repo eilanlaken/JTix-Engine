@@ -18,8 +18,6 @@ import java.util.*;
 
 public final class ToolsTexturePacker {
 
-    public static final int maxTextureSize = Graphics.getMaxTextureSize();
-
     private ToolsTexturePacker() {}
 
     public static void packTextures(final String directory, final String outputDirectory, final String outputName, final boolean recursive) {
@@ -28,17 +26,20 @@ public final class ToolsTexturePacker {
         // TODO: ...
     }
 
+    // TODO: error here:
     public static void packTextures(String outputDirectory, String outputName, int extrude, int padding, TexturePackSize maxTexturesSize, final String ...texturePaths) throws IOException {
         /* check if TexturePack was already generated and updated using the same options and input textures. */
         if (alreadyPacked(outputDirectory, outputName, extrude, padding, maxTexturesSize, texturePaths)) return;
 
         Array<PackedRegionData> regionsData = new Array<>(texturePaths.length);
         for (String texturePath : texturePaths) {
+            System.out.println(texturePath);
             File sourceImageFile = new File(texturePath);
             BufferedImage sourceImage = ImageIO.read(sourceImageFile);
             PackedRegionData regionData = getPackedRegionData(texturePath, sourceImage);
-            if (regionData.packedWidth > maxTexturesSize.value || regionData.packedHeight > maxTexturesSize.value)
-                throw new IOException("Input texture file: " + regionData.name + " cannot be packed - it's dimensions are bigger than the allowed maximum: width = " + regionData.packedWidth + ", height: " + regionData.packedHeight + ", maximum: " + maxTexturesSize.value + ".");
+            if (regionData.packedWidth + (padding + extrude) * 2 > maxTexturesSize.value || regionData.packedHeight + (padding + extrude) * 2 > maxTexturesSize.value)
+                throw new IOException("Input texture file: " + regionData.name + " cannot be packed - it's dimensions + padding + extrude are bigger than the allowed maximum: width = " + regionData.packedWidth + ", height: " + regionData.packedHeight + ", maximum: " + maxTexturesSize.value + "." +
+                        " To fix the issue, select a higher TexturePackSize for maxTexturesSize if possible. Current value: " + maxTexturesSize);
             regionsData.add(regionData);
         }
         regionsData.sort();

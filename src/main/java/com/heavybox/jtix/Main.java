@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
+import com.heavybox.jtix.tools.ToolsTexturePacker;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
+        //ToolsTexturePacker.packTextures("assets/atlases", "pack", 3,3, ToolsTexturePacker.TexturePackSize.SMALL_512,"assets/textures/stones512.jpg");
 //        try {
 //            //ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
 //        } catch (Exception e) {
@@ -56,7 +58,6 @@ public class Main {
 //        ApplicationWindowAttributes config = new ApplicationWindowAttributes();
 //        Application.create();
 //        Application.launch(new ScreenLoading());
-
 
 
         ApplicationSettings settings = new ApplicationSettings();

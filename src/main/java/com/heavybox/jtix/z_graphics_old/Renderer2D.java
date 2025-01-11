@@ -296,7 +296,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawTextureRegion(TexturePack.Region region, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawTextureRegion(TextureRegion region, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if ((vertexIndex + 4) * VERTEX_SIZE > verticesBuffer.capacity()) flush();
         if (indicesBuffer.limit() + 6 > indicesBuffer.capacity()) flush();

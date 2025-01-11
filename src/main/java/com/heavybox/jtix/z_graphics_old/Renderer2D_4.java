@@ -4,7 +4,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
-import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector2;
@@ -28,7 +27,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -481,7 +479,7 @@ import static com.heavybox.jtix.math.Matrix4x4.*;
         vectors2Pool.free(arm3);
     }
 
-    public void drawTextureRegion(TexturePack.Region region, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawTextureRegion(TextureRegion region, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4, 6)) flush();
 
