@@ -17,8 +17,6 @@ import com.heavybox.jtix.ui_2.Style;
 import com.heavybox.jtix.ui_2.UI;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-
 public class SceneTest_UI_Text_layout implements Scene {
 
 
@@ -139,7 +137,7 @@ public class SceneTest_UI_Text_layout implements Scene {
 
         for (int i = 0; i < ls.length; i++) {
             String line = ls[i];
-            renderer2D.drawStringLine(line, style.fontSize, style.fontAntialiasing, 0, line.length(), 0, 0, 0, -style.fontHeight * style.fontSize * i, 0,1,1);
+            renderer2D.drawStringLine(line, style.textSize, style.textAntialiasing, 0, line.length(), 0, 0, 0, -style.textLineHeight * style.textSize * i, 0,1,1);
         }
 //        renderer2D.drawStringLine(text.toString(), style.fontSize, style.fontAntialiasing, 0, text.length(), 0, 0, 0, 0,0,1,1);
 

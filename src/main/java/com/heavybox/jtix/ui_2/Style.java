@@ -5,20 +5,21 @@ import com.heavybox.jtix.graphics.Font;
 
 public final class Style implements Cloneable {
 
-    public Position            position            = Position.RELATIVE;
-
-    public Overflow            overflowVertical    = Overflow.IGNORE;
-    public Overflow            overflowHorizontal  = Overflow.IGNORE;
-    public Font                font                = null;
-    public int                 fontSize            = 18;
-    public float               fontHeight          = 1.2f;
-    public boolean             fontAntialiasing    = true;
-    public AlignmentVertical   alignmentVertical   = AlignmentVertical.CENTER;
-    public AlignmentHorizontal alignmentHorizontal = AlignmentHorizontal.CENTER;
-    public boolean             textWrapEnabled     = true;
-    public boolean             renderBackground    = true;
-    public Color               backgroudColor      = Color.valueOf("#007BFF");
-    public Color               textColor           = new Color(Color.WHITE);
+    public Transform           transform         = Transform.RELATIVE;
+    public Sizing              sizeWidth         = Sizing.LIQUID;
+    public Sizing              sizeHeight        = Sizing.LIQUID;
+    public Font                textFont          = null;
+    public Color               textColor         = new Color(Color.WHITE);
+    public int                 textSize          = 18;
+    public float               textLineHeight    = 1.2f;
+    public boolean             textAntialiasing  = true;
+    public boolean             textWrapEnabled   = true;
+    public Overflow            contentOverflowX  = Overflow.IGNORE;
+    public Overflow            contentOverflowY  = Overflow.IGNORE;
+    public AlignmentHorizontal contentAlignmentX = AlignmentHorizontal.CENTER;
+    public AlignmentVertical   contentAlignmentY = AlignmentVertical.CENTER;
+    public Color               backgroudColor    = Color.valueOf("#007BFF");
+    public boolean             backgroundEnabled = true;
 
     public int     zIndex   = 0;
     public float   x        = 0;
@@ -37,30 +38,20 @@ public final class Style implements Cloneable {
     public int      paddingLeft    = 5;
     public int      paddingRight   = 5;
 
-    public int      borderRadiusTopLeft = 0;
-    public int      borderRadiusTopRight = 0;
-    public int      borderRadiusBottomRight = 0;
-    public int      borderRadiusBottomLeft = 0;
+    public int cornerRadiusTopLeft = 0;
+    public int cornerRadiusTopRight = 0;
+    public int cornerRadiusBottomRight = 0;
+    public int cornerRadiusBottomLeft = 0;
 
-    public int      borderSegmentsTopLeft = 10;
-    public int      borderSegmentsTopRight = 10;
-    public int      borderSegmentBottomRight = 10;
-    public int      borderSegmentsBottomLeft = 10;
+    public int cornerSegmentsTopLeft = 10;
+    public int cornerSegmentsTopRight = 10;
+    public int cornerSegmentBottomRight = 10;
+    public int cornerSegmentsBottomLeft = 10;
 
-    public int borderSizeLeft = 0;
-    public int borderSizeTop = 0;
-    public int borderSizeRight = 0;
-    public int borderSizeBottom = 0;
-
-    public Color borderColorLeft = new Color(Color.BLACK);
-    public Color borderColorTop = new Color(Color.BLACK);
-    public Color borderColorRight = new Color(Color.BLACK);
-    public Color borderColorBottom = new Color(Color.BLACK);
-
+    // borders are out of scope for now.
 
     /* if width and height are NOT set, the widget will resize to fit its contents. */
-    public Size                sizeWidth           = Size.LIQUID;
-    public Size                sizeHeight          = Size.LIQUID;
+
     public int width = 100;
     public int height = 100;
     public int widthMin = 0;
@@ -71,11 +62,11 @@ public final class Style implements Cloneable {
     // TODO: implement interpolation (linear, cubic, etc.) between styles.
 
     public void set(final Style style) {
-        this.position = style.position;
-        this.overflowVertical = style.overflowVertical;
-        this.overflowHorizontal = style.overflowHorizontal;
-        this.font = style.font;
-        this.fontSize = style.fontSize;
+        this.transform = style.transform;
+        this.contentOverflowY = style.contentOverflowY;
+        this.contentOverflowX = style.contentOverflowX;
+        this.textFont = style.textFont;
+        this.textSize = style.textSize;
         this.backgroudColor = style.backgroudColor;
         this.textColor = style.textColor;
 
@@ -96,15 +87,15 @@ public final class Style implements Cloneable {
         this.paddingLeft = style.paddingLeft;
         this.paddingRight = style.paddingRight;
 
-        this.borderRadiusTopLeft = style.borderRadiusTopLeft;
-        this.borderRadiusTopRight = style.borderRadiusTopRight;
-        this.borderRadiusBottomRight = style.borderRadiusBottomRight;
-        this.borderRadiusBottomLeft = style.borderRadiusBottomLeft;
+        this.cornerRadiusTopLeft = style.cornerRadiusTopLeft;
+        this.cornerRadiusTopRight = style.cornerRadiusTopRight;
+        this.cornerRadiusBottomRight = style.cornerRadiusBottomRight;
+        this.cornerRadiusBottomLeft = style.cornerRadiusBottomLeft;
 
-        this.borderSegmentsTopLeft = style.borderSegmentsTopLeft;
-        this.borderSegmentsTopRight = style.borderSegmentsTopRight;
-        this.borderSegmentBottomRight = style.borderSegmentBottomRight;
-        this.borderSegmentsBottomLeft = style.borderSegmentsBottomLeft;
+        this.cornerSegmentsTopLeft = style.cornerSegmentsTopLeft;
+        this.cornerSegmentsTopRight = style.cornerSegmentsTopRight;
+        this.cornerSegmentBottomRight = style.cornerSegmentBottomRight;
+        this.cornerSegmentsBottomLeft = style.cornerSegmentsBottomLeft;
 
         this.width = style.width;
         this.height = style.height;
@@ -139,12 +130,12 @@ public final class Style implements Cloneable {
     }
 
     /* controls how the final transform of the widget is calculated. */
-    public enum Position {
-        ABSOLUTE,  // positioned x, y, deg, sclX, sclY from the window's center
-        RELATIVE,  // positioned x, y, deg, sclX, sclY relative to its parent's center. If the container is null, x, y and deg are calculated relative to the window (effectively ABSOLUTE).
+    public enum Transform {
+        ABSOLUTE,  // positioned x, y, deg, sclX, sclY from the container's center (or window, if container is null).
+        RELATIVE,  // positioned x, y, deg, sclX, sclY relative to the position calculated by its container. If the container is null, behaves like ABSOLUTE.
     }
 
-    public enum Size {
+    public enum Sizing {
         GAS,    // occupies all available space
         LIQUID, // conforms to fit container content
         SOLID,  // explicitly set by width and height

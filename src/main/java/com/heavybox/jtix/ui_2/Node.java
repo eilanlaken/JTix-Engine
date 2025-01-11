@@ -166,7 +166,7 @@ public abstract class Node {
         /* update Region or Regions (included, excluded) based on border radius, padding, clip-paths etc. */ // TODO.
 
         /* update screen positions */
-        if (style.position == Style.Position.ABSOLUTE || container == null) {
+        if (style.transform == Style.Transform.ABSOLUTE || container == null) {
             this.screenZIndex = style.zIndex;
             this.screenX = style.x;
             this.screenY = style.y;
@@ -230,14 +230,14 @@ public abstract class Node {
     }
 
     protected void renderBackground(Renderer2D renderer2D) {
-        if (style.renderBackground) {
+        if (style.backgroundEnabled) {
             renderer2D.setColor(style.backgroudColor);
             renderer2D.drawRectangleFilled(actualBackgroundWidth, actualBackgroundHeight,
 
-                    style.borderRadiusTopLeft, style.borderSegmentsTopLeft,
-                    style.borderRadiusTopRight, style.borderSegmentsTopRight,
-                    style.borderRadiusBottomRight, style.borderSegmentBottomRight,
-                    style.borderRadiusBottomLeft, style.borderSegmentsBottomLeft,
+                    style.cornerRadiusTopLeft, style.cornerSegmentsTopLeft,
+                    style.cornerRadiusTopRight, style.cornerSegmentsTopRight,
+                    style.cornerRadiusBottomRight, style.cornerSegmentBottomRight,
+                    style.cornerRadiusBottomLeft, style.cornerSegmentsBottomLeft,
 
                     actualBackgroundX, actualBackgroundY, screenDeg, screenSclX, screenSclY);
         }

@@ -2,18 +2,10 @@ package com.heavybox.jtix.ui_2;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.input.Input;
-import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.regex.Pattern;
 
 // TODO: add: polygons, rectangles with rounded corners, circles with refinement
 public final class UI {
@@ -225,11 +217,11 @@ public final class UI {
     public static void calculateLineWrapIndices(final String line, float boundaryWidth, final Style style, ArrayInt out) {
         out.clear();
         //calculateStringWrapIndices(str,boundaryWidth, style, 0, out);
-        boundaryWidth = boundaryWidth - style.fontSize;
+        boundaryWidth = boundaryWidth - style.textSize;
         int currentIndex = 0;
 
         while (currentIndex < line.length()) {
-            float currentWidth = Renderer2D.calculateStringLineWidth(line, currentIndex, line.length(), style.font, style.fontSize, style.fontAntialiasing);
+            float currentWidth = Renderer2D.calculateStringLineWidth(line, currentIndex, line.length(), style.textFont, style.textSize, style.textAntialiasing);
 
             int firstWhitespaceIndex = -1;
             for (int i = currentIndex; i < line.length(); i++ ){
@@ -248,7 +240,7 @@ public final class UI {
             for (int i = line.length() - 1; i > currentIndex; i--) {
                 char c = line.charAt(i);
                 if (!Character.isWhitespace(c)) continue;
-                float remainderWidth = Renderer2D.calculateStringLineWidth(line, currentIndex, line.length(), style.font, style.fontSize, style.fontAntialiasing);
+                float remainderWidth = Renderer2D.calculateStringLineWidth(line, currentIndex, line.length(), style.textFont, style.textSize, style.textAntialiasing);
                 if (currentWidth - remainderWidth <= boundaryWidth) { // found the split-index
                     splitIndex = i;
                     break;
@@ -279,7 +271,7 @@ public final class UI {
         /* preparation: clear buffers, trim trailing and leading spaces from input string line, adjust boundary length, break into words */
         String trimmed = line.trim();
         String[] words = trimmed.split("\\s+");
-        boundaryWidth = Math.max(boundaryWidth - style.fontSize, style.fontSize);
+        boundaryWidth = Math.max(boundaryWidth - style.textSize, style.textSize);
         builder.setLength(0);
         builder.append(trimmed);
         wordStartIndices.clear();
@@ -301,10 +293,10 @@ public final class UI {
 
         /* the greedy word wrap algorithm */
         float spaceLeft = boundaryWidth;
-        final float space_width = Renderer2D.calculateStringLineWidth(" ", 0, 1, style.font, style.fontSize, style.fontAntialiasing);
+        final float space_width = Renderer2D.calculateStringLineWidth(" ", 0, 1, style.textFont, style.textSize, style.textAntialiasing);
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
-            float width = Renderer2D.calculateStringLineWidth(word, 0, word.length(), style.font, style.fontSize, style.fontAntialiasing);
+            float width = Renderer2D.calculateStringLineWidth(word, 0, word.length(), style.textFont, style.textSize, style.textAntialiasing);
             if (width + space_width > spaceLeft) { // overflow
                 linebreakIndices.add(wordStartIndices.get(i));
                 spaceLeft = boundaryWidth - width;

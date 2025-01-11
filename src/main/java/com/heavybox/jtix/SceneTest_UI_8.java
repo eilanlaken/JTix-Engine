@@ -41,7 +41,7 @@ public class SceneTest_UI_8 implements Scene {
         Assets.loadTexture("assets/textures/flower.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.finishLoading();
 
-        nodeText2.style.position = Style.Position.RELATIVE;
+        nodeText2.style.transform = Style.Transform.RELATIVE;
 
     }
 
@@ -120,8 +120,8 @@ public class SceneTest_UI_8 implements Scene {
 
         nodeText1.style.marginBottom = 10;
 
-        nodeText1.style.sizeWidth = Style.Size.GAS;
-        nodeText1.style.sizeHeight = Style.Size.GAS;
+        nodeText1.style.sizeWidth = Style.Sizing.GAS;
+        nodeText1.style.sizeHeight = Style.Sizing.GAS;
 
         // render font
         renderer2D.begin();
