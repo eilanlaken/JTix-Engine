@@ -1,5 +1,6 @@
 package com.heavybox.jtix.ui_2;
 
+import com.heavybox.jtix.collections.ArrayInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -68,6 +69,44 @@ class UITest {
         }
 
         Assertions.assertEquals("\nAAA \nBBB", result.toString());
+    }
+
+    @Test
+    public void getWordIndicesTest() {
+        String str1 = "AA BB CC";
+        ArrayInt indices = getWordIndices(str1);
+
+        Assertions.assertEquals(3, indices.size);
+        Assertions.assertEquals(0, indices.get(0));
+        Assertions.assertEquals(3, indices.get(1));
+        Assertions.assertEquals(6, indices.get(2));
+
+        String str2 = "GGGG   CC";
+        indices = getWordIndices(str2);
+        Assertions.assertEquals(2, indices.size);
+        Assertions.assertEquals(0, indices.get(0));
+        Assertions.assertEquals(7, indices.get(1));
+    }
+
+    private ArrayInt getWordIndices(final String str) {
+        ArrayInt indices = new ArrayInt();
+        boolean inWord = false;
+
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+
+            // Detect the start of a word
+            if (!Character.isWhitespace(c)) {
+                if (!inWord) {
+                    indices.add(i);  // Capture the start index of the word
+                    inWord = true;
+                }
+            } else {
+                inWord = false;  // Reset flag when a space is found
+            }
+        }
+
+        return indices;
     }
 
 }
