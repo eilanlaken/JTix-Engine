@@ -131,14 +131,14 @@ public class SceneTest_UI_Text_layout implements Scene {
         renderer2D.setColor(Color.CYAN);
         renderer2D.setFont(font);
 
-        UI.calculateLineBreakdown(text.toString(), 200, style, lines);
+        //UI.calculateLineBreakdown(text.toString(), 200, style, lines);
 
-        UI.wordWrap(text.toString(), 200, style);
+        String[] ls = UI.wordWrap(text.toString(), 200, style);
 
 
 
-        for (int i = 0; i < lines.size; i++) {
-            String line = lines.get(i);
+        for (int i = 0; i < ls.length; i++) {
+            String line = ls[i];
             renderer2D.drawStringLine(line, style.fontSize, style.fontAntialiasing, 0, line.length(), 0, 0, 0, -style.fontHeight * style.fontSize * i, 0,1,1);
         }
 //        renderer2D.drawStringLine(text.toString(), style.fontSize, style.fontAntialiasing, 0, text.length(), 0, 0, 0, 0,0,1,1);

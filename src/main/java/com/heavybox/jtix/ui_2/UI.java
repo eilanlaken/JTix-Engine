@@ -272,7 +272,7 @@ for each Word in Text
     else
         SpaceLeft := SpaceLeft - (Width(Word) + SpaceWidth)
      */
-    public static void wordWrap(final String line, float boundaryWidth, final Style style) {
+    public static String[] wordWrap(final String line, float boundaryWidth, final Style style) {
         String trimmed = line.trim();
         String[] words = trimmed.split("\\s+");
         int[] wordStartIndices = new int[words.length];
@@ -312,6 +312,8 @@ for each Word in Text
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ANY_KEY)) {
             System.out.println(builder);
         }
+
+        return builder.toString().split("\n");
 
     }
 
