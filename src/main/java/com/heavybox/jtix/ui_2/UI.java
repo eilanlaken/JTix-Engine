@@ -274,11 +274,12 @@ public final class UI {
         else
             SpaceLeft := SpaceLeft - (Width(Word) + SpaceWidth)
     */
+    // TODO: optimize - instead of using a StringBuilder, write the linebreak indices into an output array.
     public static String[] wordWrap(final String line, float boundaryWidth, final Style style) {
         /* preparation: clear buffers, trim trailing and leading spaces from input string line, adjust boundary length, break into words */
         String trimmed = line.trim();
         String[] words = trimmed.split("\\s+");
-        boundaryWidth = boundaryWidth - style.fontSize;
+        boundaryWidth = Math.max(boundaryWidth - style.fontSize, style.fontSize);
         builder.setLength(0);
         builder.append(trimmed);
         wordStartIndices.clear();
