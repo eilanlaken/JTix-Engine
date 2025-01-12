@@ -19,7 +19,10 @@ public final class UI {
 
     private static final Style globalTheme = new Style(); // TODO.
 
-    // TODO
+    public static void setGlobalTheme(final Style style) {
+        globalTheme.set(style);
+    }
+
     public static Style getGlobalTheme() {
         return globalTheme.clone();
     }
@@ -123,15 +126,20 @@ public final class UI {
 
         float widthHalf  = width  * 0.5f;
         float heightHalf = height * 0.5f;
-        float da = 90.0f / (refinementTopLeft - 1);
         float[] rectangleRC = new float[totalRefinement * 2]; // round corners rectangle: 4 corners, 2 components for each vertex (x, y) and 'refinement' vertices for every corner
+
+        float daTL = 90.0f / (refinementTopLeft - 1);
+        float daTR = 90.0f / (refinementTopRight - 1);
+        float daBR = 90.0f / (refinementBottomRight - 1);
+        float daBL = 90.0f / (refinementBottomLeft - 1);
+
 
         Vector2 corner = vectors2Pool.allocate();
         int index = 0;
         // add upper left corner vertices
         for (int i = 0; i < refinementTopLeft; i++) {
             corner.set(-cornerRadiusTopLeft, 0);
-            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.rotateDeg(-daTL * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
             rectangleRC[index] = corner.x;
             rectangleRC[index + 1] = corner.y;
@@ -141,7 +149,7 @@ public final class UI {
         // add upper right corner vertices
         for (int i = 0; i < refinementTopRight; i++) {
             corner.set(0, cornerRadiusTopRight);
-            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.rotateDeg(-daTR * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
             rectangleRC[index] = corner.x;
             rectangleRC[index + 1] = corner.y;
@@ -151,7 +159,7 @@ public final class UI {
         // add lower right corner vertices
         for (int i = 0; i < refinementBottomRight; i++) {
             corner.set(cornerRadiusBottomRight, 0);
-            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.rotateDeg(-daBR * i); // rotate clockwise
             corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
             rectangleRC[index] = corner.x;
             rectangleRC[index + 1] = corner.y;
@@ -161,7 +169,7 @@ public final class UI {
         // add lower left corner vertices
         for (int i = 0; i < refinementBottomLeft; i++) {
             corner.set(0, -cornerRadiusBottomLeft);
-            corner.rotateDeg(-da * i); // rotate clockwise
+            corner.rotateDeg(-daBL * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
             rectangleRC[index] = corner.x;
             rectangleRC[index + 1] = corner.y;
@@ -184,81 +192,6 @@ public final class UI {
 
         return new Region.Polygon(circle);
     }
-
-
-
-
-
-    public static void calculateLineBreakdown(final String line, final float boundaryWidth, final Style style, Array<String> out) {
-        out.clear();
-        ArrayInt splitPoints = new ArrayInt();
-        calculateLineWrapIndices(line, boundaryWidth, style, splitPoints);
-
-        if (splitPoints.size == 0) {
-            out.add(line);
-            return;
-        }
-
-        int start = 0;
-        for (int i = 0; i < splitPoints.size; i++) {
-            int index = splitPoints.get(i);
-            // Ensure the index is valid and does not exceed the string length
-            if (index < 0 || index > line.length()) {
-                throw new IllegalArgumentException("Index out of bounds: " + index);
-            }
-            // Split from the current start to the current index
-            out.add(line.substring(start, index));
-            start = index; // Move the start to the next position after the last split
-        }
-
-        // Add the remaining part of the string after the last index
-        if (start < line.length()) {
-            out.add(line.substring(start));
-        }
-    }
-
-    public static void calculateLineWrapIndices(final String line, float boundaryWidth, final Style style, ArrayInt out) {
-        out.clear();
-        //calculateStringWrapIndices(str,boundaryWidth, style, 0, out);
-        boundaryWidth = boundaryWidth - style.textSize;
-        int currentIndex = 0;
-
-        while (currentIndex < line.length()) {
-            float currentWidth = Renderer2D.calculateStringLineWidth(line, currentIndex, line.length(), style.textFont, style.textSize, style.textAntialiasing);
-
-            int firstWhitespaceIndex = -1;
-            for (int i = currentIndex; i < line.length(); i++ ){
-                if (Character.isWhitespace(line.charAt(i))){
-                    firstWhitespaceIndex = i;
-                    break;
-                }
-            }
-
-            boolean containsWhiteSpace = firstWhitespaceIndex != -1;
-            if (currentWidth <= boundaryWidth) break; // we don't need to break the String
-            if (!containsWhiteSpace) break; // we can't break the String
-
-            // string overflows, we need to find a suitable index to split the String line.
-            int splitIndex = line.length() - 1;
-            for (int i = line.length() - 1; i > currentIndex; i--) {
-                char c = line.charAt(i);
-                if (!Character.isWhitespace(c)) continue;
-                float remainderWidth = Renderer2D.calculateStringLineWidth(line, currentIndex, line.length(), style.textFont, style.textSize, style.textAntialiasing);
-                if (currentWidth - remainderWidth <= boundaryWidth) { // found the split-index
-                    splitIndex = i;
-                    break;
-                }
-            }
-
-            if (splitIndex == line.length() - 1) { // we could not split the string
-                splitIndex = firstWhitespaceIndex;
-            }
-            if (splitIndex == currentIndex) return;
-            currentIndex = splitIndex;
-            out.add(currentIndex);
-        }
-    }
-
 
     /* == from Wikipedia ==
     SpaceLeft := LineWidth

@@ -8,11 +8,7 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.ui_2.Style;
-import com.heavybox.jtix.ui_2.UI;
 import com.heavybox.jtix.ui_3.NodeDebug;
 import org.lwjgl.opengl.GL11;
 
@@ -74,7 +70,7 @@ public class SceneTest_UI_Borders implements Scene {
 //            text.append((char)  codepoint);
         }
 
-        nodeDebug.fixedUpdate(Graphics.getDeltaTime());
+        nodeDebug.update(Graphics.getDeltaTime());
         nodeDebug.handleInput();
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {

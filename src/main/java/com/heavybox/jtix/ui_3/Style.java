@@ -59,7 +59,8 @@ public final class Style implements Cloneable {
     public int heightMin = 0;
     public int heightMax = Integer.MAX_VALUE;
 
-    // TODO: implement interpolation (linear, cubic, etc.) between styles.
+    // TODO: scrollbars
+    public ScrollbarRenderer scrollbarRenderer = getDefaultScrollbarRenderer();
 
     public void set(final Style style) {
         this.transform = style.transform;
@@ -146,6 +147,21 @@ public final class Style implements Cloneable {
         START,    // Equivalent to TOP or LEFT
         MIDDLE,   // Works for both vertical and horizontal centering
         END       // Equivalent to BOTTOM or RIGHT
+    }
+
+    public static abstract class ScrollbarRenderer {
+
+        protected abstract void render(Node node, float barWidth, float barHeight, float scrollProgressPercentage, float visiblePortionPercentage, float x, float y, float deg, float sclX, float sclY);
+
+    }
+
+    private static ScrollbarRenderer getDefaultScrollbarRenderer() {
+        return new ScrollbarRenderer() {
+            @Override
+            protected void render(Node node, float barWidth, float barHeight, float scrollProgressPercentage, float visiblePortionPercentage, float x, float y, float deg, float sclX, float sclY) {
+
+            }
+        };
     }
 
 }

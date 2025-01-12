@@ -35,7 +35,7 @@ draw():
  */
 public abstract class Node {
 
-    public final int    id     = UI.getID();
+    public final int id = UI.getID();
     public final Region region = new Region();
     protected NodeContainer container = null;
 
@@ -52,11 +52,6 @@ public abstract class Node {
     protected float screenSclX   = 1;
     protected float screenSclY   = 1;
 
-
-    protected int screenWidth = 0; // TODO: change back to private.
-    protected int screenHeight = 0;
-    protected int boxWidth = 0; // total box width: screen + marginLeft + marginRight
-    protected int boxHeight = 0; // total box height: screen + marginTop + marginBottom
 
     // this will be calculated from the style paddings etc.
     protected Vector2 p0 = new Vector2();
@@ -103,9 +98,8 @@ public abstract class Node {
         setDefaultStyle();
     }
 
-
-    public void fixedUpdate(float delta) {
-        update(delta);
+    public void update(float delta) {
+        fixedUpdate(delta);
 
 
         if (container == null) {
@@ -142,7 +136,6 @@ public abstract class Node {
         switch (style.sizingHeight) {
             case GAS: // make it so that the component fill the space
                 backgroundRegionHeight = boxRegionHeight - (style.marginTop + style.marginBottom);
-                System.out.println(backgroundRegionHeight);
                 backgroundY = boxRegionCenterY + style.marginBottom - (style.marginBottom + style.marginTop) / 2;
                 contentRegionHeight = backgroundRegionHeight - (style.paddingBottom + style.paddingTop);
                 contentRegionHeight = MathUtils.clampInt(contentRegionHeight, style.heightMin, style.heightMax); // clamp based on styling
@@ -246,12 +239,13 @@ public abstract class Node {
     }
 
     protected void renderForeground(Renderer2D renderer2D) {
+
         // render scrollbars if needed.
 
     }
 
 
-    protected void update(float delta) {}
+    protected void fixedUpdate(float delta) {}
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
     protected abstract int getContentWidth();
     protected abstract int getContentHeight();
