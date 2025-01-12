@@ -106,8 +106,8 @@ public class Font implements MemoryResource {
             }
 
             /* set the face size */
-            FreeType.FT_Set_Pixel_Sizes(ftFace, size, size);
-            //FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
+            //FreeType.FT_Set_Pixel_Sizes(ftFace, size, size);
+            FreeType.FT_Set_Pixel_Sizes(ftFace, 0, size);
             //FreeType.nFT_Set_Char_Size(ftFace.address(), size, size, Graphics.getWindowWidth(), Graphics.getWindowHeight());
 
             /* rasterize the character */

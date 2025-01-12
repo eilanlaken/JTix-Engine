@@ -304,7 +304,13 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* masking and stencil testing */
 
-    public void stencilMaskBegin() {
+    /*
+    pauses rendering to the color buffer and begins rendering to the stencil buffer:
+    from now on, every draw call will write to the stencil buffer; the written values
+    depends on the selected mode. By default, it writes 1s.
+     */
+    public void beginStencil() {
+        if (!drawing) throw new GraphicsException("Stencil write operations must be made within a begin() and end() blocks.");
         if (drawingToStencil) throw new GraphicsException("call to beginMask() must be followed by a call to endMask() before subsequent calls to beginMask()");
         if (maskingEnabled) throw new GraphicsException("Stencil and Masking blocks must be separated and not nested: cannot call stencilMaskBegin() while masking is enabled.");
         drawingToStencil = true;
@@ -356,7 +362,7 @@ public class Renderer2D implements MemoryResourceHolder {
         stencilMode = STENCIL_MODE_DECREMENT;
     }
 
-    public void stencilMaskEnd() {
+    public void endStencil() {
         if (!drawingToStencil) throw new GraphicsException("call to beginMask() expected before endMask()");
         flush();
         GL11.glColorMask(true, true, true, true); // Disable color buffer writes
@@ -2240,8 +2246,8 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Strings */
 
-    public void drawStringLine(final String text, int size, @Nullable Font font, boolean antialiasing, float x, float y, float deg) {
-        throw new UnsupportedOperationException();
+    public void drawStringLine(final String line, int size, boolean antialiasing, float offsetX, float offsetY, float x, float y, float deg, float sclX, float sclY) {
+        drawStringLine(line, size, antialiasing, 0, line.length(), offsetX, offsetY, x,y,deg,sclX,sclY);
     }
 
     public void drawStringLine(final String line, int size, boolean antialiasing, int startIndex, int endIndex, float offsetX, float offsetY, float x, float y, float deg, float sclX, float sclY) {
@@ -2727,6 +2733,10 @@ public class Renderer2D implements MemoryResourceHolder {
             total_width += glyph.advanceX;
         }
         return total_width;
+    }
+
+    public static float calculateStringLineWidth(final String line, @Nullable Font font, int fontSize, boolean antialiasing) {
+        return calculateStringLineWidth(line, 0, line.length(), font, fontSize, antialiasing);
     }
 
     public static float calculateStringLineWidth(final String line, int fromIndex, int toIndex, @Nullable Font font, int fontSize, boolean antialiasing) {

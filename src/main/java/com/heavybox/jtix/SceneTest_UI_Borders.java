@@ -41,7 +41,7 @@ public class SceneTest_UI_Borders implements Scene {
         System.out.println(region.u2);
         System.out.println(region.v2);
 
-        nodeDebug.style.setPadding(12);
+        nodeDebug.style.setPadding(44);
 
 //        nodeDebug.style.cornerRadiusTopLeft = 20;
 //        nodeDebug.style.cornerSegmentsTopLeft = 20;
@@ -52,8 +52,10 @@ public class SceneTest_UI_Borders implements Scene {
 //        nodeDebug.style.cornerRadiusBottomRight = 23;
 //        nodeDebug.style.cornerSegmentsBottomRight = 20;
 //
-//        nodeDebug.style.cornerRadiusBottomLeft = 60;
+//        nodeDebug.style.cornerRadiusBottomLeft = 5;
 //        nodeDebug.style.cornerSegmentsBottomLeft = 2;
+
+        nodeDebug.style.widthMax = 200;
     }
 
     float x = 0, y = 0, deg = 0, sclX = 1, sclY = 1;

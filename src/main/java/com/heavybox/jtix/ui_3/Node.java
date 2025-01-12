@@ -86,6 +86,10 @@ public abstract class Node {
     public int contentX = 0;
     public int contentY = 0;
 
+    private boolean shouldApplyMasking;
+    private float overflowX;
+    private float overflowY;
+
     /* callbacks */
     protected Node() {
         setDefaultStyle();
@@ -99,6 +103,7 @@ public abstract class Node {
     public void update(float delta) {
         fixedUpdate(delta);
 
+        // masking
 
         if (container == null) {
             //boxRegionWidth = Graphics.getWindowWidth();
@@ -211,12 +216,50 @@ public abstract class Node {
     public void draw(Renderer2D renderer2D) {
         renderBackground(renderer2D);
 
-        // TODO: apply content clipping using glScissors.
-        render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
+        shouldApplyMasking = (style.contentOverflowX != Style.Overflow.IGNORE || style.contentOverflowY != Style.Overflow.IGNORE)
+                && (overflowX > 0 || overflowY > 0);
+
+        shouldApplyMasking = true;
+        if (shouldApplyMasking) {
+            maskWrite(renderer2D);
+            renderer2D.enableMasking();
+            renderer2D.setMaskingFunctionEquals(1); // TODO: instead of 1, put the correct value for masking.
+            render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
+            renderer2D.disableMasking();
+            maskErase(renderer2D);
+        } else {
+            render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
+        }
 
         renderForeground(renderer2D);
 
         if (UI.debug) region.draw(renderer2D);
+    }
+
+    private void maskWrite(Renderer2D renderer2D) {
+        renderer2D.beginStencil();
+        renderer2D.setStencilModeIncrement();
+        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+
+                style.cornerRadiusTopLeft, style.cornerSegmentsTopLeft,
+                style.cornerRadiusTopRight, style.cornerSegmentsTopRight,
+                style.cornerRadiusBottomRight, style.cornerSegmentsBottomRight,
+                style.cornerRadiusBottomLeft, style.cornerSegmentsBottomLeft,
+
+                backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+        renderer2D.endStencil();
+    }
+
+    private void maskErase(Renderer2D renderer2D) {
+        renderer2D.beginStencil();
+        renderer2D.setStencilModeDecrement();
+        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+                style.cornerRadiusTopLeft, style.cornerSegmentsTopLeft,
+                style.cornerRadiusTopRight, style.cornerSegmentsTopRight,
+                style.cornerRadiusBottomRight, style.cornerSegmentsBottomRight,
+                style.cornerRadiusBottomLeft, style.cornerSegmentsBottomLeft,
+                backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+        renderer2D.endStencil();
     }
 
     protected void renderBackground(Renderer2D renderer2D) {

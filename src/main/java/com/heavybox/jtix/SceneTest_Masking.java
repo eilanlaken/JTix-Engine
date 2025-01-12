@@ -60,14 +60,14 @@ public class SceneTest_Masking implements Scene {
         // render font
         renderer2D.begin();
 
-        renderer2D.stencilMaskBegin();
+        renderer2D.beginStencil();
         renderer2D.setStencilModeIncrement();
         renderer2D.setColor(0.8f,1,0.1f,0.2f);
         renderer2D.drawCircleFilled(50,10,0,0,0,1,1);
         renderer2D.setColor(0.8f,0.1f,1f,0.2f);
         renderer2D.setStencilModeIncrement();
         renderer2D.drawCircleFilled(50,10,49,0,0,1,1);
-        renderer2D.stencilMaskEnd();
+        renderer2D.endStencil();
 //
 //        renderer2D.stencilMaskBegin();
 //        renderer2D.drawCircleFilled(50,10,0,0,0,1,1);
