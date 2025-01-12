@@ -115,6 +115,13 @@ public final class Style implements Cloneable {
         this.backgroudColor.set(style.borderColor);
     }
 
+    public void setPadding(int padding) {
+        this.paddingLeft = padding;
+        this.paddingTop = padding;
+        this.paddingRight = padding;
+        this.paddingBottom = padding;
+    }
+
     @Override
     public Style clone() {
         try {

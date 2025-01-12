@@ -42,7 +42,7 @@ public abstract class Node {
     public boolean active = true;
 
     /* box-styling */
-    public final Style style;
+    public final Style style = UI.getGlobalTheme();
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
     protected int   screenZIndex = 0;
@@ -71,29 +71,27 @@ public abstract class Node {
     private boolean dragJustEntered     = false;
 
     /* set by parent */
-    public int boxRegionWidth = 0;
-    public int boxRegionHeight = 0;
-    public int boxRegionCenterX = 0;
-    public int boxRegionCenterY = 0;
+    public int boxWidth = 0;
+    public int boxHeight = 0;
+    public int boxCenterX = 0;
+    public int boxCenterY = 0;
 
     /* calculated locally */
-    public int backgroundRegionWidth = 0;
-    public int backgroundRegionHeight = 0;
+    public int backgroundWidth = 0;
+    public int backgroundHeight = 0;
     public int backgroundX = 0;
     public int backgroundY = 0;
-    public int contentRegionWidth = 0;
-    public int contentRegionHeight = 0;
+    public int contentWidth = 0;
+    public int contentHeight = 0;
     public int contentX = 0;
     public int contentY = 0;
 
     /* callbacks */
     protected Node() {
-        this.style = UI.getGlobalTheme();
         setDefaultStyle();
     }
 
     protected Node(final Style inherited) {
-        this.style = UI.getGlobalTheme();
         this.style.set(inherited);
         setDefaultStyle();
     }
@@ -111,48 +109,48 @@ public abstract class Node {
 
         switch (style.sizingWidth) {
             case GAS: // make it so that the component fill the space
-                backgroundRegionWidth = boxRegionWidth - (style.marginLeft + style.marginRight);
-                backgroundX = boxRegionCenterX + style.marginLeft - (style.marginLeft + style.marginRight) / 2;
-                contentRegionWidth = backgroundRegionWidth - (style.paddingLeft + style.paddingRight);
-                contentRegionWidth = MathUtils.clampInt(contentRegionWidth, style.widthMin, style.widthMax); // clamp based on styling
+                backgroundWidth = boxWidth - (style.marginLeft + style.marginRight);
+                backgroundX = boxCenterX + style.marginLeft - (style.marginLeft + style.marginRight) / 2;
+                contentWidth = backgroundWidth - (style.paddingLeft + style.paddingRight);
+                contentWidth = MathUtils.clampInt(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
                 contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
                 break;
             case LIQUID: // make it so that the component container conforms to its content
-                contentRegionWidth = getContentWidth();
-                contentRegionWidth = MathUtils.clampInt(contentRegionWidth, style.widthMin, style.widthMax); // clamp based on styling
-                backgroundRegionWidth = contentRegionWidth + style.paddingLeft + style.paddingRight; // add padding.
-                backgroundX = boxRegionCenterX;
+                contentWidth = getContentWidth();
+                contentWidth = MathUtils.clampInt(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
+                backgroundWidth = contentWidth + style.paddingLeft + style.paddingRight; // add padding.
+                backgroundX = boxCenterX;
                 contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
                 break;
             case SOLID: // the component size is fixed.
-                contentRegionWidth = style.width;
-                contentRegionWidth = MathUtils.clampInt(contentRegionWidth, style.widthMin, style.widthMax); // clamp based on styling
-                backgroundRegionWidth = contentRegionWidth + style.paddingLeft + style.paddingRight; // add padding.
-                backgroundX = boxRegionCenterX;
+                contentWidth = style.width;
+                contentWidth = MathUtils.clampInt(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
+                backgroundWidth = contentWidth + style.paddingLeft + style.paddingRight; // add padding.
+                backgroundX = boxCenterX;
                 contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
                 break;
         }
 
         switch (style.sizingHeight) {
             case GAS: // make it so that the component fill the space
-                backgroundRegionHeight = boxRegionHeight - (style.marginTop + style.marginBottom);
-                backgroundY = boxRegionCenterY + style.marginBottom - (style.marginBottom + style.marginTop) / 2;
-                contentRegionHeight = backgroundRegionHeight - (style.paddingBottom + style.paddingTop);
-                contentRegionHeight = MathUtils.clampInt(contentRegionHeight, style.heightMin, style.heightMax); // clamp based on styling
+                backgroundHeight = boxHeight - (style.marginTop + style.marginBottom);
+                backgroundY = boxCenterY + style.marginBottom - (style.marginBottom + style.marginTop) / 2;
+                contentHeight = backgroundHeight - (style.paddingBottom + style.paddingTop);
+                contentHeight = MathUtils.clampInt(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
                 contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
                 break;
             case LIQUID: // make it so that the component container conforms to its content
-                contentRegionHeight = getContentHeight();
-                contentRegionHeight = MathUtils.clampInt(contentRegionHeight, style.heightMin, style.heightMax); // clamp based on styling
-                backgroundRegionHeight = contentRegionHeight + style.paddingBottom + style.paddingTop; // add padding.
-                backgroundY = boxRegionCenterY;
+                contentHeight = getContentHeight();
+                contentHeight = MathUtils.clampInt(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
+                backgroundHeight = contentHeight + style.paddingBottom + style.paddingTop; // add padding.
+                backgroundY = boxCenterY;
                 contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
                 break;
             case SOLID: // the component size is fixed.
-                contentRegionHeight = style.height;
-                contentRegionHeight = MathUtils.clampInt(contentRegionHeight, style.heightMin, style.heightMax); // clamp based on styling
-                backgroundRegionHeight = contentRegionHeight + style.paddingBottom + style.paddingTop; // add padding.
-                backgroundY = boxRegionCenterY;
+                contentHeight = style.height;
+                contentHeight = MathUtils.clampInt(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
+                backgroundHeight = contentHeight + style.paddingBottom + style.paddingTop; // add padding.
+                backgroundY = boxCenterY;
                 contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
                 break;
         }
@@ -214,10 +212,7 @@ public abstract class Node {
         renderBackground(renderer2D);
 
         // TODO: apply content clipping using glScissors.
-        // push pixel bounds if overflow != IGNORE
-        //render(renderer2D, screenX + innerOffsetX, screenY + innerOffsetY, screenDeg, screenSclX, screenSclY);
         render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
-        // pop pixel bounds if overflow != IGNORE
 
         renderForeground(renderer2D);
 
@@ -227,7 +222,7 @@ public abstract class Node {
     protected void renderBackground(Renderer2D renderer2D) {
         if (style.backgroundEnabled) {
             renderer2D.setColor(style.backgroudColor);
-            renderer2D.drawRectangleFilled(backgroundRegionWidth, backgroundRegionHeight,
+            renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
 
                     style.cornerRadiusTopLeft, style.cornerSegmentsTopLeft,
                     style.cornerRadiusTopRight, style.cornerSegmentsTopRight,

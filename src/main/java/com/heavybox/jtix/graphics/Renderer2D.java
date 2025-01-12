@@ -90,8 +90,8 @@ public class Renderer2D implements MemoryResourceHolder {
     private boolean drawingToStencil = false;
     private int     stencilMode      = STENCIL_MODE_INCREMENT;
     private boolean maskingEnabled   = false;
-    private int     maskingRef       = 0;
-    private int     maskingFunction  = GL11.GL_GEQUAL;
+    private int     maskingRef       = 1;
+    private int     maskingFunction  = GL11.GL_EQUAL;
 
     public Renderer2D() {
         positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
@@ -169,8 +169,8 @@ public class Renderer2D implements MemoryResourceHolder {
         drawingToStencil = false;
         stencilMode = STENCIL_MODE_INCREMENT;
         maskingEnabled = false;
-        maskingRef = 0;
-        maskingFunction = GL11.GL_GEQUAL;
+        maskingRef = 1;
+        maskingFunction = GL11.GL_EQUAL;
 
         /* init blend function with default */
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -313,10 +313,18 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glStencilMask(0xFF);
         GL11.glColorMask(false, false, false, false); // Disable color buffer writes
         GL11.glDepthMask(false);                              // Disable depth buffer writes
-        setStencilModeOnes();
+        setStencilModeSetOnes();
     }
 
-    public void setStencilModeOnes() {
+    public void setStencilModeSet(int value) {
+        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
+        if (stencilMode != STENCIL_MODE_REPLACE_1) flush();
+        GL11.glStencilFunc(GL11.GL_ALWAYS, value, 0xFF); // Always pass, ref value = 1
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
+        stencilMode = STENCIL_MODE_REPLACE_1;
+    }
+
+    public void setStencilModeSetOnes() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
         if (stencilMode != STENCIL_MODE_REPLACE_1) flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
@@ -324,7 +332,7 @@ public class Renderer2D implements MemoryResourceHolder {
         stencilMode = STENCIL_MODE_REPLACE_1;
     }
 
-    public void setStencilModeZeros() {
+    public void setStencilModeSetZeros() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
         if (stencilMode != STENCIL_MODE_REPLACE_0) flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, 0, 0xFF); // Always pass, ref value = 1
@@ -356,7 +364,7 @@ public class Renderer2D implements MemoryResourceHolder {
         drawingToStencil = false;
     }
 
-    public void clearStencil() {
+    public void stencilMaskClear() {
         if (drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call stencilMaskEnd() first.");
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
     }
@@ -366,6 +374,7 @@ public class Renderer2D implements MemoryResourceHolder {
         if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
         maskingEnabled = true;
         GL11.glEnable(GL11.GL_STENCIL_TEST);
+        setMaskingFunctionEquals(1);
     }
 
     private void setMaskingFunction(int glStencilFunc, int reference) {
