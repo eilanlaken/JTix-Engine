@@ -70,7 +70,7 @@ public abstract class Node {
     private boolean mouseRegisterClicks = false;
     private boolean dragJustEntered     = false;
 
-    /* set by parent */
+    /* set by container. */ // TODO: !THIS IS KEY!.
     public int boxWidth = 0;
     public int boxHeight = 0;
     public int boxCenterX = 0;
@@ -300,7 +300,7 @@ public abstract class Node {
     protected abstract void setDefaultStyle();
 
     public boolean descendantOf(NodeContainer container) {
-        if (container.children.contains(this)) return true;
+        if (container.children.contains(this, true)) return true;
         boolean result = false;
         for (Node child : container.children) {
             if (child instanceof NodeContainer) {

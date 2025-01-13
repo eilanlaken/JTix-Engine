@@ -1,15 +1,13 @@
 package com.heavybox.jtix.ui_3;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.z_old_gui.GUIException;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public abstract class NodeContainer extends Node {
 
-    protected final Set<Node> children = new HashSet<>();
+    protected final Array<Node> children = new Array<>(true,5);
 
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
@@ -18,17 +16,23 @@ public abstract class NodeContainer extends Node {
         }
     }
 
-    public abstract void setChildrenMetrics();
-
     @Override
-    protected int getContentWidth() {
-        return 0;
+    public void fixedUpdate(float delta) {
+        setChildrenBoxes();
+        for (Node child : children) {
+            child.update(delta);
+        }
     }
 
     @Override
-    protected int getContentHeight() {
-        return 0;
+    public void handleInput() {
+        super.handleInput();
+        for (Node child : children) {
+            child.handleInput();
+        }
     }
+
+    public abstract void setChildrenBoxes();
 
     @Override
     protected void setDefaultStyle() {
@@ -57,12 +61,7 @@ public abstract class NodeContainer extends Node {
     protected void removeChild(Node node) {
         if (node.container != this) throw new GUIException(Node.class.getSimpleName() + " node is not a child of this node to detach.");
         node.container = null;
-        children.remove(node);
-    }
-
-    // add vertical and horizontal scrollbars.
-    protected void renderForeground(Renderer2D renderer2D) {
-
+        children.removeValue(node, true);
     }
 
 }
