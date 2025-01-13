@@ -501,7 +501,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
 
-    public void drawTexture(@NotNull Texture texture, float cornerRadiusPixels, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawTexture(@NotNull Texture texture, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
         if (!ensureCapacity(refinement * 4, 3 * (refinement * 4 - 2))) flush();
@@ -516,9 +516,9 @@ public class Renderer2D implements MemoryResourceHolder {
         Vector2 corner = vectors2Pool.allocate();
         // add upper left corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(-cornerRadiusPixels, 0);
+            corner.set(-cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadiusPixels,heightHalf - cornerRadiusPixels);
+            corner.add(-widthHalf + cornerRadius,heightHalf - cornerRadius);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -529,9 +529,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add upper right corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(0, cornerRadiusPixels);
+            corner.set(0, cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadiusPixels, heightHalf - cornerRadiusPixels);
+            corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -542,9 +542,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add lower right corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(cornerRadiusPixels, 0);
+            corner.set(cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadiusPixels, -heightHalf + cornerRadiusPixels);
+            corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
@@ -555,9 +555,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
         // add lower left corner vertices
         for (int i = 0; i < refinement; i++) {
-            corner.set(0, -cornerRadiusPixels);
+            corner.set(0, -cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadiusPixels, -heightHalf + cornerRadiusPixels);
+            corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
             float u = (corner.x + widthHalf) / texture.width;
             float v = 1 - (corner.y + heightHalf) / texture.height;
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);

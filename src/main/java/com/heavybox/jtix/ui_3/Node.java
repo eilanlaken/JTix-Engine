@@ -76,15 +76,22 @@ public abstract class Node {
     public int boxCenterX = 0;
     public int boxCenterY = 0;
 
-    /* calculated locally */
-    public int backgroundWidth = 0;
-    public int backgroundHeight = 0;
-    public int backgroundX = 0;
-    public int backgroundY = 0;
-    public int contentWidth = 0;
-    public int contentHeight = 0;
-    public int contentX = 0;
-    public int contentY = 0;
+    /* calculated */
+    public float backgroundWidth = 0;
+    public float backgroundHeight = 0;
+    public float backgroundX = 0;
+    public float backgroundY = 0;
+    public float backgroundDeg = 0;
+    public float backgroundSclX = 1;
+    public float backgroundSclY = 1;
+
+    public float contentWidth = 0;
+    public float contentHeight = 0;
+    public float contentX = 0;
+    public float contentY = 0;
+    public float contentDeg = 0;
+    public float contentSclX = 1;
+    public float contentSclY = 1;
 
     private boolean shouldApplyMasking;
     private float overflowX;
@@ -115,48 +122,48 @@ public abstract class Node {
         switch (style.sizingWidth) {
             case GAS: // make it so that the component fill the space
                 backgroundWidth = boxWidth - (style.marginLeft + style.marginRight);
-                backgroundX = boxCenterX + style.marginLeft - (style.marginLeft + style.marginRight) / 2;
+                backgroundX = boxCenterX + style.marginLeft - (style.marginLeft + style.marginRight) * 0.5f;
                 contentWidth = backgroundWidth - (style.paddingLeft + style.paddingRight);
-                contentWidth = MathUtils.clampInt(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
-                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
+                contentWidth = MathUtils.clampFloat(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
+                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) * 0.5f;
                 break;
             case LIQUID: // make it so that the component container conforms to its content
                 contentWidth = getContentWidth();
-                contentWidth = MathUtils.clampInt(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
+                contentWidth = MathUtils.clampFloat(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
                 backgroundWidth = contentWidth + style.paddingLeft + style.paddingRight; // add padding.
                 backgroundX = boxCenterX;
-                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
+                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) * 0.5f;
                 break;
             case SOLID: // the component size is fixed.
                 contentWidth = style.width;
-                contentWidth = MathUtils.clampInt(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
+                contentWidth = MathUtils.clampFloat(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
                 backgroundWidth = contentWidth + style.paddingLeft + style.paddingRight; // add padding.
                 backgroundX = boxCenterX;
-                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) / 2;
+                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) * 0.5f;
                 break;
         }
 
         switch (style.sizingHeight) {
             case GAS: // make it so that the component fill the space
                 backgroundHeight = boxHeight - (style.marginTop + style.marginBottom);
-                backgroundY = boxCenterY + style.marginBottom - (style.marginBottom + style.marginTop) / 2;
+                backgroundY = boxCenterY + style.marginBottom - (style.marginBottom + style.marginTop) * 0.5f;
                 contentHeight = backgroundHeight - (style.paddingBottom + style.paddingTop);
-                contentHeight = MathUtils.clampInt(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
-                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
+                contentHeight = MathUtils.clampFloat(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
+                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) * 0.5f;
                 break;
             case LIQUID: // make it so that the component container conforms to its content
                 contentHeight = getContentHeight();
-                contentHeight = MathUtils.clampInt(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
+                contentHeight = MathUtils.clampFloat(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
                 backgroundHeight = contentHeight + style.paddingBottom + style.paddingTop; // add padding.
                 backgroundY = boxCenterY;
-                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
+                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) * 0.5f;
                 break;
             case SOLID: // the component size is fixed.
                 contentHeight = style.height;
-                contentHeight = MathUtils.clampInt(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
+                contentHeight = MathUtils.clampFloat(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
                 backgroundHeight = contentHeight + style.paddingBottom + style.paddingTop; // add padding.
                 backgroundY = boxCenterY;
-                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) / 2;
+                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) * 0.5f;
                 break;
         }
 
@@ -175,12 +182,15 @@ public abstract class Node {
 
 
 
-
-
         /* apply transform */
-        region.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
+        region.applyTransform(backgroundX, backgroundY, backgroundDeg, backgroundSclX, backgroundSclY);
 
 
+    }
+
+    protected final int getMaskingInteger() {
+        if (container == null) return 1;
+        return 1 + container.getMaskingInteger();
     }
 
     public void handleInput() { // TODO: delta will be used to detect double clicks.
