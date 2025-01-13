@@ -57,8 +57,8 @@ public class SceneTest_UI_Borders implements Scene {
         nodeDebug.style.cornerRadiusBottomLeft = 100;
         nodeDebug.style.cornerSegmentsBottomLeft = 20;
 
-        nodeDebug.style.sizingHeight = Style.Sizing.SOLID;
-        nodeDebug.style.sizingWidth = Style.Sizing.SOLID;
+        nodeDebug.style.sizingHeight = Style.Sizing.STATIC;
+        nodeDebug.style.sizingWidth = Style.Sizing.STATIC;
         nodeDebug.style.width = 400;
         nodeDebug.style.height = 200;
     }

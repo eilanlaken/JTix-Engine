@@ -6,8 +6,8 @@ import com.heavybox.jtix.graphics.Font;
 public final class Style implements Cloneable {
 
     public Transform transform         = Transform.RELATIVE;
-    public Sizing    sizingWidth       = Sizing.LIQUID;
-    public Sizing    sizingHeight      = Sizing.LIQUID;
+    public Sizing    sizingWidth       = Sizing.DYNAMIC;
+    public Sizing    sizingHeight      = Sizing.DYNAMIC;
     public Font      textFont          = null;
     public Color     textColor         = new Color(Color.WHITE);
     public int       textSize          = 18;
@@ -145,9 +145,8 @@ public final class Style implements Cloneable {
     }
 
     public enum Sizing {
-        GAS,    // occupies all available space
-        LIQUID, // conforms to fit container content
-        SOLID,  // explicitly set by width and height
+        STATIC,  // explicitly set by width and height
+        DYNAMIC, // conforms to fit content
     }
 
     public enum Alignment {

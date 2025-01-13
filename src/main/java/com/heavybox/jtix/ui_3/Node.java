@@ -120,21 +120,14 @@ public abstract class Node {
 
 
         switch (style.sizingWidth) {
-            case GAS: // make it so that the component fill the space
-                backgroundWidth = boxWidth - (style.marginLeft + style.marginRight);
-                backgroundX = boxCenterX + style.marginLeft - (style.marginLeft + style.marginRight) * 0.5f;
-                contentWidth = backgroundWidth - (style.paddingLeft + style.paddingRight);
-                contentWidth = MathUtils.clampFloat(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
-                contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) * 0.5f;
-                break;
-            case LIQUID: // make it so that the component container conforms to its content
+            case DYNAMIC: // make it so that the component container conforms to its content
                 contentWidth = getContentWidth();
                 contentWidth = MathUtils.clampFloat(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
                 backgroundWidth = contentWidth + style.paddingLeft + style.paddingRight; // add padding.
                 backgroundX = boxCenterX;
                 contentX = backgroundX + style.paddingLeft - (style.paddingLeft + style.paddingRight) * 0.5f;
                 break;
-            case SOLID: // the component size is fixed.
+            case STATIC: // the component size is fixed.
                 contentWidth = style.width;
                 contentWidth = MathUtils.clampFloat(contentWidth, style.widthMin, style.widthMax); // clamp based on styling
                 backgroundWidth = contentWidth + style.paddingLeft + style.paddingRight; // add padding.
@@ -144,21 +137,14 @@ public abstract class Node {
         }
 
         switch (style.sizingHeight) {
-            case GAS: // make it so that the component fill the space
-                backgroundHeight = boxHeight - (style.marginTop + style.marginBottom);
-                backgroundY = boxCenterY + style.marginBottom - (style.marginBottom + style.marginTop) * 0.5f;
-                contentHeight = backgroundHeight - (style.paddingBottom + style.paddingTop);
-                contentHeight = MathUtils.clampFloat(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
-                contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) * 0.5f;
-                break;
-            case LIQUID: // make it so that the component container conforms to its content
+            case DYNAMIC: // make it so that the component container conforms to its content
                 contentHeight = getContentHeight();
                 contentHeight = MathUtils.clampFloat(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
                 backgroundHeight = contentHeight + style.paddingBottom + style.paddingTop; // add padding.
                 backgroundY = boxCenterY;
                 contentY = backgroundY + style.paddingBottom - (style.paddingBottom + style.paddingTop) * 0.5f;
                 break;
-            case SOLID: // the component size is fixed.
+            case STATIC: // the component size is fixed.
                 contentHeight = style.height;
                 contentHeight = MathUtils.clampFloat(contentHeight, style.heightMin, style.heightMax); // clamp based on styling
                 backgroundHeight = contentHeight + style.paddingBottom + style.paddingTop; // add padding.
@@ -171,14 +157,7 @@ public abstract class Node {
         /* update Region or Regions (included, excluded) based on border radius, padding, clip-paths etc. */ // TODO.
 
         /* update screen positions */
-        if (style.transform == Style.Transform.ABSOLUTE || container == null) {
-            this.screenZIndex = style.zIndex;
-            this.screenX = style.x;
-            this.screenY = style.y;
-            this.screenDeg = style.deg;
-            this.screenSclX = style.sclX;
-            this.screenSclY = style.sclY;
-        }
+
 
 
 
