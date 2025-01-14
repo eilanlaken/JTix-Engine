@@ -28,8 +28,8 @@ public class Main {
 
 
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
-        ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 25, true, "ABCD");
-        if (true) return;
+//        ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 25, true, "ABCD");
+//        if (true) return;
         //ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 24, true, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
 //        AsyncTask italic = new AsyncTask() {
 //            @Override
