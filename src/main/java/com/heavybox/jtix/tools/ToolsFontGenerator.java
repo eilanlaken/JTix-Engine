@@ -10,6 +10,7 @@ import org.lwjgl.util.freetype.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -42,6 +43,8 @@ public final class ToolsFontGenerator {
         /* init font library */
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
+
+        FreeType.FT_Library_SetLcdFilter(libPointerBuffer.get(), FreeType.FT_LCD_FILTER_DEFAULT);
 
         /* load .ttf file to bytebuffer */
         long library = libPointerBuffer.get(0);
@@ -77,7 +80,7 @@ public final class ToolsFontGenerator {
             GlyphData data = new GlyphData();
             glyphsData[i] = data;
 
-            if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER);
+            if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_FT_LOAD_TARGET_LCD);  // TODO: subpixel rendering. | FreeType.FT_FT_LOAD_TARGET_LCD
             else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME | FreeType.FT_LOAD_FORCE_AUTOHINT);
 
             FT_GlyphSlot glyphSlot = ftFace.glyph();
@@ -107,6 +110,7 @@ public final class ToolsFontGenerator {
             kerningVector.free();
 
             /* set glyph image, if applicable (for non-space characters, like ABC...). */
+
             if (glyph_width <= 0 || glyph_height <= 0) continue;
 
             ByteBuffer ftCharImageBuffer = bitmap.buffer(Math.abs(glyph_pitch) * glyph_height);
@@ -115,14 +119,29 @@ public final class ToolsFontGenerator {
 
             assert ftCharImageBuffer != null;
             if (antialiasing) {
-                for (int y = 0; y < glyph_height; y++) {
-                    for (int x = 0; x < glyph_width; x++) {
-                        int srcIndex = y * Math.abs(glyph_pitch) + x;
-                        int alpha = ftCharImageBuffer.get(srcIndex) & 0xFF;  // Use grayscale value for transparency
-                        int rgb = (255 << 16) | (255 << 8) | 255;  // White color
-                        imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+                   //TODO: subpixel rendering.
+                for (int n = 0; n < glyph_height; n++) {
+
+                    for (int j = 0; j < glyph_width; j += 3) { // 3 channels per pixel (R, G, B)
+                        int r = ftCharImageBuffer.get(n * glyph_pitch + j) & 0xFF;
+                        int g = ftCharImageBuffer.get(n * glyph_pitch + j + 1) & 0xFF;
+                        int b = ftCharImageBuffer.get(n * glyph_pitch + j + 2) & 0xFF;
+                        int a = (r + g + b) / 3;
+
+                        imageData[glyph_width * n + j / 3] = (a << 24) | (r << 16) | (g << 8) | b;
+
                     }
+
                 }
+
+//                for (int y = 0; y < glyph_height; y++) {
+//                    for (int x = 0; x < glyph_width; x++) {
+//                        int srcIndex = y * Math.abs(glyph_pitch) + x;
+//                        int alpha = ftCharImageBuffer.get(srcIndex) & 0xFF;  // Use grayscale value for transparency
+//                        int rgb = (255 << 16) | (255 << 8) | 255;  // White color
+//                        imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+//                    }
+//                }
             } else {
                 for (int y = 0; y < glyph_height; y++) {
                     for (int x = 0; x < glyph_width; x++) {

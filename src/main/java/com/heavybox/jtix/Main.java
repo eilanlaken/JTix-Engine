@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
+import com.heavybox.jtix.tools.ToolsFontGenerator;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ public class Main {
 
 
         //TextureBuilder.buildTextureFont("assets/fonts", "bitmap", "assets/fonts/OpenSans-Italic.ttf", 32, false);
-        //ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 13, true, null);
+        ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 25, true, "ABCD");
+        if (true) return;
         //ToolsFontGenerator.generateFontBitmap("assets/fonts/OpenSans-Regular.ttf", 24, true, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
 //        AsyncTask italic = new AsyncTask() {
 //            @Override
