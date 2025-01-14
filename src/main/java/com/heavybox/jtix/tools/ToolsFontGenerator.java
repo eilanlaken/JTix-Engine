@@ -44,7 +44,8 @@ public final class ToolsFontGenerator {
         PointerBuffer libPointerBuffer = BufferUtils.createPointerBuffer(1);
         FreeType.FT_Init_FreeType(libPointerBuffer);
 
-        FreeType.FT_Library_SetLcdFilter(libPointerBuffer.get(), FreeType.FT_LCD_FILTER_DEFAULT);
+        // TODO: subpixel rendering.
+        //FreeType.FT_Library_SetLcdFilter(libPointerBuffer.get(), FreeType.FT_LCD_FILTER_DEFAULT);
 
         /* load .ttf file to bytebuffer */
         long library = libPointerBuffer.get(0);
@@ -80,7 +81,8 @@ public final class ToolsFontGenerator {
             GlyphData data = new GlyphData();
             glyphsData[i] = data;
 
-            if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_FT_LOAD_TARGET_LCD);  // TODO: subpixel rendering. | FreeType.FT_FT_LOAD_TARGET_LCD
+            //if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_FT_LOAD_TARGET_LCD);  // TODO: subpixel rendering. | FreeType.FT_FT_LOAD_TARGET_LCD
+            if (antialiasing) FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_FORCE_AUTOHINT);
             else FreeType.FT_Load_Char(ftFace, c, FreeType.FT_LOAD_RENDER | FreeType.FT_LOAD_MONOCHROME | FreeType.FT_LOAD_FORCE_AUTOHINT);
 
             FT_GlyphSlot glyphSlot = ftFace.glyph();
@@ -93,6 +95,7 @@ public final class ToolsFontGenerator {
             data.atlasX = -1;
             data.atlasY = -1;
             data.width = glyph_width;
+            //if (bitmap.pixel_mode() == FreeType.FT_PIXEL_MODE_LCD) data.width /= 3; TODO: subpixel rendering.
             data.height = glyph_height;
             data.bearingX = glyphSlot.bitmap_left();
             data.bearingY = glyphSlot.bitmap_top();
@@ -119,29 +122,25 @@ public final class ToolsFontGenerator {
 
             assert ftCharImageBuffer != null;
             if (antialiasing) {
-                   //TODO: subpixel rendering.
-                for (int n = 0; n < glyph_height; n++) {
-
-                    for (int j = 0; j < glyph_width; j += 3) { // 3 channels per pixel (R, G, B)
-                        int r = ftCharImageBuffer.get(n * glyph_pitch + j) & 0xFF;
-                        int g = ftCharImageBuffer.get(n * glyph_pitch + j + 1) & 0xFF;
-                        int b = ftCharImageBuffer.get(n * glyph_pitch + j + 2) & 0xFF;
-                        int a = (r + g + b) / 3;
-
-                        imageData[glyph_width * n + j / 3] = (a << 24) | (r << 16) | (g << 8) | b;
-
-                    }
-
-                }
-
-//                for (int y = 0; y < glyph_height; y++) {
-//                    for (int x = 0; x < glyph_width; x++) {
-//                        int srcIndex = y * Math.abs(glyph_pitch) + x;
-//                        int alpha = ftCharImageBuffer.get(srcIndex) & 0xFF;  // Use grayscale value for transparency
-//                        int rgb = (255 << 16) | (255 << 8) | 255;  // White color
-//                        imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+                //TODO: subpixel rendering.
+//                for (int n = 0; n < glyph_height; n++) {
+//                    for (int j = 0; j < glyph_width; j += 3) { // 3 channels per pixel (R, G, B)
+//                        int r = ftCharImageBuffer.get(n * glyph_pitch + j) & 0xFF;
+//                        int g = ftCharImageBuffer.get(n * glyph_pitch + j + 1) & 0xFF;
+//                        int b = ftCharImageBuffer.get(n * glyph_pitch + j + 2) & 0xFF;
+//                        int a = (r + g + b) / 3;
+//                        imageData[glyph_width * n + j / 3] = (a << 24) | (r << 16) | (g << 8) | b;
 //                    }
 //                }
+
+                for (int y = 0; y < glyph_height; y++) {
+                    for (int x = 0; x < glyph_width; x++) {
+                        int srcIndex = y * Math.abs(glyph_pitch) + x;
+                        int alpha = ftCharImageBuffer.get(srcIndex) & 0xFF;  // Use grayscale value for transparency
+                        int rgb = (255 << 16) | (255 << 8) | 255;  // White color
+                        imageData[y * glyph_width + x] = (alpha << 24) | rgb;
+                    }
+                }
             } else {
                 for (int y = 0; y < glyph_height; y++) {
                     for (int x = 0; x < glyph_width; x++) {

@@ -10,39 +10,39 @@ glyphs:
   advanceY: 0.0
   atlasX: 0
   atlasY: 27
-  bearingX: -1.0
+  bearingX: 0.0
   bearingY: 18.0
   character: 65
   height: 18
   kernings: {}
-  width: 54
-- advanceX: 16.0
+  width: 16
+- advanceX: 15.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 54
+  atlasX: 18
+  atlasY: 27
   bearingX: 2.0
   bearingY: 18.0
   character: 66
   height: 18
   kernings: {}
-  width: 42
+  width: 13
 - advanceX: 16.0
   advanceY: 0.0
-  atlasX: 44
-  atlasY: 54
-  bearingX: 1.0
+  atlasX: 33
+  atlasY: 27
+  bearingX: 2.0
   bearingY: 18.0
   character: 67
   height: 18
   kernings: {}
-  width: 45
+  width: 14
 - advanceX: 18.0
   advanceY: 0.0
-  atlasX: 0
-  atlasY: 81
+  atlasX: 49
+  atlasY: 27
   bearingX: 2.0
   bearingY: 18.0
   character: 68
   height: 18
   kernings: {}
-  width: 48
+  width: 15
