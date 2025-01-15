@@ -114,6 +114,27 @@ public class SceneTest_UI_Borders implements Scene {
         renderer2D.begin();
         nodeDebug.draw(renderer2D);
 
+        //renderer2D.drawRectangleBorder(300,100,20,0,0,0,1,1);
+//        renderer2D.setColor(Color.GREEN);
+//        renderer2D.drawRectangleThin(300,100,0,0,0,1,1);
+//
+//        renderer2D.setColor(Color.BLACK);
+//        renderer2D.drawRectangleThin(300,100,
+//                0, 2,
+//                50, 30,
+//                30, 0,
+//                0, 10,
+//                0,0,0,1,1);
+
+
+
+        renderer2D.setColor(Color.WHITE);
+        renderer2D.drawRectangleFilled(240,80,
+                10, 4,
+                10, 4,
+                10, 4,
+                10, 4,
+                0,0,0,1,1);
 
         renderer2D.end();
 

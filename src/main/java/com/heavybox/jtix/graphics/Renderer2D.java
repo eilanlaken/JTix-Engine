@@ -946,46 +946,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm1);
     }
 
-    /* Rendering 2D primitives - Rectangles */
-    // TODO: delete. This is not necessarily a rectangle. This should be called from physics so simply replace the call.
-    @Deprecated public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
-        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
-        if (!ensureCapacity(4, 6)) flush();
-
-        setMode(GL11.GL_LINES);
-        setTexture(defaultTexture);
-
-        // put indices
-        int startVertex = this.vertexIndex;
-        indices.put(startVertex + 0);
-        indices.put(startVertex + 1);
-        indices.put(startVertex + 1);
-        indices.put(startVertex + 2);
-        indices.put(startVertex + 2);
-        indices.put(startVertex + 3);
-        indices.put(startVertex + 3);
-        indices.put(startVertex + 0);
-
-        positions.put(x0).put(y0);
-        colors.put(currentTint);
-        textCoords.put(0.5f).put(0.5f);
-
-        positions.put(x1).put(y1);
-        colors.put(currentTint);
-        textCoords.put(0.5f).put(0.5f);
-
-        positions.put(x2).put(y2);
-        colors.put(currentTint);
-        textCoords.put(0.5f).put(0.5f);
-
-        positions.put(x3).put(y3);
-        colors.put(currentTint);
-        textCoords.put(0.5f).put(0.5f);
-
-        vertexIndex += 4;
-    }
-
-    public void drawRectangleThin(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawRectangleThin(float width, float height, float x, float y, float deg, float sclX, float sclY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (!ensureCapacity(4, 6)) flush();
 
@@ -997,24 +958,24 @@ public class Renderer2D implements MemoryResourceHolder {
         Vector2 arm2 = vectors2Pool.allocate();
         Vector2 arm3 = vectors2Pool.allocate();
 
-        float widthHalf  = width  * scaleX * 0.5f;
-        float heightHalf = height * scaleY * 0.5f;
+        float widthHalf  = width  * sclX * 0.5f;
+        float heightHalf = height * sclY * 0.5f;
 
         arm0.x = -widthHalf;
         arm0.y = heightHalf;
-        arm0.rotateDeg(degrees);
+        arm0.rotateDeg(deg);
 
         arm1.x = -widthHalf;
         arm1.y = -heightHalf;
-        arm1.rotateDeg(degrees);
+        arm1.rotateDeg(deg);
 
         arm2.x = widthHalf;
         arm2.y = -heightHalf;
-        arm2.rotateDeg(degrees);
+        arm2.rotateDeg(deg);
 
         arm3.x = widthHalf;
         arm3.y = heightHalf;
-        arm3.rotateDeg(degrees);
+        arm3.rotateDeg(deg);
 
         positions.put(arm0.x + x).put(arm0.y + y);
         colors.put(currentTint);
@@ -1050,7 +1011,7 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm3);
     }
 
-    public void drawRectangleThin(float width, float height, float cornerRadius, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
+    public void drawRectangleThin(float width, float height, float cornerRadius, int refinement, float x, float y, float deg, float sclX, float sclY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         refinement = Math.max(2, refinement);
         if (!ensureCapacity(refinement * 4, refinement * 8)) flush();
@@ -1069,7 +1030,7 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(-cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius, heightHalf - cornerRadius);
-            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
             textCoords.put(0.5f).put(0.5f);
@@ -1080,7 +1041,7 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, heightHalf - cornerRadius);
-            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
             textCoords.put(0.5f).put(0.5f);
@@ -1091,7 +1052,7 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(cornerRadius, 0);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(widthHalf - cornerRadius, -heightHalf + cornerRadius);
-            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
             textCoords.put(0.5f).put(0.5f);
@@ -1102,7 +1063,7 @@ public class Renderer2D implements MemoryResourceHolder {
             corner.set(0, -cornerRadius);
             corner.rotateDeg(-da * i); // rotate clockwise
             corner.add(-widthHalf + cornerRadius, -heightHalf + cornerRadius);
-            corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
             textCoords.put(0.5f).put(0.5f);
@@ -1117,6 +1078,97 @@ public class Renderer2D implements MemoryResourceHolder {
 
         vectors2Pool.free(corner);
         vertexIndex += refinement * 4;
+    }
+
+    public void drawRectangleThin(float width, float height,
+                                  float cornerRadiusTopLeft, int segmentsTopLeft,
+                                  float cornerRadiusTopRight, int segmentsTopRight,
+                                  float cornerRadiusBottomRight, int segmentsBottomRight,
+                                  float cornerRadiusBottomLeft, int segmentsBottomLeft,
+                                  float x, float y, float deg, float sclX, float sclY) {
+        if (cornerRadiusTopLeft == 0 && cornerRadiusTopRight == 0 // TODO: test
+                && cornerRadiusBottomRight == 0 && cornerRadiusBottomLeft == 0) {
+            drawRectangleThin(width, height, x, y, deg, sclX, sclY);
+            return;
+        }
+
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+
+        segmentsTopLeft = Math.max(2, segmentsTopLeft);
+        segmentsTopRight = Math.max(2, segmentsTopRight);
+        segmentsBottomRight = Math.max(2, segmentsBottomRight);
+        segmentsBottomLeft = Math.max(2, segmentsBottomLeft);
+        int maxRefinement = (int) MathUtils.max(segmentsTopLeft, segmentsTopRight, segmentsBottomRight, segmentsBottomLeft);
+        if (!ensureCapacity(4 * maxRefinement, maxRefinement * 3)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(defaultTexture);
+
+        float widthHalf  = width  * 0.5f;
+        float heightHalf = height * 0.5f;
+
+        float daTL = 90.0f / (segmentsTopLeft - 1);
+        float daTR = 90.0f / (segmentsTopRight - 1);
+        float daBR = 90.0f / (segmentsBottomRight - 1);
+        float daBL = 90.0f / (segmentsBottomLeft - 1);
+
+        Vector2 corner = vectors2Pool.allocate();
+
+        // add upper left corner vertices
+        for (int i = 0; i < segmentsTopLeft; i++) {
+            corner.set(-cornerRadiusTopLeft, 0);
+            corner.rotateDeg(-daTL * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusTopLeft, heightHalf - cornerRadiusTopLeft);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < segmentsTopRight; i++) {
+            corner.set(0, cornerRadiusTopRight);
+            corner.rotateDeg(-daTR * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < segmentsBottomRight; i++) {
+            corner.set(cornerRadiusBottomRight, 0);
+            corner.rotateDeg(-daBR * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < segmentsBottomLeft; i++) {
+            corner.set(0, -cornerRadiusBottomLeft);
+            corner.rotateDeg(-daBL * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+            corner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(corner.x).put(corner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        int totalSegments = segmentsTopLeft + segmentsTopRight
+                + segmentsBottomRight + segmentsBottomLeft;
+        for (int i = 0; i < totalSegments; i++) {
+            indices.put(startVertex + i);
+            indices.put(startVertex + (i + 1) % (totalSegments));
+        }
+
+        vectors2Pool.free(corner);
+        vertexIndex += totalSegments;
     }
 
     public void drawRectangleFilled(float width, float height, float x, float y, float degrees, float scaleX, float scaleY) {
@@ -1309,7 +1361,7 @@ public class Renderer2D implements MemoryResourceHolder {
         refinementBottomRight = Math.max(2, refinementBottomRight);
         refinementBottomLeft = Math.max(2, refinementBottomLeft);
         int maxRefinement = (int) MathUtils.max(refinementTopLeft, refinementTopRight, refinementBottomRight, refinementBottomLeft);
-        if (!ensureCapacity(maxRefinement, maxRefinement * 3)) flush();
+        if (!ensureCapacity(4 * maxRefinement, maxRefinement * 3)) flush();
 
         setMode(GL11.GL_TRIANGLES);
         setTexture(texture);
@@ -1939,6 +1991,49 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
         drawCurveFilled(stroke, smoothness, points, 0, 0, 0, 1, 1);
+    }
+
+    // TODO: contains errors and artifacts.
+    public void drawCurveFilled(float stroke, int smoothness, final Array<Vector2> points, float x, float y, float deg, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(defaultTexture);
+
+        Vector2[] points_transformed = new Vector2[points.size];
+        /* transform vertices */
+        for (int i = 0; i < points_transformed.length; i++) {
+            Vector2 vertex = new Vector2(points.get(i));
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(deg);
+            vertex.add(x, y);
+            points_transformed[i] = vertex;
+        }
+
+        Array<Vector2> vertices = getCurveVertices(stroke, smoothness, points_transformed);
+        if (!ensureCapacity(vertices.size, vertices.size)) flush();
+
+        /*
+        In the case of curve rendering, we might have a case where the number of vertices exceeds the capacity of the entire batch.
+        In that case, we write triangle by triangle.
+        */
+        if (vertices.size > VERTICES_CAPACITY) {
+            for (int i = 0; i < vertices.size; i += 3) {
+                Vector2 p0 = vertices.get(i + 0);
+                Vector2 p1 = vertices.get(i + 1);
+                Vector2 p2 = vertices.get(i + 2);
+                drawTriangleFilled(p0, p1, p2);
+            }
+        } else {
+            for (int i = 0; i < vertices.size; i++) {
+                Vector2 vertex = vertices.get(i);
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
+                indices.put(vertexIndex + i);
+            }
+
+            vertexIndex += vertices.size;
+        }
     }
 
     // TODO: optimize: remove *new* operator.

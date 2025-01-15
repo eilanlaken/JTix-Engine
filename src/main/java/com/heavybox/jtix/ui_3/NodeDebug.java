@@ -11,8 +11,8 @@ public class NodeDebug extends Node {
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
 //        renderer2D.setColor(Color.YELLOW);
 //        renderer2D.drawRectangleFilled(300, 150, x,y,deg,sclX,sclY);
-        renderer2D.setColor(Color.RED);
-        renderer2D.drawStringLine(text, 18, true, 0,0,x,y,deg,sclX,sclY);
+        renderer2D.setColor(Color.WHITE);
+        renderer2D.drawStringLine(text, 22, true, 0,0,x,y,deg,sclX,sclY);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class NodeDebug extends Node {
 
     @Override
     protected void setDefaultStyle() {
-
+        //style.backgroundEnabled = false;
     }
 
 }
