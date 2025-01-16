@@ -1524,7 +1524,7 @@ public class Renderer2D implements MemoryResourceHolder {
                                                      float x, float y, float deg, float sclX, float sclY) {
         if (cornerRadiusTopLeft == 0 && cornerRadiusTopRight == 0 // TODO: test
                 && cornerRadiusBottomRight == 0 && cornerRadiusBottomLeft == 0) {
-            drawRectangleThin(width, height, x, y, deg, sclX, sclY);
+            //drawRectangleThin(width, height, x, y, deg, sclX, sclY);
             //return;
         }
 
