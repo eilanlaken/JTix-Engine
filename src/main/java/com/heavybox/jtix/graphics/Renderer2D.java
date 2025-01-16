@@ -1553,39 +1553,63 @@ public class Renderer2D implements MemoryResourceHolder {
 
 
         // add upper left corner vertices
-        for (int i = 0; i < segmentsTopLeft; i++) {
+        if (MathUtils.isZero(cornerRadiusTopLeft)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.set(-cornerRadiusTopLeft, 0);
-            corner.rotateDeg(-daTL * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadiusTopLeft, heightHalf - cornerRadiusTopLeft);
+            corner.add(-widthHalf, heightHalf);
             inners.add(corner);
+        } else {
+            for (int i = 0; i < segmentsTopLeft; i++) {
+                Vector2 corner = vectors2Pool.allocate();
+                corner.set(-cornerRadiusTopLeft, 0);
+                corner.rotateDeg(-daTL * i); // rotate clockwise
+                corner.add(-widthHalf + cornerRadiusTopLeft, heightHalf - cornerRadiusTopLeft);
+                inners.add(corner);
+            }
         }
 
         // add upper right corner vertices
-        for (int i = 0; i < segmentsTopRight; i++) {
+        if (MathUtils.isZero(cornerRadiusTopRight)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.set(0, cornerRadiusTopRight);
-            corner.rotateDeg(-daTR * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+            corner.add(widthHalf, heightHalf);
             inners.add(corner);
+        } else {
+            for (int i = 0; i < segmentsTopRight; i++) {
+                Vector2 corner = vectors2Pool.allocate();
+                corner.set(0, cornerRadiusTopRight);
+                corner.rotateDeg(-daTR * i); // rotate clockwise
+                corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+                inners.add(corner);
+            }
         }
 
         // add lower right corner vertices
-        for (int i = 0; i < segmentsBottomRight; i++) {
+        if (MathUtils.isZero(cornerRadiusBottomRight)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.set(cornerRadiusBottomRight, 0);
-            corner.rotateDeg(-daBR * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+            corner.add(widthHalf, -heightHalf);
             inners.add(corner);
+        } else {
+            for (int i = 0; i < segmentsBottomRight; i++) {
+                Vector2 corner = vectors2Pool.allocate();
+                corner.set(cornerRadiusBottomRight, 0);
+                corner.rotateDeg(-daBR * i); // rotate clockwise
+                corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+                inners.add(corner);
+            }
         }
 
         // add lower left corner vertices
-        for (int i = 0; i < segmentsBottomLeft; i++) {
+        if (MathUtils.isZero(cornerRadiusBottomLeft)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.set(0, -cornerRadiusBottomLeft);
-            corner.rotateDeg(-daBL * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+            corner.add(-widthHalf, -heightHalf);
             inners.add(corner);
+        } else {
+            for (int i = 0; i < segmentsBottomLeft; i++) {
+                Vector2 corner = vectors2Pool.allocate();
+                corner.set(0, -cornerRadiusBottomLeft);
+                corner.rotateDeg(-daBL * i); // rotate clockwise
+                corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+                inners.add(corner);
+            }
         }
 
         MathUtils.polygonRemoveDegenerateVertices(inners);  // very important.

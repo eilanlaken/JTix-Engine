@@ -152,11 +152,10 @@ public class SceneTest_UI_Borders implements Scene {
 //                0,0,0,1,1);
 
         renderer2D.setColor(Color.RED);
-        Tuple2<Array<Vector2>, Array<Vector2>> result =
-         renderer2D.drawRectangleBorder(300,100, 30,
-                10, 10,
-                50, 5,
-                30, 2,
+        Tuple2<Array<Vector2>, Array<Vector2>> result = renderer2D.drawRectangleBorder(300,100, 15,
+                0, 10,
+                10, 5,
+                0, 2,
                 0, 2,
                 0,0,0,1,1);
 
