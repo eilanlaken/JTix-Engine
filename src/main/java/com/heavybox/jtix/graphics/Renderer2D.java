@@ -1516,18 +1516,12 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.freeAll(vertices);
     }
 
-    public Tuple2<Array<Vector2>, Array<Vector2>> drawRectangleBorder(float width, float height, float thickness,
+    public void drawRectangleBorder(float width, float height, float thickness,
                                                      float cornerRadiusTopLeft, int segmentsTopLeft,
                                                      float cornerRadiusTopRight, int segmentsTopRight,
                                                      float cornerRadiusBottomRight, int segmentsBottomRight,
                                                      float cornerRadiusBottomLeft, int segmentsBottomLeft,
                                                      float x, float y, float deg, float sclX, float sclY) {
-        if (cornerRadiusTopLeft == 0 && cornerRadiusTopRight == 0 // TODO: test
-                && cornerRadiusBottomRight == 0 && cornerRadiusBottomLeft == 0) {
-            //drawRectangleThin(width, height, x, y, deg, sclX, sclY);
-            //return;
-        }
-
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
         segmentsTopLeft = Math.max(2, segmentsTopLeft);
@@ -1540,8 +1534,10 @@ public class Renderer2D implements MemoryResourceHolder {
         setMode(GL11.GL_TRIANGLES);
         setTexture(defaultTexture);
 
-        float widthHalf  = width  * 0.5f;
-        float heightHalf = height * 0.5f;
+        float widthHalf_inner  = width  * 0.5f;
+        float heightHalf_inner = height * 0.5f;
+        float widthHalf_outer  = widthHalf_inner + thickness * 0.5f;
+        float heightHalf_outer = heightHalf_inner + thickness * 0.5f;
 
         float daTL = 90.0f / (segmentsTopLeft - 1);
         float daTR = 90.0f / (segmentsTopRight - 1);
@@ -1551,93 +1547,108 @@ public class Renderer2D implements MemoryResourceHolder {
         Array<Vector2> inners = new Array<>(true, maxRefinement);
         Array<Vector2> outers = new Array<>(true, maxRefinement);
 
-
         // add upper left corner vertices
         if (MathUtils.isZero(cornerRadiusTopLeft)) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.add(-widthHalf, heightHalf);
-            inners.add(corner);
+            Vector2 corner_inner = vectors2Pool.allocate();
+            corner_inner.add(-widthHalf_inner, heightHalf_inner);
+            inners.add(corner_inner);
+
+            Vector2 corner_outer = vectors2Pool.allocate();
+            corner_outer.add(-widthHalf_outer, heightHalf_outer);
+            outers.add(corner_outer);
         } else {
             for (int i = 0; i < segmentsTopLeft; i++) {
-                Vector2 corner = vectors2Pool.allocate();
-                corner.set(-cornerRadiusTopLeft, 0);
-                corner.rotateDeg(-daTL * i); // rotate clockwise
-                corner.add(-widthHalf + cornerRadiusTopLeft, heightHalf - cornerRadiusTopLeft);
-                inners.add(corner);
+                Vector2 corner_inner = vectors2Pool.allocate();
+                corner_inner.set(-cornerRadiusTopLeft, 0);
+                corner_inner.rotateDeg(-daTL * i); // rotate clockwise
+                corner_inner.add(-widthHalf_inner + cornerRadiusTopLeft, heightHalf_inner - cornerRadiusTopLeft);
+                inners.add(corner_inner);
+
+                Vector2 corner_outer = vectors2Pool.allocate();
+                corner_outer.set(-cornerRadiusTopLeft, 0);
+                corner_outer.rotateDeg(-daTL * i); // rotate clockwise
+                corner_outer.add(-widthHalf_outer + cornerRadiusTopLeft, heightHalf_outer - cornerRadiusTopLeft);
+                outers.add(corner_outer);
             }
         }
 
         // add upper right corner vertices
         if (MathUtils.isZero(cornerRadiusTopRight)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.add(widthHalf, heightHalf);
+            corner.add(widthHalf_inner, heightHalf_inner);
             inners.add(corner);
+
+            Vector2 corner_outer = vectors2Pool.allocate();
+            corner_outer.add(widthHalf_outer, heightHalf_outer);
+            outers.add(corner_outer);
         } else {
             for (int i = 0; i < segmentsTopRight; i++) {
-                Vector2 corner = vectors2Pool.allocate();
-                corner.set(0, cornerRadiusTopRight);
-                corner.rotateDeg(-daTR * i); // rotate clockwise
-                corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
-                inners.add(corner);
+                Vector2 corner_inner = vectors2Pool.allocate();
+                corner_inner.set(0, cornerRadiusTopRight);
+                corner_inner.rotateDeg(-daTR * i); // rotate clockwise
+                corner_inner.add(widthHalf_inner - cornerRadiusTopRight, heightHalf_inner - cornerRadiusTopRight);
+                inners.add(corner_inner);
+
+                Vector2 corner_outer = vectors2Pool.allocate();
+                corner_outer.set(0, cornerRadiusTopRight);
+                corner_outer.rotateDeg(-daTR * i); // rotate clockwise
+                corner_outer.add(widthHalf_outer - cornerRadiusTopRight, heightHalf_outer - cornerRadiusTopRight);
+                outers.add(corner_outer);
             }
         }
 
         // add lower right corner vertices
         if (MathUtils.isZero(cornerRadiusBottomRight)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.add(widthHalf, -heightHalf);
+            corner.add(widthHalf_inner, -heightHalf_inner);
             inners.add(corner);
+
+            Vector2 corner_outer = vectors2Pool.allocate();
+            corner_outer.add(widthHalf_outer, -heightHalf_outer);
+            outers.add(corner_outer);
         } else {
             for (int i = 0; i < segmentsBottomRight; i++) {
-                Vector2 corner = vectors2Pool.allocate();
-                corner.set(cornerRadiusBottomRight, 0);
-                corner.rotateDeg(-daBR * i); // rotate clockwise
-                corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
-                inners.add(corner);
+                Vector2 corner_inner = vectors2Pool.allocate();
+                corner_inner.set(cornerRadiusBottomRight, 0);
+                corner_inner.rotateDeg(-daBR * i); // rotate clockwise
+                corner_inner.add(widthHalf_inner - cornerRadiusBottomRight, -heightHalf_inner + cornerRadiusBottomRight);
+                inners.add(corner_inner);
+
+                Vector2 corner_outer = vectors2Pool.allocate();
+                corner_outer.set(cornerRadiusBottomRight, 0);
+                corner_outer.rotateDeg(-daBR * i); // rotate clockwise
+                corner_outer.add(widthHalf_outer - cornerRadiusBottomRight, -heightHalf_outer + cornerRadiusBottomRight);
+                outers.add(corner_outer);
             }
         }
 
         // add lower left corner vertices
         if (MathUtils.isZero(cornerRadiusBottomLeft)) {
             Vector2 corner = vectors2Pool.allocate();
-            corner.add(-widthHalf, -heightHalf);
+            corner.add(-widthHalf_inner, -heightHalf_inner);
             inners.add(corner);
+
+            Vector2 corner_outer = vectors2Pool.allocate();
+            corner_outer.add(-widthHalf_outer, -heightHalf_outer);
+            outers.add(corner_outer);
         } else {
             for (int i = 0; i < segmentsBottomLeft; i++) {
-                Vector2 corner = vectors2Pool.allocate();
-                corner.set(0, -cornerRadiusBottomLeft);
-                corner.rotateDeg(-daBL * i); // rotate clockwise
-                corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
-                inners.add(corner);
+                Vector2 corner_inner = vectors2Pool.allocate();
+                corner_inner.set(0, -cornerRadiusBottomLeft);
+                corner_inner.rotateDeg(-daBL * i); // rotate clockwise
+                corner_inner.add(-widthHalf_inner + cornerRadiusBottomLeft, -heightHalf_inner + cornerRadiusBottomLeft);
+                inners.add(corner_inner);
+
+                Vector2 corner_outer = vectors2Pool.allocate();
+                corner_outer.set(0, -cornerRadiusBottomLeft);
+                corner_outer.rotateDeg(-daBL * i); // rotate clockwise
+                corner_outer.add(-widthHalf_outer + cornerRadiusBottomLeft, -heightHalf_outer + cornerRadiusBottomLeft);
+                outers.add(corner_outer);
             }
         }
 
-        MathUtils.polygonRemoveDegenerateVertices(inners);  // very important.
-
-        for (int i = 0; i < inners.size; i++) {
-            Vector2 inner_prev = inners.getCyclic(i - 1);
-            Vector2 inner = inners.get(i);
-            Vector2 inner_next = inners.getCyclic(i + 1);
-
-            Vector2 to_prev = new Vector2();
-            to_prev.x = inner_prev.x - inner.x;
-            to_prev.y = inner_prev.y - inner.y;
-            to_prev.rotate90(-1).nor().scl(thickness);
-
-            Vector2 to_next = new Vector2();
-            to_next.x = inner_next.x - inner.x;
-            to_next.y = inner_next.y - inner.y;
-            to_next.rotate90(1).nor().scl(thickness);
-
-            Vector2 outer = vectors2Pool.allocate();
-            outer.x = to_prev.x + to_next.x;
-            outer.y = to_prev.y + to_next.y;
-            outer.scl(0.5f);
-
-            outer.x += inner.x;
-            outer.y += inner.y;
-            outers.add(outer);
-        }
+        MathUtils.polygonRemoveDegenerateVertices(inners);  // maybe unnecessary
+        MathUtils.polygonRemoveDegenerateVertices(outers);  // maybe unnecessary
 
         // transform vertices and put them in the buffer.
         for (int i = 0; i < inners.size; i++) {
@@ -1668,12 +1679,9 @@ public class Renderer2D implements MemoryResourceHolder {
             indices.put(startVertex + (i + 3) % (total_vertices));
         }
         vertexIndex += total_vertices;
-        // TODO: dont forget to free!!!
-//
-//        vectors2Pool.freeAll(inners);
-//        vectors2Pool.freeAll(outers);
 
-        return new Tuple2<>(inners, outers);
+        vectors2Pool.freeAll(inners);
+        vectors2Pool.freeAll(outers);
     }
 
     /* Rendering 2D primitives - Polygons */

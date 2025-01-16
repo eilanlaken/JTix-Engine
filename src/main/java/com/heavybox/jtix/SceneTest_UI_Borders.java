@@ -152,24 +152,18 @@ public class SceneTest_UI_Borders implements Scene {
 //                0,0,0,1,1);
 
         renderer2D.setColor(Color.RED);
-        Tuple2<Array<Vector2>, Array<Vector2>> result = renderer2D.drawRectangleBorder(300,100, 15,
+        renderer2D.drawRectangleBorder(300,100, 15,
                 0, 10,
-                10, 5,
+                30, 5,
                 0, 2,
-                0, 2,
+                40, 2,
                 0,0,0,1,1);
 
-        renderer2D.setColor(Color.GREEN);
-        for (Vector2 v : result.t1) {
-            renderer2D.drawCircleFilled(2,5,v.x, v.y, 0, 1,1);
-        }
-        renderer2D.setColor(Color.YELLOW);
-        for (Vector2 v : result.t2) {
-            renderer2D.drawCircleFilled(2,5,v.x, v.y, 0, 1,1);
-        }
+
 
         phase += 0.1f;
-        renderer2D.setColor(1,0,0,0.4f);
+        renderer2D.setColor(0,1,0,0.4f);
+        renderer2D.drawRectangleBorder(100,100, 30, 0,0,0,1,1);
 //        renderer2D.drawFunctionFilled(
 //                300, 55, 10, -MathUtils.PI_TWO, MathUtils.PI_TWO * 2, 55,
 //                x -> MathUtils.sinRad(x + phase), // Apply phase shift
