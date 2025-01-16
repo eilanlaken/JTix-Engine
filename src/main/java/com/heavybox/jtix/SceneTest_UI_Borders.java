@@ -8,6 +8,8 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.ui_3.NodeDebug;
 import com.heavybox.jtix.ui_3.Style;
@@ -128,18 +130,31 @@ public class SceneTest_UI_Borders implements Scene {
 
 
 
-        renderer2D.setColor(Color.WHITE);
-        renderer2D.drawRectangleFilled(240,80,
-                10, 4,
-                10, 4,
-                10, 4,
-                10, 4,
-                0,0,0,1,1);
+
+//
+//        renderer2D.setColor(1,0,0,0.3f);
+//        renderer2D.drawCurveFilled(5, 22,
+//                new Vector2(-100,20),
+//                new Vector2(-90, -20),
+//                new Vector2(-50,40),
+//                new Vector2(-20,30),
+//                new Vector2(0, 100),
+//                new Vector2(22,-30)
+//        );
+
+        phase += 0.1f;
+        renderer2D.setColor(1,0,0,0.4f);
+        renderer2D.drawFunctionFilled(
+                300, 55, 10, -MathUtils.PI_TWO, MathUtils.PI_TWO * 2, 55,
+                x -> MathUtils.sinRad(x + phase), // Apply phase shift
+                0, 0, 0, 1, 1
+        );
 
         renderer2D.end();
 
     }
 
+    float phase;
     @Override
     public void finish() {
 

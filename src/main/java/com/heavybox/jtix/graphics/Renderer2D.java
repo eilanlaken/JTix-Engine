@@ -1989,11 +1989,9 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += values.length;
     }
 
-    public void drawCurveFilled(float stroke, int smoothness, final Vector2... points) {
-        drawCurveFilled(stroke, smoothness, points, 0, 0, 0, 1, 1);
-    }
-
-    // TODO: contains errors and artifacts.
+    // The filled curve tesselation algorithm works.
+    // It does not handle edge cases of high thickness / segment length ratio, but I that is a degenerate case.
+    // Note: might produce rendering artifacts for highly refined functions and a color with transparency.
     public void drawCurveFilled(float stroke, int smoothness, final Array<Vector2> points, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         setMode(GL11.GL_TRIANGLES);
@@ -2009,7 +2007,7 @@ public class Renderer2D implements MemoryResourceHolder {
             points_transformed[i] = vertex;
         }
 
-        Array<Vector2> vertices = getCurveVertices(stroke, smoothness, points_transformed);
+        Array<Vector2> vertices = curveFilledCalculateVertices(stroke, smoothness, points_transformed);
         if (!ensureCapacity(vertices.size, vertices.size)) flush();
 
         /*
@@ -2036,7 +2034,9 @@ public class Renderer2D implements MemoryResourceHolder {
         }
     }
 
-    // TODO: optimize: remove *new* operator.
+    // The filled curve tesselation algorithm works.
+    // It does not handle edge cases of high thickness / segment length ratio, but I that is a degenerate case.
+    // Note: might produce rendering artifacts for highly refined functions and a color with transparency.
     public void drawCurveFilled(float stroke, int smoothness, final Vector2[] points, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         setMode(GL11.GL_TRIANGLES);
@@ -2052,9 +2052,7 @@ public class Renderer2D implements MemoryResourceHolder {
             points_transformed[i] = vertex;
         }
 
-        Array<Vector2> vertices = getCurveVertices(stroke, smoothness, points_transformed);
-
-
+        Array<Vector2> vertices = curveFilledCalculateVertices(stroke, smoothness, points_transformed);
         if (!ensureCapacity(vertices.size, vertices.size)) flush();
 
         /*
@@ -2076,12 +2074,11 @@ public class Renderer2D implements MemoryResourceHolder {
                 textCoords.put(0.5f).put(0.5f);
                 indices.put(vertexIndex + i);
             }
-
             vertexIndex += vertices.size;
         }
     }
 
-    public Array<Vector2> getCurveVertices(float stroke, int smoothness, Vector2... points) {
+    private Array<Vector2> curveFilledCalculateVertices(float stroke, int smoothness, Vector2... points) {
         if (points.length < 2) {
             return null;
         }
