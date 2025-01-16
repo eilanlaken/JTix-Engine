@@ -1,8 +1,6 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.ArrayFloat;
-import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.collections.*;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector4;
@@ -1516,6 +1514,142 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += 8;
 
         vectors2Pool.freeAll(vertices);
+    }
+
+    public Tuple2<Array<Vector2>, Array<Vector2>> drawRectangleBorder(float width, float height, float thickness,
+                                                     float cornerRadiusTopLeft, int segmentsTopLeft,
+                                                     float cornerRadiusTopRight, int segmentsTopRight,
+                                                     float cornerRadiusBottomRight, int segmentsBottomRight,
+                                                     float cornerRadiusBottomLeft, int segmentsBottomLeft,
+                                                     float x, float y, float deg, float sclX, float sclY) {
+        if (cornerRadiusTopLeft == 0 && cornerRadiusTopRight == 0 // TODO: test
+                && cornerRadiusBottomRight == 0 && cornerRadiusBottomLeft == 0) {
+            drawRectangleThin(width, height, x, y, deg, sclX, sclY);
+            //return;
+        }
+
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+
+        segmentsTopLeft = Math.max(2, segmentsTopLeft);
+        segmentsTopRight = Math.max(2, segmentsTopRight);
+        segmentsBottomRight = Math.max(2, segmentsBottomRight);
+        segmentsBottomLeft = Math.max(2, segmentsBottomLeft);
+        int maxRefinement = (int) MathUtils.max(segmentsTopLeft, segmentsTopRight, segmentsBottomRight, segmentsBottomLeft);
+        if (!ensureCapacity(4 * maxRefinement, maxRefinement * 3)) flush();
+
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(defaultTexture);
+
+        float widthHalf  = width  * 0.5f;
+        float heightHalf = height * 0.5f;
+
+        float daTL = 90.0f / (segmentsTopLeft - 1);
+        float daTR = 90.0f / (segmentsTopRight - 1);
+        float daBR = 90.0f / (segmentsBottomRight - 1);
+        float daBL = 90.0f / (segmentsBottomLeft - 1);
+
+        Array<Vector2> inners = new Array<>(true, maxRefinement);
+        Array<Vector2> outers = new Array<>(true, maxRefinement);
+
+
+        // add upper left corner vertices
+        for (int i = 0; i < segmentsTopLeft; i++) {
+            Vector2 corner = vectors2Pool.allocate();
+            corner.set(-cornerRadiusTopLeft, 0);
+            corner.rotateDeg(-daTL * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusTopLeft, heightHalf - cornerRadiusTopLeft);
+            inners.add(corner);
+        }
+
+        // add upper right corner vertices
+        for (int i = 0; i < segmentsTopRight; i++) {
+            Vector2 corner = vectors2Pool.allocate();
+            corner.set(0, cornerRadiusTopRight);
+            corner.rotateDeg(-daTR * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+            inners.add(corner);
+        }
+
+        // add lower right corner vertices
+        for (int i = 0; i < segmentsBottomRight; i++) {
+            Vector2 corner = vectors2Pool.allocate();
+            corner.set(cornerRadiusBottomRight, 0);
+            corner.rotateDeg(-daBR * i); // rotate clockwise
+            corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+            inners.add(corner);
+        }
+
+        // add lower left corner vertices
+        for (int i = 0; i < segmentsBottomLeft; i++) {
+            Vector2 corner = vectors2Pool.allocate();
+            corner.set(0, -cornerRadiusBottomLeft);
+            corner.rotateDeg(-daBL * i); // rotate clockwise
+            corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+            inners.add(corner);
+        }
+
+        MathUtils.polygonRemoveDegenerateVertices(inners);  // very important.
+
+        for (int i = 0; i < inners.size; i++) {
+            Vector2 inner_prev = inners.getCyclic(i - 1);
+            Vector2 inner = inners.get(i);
+            Vector2 inner_next = inners.getCyclic(i + 1);
+
+            Vector2 to_prev = new Vector2();
+            to_prev.x = inner_prev.x - inner.x;
+            to_prev.y = inner_prev.y - inner.y;
+            to_prev.rotate90(-1).nor().scl(thickness);
+
+            Vector2 to_next = new Vector2();
+            to_next.x = inner_next.x - inner.x;
+            to_next.y = inner_next.y - inner.y;
+            to_next.rotate90(1).nor().scl(thickness);
+
+            Vector2 outer = vectors2Pool.allocate();
+            outer.x = to_prev.x + to_next.x;
+            outer.y = to_prev.y + to_next.y;
+            outer.scl(0.5f);
+
+            outer.x += inner.x;
+            outer.y += inner.y;
+            outers.add(outer);
+        }
+
+        // transform vertices and put them in the buffer.
+        for (int i = 0; i < inners.size; i++) {
+            Vector2 inner = inners.get(i);
+            Vector2 outer = outers.get(i);
+            inner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            outer.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+
+            positions.put(inner.x).put(inner.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            positions.put(outer.x).put(outer.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+        }
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        int total_vertices = inners.size + outers.size; // or inner.size * 2
+        for (int i = 0; i < total_vertices; i += 2) {
+            indices.put(startVertex + (i + 0) % (total_vertices));
+            indices.put(startVertex + (i + 3) % (total_vertices));
+            indices.put(startVertex + (i + 1) % (total_vertices));
+
+            indices.put(startVertex + (i + 0) % (total_vertices));
+            indices.put(startVertex + (i + 2) % (total_vertices));
+            indices.put(startVertex + (i + 3) % (total_vertices));
+        }
+        vertexIndex += total_vertices;
+        // TODO: dont forget to free!!!
+//
+//        vectors2Pool.freeAll(inners);
+//        vectors2Pool.freeAll(outers);
+
+        return new Tuple2<>(inners, outers);
     }
 
     /* Rendering 2D primitives - Polygons */

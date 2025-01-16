@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.collections.Tuple2;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -114,7 +115,7 @@ public class SceneTest_UI_Borders implements Scene {
 
         // render font
         renderer2D.begin();
-        nodeDebug.draw(renderer2D);
+        //nodeDebug.draw(renderer2D);
 
         //renderer2D.drawRectangleBorder(300,100,20,0,0,0,1,1);
 //        renderer2D.setColor(Color.GREEN);
@@ -142,13 +143,39 @@ public class SceneTest_UI_Borders implements Scene {
 //                new Vector2(22,-30)
 //        );
 
+//        renderer2D.setColor(Color.WHITE);
+//        renderer2D.drawRectangleThin(300,100,
+//                0, 10,
+//                50, 2,
+//                30, 2,
+//                0, 2,
+//                0,0,0,1,1);
+
+        renderer2D.setColor(Color.RED);
+        Tuple2<Array<Vector2>, Array<Vector2>> result =
+         renderer2D.drawRectangleBorder(300,100, 30,
+                10, 10,
+                50, 5,
+                30, 2,
+                0, 2,
+                0,0,0,1,1);
+
+        renderer2D.setColor(Color.GREEN);
+        for (Vector2 v : result.t1) {
+            renderer2D.drawCircleFilled(2,5,v.x, v.y, 0, 1,1);
+        }
+        renderer2D.setColor(Color.YELLOW);
+        for (Vector2 v : result.t2) {
+            renderer2D.drawCircleFilled(2,5,v.x, v.y, 0, 1,1);
+        }
+
         phase += 0.1f;
         renderer2D.setColor(1,0,0,0.4f);
-        renderer2D.drawFunctionFilled(
-                300, 55, 10, -MathUtils.PI_TWO, MathUtils.PI_TWO * 2, 55,
-                x -> MathUtils.sinRad(x + phase), // Apply phase shift
-                0, 0, 0, 1, 1
-        );
+//        renderer2D.drawFunctionFilled(
+//                300, 55, 10, -MathUtils.PI_TWO, MathUtils.PI_TWO * 2, 55,
+//                x -> MathUtils.sinRad(x + phase), // Apply phase shift
+//                0, 0, 0, 1, 1
+//        );
 
         renderer2D.end();
 
