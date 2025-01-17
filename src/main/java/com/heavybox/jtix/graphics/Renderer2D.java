@@ -1517,11 +1517,11 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void drawRectangleBorder(float width, float height, float thickness,
-                                                     float cornerRadiusTopLeft, int segmentsTopLeft,
-                                                     float cornerRadiusTopRight, int segmentsTopRight,
-                                                     float cornerRadiusBottomRight, int segmentsBottomRight,
-                                                     float cornerRadiusBottomLeft, int segmentsBottomLeft,
-                                                     float x, float y, float deg, float sclX, float sclY) {
+                                    float cornerRadiusTopLeft, int segmentsTopLeft,
+                                    float cornerRadiusTopRight, int segmentsTopRight,
+                                    float cornerRadiusBottomRight, int segmentsBottomRight,
+                                    float cornerRadiusBottomLeft, int segmentsBottomLeft,
+                                    float x, float y, float deg, float sclX, float sclY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
         segmentsTopLeft = Math.max(2, segmentsTopLeft);
@@ -1536,8 +1536,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
         float widthHalf_inner  = width  * 0.5f;
         float heightHalf_inner = height * 0.5f;
-        float widthHalf_outer  = widthHalf_inner + thickness * 0.5f;
-        float heightHalf_outer = heightHalf_inner + thickness * 0.5f;
 
         float daTL = 90.0f / (segmentsTopLeft - 1);
         float daTR = 90.0f / (segmentsTopRight - 1);
@@ -1545,140 +1543,241 @@ public class Renderer2D implements MemoryResourceHolder {
         float daBL = 90.0f / (segmentsBottomLeft - 1);
 
         Array<Vector2> inners = new Array<>(true, maxRefinement);
-        Array<Vector2> outers = new Array<>(true, maxRefinement);
 
         // add upper left corner vertices
-        if (MathUtils.isZero(cornerRadiusTopLeft)) {
+        for (int i = 0; i < segmentsTopLeft; i++) {
             Vector2 corner_inner = vectors2Pool.allocate();
-            corner_inner.add(-widthHalf_inner, heightHalf_inner);
+            corner_inner.set(-cornerRadiusTopLeft, 0);
+            corner_inner.rotateDeg(-daTL * i); // rotate clockwise
+            corner_inner.add(-widthHalf_inner + cornerRadiusTopLeft, heightHalf_inner - cornerRadiusTopLeft);
             inners.add(corner_inner);
-
-            Vector2 corner_outer = vectors2Pool.allocate();
-            corner_outer.add(-widthHalf_outer, heightHalf_outer);
-            outers.add(corner_outer);
-        } else {
-            for (int i = 0; i < segmentsTopLeft; i++) {
-                Vector2 corner_inner = vectors2Pool.allocate();
-                corner_inner.set(-cornerRadiusTopLeft, 0);
-                corner_inner.rotateDeg(-daTL * i); // rotate clockwise
-                corner_inner.add(-widthHalf_inner + cornerRadiusTopLeft, heightHalf_inner - cornerRadiusTopLeft);
-                inners.add(corner_inner);
-
-                Vector2 corner_outer = vectors2Pool.allocate();
-                corner_outer.set(-cornerRadiusTopLeft, 0);
-                corner_outer.rotateDeg(-daTL * i); // rotate clockwise
-                corner_outer.add(-widthHalf_outer + cornerRadiusTopLeft, heightHalf_outer - cornerRadiusTopLeft);
-                outers.add(corner_outer);
-            }
         }
-
         // add upper right corner vertices
-        if (MathUtils.isZero(cornerRadiusTopRight)) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.add(widthHalf_inner, heightHalf_inner);
-            inners.add(corner);
-
-            Vector2 corner_outer = vectors2Pool.allocate();
-            corner_outer.add(widthHalf_outer, heightHalf_outer);
-            outers.add(corner_outer);
-        } else {
-            for (int i = 0; i < segmentsTopRight; i++) {
-                Vector2 corner_inner = vectors2Pool.allocate();
-                corner_inner.set(0, cornerRadiusTopRight);
-                corner_inner.rotateDeg(-daTR * i); // rotate clockwise
-                corner_inner.add(widthHalf_inner - cornerRadiusTopRight, heightHalf_inner - cornerRadiusTopRight);
-                inners.add(corner_inner);
-
-                Vector2 corner_outer = vectors2Pool.allocate();
-                corner_outer.set(0, cornerRadiusTopRight);
-                corner_outer.rotateDeg(-daTR * i); // rotate clockwise
-                corner_outer.add(widthHalf_outer - cornerRadiusTopRight, heightHalf_outer - cornerRadiusTopRight);
-                outers.add(corner_outer);
-            }
+        for (int i = 0; i < segmentsTopRight; i++) {
+            Vector2 corner_inner = vectors2Pool.allocate();
+            corner_inner.set(0, cornerRadiusTopRight);
+            corner_inner.rotateDeg(-daTR * i); // rotate clockwise
+            corner_inner.add(widthHalf_inner - cornerRadiusTopRight, heightHalf_inner - cornerRadiusTopRight);
+            inners.add(corner_inner);
         }
-
         // add lower right corner vertices
-        if (MathUtils.isZero(cornerRadiusBottomRight)) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.add(widthHalf_inner, -heightHalf_inner);
-            inners.add(corner);
-
-            Vector2 corner_outer = vectors2Pool.allocate();
-            corner_outer.add(widthHalf_outer, -heightHalf_outer);
-            outers.add(corner_outer);
-        } else {
-            for (int i = 0; i < segmentsBottomRight; i++) {
-                Vector2 corner_inner = vectors2Pool.allocate();
-                corner_inner.set(cornerRadiusBottomRight, 0);
-                corner_inner.rotateDeg(-daBR * i); // rotate clockwise
-                corner_inner.add(widthHalf_inner - cornerRadiusBottomRight, -heightHalf_inner + cornerRadiusBottomRight);
-                inners.add(corner_inner);
-
-                Vector2 corner_outer = vectors2Pool.allocate();
-                corner_outer.set(cornerRadiusBottomRight, 0);
-                corner_outer.rotateDeg(-daBR * i); // rotate clockwise
-                corner_outer.add(widthHalf_outer - cornerRadiusBottomRight, -heightHalf_outer + cornerRadiusBottomRight);
-                outers.add(corner_outer);
-            }
+        for (int i = 0; i < segmentsBottomRight; i++) {
+            Vector2 corner_inner = vectors2Pool.allocate();
+            corner_inner.set(cornerRadiusBottomRight, 0);
+            corner_inner.rotateDeg(-daBR * i); // rotate clockwise
+            corner_inner.add(widthHalf_inner - cornerRadiusBottomRight, -heightHalf_inner + cornerRadiusBottomRight);
+            inners.add(corner_inner);
         }
-
         // add lower left corner vertices
-        if (MathUtils.isZero(cornerRadiusBottomLeft)) {
-            Vector2 corner = vectors2Pool.allocate();
-            corner.add(-widthHalf_inner, -heightHalf_inner);
-            inners.add(corner);
-
-            Vector2 corner_outer = vectors2Pool.allocate();
-            corner_outer.add(-widthHalf_outer, -heightHalf_outer);
-            outers.add(corner_outer);
-        } else {
-            for (int i = 0; i < segmentsBottomLeft; i++) {
-                Vector2 corner_inner = vectors2Pool.allocate();
-                corner_inner.set(0, -cornerRadiusBottomLeft);
-                corner_inner.rotateDeg(-daBL * i); // rotate clockwise
-                corner_inner.add(-widthHalf_inner + cornerRadiusBottomLeft, -heightHalf_inner + cornerRadiusBottomLeft);
-                inners.add(corner_inner);
-
-                Vector2 corner_outer = vectors2Pool.allocate();
-                corner_outer.set(0, -cornerRadiusBottomLeft);
-                corner_outer.rotateDeg(-daBL * i); // rotate clockwise
-                corner_outer.add(-widthHalf_outer + cornerRadiusBottomLeft, -heightHalf_outer + cornerRadiusBottomLeft);
-                outers.add(corner_outer);
-            }
+        for (int i = 0; i < segmentsBottomLeft; i++) {
+            Vector2 corner_inner = vectors2Pool.allocate();
+            corner_inner.set(0, -cornerRadiusBottomLeft);
+            corner_inner.rotateDeg(-daBL * i); // rotate clockwise
+            corner_inner.add(-widthHalf_inner + cornerRadiusBottomLeft, -heightHalf_inner + cornerRadiusBottomLeft);
+            inners.add(corner_inner);
         }
 
-        MathUtils.polygonRemoveDegenerateVertices(inners);  // maybe unnecessary
+        MathUtils.polygonRemoveDegenerateVertices(inners);  // important
+
+        Array<Vector2> outers = new Array<>(true, inners.size * 2);
+        for (int i = 0; i < inners.size; i++) {
+            Vector2 inner_prev = inners.getCyclic(i - 1);
+            Vector2 inner = inners.get(i);
+            Vector2 inner_next = inners.getCyclic(i + 1);
+
+            Vector2 prev = vectors2Pool.allocate();
+            prev.x = inner_prev.x - inner.x;
+            prev.y = inner_prev.y - inner.y;
+            prev.rotate90(-1);
+            prev.nor().scl(thickness).add(inner);
+
+            Vector2 next = vectors2Pool.allocate();
+            next.x = inner_next.x - inner.x;
+            next.y = inner_next.y - inner.y;
+            next.rotate90(1);
+            next.nor().scl(thickness).add(inner);
+
+            outers.add(prev);
+            outers.add(next);
+        }
+
         MathUtils.polygonRemoveDegenerateVertices(outers);  // maybe unnecessary
 
         // transform vertices and put them in the buffer.
         for (int i = 0; i < inners.size; i++) {
             Vector2 inner = inners.get(i);
-            Vector2 outer = outers.get(i);
             inner.scl(sclX, sclY).rotateDeg(deg).add(x, y);
-            outer.scl(sclX, sclY).rotateDeg(deg).add(x, y);
-
             positions.put(inner.x).put(inner.y);
             colors.put(currentTint);
             textCoords.put(0.5f).put(0.5f);
 
-            positions.put(outer.x).put(outer.y);
+            Vector2 outer_prev = outers.get(2 * i);
+            outer_prev.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(outer_prev.x).put(outer_prev.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 outer_next = outers.get(2 * i + 1);
+            outer_next.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(outer_next.x).put(outer_next.y);
             colors.put(currentTint);
             textCoords.put(0.5f).put(0.5f);
         }
 
         // put indices
         int startVertex = this.vertexIndex;
-        int total_vertices = inners.size + outers.size; // or inner.size * 2
-        for (int i = 0; i < total_vertices; i += 2) {
+        int total_vertices = inners.size + outers.size;
+        for (int i = 0; i < total_vertices; i += 3) {
             indices.put(startVertex + (i + 0) % (total_vertices));
-            indices.put(startVertex + (i + 3) % (total_vertices));
+            indices.put(startVertex + (i + 2) % (total_vertices));
             indices.put(startVertex + (i + 1) % (total_vertices));
 
             indices.put(startVertex + (i + 0) % (total_vertices));
+            indices.put(startVertex + (i + 3) % (total_vertices));
+            indices.put(startVertex + (i + 2) % (total_vertices));
+
             indices.put(startVertex + (i + 2) % (total_vertices));
             indices.put(startVertex + (i + 3) % (total_vertices));
+            indices.put(startVertex + (i + 4) % (total_vertices));
         }
         vertexIndex += total_vertices;
+
+        // adjustment: for every sharp corner, fill the triangle to create a square corner.
+        // top left corner:
+        startVertex = this.vertexIndex;
+        if (MathUtils.isZero(cornerRadiusTopLeft)) {
+            Vector2 cornerTopLeft_1 = vectors2Pool.allocate();
+            cornerTopLeft_1.add(-widthHalf_inner - thickness, heightHalf_inner);
+            cornerTopLeft_1.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerTopLeft_1.x).put(cornerTopLeft_1.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerTopLeft_2 = vectors2Pool.allocate();
+            cornerTopLeft_2.add(-widthHalf_inner, heightHalf_inner + thickness);
+            cornerTopLeft_2.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerTopLeft_2.x).put(cornerTopLeft_2.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerTopLeft_3 = vectors2Pool.allocate();
+            cornerTopLeft_3.add(-widthHalf_inner - thickness, heightHalf_inner + thickness);
+            cornerTopLeft_3.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerTopLeft_3.x).put(cornerTopLeft_3.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 3;
+
+            vectors2Pool.free(cornerTopLeft_1);
+            vectors2Pool.free(cornerTopLeft_2);
+            vectors2Pool.free(cornerTopLeft_3);
+        }
+
+        // top right corner:
+        startVertex = this.vertexIndex;
+        if (MathUtils.isZero(cornerRadiusTopRight)) {
+            Vector2 cornerTopRight_1 = vectors2Pool.allocate();
+            cornerTopRight_1.add(widthHalf_inner + thickness, heightHalf_inner);
+            cornerTopRight_1.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerTopRight_1.x).put(cornerTopRight_1.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerTopRight_2 = vectors2Pool.allocate();
+            cornerTopRight_2.add(widthHalf_inner, heightHalf_inner + thickness);
+            cornerTopRight_2.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerTopRight_2.x).put(cornerTopRight_2.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerTopRight_3 = vectors2Pool.allocate();
+            cornerTopRight_3.add(widthHalf_inner + thickness, heightHalf_inner + thickness);
+            cornerTopRight_3.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerTopRight_3.x).put(cornerTopRight_3.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 3;
+
+            vectors2Pool.free(cornerTopRight_1);
+            vectors2Pool.free(cornerTopRight_2);
+            vectors2Pool.free(cornerTopRight_3);
+        }
+
+        // bottom right corner:
+        startVertex = this.vertexIndex;
+        if (MathUtils.isZero(cornerRadiusBottomRight)) {
+            Vector2 cornerBottomRight_1 = vectors2Pool.allocate();
+            cornerBottomRight_1.add(widthHalf_inner + thickness, -heightHalf_inner);
+            cornerBottomRight_1.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerBottomRight_1.x).put(cornerBottomRight_1.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerBottomRight_2 = vectors2Pool.allocate();
+            cornerBottomRight_2.add(widthHalf_inner, -heightHalf_inner - thickness);
+            cornerBottomRight_2.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerBottomRight_2.x).put(cornerBottomRight_2.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerBottomRight_3 = vectors2Pool.allocate();
+            cornerBottomRight_3.add(widthHalf_inner + thickness, -heightHalf_inner - thickness);
+            cornerBottomRight_3.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerBottomRight_3.x).put(cornerBottomRight_3.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 3;
+
+            vectors2Pool.free(cornerBottomRight_1);
+            vectors2Pool.free(cornerBottomRight_2);
+            vectors2Pool.free(cornerBottomRight_3);
+        }
+
+        // bottom right corner:
+        startVertex = this.vertexIndex;
+        if (MathUtils.isZero(cornerRadiusBottomLeft)) {
+            Vector2 cornerBottomLeft_1 = vectors2Pool.allocate();
+            cornerBottomLeft_1.add(-widthHalf_inner - thickness, -heightHalf_inner);
+            cornerBottomLeft_1.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerBottomLeft_1.x).put(cornerBottomLeft_1.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerBottomLeft_2 = vectors2Pool.allocate();
+            cornerBottomLeft_2.add(-widthHalf_inner, -heightHalf_inner - thickness);
+            cornerBottomLeft_2.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerBottomLeft_2.x).put(cornerBottomLeft_2.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            Vector2 cornerBottomLeft_3 = vectors2Pool.allocate();
+            cornerBottomLeft_3.add(-widthHalf_inner - thickness, -heightHalf_inner - thickness);
+            cornerBottomLeft_3.scl(sclX, sclY).rotateDeg(deg).add(x, y);
+            positions.put(cornerBottomLeft_3.x).put(cornerBottomLeft_3.y);
+            colors.put(currentTint);
+            textCoords.put(0.5f).put(0.5f);
+
+            indices.put(startVertex + 0);
+            indices.put(startVertex + 1);
+            indices.put(startVertex + 2);
+            vertexIndex += 3;
+
+            vectors2Pool.free(cornerBottomLeft_1);
+            vectors2Pool.free(cornerBottomLeft_2);
+            vectors2Pool.free(cornerBottomLeft_3);
+        }
 
         vectors2Pool.freeAll(inners);
         vectors2Pool.freeAll(outers);

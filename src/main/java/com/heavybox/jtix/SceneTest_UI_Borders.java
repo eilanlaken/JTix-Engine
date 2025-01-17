@@ -4,13 +4,10 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.collections.Tuple2;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.ui_3.NodeDebug;
 import com.heavybox.jtix.ui_3.Style;
@@ -151,19 +148,18 @@ public class SceneTest_UI_Borders implements Scene {
 //                0, 2,
 //                0,0,0,1,1);
 
-        renderer2D.setColor(Color.RED);
-        renderer2D.drawRectangleBorder(300,100, 15,
-                0, 10,
-                30, 5,
+        renderer2D.setColor(1,0,0,0.4f);
+        renderer2D.drawRectangleBorder(300,100, 30,
+                30, 10,
+                0, 5,
                 0, 2,
-                40, 2,
+                0, 2,
                 0,0,0,1,1);
 
 
 
-        phase += 0.1f;
-        renderer2D.setColor(0,1,0,0.4f);
-        renderer2D.drawRectangleBorder(100,100, 30, 0,0,0,1,1);
+//        phase += 0.1f;
+//        renderer2D.setColor(0,1,0,0.4f);
 //        renderer2D.drawFunctionFilled(
 //                300, 55, 10, -MathUtils.PI_TWO, MathUtils.PI_TWO * 2, 55,
 //                x -> MathUtils.sinRad(x + phase), // Apply phase shift
