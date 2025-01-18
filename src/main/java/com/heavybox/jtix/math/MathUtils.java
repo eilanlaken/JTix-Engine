@@ -664,6 +664,24 @@ public final class MathUtils {
                 ;
     }
 
+    public static int sign(double n) {
+        if (n > 0) return 1;
+        if (n < 0) return -1;
+        return 0;
+    }
+
+    public static int sign(float n) {
+        if (n > 0) return 1;
+        if (n < 0) return -1;
+        return 0;
+    }
+
+    public static int sign(int n) {
+        if (n > 0) return 1;
+        if (n < 0) return -1;
+        return 0;
+    }
+
     public static boolean isZero(float value) {
         return Math.abs(value) <= FLOAT_ROUNDING_ERROR;
     }

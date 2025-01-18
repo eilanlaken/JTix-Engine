@@ -1537,6 +1537,7 @@ public class Renderer2D implements MemoryResourceHolder {
         float widthHalf_inner  = width  * 0.5f;
         float heightHalf_inner = height * 0.5f;
 
+        thickness = Math.abs(thickness);
         float daTL = 90.0f / (segmentsTopLeft - 1);
         float daTR = 90.0f / (segmentsTopRight - 1);
         float daBR = 90.0f / (segmentsBottomRight - 1);
