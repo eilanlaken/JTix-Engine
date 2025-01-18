@@ -3,7 +3,6 @@ package com.heavybox.jtix.ui_3;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.z_old_gui.GUIException;
 
 public abstract class NodeContainer extends Node {
 
@@ -47,10 +46,10 @@ public abstract class NodeContainer extends Node {
     }
 
     public void addChild(Node node) {
-        if (node == null)                   throw new GUIException(Node.class.getSimpleName() + " element cannot be null.");
-        if (node == this)                   throw new GUIException("Trying to parent a " + Node.class.getSimpleName() + " to itself.");
+        if (node == null)                   throw new UIException(Node.class.getSimpleName() + " element cannot be null.");
+        if (node == this)                   throw new UIException("Trying to parent a " + Node.class.getSimpleName() + " to itself.");
         if (node instanceof NodeContainer) {
-            if (this.descendantOf((NodeContainer) node)) throw new GUIException("Trying to create circular dependency in Widgets elements tree.");
+            if (this.descendantOf((NodeContainer) node)) throw new UIException("Trying to create circular dependency in Widgets elements tree.");
         }
 
         if (node.container != null) node.container.removeChild(node);
@@ -59,7 +58,7 @@ public abstract class NodeContainer extends Node {
     }
 
     protected void removeChild(Node node) {
-        if (node.container != this) throw new GUIException(Node.class.getSimpleName() + " node is not a child of this node to detach.");
+        if (node.container != this) throw new UIException(Node.class.getSimpleName() + " node is not a child of this node to detach.");
         node.container = null;
         children.removeValue(node, true);
     }
