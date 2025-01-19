@@ -1,6 +1,6 @@
 package com.heavybox.jtix.graphics;
 
-public class Color {
+public class Color implements Cloneable {
 
     public static final Color WHITE       = new Color(1, 1, 1, 1);
     public static final Color LIGHT_GRAY  = new Color(0xbfbfbfff);
@@ -556,4 +556,17 @@ public class Color {
         return new Color(this);
     }
 
+    @Override
+    public Color clone() {
+        try {
+            Color clone = (Color) super.clone();
+            clone.r = this.r;
+            clone.g = this.g;
+            clone.b = this.b;
+            clone.a = this.a;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

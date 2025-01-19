@@ -10,6 +10,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets.NodeDebug;
+import com.heavybox.jtix.widgets.NodeSlider;
 import com.heavybox.jtix.widgets.WidgetsStyle;
 import org.lwjgl.opengl.GL11;
 
@@ -19,6 +20,7 @@ public class SceneTest_UI_Borders implements Scene {
     private Renderer2D renderer2D = new Renderer2D();
 
     private NodeDebug nodeDebug = new NodeDebug();
+    private NodeSlider slider = new NodeSlider();
 
     @Override
     public void setup() {
@@ -82,6 +84,9 @@ public class SceneTest_UI_Borders implements Scene {
         nodeDebug.update(Graphics.getDeltaTime());
         nodeDebug.handleInput();
 
+        slider.update(Graphics.getDeltaTime());
+        slider.handleInput();
+
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
             y += 3;
         }
@@ -107,13 +112,13 @@ public class SceneTest_UI_Borders implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0f,0f,0f,1);
+        GL11.glClearColor(1f,1f,1f,1);
 
 
         // render font
         renderer2D.begin();
-        nodeDebug.draw(renderer2D);
-
+        //nodeDebug.draw(renderer2D);
+        slider.draw(renderer2D);
 
 //        renderer2D.setColor(0,1,0,0.4f);
 //        renderer2D.drawRectangleBorder(300,100, -10,
