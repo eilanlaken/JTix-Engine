@@ -6,7 +6,7 @@ import com.heavybox.jtix.math.Vector2;
 
 public class NodeSlider extends Node {
 
-    public float value     = 0.2f;
+    public float value     = 0.4f;
     public int   width     = 150;
     public int   height    = 5;
     public int   thumbWidth = 8;
@@ -29,7 +29,7 @@ public class NodeSlider extends Node {
         renderBar(renderer2D, width, height, x, y, deg, sclX, sclY);
 
 
-        Vector2 trackPos = new Vector2(-width * 0.5f + width * value * 0.5f, 0);
+        Vector2 trackPos = new Vector2(width * 0.5f * (value - 1), 0);
         trackPos.scl(sclX, sclY).rotateDeg(deg).add(x,y);
         float trackWidth = width * value;
         float trackHeight = height;
