@@ -1340,7 +1340,6 @@ public class Renderer2D implements MemoryResourceHolder {
                 x, y, degrees, scaleX, scaleY);
     }
 
-    // TODO: handle case of radius 0!!!!!
     public void drawRectangleFilled(@Nullable Texture texture, float width, float height,
                                     float cornerRadiusTopLeft, int refinementTopLeft,
                                     float cornerRadiusTopRight, int refinementTopRight,
@@ -1372,74 +1371,117 @@ public class Renderer2D implements MemoryResourceHolder {
         float daBL = 90.0f / (refinementBottomLeft - 1);
 
         Vector2 corner = vectors2Pool.allocate();
+        int totalRefinement = 0;
         // add upper left corner vertices
-        for (int i = 0; i < refinementTopLeft; i++) {
-            corner.set(-cornerRadiusTopLeft, 0);
-            corner.rotateDeg(-daTL * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadiusTopLeft,heightHalf - cornerRadiusTopLeft);
+        if (MathUtils.isZero(cornerRadiusTopLeft)) {
+            corner.set(-widthHalf, heightHalf);
             float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
             float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
-
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
+            totalRefinement++;
+        } else {
+            for (int i = 0; i < refinementTopLeft; i++) {
+                corner.set(-cornerRadiusTopLeft, 0);
+                corner.rotateDeg(-daTL * i); // rotate clockwise
+                corner.add(-widthHalf + cornerRadiusTopLeft, heightHalf - cornerRadiusTopLeft);
+                float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+                float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+                textCoords.put(u).put(v);
+                corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+                positions.put(corner.x).put(corner.y);
+                colors.put(currentTint);
+                totalRefinement++;
+            }
         }
 
         // add upper right corner vertices
-        for (int i = 0; i < refinementTopRight; i++) {
-            corner.set(0, cornerRadiusTopRight);
-            corner.rotateDeg(-daTR * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+        if (MathUtils.isZero(cornerRadiusTopRight)) {
+            corner.set(widthHalf, heightHalf);
             float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
             float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
-
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
+            totalRefinement++;
+        } else {
+            for (int i = 0; i < refinementTopRight; i++) {
+                corner.set(0, cornerRadiusTopRight);
+                corner.rotateDeg(-daTR * i); // rotate clockwise
+                corner.add(widthHalf - cornerRadiusTopRight, heightHalf - cornerRadiusTopRight);
+                float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+                float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+                textCoords.put(u).put(v);
+                corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+                positions.put(corner.x).put(corner.y);
+                colors.put(currentTint);
+                totalRefinement++;
+            }
         }
 
         // add lower right corner vertices
-        for (int i = 0; i < refinementBottomRight; i++) {
-            corner.set(cornerRadiusBottomRight, 0);
-            corner.rotateDeg(-daBR * i); // rotate clockwise
-            corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+        if (MathUtils.isZero(cornerRadiusBottomRight)) {
+            corner.set(widthHalf, -heightHalf);
             float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
             float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
-
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
+            totalRefinement++;
+        } else {
+            for (int i = 0; i < refinementBottomRight; i++) {
+                corner.set(cornerRadiusBottomRight, 0);
+                corner.rotateDeg(-daBR * i); // rotate clockwise
+                corner.add(widthHalf - cornerRadiusBottomRight, -heightHalf + cornerRadiusBottomRight);
+                float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+                float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+                textCoords.put(u).put(v);
+                corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+                positions.put(corner.x).put(corner.y);
+                colors.put(currentTint);
+                totalRefinement++;
+            }
         }
 
         // add lower left corner vertices
-        for (int i = 0; i < refinementBottomLeft; i++) {
-            corner.set(0, -cornerRadiusBottomLeft);
-            corner.rotateDeg(-daBL * i); // rotate clockwise
-            corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+        if (MathUtils.isZero(cornerRadiusBottomLeft)) {
+            corner.set(-widthHalf, -heightHalf);
             float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
             float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
             textCoords.put(u).put(v);
-
             corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
             positions.put(corner.x).put(corner.y);
             colors.put(currentTint);
+            totalRefinement++;
+        } else {
+            for (int i = 0; i < refinementBottomLeft; i++) {
+                corner.set(0, -cornerRadiusBottomLeft);
+                corner.rotateDeg(-daBL * i); // rotate clockwise
+                corner.add(-widthHalf + cornerRadiusBottomLeft, -heightHalf + cornerRadiusBottomLeft);
+                float u = 0.5f + (corner.x * currentTexture.invWidth * pixelScaleWidth);
+                float v = 0.5f - (corner.y * currentTexture.invHeight * pixelScaleHeight);
+                textCoords.put(u).put(v);
+                corner.scl(scaleX, scaleY).rotateDeg(degrees).add(x, y);
+                positions.put(corner.x).put(corner.y);
+                colors.put(currentTint);
+                totalRefinement++;
+            }
         }
 
         // put indices
         int startVertex = this.vertexIndex;
-        int totalRefinement = refinementTopLeft + refinementTopRight
-                + refinementBottomRight + refinementBottomLeft;
         for (int i = 0; i < (totalRefinement) - 2; i++) {
             indices.put(startVertex);
             indices.put(startVertex + i + 1);
             indices.put(startVertex + i + 2);
         }
+        vertexIndex += totalRefinement;
 
         vectors2Pool.free(corner);
-        vertexIndex += totalRefinement;
     }
 
     // TODO: maybe also create a version w or w/o Texture

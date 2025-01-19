@@ -148,12 +148,20 @@ public class SceneTest_UI_Borders implements Scene {
 //                0, 2,
 //                0,0,0,1,1);
 
+//        renderer2D.setColor(1,0,0,0.4f);
+//        renderer2D.drawRectangleBorder(300,100, -10,
+//                30, 10,
+//                30, 2,
+//                0, 2,
+//                0, 2,
+//                0,0,0,1,1);
+
         renderer2D.setColor(1,0,0,0.4f);
-        renderer2D.drawRectangleBorder(300,100, -10,
-                30, 10,
+        renderer2D.drawRectangleFilled(300,100,
+                10, 10,
+                0, 2,
+                40, 20,
                 30, 2,
-                0, 2,
-                0, 2,
                 0,0,0,1,1);
 
 
