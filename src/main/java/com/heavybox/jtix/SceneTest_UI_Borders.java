@@ -9,8 +9,8 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.ui_3.NodeDebug;
-import com.heavybox.jtix.ui_3.Style;
+import com.heavybox.jtix.widgets.NodeDebug;
+import com.heavybox.jtix.widgets.WidgetsStyle;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Borders implements Scene {
@@ -42,25 +42,25 @@ public class SceneTest_UI_Borders implements Scene {
         System.out.println(region.u2);
         System.out.println(region.v2);
 
-        nodeDebug.style.paddingLeft = 44;
-        nodeDebug.style.paddingRight = 12;
+        nodeDebug.style.boxPaddingLeft = 44;
+        nodeDebug.style.boxPaddingRight = 12;
 
-        nodeDebug.style.cornerRadiusTopLeft = 40;
-        nodeDebug.style.cornerSegmentsTopLeft = 20;
+        nodeDebug.style.boxCornerRadiusTopLeft = 40;
+        nodeDebug.style.boxCornerSegmentsTopLeft = 20;
 
-        nodeDebug.style.cornerRadiusTopRight = 10;
-        nodeDebug.style.cornerSegmentsTopRight = 10;
+        nodeDebug.style.boxCornerRadiusTopRight = 10;
+        nodeDebug.style.boxCornerSegmentsTopRight = 10;
 
-        nodeDebug.style.cornerRadiusBottomRight = 10;
-        nodeDebug.style.cornerSegmentsBottomRight = 20;
+        nodeDebug.style.boxCornerRadiusBottomRight = 10;
+        nodeDebug.style.boxCornerSegmentsBottomRight = 20;
 
-        nodeDebug.style.cornerRadiusBottomLeft = 100;
-        nodeDebug.style.cornerSegmentsBottomLeft = 20;
+        nodeDebug.style.boxCornerRadiusBottomLeft = 100;
+        nodeDebug.style.boxCornerSegmentsBottomLeft = 20;
 
-        nodeDebug.style.sizingHeight = Style.Sizing.STATIC;
-        nodeDebug.style.sizingWidth = Style.Sizing.STATIC;
-        nodeDebug.style.width = 400;
-        nodeDebug.style.height = 200;
+        nodeDebug.style.sizingHeight = WidgetsStyle.Sizing.STATIC;
+        nodeDebug.style.sizingWidth = WidgetsStyle.Sizing.STATIC;
+        nodeDebug.style.sizeWidth = 400;
+        nodeDebug.style.sizeHeight = 200;
     }
 
     float x = 0, y = 0, deg = 0, sclX = 1, sclY = 1;
@@ -112,57 +112,24 @@ public class SceneTest_UI_Borders implements Scene {
 
         // render font
         renderer2D.begin();
-        //nodeDebug.draw(renderer2D);
-
-        //renderer2D.drawRectangleBorder(300,100,20,0,0,0,1,1);
-//        renderer2D.setColor(Color.GREEN);
-//        renderer2D.drawRectangleThin(300,100,0,0,0,1,1);
-//
-//        renderer2D.setColor(Color.BLACK);
-//        renderer2D.drawRectangleThin(300,100,
-//                0, 2,
-//                50, 30,
-//                30, 0,
-//                0, 10,
-//                0,0,0,1,1);
+        nodeDebug.draw(renderer2D);
 
 
-
-
-//
-//        renderer2D.setColor(1,0,0,0.3f);
-//        renderer2D.drawCurveFilled(5, 22,
-//                new Vector2(-100,20),
-//                new Vector2(-90, -20),
-//                new Vector2(-50,40),
-//                new Vector2(-20,30),
-//                new Vector2(0, 100),
-//                new Vector2(22,-30)
-//        );
-
-//        renderer2D.setColor(Color.WHITE);
-//        renderer2D.drawRectangleThin(300,100,
-//                0, 10,
-//                50, 2,
-//                30, 2,
-//                0, 2,
-//                0,0,0,1,1);
-
-//        renderer2D.setColor(1,0,0,0.4f);
+//        renderer2D.setColor(0,1,0,0.4f);
 //        renderer2D.drawRectangleBorder(300,100, -10,
 //                30, 10,
 //                30, 2,
 //                0, 2,
 //                0, 2,
 //                0,0,0,1,1);
-
-        renderer2D.setColor(1,0,0,0.4f);
-        renderer2D.drawRectangleFilled(300,100,
-                10, 10,
-                0, 2,
-                40, 20,
-                30, 2,
-                0,0,0,1,1);
+//
+//        renderer2D.setColor(1,0,0,0.4f);
+//        renderer2D.drawRectangleFilled(300,100,
+//                10, 10,
+//                0, 2,
+//                40, 20,
+//                30, 2,
+//                0,0,0,1,1);
 
 
 

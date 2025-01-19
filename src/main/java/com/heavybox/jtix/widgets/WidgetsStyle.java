@@ -50,7 +50,7 @@ public final class WidgetsStyle implements Cloneable {
     public int        boxCornerSegmentsBottomRight = 10;
     public int        boxCornerSegmentsBottomLeft  = 10;
     public int        boxBorderSize                = 0;
-    public Color      boxBorderColor               = new Color(Color.BLACK);
+    public Color      boxBorderColor               = new Color(Color.RED);
 
 
 
@@ -159,7 +159,7 @@ public final class WidgetsStyle implements Cloneable {
     private static ScrollbarRenderer getDefaultScrollbarRenderer() {
         return new ScrollbarRenderer() {
             @Override
-            protected void render(Node node, float barWidth, float barHeight, float scrollProgressPercentage, float visiblePortionPercentage, float x, float y, float deg, float sclX, float sclY) {
+            protected void render(Node node, float barWidth, float barHeight, float progress, float viewPortion, float x, float y, float deg, float sclX, float sclY) {
 
             }
         };

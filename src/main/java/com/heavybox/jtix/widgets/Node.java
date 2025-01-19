@@ -16,20 +16,19 @@ the rectangular bounds set by [p0, p1, p2, p3].
 
 draw():
  ----------------------------------------------------------------
-|                         margin top                             |
+|                         border top                             |
 |          --------------------------------------                |
 |         |               padding top            |               |
 |         |          p0----------------p1        |               |
 |         |  padding  |                | padding |               |
-| margin  |   left    |                |  right  |   margin      |
+| border  |   left    |                |  right  |    border     |
 |  left   |           |    content     |         |    right      |
 |         |           |    render()    |         |               |
 |         |           |                |         |               |
 |         |          p3----------------p2        |               |
 |         |             padding bottom           |               |
 |          --------------------------------------                |
-|                                                                |
-|                       margin bottom                            |
+|                       border bottom                            |
  ----------------------------------------------------------------
 
  */
@@ -220,6 +219,7 @@ public abstract class Node {
             render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
         }
 
+
         renderForeground(renderer2D);
 
         if (Widgets.debug) region.draw(renderer2D);
@@ -229,12 +229,10 @@ public abstract class Node {
         renderer2D.beginStencil();
         renderer2D.setStencilModeIncrement();
         renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
-
                 style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
                 style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
                 style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
                 style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-
                 backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
         renderer2D.endStencil();
     }
@@ -255,20 +253,24 @@ public abstract class Node {
         if (style.boxBackgroundEnabled) {
             renderer2D.setColor(style.boxBackgroudColor);
             renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
-
                     style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
                     style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
                     style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
                     style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-
                     backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
         }
     }
 
     protected void renderForeground(Renderer2D renderer2D) {
-
-        // render scrollbars if needed.
-
+        if (style.boxBorderSize > 0) {
+            renderer2D.setColor(style.boxBorderColor);
+            renderer2D.drawRectangleBorder(backgroundWidth, backgroundHeight, style.boxBorderSize,
+                    style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
+                    style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
+                    style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
+                    style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
+                    backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+        }
     }
 
 
