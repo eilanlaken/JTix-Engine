@@ -2,13 +2,14 @@ package com.heavybox.jtix.widgets;
 
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
 public class NodeSlider extends Node {
 
-    public float value     = 0.4f;
+    public float value     = 0.5f;
     public int   width     = 150;
-    public int   height    = 5;
+    public int   height    = 6;
     public int   thumbWidth = 8;
     public int   thumbHeight = 8;
 
@@ -19,21 +20,24 @@ public class NodeSlider extends Node {
     public Color thumbColorFill = Color.valueOf("0075FF");
     public Color thumbColorBorder = Color.valueOf("0075FF");
 
-
+    public float borderThickness = 1;
+    public float borderRadius = height * 1.5f * 0;
 
     public NodeSlider() {
     }
 
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
-        renderBar(renderer2D, width, height, x, y, deg, sclX, sclY);
+        float cornerRadius = MathUtils.clampFloat(borderRadius, 0,height * 0.5f);
+
+        renderBar(renderer2D, width, height, cornerRadius, x, y, deg, sclX, sclY);
 
 
         Vector2 trackPos = new Vector2(width * 0.5f * (value - 1), 0);
         trackPos.scl(sclX, sclY).rotateDeg(deg).add(x,y);
         float trackWidth = width * value;
-        float trackHeight = height;
-        renderTrack(renderer2D, trackWidth, trackHeight, trackPos.x, trackPos.y, deg, sclX, sclY);
+        float trackHeight = height + borderThickness * 2;
+        renderTrack(renderer2D, trackWidth, trackHeight, cornerRadius, trackPos.x, trackPos.y, deg, sclX, sclY);
 
 
         Vector2 thumbPos = new Vector2(width * (value - 0.5f), 0);
@@ -41,30 +45,31 @@ public class NodeSlider extends Node {
         renderThumb(renderer2D, thumbWidth, thumbHeight, thumbPos.x, thumbPos.y, deg, sclX, sclY);
     }
 
-    protected void renderBar(Renderer2D renderer2D, int width, int height, float x, float y, float deg, float sclX, float sclY) {
+    protected void renderBar(Renderer2D renderer2D, int width, int height, float cornerRadius, float x, float y, float deg, float sclX, float sclY) {
+
         renderer2D.setColor(barColorFill);
         renderer2D.drawRectangleFilled(width, height,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
                 x,y,deg,sclX,sclY);
         renderer2D.setColor(barColorBorder);
-        renderer2D.drawRectangleBorder(width, height, 2,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
+        renderer2D.drawRectangleBorder(width, height, borderThickness,
+                cornerRadius, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
         x,y,deg,sclX,sclY);
     }
 
-    protected void renderTrack(Renderer2D renderer2D, float trackWidth, float trackHeight, float x, float y, float deg, float sclX, float sclY) {
+    protected void renderTrack(Renderer2D renderer2D, float trackWidth, float trackHeight, float cornerRadius, float x, float y, float deg, float sclX, float sclY) {
         renderer2D.setColor(trackColor);
         renderer2D.drawRectangleFilled(trackWidth, trackHeight,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
-                height * 0.5f, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
+                cornerRadius, 6,
                 x,y,deg,sclX,sclY);
     }
 
@@ -82,7 +87,7 @@ public class NodeSlider extends Node {
 
     @Override
     protected int getContentHeight() {
-        return thumbHeight * 2;
+        return Math.max(height, thumbHeight * 2);
     }
 
     @Override

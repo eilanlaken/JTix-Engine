@@ -13,10 +13,10 @@ public class NodeText extends Node {
     @Override
     protected void setDefaultStyle() {
         style.boxBackgroundEnabled = true;
-        style.contentOverflowY = WidgetsStyle.Overflow.IGNORE;
-        style.contentOverflowX = WidgetsStyle.Overflow.IGNORE;
-        style.sizingWidth = WidgetsStyle.Sizing.DYNAMIC;
-        style.sizingHeight = WidgetsStyle.Sizing.DYNAMIC;
+        style.contentOverflowY = Style.Overflow.IGNORE;
+        style.contentOverflowX = Style.Overflow.IGNORE;
+        style.sizingWidth = Style.Sizing.DYNAMIC;
+        style.sizingHeight = Style.Sizing.DYNAMIC;
         style.boxPaddingRight = 3;
         style.boxPaddingLeft = 10;
         style.boxPaddingTop = 0;

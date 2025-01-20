@@ -9,9 +9,10 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.widgets.NodeCheckbox;
 import com.heavybox.jtix.widgets.NodeDebug;
 import com.heavybox.jtix.widgets.NodeSlider;
-import com.heavybox.jtix.widgets.WidgetsStyle;
+import com.heavybox.jtix.widgets.Style;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Borders implements Scene {
@@ -21,6 +22,7 @@ public class SceneTest_UI_Borders implements Scene {
 
     private NodeDebug nodeDebug = new NodeDebug();
     private NodeSlider slider = new NodeSlider();
+    private NodeCheckbox checkbox = new NodeCheckbox();
 
     @Override
     public void setup() {
@@ -59,8 +61,8 @@ public class SceneTest_UI_Borders implements Scene {
         nodeDebug.style.boxCornerRadiusBottomLeft = 100;
         nodeDebug.style.boxCornerSegmentsBottomLeft = 20;
 
-        nodeDebug.style.sizingHeight = WidgetsStyle.Sizing.STATIC;
-        nodeDebug.style.sizingWidth = WidgetsStyle.Sizing.STATIC;
+        nodeDebug.style.sizingHeight = Style.Sizing.STATIC;
+        nodeDebug.style.sizingWidth = Style.Sizing.STATIC;
         nodeDebug.style.sizeWidth = 400;
         nodeDebug.style.sizeHeight = 200;
     }
@@ -86,6 +88,9 @@ public class SceneTest_UI_Borders implements Scene {
 
         slider.update(Graphics.getDeltaTime());
         slider.handleInput();
+
+        checkbox.update(Graphics.getDeltaTime());
+        checkbox.handleInput();
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
             y += 3;
@@ -118,7 +123,9 @@ public class SceneTest_UI_Borders implements Scene {
         // render font
         renderer2D.begin();
         //nodeDebug.draw(renderer2D);
-        slider.draw(renderer2D);
+        //slider.draw(renderer2D);
+
+        checkbox.draw(renderer2D);
 
 //        renderer2D.setColor(0,1,0,0.4f);
 //        renderer2D.drawRectangleBorder(300,100, -10,

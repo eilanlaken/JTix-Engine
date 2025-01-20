@@ -16,13 +16,13 @@ public final class Widgets {
     private static final ArrayInt            wordStartIndices = new ArrayInt();
     private static final ArrayInt            linebreakIndices = new ArrayInt();
 
-    private static final WidgetsStyle globalTheme = new WidgetsStyle(); // TODO.
+    private static final Style globalTheme = new Style(); // TODO.
 
-    public static void setGlobalTheme(final WidgetsStyle style) {
+    public static void setGlobalTheme(final Style style) {
         globalTheme.set(style);
     }
 
-    public static WidgetsStyle getGlobalTheme() {
+    public static Style getGlobalTheme() {
         return globalTheme.clone();
     }
 
@@ -202,7 +202,7 @@ public final class Widgets {
             SpaceLeft := SpaceLeft - (Width(Word) + SpaceWidth)
     */
     // TODO: optimize - instead of using a StringBuilder, write the linebreak indices into an output array.
-    public static String[] wordWrap(final String line, float boundaryWidth, final WidgetsStyle style) {
+    public static String[] wordWrap(final String line, float boundaryWidth, final Style style) {
         /* preparation: clear buffers, trim trailing and leading spaces from input string line, adjust boundary length, break into words */
         String trimmed = line.trim();
         String[] words = trimmed.split("\\s+");

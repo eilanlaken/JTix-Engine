@@ -41,7 +41,7 @@ public abstract class Node {
     public boolean active = true;
 
     /* box-styling */
-    public final WidgetsStyle style = Widgets.getGlobalTheme();
+    public final Style style = Widgets.getGlobalTheme();
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
     protected int   screenZIndex = 0;
@@ -101,7 +101,7 @@ public abstract class Node {
         setDefaultStyle();
     }
 
-    protected Node(final WidgetsStyle inherited) {
+    protected Node(final Style inherited) {
         this.style.set(inherited);
         setDefaultStyle();
     }
@@ -203,8 +203,9 @@ public abstract class Node {
 
     public void draw(Renderer2D renderer2D) {
         renderBackground(renderer2D);
+        renderBorder(renderer2D);
 
-        shouldApplyMasking = (style.contentOverflowX != WidgetsStyle.Overflow.IGNORE || style.contentOverflowY != WidgetsStyle.Overflow.IGNORE)
+        shouldApplyMasking = (style.contentOverflowX != Style.Overflow.IGNORE || style.contentOverflowY != Style.Overflow.IGNORE)
                 && (overflowX > 0 || overflowY > 0);
 
         shouldApplyMasking = true;
@@ -220,7 +221,6 @@ public abstract class Node {
         }
 
 
-        renderForeground(renderer2D);
 
         if (Widgets.debug) region.draw(renderer2D);
     }
@@ -261,7 +261,7 @@ public abstract class Node {
         }
     }
 
-    protected void renderForeground(Renderer2D renderer2D) {
+    protected void renderBorder(Renderer2D renderer2D) {
         if (style.boxBorderSize > 0) {
             renderer2D.setColor(style.boxBorderColor);
             renderer2D.drawRectangleBorder(backgroundWidth, backgroundHeight, style.boxBorderSize,

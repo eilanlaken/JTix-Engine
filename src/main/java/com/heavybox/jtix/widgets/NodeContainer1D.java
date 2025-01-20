@@ -15,7 +15,7 @@ public class NodeContainer1D extends NodeContainer {
         if (vertical) {
             for (Node child : children) {
                 // TODO.
-                if (child.style.transform == WidgetsStyle.Transform.ABSOLUTE) continue;
+                if (child.style.transform == Style.Transform.ABSOLUTE) continue;
             }
         }
         return 0;

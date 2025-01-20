@@ -3,7 +3,7 @@ package com.heavybox.jtix.widgets;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
 
-public final class WidgetsStyle implements Cloneable {
+public final class Style implements Cloneable {
 
 
     public Transform  transform                    = Transform.RELATIVE;
@@ -57,7 +57,7 @@ public final class WidgetsStyle implements Cloneable {
     // TODO: scrollbars
     public ScrollbarRenderer scrollbarRenderer = getDefaultScrollbarRenderer();
 
-    public void set(final WidgetsStyle style) {
+    public void set(final Style style) {
         this.transform = style.transform;
         this.sizingWidth = style.sizingWidth;
         this.sizingHeight = style.sizingHeight;
@@ -118,9 +118,9 @@ public final class WidgetsStyle implements Cloneable {
     }
 
     @Override
-    public WidgetsStyle clone() {
+    public Style clone() {
         try {
-            return (WidgetsStyle) super.clone();
+            return (Style) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
