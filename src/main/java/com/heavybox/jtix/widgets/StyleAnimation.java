@@ -9,4 +9,15 @@ from an enum.
 Can choose a play mod (ONCE, LOOP, PING_PING, RANDOM, etc.).
  */
 public class StyleAnimation {
+
+    public float durationSeconds;
+    public boolean reverse;
+
+    public enum PlayMode {
+        ONCE,
+        LOOP,
+        PING_PONG,
+        RANDOM
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.heavybox.jtix.widgets;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
@@ -42,6 +43,7 @@ public abstract class Node {
 
     /* box-styling */
     public final Style style = Widgets.getGlobalTheme();
+    public final Array<StyleAnimation> animations = new Array<>(); // TODO.
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
     protected int   screenZIndex = 0;
