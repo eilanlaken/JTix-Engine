@@ -8,6 +8,8 @@ public abstract class NodeContainer extends Node {
 
     protected final Array<Node> children = new Array<>(true,5);
 
+    public float childrenMargins = 10;
+
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
         for (Node child : children) {

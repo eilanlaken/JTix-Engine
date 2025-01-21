@@ -13,11 +13,11 @@ public final class Style implements Cloneable {
     public float      transformDeg                 = 0;
     public float      transformSclX                = 1;
     public float      transformSclY                = 1;
-    public Sizing     sizingWidth                  = Sizing.DYNAMIC;
+    public Sizing     sizingWidth                  = Sizing.AUTO;
     public int        sizeWidth                    = 100;
     public int        sizeWidthMin                 = 0;
     public int        sizeWidthMax                 = Integer.MAX_VALUE;
-    public Sizing     sizingHeight                 = Sizing.DYNAMIC;
+    public Sizing     sizingHeight                 = Sizing.AUTO;
     public int        sizeHeight                   = 100;
     public int        sizeHeightMin                = 0;
     public int        sizeHeightMax                = Integer.MAX_VALUE;
@@ -132,8 +132,9 @@ public final class Style implements Cloneable {
     }
 
     public enum Sizing {
-        STATIC,  // explicitly set by width and height
-        DYNAMIC, // conforms to fit content
+        ABSOLUTE, // explicitly set by width and height
+        RELATIVE, // relative to the container's calculated dimensions
+        AUTO, // conforms to fit content
     }
 
     public enum Alignment {
@@ -157,4 +158,25 @@ public final class Style implements Cloneable {
         };
     }
 
+    /*
+        Animations are like components.
+        You can add a number of animations to a widget,
+        and they will all affect the style, independently.
+        You can choose a transition (interpolation) function
+        from an enum.
+        Can choose a play mod (ONCE, LOOP, PING_PING, RANDOM, etc.).
+         */
+    public static class Animation {
+
+        public float durationSeconds;
+        public boolean reverse;
+
+        public enum PlayMode {
+            ONCE,
+            LOOP,
+            PING_PONG,
+            RANDOM
+        }
+
+    }
 }

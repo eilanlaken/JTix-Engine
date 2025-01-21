@@ -6,7 +6,6 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
 
 import java.util.Objects;
 
@@ -35,33 +34,17 @@ draw():
  */
 public abstract class Node {
 
-    private Canvas canvas = null;
-
     public final int id = Widgets.getID();
-    public final WidgetsRegion region = new WidgetsRegion();
+    public final Region region = new Region();
     protected NodeContainer container = null;
 
     public boolean active = true;
 
     /* box-styling */
     public final Style style = Widgets.getGlobalTheme();
-    public final Array<StyleAnimation> animations = new Array<>(); // TODO.
+    public final Array<Style.Animation> animations = new Array<>(); // TODO.
 
     /* calculated private attributes - computed every frame from the container, the style, etc. */
-    protected int   screenZIndex = 0;
-    protected float screenX      = 0;
-    protected float screenY      = 0;
-    protected float screenDeg    = 0;
-    protected float screenSclX   = 1;
-    protected float screenSclY   = 1;
-
-
-    // this will be calculated from the style paddings etc.
-    protected Vector2 p0 = new Vector2();
-    protected Vector2 p1 = new Vector2();
-    protected Vector2 p2 = new Vector2();
-    protected Vector2 p3 = new Vector2();
-
     protected int innerOffsetX = 0;
     protected int innerOffsetY = 0;
 
@@ -73,20 +56,14 @@ public abstract class Node {
     private boolean mouseRegisterClicks = false;
     private boolean dragJustEntered     = false;
 
-    /* set by container. */ // TODO: !THIS IS KEY!.
-    public int boxWidth = 0;
-    public int boxHeight = 0;
-    public int boxCenterX = 0;
-    public int boxCenterY = 0;
-
     /* calculated */
-    public float backgroundWidth = 0;
-    public float backgroundHeight = 0;
-    public float backgroundX = 0;
-    public float backgroundY = 0;
-    public float backgroundDeg = 0;
-    public float backgroundSclX = 1;
-    public float backgroundSclY = 1;
+    public float boxWidth = 0;
+    public float boxHeight = 0;
+    public float boxX = 0;
+    public float boxY = 0;
+    public float boxDeg = 0;
+    public float boxSclX = 1;
+    public float boxSclY = 1;
 
     public float contentWidth = 0;
     public float contentHeight = 0;
@@ -123,36 +100,36 @@ public abstract class Node {
 
 
         switch (style.sizingWidth) {
-            case DYNAMIC: // make it so that the component container conforms to its content
+            case AUTO: // make it so that the component container conforms to its content
                 contentWidth = getContentWidth();
                 contentWidth = MathUtils.clampFloat(contentWidth, style.sizeWidthMin, style.sizeWidthMax); // clamp based on styling
-                backgroundWidth = contentWidth + style.boxPaddingLeft + style.boxPaddingRight; // add padding.
-                backgroundX = boxCenterX;
-                contentX = backgroundX + style.boxPaddingLeft - (style.boxPaddingLeft + style.boxPaddingRight) * 0.5f;
+                boxWidth = contentWidth + style.boxPaddingLeft + style.boxPaddingRight; // add padding.
+//                backgroundX = boxCenterX;
+                contentX = boxX + style.boxPaddingLeft - (style.boxPaddingLeft + style.boxPaddingRight) * 0.5f;
                 break;
-            case STATIC: // the component size is fixed.
+            case ABSOLUTE: // the component size is fixed.
                 contentWidth = style.sizeWidth;
                 contentWidth = MathUtils.clampFloat(contentWidth, style.sizeWidthMin, style.sizeWidthMax); // clamp based on styling
-                backgroundWidth = contentWidth + style.boxPaddingLeft + style.boxPaddingRight; // add padding.
-                backgroundX = boxCenterX;
-                contentX = backgroundX + style.boxPaddingLeft - (style.boxPaddingLeft + style.boxPaddingRight) * 0.5f;
+                boxWidth = contentWidth + style.boxPaddingLeft + style.boxPaddingRight; // add padding.
+//                backgroundX = boxCenterX;
+                contentX = boxX + style.boxPaddingLeft - (style.boxPaddingLeft + style.boxPaddingRight) * 0.5f;
                 break;
         }
 
         switch (style.sizingHeight) {
-            case DYNAMIC: // make it so that the component container conforms to its content
+            case AUTO: // make it so that the component container conforms to its content
                 contentHeight = getContentHeight();
                 contentHeight = MathUtils.clampFloat(contentHeight, style.sizeHeightMin, style.sizeHeightMax); // clamp based on styling
-                backgroundHeight = contentHeight + style.boxPaddingBottom + style.boxPaddingTop; // add padding.
-                backgroundY = boxCenterY;
-                contentY = backgroundY + style.boxPaddingBottom - (style.boxPaddingBottom + style.boxPaddingTop) * 0.5f;
+                boxHeight = contentHeight + style.boxPaddingBottom + style.boxPaddingTop; // add padding.
+//                backgroundY = boxCenterY;
+                contentY = boxY + style.boxPaddingBottom - (style.boxPaddingBottom + style.boxPaddingTop) * 0.5f;
                 break;
-            case STATIC: // the component size is fixed.
+            case ABSOLUTE: // the component size is fixed.
                 contentHeight = style.sizeHeight;
                 contentHeight = MathUtils.clampFloat(contentHeight, style.sizeHeightMin, style.sizeHeightMax); // clamp based on styling
-                backgroundHeight = contentHeight + style.boxPaddingBottom + style.boxPaddingTop; // add padding.
-                backgroundY = boxCenterY;
-                contentY = backgroundY + style.boxPaddingBottom - (style.boxPaddingBottom + style.boxPaddingTop) * 0.5f;
+                boxHeight = contentHeight + style.boxPaddingBottom + style.boxPaddingTop; // add padding.
+//                backgroundY = boxCenterY;
+                contentY = boxY + style.boxPaddingBottom - (style.boxPaddingBottom + style.boxPaddingTop) * 0.5f;
                 break;
         }
 
@@ -165,7 +142,7 @@ public abstract class Node {
 
 
         /* apply transform */
-        region.applyTransform(backgroundX, backgroundY, backgroundDeg, backgroundSclX, backgroundSclY);
+        region.applyTransform(boxX, boxY, boxDeg, boxSclX, boxSclY);
 
 
     }
@@ -217,11 +194,11 @@ public abstract class Node {
             maskWrite(renderer2D);
             renderer2D.enableMasking();
             renderer2D.setMaskingFunctionEquals(1); // TODO: instead of 1, put the correct value for masking.
-            render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
+            render(renderer2D, contentX, contentY, contentDeg, contentSclX, contentSclY);
             renderer2D.disableMasking();
             maskErase(renderer2D);
         } else {
-            render(renderer2D, contentX, contentY, screenDeg, screenSclX, screenSclY);
+            render(renderer2D, contentX, contentY, contentDeg, contentSclX, contentSclY);
         }
 
 
@@ -232,51 +209,50 @@ public abstract class Node {
     private void maskWrite(Renderer2D renderer2D) {
         renderer2D.beginStencil();
         renderer2D.setStencilModeIncrement();
-        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+        renderer2D.drawRectangleFilled(boxWidth, boxHeight,
                 style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
                 style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
                 style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
                 style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+                boxX, boxY, boxDeg, boxSclX, boxSclY);
         renderer2D.endStencil();
     }
 
     private void maskErase(Renderer2D renderer2D) {
         renderer2D.beginStencil();
         renderer2D.setStencilModeDecrement();
-        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+        renderer2D.drawRectangleFilled(boxWidth, boxHeight,
                 style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
                 style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
                 style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
                 style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+                boxX, boxY, boxDeg, boxSclX, boxSclY);
         renderer2D.endStencil();
     }
 
     protected void renderBackground(Renderer2D renderer2D) {
         if (style.boxBackgroundEnabled) {
             renderer2D.setColor(style.boxBackgroudColor);
-            renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+            renderer2D.drawRectangleFilled(boxWidth, boxHeight,
                     style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
                     style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
                     style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
                     style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                    backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+                    boxX, boxY, boxDeg, boxSclX, boxSclY);
         }
     }
 
     protected void renderBorder(Renderer2D renderer2D) {
         if (style.boxBorderSize > 0) {
             renderer2D.setColor(style.boxBorderColor);
-            renderer2D.drawRectangleBorder(backgroundWidth, backgroundHeight, style.boxBorderSize,
+            renderer2D.drawRectangleBorder(boxWidth, boxHeight, style.boxBorderSize,
                     style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
                     style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
                     style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
                     style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                    backgroundX, backgroundY, screenDeg, screenSclX, screenSclY);
+                    boxX, boxY, boxDeg, boxSclX, boxSclY);
         }
     }
-
 
     protected void fixedUpdate(float delta) {}
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
@@ -293,11 +269,6 @@ public abstract class Node {
             }
         }
         return result;
-    }
-
-    protected final void setCanvas(final Canvas canvas) {
-        //if (this.canvas != null) throw new WidgetsException("Node " + this.getClass().getSimpleName() + ": " + this + " already assigned to a Canvas. A " + Node.class.getSimpleName() + " can belong to a single Canvas objects during its lifetime.");
-        this.canvas = canvas;
     }
 
     // TODO: replace with callback lambda expression attributes

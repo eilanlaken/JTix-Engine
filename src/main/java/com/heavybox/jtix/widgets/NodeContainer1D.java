@@ -11,12 +11,15 @@ public class NodeContainer1D extends NodeContainer {
 
     @Override
     protected int getContentWidth() {
-        float maxWidth = Float.NEGATIVE_INFINITY;
+        float maxWidth = 0;
         if (vertical) {
             for (Node child : children) {
                 // TODO.
                 if (child.style.transform == Style.Transform.ABSOLUTE) continue;
+
             }
+        } else {
+
         }
         return 0;
     }

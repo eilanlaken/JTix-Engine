@@ -4,7 +4,10 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Graphics;
+import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.graphics.TexturePack;
+import com.heavybox.jtix.graphics.TextureRegion;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -12,7 +15,7 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets.*;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_Borders implements Scene {
+public class SceneTest_UI_Canvas implements Scene {
 
 
     private Renderer2D renderer2D = new Renderer2D();
@@ -21,6 +24,8 @@ public class SceneTest_UI_Borders implements Scene {
     private NodeSlider slider = new NodeSlider();
     private NodeCheckbox checkbox = new NodeCheckbox();
     private NodeRadioButton radioButton = new NodeRadioButton();
+
+    private Canvas canvas = new Canvas();
 
     @Override
     public void setup() {
@@ -81,17 +86,8 @@ public class SceneTest_UI_Borders implements Scene {
 //            text.append((char)  codepoint);
         }
 
-        nodeDebug.update(Graphics.getDeltaTime());
-        nodeDebug.handleInput();
-
-        slider.update(Graphics.getDeltaTime());
-        slider.handleInput();
-
-        checkbox.update(Graphics.getDeltaTime());
-        checkbox.handleInput();
-
-        radioButton.update(Graphics.getDeltaTime());
-        radioButton.handleInput();
+        canvas.fixedUpdate(Graphics.getDeltaTime());
+        canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
             y += 3;
@@ -127,7 +123,7 @@ public class SceneTest_UI_Borders implements Scene {
         //slider.draw(renderer2D);
 
         //checkbox.draw(renderer2D);
-        radioButton.draw(renderer2D);
+        canvas.draw(renderer2D);
 
 //        renderer2D.setColor(0,1,0,0.4f);
 //        renderer2D.drawRectangleBorder(300,100, -10,

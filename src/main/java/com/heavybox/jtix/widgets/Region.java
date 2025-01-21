@@ -8,7 +8,7 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
 
-public final class WidgetsRegion {
+public final class Region {
 
     final Array<Polygon> polygonsIn  = new Array<>(false, 1);
     final Array<Polygon> polygonsOut = new Array<>(false, 1);

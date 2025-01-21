@@ -15,8 +15,8 @@ public class NodeText extends Node {
         style.boxBackgroundEnabled = true;
         style.contentOverflowY = Style.Overflow.IGNORE;
         style.contentOverflowX = Style.Overflow.IGNORE;
-        style.sizingWidth = Style.Sizing.DYNAMIC;
-        style.sizingHeight = Style.Sizing.DYNAMIC;
+        style.sizingWidth = Style.Sizing.AUTO;
+        style.sizingHeight = Style.Sizing.AUTO;
         style.boxPaddingRight = 3;
         style.boxPaddingLeft = 10;
         style.boxPaddingTop = 0;
