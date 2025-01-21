@@ -17,23 +17,25 @@ the rectangular bounds set by [p0, p1, p2, p3].
 
 draw():
  ----------------------------------------------------------------
-|                         border top                             |
+|                            border                              |
 |          --------------------------------------                |
 |         |               padding top            |               |
 |         |          p0----------------p1        |               |
 |         |  padding  |                | padding |               |
 | border  |   left    |                |  right  |    border     |
-|  left   |           |    content     |         |    right      |
+|         |           |    content     |         |               |
 |         |           |    render()    |         |               |
 |         |           |                |         |               |
 |         |          p3----------------p2        |               |
 |         |             padding bottom           |               |
 |          --------------------------------------                |
-|                       border bottom                            |
+|                           border                               |
  ----------------------------------------------------------------
 
  */
 public abstract class Node {
+
+    private Canvas canvas = null;
 
     public final int id = Widgets.getID();
     public final WidgetsRegion region = new WidgetsRegion();
@@ -291,6 +293,11 @@ public abstract class Node {
             }
         }
         return result;
+    }
+
+    protected final void setCanvas(final Canvas canvas) {
+        //if (this.canvas != null) throw new WidgetsException("Node " + this.getClass().getSimpleName() + ": " + this + " already assigned to a Canvas. A " + Node.class.getSimpleName() + " can belong to a single Canvas objects during its lifetime.");
+        this.canvas = canvas;
     }
 
     // TODO: replace with callback lambda expression attributes

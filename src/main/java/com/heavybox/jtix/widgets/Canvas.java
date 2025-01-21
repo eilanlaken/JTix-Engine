@@ -22,9 +22,11 @@ public class Canvas {
     public void addNode(Node node) {
         if (nodes.contains(node, true)) throw new WidgetsException("Node " + node + " already contained in Canvas.");
         nodes.add(node);
+        node.setCanvas(this);
     }
 
     public void removeNode(Node node) {
+        node.setCanvas(null);
         nodes.removeValue(node, true);
     }
 

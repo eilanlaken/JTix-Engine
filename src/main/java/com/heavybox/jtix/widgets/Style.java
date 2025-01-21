@@ -22,7 +22,7 @@ public final class Style implements Cloneable {
     public int        sizeHeightMin                = 0;
     public int        sizeHeightMax                = Integer.MAX_VALUE;
     public Font       textFont                     = null;
-    public Color      textColor                    = new Color(Color.WHITE);
+    public Color      textColor                    = Color.WHITE.clone();
     public int        textSize                     = 18;
     public float      textLineHeight               = 1.2f;
     public boolean    textAntialiasing             = true;
@@ -33,10 +33,6 @@ public final class Style implements Cloneable {
     public Alignment  contentAlignmentY            = Alignment.MIDDLE;
     public Color      boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean    boxBackgroundEnabled         = true;
-    public int        boxMarginTop                 = 0;
-    public int        boxMarginBottom              = 0;
-    public int        boxMarginLeft                = 0;
-    public int        boxMarginRight               = 0;
     public int        boxPaddingTop                = 5;
     public int        boxPaddingBottom             = 5;
     public int        boxPaddingLeft               = 5;
@@ -50,7 +46,7 @@ public final class Style implements Cloneable {
     public int        boxCornerSegmentsBottomRight = 10;
     public int        boxCornerSegmentsBottomLeft  = 10;
     public int        boxBorderSize                = 0;
-    public Color      boxBorderColor               = new Color(Color.RED);
+    public Color      boxBorderColor               = Color.RED.clone();
 
 
 
@@ -79,11 +75,6 @@ public final class Style implements Cloneable {
         this.transformSclY = style.transformSclY;
         this.transformZIndex = style.transformZIndex;
 
-        this.boxMarginTop = style.boxMarginTop;
-        this.boxMarginBottom = style.boxMarginBottom;
-        this.boxMarginLeft = style.boxMarginLeft;
-        this.boxMarginRight = style.boxMarginRight;
-
         this.boxPaddingTop = style.boxPaddingTop;
         this.boxPaddingBottom = style.boxPaddingBottom;
         this.boxPaddingLeft = style.boxPaddingLeft;
@@ -99,15 +90,16 @@ public final class Style implements Cloneable {
         this.boxCornerSegmentsBottomRight = style.boxCornerSegmentsBottomRight;
         this.boxCornerSegmentsBottomLeft = style.boxCornerSegmentsBottomLeft;
 
+        this.boxBorderSize = style.boxBorderSize;
+        this.boxBackgroudColor.set(style.boxBackgroudColor);
+        this.boxBorderColor.set(style.boxBorderColor);
+
         this.sizeWidth = style.sizeWidth;
         this.sizeHeight = style.sizeHeight;
         this.sizeWidthMin = style.sizeWidthMin;
         this.sizeWidthMax = style.sizeWidthMax;
         this.sizeHeightMin = style.sizeHeightMin;
         this.sizeHeightMax = style.sizeHeightMax;
-
-        this.boxBorderSize = style.boxBorderSize;
-        this.boxBackgroudColor.set(style.boxBorderColor);
     }
 
     public void setPadding(int padding) {
