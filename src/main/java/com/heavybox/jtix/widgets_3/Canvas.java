@@ -1,4 +1,4 @@
-package com.heavybox.jtix.z_deprecated.z_widgets_2;
+package com.heavybox.jtix.widgets_3;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Renderer2D;
@@ -9,25 +9,24 @@ TODO: you would be able to anchor a canvas to one of the screen corners / CENTER
  */
 public class Canvas {
 
+    public boolean debug = true;
+
+
     public @NotNull Anchor anchorWindow = Anchor.CENTER_CENTER;
     public @NotNull Anchor anchorPivot  = Anchor.CENTER_CENTER;
     public          int    positionX    = 0;
     public          int    positionY    = 0;
+    private float calculatedWidth = 0;
+    private float calculatedHeight = 0;
 
     private final Array<Node> nodes = new Array<>(false, 5);
+
+
 
     public final void fixedUpdate(float delta) {
         for (Node node : nodes) {
 
         }
-    }
-
-    private void fixedUpdateContainer(float delta) {
-
-    }
-
-    private void fixedUpdateTerminal(float delta) {
-
     }
 
     // frame update

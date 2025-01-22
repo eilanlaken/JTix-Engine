@@ -12,8 +12,9 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets.Canvas;
-import com.heavybox.jtix.widgets.NodeText;
+import com.heavybox.jtix.widgets_3.Canvas;
+import com.heavybox.jtix.widgets_3.NodeDebug;
+import com.heavybox.jtix.widgets_3.NodeText;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Canvas_2 implements Scene {
@@ -22,8 +23,10 @@ public class SceneTest_UI_Canvas_2 implements Scene {
     private Renderer2D renderer2D = new Renderer2D();
 
 
-    private Canvas canvas = new Canvas();
+    private final Canvas canvas = new Canvas();
     NodeText text = new NodeText("hello node");
+    NodeDebug rect1 = new NodeDebug();
+    NodeDebug rect2 = new NodeDebug();
 
     @Override
     public void setup() {
@@ -35,6 +38,8 @@ public class SceneTest_UI_Canvas_2 implements Scene {
 
         Assets.finishLoading();
 
+        canvas.addNode(rect1);
+        canvas.addNode(rect2);
         canvas.addNode(text);
     }
 
@@ -42,11 +47,6 @@ public class SceneTest_UI_Canvas_2 implements Scene {
     public void start() {
         TexturePack pack = Assets.get("assets/atlases/pack.yml");
         TextureRegion region = pack.getRegion("assets/textures/stones512.jpg");
-        System.out.println(region.u1);
-        System.out.println(region.v1);
-
-        System.out.println(region.u2);
-        System.out.println(region.v2);
 
 
     }

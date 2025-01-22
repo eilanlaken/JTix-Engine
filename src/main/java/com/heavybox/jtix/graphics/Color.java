@@ -1,5 +1,7 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.math.MathUtils;
+
 public class Color implements Cloneable {
 
     public static final Color WHITE       = new Color(1, 1, 1, 1);
@@ -307,6 +309,24 @@ public class Color implements Cloneable {
         color.g = Integer.parseInt(hex.substring(2, 4), 16) / 255f;
         color.b = Integer.parseInt(hex.substring(4, 6), 16) / 255f;
         color.a = hex.length() != 8 ? 1 : Integer.parseInt(hex.substring(6, 8), 16) / 255f;
+        return color;
+    }
+
+    public static Color random() {
+        Color color = new Color();
+        color.r = MathUtils.randomUniformFloat(0,1);
+        color.g = MathUtils.randomUniformFloat(0,1);
+        color.b = MathUtils.randomUniformFloat(0,1);
+        color.a = MathUtils.randomUniformFloat(0,1);
+        return color;
+    }
+
+    public static Color randomOpaque() {
+        Color color = new Color();
+        color.r = MathUtils.randomUniformFloat(0,1);
+        color.g = MathUtils.randomUniformFloat(0,1);
+        color.b = MathUtils.randomUniformFloat(0,1);
+        color.a = 1.0f;
         return color;
     }
 

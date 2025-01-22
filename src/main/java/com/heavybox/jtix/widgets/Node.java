@@ -146,7 +146,12 @@ public abstract class Node {
 
     }
 
-    @Deprecated public void handleInput() { // TODO: delta will be used to detect double clicks.
+//    protected final int getMaskingInteger() {
+//        if (container == null) return 1;
+//        return 1 + container.getMaskingInteger();
+//    }
+
+    public void handleInput() { // TODO: delta will be used to detect double clicks.
         float delta = Graphics.getDeltaTime();
         /* handle input */
         float xMouse = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
@@ -194,6 +199,10 @@ public abstract class Node {
         } else {
             render(renderer2D, contentX, contentY, contentDeg, contentSclX, contentSclY);
         }
+
+
+
+        if (Widgets.debug) region.draw(renderer2D);
     }
 
     private void maskWrite(Renderer2D renderer2D) {
@@ -250,16 +259,16 @@ public abstract class Node {
     protected abstract float getContentHeight();
     protected abstract void setDefaultStyle();
 
-    public boolean descendantOf(NodeContainer container) {
-        if (container.children.contains(this, true)) return true;
-        boolean result = false;
-        for (Node child : container.children) {
-            if (child instanceof NodeContainer) {
-                result = result || descendantOf((NodeContainer) child);
-            }
-        }
-        return result;
-    }
+//    public boolean descendantOf(NodeContainer container) {
+//        if (container.children.contains(this, true)) return true;
+//        boolean result = false;
+//        for (Node child : container.children) {
+//            if (child instanceof NodeContainer) {
+//                result = result || descendantOf((NodeContainer) child);
+//            }
+//        }
+//        return result;
+//    }
 
     // TODO: replace with callback lambda expression attributes
     /* Triggered when the element is clicked. */

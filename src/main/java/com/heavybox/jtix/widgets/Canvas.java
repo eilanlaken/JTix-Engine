@@ -37,7 +37,9 @@ public class Canvas {
 
     // frame update
     public final void draw(Renderer2D renderer2D) {
-
+        for (Node node : nodes) {
+            node.draw(renderer2D);
+        }
     }
 
     public final void addNode(Node node) {
