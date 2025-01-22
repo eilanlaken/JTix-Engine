@@ -1,16 +1,16 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.z_old_application.ApplicationScreen;
-import com.heavybox.jtix.z_old_assets.AssetStore;
+import com.heavybox.jtix.z_deprecated.z_old_application.ApplicationScreen;
+import com.heavybox.jtix.z_deprecated.z_old_assets.AssetStore;
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.z_old_input.Keyboard;
-import com.heavybox.jtix.z_old_input.Mouse;
+import com.heavybox.jtix.z_deprecated.z_old_input.Keyboard;
+import com.heavybox.jtix.z_deprecated.z_old_input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_ecs_old.ComponentTransform;
+import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentTransform;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;

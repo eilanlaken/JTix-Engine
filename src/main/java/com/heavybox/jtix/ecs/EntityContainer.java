@@ -2,7 +2,7 @@ package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.z_graphics_old.Renderer2D;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D;
 import com.heavybox.jtix.memory.MemoryResourceHolder;
 
 public abstract class EntityContainer implements MemoryResourceHolder {

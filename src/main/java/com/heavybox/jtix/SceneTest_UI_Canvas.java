@@ -12,7 +12,8 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets_2.*;
+import com.heavybox.jtix.z_deprecated.z_widgets_2.Canvas;
+import com.heavybox.jtix.z_deprecated.z_widgets_2.NodeText;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Canvas implements Scene {

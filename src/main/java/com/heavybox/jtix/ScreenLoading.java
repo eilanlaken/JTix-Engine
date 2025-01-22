@@ -1,8 +1,8 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.z_old_application.Application;
-import com.heavybox.jtix.z_old_application.ApplicationScreen;
-import com.heavybox.jtix.z_old_assets.AssetStore;
+import com.heavybox.jtix.z_deprecated.z_old_application.Application;
+import com.heavybox.jtix.z_deprecated.z_old_application.ApplicationScreen;
+import com.heavybox.jtix.z_deprecated.z_old_assets.AssetStore;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.opengl.GL11;
 

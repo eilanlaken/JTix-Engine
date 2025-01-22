@@ -3,7 +3,7 @@ package com.heavybox.jtix.physics2d;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.z_graphics_old.Renderer2D_old;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D_old;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 

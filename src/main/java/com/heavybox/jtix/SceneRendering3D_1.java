@@ -1,17 +1,17 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.z_old_application.ApplicationScreen;
-import com.heavybox.jtix.z_old_assets.AssetStore;
-import com.heavybox.jtix.z_old_assets.AssetUtils;
+import com.heavybox.jtix.z_deprecated.z_old_application.ApplicationScreen;
+import com.heavybox.jtix.z_deprecated.z_old_assets.AssetStore;
+import com.heavybox.jtix.z_deprecated.z_old_assets.AssetUtils;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.z_graphics_old.Model;
-import com.heavybox.jtix.z_graphics_old.Renderer3D_old;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Model;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer3D_old;
 import com.heavybox.jtix.graphics.Shader;
-import com.heavybox.jtix.z_old_input.Keyboard;
+import com.heavybox.jtix.z_deprecated.z_old_input.Keyboard;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_ecs_old.Component;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_ecs_old.ComponentTransform_1;
+import com.heavybox.jtix.z_deprecated.z_ecs_old.Component;
+import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentTransform_1;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;

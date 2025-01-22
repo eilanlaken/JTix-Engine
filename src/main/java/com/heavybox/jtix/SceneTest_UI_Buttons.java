@@ -7,7 +7,7 @@ import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D_4;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;

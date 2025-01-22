@@ -37,7 +37,6 @@ public abstract class Node {
     public final int id = Widgets.getID();
     public final Region region = new Region();
     protected NodeContainer container = null;
-
     public boolean active = true;
 
     /* box-styling */
@@ -147,12 +146,7 @@ public abstract class Node {
 
     }
 
-    protected final int getMaskingInteger() {
-        if (container == null) return 1;
-        return 1 + container.getMaskingInteger();
-    }
-
-    public void handleInput() { // TODO: delta will be used to detect double clicks.
+    @Deprecated public void handleInput() { // TODO: delta will be used to detect double clicks.
         float delta = Graphics.getDeltaTime();
         /* handle input */
         float xMouse = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
@@ -200,10 +194,6 @@ public abstract class Node {
         } else {
             render(renderer2D, contentX, contentY, contentDeg, contentSclX, contentSclY);
         }
-
-
-
-        if (Widgets.debug) region.draw(renderer2D);
     }
 
     private void maskWrite(Renderer2D renderer2D) {
@@ -256,8 +246,8 @@ public abstract class Node {
 
     protected void fixedUpdate(float delta) {}
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
-    protected abstract int getContentWidth();
-    protected abstract int getContentHeight();
+    protected abstract float getContentWidth();
+    protected abstract float getContentHeight();
     protected abstract void setDefaultStyle();
 
     public boolean descendantOf(NodeContainer container) {

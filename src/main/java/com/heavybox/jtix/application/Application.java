@@ -396,7 +396,7 @@ public class Application {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
         ByteBuffer imageData = STBImage.stbi_load(path, width, height, channels, 4);
-        if (imageData == null) throw new com.heavybox.jtix.z_old_application.ApplicationException("Failed to load icon image: " + STBImage.stbi_failure_reason());
+        if (imageData == null) throw new com.heavybox.jtix.z_deprecated.z_old_application.ApplicationException("Failed to load icon image: " + STBImage.stbi_failure_reason());
         GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
         iconBuffer.position(0).width(width.get(0)).height(height.get(0)).pixels(imageData);
         GLFW.glfwSetWindowIcon(windowHandle, iconBuffer);

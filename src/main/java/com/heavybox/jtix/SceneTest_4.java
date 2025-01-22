@@ -11,8 +11,8 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_graphics_old.Renderer2D_4;
+import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentGraphicsCamera;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D_4;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_4 implements Scene {

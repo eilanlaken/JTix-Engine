@@ -1,6 +1,5 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.z_old_application.ApplicationWindow;
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationException;
 import org.lwjgl.BufferUtils;

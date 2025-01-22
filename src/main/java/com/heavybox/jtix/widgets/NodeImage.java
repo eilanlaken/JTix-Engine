@@ -12,12 +12,12 @@ public class NodeImage extends Node {
     }
 
     @Override
-    protected int getContentWidth() {
+    protected float getContentWidth() {
         return 0;
     }
 
     @Override
-    protected int getContentHeight() {
+    protected float getContentHeight() {
         return 0;
     }
 

@@ -8,7 +8,7 @@ import com.heavybox.jtix.collections.Queue;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_graphics_old.Model;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Model;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.MemoryUtil;
 import org.yaml.snakeyaml.DumperOptions;

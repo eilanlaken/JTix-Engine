@@ -143,6 +143,16 @@ public final class Style implements Cloneable {
         END       // Equivalent to BOTTOM or RIGHT
     }
 
+    public enum TextWrap {
+        DISABLED,
+        LEFT,
+        RIGHT,
+        CENTER,
+        JUSTIFY,
+        START,
+        END
+    }
+
     public static abstract class ScrollbarRenderer {
 
         protected abstract void render(Node node, float barWidth, float barHeight, float scrollProgressPercentage, float visiblePortionPercentage, float x, float y, float deg, float sclX, float sclY);
@@ -165,7 +175,7 @@ public final class Style implements Cloneable {
         You can choose a transition (interpolation) function
         from an enum.
         Can choose a play mod (ONCE, LOOP, PING_PING, RANDOM, etc.).
-         */
+     */
     public static class Animation {
 
         public float durationSeconds;

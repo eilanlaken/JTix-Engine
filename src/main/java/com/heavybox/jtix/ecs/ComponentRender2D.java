@@ -1,7 +1,7 @@
 package com.heavybox.jtix.ecs;
 
 import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.z_graphics_old.Renderer2D;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D;
 import com.heavybox.jtix.graphics.Shader;
 
 import java.util.Map;

@@ -1,6 +1,6 @@
 package com.heavybox.jtix.ecs;
 
-import com.heavybox.jtix.z_graphics_old.Renderer3D;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer3D;
 import com.heavybox.jtix.math.Matrix4x4;
 
 public abstract class ComponentRender3D implements ComponentRender {
