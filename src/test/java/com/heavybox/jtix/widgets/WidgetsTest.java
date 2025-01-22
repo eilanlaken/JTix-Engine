@@ -1,17 +1,10 @@
-package com.heavybox.jtix.ui_2;
+package com.heavybox.jtix.widgets;
 
 import com.heavybox.jtix.collections.ArrayInt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class UITest {
+class WidgetsTest {
 
     @Test
     public void wordBreak() {

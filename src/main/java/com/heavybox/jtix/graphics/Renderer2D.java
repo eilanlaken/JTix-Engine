@@ -3175,16 +3175,4 @@ public class Renderer2D implements MemoryResourceHolder {
         return total_width;
     }
 
-    // TODO: change to int
-    @Deprecated public static float getTextBlockHeight(@Nullable Font font, final String text, int size, boolean antialiasing) {
-        font = Objects.requireNonNullElse(font, defaultFont);
-        // calculates the text block height based on the newline '\n' character count.
-        return 0;
-    }
-
-    // TODO: change to int
-    public static void getTextBlockDimensions(@Nullable Font font, final String text, int size, boolean antialiasing, Vector2 out) {
-
-    }
-
 }

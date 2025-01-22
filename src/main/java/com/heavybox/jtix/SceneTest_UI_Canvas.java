@@ -12,7 +12,7 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets.*;
+import com.heavybox.jtix.widgets_2.*;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Canvas implements Scene {
@@ -20,12 +20,9 @@ public class SceneTest_UI_Canvas implements Scene {
 
     private Renderer2D renderer2D = new Renderer2D();
 
-    private NodeDebug nodeDebug = new NodeDebug();
-    private NodeSlider slider = new NodeSlider();
-    private NodeCheckbox checkbox = new NodeCheckbox();
-    private NodeRadioButton radioButton = new NodeRadioButton();
 
     private Canvas canvas = new Canvas();
+    NodeText text = new NodeText("hello node");
 
     @Override
     public void setup() {
@@ -37,6 +34,7 @@ public class SceneTest_UI_Canvas implements Scene {
 
         Assets.finishLoading();
 
+        canvas.addNode(text);
     }
 
     @Override
@@ -49,25 +47,7 @@ public class SceneTest_UI_Canvas implements Scene {
         System.out.println(region.u2);
         System.out.println(region.v2);
 
-        nodeDebug.style.boxPaddingLeft = 44;
-        nodeDebug.style.boxPaddingRight = 12;
 
-        nodeDebug.style.boxCornerRadiusTopLeft = 40;
-        nodeDebug.style.boxCornerSegmentsTopLeft = 20;
-
-        nodeDebug.style.boxCornerRadiusTopRight = 10;
-        nodeDebug.style.boxCornerSegmentsTopRight = 10;
-
-        nodeDebug.style.boxCornerRadiusBottomRight = 10;
-        nodeDebug.style.boxCornerSegmentsBottomRight = 20;
-
-        nodeDebug.style.boxCornerRadiusBottomLeft = 100;
-        nodeDebug.style.boxCornerSegmentsBottomLeft = 20;
-
-        nodeDebug.style.sizingHeight = Style.Sizing.ABSOLUTE;
-        nodeDebug.style.sizingWidth = Style.Sizing.ABSOLUTE;
-        nodeDebug.style.sizeWidth = 400;
-        nodeDebug.style.sizeHeight = 200;
     }
 
     float x = 0, y = 0, deg = 0, sclX = 1, sclY = 1;
@@ -114,7 +94,7 @@ public class SceneTest_UI_Canvas implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1f,1f,1f,1);
+        GL11.glClearColor(0f,0f,0f,1);
 
 
         // render font
