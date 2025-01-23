@@ -25,8 +25,9 @@ public class Canvas {
 
     public final void fixedUpdate(float delta) {
         for (Node node : nodes) {
-
+            node.updatePolygon();
         }
+
     }
 
     // frame update
@@ -38,6 +39,11 @@ public class Canvas {
     public final void draw(Renderer2D renderer2D) {
         for (Node node : nodes) {
             node.draw(renderer2D);
+        }
+        if (debug) {
+            for (Node node : nodes) {
+                renderer2D.drawPolygonThin(node.polygon.points, false,0,0,0, 1,1); // transform is already applied
+            }
         }
     }
 

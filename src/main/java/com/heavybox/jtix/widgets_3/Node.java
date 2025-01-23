@@ -6,8 +6,7 @@ import java.util.Objects;
 
 public abstract class Node {
 
-    protected final int    id = Widgets.getID();
-    protected final Region region = new Region();
+    protected final int id = Widgets.getID();
 
     public Transform transform       = Transform.RELATIVE;
     public int       transformZIndex = 0;
@@ -16,6 +15,8 @@ public abstract class Node {
     public float     transformDeg    = 0;
     public float     transformSclX   = 1;
     public float     transformSclY   = 1;
+
+    final Polygon polygon = new Polygon();
 
     /* calculated by container and Sizing */
     public float boxWidth = 0;
@@ -33,6 +34,16 @@ public abstract class Node {
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
     protected abstract float getWidth();
     protected abstract float getHeight();
+
+    protected final void updatePolygon() {
+        polygon.reset();
+        updatePolygon(polygon);
+    };
+
+    // kind of a default implementation
+    protected void updatePolygon(final Polygon polygon) {
+        polygon.setToRectangle(getWidth(), getHeight());
+    }
 
     @Override
     public String toString() {

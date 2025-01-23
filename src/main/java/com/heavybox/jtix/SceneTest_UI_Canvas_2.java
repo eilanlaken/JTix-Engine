@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 public class SceneTest_UI_Canvas_2 implements Scene {
 
 
-    private Renderer2D renderer2D = new Renderer2D();
+    private final Renderer2D renderer2D = new Renderer2D();
 
 
     private final Canvas canvas = new Canvas();

@@ -51,6 +51,8 @@ public final class Region {
         final ArrayFloat pointsOriginal    = new ArrayFloat(true, 8);
         final ArrayFloat pointsTransformed = new ArrayFloat(true, 8);
 
+        Polygon() {}
+
         Polygon(float[] points) {
             MathUtils.polygonRemoveDegenerateVertices(points, this.pointsOriginal);
             pointsOriginal.pack();

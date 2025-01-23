@@ -1850,7 +1850,86 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.freeAll(outers);
     }
 
-    /* Rendering 2D primitives - Polygons */
+    /* Rendering 2D primitives - Polygons */ // TODO: do something about this code duplication.
+
+    public void drawPolygonThin(ArrayFloat polygon, boolean triangulated, float x, float y, float degrees, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (polygon.size < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.size);
+        if (polygon.size % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+
+        int count = polygon.size / 2;
+        if (!ensureCapacity(count, count * 6)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(defaultTexture);
+
+        int startVertex = this.vertexIndex;
+        if (!triangulated) {
+            Vector2 vertex = vectors2Pool.allocate();
+            for (int i = 0; i < polygon.size; i += 2) {
+                float poly_x = polygon.get(i);
+                float poly_y = polygon.get(i + 1);
+                vertex.set(poly_x, poly_y);
+                vertex.scl(scaleX, scaleY);
+                vertex.rotateDeg(degrees);
+                vertex.add(x, y);
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
+            }
+            vectors2Pool.free(vertex);
+
+            for (int i = 0; i < count - 1; i++) {
+                indices.put(startVertex + i);
+                indices.put(startVertex + i + 1);
+            }
+            indices.put(startVertex + count - 1);
+            indices.put(startVertex + 0);
+            vertexIndex += count;
+        } else {
+            ArrayFloat vertices  = arrayFloatPool.allocate();
+            ArrayInt   triangles = arrayIntPool.allocate();
+            /* try to triangulate the polygon. We might have a polygon that is degenerate and the triangulation fails. In that case, it is okay to not render anything.*/
+            try {
+                MathUtils.polygonTriangulate(polygon, vertices, triangles);
+            } catch (Exception e) {
+                /* Probably the polygon has collapsed into a single point. */
+                return;
+            }
+
+            Vector2 vertex = vectors2Pool.allocate();
+            for (int i = 0; i < vertices.size; i += 2) {
+                float poly_x = vertices.get(i);
+                float poly_y = vertices.get(i + 1);
+
+                vertex.set(poly_x, poly_y);
+                vertex.scl(scaleX, scaleY);
+                vertex.rotateDeg(degrees);
+                vertex.add(x, y);
+
+                positions.put(vertex.x).put(vertex.y);
+                colors.put(currentTint);
+                textCoords.put(0.5f).put(0.5f);
+            }
+            vectors2Pool.free(vertex);
+
+            for (int i = 0; i < triangles.size - 2; i += 3) {
+                indices.put(startVertex + triangles.get(i));
+                indices.put(startVertex + triangles.get(i + 1));
+
+                indices.put(startVertex + triangles.get(i + 1));
+                indices.put(startVertex + triangles.get(i + 2));
+
+                indices.put(startVertex + triangles.get(i + 2));
+                indices.put(startVertex + triangles.get(i));
+            }
+
+            vertexIndex += vertices.size / 2;
+
+            arrayFloatPool.free(vertices);
+            arrayIntPool.free(triangles);
+        }
+    }
 
     public void drawPolygonThin(float[] polygon, boolean triangulated, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");

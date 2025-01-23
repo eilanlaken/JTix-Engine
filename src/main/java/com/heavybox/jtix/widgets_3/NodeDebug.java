@@ -25,4 +25,5 @@ public class NodeDebug extends Node {
     protected float getHeight() {
         return height;
     }
+
 }

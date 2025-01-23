@@ -137,6 +137,44 @@ class MathUtilsTest {
         Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,1.2f,0.1f));
         Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,-1.2f,0.1f));
         Assertions.assertFalse(MathUtils.polygonContainsPoint(p3,Float.POSITIVE_INFINITY,0.1f));
+
+        // Square polygon - clockwise with degenerate vertices
+        float[] p4 = new float[] {
+                0.0f, 0.0f, // Bottom left
+                0.0f, 0.0f, // Bottom left
+                0.0f, 1.0f, // Top left
+                0.5f, 1.0f, // Top left - top right
+                1.0f, 1.0f, // Top right
+                1.0f, 0.0f,  // Bottom right
+                1.0f, 0.0f,  // Bottom right
+        };
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4,0.5f,0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4,0.2f,0.9f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4,0.9f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4,-1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4,Float.POSITIVE_INFINITY,0.1f));
+
+        ArrayFloat p4_ArrayFloat = new ArrayFloat(p4);
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4_ArrayFloat,0.5f,0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4_ArrayFloat,0.2f,0.9f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4_ArrayFloat,0.9f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_ArrayFloat,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_ArrayFloat,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_ArrayFloat,-1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_ArrayFloat,Float.POSITIVE_INFINITY,0.1f));
+
+        ArrayFloat p4_removedDegenerateVertices = new ArrayFloat();
+        MathUtils.polygonRemoveDegenerateVertices(p4, p4_removedDegenerateVertices);
+        float[] p4_out = p4_removedDegenerateVertices.pack();
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4_out,0.5f,0.5f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4_out,0.2f,0.9f));
+        Assertions.assertTrue(MathUtils.polygonContainsPoint(p4_out,0.9f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_out,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_out,1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_out,-1.2f,0.1f));
+        Assertions.assertFalse(MathUtils.polygonContainsPoint(p4_out,Float.POSITIVE_INFINITY,0.1f));
     }
 
     @Test
