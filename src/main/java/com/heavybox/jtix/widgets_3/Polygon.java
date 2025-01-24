@@ -3,9 +3,7 @@ package com.heavybox.jtix.widgets_3;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
-import com.heavybox.jtix.memory.MemoryPool;
 
-// TODO: write unit tests and render
 public class Polygon {
 
     final ArrayFloat points = new ArrayFloat(true, 8);
@@ -21,10 +19,6 @@ public class Polygon {
             points.set(i, point.x);
             points.set(i + 1, point.y);
         }
-    }
-
-    void reset() {
-        points.clear();
     }
 
     void setToRectangle(float width, float height) {
@@ -131,7 +125,6 @@ public class Polygon {
 
     void setToCircle(float r, int refinement) {
         points.clear();
-
         refinement = Math.max(refinement, 3);
         float da = 360f / refinement;
         for (int i = 0; i < refinement; i++) {

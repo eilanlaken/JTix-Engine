@@ -1,48 +1,92 @@
 package com.heavybox.jtix.widgets_3;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.math.MathUtils;
 
 import java.util.Objects;
 
 public abstract class Node {
 
     protected final int id = Widgets.getID();
-
-    public Transform transform       = Transform.RELATIVE;
-    public int       transformZIndex = 0;
-    public float     transformX      = 0;
-    public float     transformY      = 0;
-    public float     transformDeg    = 0;
-    public float     transformSclX   = 1;
-    public float     transformSclY   = 1;
-
     final Polygon polygon = new Polygon();
 
-    /* calculated by container and Sizing */
-    public float boxWidth = 0;
-    public float boxHeight = 0;
+    Node        parent   = null;
+    Array<Node> children = new Array<>(false, 5);
+
+    /* can be explicitly set by user */
+    public int   zIndex = 0;
+    public float x      = 0;
+    public float y      = 0;
+    public float deg    = 0;
+    public float sclX   = 1;
+    public float sclY   = 1;
+
+    /* set by parent / parent-container */
+    public int   parentZIndex = 0;
+    public float parentX      = 0;
+    public float parentY      = 0;
+    public float parentDeg    = 0;
+    public float parentSclX   = 1;
+    public float parentSclY   = 1;
 
     /* calculated by container and Transform */
-    public float boxX = 0;
-    public float boxY = 0;
-    public float boxDeg = 0;
-    public float boxSclX = 1;
-    public float boxSclY = 1;
+    public int   screenZIndex = 0;
+    public float screenX    = 0;
+    public float screenY    = 0;
+    public float screenDeg  = 0;
+    public float screenSclX = 1;
+    public float screenSclY = 1;
 
     protected void fixedUpdate(float delta) {}
-    protected final void draw(Renderer2D renderer2D) { render(renderer2D, boxX, boxY, boxDeg, boxSclX, boxSclY); }
+    protected final void draw(Renderer2D renderer2D) { render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY); }
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
     protected abstract float getWidth();
     protected abstract float getHeight();
+    final void updatePolygon() { updatePolygon(polygon); }
 
-    protected final void updatePolygon() {
-        polygon.reset();
-        updatePolygon(polygon);
-    };
+    final void transform() {
+        float cos = MathUtils.cosDeg(parentDeg);
+        float sin = MathUtils.sinDeg(parentDeg);
+        float x = this.x * cos - this.y * sin;
+        float y = this.x * sin + this.y * cos;
+        screenZIndex = parentZIndex + this.zIndex;
+        screenX = parentX + x * parentSclX;
+        screenY = parentY + y * parentSclY;
+        screenDeg  = this.deg + parentDeg;
+        screenSclX = this.sclX * parentSclX;
+        screenSclY = this.sclY * parentSclY;
+
+        polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
+    }
 
     // kind of a default implementation
     protected void updatePolygon(final Polygon polygon) {
         polygon.setToRectangle(getWidth(), getHeight());
+    }
+
+    public void addChild(Node child) {
+        if (child == null)            throw new WidgetsException(Node.class.getSimpleName() + " element cannot be null.");
+        if (child == this)            throw new WidgetsException("Trying to parent a " + Node.class.getSimpleName() + " to itself.");
+        if (this.descendantOf(child)) throw new WidgetsException("Trying to create circular dependency in Widgets elements tree.");
+        if (child.parent != null) child.parent.removeChild(child);
+        children.add(child);
+        child.parent = this;
+    }
+
+    protected void removeChild(Node node) {
+        if (node.parent != this) throw new WidgetsException(Node.class.getSimpleName() + " node is not a child of this node to detach.");
+        node.parent = null;
+        children.removeValue(node, true);
+    }
+
+    public boolean descendantOf(Node node) {
+        if (node.children.contains(this, true)) return true;
+        boolean result = false;
+        for (Node child : node.children) {
+            result = result || descendantOf(child);
+        }
+        return result;
     }
 
     @Override
@@ -61,13 +105,6 @@ public abstract class Node {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    /* controls how the final transform of the widget is calculated. */
-    public enum Transform {
-        ABSOLUTE,  // positioned x, y, deg, sclX, sclY from the container's center (or window, if container is null).
-        RELATIVE,  // positioned x, y, deg, sclX, sclY relative to the position calculated by its container. If the container is null, behaves like ABSOLUTE.
-        AUTO, // calculated by container
     }
 
     // TODO: probably belongs in container.
