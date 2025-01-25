@@ -1,7 +1,9 @@
 package com.heavybox.jtix.widgets_3;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.math.Vector2;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -16,27 +18,55 @@ public class Canvas {
 
     public boolean debug = true;
 
-    public  Anchor anchor    = Anchor.CENTER_CENTER; // see what anchor does
-    public  int    positionX = 0;
+    public  Anchor anchor    = Anchor.CENTER_LEFT; // see what anchor does
+    public  int    positionX = 200;
     public  int    positionY = 0;
     private float  offsetX   = 0; // calculated
     private float  offsetY   = 0; // calculated
 
     private final Array<Node> nodes = new Array<>(false, 5); // a list of ROOT nodes with no parent.
 
+    private final Vector2 center            = new Vector2();
+    private final Vector2 cornerTopLeft     = new Vector2();
+    private final Vector2 cornerTopRight    = new Vector2();
+    private final Vector2 cornerBottomRight = new Vector2();
+    private final Vector2 cornerBottomLeft  = new Vector2();
+
+    float min_x = Float.POSITIVE_INFINITY;
+    float max_x = Float.NEGATIVE_INFINITY;
+    float min_y = Float.POSITIVE_INFINITY;
+    float max_y = Float.NEGATIVE_INFINITY;
+
     public final void fixedUpdate(float delta) {
         // calculate metrics: width, height, center x, center y
-        float min_x = Float.POSITIVE_INFINITY;
-        float max_x = Float.NEGATIVE_INFINITY;
-        float min_y = Float.POSITIVE_INFINITY;
-        float max_y = Float.NEGATIVE_INFINITY;
+        min_x = Float.POSITIVE_INFINITY;
+        max_x = Float.NEGATIVE_INFINITY;
+        min_y = Float.POSITIVE_INFINITY;
+        max_y = Float.NEGATIVE_INFINITY;
         for (Node node : nodes) {
-            min_x = Math.min(node.x - node.getWidth(), min_x);
-            max_x = Math.max(node.x + node.getWidth(), max_x);
-            min_y = Math.min(node.y - node.getHeight(), min_y);
-            max_y = Math.max(node.y + node.getHeight(), max_y);
+            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
+            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
+            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
+            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
         }
+        cornerTopLeft.set(min_x, max_y);
+        cornerTopRight.set(max_x, max_y);
+        cornerBottomRight.set(max_x, min_y);
+        cornerBottomLeft.set(min_x, min_y);
+        center.set(min_x + (max_x - min_x) * 0.5f, min_y + (max_y - min_y) * 0.5f);
 
+        if (anchor == Anchor.CENTER_LEFT) {
+            float offsetWindowWidth = -Graphics.getWindowWidth() * 0.5f;
+            offsetX = min_x - offsetWindowWidth + positionX;
+//            for (Node node : nodes) {
+//                System.out.println(offsetX);
+//                node.parentX = offsetX;
+//                node.parentY = 0;
+//                node.parentDeg = 0;
+//                node.parentSclX = 1;
+//                node.parentSclY = 1;
+//            }
+        }
 
 
 
@@ -59,6 +89,7 @@ public class Canvas {
             for (Node node : nodes) {
                 renderer2D.drawPolygonThin(node.polygon.points, false,0,0,0, 1,1); // transform is already applied
             }
+            renderer2D.drawRectangleThin(max_x - min_x, max_y - min_y, center.x, center.y, 0, 1, 1);
         }
     }
 

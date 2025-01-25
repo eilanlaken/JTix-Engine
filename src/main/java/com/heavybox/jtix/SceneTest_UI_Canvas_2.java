@@ -38,6 +38,10 @@ public class SceneTest_UI_Canvas_2 implements Scene {
 
         Assets.finishLoading();
 
+        rect1.x = 300;
+        rect2.x = -200;
+        text.x = -400;
+
         canvas.addNode(rect1);
         canvas.addNode(rect2);
         canvas.addNode(text);
