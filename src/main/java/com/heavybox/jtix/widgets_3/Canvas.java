@@ -4,7 +4,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.math.Vector2;
-import org.jetbrains.annotations.NotNull;
 
 /*
 TODO: you would be able to anchor a canvas to one of the screen corners / CENTER.
@@ -18,11 +17,11 @@ public class Canvas {
 
     public boolean debug = true;
 
-    public  Anchor anchor    = Anchor.CENTER_LEFT; // see what anchor does
-    public  int    positionX = 200;
-    public  int    positionY = 0;
-    private float  offsetX   = 0; // calculated
-    private float  offsetY   = 0; // calculated
+    public  Anchor anchor  = Anchor.CENTER_LEFT; // see what anchor does
+    public  int    anchorX = 200;
+    public  int    anchorY = 0;
+    private float  offsetX = 0; // calculated
+    private float  offsetY = 0; // calculated
 
     private final Array<Node> nodes = new Array<>(false, 5); // a list of ROOT nodes with no parent.
 
@@ -56,16 +55,18 @@ public class Canvas {
         center.set(min_x + (max_x - min_x) * 0.5f, min_y + (max_y - min_y) * 0.5f);
 
         if (anchor == Anchor.CENTER_LEFT) {
-            float offsetWindowWidth = -Graphics.getWindowWidth() * 0.5f;
-            offsetX = min_x - offsetWindowWidth + positionX;
-//            for (Node node : nodes) {
-//                System.out.println(offsetX);
-//                node.parentX = offsetX;
-//                node.parentY = 0;
-//                node.parentDeg = 0;
-//                node.parentSclX = 1;
-//                node.parentSclY = 1;
-//            }
+            float screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
+            System.out.println(screen_min_x);
+
+            offsetX = anchorX - screen_min_x;
+            for (Node node : nodes) {
+                System.out.println(offsetX);
+                node.parentX = offsetX;
+                node.parentY = 0;
+                node.parentDeg = 0;
+                node.parentSclX = 1;
+                node.parentSclY = 1;
+            }
         }
 
 
@@ -89,7 +90,7 @@ public class Canvas {
             for (Node node : nodes) {
                 renderer2D.drawPolygonThin(node.polygon.points, false,0,0,0, 1,1); // transform is already applied
             }
-            renderer2D.drawRectangleThin(max_x - min_x, max_y - min_y, center.x, center.y, 0, 1, 1);
+            renderer2D.drawRectangleThin(max_x - min_x, max_y - min_y, center.x + offsetX, center.y + offsetY, 0, 1, 1);
         }
     }
 
