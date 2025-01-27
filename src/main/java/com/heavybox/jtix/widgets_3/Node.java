@@ -41,8 +41,8 @@ public abstract class Node {
     protected void fixedUpdate(float delta) {}
     protected final void draw(Renderer2D renderer2D) { render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY); }
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
-    protected abstract float getWidth();
-    protected abstract float getHeight();
+    protected abstract float getContentWidth();
+    protected abstract float getContentHeight();
     final void updatePolygon() { updatePolygon(polygon); }
 
     final void transform() {
@@ -62,7 +62,7 @@ public abstract class Node {
 
     // kind of a default implementation
     protected void updatePolygon(final Polygon polygon) {
-        polygon.setToRectangle(getWidth(), getHeight());
+        polygon.setToRectangle(getContentWidth(), getContentHeight());
     }
 
     public void addChild(Node child) {

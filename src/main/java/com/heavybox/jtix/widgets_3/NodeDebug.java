@@ -17,12 +17,12 @@ public class NodeDebug extends Node {
     }
 
     @Override
-    protected float getWidth() {
+    protected float getContentWidth() {
         return width;
     }
 
     @Override
-    protected float getHeight() {
+    protected float getContentHeight() {
         return height;
     }
 

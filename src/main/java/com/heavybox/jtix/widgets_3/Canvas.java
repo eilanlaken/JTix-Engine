@@ -13,12 +13,21 @@ TODO: of UI elements. For example:
     Widget: [TopBar: [button, button, ...]]
     Widget: [Tools : [button, button, ...]]
  */
+
+/*
+TODO: ECS
+Canvas is just like any other entity.
+There will be a canvas 2d and canvas 3d. (or rather Widget2D and Widget3D).
+You will use a camera2d or camera3d to render the entire canvas.
+A canvas entity will have a transform.
+It will be applied to the internal elements and the polygon.
+ */
 public class Canvas {
 
     public boolean debug = true;
 
     public  Anchor anchor  = Anchor.CENTER_LEFT; // see what anchor does
-    public  int    anchorX = 200;
+    public  int    anchorX = 50;
     public  int    anchorY = 0;
     private float  offsetX = 0; // calculated
     private float  offsetY = 0; // calculated
@@ -43,10 +52,10 @@ public class Canvas {
         min_y = Float.POSITIVE_INFINITY;
         max_y = Float.NEGATIVE_INFINITY;
         for (Node node : nodes) {
-            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
-            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
-            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
-            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
+            min_x = Math.min(node.x - node.getContentWidth() * 0.5f, min_x);
+            max_x = Math.max(node.x + node.getContentWidth() * 0.5f, max_x);
+            min_y = Math.min(node.y - node.getContentHeight() * 0.5f, min_y);
+            max_y = Math.max(node.y + node.getContentHeight() * 0.5f, max_y);
         }
         cornerTopLeft.set(min_x, max_y);
         cornerTopRight.set(max_x, max_y);
