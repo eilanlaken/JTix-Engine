@@ -32,23 +32,13 @@ public class NodeText extends Node {
     }
 
     @Override
-    protected float getContentWidth() {
+    protected float getWidth() {
         return Renderer2D.calculateStringLineWidth(text, font, size, antialiasing);
     }
 
     @Override
-    protected float getContentHeight() {
+    protected float getHeight() {
         return size;
-    }
-
-    @Override
-    protected float getTotalWidth() {
-        return getContentWidth();
-    }
-
-    @Override
-    protected float getTotalHeight() {
-        return getContentHeight();
     }
 
 }

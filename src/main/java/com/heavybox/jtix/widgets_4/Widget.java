@@ -54,10 +54,10 @@ public class Widget {
         for (Node node : nodes) {
             node.parentWidth = Graphics.getWindowWidth();
             node.parentHeight = Graphics.getWindowHeight();
-            min_x = Math.min(node.x - node.getTotalWidth() * 0.5f, min_x);
-            max_x = Math.max(node.x + node.getTotalWidth() * 0.5f, max_x);
-            min_y = Math.min(node.y - node.getTotalHeight() * 0.5f, min_y);
-            max_y = Math.max(node.y + node.getTotalHeight() * 0.5f, max_y);
+            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
+            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
+            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
+            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
         }
         cornerTopLeft.set(min_x, max_y);
         cornerTopRight.set(max_x, max_y);

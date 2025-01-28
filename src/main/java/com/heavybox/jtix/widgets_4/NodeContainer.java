@@ -58,8 +58,8 @@ public class NodeContainer extends Node {
 
     @Override
     protected void fixedUpdate(float delta) {
-        backgroundWidth = getTotalWidth() - boxBorderSize * 2;
-        backgroundHeight = getTotalHeight() - boxBorderSize * 2;
+        backgroundWidth = getWidth() - boxBorderSize * 2;
+        backgroundHeight = getHeight() - boxBorderSize * 2;
 
     }
 
@@ -87,30 +87,44 @@ public class NodeContainer extends Node {
         // end mask
     }
 
-    @Override
     protected float getContentWidth() {
         float min_x = Float.POSITIVE_INFINITY;
         float max_x = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
-            min_x = Math.min(node.x - node.getContentWidth() * 0.5f, min_x);
-            max_x = Math.max(node.x + node.getContentWidth() * 0.5f, max_x);
+            if (node instanceof NodeContainer) {
+                NodeContainer child = (NodeContainer) node;
+                if (child.boxSizingWidth == Sizing.RELATIVE) {
+                    min_x = Math.min(node.x - child.getContentWidth() * 0.5f, min_x);
+                    max_x = Math.max(node.x + child.getContentWidth() * 0.5f, max_x);
+                    continue;
+                }
+            }
+            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
+            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
         }
         return Math.abs(max_x - min_x) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
     }
 
-    @Override
     protected float getContentHeight() {
         float min_y = Float.POSITIVE_INFINITY;
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
-            min_y = Math.min(node.y - node.getContentHeight() * 0.5f, min_y);
-            max_y = Math.max(node.y + node.getContentHeight() * 0.5f, max_y);
+            if (node instanceof NodeContainer) {
+                NodeContainer child = (NodeContainer) node;
+                if (child.boxSizingHeight == Sizing.RELATIVE) {
+                    min_y = Math.min(node.y - child.getContentHeight() * 0.5f, min_y);
+                    max_y = Math.max(node.y + child.getContentHeight() * 0.5f, max_y);
+                    continue;
+                }
+            }
+            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
+            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
         }
         return Math.abs(max_y - min_y) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
     }
 
     @Override
-    protected float getTotalWidth() {
+    protected float getWidth() {
         float width = 0;
         switch (boxSizingWidth) {
             case ABSOLUTE:
@@ -127,7 +141,7 @@ public class NodeContainer extends Node {
     }
 
     @Override
-    protected float getTotalHeight() {
+    protected float getHeight() {
         float height = 0;
         switch (boxSizingHeight) {
             case ABSOLUTE:
