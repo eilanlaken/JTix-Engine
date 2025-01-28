@@ -23,17 +23,16 @@ public class NodeDebug extends Node {
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
         renderer2D.setColor(color);
-        System.out.println(x);
         renderer2D.drawRectangleFilled(width, height, x, y, deg, sclX, sclY);
     }
 
     @Override
-    protected float getWidth() {
+    public float getWidth() {
         return width;
     }
 
     @Override
-    protected float getHeight() {
+    public float getHeight() {
         return height;
     }
 

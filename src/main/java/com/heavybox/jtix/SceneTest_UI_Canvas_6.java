@@ -4,10 +4,7 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.graphics.TexturePack;
-import com.heavybox.jtix.graphics.TextureRegion;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -29,8 +26,8 @@ public class SceneTest_UI_Canvas_6 implements Scene {
     NodeDebug rect1 = new NodeDebug(0,100);
     NodeDebug rect2 = new NodeDebug(0,200);
 
-    NodeContainer container1 = new NodeContainer();
-    NodeContainer container2 = new NodeContainer();
+    NodeContainer containerP = new NodeContainer();
+    NodeContainer containerC = new NodeContainer();
     // TODO
 
     @Override
@@ -43,13 +40,20 @@ public class SceneTest_UI_Canvas_6 implements Scene {
 
         Assets.finishLoading();
 
-        container1.boxSizingWidth = NodeContainer.Sizing.RELATIVE;
-        container1.boxWidth = 1;
+        containerP.boxSizingWidth = NodeContainer.Sizing.AUTO;
+
+        containerC.boxSizingWidth = NodeContainer.Sizing.AUTO;
+        containerC.addChild(rect1);
+        containerC.addChild(rect2);
+        //System.out.println(containerC.getContentWidth());
+        containerC.boxBackgroudColor = Color.WHITE.clone();
 
         //container.addChild(rect1);
         //container.addChild(rect2);
-        container1.addChild(text);
-        canvas.addNode(container1);
+        //containerP.addChild(text);
+        //containerP.addChild(containerC);
+
+        canvas.addNode(containerC);
     }
 
     @Override

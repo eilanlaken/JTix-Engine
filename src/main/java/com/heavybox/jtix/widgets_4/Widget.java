@@ -70,8 +70,6 @@ public class Widget {
 
             offsetX = anchorX - screen_min_x;
             for (Node node : nodes) {
-                System.out.println(offsetX);
-
                 node.parentX = offsetX;
                 node.parentY = 0;
                 node.parentDeg = 0;

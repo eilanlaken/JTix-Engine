@@ -58,9 +58,13 @@ public class NodeContainer extends Node {
 
     @Override
     protected void fixedUpdate(float delta) {
+
         backgroundWidth = getWidth() - boxBorderSize * 2;
         backgroundHeight = getHeight() - boxBorderSize * 2;
-
+        for (Node child : children) {
+            child.parentWidth = backgroundWidth - boxPaddingLeft - boxPaddingRight;
+            child.parentHeight = backgroundHeight - boxPaddingTop - boxPaddingBottom;
+        }
     }
 
     @Override
@@ -87,7 +91,7 @@ public class NodeContainer extends Node {
         // end mask
     }
 
-    protected float getContentWidth() {
+    public float getContentWidth() {
         float min_x = Float.POSITIVE_INFINITY;
         float max_x = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
@@ -105,7 +109,7 @@ public class NodeContainer extends Node {
         return Math.abs(max_x - min_x) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
     }
 
-    protected float getContentHeight() {
+    public float getContentHeight() {
         float min_y = Float.POSITIVE_INFINITY;
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
@@ -124,7 +128,7 @@ public class NodeContainer extends Node {
     }
 
     @Override
-    protected float getWidth() {
+    public float getWidth() {
         float width = 0;
         switch (boxSizingWidth) {
             case ABSOLUTE:
@@ -141,7 +145,7 @@ public class NodeContainer extends Node {
     }
 
     @Override
-    protected float getHeight() {
+    public float getHeight() {
         float height = 0;
         switch (boxSizingHeight) {
             case ABSOLUTE:

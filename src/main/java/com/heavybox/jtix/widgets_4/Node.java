@@ -38,8 +38,8 @@ public abstract class Node {
     protected abstract void fixedUpdate(float delta);
     protected final void draw(Renderer2D renderer2D) { render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY); }
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
-    protected abstract float getWidth();
-    protected abstract float getHeight();
+    public abstract float getWidth();
+    public abstract float getHeight();
     final void updatePolygon() { updatePolygon(polygon); }
 
     final void transform() {
