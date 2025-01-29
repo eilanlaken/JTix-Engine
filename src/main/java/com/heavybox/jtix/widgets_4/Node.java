@@ -18,8 +18,6 @@ public abstract class Node {
     public float sclY   = 1;
 
     /* set by parent container */
-    public float parentWidth;
-    public float parentHeight;
     public int parentZIndex = 0;
     public float parentX = 0;
     public float parentY = 0;

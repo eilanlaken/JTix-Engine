@@ -41,7 +41,7 @@ public class SceneTest_UI_Canvas_5 implements Scene {
 
         Assets.finishLoading();
 
-        container.boxSizingWidth = NodeContainer.Sizing.RELATIVE;
+        container.boxSizingWidth = NodeContainer.Sizing.VIEWPORT;
         container.boxWidth = 1;
 
         //container.addChild(rect1);

@@ -47,36 +47,34 @@ public class Widget {
 
     public final void fixedUpdate(float delta) {
         // calculate metrics: width, height, center x, center y
-        min_x = Float.POSITIVE_INFINITY;
-        max_x = Float.NEGATIVE_INFINITY;
-        min_y = Float.POSITIVE_INFINITY;
-        max_y = Float.NEGATIVE_INFINITY;
-        for (Node node : nodes) {
-            node.parentWidth = Graphics.getWindowWidth();
-            node.parentHeight = Graphics.getWindowHeight();
-            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
-            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
-            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
-            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
-        }
-        cornerTopLeft.set(min_x, max_y);
-        cornerTopRight.set(max_x, max_y);
-        cornerBottomRight.set(max_x, min_y);
-        cornerBottomLeft.set(min_x, min_y);
-        center.set(min_x + (max_x - min_x) * 0.5f, min_y + (max_y - min_y) * 0.5f);
-
-        if (anchor == Anchor.CENTER_LEFT) {
-            float screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
-
-            offsetX = anchorX - screen_min_x;
-            for (Node node : nodes) {
-                node.parentX = offsetX;
-                node.parentY = 0;
-                node.parentDeg = 0;
-                node.parentSclX = 1;
-                node.parentSclY = 1;
-            }
-        }
+//        min_x = Float.POSITIVE_INFINITY;
+//        max_x = Float.NEGATIVE_INFINITY;
+//        min_y = Float.POSITIVE_INFINITY;
+//        max_y = Float.NEGATIVE_INFINITY;
+//        for (Node node : nodes) {
+//            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
+//            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
+//            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
+//            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
+//        }
+//        cornerTopLeft.set(min_x, max_y);
+//        cornerTopRight.set(max_x, max_y);
+//        cornerBottomRight.set(max_x, min_y);
+//        cornerBottomLeft.set(min_x, min_y);
+//        center.set(min_x + (max_x - min_x) * 0.5f, min_y + (max_y - min_y) * 0.5f);
+//
+//        if (anchor == Anchor.CENTER_LEFT) {
+//            float screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
+//
+//            offsetX = anchorX - screen_min_x;
+//            for (Node node : nodes) {
+//                node.parentX = offsetX;
+//                node.parentY = 0;
+//                node.parentDeg = 0;
+//                node.parentSclX = 1;
+//                node.parentSclY = 1;
+//            }
+//        }
 
         for (Node node : nodes) {
             node.fixedUpdate(delta);

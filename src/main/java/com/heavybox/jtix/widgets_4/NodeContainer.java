@@ -2,6 +2,7 @@ package com.heavybox.jtix.widgets_4;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.widgets_3.WidgetsException;
 
@@ -11,8 +12,6 @@ public class NodeContainer extends Node {
 
     public Overflow  contentOverflowX             = Overflow.IGNORE;
     public Overflow  contentOverflowY             = Overflow.IGNORE;
-    public Alignment contentAlignmentX            = Alignment.MIDDLE;
-    public Alignment contentAlignmentY            = Alignment.MIDDLE;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
     public int       boxPaddingTop                = 5;
@@ -31,10 +30,14 @@ public class NodeContainer extends Node {
     public Color     boxBorderColor               = Color.RED.clone();
 
     // sizing
-    public Sizing boxSizingWidth = Sizing.AUTO;
-    public float boxWidth;
-    public Sizing boxSizingHeight = Sizing.AUTO;
-    public float boxHeight;
+    public Sizing boxSizingWidth  = Sizing.FIT_CONTENT;
+    public float  boxWidthMin     = 0;
+    public float  boxWidthMax     = Float.POSITIVE_INFINITY;
+    public float  boxWidth        = 0;
+    public Sizing boxSizingHeight = Sizing.FIT_CONTENT;
+    public float  boxHeightMin    = 0;
+    public float  boxHeightMax    = Float.POSITIVE_INFINITY;
+    public float  boxHeight       = 0;
 
     // state
     public float calculatedWidth;
@@ -62,8 +65,7 @@ public class NodeContainer extends Node {
         backgroundWidth = getWidth() - boxBorderSize * 2;
         backgroundHeight = getHeight() - boxBorderSize * 2;
         for (Node child : children) {
-            child.parentWidth = backgroundWidth - boxPaddingLeft - boxPaddingRight;
-            child.parentHeight = backgroundHeight - boxPaddingTop - boxPaddingBottom;
+
         }
     }
 
@@ -95,49 +97,33 @@ public class NodeContainer extends Node {
         float min_x = Float.POSITIVE_INFINITY;
         float max_x = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
-            if (node instanceof NodeContainer) {
-                NodeContainer child = (NodeContainer) node;
-                if (child.boxSizingWidth == Sizing.RELATIVE) {
-                    min_x = Math.min(node.x - child.getContentWidth() * 0.5f, min_x);
-                    max_x = Math.max(node.x + child.getContentWidth() * 0.5f, max_x);
-                    continue;
-                }
-            }
             min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
             max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
         }
-        return Math.abs(max_x - min_x) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+        return Math.abs(max_x - min_x);// + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
     }
 
     public float getContentHeight() {
         float min_y = Float.POSITIVE_INFINITY;
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
-            if (node instanceof NodeContainer) {
-                NodeContainer child = (NodeContainer) node;
-                if (child.boxSizingHeight == Sizing.RELATIVE) {
-                    min_y = Math.min(node.y - child.getContentHeight() * 0.5f, min_y);
-                    max_y = Math.max(node.y + child.getContentHeight() * 0.5f, max_y);
-                    continue;
-                }
-            }
             min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
             max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
         }
-        return Math.abs(max_y - min_y) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+        return Math.abs(max_y - min_y);// + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
     }
 
     @Override
     public float getWidth() {
         float width = 0;
         switch (boxSizingWidth) {
-            case ABSOLUTE:
+            case STATIC:
                 width = boxWidth + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
                 break;
-            case RELATIVE:
-                width = boxWidth * parentWidth;
+            case VIEWPORT:
+                width = boxWidth * Graphics.getWindowWidth(); // TODO
                 break;
-            case AUTO:
+            case FIT_CONTENT:
                 width = getContentWidth();
                 break;
         };
@@ -148,13 +134,13 @@ public class NodeContainer extends Node {
     public float getHeight() {
         float height = 0;
         switch (boxSizingHeight) {
-            case ABSOLUTE:
+            case STATIC:
                 height = boxHeight + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
                 break;
-            case RELATIVE:
-                height = boxHeight * (parentHeight - boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize);
+            case VIEWPORT:
+                height = boxHeight * Graphics.getWindowHeight(); // TODO
                 break;
-            case AUTO:
+            case FIT_CONTENT:
                 height = getContentHeight();
                 break;
         };
@@ -178,16 +164,10 @@ public class NodeContainer extends Node {
         SCROLLBAR, // trims the content and adds scrollbars
     }
 
-    public enum Alignment {
-        START,  // Equivalent to TOP or LEFT
-        MIDDLE, // Works for both vertical and horizontal centering
-        END     // Equivalent to BOTTOM or RIGHT
-    }
-
     public enum Sizing {
-        ABSOLUTE, // explicitly set by width and height
-        RELATIVE, // relative to the container's calculated dimensions
-        AUTO,     // conforms to fit content
+        STATIC, // explicitly set by width and height
+        FIT_CONTENT,     // conforms to fit content
+        VIEWPORT, // relative to the container's calculated dimensions
     }
 
 }
