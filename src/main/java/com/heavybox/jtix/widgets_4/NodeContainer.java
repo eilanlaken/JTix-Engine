@@ -14,7 +14,7 @@ public class NodeContainer extends Node {
     public Overflow  contentOverflowY             = Overflow.IGNORE;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
-    public int       boxPaddingTop                = 5;
+    public int       boxPaddingTop                = 15;
     public int       boxPaddingBottom             = 5;
     public int       boxPaddingLeft               = 5;
     public int       boxPaddingRight              = 5;
@@ -26,18 +26,18 @@ public class NodeContainer extends Node {
     public int       boxCornerSegmentsTopRight    = 10;
     public int       boxCornerSegmentsBottomRight = 10;
     public int       boxCornerSegmentsBottomLeft  = 10;
-    public int       boxBorderSize                = 0;
+    public int       boxBorderSize                = 8;
     public Color     boxBorderColor               = Color.RED.clone();
 
     // sizing
-    public Sizing boxSizingWidth  = Sizing.FIT_CONTENT;
+    public Sizing boxSizingWidth  = Sizing.VIEWPORT;
     public float  boxWidthMin     = 0;
     public float  boxWidthMax     = Float.POSITIVE_INFINITY;
-    public float  boxWidth        = 0;
+    public float  boxWidth        = 1;
     public Sizing boxSizingHeight = Sizing.FIT_CONTENT;
     public float  boxHeightMin    = 0;
     public float  boxHeightMax    = Float.POSITIVE_INFINITY;
-    public float  boxHeight       = 0;
+    public float  boxHeight       = 1;
 
     // state
     public float calculatedWidth;
@@ -71,9 +71,19 @@ public class NodeContainer extends Node {
 
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
+        System.out.println(backgroundWidth);
         if (boxBackgroundEnabled) {
             renderer2D.setColor(boxBackgroudColor);
             renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+                    boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
+                    boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
+                    boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
+                    boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
+                    screenX, screenY, screenDeg, screenSclX, screenSclY);
+        }
+        if (boxBorderSize > 0) {
+            renderer2D.setColor(boxBorderColor);
+            renderer2D.drawRectangleBorder(backgroundWidth, backgroundHeight, boxBorderSize,
                     boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
                     boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
                     boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
@@ -118,13 +128,13 @@ public class NodeContainer extends Node {
         float width = 0;
         switch (boxSizingWidth) {
             case STATIC:
-                width = boxWidth + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+                width = boxWidth;
                 break;
             case VIEWPORT:
                 width = boxWidth * Graphics.getWindowWidth(); // TODO
                 break;
             case FIT_CONTENT:
-                width = getContentWidth();
+                width = getContentWidth() +  + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
                 break;
         };
         return width;
@@ -135,13 +145,13 @@ public class NodeContainer extends Node {
         float height = 0;
         switch (boxSizingHeight) {
             case STATIC:
-                height = boxHeight + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
+                height = boxHeight;
                 break;
             case VIEWPORT:
                 height = boxHeight * Graphics.getWindowHeight(); // TODO
                 break;
             case FIT_CONTENT:
-                height = getContentHeight();
+                height = getContentHeight() + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
                 break;
         };
         return height;
