@@ -15,19 +15,10 @@ public final class Theme {
     public static boolean    textAntialiasing             = true;
     public static boolean    textWrapEnabled              = true;
     // TODO: add background image.
-
+    // TODO: add container parameters.
 
     // TODO: scrollbars
     public static ScrollbarRenderer scrollbarRenderer = getDefaultScrollbarRenderer();
-
-    @Override
-    public Theme clone() {
-        try {
-            return (Theme) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
 
     // equivalent to CSS text alignment.
     // TODO: later.

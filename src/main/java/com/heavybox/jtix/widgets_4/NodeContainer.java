@@ -40,8 +40,8 @@ public class NodeContainer extends Node {
     public float     boxHeightMin                 = 0;
     public float     boxHeightMax                 = Float.POSITIVE_INFINITY;
     public float     boxHeight                    = 1;
-    public Overflow  contentOverflowX             = Overflow.IGNORE;
-    public Overflow  contentOverflowY             = Overflow.IGNORE;
+    public Overflow  contentOverflowX             = Overflow.TRIM;
+    public Overflow  contentOverflowY             = Overflow.TRIM;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
     public int       boxPaddingTop                = 15;
@@ -64,7 +64,10 @@ public class NodeContainer extends Node {
     private float calculatedHeight;
     private float backgroundWidth;
     private float backgroundHeight;
-    private float innerOffsetX;
+    private boolean overflowX;
+    private boolean overflowY;
+    private float offsetX;
+    private float offsetY;
 
     public NodeContainer() {
 
@@ -89,6 +92,7 @@ public class NodeContainer extends Node {
         calculatedHeight = getHeight();
         backgroundWidth = calculatedWidth - boxBorderSize * 2;
         backgroundHeight = calculatedHeight - boxBorderSize * 2;
+        // update overflowX amd overflowY
         for (Node child : children) {
             child.update(delta);
         }
