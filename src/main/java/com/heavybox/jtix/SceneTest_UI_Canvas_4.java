@@ -15,7 +15,6 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets_4.Widget;
 import com.heavybox.jtix.widgets_4.NodeDebug;
 import com.heavybox.jtix.widgets_4.NodeText;
-import com.heavybox.jtix.widgets_4.Widgets;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Canvas_4 implements Scene {
@@ -72,7 +71,7 @@ public class SceneTest_UI_Canvas_4 implements Scene {
 //            text.append((char)  codepoint);
         }
 
-        canvas.fixedUpdate(Graphics.getDeltaTime());
+        canvas.update(Graphics.getDeltaTime());
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {

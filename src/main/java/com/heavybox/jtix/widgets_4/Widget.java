@@ -1,7 +1,6 @@
 package com.heavybox.jtix.widgets_4;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.math.Vector2;
 
@@ -45,7 +44,7 @@ public class Widget {
     float min_y = Float.POSITIVE_INFINITY;
     float max_y = Float.NEGATIVE_INFINITY;
 
-    public final void fixedUpdate(float delta) {
+    public final void update(float delta) {
         // calculate metrics: width, height, center x, center y
 //        min_x = Float.POSITIVE_INFINITY;
 //        max_x = Float.NEGATIVE_INFINITY;
@@ -77,7 +76,7 @@ public class Widget {
 //        }
 
         for (Node node : nodes) {
-            node.fixedUpdate(delta);
+            node.update(delta);
         }
 
     }
@@ -85,8 +84,7 @@ public class Widget {
     // frame update
     public final void handleInput(float delta) {
         for (Node node : nodes) {
-            node.updatePolygon();
-            node.transform();
+            node.setInputRegion();
         }
     }
 

@@ -4,12 +4,42 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.widgets_3.WidgetsException;
 
+/*
+Follows CSS' box model, more or less -
+
+draw():
+ -----------------------------------------------------------
+|                           border                         |
+|          --------------------------------------          |
+|         |               padding top            |         |
+|         |          p0----------------p1        |         |
+|         |  padding  |                | padding |         |
+| border  |   left    |                |  right  |  border |
+|         |           |    content     |         |         |
+|         |           |    render()    |         |         |
+|         |           |                |         |         |
+|         |          p3----------------p2        |         |
+|         |             padding bottom           |         |
+|          --------------------------------------          |
+|                           border                         |
+ -----------------------------------------------------------
+
+ */
 public class NodeContainer extends Node {
 
-    final Array<Node> children = new Array<>(false, 5);
+    private final Array<Node> children = new Array<>(false, 5);
 
+    public Sizing    boxWidthSizing               = Sizing.DYNAMIC;
+    public float     boxWidthMin                  = 0;
+    public float     boxWidthMax                  = Float.POSITIVE_INFINITY;
+    public float     boxWidth                     = 1;
+    public Sizing    boxHeightSizing              = Sizing.DYNAMIC;
+    public float     boxHeightMin                 = 0;
+    public float     boxHeightMax                 = Float.POSITIVE_INFINITY;
+    public float     boxHeight                    = 1;
     public Overflow  contentOverflowX             = Overflow.IGNORE;
     public Overflow  contentOverflowY             = Overflow.IGNORE;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
@@ -29,23 +59,16 @@ public class NodeContainer extends Node {
     public int       boxBorderSize                = 8;
     public Color     boxBorderColor               = Color.RED.clone();
 
-    // sizing
-    public Sizing boxSizingWidth  = Sizing.VIEWPORT;
-    public float  boxWidthMin     = 0;
-    public float  boxWidthMax     = Float.POSITIVE_INFINITY;
-    public float  boxWidth        = 1;
-    public Sizing boxSizingHeight = Sizing.FIT_CONTENT;
-    public float  boxHeightMin    = 0;
-    public float  boxHeightMax    = Float.POSITIVE_INFINITY;
-    public float  boxHeight       = 1;
+    // inner state
+    private float calculatedWidth;
+    private float calculatedHeight;
+    private float backgroundWidth;
+    private float backgroundHeight;
+    private float innerOffsetX;
 
-    // state
-    public float calculatedWidth;
-    public float calculatedHeight;
+    public NodeContainer() {
 
-    float backgroundWidth;
-    float backgroundHeight;
-    float innerOffsetX;
+    }
 
     public void addChild(Node child) {
         if (child == null) throw new WidgetsException(Node.class.getSimpleName() + " element cannot be null.");
@@ -61,17 +84,30 @@ public class NodeContainer extends Node {
 
     @Override
     protected void fixedUpdate(float delta) {
-
-        backgroundWidth = getWidth() - boxBorderSize * 2;
-        backgroundHeight = getHeight() - boxBorderSize * 2;
+        setChildrenLayout(children);
+        calculatedWidth = getWidth();
+        calculatedHeight = getHeight();
+        backgroundWidth = calculatedWidth - boxBorderSize * 2;
+        backgroundHeight = calculatedHeight - boxBorderSize * 2;
         for (Node child : children) {
+            child.update(delta);
+        }
+    }
 
+    protected void setChildrenLayout(final Array<Node> children) {
+        for (Node child : children) {
+            child.refZIndex = screenZIndex;
+            child.refX = screenX;
+            child.refY = screenY;
+            child.refDeg = screenDeg;
+            child.refSclX = screenSclX;
+            child.refSclY = screenSclY;
         }
     }
 
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
-        System.out.println(backgroundWidth);
+
         if (boxBackgroundEnabled) {
             renderer2D.setColor(boxBackgroudColor);
             renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
@@ -90,74 +126,61 @@ public class NodeContainer extends Node {
                     boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
                     screenX, screenY, screenDeg, screenSclX, screenSclY);
         }
+
         // begin mask
         // draw mask
         // end mask
+
         // enable masking
         for (Node child : children) {
             child.draw(renderer2D);
         }
         // disable masking
+
         // begin mask
         // erase mask
         // end mask
+
+        // draw scrollbars
     }
 
     public float getContentWidth() {
-        float min_x = Float.POSITIVE_INFINITY;
-        float max_x = Float.NEGATIVE_INFINITY;
+        float max_x = 0;
         for (Node node : children) {
-            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
-            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
+            max_x = Math.max(node.getWidth(), max_x);
         }
-        return Math.abs(max_x - min_x);// + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+        return max_x;
     }
 
     public float getContentHeight() {
-        float min_y = Float.POSITIVE_INFINITY;
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
-            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
-            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
+            max_y = Math.max(node.getHeight(), max_y);
         }
-        return Math.abs(max_y - min_y);// + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+        return max_y;
     }
 
     @Override
     public float getWidth() {
-        float width = 0;
-        switch (boxSizingWidth) {
-            case STATIC:
-                width = boxWidth;
-                break;
-            case VIEWPORT:
-                width = boxWidth * Graphics.getWindowWidth(); // TODO
-                break;
-            case FIT_CONTENT:
-                width = getContentWidth() +  + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
-                break;
+        float width = switch (boxWidthSizing) {
+            case STATIC   -> boxWidth;
+            case VIEWPORT -> boxWidth * Graphics.getWindowWidth();
+            case DYNAMIC  -> getContentWidth() + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
         };
-        return width;
+        return MathUtils.clampFloat(width, boxWidthMin, boxWidthMax);
     }
 
     @Override
     public float getHeight() {
-        float height = 0;
-        switch (boxSizingHeight) {
-            case STATIC:
-                height = boxHeight;
-                break;
-            case VIEWPORT:
-                height = boxHeight * Graphics.getWindowHeight(); // TODO
-                break;
-            case FIT_CONTENT:
-                height = getContentHeight() + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
-                break;
+        float height = switch (boxHeightSizing) {
+            case STATIC   -> boxHeight;
+            case VIEWPORT -> boxHeight * Graphics.getWindowHeight();
+            case DYNAMIC  -> getContentHeight() + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
         };
-        return height;
+        return MathUtils.clampFloat(height, boxHeightMin, boxHeightMax);
     }
 
-    protected void updatePolygon(final Polygon polygon) {
+    protected void setPolygon(final Polygon polygon) {
         polygon.setToRectangle(
                 calculatedWidth, calculatedHeight,
                 boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
@@ -175,9 +198,9 @@ public class NodeContainer extends Node {
     }
 
     public enum Sizing {
-        STATIC, // explicitly set by width and height
-        FIT_CONTENT,     // conforms to fit content
-        VIEWPORT, // relative to the container's calculated dimensions
+        STATIC,   // explicitly set by width and height
+        DYNAMIC,  // conforms to fit content
+        VIEWPORT, // relative to the viewport (width or height)
     }
 
 }

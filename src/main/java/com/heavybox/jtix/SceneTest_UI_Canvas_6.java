@@ -26,8 +26,7 @@ public class SceneTest_UI_Canvas_6 implements Scene {
     NodeDebug rect1 = new NodeDebug(0,100);
     NodeDebug rect2 = new NodeDebug(0,200);
 
-    NodeContainer containerP = new NodeContainer();
-    NodeContainer containerC = new NodeContainer();
+    NodeContainer container = new NodeContainer();
     // TODO
 
     @Override
@@ -41,18 +40,16 @@ public class SceneTest_UI_Canvas_6 implements Scene {
         Assets.finishLoading();
 
 
-        containerC.boxSizingWidth = NodeContainer.Sizing.VIEWPORT;
-        containerC.addChild(rect1);
-        containerC.addChild(rect2);
+        //containerC.boxSizingWidth = NodeContainer.Sizing.VIEWPORT;
+        container.boxWidth = 1f;
+        container.addChild(rect1);
+        container.addChild(rect2);
+        container.addChild(text);
         //System.out.println(containerC.getContentWidth());
-        containerC.boxBackgroudColor = Color.WHITE.clone();
+        container.boxBackgroudColor = Color.ROYAL.clone();
 
-        //container.addChild(rect1);
-        //container.addChild(rect2);
-        //containerP.addChild(text);
-        //containerP.addChild(containerC);
 
-        canvas.addNode(containerC);
+        canvas.addNode(container);
     }
 
     @Override
@@ -79,23 +76,23 @@ public class SceneTest_UI_Canvas_6 implements Scene {
 //            text.append((char)  codepoint);
         }
 
-        canvas.fixedUpdate(Graphics.getDeltaTime());
+        canvas.update(Graphics.getDeltaTime());
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            y += 3;
+            container.y += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            y -= 3;
+            container.y -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            deg += 3;
+            container.deg += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            deg -= 3;
+            container.deg -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {

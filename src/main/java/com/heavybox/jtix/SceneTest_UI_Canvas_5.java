@@ -41,7 +41,7 @@ public class SceneTest_UI_Canvas_5 implements Scene {
 
         Assets.finishLoading();
 
-        container.boxSizingWidth = NodeContainer.Sizing.VIEWPORT;
+        container.boxWidthSizing = NodeContainer.Sizing.VIEWPORT;
         container.boxWidth = 1;
 
         //container.addChild(rect1);
@@ -74,7 +74,7 @@ public class SceneTest_UI_Canvas_5 implements Scene {
 //            text.append((char)  codepoint);
         }
 
-        canvas.fixedUpdate(Graphics.getDeltaTime());
+        canvas.update(Graphics.getDeltaTime());
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {

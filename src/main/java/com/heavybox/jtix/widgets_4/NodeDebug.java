@@ -13,6 +13,7 @@ public class NodeDebug extends Node {
     public NodeDebug(float x, float w) {
         this.x = x;
         this.width = w;
+        color.a = 0.5f;
     }
 
     @Override
