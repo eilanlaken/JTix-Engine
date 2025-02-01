@@ -9,13 +9,10 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets_4.NodeContainer;
-import com.heavybox.jtix.widgets_4.NodeDebug;
-import com.heavybox.jtix.widgets_4.NodeText;
-import com.heavybox.jtix.widgets_4.Widget;
+import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_Canvas_6 implements Scene {
+public class SceneTest_UI_Canvas_7 implements Scene {
 
 
     private final Renderer2D renderer2D = new Renderer2D();
@@ -25,9 +22,10 @@ public class SceneTest_UI_Canvas_6 implements Scene {
     NodeText text = new NodeText("hello node");
     NodeDebug rect1 = new NodeDebug(0,100);
     NodeDebug rect2 = new NodeDebug(0,200);
+    NodeDebug rect3 = new NodeDebug(0,200);
+    NodeDebug rect4 = new NodeDebug(0,200);
 
-    NodeContainer container = new NodeContainer();
-    NodeContainer child = new NodeContainer();
+    NodeContainerVertical container = new NodeContainerVertical();
     // TODO
 
     @Override
@@ -41,18 +39,14 @@ public class SceneTest_UI_Canvas_6 implements Scene {
         Assets.finishLoading();
 
 
-        child.boxBackgroudColor = Color.BLUE.clone();
-        child.boxWidthSizing = NodeContainer.Sizing.STATIC;
-        child.boxHeightSizing = NodeContainer.Sizing.STATIC;
-        child.boxWidth = 200;
-        child.boxHeight = 200;
-        child.boxCornerRadiusBottomRight = 30;
+
 
         //containerC.boxSizingWidth = NodeContainer.Sizing.VIEWPORT;
         container.boxWidth = 1f;
-        container.addChild(child);
         container.addChild(rect1);
         container.addChild(rect2);
+        container.addChild(rect3);
+        container.addChild(rect4);
         container.addChild(text);
         //System.out.println(containerC.getContentWidth());
         container.boxBackgroudColor = Color.ROYAL.clone();

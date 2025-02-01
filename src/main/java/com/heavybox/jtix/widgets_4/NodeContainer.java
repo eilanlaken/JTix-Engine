@@ -44,8 +44,8 @@ public class NodeContainer extends Node {
     public Overflow  contentOverflowY             = Overflow.TRIM;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
-    public int       boxPaddingTop                = 0;
-    public int       boxPaddingBottom             = 0;
+    public int       boxPaddingTop                = 10;
+    public int       boxPaddingBottom             = 100;
     public int       boxPaddingLeft               = 100;
     public int       boxPaddingRight              = 0;
     public int       boxCornerRadiusTopLeft       = 0;
@@ -150,7 +150,7 @@ public class NodeContainer extends Node {
         // draw scrollbars
     }
 
-    public float getContentWidth() {
+    protected float getContentWidth(final Array<Node> children) {
         float max_x = 0;
         for (Node node : children) {
             max_x = Math.max(node.getWidth(), max_x);
@@ -158,7 +158,7 @@ public class NodeContainer extends Node {
         return max_x;
     }
 
-    public float getContentHeight() {
+    protected float getContentHeight(final Array<Node> children) {
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
             max_y = Math.max(node.getHeight(), max_y);
@@ -171,7 +171,7 @@ public class NodeContainer extends Node {
         float width = switch (boxWidthSizing) {
             case STATIC   -> boxWidth;
             case VIEWPORT -> boxWidth * Graphics.getWindowWidth();
-            case DYNAMIC  -> getContentWidth() + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+            case DYNAMIC  -> getContentWidth(this.children) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
         };
         return MathUtils.clampFloat(width, boxWidthMin, boxWidthMax);
     }
@@ -181,7 +181,7 @@ public class NodeContainer extends Node {
         float height = switch (boxHeightSizing) {
             case STATIC   -> boxHeight;
             case VIEWPORT -> boxHeight * Graphics.getWindowHeight();
-            case DYNAMIC  -> getContentHeight() + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
+            case DYNAMIC  -> getContentHeight(this.children) + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
         };
         return MathUtils.clampFloat(height, boxHeightMin, boxHeightMax);
     }
