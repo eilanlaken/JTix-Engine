@@ -45,8 +45,8 @@ public class NodeContainer extends Node {
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
     public int       boxPaddingTop                = 10;
-    public int       boxPaddingBottom             = 100;
-    public int       boxPaddingLeft               = 100;
+    public int       boxPaddingBottom             = 10;
+    public int       boxPaddingLeft               = 0;
     public int       boxPaddingRight              = 0;
     public int       boxCornerRadiusTopLeft       = 0;
     public int       boxCornerRadiusTopRight      = 0;
@@ -66,8 +66,6 @@ public class NodeContainer extends Node {
     private float backgroundHeight;
     private boolean overflowX;
     private boolean overflowY;
-    private float offsetX;
-    private float offsetY;
 
     public NodeContainer() {
 
@@ -87,7 +85,15 @@ public class NodeContainer extends Node {
 
     @Override
     protected void fixedUpdate(float delta) {
-        setChildrenLayout(children);
+        setChildrenOffset(children);
+        for (Node child : children) {
+            child.refZIndex = screenZIndex;
+            child.refX = screenX;
+            child.refY = screenY;
+            child.refDeg = screenDeg;
+            child.refSclX = screenSclX;
+            child.refSclY = screenSclY;
+        }
         calculatedWidth = getWidth();
         calculatedHeight = getHeight();
         backgroundWidth = calculatedWidth - boxBorderSize * 2;
@@ -98,22 +104,15 @@ public class NodeContainer extends Node {
         }
     }
 
-    protected void setChildrenLayout(final Array<Node> children) {
+    protected void setChildrenOffset(final Array<Node> children) {
         for (Node child : children) {
-            child.refZIndex = screenZIndex;
-            child.refOffsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;
-            child.refOffsetY = boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;
-            child.refX = screenX;// + boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;;
-            child.refY = screenY;// + boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;;
-            child.refDeg = screenDeg;
-            child.refSclX = screenSclX;
-            child.refSclY = screenSclY;
+            child.offsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;
+            child.offsetY = boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;
         }
     }
 
     @Override
     protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
-
         if (boxBackgroundEnabled) {
             renderer2D.setColor(boxBackgroudColor);
             renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
@@ -171,7 +170,7 @@ public class NodeContainer extends Node {
         float width = switch (boxWidthSizing) {
             case STATIC   -> boxWidth;
             case VIEWPORT -> boxWidth * Graphics.getWindowWidth();
-            case DYNAMIC  -> getContentWidth(this.children) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
+            case DYNAMIC  -> getContentWidth(children) + boxPaddingLeft + boxPaddingRight + boxBorderSize + boxBorderSize;
         };
         return MathUtils.clampFloat(width, boxWidthMin, boxWidthMax);
     }
@@ -181,7 +180,7 @@ public class NodeContainer extends Node {
         float height = switch (boxHeightSizing) {
             case STATIC   -> boxHeight;
             case VIEWPORT -> boxHeight * Graphics.getWindowHeight();
-            case DYNAMIC  -> getContentHeight(this.children) + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
+            case DYNAMIC  -> getContentHeight(children) + boxPaddingTop + boxPaddingBottom + boxBorderSize + boxBorderSize;
         };
         return MathUtils.clampFloat(height, boxHeightMin, boxHeightMax);
     }

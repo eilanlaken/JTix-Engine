@@ -339,6 +339,10 @@ public class Vector2 implements MemoryPool.Reset {
         return this.sub(reference).rotateDeg(degrees).add(reference);
     }
 
+    public Vector2 rotateAroundDeg(float refX, float refY, float degrees) {
+        return this.sub(refX, refY).rotateDeg(degrees).add(refX, refY);
+    }
+
     public Vector2 rotateAroundRad(Vector2 reference, float radians) {
         return this.sub(reference).rotateRad(radians).add(reference);
     }

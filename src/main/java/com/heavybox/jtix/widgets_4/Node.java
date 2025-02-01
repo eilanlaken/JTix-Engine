@@ -20,8 +20,6 @@ public abstract class Node {
 
     /* set by parent container */
     public int   refZIndex = 0;
-    public float refOffsetX = 0;
-    public float refOffsetY = 0;
     public float refX      = 0;
     public float refY      = 0;
     public float refDeg    = 0;
@@ -35,6 +33,9 @@ public abstract class Node {
     public float screenDeg    = 0;
     public float screenSclX   = 1;
     public float screenSclY   = 1;
+
+    public float offsetX = 0;
+    public float offsetY = 0;
 
     protected abstract void fixedUpdate(float delta);
     protected final void draw(Renderer2D renderer2D) { render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY); }
@@ -52,6 +53,24 @@ public abstract class Node {
         polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
     }
 
+//    final void transform() {
+//        float cos = MathUtils.cosDeg(refDeg);
+//        float sin = MathUtils.sinDeg(refDeg);
+//        float x = this.x * cos - this.y * sin;
+//        float y = this.x * sin + this.y * cos;
+//        screenZIndex = refZIndex + this.zIndex;
+//        screenX = refX + x * refSclX;
+//        screenY = refY + y * refSclY;
+//        float offsetX = refOffsetX * cos - refOffsetY * sin;
+//        float offsetY = refOffsetX * sin + refOffsetY * cos;
+//        screenX += offsetX;
+//        screenY += offsetY;
+//        screenDeg  = this.deg + refDeg;
+//        screenSclX = this.sclX * refSclX;
+//        screenSclY = this.sclY * refSclY;
+//    }
+
+
     final void transform() {
         float cos = MathUtils.cosDeg(refDeg);
         float sin = MathUtils.sinDeg(refDeg);
@@ -60,14 +79,15 @@ public abstract class Node {
         screenZIndex = refZIndex + this.zIndex;
         screenX = refX + x * refSclX;
         screenY = refY + y * refSclY;
-        float offsetX = refOffsetX * cos - refOffsetY * sin;
-        float offsetY = refOffsetX * sin + refOffsetY * cos;
-        screenX += offsetX;
-        screenY += offsetY;
+        Vector2 ref = new Vector2(offsetX, offsetY);
+        ref.rotateAroundDeg(0,0, refDeg);
+        screenX += ref.x;
+        screenY += ref.y;
         screenDeg  = this.deg + refDeg;
         screenSclX = this.sclX * refSclX;
         screenSclY = this.sclY * refSclY;
     }
+
 
     // kind of a default implementation
     protected void setPolygon(final Polygon polygon) {
