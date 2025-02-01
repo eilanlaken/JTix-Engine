@@ -87,6 +87,14 @@ public class SceneTest_UI_Canvas_6 implements Scene {
             container.y -= 3;
         }
 
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
+            container.x -= 3;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
+            container.x += 3;
+        }
+
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
             container.deg += 3;
         }

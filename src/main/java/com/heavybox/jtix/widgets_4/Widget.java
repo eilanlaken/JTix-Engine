@@ -28,54 +28,85 @@ public class Widget {
 
     public Anchor anchor  = Anchor.CENTER_CENTER; // see what anchor does
     public float  anchorX = 50;
-    public float  anchorY = 0;
+    public float  anchorY = 100;
 
     private final Array<Node> nodes = new Array<>(false, 5); // a list of ROOT nodes with no parent.
 
-    // TODO: inline offsetX, offsetY
-    private float  offsetX = 0; // calculated
-    private float  offsetY = 0; // calculated
-    // TODO: remove all but 1, rename to anchorPoint, calculate inline
-    private final Vector2 center            = new Vector2();
-    private final Vector2 cornerTopLeft     = new Vector2();
-    private final Vector2 cornerTopRight    = new Vector2();
-    private final Vector2 cornerBottomRight = new Vector2();
-    private final Vector2 cornerBottomLeft  = new Vector2();
-    // TODO: inline
-    private float min_x = Float.POSITIVE_INFINITY;
-    private float max_x = Float.NEGATIVE_INFINITY;
-    private float min_y = Float.POSITIVE_INFINITY;
-    private float max_y = Float.NEGATIVE_INFINITY;
-
     public final void update(float delta) {
-        // calculate metrics: width, height, center x, center y
-        min_x = Float.POSITIVE_INFINITY;
-        max_x = Float.NEGATIVE_INFINITY;
-        min_y = Float.POSITIVE_INFINITY;
-        max_y = Float.NEGATIVE_INFINITY;
+        // calculate bounds
+        float min_x = Float.POSITIVE_INFINITY;
+        float max_x = Float.NEGATIVE_INFINITY;
+        float min_y = Float.POSITIVE_INFINITY;
+        float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : nodes) {
             min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
             max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
             min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
             max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
         }
-        cornerTopLeft.set(min_x, max_y);
-        cornerTopRight.set(max_x, max_y);
-        cornerBottomRight.set(max_x, min_y);
-        cornerBottomLeft.set(min_x, min_y);
-        center.set(min_x + (max_x - min_x) * 0.5f, min_y + (max_y - min_y) * 0.5f);
 
-        if (anchor == Anchor.CENTER_LEFT) {
-            float screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
+        float offsetX = 0; // calculated
+        float offsetY = 0; // calculated
+        float screen_max_x;
+        float screen_min_x;
+        float screen_max_y;
+        float screen_min_y;
+        switch (anchor) {
+            case CENTER_RIGHT:
+                screen_max_x = Graphics.getWindowWidth() * 0.5f - max_x;
+                offsetX = screen_max_x - anchorX;
+                offsetY = 0;
+                break;
+            case CENTER_LEFT:
+                screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
+                offsetX = anchorX - screen_min_x;
+                offsetY = 0;
+                break;
+            case TOP_CENTER:
+                screen_max_y = Graphics.getWindowHeight() * 0.5f - max_y;
+                offsetX = 0;
+                offsetY = screen_max_y - anchorY;
+                break;
+            case BOTTOM_CENTER:
+                screen_min_y = min_y + Graphics.getWindowHeight() * 0.5f;
+                offsetX = 0;
+                offsetY = anchorY - screen_min_y;
+                break;
+            case TOP_LEFT:
+                screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
+                screen_max_y = Graphics.getWindowHeight() * 0.5f - max_y;
+                offsetX = anchorX - screen_min_x;
+                offsetY = screen_max_y - anchorY;
+                break;
+            case TOP_RIGHT:
+                screen_max_x = Graphics.getWindowWidth() * 0.5f - max_x;
+                screen_max_y = Graphics.getWindowHeight() * 0.5f - max_y;
+                offsetX = screen_max_x - anchorX;
+                offsetY = screen_max_y - anchorY;
+                break;
+            case BOTTOM_RIGHT:
+                screen_max_x = Graphics.getWindowWidth() * 0.5f - max_x;
+                screen_min_y = min_y + Graphics.getWindowHeight() * 0.5f;
+                offsetX = screen_max_x - anchorX;
+                offsetY = anchorY - screen_min_y;
+                break;
+            case BOTTOM_LEFT:
+                screen_min_x = min_x + Graphics.getWindowWidth() * 0.5f;
+                screen_min_y = min_y + Graphics.getWindowHeight() * 0.5f;
+                offsetX = anchorX - screen_min_x;
+                offsetY = anchorY - screen_min_y;
+                break;
+            case CENTER_CENTER:
+                // TODO
+                break;
+        }
 
-            offsetX = anchorX - screen_min_x;
-            for (Node node : nodes) {
-                node.refX = offsetX;
-                node.refY = 0;
-                node.refDeg = 0;
-                node.refSclX = 1;
-                node.refSclY = 1;
-            }
+        for (Node node : nodes) {
+            node.refX = offsetX;
+            node.refY = offsetY;
+            node.refDeg = 0;
+            node.refSclX = 1;
+            node.refSclY = 1;
         }
 
         for (Node node : nodes) {
