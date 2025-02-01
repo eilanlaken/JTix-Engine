@@ -2,6 +2,7 @@ package com.heavybox.jtix.widgets_4;
 
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 
 public abstract class Node {
 
@@ -19,6 +20,8 @@ public abstract class Node {
 
     /* set by parent container */
     public int   refZIndex = 0;
+    public float refOffsetX = 0;
+    public float refOffsetY = 0;
     public float refX      = 0;
     public float refY      = 0;
     public float refDeg    = 0;
@@ -57,6 +60,10 @@ public abstract class Node {
         screenZIndex = refZIndex + this.zIndex;
         screenX = refX + x * refSclX;
         screenY = refY + y * refSclY;
+        float offsetX = refOffsetX * cos - refOffsetY * sin;
+        float offsetY = refOffsetX * sin + refOffsetY * cos;
+        screenX += offsetX;
+        screenY += offsetY;
         screenDeg  = this.deg + refDeg;
         screenSclX = this.sclX * refSclX;
         screenSclY = this.sclY * refSclY;

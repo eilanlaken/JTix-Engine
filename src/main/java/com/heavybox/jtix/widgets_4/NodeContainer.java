@@ -44,10 +44,10 @@ public class NodeContainer extends Node {
     public Overflow  contentOverflowY             = Overflow.TRIM;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
-    public int       boxPaddingTop                = 15;
-    public int       boxPaddingBottom             = 5;
-    public int       boxPaddingLeft               = 5;
-    public int       boxPaddingRight              = 5;
+    public int       boxPaddingTop                = 0;
+    public int       boxPaddingBottom             = 0;
+    public int       boxPaddingLeft               = 100;
+    public int       boxPaddingRight              = 0;
     public int       boxCornerRadiusTopLeft       = 0;
     public int       boxCornerRadiusTopRight      = 0;
     public int       boxCornerRadiusBottomRight   = 0;
@@ -101,8 +101,10 @@ public class NodeContainer extends Node {
     protected void setChildrenLayout(final Array<Node> children) {
         for (Node child : children) {
             child.refZIndex = screenZIndex;
-            child.refX = screenX;
-            child.refY = screenY;
+            child.refOffsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;
+            child.refOffsetY = boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;
+            child.refX = screenX;// + boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;;
+            child.refY = screenY;// + boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;;
             child.refDeg = screenDeg;
             child.refSclX = screenSclX;
             child.refSclY = screenSclY;

@@ -103,6 +103,14 @@ public class SceneTest_UI_Canvas_6 implements Scene {
             container.deg -= 3;
         }
 
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.U)) {
+            rect1.deg += 3;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.I)) {
+            rect1.deg -= 3;
+        }
+
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
             sclX *= 1.01f;
         }

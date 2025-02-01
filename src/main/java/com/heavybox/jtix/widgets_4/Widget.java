@@ -26,7 +26,7 @@ public class Widget {
 
     public boolean debug = true;
 
-    public Anchor anchor  = Anchor.CENTER_CENTER; // see what anchor does
+    public Anchor anchor  = Anchor.CENTER_LEFT; // see what anchor does
     public float  anchorX = 50;
     public float  anchorY = 100;
 
