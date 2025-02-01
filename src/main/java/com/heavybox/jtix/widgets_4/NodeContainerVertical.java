@@ -8,11 +8,14 @@ public class NodeContainerVertical extends NodeContainer {
 
     @Override
     protected void setChildrenOffset(final Array<Node> children) {
-        float position_y = getWidth();
+
+        //float position_y = getWidth() * 0.5f + boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;
+        float position_y = getHeight() * 0.5f - boxBorderSize - boxPaddingTop;
+        System.out.println(position_y);
         for (Node child : children) {
             float child_height = child.getHeight();
             child.offsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;
-            child.offsetY = position_y - child_height * 0.5f + boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;
+            child.offsetY = position_y - child_height * 0.5f;
             position_y -= child_height + margin;
         }
     }

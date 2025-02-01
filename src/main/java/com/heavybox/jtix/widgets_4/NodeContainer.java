@@ -44,8 +44,8 @@ public class NodeContainer extends Node {
     public Overflow  contentOverflowY             = Overflow.TRIM;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
-    public int       boxPaddingTop                = 10;
-    public int       boxPaddingBottom             = 10;
+    public int       boxPaddingTop                = 80;
+    public int       boxPaddingBottom             = 20;
     public int       boxPaddingLeft               = 0;
     public int       boxPaddingRight              = 0;
     public int       boxCornerRadiusTopLeft       = 0;
