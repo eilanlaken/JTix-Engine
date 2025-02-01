@@ -33,6 +33,7 @@ public class Widget {
     private final Array<Node> nodes = new Array<>(false, 5); // a list of ROOT nodes with no parent.
 
     public final void update(float delta) {
+        // TODO: maybe validate that the nodes are all root nodes and the widget is in a legitimate state.
         // calculate bounds
         float min_x = Float.POSITIVE_INFINITY;
         float max_x = Float.NEGATIVE_INFINITY;
@@ -47,10 +48,10 @@ public class Widget {
 
         float offsetX = 0; // calculated
         float offsetY = 0; // calculated
-        float screen_max_x;
         float screen_min_x;
-        float screen_max_y;
+        float screen_max_x;
         float screen_min_y;
+        float screen_max_y;
         switch (anchor) {
             case CENTER_RIGHT:
                 screen_max_x = Graphics.getWindowWidth() * 0.5f - max_x;

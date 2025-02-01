@@ -8,11 +8,10 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 public final class Keyboard {
 
-    private final int[] keysCurrentState = new int[Key.ketMaxKeyCode()];
-    private final ArrayInt keysPressed = new ArrayInt(12);
-    private final ArrayInt keysHeld = new ArrayInt(12);
-    private final ArrayInt keysJustPressed = new ArrayInt(12);
-
+    private final int[]    keysCurrentState = new int[Key.ketMaxKeyCode()];
+    private final ArrayInt keysPressed      = new ArrayInt(12);
+    private final ArrayInt keysHeld         = new ArrayInt(12);
+    private final ArrayInt keysJustPressed  = new ArrayInt(12);
     private final ArrayInt codepointPressed = new ArrayInt(false, 5);
 
     Keyboard() {
