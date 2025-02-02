@@ -23,7 +23,7 @@ It will be applied to the internal elements and the polygon.
  */
 public class Widget {
 
-    public Anchor anchor  = Anchor.CENTER_LEFT;
+    public Anchor anchor  = Anchor.CENTER_CENTER;
     public float  anchorX = 50;
     public float  anchorY = 100;
 
@@ -99,15 +99,9 @@ public class Widget {
                 break;
         }
 
-        // NO! maybe this should change the offset!
         for (Node node : nodes) {
             node.offsetX = offsetX;
             node.offsetY = offsetY;
-            node.refX = 0;
-            node.refY = 0;
-            node.refDeg = 0;
-            node.refSclX = 1;
-            node.refSclY = 1;
         }
 
         for (Node node : nodes) {

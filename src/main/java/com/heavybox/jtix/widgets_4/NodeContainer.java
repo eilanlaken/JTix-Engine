@@ -86,14 +86,14 @@ public class NodeContainer extends Node {
     @Override
     protected void fixedUpdate(float delta) {
         setChildrenOffset(children);
-        for (Node child : children) {
-            child.refZIndex = screenZIndex;
-            child.refX = screenX;
-            child.refY = screenY;
-            child.refDeg = screenDeg;
-            child.refSclX = screenSclX;
-            child.refSclY = screenSclY;
-        }
+//        for (Node child : children) {
+//            child.refZIndex = screenZIndex;
+//            child.refX = screenX;
+//            child.refY = screenY;
+//            child.refDeg = screenDeg;
+//            child.refSclX = screenSclX;
+//            child.refSclY = screenSclY;
+//        }
         calculatedWidth = calculateWidth();
         calculatedHeight = calculateHeight();
         backgroundWidth = calculatedWidth - boxBorderSize * 2;

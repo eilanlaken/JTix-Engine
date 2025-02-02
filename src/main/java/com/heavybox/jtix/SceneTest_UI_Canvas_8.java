@@ -109,11 +109,11 @@ public class SceneTest_UI_Canvas_8 implements Scene {
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
-            sclX *= 1.01f;
+            container.sclY *= 1.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            sclX *= 0.99f;
+            container.sclY *= 0.99f;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

@@ -18,15 +18,6 @@ public abstract class Node {
     public float sclX   = 1;
     public float sclY   = 1;
 
-    /* set by parent container */
-    // change to package.
-    public int   refZIndex = 0;
-    public float refX      = 0;
-    public float refY      = 0;
-    public float refDeg    = 0;
-    public float refSclX   = 1;
-    public float refSclY   = 1;
-
     /* calculated by container and Transform */
     // change to package private
     public int   screenZIndex = 0;
@@ -35,16 +26,17 @@ public abstract class Node {
     public float screenDeg    = 0;
     public float screenSclX   = 1;
     public float screenSclY   = 1;
-
     public float offsetX = 0;
     public float offsetY = 0;
 
-
     protected abstract void fixedUpdate(float delta);
-    protected final void draw(Renderer2D renderer2D) { render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY); }
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
-    public abstract float calculateWidth();
-    public abstract float calculateHeight();
+    public abstract float calculateWidth(); // TODO: cache location and implement reset() logic
+    public abstract float calculateHeight(); // TODO: cache location and implement reset() logic
+
+    protected final void draw(Renderer2D renderer2D) {
+        render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
+    }
 
     public final void update(float delta) {
         transform();
@@ -56,20 +48,20 @@ public abstract class Node {
         polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
     }
 
-
-    // TODO: get rid of the new operator.
     final void transform() {
+        int refZIndex = container == null ? this.zIndex : this.zIndex + container.screenZIndex;
+        float refX = container == null ? 0 : container.screenX;
+        float refY = container == null ? 0 : container.screenY;
+        float refDeg = container == null ? 0 : container.screenDeg;
+        float refSclX = container == null ? 1 : container.screenSclX;
+        float refSclY = container == null ? 1 : container.screenSclY;
         float cos = MathUtils.cosDeg(refDeg);
         float sin = MathUtils.sinDeg(refDeg);
         float x = this.x * cos - this.y * sin;
         float y = this.x * sin + this.y * cos;
         screenZIndex = refZIndex + this.zIndex;
-        screenX = refX + x * refSclX;
-        screenY = refY + y * refSclY;
-        Vector2 ref = new Vector2(offsetX, offsetY);
-        ref.rotateAroundDeg(0,0, refDeg);
-        screenX += ref.x;
-        screenY += ref.y;
+        screenX = refX + x * refSclX + offsetX * cos - offsetY * sin; // add the rotated offset vector x component
+        screenY = refY + y * refSclY + offsetX * sin + offsetY * cos; // add the rotated offset vector y component
         screenDeg  = this.deg + refDeg;
         screenSclX = this.sclX * refSclX;
         screenSclY = this.sclY * refSclY;
@@ -87,3 +79,28 @@ public abstract class Node {
     }
 
 }
+
+// TODO: get rid of the new operator.
+//    final void transform() {
+//        int refZIndex = container == null ? this.zIndex : this.zIndex + container.screenZIndex;
+//        float refX = container == null ? 0 : container.screenX;
+//        float refY = container == null ? 0 : container.screenY;
+//        float refDeg = container == null ? 0 : container.screenDeg;
+//        float refSclX = container == null ? 1 : container.screenSclX;
+//        float refSclY = container == null ? 1 : container.screenSclY;
+//
+//        float cos = MathUtils.cosDeg(refDeg);
+//        float sin = MathUtils.sinDeg(refDeg);
+//        float x = this.x * cos - this.y * sin;
+//        float y = this.x * sin + this.y * cos;
+//        screenZIndex = refZIndex + this.zIndex;
+//        screenX = refX + x * refSclX;
+//        screenY = refY + y * refSclY;
+//        Vector2 ref = new Vector2(offsetX, offsetY);
+//        ref.rotateDeg(refDeg);
+//        screenX += ref.x;
+//        screenY += ref.y;
+//        screenDeg  = this.deg + refDeg;
+//        screenSclX = this.sclX * refSclX;
+//        screenSclY = this.sclY * refSclY;
+//    }
