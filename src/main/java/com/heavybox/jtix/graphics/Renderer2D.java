@@ -316,7 +316,7 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         GL11.glStencilMask(0xFF);
         GL11.glColorMask(false, false, false, false); // Disable color buffer writes
-        GL11.glDepthMask(false);                              // Disable depth buffer writes
+        GL11.glDepthMask(false); // Disable depth buffer writes
         setStencilModeSetOnes();
     }
 

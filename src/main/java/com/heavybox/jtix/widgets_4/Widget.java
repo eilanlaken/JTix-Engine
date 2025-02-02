@@ -24,9 +24,7 @@ It will be applied to the internal elements and the polygon.
  */
 public class Widget {
 
-    public boolean debug = true;
-
-    public Anchor anchor  = Anchor.CENTER_CENTER; // see what anchor does
+    public Anchor anchor  = Anchor.CENTER_CENTER;
     public float  anchorX = 50;
     public float  anchorY = 100;
 
@@ -116,7 +114,7 @@ public class Widget {
 
     }
 
-    // frame update
+    // TODO: this needs proper input handling, including nested Nodes. (frame update)
     public final void handleInput(float delta) {
         for (Node node : nodes) {
             node.setInputRegion();
@@ -125,14 +123,9 @@ public class Widget {
 
     // frame update
     public final void draw(Renderer2D renderer2D) {
+        renderer2D.stencilMaskClear(); // clear stencil buffer in case it was "stained" by previous rendering calls.
         for (Node node : nodes) {
             node.draw(renderer2D);
-        }
-        if (debug) {
-//            for (Node node : nodes) {
-//                renderer2D.drawPolygonThin(node.polygon.points, false,0,0,0, 1,1); // transform is already applied
-//            }
-//            renderer2D.drawRectangleThin(max_x - min_x, max_y - min_y, center.x + offsetX, center.y + offsetY, 0, 1, 1);
         }
     }
 

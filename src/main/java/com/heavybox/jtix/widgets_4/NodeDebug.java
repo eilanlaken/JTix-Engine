@@ -7,7 +7,7 @@ import com.heavybox.jtix.math.MathUtils;
 public class NodeDebug extends Node {
 
     public float width = MathUtils.randomUniformFloat(50,200);
-    public float height = MathUtils.randomUniformFloat(50,200);
+    public float height = 150;//MathUtils.randomUniformFloat(50,200);
     public Color color = Color.random();
 
     public NodeDebug(float x, float w) {

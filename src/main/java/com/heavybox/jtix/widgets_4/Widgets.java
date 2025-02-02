@@ -3,25 +3,20 @@ package com.heavybox.jtix.widgets_4;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.math.Vector2;
-import com.heavybox.jtix.memory.MemoryPool;
 
 // TODO: add: polygons, rectangles with rounded corners, circles with refinement
 public final class Widgets {
 
-    private static int widgetsCount = 0;
+    private static int count = 0;
 
     private static final StringBuilder wordWrapStringBuilder    = new StringBuilder();
     private static final ArrayInt      wordWrapStartIndices     = new ArrayInt();
     private static final ArrayInt      wordWrapLinebreakIndices = new ArrayInt();
 
-
     public static int getID() {
-        widgetsCount++;
-        return widgetsCount - 1;
+        count++;
+        return count - 1;
     }
-
-
 
     /* == from Wikipedia ==
     SpaceLeft := LineWidth
