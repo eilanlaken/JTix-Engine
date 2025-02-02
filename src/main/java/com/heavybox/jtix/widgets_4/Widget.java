@@ -3,7 +3,6 @@ package com.heavybox.jtix.widgets_4;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.math.Vector2;
 
 /*
 TODO: you would be able to anchor a canvas to one of the screen corners / CENTER.
@@ -24,7 +23,7 @@ It will be applied to the internal elements and the polygon.
  */
 public class Widget {
 
-    public Anchor anchor  = Anchor.CENTER_CENTER;
+    public Anchor anchor  = Anchor.CENTER_LEFT;
     public float  anchorX = 50;
     public float  anchorY = 100;
 
@@ -38,10 +37,10 @@ public class Widget {
         float min_y = Float.POSITIVE_INFINITY;
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : nodes) {
-            min_x = Math.min(node.x - node.getWidth() * 0.5f, min_x);
-            max_x = Math.max(node.x + node.getWidth() * 0.5f, max_x);
-            min_y = Math.min(node.y - node.getHeight() * 0.5f, min_y);
-            max_y = Math.max(node.y + node.getHeight() * 0.5f, max_y);
+            min_x = Math.min(node.x - node.calculateWidth() * 0.5f, min_x);
+            max_x = Math.max(node.x + node.calculateWidth() * 0.5f, max_x);
+            min_y = Math.min(node.y - node.calculateHeight() * 0.5f, min_y);
+            max_y = Math.max(node.y + node.calculateHeight() * 0.5f, max_y);
         }
 
         float offsetX = 0; // calculated
@@ -100,9 +99,12 @@ public class Widget {
                 break;
         }
 
+        // NO! maybe this should change the offset!
         for (Node node : nodes) {
-            node.refX = offsetX;
-            node.refY = offsetY;
+            node.offsetX = offsetX;
+            node.offsetY = offsetY;
+            node.refX = 0;
+            node.refY = 0;
             node.refDeg = 0;
             node.refSclX = 1;
             node.refSclY = 1;

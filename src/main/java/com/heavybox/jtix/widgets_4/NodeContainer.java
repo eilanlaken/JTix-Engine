@@ -40,8 +40,8 @@ public class NodeContainer extends Node {
     public float     boxHeightMin                 = 0;
     public float     boxHeightMax                 = Float.POSITIVE_INFINITY;
     public float     boxHeight                    = 1;
-    public Overflow  contentOverflowX             = Overflow.TRIM;
-    public Overflow  contentOverflowY             = Overflow.TRIM;
+    public Overflow  contentOverflowX             = Overflow.HIDDEN;
+    public Overflow  contentOverflowY             = Overflow.HIDDEN;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
     public int       boxPaddingTop                = 80;
@@ -94,8 +94,8 @@ public class NodeContainer extends Node {
             child.refSclX = screenSclX;
             child.refSclY = screenSclY;
         }
-        calculatedWidth = getWidth();
-        calculatedHeight = getHeight();
+        calculatedWidth = calculateWidth();
+        calculatedHeight = calculateHeight();
         backgroundWidth = calculatedWidth - boxBorderSize * 2;
         backgroundHeight = calculatedHeight - boxBorderSize * 2;
         // update overflowX amd overflowY
@@ -152,7 +152,7 @@ public class NodeContainer extends Node {
     protected float getContentWidth(final Array<Node> children) {
         float max_x = 0;
         for (Node node : children) {
-            max_x = Math.max(node.getWidth(), max_x);
+            max_x = Math.max(node.calculateWidth(), max_x);
         }
         return max_x;
     }
@@ -160,13 +160,13 @@ public class NodeContainer extends Node {
     protected float getContentHeight(final Array<Node> children) {
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : children) {
-            max_y = Math.max(node.getHeight(), max_y);
+            max_y = Math.max(node.calculateHeight(), max_y);
         }
         return max_y;
     }
 
     @Override
-    public float getWidth() {
+    public float calculateWidth() {
         float width = switch (boxWidthSizing) {
             case STATIC   -> boxWidth;
             case VIEWPORT -> boxWidth * Graphics.getWindowWidth();
@@ -176,7 +176,7 @@ public class NodeContainer extends Node {
     }
 
     @Override
-    public float getHeight() {
+    public float calculateHeight() {
         float height = switch (boxHeightSizing) {
             case STATIC   -> boxHeight;
             case VIEWPORT -> boxHeight * Graphics.getWindowHeight();
@@ -185,6 +185,7 @@ public class NodeContainer extends Node {
         return MathUtils.clampFloat(height, boxHeightMin, boxHeightMax);
     }
 
+    @Override
     protected void setPolygon(final Polygon polygon) {
         polygon.setToRectangle(
                 calculatedWidth, calculatedHeight,
@@ -197,8 +198,8 @@ public class NodeContainer extends Node {
 
     /* controls how it renders the contents of the widget that overflow the box */
     public enum Overflow {
-        IGNORE,    // does nothing, renders while ignoring the bounds
-        TRIM,      // uses glScissors to clip the content, so only the pixels that land inside the box render. The rest get trimmed.
+        VISIBLE,    // does nothing, renders while ignoring the bounds
+        HIDDEN,      // uses glScissors to clip the content, so only the pixels that land inside the box render. The rest get trimmed.
         SCROLLBAR, // trims the content and adds scrollbars
     }
 

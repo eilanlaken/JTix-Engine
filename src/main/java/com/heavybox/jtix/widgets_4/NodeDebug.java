@@ -28,12 +28,12 @@ public class NodeDebug extends Node {
     }
 
     @Override
-    public float getWidth() {
+    public float calculateWidth() {
         return width;
     }
 
     @Override
-    public float getHeight() {
+    public float calculateHeight() {
         return height;
     }
 

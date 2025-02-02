@@ -8,9 +8,9 @@ public class NodeContainerVertical extends NodeContainer {
 
     @Override
     protected void setChildrenOffset(final Array<Node> children) {
-        float position_y = (getHeight() * 0.5f - boxBorderSize - boxPaddingTop) * screenSclY;
+        float position_y = (calculateHeight() * 0.5f - boxBorderSize - boxPaddingTop) * screenSclY;
         for (Node child : children) {
-            float child_height = child.getHeight() * screenSclY;
+            float child_height = child.calculateHeight() * screenSclY;
             child.offsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;
             child.offsetY = position_y - child_height * 0.5f;
             position_y -= child_height + margin * screenSclY;
@@ -21,7 +21,7 @@ public class NodeContainerVertical extends NodeContainer {
     protected float getContentHeight(final Array<Node> children) {
         float height = 0;
         for (Node child : children) {
-            height += child.getHeight();
+            height += child.calculateHeight();
         }
         height += Math.max(0f, margin * (children.size - 1));
         return height;

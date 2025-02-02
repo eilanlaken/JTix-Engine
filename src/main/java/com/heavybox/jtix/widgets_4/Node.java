@@ -19,6 +19,7 @@ public abstract class Node {
     public float sclY   = 1;
 
     /* set by parent container */
+    // change to package.
     public int   refZIndex = 0;
     public float refX      = 0;
     public float refY      = 0;
@@ -27,6 +28,7 @@ public abstract class Node {
     public float refSclY   = 1;
 
     /* calculated by container and Transform */
+    // change to package private
     public int   screenZIndex = 0;
     public float screenX      = 0;
     public float screenY      = 0;
@@ -37,11 +39,12 @@ public abstract class Node {
     public float offsetX = 0;
     public float offsetY = 0;
 
+
     protected abstract void fixedUpdate(float delta);
     protected final void draw(Renderer2D renderer2D) { render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY); }
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
-    public abstract float getWidth();
-    public abstract float getHeight();
+    public abstract float calculateWidth();
+    public abstract float calculateHeight();
 
     public final void update(float delta) {
         transform();
@@ -53,24 +56,8 @@ public abstract class Node {
         polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
     }
 
-//    final void transform() {
-//        float cos = MathUtils.cosDeg(refDeg);
-//        float sin = MathUtils.sinDeg(refDeg);
-//        float x = this.x * cos - this.y * sin;
-//        float y = this.x * sin + this.y * cos;
-//        screenZIndex = refZIndex + this.zIndex;
-//        screenX = refX + x * refSclX;
-//        screenY = refY + y * refSclY;
-//        float offsetX = refOffsetX * cos - refOffsetY * sin;
-//        float offsetY = refOffsetX * sin + refOffsetY * cos;
-//        screenX += offsetX;
-//        screenY += offsetY;
-//        screenDeg  = this.deg + refDeg;
-//        screenSclX = this.sclX * refSclX;
-//        screenSclY = this.sclY * refSclY;
-//    }
 
-
+    // TODO: get rid of the new operator.
     final void transform() {
         float cos = MathUtils.cosDeg(refDeg);
         float sin = MathUtils.sinDeg(refDeg);
@@ -91,7 +78,7 @@ public abstract class Node {
 
     // kind of a default implementation
     protected void setPolygon(final Polygon polygon) {
-        polygon.setToRectangle(getWidth(), getHeight());
+        polygon.setToRectangle(calculateWidth(), calculateHeight());
     }
 
     @Override
