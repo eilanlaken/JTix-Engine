@@ -12,7 +12,7 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_Canvas_7 implements Scene {
+public class SceneTest_UI_Canvas_9 implements Scene {
 
 
     private final Renderer2D renderer2D = new Renderer2D();
@@ -25,7 +25,7 @@ public class SceneTest_UI_Canvas_7 implements Scene {
     NodeDebug rect3 = new NodeDebug(0,200);
     NodeDebug rect4 = new NodeDebug(0,200);
 
-    NodeContainerVertical container = new NodeContainerVertical();
+    NodeContainerHorizontal container = new NodeContainerHorizontal();
     // TODO
 
     @Override
@@ -44,6 +44,11 @@ public class SceneTest_UI_Canvas_7 implements Scene {
         container.addChild(rect2);
         container.addChild(rect3);
         container.addChild(rect4);
+        container.boxBorderSize = 4;
+
+        container.boxPaddingLeft = 50;
+        container.boxPaddingRight = 50;
+
         //container.addChild(text);
         //System.out.println(containerC.getContentWidth());
         container.boxBackgroudColor = Color.ROYAL.clone();
