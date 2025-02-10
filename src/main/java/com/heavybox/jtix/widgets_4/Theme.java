@@ -14,8 +14,9 @@ public final class Theme {
     public static float      textLineHeight               = 1.2f;
     public static boolean    textAntialiasing             = true;
     public static boolean    textWrapEnabled              = true;
-    // TODO: add background image.
-    // TODO: add container parameters.
+
+    // TODO: Add Themes for common supported primitives: image, text, text-field, checkbox, radio-button, ...
+
 
     // TODO: scrollbars
     public static ScrollbarRenderer scrollbarRenderer = getDefaultScrollbarRenderer();

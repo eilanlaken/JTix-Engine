@@ -19,36 +19,19 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
 
 
     private final Widget canvas = new Widget();
-    NodeText text = new NodeText("hello node");
-    NodeInputCheckbox checkbox = new NodeInputCheckbox();
-
-    NodeContainerHorizontal container = new NodeContainerHorizontal();
+//    Node element = new NodeInputCheckbox();
+//    Node element = new NodeInputRadio();
+    Node element = new NodeInputTextField();
 
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadFont("C:\\Windows\\Fonts\\ahronbd.ttf");
-
         Assets.loadTexturePack("assets/atlases/pack.yml");
-
         Assets.finishLoading();
 
-        container.boxHeightSizing = NodeContainer.Sizing.DYNAMIC;
-        container.boxBorderSize = 4;
-
-        container.boxPaddingLeft = 50;
-        container.boxPaddingRight = 50;
-
-        //container.addChild(text);
-        //System.out.println(containerC.getContentWidth());
-        container.boxBackgroudColor = Color.ROYAL.clone();
-
-        container.addChild(checkbox);
-
-        text.x = 300;
-        canvas.addNode(container);
-        canvas.addNode(text);
+        canvas.addNode(element);
     }
 
     @Override
@@ -79,47 +62,40 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            container.y += 3;
+            element.y += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            container.y -= 3;
+            element.y -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            container.x -= 3;
+            element.x -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            container.x += 3;
+            element.x += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            checkbox.deg += 3;
+            element.deg += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            checkbox.deg -= 3;
+            element.deg -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
-            checkbox.sclY *= 1.01f;
+            element.sclY *= 1.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            checkbox.sclY *= 0.99f;
+            element.sclY *= 0.99f;
         }
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.P)) {
-            checkbox.size *= 1.01f;
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.O)) {
-            checkbox.size *= 0.99f;
-        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0f,0f,0f,1);
+        GL11.glClearColor(1f,1f,1f,1);
 
 
         // render font

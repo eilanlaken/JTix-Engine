@@ -57,8 +57,6 @@ public class SceneTest_UI_Canvas_Primitives_Container implements Scene {
 
     }
 
-    float x = 0, y = 0, deg = 0, sclX = 1, sclY = 1;
-
     @Override
     public void update() {
 

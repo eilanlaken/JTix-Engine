@@ -40,7 +40,7 @@ public class NodeContainer extends Node {
     public float     boxHeightMin                 = 0;
     public float     boxHeightMax                 = Float.POSITIVE_INFINITY;
     public float     boxHeight                    = 1;
-    public Overflow  contentOverflowX             = Overflow.VISIBLE;
+    public Overflow  contentOverflowX             = Overflow.HIDDEN;
     public Overflow  contentOverflowY             = Overflow.HIDDEN;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
