@@ -6,6 +6,11 @@ public class NodeContainerVertical extends NodeContainer {
 
     public float margin = 5;
 
+    public NodeContainerVertical() {
+        contentOverflowX = Overflow.HIDDEN;
+        contentOverflowY = Overflow.SCROLLBAR;
+    }
+
     @Override
     protected void setChildrenOffset(final Array<Node> children) {
         float position_y = (calculateHeight() * 0.5f - boxBorderSize - boxPaddingTop) * screenSclY;

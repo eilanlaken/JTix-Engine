@@ -12,7 +12,7 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_Canvas_9 implements Scene {
+public class SceneTest_UI_Canvas_Primitives implements Scene {
 
 
     private final Renderer2D renderer2D = new Renderer2D();
@@ -20,13 +20,9 @@ public class SceneTest_UI_Canvas_9 implements Scene {
 
     private final Widget canvas = new Widget();
     NodeText text = new NodeText("hello node");
-    NodeDebug rect1 = new NodeDebug(0,100);
-    NodeDebug rect2 = new NodeDebug(0,200);
-    NodeDebug rect3 = new NodeDebug(0,200);
-    NodeDebug rect4 = new NodeDebug(0,200);
+    NodeInputCheckbox checkbox = new NodeInputCheckbox();
 
     NodeContainerHorizontal container = new NodeContainerHorizontal();
-    // TODO
 
     @Override
     public void setup() {
@@ -38,12 +34,7 @@ public class SceneTest_UI_Canvas_9 implements Scene {
 
         Assets.finishLoading();
 
-        container.boxWidthSizing = NodeContainer.Sizing.VIEWPORT;
-        container.boxWidth = 0.3f;
-        container.addChild(rect1);
-        container.addChild(rect2);
-        container.addChild(rect3);
-        container.addChild(rect4);
+        container.boxHeightSizing = NodeContainer.Sizing.DYNAMIC;
         container.boxBorderSize = 4;
 
         container.boxPaddingLeft = 50;
@@ -52,6 +43,8 @@ public class SceneTest_UI_Canvas_9 implements Scene {
         //container.addChild(text);
         //System.out.println(containerC.getContentWidth());
         container.boxBackgroudColor = Color.ROYAL.clone();
+
+        container.addChild(checkbox);
 
         text.x = 300;
         canvas.addNode(container);
@@ -102,27 +95,27 @@ public class SceneTest_UI_Canvas_9 implements Scene {
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            container.deg += 3;
+            checkbox.deg += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            container.deg -= 3;
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.U)) {
-            rect1.deg += 3;
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.I)) {
-            rect1.deg -= 3;
+            checkbox.deg -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
-            container.sclY *= 1.01f;
+            checkbox.sclY *= 1.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            container.sclY *= 0.99f;
+            checkbox.sclY *= 0.99f;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.P)) {
+            checkbox.size *= 1.01f;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.O)) {
+            checkbox.size *= 0.99f;
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -136,32 +129,6 @@ public class SceneTest_UI_Canvas_9 implements Scene {
 
         //checkbox.draw(renderer2D);
         canvas.draw(renderer2D);
-
-//        renderer2D.setColor(0,1,0,0.4f);
-//        renderer2D.drawRectangleBorder(300,100, -10,
-//                30, 10,
-//                30, 2,
-//                0, 2,
-//                0, 2,
-//                0,0,0,1,1);
-//
-//        renderer2D.setColor(1,0,0,0.4f);
-//        renderer2D.drawRectangleFilled(300,100,
-//                10, 10,
-//                0, 2,
-//                40, 20,
-//                30, 2,
-//                0,0,0,1,1);
-
-
-
-//        phase += 0.1f;
-//        renderer2D.setColor(0,1,0,0.4f);
-//        renderer2D.drawFunctionFilled(
-//                300, 55, 10, -MathUtils.PI_TWO, MathUtils.PI_TWO * 2, 55,
-//                x -> MathUtils.sinRad(x + phase), // Apply phase shift
-//                0, 0, 0, 1, 1
-//        );
 
         renderer2D.end();
 

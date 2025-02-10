@@ -40,7 +40,7 @@ public class NodeContainer extends Node {
     public float     boxHeightMin                 = 0;
     public float     boxHeightMax                 = Float.POSITIVE_INFINITY;
     public float     boxHeight                    = 1;
-    public Overflow  contentOverflowX             = Overflow.HIDDEN;
+    public Overflow  contentOverflowX             = Overflow.VISIBLE;
     public Overflow  contentOverflowY             = Overflow.HIDDEN;
     public Color     boxBackgroudColor            = Color.valueOf("#007BFF");
     public boolean   boxBackgroundEnabled         = true;
@@ -66,8 +66,8 @@ public class NodeContainer extends Node {
     private float backgroundHeight;
     private boolean overflowX;
     private boolean overflowY;
-    private float childrenOffsetX;
-    private float childrenOffsetY;
+    private float scrollX;
+    private float scrollY;
 
     public NodeContainer() {
 
@@ -90,8 +90,8 @@ public class NodeContainer extends Node {
         setChildrenOffset(children);
         calculatedWidth = calculateWidth();
         calculatedHeight = calculateHeight();
-        backgroundWidth = calculatedWidth - boxBorderSize * 2;
-        backgroundHeight = calculatedHeight - boxBorderSize * 2;
+        backgroundWidth = Math.max(0, calculatedWidth - boxBorderSize * 2);
+        backgroundHeight = Math.max(0, calculatedHeight - boxBorderSize * 2);
         // update overflowX amd overflowY
         for (Node child : children) {
             child.update(delta);
@@ -126,19 +126,39 @@ public class NodeContainer extends Node {
                     screenX, screenY, screenDeg, screenSclX, screenSclY);
         }
 
-        // begin mask
-        // draw mask
-        // end mask
+        // write mask
+        renderer2D.beginStencil();
+        renderer2D.setStencilModeIncrement();
+        final float windowMaxExtent = Math.max(Graphics.getWindowWidth(), Graphics.getWindowHeight());
+        final float fullScreenMask = 2 * windowMaxExtent;
+        float maskWidth  = contentOverflowX == Overflow.VISIBLE ? fullScreenMask : backgroundWidth;
+        float maskHeight = contentOverflowY == Overflow.VISIBLE ? fullScreenMask : backgroundHeight;
+        renderer2D.drawRectangleFilled(maskWidth, maskHeight,
+                boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
+                boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
+                boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
+                boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
+                screenX, screenY, screenDeg, screenSclX, screenSclY);
+        renderer2D.endStencil(); // end mask
 
-        // enable masking
+        // apply mask
+        renderer2D.enableMasking(); // enable masking
+        renderer2D.setMaskingFunctionEquals(1); // TODO: instead of 1, put the correct value for masking.
         for (Node child : children) {
             child.draw(renderer2D);
         }
-        // disable masking
+        renderer2D.disableMasking(); // disable masking
 
-        // begin mask
         // erase mask
-        // end mask
+        renderer2D.beginStencil();
+        renderer2D.setStencilModeDecrement();
+        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+                boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
+                boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
+                boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
+                boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
+                screenX, screenY, screenDeg, screenSclX, screenSclY);
+        renderer2D.endStencil();
 
         // draw scrollbars
     }

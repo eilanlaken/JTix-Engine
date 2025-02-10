@@ -1644,7 +1644,8 @@ public class Renderer2D implements MemoryResourceHolder {
             }
         }
 
-        MathUtils.polygonRemoveDegenerateVertices(inners);  // important
+        if (inners.size >= 3) MathUtils.polygonRemoveDegenerateVertices(inners);  // important
+        else return;
 
         Array<Vector2> outers = new Array<>(true, inners.size * 2);
         for (int i = 0; i < inners.size; i++) {
@@ -1668,7 +1669,8 @@ public class Renderer2D implements MemoryResourceHolder {
             outers.add(next);
         }
 
-        MathUtils.polygonRemoveDegenerateVertices(outers);  // maybe unnecessary
+        if (outers.size >= 3) MathUtils.polygonRemoveDegenerateVertices(outers);  // maybe unnecessary
+        else return;
 
         // transform vertices and put them in the buffer.
         for (int i = 0; i < inners.size; i++) {

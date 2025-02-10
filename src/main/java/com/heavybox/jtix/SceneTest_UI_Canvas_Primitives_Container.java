@@ -9,23 +9,20 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets_4.*;
+import com.heavybox.jtix.widgets_4.NodeContainer;
+import com.heavybox.jtix.widgets_4.NodeDebug;
+import com.heavybox.jtix.widgets_4.Widget;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_Canvas_9 implements Scene {
+public class SceneTest_UI_Canvas_Primitives_Container implements Scene {
 
 
     private final Renderer2D renderer2D = new Renderer2D();
 
 
     private final Widget canvas = new Widget();
-    NodeText text = new NodeText("hello node");
-    NodeDebug rect1 = new NodeDebug(0,100);
-    NodeDebug rect2 = new NodeDebug(0,200);
-    NodeDebug rect3 = new NodeDebug(0,200);
-    NodeDebug rect4 = new NodeDebug(0,200);
-
-    NodeContainerHorizontal container = new NodeContainerHorizontal();
+    NodeDebug rect = new NodeDebug(0,200);
+    NodeContainer container = new NodeContainer();
     // TODO
 
     @Override
@@ -38,24 +35,18 @@ public class SceneTest_UI_Canvas_9 implements Scene {
 
         Assets.finishLoading();
 
-        container.boxWidthSizing = NodeContainer.Sizing.VIEWPORT;
-        container.boxWidth = 0.3f;
-        container.addChild(rect1);
-        container.addChild(rect2);
-        container.addChild(rect3);
-        container.addChild(rect4);
-        container.boxBorderSize = 4;
+        rect.color = Color.YELLOW.clone();
+        rect.color.a = 0.8f;
 
-        container.boxPaddingLeft = 50;
-        container.boxPaddingRight = 50;
-
-        //container.addChild(text);
-        //System.out.println(containerC.getContentWidth());
+        container.boxWidthSizing = NodeContainer.Sizing.STATIC;
+        container.boxHeightSizing = NodeContainer.Sizing.STATIC;
+        container.boxWidth = 150;
+        container.boxHeight = 200f;
+        container.addChild(rect);
+        container.boxBorderSize = 1;
         container.boxBackgroudColor = Color.ROYAL.clone();
 
-        text.x = 300;
         canvas.addNode(container);
-        canvas.addNode(text);
     }
 
     @Override
@@ -110,11 +101,11 @@ public class SceneTest_UI_Canvas_9 implements Scene {
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.U)) {
-            rect1.deg += 3;
+            rect.deg += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.I)) {
-            rect1.deg -= 3;
+            rect.deg -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
