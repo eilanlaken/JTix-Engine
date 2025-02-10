@@ -19,9 +19,9 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
 
 
     private final Widget canvas = new Widget();
-//    Node element = new NodeInputCheckbox();
-//    Node element = new NodeInputRadio();
-    Node element = new NodeInputTextField();
+    Node checkbox = new NodeInputCheckbox();
+    Node textField = new NodeInputTextField();
+    Node radio = new NodeInputRadio();
 
     @Override
     public void setup() {
@@ -31,7 +31,13 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         Assets.loadTexturePack("assets/atlases/pack.yml");
         Assets.finishLoading();
 
-        canvas.addNode(element);
+        checkbox.y = 300;
+        textField.y = 0;
+        radio.y = -300;
+
+        canvas.addNode(checkbox);
+        canvas.addNode(radio);
+        canvas.addNode(textField);
     }
 
     @Override
@@ -62,35 +68,35 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            element.y += 3;
+            textField.y += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            element.y -= 3;
+            textField.y -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            element.x -= 3;
+            textField.x -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            element.x += 3;
+            textField.x += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            element.deg += 3;
+            textField.deg += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            element.deg -= 3;
+            textField.deg -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
-            element.sclY *= 1.01f;
+            textField.sclY *= 1.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            element.sclY *= 0.99f;
+            textField.sclY *= 0.99f;
         }
 
 
