@@ -68,7 +68,6 @@ public class NodeContainer extends Node {
     private boolean overflowY;
     private float scrollX;
     private float scrollY;
-    private int maskingRef = 1;
 
     public NodeContainer() {
 
@@ -93,10 +92,6 @@ public class NodeContainer extends Node {
         calculatedHeight = calculateHeight();
         backgroundWidth = Math.max(0, calculatedWidth - boxBorderSize * 2);
         backgroundHeight = Math.max(0, calculatedHeight - boxBorderSize * 2);
-
-        // masking
-        if (container != null) maskingRef = container.maskingRef + 1;
-
         // update overflowX amd overflowY
         for (Node child : children) {
             child.update(delta);
@@ -149,8 +144,8 @@ public class NodeContainer extends Node {
 
         // apply mask
         renderer2D.enableMasking(); // enable masking
-        //renderer2D.setMaskingFunctionLessEquals(1); // TODO: instead of 1, put the correct value for masking.
-        renderer2D.setMaskingFunctionEquals(maskingRef); // TODO: instead of 1, put the correct value for masking.
+        int maskingIndex = getMaskingIndex();
+        renderer2D.setMaskingFunctionEquals(maskingIndex); // TODO: instead of 1, put the correct value for masking.
         for (Node child : children) {
             child.draw(renderer2D);
         }

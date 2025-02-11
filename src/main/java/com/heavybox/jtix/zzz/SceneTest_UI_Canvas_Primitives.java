@@ -25,7 +25,8 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
     Node image;
 
     NodeContainer a = new NodeContainer();
-    NodeContainer b = new NodeContainer();
+    NodeContainer b1 = new NodeContainer();
+    NodeContainer b2 = new NodeContainer();
     NodeCircle c = new NodeCircle(50);
 
     @Override
@@ -57,15 +58,23 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         a.contentOverflowX = NodeContainer.Overflow.HIDDEN;
         a.contentOverflowY = NodeContainer.Overflow.HIDDEN;
 
-        b.boxBorderSize = 2;
-        b.boxWidthSizing = NodeContainer.Sizing.STATIC;
-        b.boxWidth = 150;
-        b.boxHeightSizing = NodeContainer.Sizing.STATIC;
-        b.boxHeight = 200;
-        b.boxBackgroudColor = Color.GREEN.clone();
+        b1.boxBorderSize = 2;
+        b1.boxWidthSizing = NodeContainer.Sizing.STATIC;
+        b1.boxWidth = 150;
+        b1.boxHeightSizing = NodeContainer.Sizing.STATIC;
+        b1.boxHeight = 40;
+        b1.boxBackgroudColor = Color.ROYAL.clone();
 
-        b.addChild(c);
-        a.addChild(b);
+        b2.boxBorderSize = 2;
+        b2.boxWidthSizing = NodeContainer.Sizing.STATIC;
+        b2.boxWidth = 150;
+        b2.boxHeightSizing = NodeContainer.Sizing.STATIC;
+        b2.boxHeight = 40;
+        b2.boxBackgroudColor = Color.GREEN.clone();
+
+        b1.addChild(c);
+        a.addChild(b1);
+        a.addChild(b2);
         canvas.addNode(a);
 
 //        canvas.addNode(image);
@@ -102,16 +111,20 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            b.y += 3;
+            b1.y += 3;
+            b2.y -= 3;
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            b.y -= 3;
+            b1.y -= 3;
+            b2.y += 3;
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            b.x -= 3;
+            b1.x -= 3;
+            b2.x += 3;
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            b.x += 3;
+            b1.x += 3;
+            b2.x -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {

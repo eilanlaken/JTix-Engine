@@ -30,12 +30,17 @@ public abstract class Node {
     // calculated by container
     public float offsetX = 0;
     public float offsetY = 0;
-    public int maskingIndex; // TODO.
+    public int maskingIndex = 1; // TODO.
 
     protected abstract void fixedUpdate(float delta);
     protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
     public abstract float calculateWidth(); // TODO: cache location and implement reset() logic
     public abstract float calculateHeight(); // TODO: cache location and implement reset() logic
+
+    public final int getMaskingIndex() {
+        if (container != null) return container.getMaskingIndex() + 1;
+        return 1;
+    }
 
     protected final void draw(Renderer2D renderer2D) {
         render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
