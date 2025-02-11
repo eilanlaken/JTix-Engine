@@ -6,11 +6,11 @@ import com.heavybox.jtix.math.Vector2;
 
 public abstract class Node {
 
-    protected NodeContainer container;
-
+    protected NodeContainer container = null;
     final Polygon polygon = new Polygon();
+    public boolean active = true;
 
-    /* can be explicitly set by user */
+    /* can be explicitly set by the programmer */
     public int   zIndex = 0;
     public float x      = 0;
     public float y      = 0;
@@ -19,7 +19,7 @@ public abstract class Node {
     public float sclY   = 1;
 
     /* calculated by container and Transform */
-    // TODO: change to package private
+    // TODO: change to protected
     public int   screenZIndex = 0;
     public float screenX      = 0;
     public float screenY      = 0;

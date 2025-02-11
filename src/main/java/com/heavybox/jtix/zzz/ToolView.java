@@ -1,4 +1,9 @@
 package com.heavybox.jtix.zzz;
 
-public class ToolView {
+import com.heavybox.jtix.widgets_4.NodeContainerVertical;
+
+public class ToolView extends NodeContainerVertical {
+
+
+
 }

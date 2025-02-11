@@ -58,6 +58,7 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         a.contentOverflowX = NodeContainer.Overflow.HIDDEN;
         a.contentOverflowY = NodeContainer.Overflow.HIDDEN;
 
+        b1.y = 50;
         b1.boxBorderSize = 2;
         b1.boxWidthSizing = NodeContainer.Sizing.STATIC;
         b1.boxWidth = 150;
@@ -65,6 +66,7 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         b1.boxHeight = 40;
         b1.boxBackgroudColor = Color.ROYAL.clone();
 
+        b1.y = -50;
         b2.boxBorderSize = 2;
         b2.boxWidthSizing = NodeContainer.Sizing.STATIC;
         b2.boxWidth = 150;
@@ -73,8 +75,8 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         b2.boxBackgroudColor = Color.GREEN.clone();
 
         b1.addChild(c);
-        a.addChild(b1);
         a.addChild(b2);
+        a.addChild(b1);
         canvas.addNode(a);
 
 //        canvas.addNode(image);
@@ -138,6 +140,13 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
             c.x += 3;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+            a.deg -= 3;
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
+            a.deg += 3;
         }
 
 

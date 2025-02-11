@@ -143,13 +143,13 @@ public class NodeContainer extends Node {
         renderer2D.endStencil(); // end mask
 
         // apply mask
-        renderer2D.enableMasking(); // enable masking
         int maskingIndex = getMaskingIndex();
-        renderer2D.setMaskingFunctionEquals(maskingIndex); // TODO: instead of 1, put the correct value for masking.
         for (Node child : children) {
+            renderer2D.enableMasking(); // enable masking
+            renderer2D.setMaskingFunctionEquals(maskingIndex); // TODO: instead of 1, put the correct value for masking.
             child.draw(renderer2D);
+            renderer2D.disableMasking(); // disable masking
         }
-        renderer2D.disableMasking(); // disable masking
 
         // erase mask
         renderer2D.beginStencil();

@@ -33,12 +33,12 @@ public class RPGMapMakerScene implements Scene {
 
         icons = Assets.get("assets/app-texture-packs/icons.yml");
 
-        ToolButton select = new ToolButton(icons.getRegion("assets/app-icons/select.png"), "Select", "press S");
-        ToolButton terrain = new ToolButton(icons.getRegion("assets/app-icons/terrain.png"), "Terrain", "press T");
-        ToolButton brush = new ToolButton(icons.getRegion("assets/app-icons/brush.png"), "Brush", "press B");
-        ToolButton path = new ToolButton(icons.getRegion("assets/app-icons/path.png"), "Path", "press P");
-        ToolButton text = new ToolButton(icons.getRegion("assets/app-icons/text.png"), "Text", "press T");
-        ToolButton export = new ToolButton(icons.getRegion("assets/app-icons/export.png"), "Export", "press E");
+        MenuItem select = new MenuItem(icons.getRegion("assets/app-icons/select.png"), "Select", "press S");
+        MenuItem terrain = new MenuItem(icons.getRegion("assets/app-icons/terrain.png"), "Terrain", "press T");
+        MenuItem brush = new MenuItem(icons.getRegion("assets/app-icons/brush.png"), "Brush", "press B");
+        MenuItem path = new MenuItem(icons.getRegion("assets/app-icons/path.png"), "Path", "press P");
+        MenuItem text = new MenuItem(icons.getRegion("assets/app-icons/text.png"), "Text", "press T");
+        MenuItem export = new MenuItem(icons.getRegion("assets/app-icons/export.png"), "Export", "press E");
 
         NodeContainerVertical toolbarContainer = new NodeContainerVertical();
         toolbarContainer.boxWidthSizing = NodeContainer.Sizing.DYNAMIC;
@@ -110,7 +110,7 @@ public class RPGMapMakerScene implements Scene {
         toolbar.update(Graphics.getDeltaTime());
         toolbar.handleInput(Graphics.getDeltaTime());
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
 
         }
 

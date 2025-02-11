@@ -23,9 +23,10 @@ It will be applied to the internal elements and the polygon.
  */
 public class Widget {
 
-    public Anchor anchor  = Anchor.CENTER_CENTER;
-    public float  anchorX = 50;
-    public float  anchorY = 100;
+    public Anchor  anchor  = Anchor.CENTER_CENTER;
+    public float   anchorX = 0;
+    public float   anchorY = 0;
+    public boolean active  = true;
 
     private final Array<Node> nodes = new Array<>(false, 5); // a list of ROOT nodes with no parent.
 
@@ -37,6 +38,7 @@ public class Widget {
         float min_y = Float.POSITIVE_INFINITY;
         float max_y = Float.NEGATIVE_INFINITY;
         for (Node node : nodes) {
+            if (!node.active) continue;
             min_x = Math.min(node.x - node.calculateWidth() * 0.5f, min_x);
             max_x = Math.max(node.x + node.calculateWidth() * 0.5f, max_x);
             min_y = Math.min(node.y - node.calculateHeight() * 0.5f, min_y);
@@ -100,11 +102,13 @@ public class Widget {
         }
 
         for (Node node : nodes) {
+            if (!node.active) continue;
             node.offsetX = offsetX;
             node.offsetY = offsetY;
         }
 
         for (Node node : nodes) {
+            if (!node.active) continue;
             node.update(delta);
         }
 
@@ -113,6 +117,7 @@ public class Widget {
     // TODO: this needs proper input handling, including nested Nodes. (frame update)
     public final void handleInput(float delta) {
         for (Node node : nodes) {
+            if (!node.active) continue;
             node.setInputRegion();
         }
     }
@@ -121,6 +126,7 @@ public class Widget {
     public final void draw(Renderer2D renderer2D) {
         renderer2D.stencilMaskClear(); // clear stencil buffer in case it was "stained" by previous rendering calls.
         for (Node node : nodes) {
+            if (!node.active) continue;
             node.draw(renderer2D);
         }
     }
