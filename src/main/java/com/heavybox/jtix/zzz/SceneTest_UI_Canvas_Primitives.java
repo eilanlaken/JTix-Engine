@@ -1,4 +1,4 @@
-package com.heavybox.jtix;
+package com.heavybox.jtix.zzz;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
@@ -23,6 +23,8 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
     Node textField = new NodeInputTextField();
     Node radio = new NodeInputRadio();
 
+    Node image;
+
     @Override
     public void setup() {
         //Assets.loadTexture("assets/textures/yellowSquare.jpg");
@@ -31,10 +33,20 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         Assets.loadTexturePack("assets/atlases/pack.yml");
         Assets.finishLoading();
 
+        TexturePack t = Assets.get("assets/atlases/pack.yml");
+
+        image = new NodeImage(t.getRegion("assets/textures/stones512.jpg"));
+
         checkbox.y = 300;
         textField.y = 0;
+        image.y = -100;
+        image.x = 200;
+        ((NodeImage) image).resizeX = 0.1f;
+        ((NodeImage) image).resizeY = 0.1f;
+
         radio.y = -300;
 
+        canvas.addNode(image);
         canvas.addNode(checkbox);
         canvas.addNode(radio);
         canvas.addNode(textField);
@@ -68,31 +80,31 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            textField.y += 3;
+            image.y += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            textField.y -= 3;
+            image.y -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            textField.x -= 3;
+            image.x -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            textField.x += 3;
+            image.x += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            textField.deg += 3;
+            image.deg += 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            textField.deg -= 3;
+            image.deg -= 3;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
-            textField.sclY *= 1.01f;
+            image.sclY *= 1.01f;
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {

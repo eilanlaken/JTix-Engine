@@ -2,8 +2,9 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
-import com.heavybox.jtix.tools.ToolsFontGenerator;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
+import com.heavybox.jtix.zzz.RPGMapMakerScene;
+import com.heavybox.jtix.zzz.SceneTest_UI_Canvas_Primitives;
 
 import java.io.IOException;
 
@@ -12,7 +13,21 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        //ToolsTexturePacker.packTextures("assets/atlases", "pack", 3,3, ToolsTexturePacker.TexturePackSize.SMALL_512,"assets/textures/stones512.jpg");
+        ToolsTexturePacker.packTextures("assets/app-texture-packs", "icons", 2,2, ToolsTexturePacker.TexturePackSize.LARGE_2048,
+                // toolbar
+                "assets/app-icons/brush.png",
+                "assets/app-icons/export.png",
+                "assets/app-icons/path.png",
+                "assets/app-icons/select.png",
+                "assets/app-icons/terrain.png",
+                "assets/app-icons/text.png",
+                // menu-bar
+                "assets/app-icons/new.png",
+                "assets/app-icons/open.png",
+                "assets/app-icons/blank.png",
+                "assets/app-icons/save.png",
+                "assets/app-icons/exit.png"
+                );
 //        try {
 //            //ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
 //        } catch (Exception e) {
@@ -65,7 +80,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneTest_UI_Canvas_Primitives());
+        Application.launch(new RPGMapMakerScene());
 
     }
 

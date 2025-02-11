@@ -127,38 +127,38 @@ public class NodeContainer extends Node {
         }
 
         // write mask
-        renderer2D.beginStencil();
-        renderer2D.setStencilModeIncrement();
-        final float windowMaxExtent = Math.max(Graphics.getWindowWidth(), Graphics.getWindowHeight());
-        final float fullScreenMask = 2 * windowMaxExtent;
-        float maskWidth  = contentOverflowX == Overflow.VISIBLE ? fullScreenMask : backgroundWidth;
-        float maskHeight = contentOverflowY == Overflow.VISIBLE ? fullScreenMask : backgroundHeight;
-        renderer2D.drawRectangleFilled(maskWidth, maskHeight,
-                boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
-                boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
-                boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
-                boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
-                screenX, screenY, screenDeg, screenSclX, screenSclY);
-        renderer2D.endStencil(); // end mask
-
-        // apply mask
-        renderer2D.enableMasking(); // enable masking
-        renderer2D.setMaskingFunctionEquals(1); // TODO: instead of 1, put the correct value for masking.
+//        renderer2D.beginStencil();
+//        renderer2D.setStencilModeIncrement();
+//        final float windowMaxExtent = Math.max(Graphics.getWindowWidth(), Graphics.getWindowHeight());
+//        final float fullScreenMask = 2 * windowMaxExtent;
+//        float maskWidth  = contentOverflowX == Overflow.VISIBLE ? fullScreenMask : backgroundWidth;
+//        float maskHeight = contentOverflowY == Overflow.VISIBLE ? fullScreenMask : backgroundHeight;
+//        renderer2D.drawRectangleFilled(maskWidth, maskHeight,
+//                boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
+//                boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
+//                boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
+//                boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
+//                screenX, screenY, screenDeg, screenSclX, screenSclY);
+//        renderer2D.endStencil(); // end mask
+//
+//        // apply mask
+//        renderer2D.enableMasking(); // enable masking
+//        renderer2D.setMaskingFunctionGreaterEquals(1); // TODO: instead of 1, put the correct value for masking.
         for (Node child : children) {
             child.draw(renderer2D);
         }
         renderer2D.disableMasking(); // disable masking
 
-        // erase mask
-        renderer2D.beginStencil();
-        renderer2D.setStencilModeDecrement();
-        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
-                boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
-                boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
-                boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
-                boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
-                screenX, screenY, screenDeg, screenSclX, screenSclY);
-        renderer2D.endStencil();
+//        // erase mask
+//        renderer2D.beginStencil();
+//        renderer2D.setStencilModeDecrement();
+//        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+//                boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
+//                boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
+//                boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
+//                boxCornerRadiusBottomLeft, boxCornerSegmentsBottomLeft,
+//                screenX, screenY, screenDeg, screenSclX, screenSclY);
+//        renderer2D.endStencil();
 
         // draw scrollbars
     }
