@@ -22,8 +22,11 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
     Node checkbox = new NodeInputCheckbox();
     Node textField = new NodeInputTextField();
     Node radio = new NodeInputRadio();
-
     Node image;
+
+    NodeContainer a = new NodeContainer();
+    NodeContainer b = new NodeContainer();
+    NodeCircle c = new NodeCircle(50);
 
     @Override
     public void setup() {
@@ -46,10 +49,29 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
 
         radio.y = -300;
 
-        canvas.addNode(image);
-        canvas.addNode(checkbox);
-        canvas.addNode(radio);
-        canvas.addNode(textField);
+        a.boxBorderSize = 3;
+        a.boxWidthSizing = NodeContainer.Sizing.STATIC;
+        a.boxWidth = 300;
+        a.boxHeightSizing = NodeContainer.Sizing.STATIC;
+        a.boxHeight = 400;
+        a.contentOverflowX = NodeContainer.Overflow.HIDDEN;
+        a.contentOverflowY = NodeContainer.Overflow.HIDDEN;
+
+        b.boxBorderSize = 2;
+        b.boxWidthSizing = NodeContainer.Sizing.STATIC;
+        b.boxWidth = 150;
+        b.boxHeightSizing = NodeContainer.Sizing.STATIC;
+        b.boxHeight = 200;
+        b.boxBackgroudColor = Color.GREEN.clone();
+
+        b.addChild(c);
+        a.addChild(b);
+        canvas.addNode(a);
+
+//        canvas.addNode(image);
+//        canvas.addNode(checkbox);
+//        canvas.addNode(radio);
+//        canvas.addNode(textField);
     }
 
     @Override
@@ -80,39 +102,33 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
         canvas.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            image.y += 3;
+            b.y += 3;
         }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            image.y -= 3;
+            b.y -= 3;
         }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            image.x -= 3;
+            b.x -= 3;
         }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            image.x += 3;
+            b.x += 3;
         }
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            image.deg += 3;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
+            c.y += 3;
         }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            image.deg -= 3;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+            c.y -= 3;
         }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.T)) {
-            image.sclY *= 1.01f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            c.x -= 3;
         }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            textField.sclY *= 0.99f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            c.x += 3;
         }
 
 
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
         GL11.glClearColor(1f,1f,1f,1);
 
 
@@ -137,6 +153,37 @@ public class SceneTest_UI_Canvas_Primitives implements Scene {
     @Override
     public void windowFilesDraggedAndDropped(Array<String> filePaths) {
         Scene.super.windowFilesDraggedAndDropped(filePaths);
+    }
+
+    class NodeCircle extends Node {
+
+        Color color = Color.YELLOW.clone();
+        float r;
+
+        NodeCircle(float r) {
+            this.r = r;
+        }
+
+        @Override
+        protected void fixedUpdate(float delta) {
+
+        }
+
+        @Override
+        protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
+            renderer2D.setColor(color);
+            renderer2D.drawCircleFilled(r, 15, x, y, deg, sclX, sclY);
+        }
+
+        @Override
+        public float calculateWidth() {
+            return r * 2;
+        }
+
+        @Override
+        public float calculateHeight() {
+            return r * 2;
+        }
     }
 
 }

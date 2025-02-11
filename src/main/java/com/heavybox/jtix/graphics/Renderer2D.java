@@ -310,7 +310,8 @@ public class Renderer2D implements MemoryResourceHolder {
     public void beginStencil() {
         if (!drawing) throw new GraphicsException("Stencil write operations must be made within a begin() and end() blocks.");
         if (drawingToStencil) throw new GraphicsException("call to beginMask() must be followed by a call to endMask() before subsequent calls to beginMask()");
-        if (maskingEnabled) throw new GraphicsException("Stencil and Masking blocks must be separated and not nested: cannot call stencilMaskBegin() while masking is enabled.");
+        //if (maskingEnabled) throw new GraphicsException("Stencil and Masking blocks must be separated and not nested: cannot call stencilMaskBegin() while masking is enabled.");
+        if (maskingEnabled) disableMasking();
         drawingToStencil = true;
         flush();
         GL11.glEnable(GL11.GL_STENCIL_TEST);
@@ -381,15 +382,6 @@ public class Renderer2D implements MemoryResourceHolder {
         setMaskingFunctionEquals(1);
     }
 
-    private void setMaskingFunction(int glStencilFunc, int reference) {
-        if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
-        if (!maskingEnabled) throw new GraphicsException("setMaskingFunction() should be called only between enableMasking() and disableMasking().");
-        if (reference != maskingRef || maskingFunction != glStencilFunc) flush();
-        maskingRef = reference;
-        maskingFunction = glStencilFunc;
-        GL11.glStencilFunc(glStencilFunc, reference, 0xFF);
-    }
-
     public void setMaskingFunctionNever(int reference) {
         setMaskingFunction(GL11.GL_NEVER, reference);
     }
@@ -420,6 +412,15 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void setMaskingFunctionGreaterEquals(int reference) {
         setMaskingFunction(GL11.GL_GEQUAL, reference);
+    }
+
+    private void setMaskingFunction(int glStencilFunc, int reference) {
+        if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
+        if (!maskingEnabled) throw new GraphicsException("setMaskingFunction() should be called only between enableMasking() and disableMasking().");
+        if (reference != maskingRef || maskingFunction != glStencilFunc) flush();
+        maskingRef = reference;
+        maskingFunction = glStencilFunc;
+        GL11.glStencilFunc(glStencilFunc, reference, 0xFF);
     }
 
     public void disableMasking() {
