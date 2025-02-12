@@ -56,7 +56,7 @@ public class RPGMapMakerScene implements Scene {
 
         toolbarWidget.anchor = Widget.Anchor.TOP_LEFT;
         toolbarWidget.anchorX = 0;
-        toolbarWidget.anchorY = 40;
+        toolbarWidget.anchorY = 24;
         toolbarWidget.addNode(toolBar);
 
         menuBarWidget.anchor = Widget.Anchor.TOP_CENTER;
@@ -91,7 +91,8 @@ public class RPGMapMakerScene implements Scene {
         toolbarWidget.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-
+            toolbarWidget.anchorY -= 1;
+            System.out.println(toolbarWidget.anchorY);
         }
 
         if (Input.mouse.getCursorEnteredWindow()) {

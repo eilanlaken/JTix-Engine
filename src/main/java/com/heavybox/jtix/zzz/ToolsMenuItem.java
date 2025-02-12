@@ -22,7 +22,7 @@ public class ToolsMenuItem extends NodeContainerHorizontal {
     public ToolsMenuItem(TextureRegion iconRegion, String name, String hotkey) {
         boxHeightSizing = Sizing.DYNAMIC;
         boxWidthSizing = Sizing.STATIC;
-        boxWidth = 200;
+        boxWidth = 240;
         boxBorderSize = 0;
         boxPaddingLeft = 10;
         boxPaddingRight = 10;

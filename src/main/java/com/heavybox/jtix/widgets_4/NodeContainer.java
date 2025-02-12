@@ -94,6 +94,7 @@ public class NodeContainer extends Node {
         backgroundHeight = Math.max(0, calculatedHeight - boxBorderSize * 2);
         // update overflowX amd overflowY
         for (Node child : children) {
+            if (!child.active) continue;
             child.update(delta);
         }
         updateContainer();
@@ -113,6 +114,7 @@ public class NodeContainer extends Node {
 
     protected void setChildrenOffset(final Array<Node> children) {
         for (Node child : children) {
+            if (!child.active) continue;
             child.offsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;
             child.offsetY = boxPaddingBottom - (boxPaddingBottom + boxPaddingTop) * 0.5f;
         }
@@ -158,6 +160,7 @@ public class NodeContainer extends Node {
         // apply mask
         int maskingIndex = getMaskingIndex();
         for (Node child : children) {
+            if (!child.active) continue;
             renderer2D.enableMasking(); // enable masking
             renderer2D.setMaskingFunctionEquals(maskingIndex); // TODO: instead of 1, put the correct value for masking.
             child.draw(renderer2D);
@@ -180,16 +183,18 @@ public class NodeContainer extends Node {
 
     protected float getContentWidth(final Array<Node> children) {
         float max_x = 0;
-        for (Node node : children) {
-            max_x = Math.max(node.calculateWidth(), max_x);
+        for (Node child : children) {
+            if (!child.active) continue;
+            max_x = Math.max(child.calculateWidth(), max_x);
         }
         return max_x;
     }
 
     protected float getContentHeight(final Array<Node> children) {
         float max_y = Float.NEGATIVE_INFINITY;
-        for (Node node : children) {
-            max_y = Math.max(node.calculateHeight(), max_y);
+        for (Node child : children) {
+            if (!child.active) continue;
+            max_y = Math.max(child.calculateHeight(), max_y);
         }
         return max_y;
     }

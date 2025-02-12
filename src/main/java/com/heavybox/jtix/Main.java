@@ -22,6 +22,7 @@ public class Main {
                 "assets/app-icons/select.png",
                 "assets/app-icons/terrain.png",
                 "assets/app-icons/text.png",
+                "assets/app-icons/move.png",
                 // menu-bar
                 "assets/app-icons/new.png",
                 "assets/app-icons/open.png",

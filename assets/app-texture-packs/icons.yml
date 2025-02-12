@@ -7,7 +7,7 @@ regions:
   packedHeight: 128
   packedWidth: 128
   textureIndex: 0
-  x: 4
+  x: 140
   y: 140
 - name: assets/app-icons/export.png
   offsetX: 0
@@ -29,7 +29,7 @@ regions:
   textureIndex: 0
   x: 140
   y: 4
-- name: assets/app-icons/save.png
+- name: assets/app-icons/move.png
   offsetX: 0
   offsetY: 0
   originalHeight: 128
@@ -39,6 +39,16 @@ regions:
   textureIndex: 0
   x: 276
   y: 4
+- name: assets/app-icons/save.png
+  offsetX: 0
+  offsetY: 0
+  originalHeight: 128
+  originalWidth: 128
+  packedHeight: 128
+  packedWidth: 128
+  textureIndex: 0
+  x: 4
+  y: 140
 - name: assets/app-icons/path.png
   offsetX: 0
   offsetY: 1
@@ -47,7 +57,7 @@ regions:
   packedHeight: 126
   packedWidth: 128
   textureIndex: 0
-  x: 4
+  x: 242
   y: 276
 - name: assets/app-icons/exit.png
   offsetX: 1
@@ -57,7 +67,7 @@ regions:
   packedHeight: 128
   packedWidth: 126
   textureIndex: 0
-  x: 140
+  x: 276
   y: 140
 - name: assets/app-icons/new.png
   offsetX: 8
@@ -67,8 +77,8 @@ regions:
   packedHeight: 128
   packedWidth: 112
   textureIndex: 0
-  x: 274
-  y: 140
+  x: 4
+  y: 276
 - name: assets/app-icons/text.png
   offsetX: 9
   offsetY: 0
@@ -77,8 +87,8 @@ regions:
   packedHeight: 128
   packedWidth: 110
   textureIndex: 0
-  x: 394
-  y: 140
+  x: 124
+  y: 276
 - name: assets/app-icons/open.png
   offsetX: 0
   offsetY: 21
@@ -87,7 +97,7 @@ regions:
   packedHeight: 86
   packedWidth: 128
   textureIndex: 0
-  x: 140
+  x: 378
   y: 276
 - name: assets/app-icons/terrain.png
   offsetX: 0
@@ -97,8 +107,8 @@ regions:
   packedHeight: 84
   packedWidth: 128
   textureIndex: 0
-  x: 276
-  y: 276
+  x: 378
+  y: 370
 - name: assets/app-icons/blank.png
   offsetX: 128
   offsetY: 0
@@ -107,8 +117,8 @@ regions:
   packedHeight: 0
   packedWidth: 0
   textureIndex: 0
-  x: 412
-  y: 276
+  x: 242
+  y: 410
 textures:
 - file: icons_0.png
   height: 512
