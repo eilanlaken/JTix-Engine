@@ -5,6 +5,7 @@ import com.heavybox.jtix.application.ApplicationSettings;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
 import com.heavybox.jtix.zzz.RPGMapMakerScene;
 import com.heavybox.jtix.zzz.SceneTest_UI_Canvas_Primitives;
+import com.heavybox.jtix.zzz.SceneTest_UI_Canvas_Primitives_input;
 
 import java.io.IOException;
 
@@ -80,7 +81,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneTest_UI_Canvas_Primitives());
+        Application.launch(new SceneTest_UI_Canvas_Primitives_input());
 
     }
 

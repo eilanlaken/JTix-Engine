@@ -21,7 +21,7 @@ public class Polygon {
         }
     }
 
-    void setToRectangle(float width, float height) {
+    public void setToRectangle(float width, float height) {
         points.clear();
         float widthHalf = width * 0.5f;
         float heightHalf = height * 0.5f;
@@ -31,7 +31,7 @@ public class Polygon {
         points.add(-widthHalf,  heightHalf);
     }
 
-    void setToRectangle(float width, float height, float cornerRadius, int refinement) {
+    public void setToRectangle(float width, float height, float cornerRadius, int refinement) {
         if (cornerRadius == 0) {
             setToRectangle(width, height);
             return;
@@ -76,7 +76,7 @@ public class Polygon {
         }
     }
 
-    void setToRectangle(float width, float height,
+    public void setToRectangle(float width, float height,
                                float cornerRadiusTopLeft, int refinementTopLeft,
                                float cornerRadiusTopRight, int refinementTopRight,
                                float cornerRadiusBottomRight, int refinementBottomRight,
@@ -132,7 +132,7 @@ public class Polygon {
         }
     }
 
-    void setToCircle(float r, int refinement) {
+    public void setToCircle(float r, int refinement) {
         points.clear();
         refinement = Math.max(refinement, 3);
         float da = 360f / refinement;

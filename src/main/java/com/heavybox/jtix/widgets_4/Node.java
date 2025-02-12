@@ -37,6 +37,7 @@ public abstract class Node {
     public abstract float calculateWidth(); // TODO: cache location and implement reset() logic
     public abstract float calculateHeight(); // TODO: cache location and implement reset() logic
 
+    // TODO: optimize by caching and only change when setting a parent.
     public final int getMaskingIndex() {
         if (container != null) return container.getMaskingIndex() + 1;
         return 1;

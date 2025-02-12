@@ -9,6 +9,8 @@ public final class Widgets {
 
     private static int count = 0;
 
+    public static boolean debugMode = true;
+
     private static final StringBuilder wordWrapStringBuilder    = new StringBuilder();
     private static final ArrayInt      wordWrapStartIndices     = new ArrayInt();
     private static final ArrayInt      wordWrapLinebreakIndices = new ArrayInt();
