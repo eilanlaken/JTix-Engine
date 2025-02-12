@@ -86,7 +86,7 @@ public class NodeContainer extends Node {
     }
 
     @Override
-    protected void fixedUpdate(float delta) {
+    protected final void fixedUpdate(float delta) {
         setChildrenOffset(children);
         calculatedWidth = calculateWidth();
         calculatedHeight = calculateHeight();
@@ -96,6 +96,11 @@ public class NodeContainer extends Node {
         for (Node child : children) {
             child.update(delta);
         }
+        updateContainer();
+    }
+
+    protected void updateContainer() {
+
     }
 
     @Override

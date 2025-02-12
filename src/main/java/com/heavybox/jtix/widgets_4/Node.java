@@ -16,9 +16,9 @@ public abstract class Node {
     public    boolean       active    = true;
 
     /* input handling */
-    public BiConsumer<Float, Float> onClick     = null;
-    public BiConsumer<Float, Float> onMouseOver = null;
-    public BiConsumer<Float, Float> onMouseOut  = null;
+    public Runnable onClick     = null;
+    public Runnable onMouseOver = null;
+    public Runnable onMouseOut  = null;
     private boolean mouseRegisterClicks = false;
 
     /* can be explicitly set by the programmer */
@@ -89,13 +89,13 @@ public abstract class Node {
         /* invoke event callbacks */
         // TODO
         if (mouseRegisterClicks && Input.mouse.isButtonClicked(Mouse.Button.LEFT) && mouseInside) {
-            if (onClick != null) onClick.accept(pointerX, pointerY);
+            if (onClick != null) onClick.run();
         }
         if (mouseJustEntered) {
-            if (onMouseOver != null) onMouseOver.accept(pointerX, pointerY);
+            if (onMouseOver != null) onMouseOver.run();
         }
         if (mouseJustLeft) {
-            if (onMouseOut != null) onMouseOut.accept(pointerX, pointerY);
+            if (onMouseOut != null) onMouseOut.run();
         }
 
         frameUpdate();

@@ -21,8 +21,8 @@ public class RPGMapMakerScene implements Scene {
     private final Renderer2D renderer2D = new Renderer2D();
     private TexturePack icons;
 
-    private final Widget toolbar = new Widget();
-    private final Widget menuBar = new Widget();
+    private final Widget toolbarWidget = new Widget();
+    private final Widget menuBarWidget = new Widget();
 
     @Override
     public void setup() {
@@ -33,27 +33,7 @@ public class RPGMapMakerScene implements Scene {
 
         icons = Assets.get("assets/app-texture-packs/icons.yml");
 
-        MenuItem select = new MenuItem(icons.getRegion("assets/app-icons/select.png"), "Select", "press S");
-        MenuItem terrain = new MenuItem(icons.getRegion("assets/app-icons/terrain.png"), "Terrain", "press T");
-        MenuItem brush = new MenuItem(icons.getRegion("assets/app-icons/brush.png"), "Brush", "press B");
-        MenuItem path = new MenuItem(icons.getRegion("assets/app-icons/path.png"), "Path", "press P");
-        MenuItem text = new MenuItem(icons.getRegion("assets/app-icons/text.png"), "Text", "press T");
-        MenuItem export = new MenuItem(icons.getRegion("assets/app-icons/export.png"), "Export", "press E");
-
-        NodeContainerVertical toolbarContainer = new NodeContainerVertical();
-        toolbarContainer.boxWidthSizing = NodeContainer.Sizing.DYNAMIC;
-        toolbarContainer.boxHeightSizing = NodeContainer.Sizing.DYNAMIC;
-        toolbarContainer.boxBorderSize = 0;
-        toolbarContainer.boxPaddingTop = 5;
-        toolbarContainer.boxPaddingBottom = 5;
-        toolbarContainer.boxBackgroudColor = Color.valueOf("1D1D1D");
-        toolbarContainer.boxBackgroundEnabled = true;
-        toolbarContainer.addChild(select);
-        toolbarContainer.addChild(terrain);
-        toolbarContainer.addChild(brush);
-        toolbarContainer.addChild(path);
-        toolbarContainer.addChild(text);
-        toolbarContainer.addChild(export);
+        ToolBar toolBar = new ToolBar();
 
         NodeContainerHorizontal menuBarContainer = new NodeContainerHorizontal();
         menuBarContainer.boxWidthSizing = NodeContainer.Sizing.VIEWPORT;
@@ -74,14 +54,14 @@ public class RPGMapMakerScene implements Scene {
         menuBarContainer.addChild(edit);
         menuBarContainer.addChild(help);
 
-        toolbar.anchor = Widget.Anchor.TOP_LEFT;
-        toolbar.anchorX = 0;
-        toolbar.anchorY = 40;
-        toolbar.addNode(toolbarContainer);
+        toolbarWidget.anchor = Widget.Anchor.TOP_LEFT;
+        toolbarWidget.anchorX = 0;
+        toolbarWidget.anchorY = 40;
+        toolbarWidget.addNode(toolBar);
 
-        menuBar.anchor = Widget.Anchor.TOP_CENTER;
-        menuBar.anchorY = 0;
-        menuBar.addNode(menuBarContainer);
+        menuBarWidget.anchor = Widget.Anchor.TOP_CENTER;
+        menuBarWidget.anchorY = 0;
+        menuBarWidget.addNode(menuBarContainer);
     }
 
     @Override
@@ -105,10 +85,10 @@ public class RPGMapMakerScene implements Scene {
 //            text.append((char)  codepoint);
         }
 
-        menuBar.update(Graphics.getDeltaTime());
-        menuBar.handleInput(Graphics.getDeltaTime());
-        toolbar.update(Graphics.getDeltaTime());
-        toolbar.handleInput(Graphics.getDeltaTime());
+        menuBarWidget.update(Graphics.getDeltaTime());
+        menuBarWidget.handleInput(Graphics.getDeltaTime());
+        toolbarWidget.update(Graphics.getDeltaTime());
+        toolbarWidget.handleInput(Graphics.getDeltaTime());
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
 
@@ -125,8 +105,8 @@ public class RPGMapMakerScene implements Scene {
         //slider.draw(renderer2D);
 
         //checkbox.draw(renderer2D);
-        toolbar.draw(renderer2D);
-        menuBar.draw(renderer2D);
+        toolbarWidget.draw(renderer2D);
+        menuBarWidget.draw(renderer2D);
 
         renderer2D.end();
 

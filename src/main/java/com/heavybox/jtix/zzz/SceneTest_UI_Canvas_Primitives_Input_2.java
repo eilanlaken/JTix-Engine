@@ -74,7 +74,7 @@ public class SceneTest_UI_Canvas_Primitives_Input_2 implements Scene {
         b2.boxHeight = 40;
         b2.boxBackgroudColor = Color.GREEN.clone();
 
-        c.onClick = (x, y) -> System.out.println("circle clicked");
+        c.onClick = () -> System.out.println("circle clicked");
 
 
         b1.addChild(c);

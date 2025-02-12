@@ -56,7 +56,7 @@ public class SceneTest_UI_Canvas_Primitives_Input implements Scene {
         a.contentOverflowX = NodeContainer.Overflow.VISIBLE;
         a.contentOverflowY = NodeContainer.Overflow.HIDDEN;
 
-        c.onClick = (x, y) -> System.out.println("circle clicked");
+        c.onClick = () -> System.out.println("circle clicked");
 
         a.addChild(c);
         canvas.addNode(a);
