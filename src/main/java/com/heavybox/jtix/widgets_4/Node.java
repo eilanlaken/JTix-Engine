@@ -7,8 +7,6 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 
-import java.util.function.BiConsumer;
-
 public abstract class Node {
 
     protected NodeContainer container = null;
@@ -17,8 +15,9 @@ public abstract class Node {
 
     /* input handling */
     public Runnable onClick     = null;
-    public Runnable onMouseOver = null;
-    public Runnable onMouseOut  = null;
+    public Runnable onMouseOver  = null;
+    public Runnable onMouseEnter = null;
+    public Runnable onMouseLeave = null;
     private boolean mouseRegisterClicks = false;
 
     /* can be explicitly set by the programmer */
@@ -68,20 +67,23 @@ public abstract class Node {
         polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
     }
 
+    // TODO: many bugs here.
     final void handleInput() {
         setPolygon(polygon);
         polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
 
         // TODO see how to lift up to widget.
-        float pointerX = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
-        float pointerY = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
-        float pointerXPrev = Input.mouse.getXPrev() - Graphics.getWindowWidth() * 0.5f;
-        float pointerYPrev = Graphics.getWindowHeight() * 0.5f - Input.mouse.getYPrev();
+        float windowHalfWidth = Graphics.getWindowWidth() * 0.5f;
+        float windowHalfHeight = Graphics.getWindowHeight() * 0.5f;
+        float pointerX = Input.mouse.getX() - windowHalfWidth;
+        float pointerY = windowHalfHeight - Input.mouse.getY();
+        float pointerXPrev = Input.mouse.getXPrev() - windowHalfWidth;
+        float pointerYPrev = windowHalfHeight - Input.mouse.getYPrev();
 
         boolean mouseInside = containsPoint(pointerX, pointerY);
         boolean mousePrevInside = containsPoint(pointerXPrev, pointerYPrev);
-        boolean mouseJustEntered = !mousePrevInside && mouseInside;
-        boolean mouseJustLeft = !mouseInside && mousePrevInside;
+        boolean mouseJustEntered = (!mousePrevInside && mouseInside) || (Input.mouse.getCursorEnteredWindow() && mouseInside);
+        boolean mouseJustLeft = (!mouseInside && mousePrevInside) || Input.mouse.getCursorLeftWindow();
         if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
             mouseRegisterClicks = mouseInside;
         }
@@ -92,10 +94,10 @@ public abstract class Node {
             if (onClick != null) onClick.run();
         }
         if (mouseJustEntered) {
-            if (onMouseOver != null) onMouseOver.run();
+            if (onMouseEnter != null) onMouseEnter.run();
         }
         if (mouseJustLeft) {
-            if (onMouseOut != null) onMouseOut.run();
+            if (onMouseLeave != null) onMouseLeave.run();
         }
 
         frameUpdate();

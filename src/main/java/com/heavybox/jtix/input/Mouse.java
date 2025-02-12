@@ -14,6 +14,8 @@ public class Mouse {
     private int     cursorDeltaY     = 0;
     private boolean cursorHidden     = false;
     private boolean cursorInWindow   = true;
+    private boolean cursorEnteredWindow = false;
+    private boolean cursorLeftWindow    = false;
     private float   verticalScroll   = 0;
     private float   horizontalScroll = 0;
 
@@ -46,6 +48,8 @@ public class Mouse {
             @Override
             public void invoke(long window, boolean entered) {
                 cursorInWindow = entered;
+                cursorEnteredWindow = entered;
+                cursorLeftWindow = !entered;
             }
         });
 
@@ -124,6 +128,14 @@ public class Mouse {
         return mouseButtonsPrevStates[button.glfwCode] == GLFW.GLFW_PRESS && mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
+    public boolean getCursorEnteredWindow() {
+        return cursorEnteredWindow;
+    }
+
+    public boolean getCursorLeftWindow() {
+        return cursorLeftWindow;
+    }
+
     void update() {
         /* reset internal state */
         verticalScroll = 0;
@@ -135,6 +147,9 @@ public class Mouse {
         mouseButtonsPrevStates[GLFW.GLFW_MOUSE_BUTTON_3] = mouseButtonsCurrentStates[GLFW.GLFW_MOUSE_BUTTON_3];
         mouseButtonsPrevStates[GLFW.GLFW_MOUSE_BUTTON_4] = mouseButtonsCurrentStates[GLFW.GLFW_MOUSE_BUTTON_4];
         mouseButtonsPrevStates[GLFW.GLFW_MOUSE_BUTTON_5] = mouseButtonsCurrentStates[GLFW.GLFW_MOUSE_BUTTON_5];
+
+        cursorEnteredWindow = false;
+        cursorLeftWindow = false;
     }
 
     public enum Button {

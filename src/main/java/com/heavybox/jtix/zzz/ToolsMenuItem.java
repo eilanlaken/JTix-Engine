@@ -11,7 +11,7 @@ import com.heavybox.jtix.widgets_4.NodeText;
 public class ToolsMenuItem extends NodeContainerHorizontal {
 
     public static final Color COLOR_UNSELECTED = Color.valueOf("1D1D1D");
-    public static final Color COLOR_SELECTED = Color.RED;
+    public static final Color COLOR_SELECTED = Color.valueOf("AD1D1D");
     public static final Color TEXT_COLOR_SELECTED = Color.WHITE;
     public static final Color TEXT_COLOR_UNSELECTED = Color.WHITE;
 
@@ -51,13 +51,13 @@ public class ToolsMenuItem extends NodeContainerHorizontal {
             toolBar.select(this);
         };
 
-        onMouseOver = () -> {
+        onMouseEnter = () -> {
             ToolBar toolBar = (ToolBar) container;
             if (toolBar.selected == this) return;
             boxBackgroudColor = Color.valueOf("2D2D4D");
         };
 
-        onMouseOut = () -> {
+        onMouseLeave = () -> {
             ToolBar toolBar = (ToolBar) container;
             if (toolBar.selected == this) return;
             boxBackgroudColor = Color.valueOf("1D1D1D");

@@ -94,6 +94,12 @@ public class RPGMapMakerScene implements Scene {
 
         }
 
+        if (Input.mouse.getCursorEnteredWindow()) {
+            //System.out.println("entered");
+        }
+        if (Input.mouse.getCursorLeftWindow()) {
+            //System.out.println("left");
+        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); // should probably clear the stencil
         GL11.glClearColor(0.01f,0.01f,0.01f,1);

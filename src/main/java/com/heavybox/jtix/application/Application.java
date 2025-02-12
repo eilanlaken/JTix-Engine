@@ -90,7 +90,7 @@ public class Application {
         }
 
     };
-    private static final GLFWWindowFocusCallback     windowFocusChangeCallback  = new GLFWWindowFocusCallback() {
+    private static final GLFWWindowFocusCallback windowFocusChangeCallback  = new GLFWWindowFocusCallback() {
         @Override
         public synchronized void invoke(long handle, final boolean focused) {
             windowTasks.add(() -> {
@@ -131,7 +131,7 @@ public class Application {
             });
         }
     };
-    private static final GLFWWindowPosCallback       windowPositionCallback     = new GLFWWindowPosCallback() {
+    private static final GLFWWindowPosCallback windowPositionCallback = new GLFWWindowPosCallback() {
         @Override
         public void invoke(long handle, int xPos, int yPos) {
             windowPosX = xPos;
@@ -357,13 +357,26 @@ public class Application {
         GLFW.glfwSetWindowShouldClose(windowHandle, true);
     }
 
+    // window set size and window increase size.
+    public static void windowSetWidth(int width) {
+        GLFW.glfwSetWindowSize(windowHandle, width, windowHeight);
+    }
+
+    public static void windowSetHeight(int height) {
+        GLFW.glfwSetWindowSize(windowHandle, windowWidth, height);
+    }
+
+    public static void windowResize(int deltaWidth, int deltaHeight) {
+        GLFW.glfwSetWindowSize(windowHandle, windowWidth + deltaWidth, windowHeight + deltaHeight);
+    }
+
     public static void windowSetSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) {
         GLFW.glfwSetWindowSizeLimits(windowHandle, minWidth > -1 ? minWidth : GLFW.GLFW_DONT_CARE,
                 minHeight > -1 ? minHeight : GLFW.GLFW_DONT_CARE, maxWidth > -1 ? maxWidth : GLFW.GLFW_DONT_CARE,
                 maxHeight > -1 ? maxHeight : GLFW.GLFW_DONT_CARE);
     }
 
-    protected static void windowSetPosition(int x, int y) {
+    public static void windowSetPosition(int x, int y) {
         GLFW.glfwSetWindowPos(windowHandle, x, y);
     }
 
@@ -375,10 +388,6 @@ public class Application {
     public static void windowMaximize() {
         GLFW.glfwMaximizeWindow(windowHandle);
         windowMaximized = true;
-    }
-
-    public static void setWindowPosition(int xPos, int yPos) {
-        GLFW.glfwSetWindowPos(windowHandle, xPos, yPos);
     }
 
     public static void windowFocus() {
