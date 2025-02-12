@@ -3,6 +3,7 @@ package com.heavybox.jtix.widgets_4;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.input.Input;
 
 /*
 TODO: you would be able to anchor a canvas to one of the screen corners / CENTER.
@@ -116,9 +117,10 @@ public class Widget {
 
     // TODO: this needs proper input handling, including nested Nodes. (frame update)
     public final void handleInput(float delta) {
+
         for (Node node : nodes) {
             if (!node.active) continue;
-            node.setInputRegion();
+            node.handleInput();
         }
     }
 

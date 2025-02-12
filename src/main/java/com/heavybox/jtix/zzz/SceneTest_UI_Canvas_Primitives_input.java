@@ -53,10 +53,10 @@ public class SceneTest_UI_Canvas_Primitives_input implements Scene {
         a.boxWidth = 300;
         a.boxHeightSizing = NodeContainer.Sizing.STATIC;
         a.boxHeight = 400;
-        a.contentOverflowX = NodeContainer.Overflow.HIDDEN;
+        a.contentOverflowX = NodeContainer.Overflow.VISIBLE;
         a.contentOverflowY = NodeContainer.Overflow.HIDDEN;
 
-
+        c.onClick = (x, y) -> System.out.println("circle clicked");
 
         a.addChild(c);
         canvas.addNode(a);

@@ -98,6 +98,14 @@ public class NodeContainer extends Node {
         }
     }
 
+    @Override
+    protected void frameUpdate() {
+        for (Node child : children) {
+            if (!child.active) continue;
+            child.handleInput();
+        }
+    }
+
     protected void setChildrenOffset(final Array<Node> children) {
         for (Node child : children) {
             child.offsetX = boxPaddingLeft - (boxPaddingLeft + boxPaddingRight) * 0.5f;

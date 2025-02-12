@@ -1,14 +1,24 @@
 package com.heavybox.jtix.widgets_4;
 
+import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
+import com.heavybox.jtix.input.Input;
+import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Vector2;
+
+import java.util.function.BiConsumer;
 
 public abstract class Node {
 
     protected NodeContainer container = null;
-    final Polygon polygon = new Polygon();
-    public boolean active = true;
+    protected Polygon       polygon   = new Polygon();
+    public    boolean       active    = true;
+
+    /* input handling */
+    public BiConsumer<Float, Float> onClick     = null;
+    public BiConsumer<Float, Float> onMouseOver = null;
+    public BiConsumer<Float, Float> onMouseOut  = null;
+    private boolean mouseRegisterClicks = false;
 
     /* can be explicitly set by the programmer */
     public int   zIndex = 0;
@@ -57,6 +67,43 @@ public abstract class Node {
         polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
     }
 
+    final void handleInput() {
+        setPolygon(polygon);
+        polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
+
+        // TODO see how to lift up to widget.
+        float pointerX = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
+        float pointerY = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
+        float pointerXPrev = Input.mouse.getXPrev() - Graphics.getWindowWidth() * 0.5f;
+        float pointerYPrev = Graphics.getWindowHeight() * 0.5f - Input.mouse.getYPrev();
+
+        boolean mouseInside = containsPoint(pointerX, pointerY);
+        boolean mousePrevInside = containsPoint(pointerXPrev, pointerYPrev);
+        boolean mouseJustEntered = !mousePrevInside && mouseInside;
+        boolean mouseJustLeft = !mouseInside && mousePrevInside;
+        if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
+            mouseRegisterClicks = mouseInside;
+        }
+
+        /* invoke event callbacks */
+        // TODO
+        if (mouseRegisterClicks && Input.mouse.isButtonClicked(Mouse.Button.LEFT) && mouseInside) {
+            if (onClick != null) onClick.accept(pointerX, pointerY);
+        }
+        if (mouseJustEntered) {
+            if (onMouseOver != null) onMouseOver.accept(pointerX, pointerY);
+        }
+        if (mouseJustLeft) {
+            if (onMouseOut != null) onMouseOut.accept(pointerX, pointerY);
+        }
+
+        frameUpdate();
+    }
+
+    protected void frameUpdate() {
+
+    }
+
     final void transform() {
         int refZIndex = container == null ? this.zIndex : this.zIndex + container.screenZIndex;
         float refX = container == null ? 0 : container.screenX;
@@ -80,6 +127,14 @@ public abstract class Node {
     // kind of a default implementation
     protected void setPolygon(final Polygon polygon) {
         polygon.setToRectangle(calculateWidth(), calculateHeight());
+    }
+
+    final boolean containsPoint(float x, float y) {
+        if (container == null) return polygon.containsPoint(x, y);
+        if (container.contentOverflowX == NodeContainer.Overflow.VISIBLE) return polygon.containsPoint(x, y);
+        if (container.contentOverflowY == NodeContainer.Overflow.VISIBLE) return polygon.containsPoint(x, y);
+
+        return polygon.containsPoint(x, y) && container.containsPoint(x, y);
     }
 
     @Override
