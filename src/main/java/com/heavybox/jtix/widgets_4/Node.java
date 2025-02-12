@@ -5,6 +5,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 
 import java.util.function.BiConsumer;
 
@@ -131,8 +132,34 @@ public abstract class Node {
 
     final boolean containsPoint(float x, float y) {
         if (container == null) return polygon.containsPoint(x, y);
-        if (container.contentOverflowX == NodeContainer.Overflow.VISIBLE) return polygon.containsPoint(x, y);
-        if (container.contentOverflowY == NodeContainer.Overflow.VISIBLE) return polygon.containsPoint(x, y);
+
+        if (container.contentOverflowX == NodeContainer.Overflow.VISIBLE && container.contentOverflowY == NodeContainer.Overflow.VISIBLE) {
+            return polygon.containsPoint(x, y);
+        }
+
+        if (container.contentOverflowX == NodeContainer.Overflow.VISIBLE && container.contentOverflowY == NodeContainer.Overflow.HIDDEN) {
+            if (MathUtils.isZero(container.sclY)) return false;
+
+            float height = container.calculateHeight() - container.boxBorderSize;
+            Vector2 v = new Vector2(x, y);
+            v.sub(container.screenX, container.screenY);
+            v.rotateDeg(-container.screenDeg);
+            v.scl(0, 1 / container.screenSclY);
+
+            return polygon.containsPoint(x, y) && Math.abs(v.y) <= Math.abs(height / 2);
+        }
+
+        if (container.contentOverflowX == NodeContainer.Overflow.HIDDEN && container.contentOverflowY == NodeContainer.Overflow.VISIBLE) {
+            if (MathUtils.isZero(container.sclX)) return false;
+
+            float width = container.calculateWidth() - container.boxBorderSize;
+            Vector2 v = new Vector2(x, y);
+            v.sub(container.screenX, container.screenY);
+            v.rotateDeg(-container.screenDeg);
+            v.scl(0, 1 / container.screenSclY);
+
+            return polygon.containsPoint(x, y) && Math.abs(v.x) <= Math.abs(width / 2);
+        }
 
         return polygon.containsPoint(x, y) && container.containsPoint(x, y);
     }
