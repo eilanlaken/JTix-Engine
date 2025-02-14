@@ -19,6 +19,8 @@ public abstract class Node {
     public Runnable onMouseEnter = null;
     public Runnable onMouseLeave = null;
     private boolean mouseRegisterClicks = false;
+    private boolean mouseInside = false;
+    private boolean mouseInsidePrev = false;
 
     /* can be explicitly set by the programmer */
     public int   zIndex = 0;
@@ -77,13 +79,11 @@ public abstract class Node {
         float windowHalfHeight = Graphics.getWindowHeight() * 0.5f;
         float pointerX = Input.mouse.getX() - windowHalfWidth;
         float pointerY = windowHalfHeight - Input.mouse.getY();
-        float pointerXPrev = Input.mouse.getXPrev() - windowHalfWidth;
-        float pointerYPrev = windowHalfHeight - Input.mouse.getYPrev();
 
-        boolean mouseInside = containsPoint(pointerX, pointerY);
-        boolean mousePrevInside = containsPoint(pointerXPrev, pointerYPrev);
-        boolean mouseJustEntered = (!mousePrevInside && mouseInside) || (Input.mouse.getCursorEnteredWindow() && mouseInside);
-        boolean mouseJustLeft = (!mouseInside && mousePrevInside) || Input.mouse.getCursorLeftWindow();
+        mouseInsidePrev = mouseInside;
+        mouseInside = containsPoint(pointerX, pointerY);
+        boolean mouseJustEntered = (!mouseInsidePrev && mouseInside) || (Input.mouse.cursorJustEnteredWindow() && mouseInside);
+        boolean mouseJustLeft = (!mouseInside && mouseInsidePrev) || Input.mouse.cursorJustLeftWindow();
         if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
             mouseRegisterClicks = mouseInside;
         }

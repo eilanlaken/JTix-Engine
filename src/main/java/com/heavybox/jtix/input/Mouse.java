@@ -128,11 +128,11 @@ public class Mouse {
         return mouseButtonsPrevStates[button.glfwCode] == GLFW.GLFW_PRESS && mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
-    public boolean getCursorEnteredWindow() {
+    public boolean cursorJustEnteredWindow() {
         return cursorEnteredWindow;
     }
 
-    public boolean getCursorLeftWindow() {
+    public boolean cursorJustLeftWindow() {
         return cursorLeftWindow;
     }
 

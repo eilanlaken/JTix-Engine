@@ -95,10 +95,10 @@ public class RPGMapMakerScene implements Scene {
             System.out.println(toolbarWidget.anchorY);
         }
 
-        if (Input.mouse.getCursorEnteredWindow()) {
+        if (Input.mouse.cursorJustEnteredWindow()) {
             //System.out.println("entered");
         }
-        if (Input.mouse.getCursorLeftWindow()) {
+        if (Input.mouse.cursorJustLeftWindow()) {
             //System.out.println("left");
         }
 
