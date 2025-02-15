@@ -170,7 +170,7 @@ public class NodeContainer extends Node {
         // erase mask
         renderer2D.beginStencil();
         renderer2D.setStencilModeDecrement();
-        renderer2D.drawRectangleFilled(backgroundWidth, backgroundHeight,
+        renderer2D.drawRectangleFilled(maskWidth, maskHeight,
                 boxCornerRadiusTopLeft, boxCornerSegmentsTopLeft,
                 boxCornerRadiusTopRight, boxCornerSegmentsTopRight,
                 boxCornerRadiusBottomRight, boxCornerSegmentsBottomRight,
