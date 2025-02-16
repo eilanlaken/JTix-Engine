@@ -27,7 +27,10 @@ public class RPGMapMakerScene implements Scene {
     private final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
 
     private Array<Command> commands = new Array<>(true, 100);
-    private Array<CommandTerrainCircleBrush> commandsTerrain = new Array<>(true, 100);
+    private Array<CommandTerrain> commandsTerrain = new Array<>(true, 100);
+
+    // active tool. TODO: make static constants of tool indices.
+    private int activeTool = 1;
 
     @Override
     public void setup() {
@@ -78,8 +81,6 @@ public class RPGMapMakerScene implements Scene {
 
     }
 
-    float x = 0, y = 0, deg = 0, sclX = 1, sclY = 1;
-
     @Override
     public void update() {
 
@@ -99,17 +100,6 @@ public class RPGMapMakerScene implements Scene {
         toolbarWidget.update(Graphics.getDeltaTime());
         toolbarWidget.handleInput(Graphics.getDeltaTime());
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-            toolbarWidget.anchorY -= 1;
-            System.out.println(toolbarWidget.anchorY);
-        }
-
-        if (Input.mouse.cursorJustEnteredWindow()) {
-            //System.out.println("entered");
-        }
-        if (Input.mouse.cursorJustLeftWindow()) {
-            //System.out.println("left");
-        }
 
         if (Input.mouse.getVerticalScroll() != 0) {
             camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
@@ -120,17 +110,31 @@ public class RPGMapMakerScene implements Scene {
             // TODO: set zoom limits
         }
 
+        if (activeTool == 1) {
+            if (Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Input.mouse.getXDelta() > 0 || Input.mouse.getYDelta() > 0)) {
+                CommandTerrain drawTerrainCommand = new CommandTerrain();
+
+                commands.add(drawTerrainCommand);
+            }
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); // should probably clear the stencil
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
 
+        // get all terrain draw commands history
         commandsTerrain.clear();
-        commandsTerrain.add(new CommandTerrainCircleBrush());
+        for (Command command : commands) {
+            if (command instanceof CommandTerrain) {
+                CommandTerrain cmd = (CommandTerrain) command;
+                commandsTerrain.add(cmd);
+            }
+        }
 
         // render scene
         renderer2D.begin(camera);
 
         renderer2D.beginStencil();
-        for (CommandTerrainCircleBrush command : commandsTerrain) {
+        for (CommandTerrain command : commandsTerrain) {
             renderer2D.setStencilModeSet(command.mask);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
