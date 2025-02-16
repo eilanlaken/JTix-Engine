@@ -4,10 +4,7 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.graphics.TexturePack;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -24,14 +21,26 @@ public class RPGMapMakerScene implements Scene {
     private final Widget toolbarWidget = new Widget();
     private final Widget menuBarWidget = new Widget();
 
+    private Texture terrainGrass;
+    private Texture terrainWater;
+
+    private final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
+
+    private Array<Command> commands = new Array<>(true, 100);
+    private Array<CommandTerrainCircleBrush> commandsTerrain = new Array<>(true, 100);
+
     @Override
     public void setup() {
-        //Assets.loadTexture("assets/textures/yellowSquare.jpg");
+        Assets.loadTexture("assets/app-textures/terrain-grass.png");
+        Assets.loadTexture("assets/app-textures/terrain-water.png");
+
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
         Assets.finishLoading();
 
         icons = Assets.get("assets/app-texture-packs/icons.yml");
+        terrainGrass = Assets.get("assets/app-textures/terrain-grass.png");
+        terrainWater = Assets.get("assets/app-textures/terrain-water.png");
 
         ToolBar toolBar = new ToolBar();
 
@@ -102,11 +111,44 @@ public class RPGMapMakerScene implements Scene {
             //System.out.println("left");
         }
 
+        if (Input.mouse.getVerticalScroll() != 0) {
+            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
+        }
+        if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            camera.position.x -= 1.5f * Input.mouse.getXDelta();
+            camera.position.y += 1.5f * Input.mouse.getYDelta();
+            // TODO: set zoom limits
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); // should probably clear the stencil
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
 
+        commandsTerrain.clear();
+        commandsTerrain.add(new CommandTerrainCircleBrush());
 
-        // render font
+        // render scene
+        renderer2D.begin(camera);
+
+        renderer2D.beginStencil();
+        for (CommandTerrainCircleBrush command : commandsTerrain) {
+            renderer2D.setStencilModeSet(command.mask);
+            renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
+        }
+        renderer2D.endStencil();
+
+        renderer2D.enableMasking();
+        renderer2D.setMaskingFunctionEquals(0);
+        renderer2D.drawTexture(terrainWater, 0, 0, 0, 1, 1);
+        renderer2D.disableMasking();
+
+        renderer2D.enableMasking();
+        renderer2D.setMaskingFunctionEquals(1);
+        renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
+        renderer2D.disableMasking();
+
+        renderer2D.end();
+
+        // render UI
         renderer2D.begin();
         //nodeDebug.draw(renderer2D);
         //slider.draw(renderer2D);
@@ -130,4 +172,9 @@ public class RPGMapMakerScene implements Scene {
         Scene.super.windowFilesDraggedAndDropped(filePaths);
     }
 
+    @Override
+    public void windowResized(int width, int height) {
+        camera.viewportWidth = Graphics.getWindowWidth();
+        camera.viewportHeight = Graphics.getWindowHeight();
+    }
 }

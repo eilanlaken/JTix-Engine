@@ -102,7 +102,7 @@ public class Mouse {
 
     public int getXDelta() { return cursorDeltaX; }
 
-    public int geYDelta() { return cursorDeltaY; }
+    public int getYDelta() { return cursorDeltaY; }
 
     public boolean isCursorInWindow() {
         return cursorInWindow;
