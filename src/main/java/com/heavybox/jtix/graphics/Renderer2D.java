@@ -323,7 +323,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void setStencilModeSet(int value) {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_REPLACE_1) flush();
+        flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, value, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
         stencilMode = STENCIL_MODE_REPLACE_1;

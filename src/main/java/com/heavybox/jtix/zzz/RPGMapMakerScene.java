@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -12,8 +13,11 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Comparator;
+
 public class RPGMapMakerScene implements Scene {
 
+    private static final Vector3 screen = new Vector3();
 
     private final Renderer2D renderer2D = new Renderer2D();
     private TexturePack icons;
@@ -84,10 +88,7 @@ public class RPGMapMakerScene implements Scene {
     @Override
     public void update() {
 
-        Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
-        if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
 
-        }
 
         ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
         for (int i = 0; i < codepointsPressed.size; i++) {
@@ -111,10 +112,29 @@ public class RPGMapMakerScene implements Scene {
         }
 
         if (activeTool == 1) {
-            if (Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Input.mouse.getXDelta() > 0 || Input.mouse.getYDelta() > 0)) {
+            boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
+            boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
+            if (leftJustPressed || leftPressedAndMoved) {
+
+
+                screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
+                camera.unProject(screen);
+                float x = screen.x;
+                float y = screen.y;
+
                 CommandTerrain drawTerrainCommand = new CommandTerrain();
+                drawTerrainCommand.mask = CommandTerrain.DRAW_GRASS;
+                drawTerrainCommand.x = x;
+                drawTerrainCommand.y = y;
+
+                CommandTerrain drawOutlineCommand = new CommandTerrain();
+                drawOutlineCommand.mask = CommandTerrain.DRAW_OUTLINE;
+                drawOutlineCommand.r = drawTerrainCommand.r + 2;
+                drawOutlineCommand.x = x;
+                drawOutlineCommand.y = y;
 
                 commands.add(drawTerrainCommand);
+                commands.add(drawOutlineCommand);
             }
         }
 
@@ -129,24 +149,40 @@ public class RPGMapMakerScene implements Scene {
                 commandsTerrain.add(cmd);
             }
         }
+        // TODO: need to sort by masking.
+        commandsTerrain.sort(new Comparator<CommandTerrain>() {
+            @Override
+            public int compare(CommandTerrain o1, CommandTerrain o2) {
+                return Integer.compare(o1.mask, o2.mask);
+            }
+        });
 
         // render scene
         renderer2D.begin(camera);
 
         renderer2D.beginStencil();
         for (CommandTerrain command : commandsTerrain) {
+            System.out.println(command.mask);
             renderer2D.setStencilModeSet(command.mask);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
         renderer2D.endStencil();
 
         renderer2D.enableMasking();
-        renderer2D.setMaskingFunctionEquals(0);
+        renderer2D.setMaskingFunctionEquals(CommandTerrain.DRAW_WATER);
         renderer2D.drawTexture(terrainWater, 0, 0, 0, 1, 1);
         renderer2D.disableMasking();
 
         renderer2D.enableMasking();
-        renderer2D.setMaskingFunctionEquals(1);
+        renderer2D.setMaskingFunctionEquals(CommandTerrain.DRAW_OUTLINE);
+        renderer2D.setColor(1.235f, 0.2196f, 0.176f, 1);
+        renderer2D.drawRectangleFilled(4096, 4096, 0, 0, 0, 1, 1);
+        renderer2D.setColor(1,1,1,1);
+//        renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
+        renderer2D.disableMasking();
+
+        renderer2D.enableMasking();
+        renderer2D.setMaskingFunctionEquals(CommandTerrain.DRAW_GRASS);
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
         renderer2D.disableMasking();
 

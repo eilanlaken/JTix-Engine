@@ -135,10 +135,6 @@ public class Camera {
         this.frustumPlaneDs[i] = -1 * Vector3.dot(point1, this.frustumNormals[i]);
     }
 
-    public void unProject(Vector3 screenCoordinates) {
-        unProject(0, 0, Graphics.getWindowWidth(), Graphics.getWindowHeight(), screenCoordinates);
-    }
-
     public boolean frustumIntersectsSphere(final Vector3 center, final float r) {
         for (int i = 0; i < 6; i++) {
             float signedDistance = frustumNormals[i].x * center.x + frustumNormals[i].y * center.y + frustumNormals[i].z * center.z + frustumPlaneDs[i];
@@ -146,6 +142,10 @@ public class Camera {
             if (diff < 0) return false;
         }
         return true;
+    }
+
+    public void unProject(Vector3 screenCoordinates) {
+        unProject(0, 0, Graphics.getWindowWidth(), Graphics.getWindowHeight(), screenCoordinates);
     }
 
     public void unProject(float viewportX, float viewportY, float viewportWidth, float viewportHeight, Vector3 screenCoordinates) {
