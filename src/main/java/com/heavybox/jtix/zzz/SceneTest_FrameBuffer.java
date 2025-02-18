@@ -80,40 +80,4 @@ public class SceneTest_FrameBuffer implements Scene {
         Scene.super.windowFilesDraggedAndDropped(filePaths);
     }
 
-    static class NodeCircle extends Node {
-
-        Color color = Color.YELLOW.clone();
-        float r;
-
-        NodeCircle(float r) {
-            this.r = r;
-        }
-
-        @Override
-        protected void fixedUpdate(float delta) {
-
-        }
-
-        @Override
-        protected void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
-            renderer2D.setColor(color);
-            renderer2D.drawCircleFilled(r, 15, x, y, deg, sclX, sclY);
-        }
-
-        @Override
-        public float calculateWidth() {
-            return r * 2;
-        }
-
-        @Override
-        public float calculateHeight() {
-            return r * 2;
-        }
-
-        public void setPolygon(final Polygon polygon) {
-            polygon.setToCircle(r, 15);
-        }
-
-    }
-
 }
