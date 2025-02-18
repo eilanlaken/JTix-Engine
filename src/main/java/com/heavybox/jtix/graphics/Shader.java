@@ -34,7 +34,8 @@ public class Shader implements MemoryResource {
     public final String[]             attributeNames;
     public final String[]             uniformNames;
 
-    private final Object[] uniformsCache;
+    //private final Object[] uniformsCache;
+    private final HashMap<Integer, Object> uniformsCache;
 
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
         if (vertexShaderSource == null)   throw new GraphicsException("Vertex shader cannot be null.");
@@ -141,7 +142,7 @@ public class Shader implements MemoryResource {
         }
 
         /* instantiate cache */
-        this.uniformsCache = new Object[uniformNames.length]; // TODO: use this instead
+        this.uniformsCache = new HashMap<>();
 
         /* validation */
         /* validate: limit the allowed max sampled textures */
@@ -202,110 +203,102 @@ public class Shader implements MemoryResource {
             case GL20.GL_SAMPLER_2D -> {
                 Texture texture = (Texture) value;
                 int slot = TextureBinder.bind(texture);
-                final Integer cache = (Integer) uniformsCache[location];
+                final Integer cache = (Integer) uniformsCache.get(location);
                 if (cache == null || !cache.equals(slot)) {
                     GL20.glUniform1i(location, slot); // bind
-                    uniformsCache[location] = slot; // create cache and store value
+                    uniformsCache.put(location, slot);
                 }
             }
 
             case GL20.GL_BOOL -> {
                 boolean b = (Boolean) value;
-                final Boolean cache = (Boolean) uniformsCache[location];
+                final Boolean cache = (Boolean) uniformsCache.get(location);
                 if (cache == null || !cache.equals(b)) {
                     GL20.glUniform1i(location, b ? GL20.GL_TRUE : GL20.GL_FALSE);  // bind
-                    uniformsCache[location] = b; // create cache and store value
+                    uniformsCache.put(location, b);
                 }
             }
 
             case GL20.GL_INT -> {
                 int i = (Integer) value;
-                final Integer cache = (Integer) uniformsCache[location];
+                final Integer cache = (Integer) uniformsCache.get(location);
                 if (cache == null || !cache.equals(i)) {
                     GL20.glUniform1i(location, i); // bind
-                    uniformsCache[location] = i; // create cache and store value
+                    uniformsCache.put(location, i);
                 }
             }
 
             case GL20.GL_FLOAT -> {
                 float f = (Float) value;
-                final Float cache = (Float) uniformsCache[location];
+                final Float cache = (Float) uniformsCache.get(location);
                 if (cache == null || !cache.equals(f)) {
                     GL20.glUniform1f(location, f); // bind
-                    uniformsCache[location] = f; // create cache and store value
+                    uniformsCache.put(location, f);
                 }
             }
 
             case GL20.GL_FLOAT_MAT4 -> {
                 Matrix4x4 matrix4 = (Matrix4x4) value;
-                final Matrix4x4 cache = (Matrix4x4) uniformsCache[location];
+                final Matrix4x4 cache = (Matrix4x4) uniformsCache.get(location);
                 if (cache == null) {
                     GL20.glUniformMatrix4fv(location, false, matrix4.val); // bind
-                    uniformsCache[location] = new Matrix4x4(); // create cache
-                    ((Matrix4x4) uniformsCache[location]).set(matrix4); // store cache
+                    Matrix4x4 newCache = new Matrix4x4();
+                    newCache.set(matrix4);
+                    uniformsCache.put(location, newCache);
                 } else if (!cache.equals(matrix4)) {
                     GL20.glUniformMatrix4fv(location, false, matrix4.val); // bind
-                    ((Matrix4x4) uniformsCache[location]).set(matrix4); // store cache
+                    cache.set(matrix4);
                 }
             }
 
             case GL20.GL_FLOAT_VEC2 -> {
                 Vector2 vector2 = (Vector2) value;
-                final Vector2 cache = (Vector2) uniformsCache[location];
+                final Vector2 cache = (Vector2) uniformsCache.get(location);
                 if (cache == null) {
                     GL20.glUniform2f(location, vector2.x, vector2.y); // bind
-                    uniformsCache[location] = new Vector2(); // create cache
-                    ((Vector2) uniformsCache[location]).set(vector2); // store cache
+                    Vector2 newCache = new Vector2(); // create cache
+                    newCache.set(vector2);
+                    uniformsCache.put(location, newCache);
                 } else if (!cache.equals(vector2)) {
                     GL20.glUniform2f(location, vector2.x, vector2.y); // bind
-                    ((Vector2) uniformsCache[location]).set(vector2); // store cache
+                    cache.set(vector2); // store cache
                 }
             }
 
             case GL20.GL_FLOAT_VEC3 -> {
                 Vector3 vector3 = (Vector3) value;
-                final Vector3 cache = (Vector3) uniformsCache[location];
+                final Vector3 cache = (Vector3) uniformsCache.get(location);
                 if (cache == null) {
                     GL20.glUniform3f(location, vector3.x, vector3.y, vector3.z); // bind
-                    uniformsCache[location] = new Vector3(); // create cache
-                    ((Vector3) uniformsCache[location]).set(vector3); // store cache
+                    Vector3 newCache = new Vector3(); // create cache
+                    newCache.set(vector3); // store cache
                 } else if (!cache.equals(vector3)) {
                     GL20.glUniform3f(location, vector3.x, vector3.y, vector3.z); // bind
-                    ((Vector3) uniformsCache[location]).set(vector3); // store cache
+                    cache.set(vector3); // store cache
                 }
             }
 
             case GL20.GL_FLOAT_VEC4 -> {
-                final Vector4 cache = (Vector4) uniformsCache[location];
+                final Vector4 cache = (Vector4) uniformsCache.get(location);
                 if (value instanceof Color) {
                     Color color = (Color) value;
                     if (cache == null) {
                         GL20.glUniform4f(location, color.r, color.g, color.b, color.a); // bind
-                        uniformsCache[location] = new Vector4(); // create cache
-                        ((Vector4) uniformsCache[location]).set(color.r, color.g, color.b, color.a); // store cache
+                        Vector4 newCache = new Vector4(); // create cache
+                        newCache.set(color.r, color.g, color.b, color.a); // store cache
                     } else if (cache.x != color.r || cache.y != color.g || cache.z != color.b || cache.w != color.a) {
                         GL20.glUniform4f(location, color.r, color.g, color.b, color.a); // bind
-                        ((Vector4) uniformsCache[location]).set(color.r, color.g, color.b, color.a); // store cache
+                        cache.set(color.r, color.g, color.b, color.a); // store cache
                     }
                 } else if (value instanceof Vector4) {
                     Vector4 vector4 = (Vector4) value;
                     if (cache == null) {
                         GL20.glUniform4f(location, vector4.x, vector4.y, vector4.z, vector4.w); // bind
-                        uniformsCache[location] = new Vector4(); // create cache
-                        ((Vector4) uniformsCache[location]).set(vector4); // store cache
+                        Vector4 newCache = new Vector4(); // create cache
+                        newCache.set(vector4); // store cache
                     } else if (!cache.equals(vector4)) {
                         GL20.glUniform4f(location, vector4.x, vector4.y, vector4.z, vector4.w); // bind
-                        ((Vector4) uniformsCache[location]).set(vector4); // store cache
-                    }
-                } else if (value instanceof Quaternion) {
-                    Quaternion quaternion = (Quaternion) value;
-                    if (cache == null) {
-                        GL20.glUniform4f(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w); // bind
-                        uniformsCache[location] = new Vector4(); // create cache
-                        ((Vector4) uniformsCache[location]).set(quaternion.x, quaternion.y, quaternion.z, quaternion.w); // store cache
-                    } else if (cache.x != quaternion.x || cache.y != quaternion.y || cache.z != quaternion.z || cache.w != quaternion.w) {
-                        GL20.glUniform4f(location, quaternion.x, quaternion.y, quaternion.z, quaternion.w); // bind
-                        ((Vector4) uniformsCache[location]).set(quaternion.x, quaternion.y, quaternion.z, quaternion.w); // store cache
+                        cache.set(vector4); // store cache
                     }
                 }
             }

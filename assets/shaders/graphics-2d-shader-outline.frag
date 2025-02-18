@@ -6,7 +6,7 @@ in vec2 uv;
 
 // uniforms
 uniform sampler2D u_texture;
-//uniform int n;
+uniform int n;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -43,7 +43,7 @@ void main() {
 
 
     // Loop over the n x n neighborhood
-    int n = 8;
+    //int n = 8;
     int halfN = n / 2;
     vec2 texelSize = vec2(texelWidth, texelHeight);
 

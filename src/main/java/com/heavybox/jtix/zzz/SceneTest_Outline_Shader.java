@@ -55,7 +55,7 @@ public class SceneTest_Outline_Shader implements Scene {
         // render font
         renderer2D.begin();
         renderer2D.setShader(outlineShader);
-        //outlineShader.bindUniform("n", 8);
+        outlineShader.bindUniform("n", 26);
         renderer2D.drawTexture(outline, 0, 0, 0, 1, 1);
         renderer2D.end();
 
