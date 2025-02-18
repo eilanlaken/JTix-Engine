@@ -3,25 +3,25 @@ package com.heavybox.jtix.zzz;
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets_4.*;
+import com.heavybox.jtix.widgets_4.Node;
+import com.heavybox.jtix.widgets_4.Polygon;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 
-public class SceneTest_Outline_Shader implements Scene {
+public class SceneTest_FrameBuffer implements Scene {
 
 
     private final Renderer2D renderer2D = new Renderer2D();
 
     private Texture outline;
 
-    Shader outlineShader;
+    private Shader outlineShader;
+
+    private FrameBuffer frameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
 
     @Override
     public void setup() {
@@ -30,10 +30,9 @@ public class SceneTest_Outline_Shader implements Scene {
         Assets.finishLoading();
 
         outlineShader = Assets.get("outline");
+
         //outlineShader = new Shader("assets/shaders/graphics-2d-shader-outline.vert", "assets/shaders/graphics-2d-shader-outline.frag");
         outline = Assets.get("assets/textures/test_outline.png");
-
-        System.out.println(Arrays.toString(outlineShader.uniformNames));
 
     }
 
@@ -43,28 +42,37 @@ public class SceneTest_Outline_Shader implements Scene {
 
     }
 
+    int n = 6;
+
     @Override
     public void update() {
 
-
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) n += 2;
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
         GL11.glClearColor(1f,1f,1f,1);
 
 
         // render font
+        FrameBufferBinder.bind(frameBuffer);
+        renderer2D.begin();
+        renderer2D.setColor(1,0,0,1);
+        renderer2D.drawCircleFilled(36, 30,0, 0, 0, 1, 1);
+        renderer2D.end();
+
+        FrameBufferBinder.bind(null);
         renderer2D.begin();
         renderer2D.setShader(outlineShader);
-        //outlineShader.bindUniform("n", 26);
-        renderer2D.drawTexture(outline, 0, 0, 0, 1, 1);
+        renderer2D.setShaderAttribute("n", n);
+        renderer2D.drawTexture(frameBuffer.getColorAttachment(), 0, 0, 0, 1, 1);
         renderer2D.end();
+
 
     }
 
-    float phase;
     @Override
     public void finish() {
-
+        frameBuffer.delete();
     }
 
     @Override

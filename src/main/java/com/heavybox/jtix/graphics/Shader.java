@@ -34,7 +34,7 @@ public class Shader implements MemoryResource {
     public final String[]             attributeNames;
     public final String[]             uniformNames;
 
-    //private final Object[] uniformsCache;
+    // TODO: maybe remove uniform caching?
     private final HashMap<Integer, Object> uniformsCache;
 
     public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
@@ -53,13 +53,12 @@ public class Shader implements MemoryResource {
         this.uniformSizes = new MapObjectInt<>();
         /* create shader */
         this.program = GL20.glCreateProgram();
-        if (program == 0)
-            throw new GraphicsException("Could not create shader");
+        if (program == 0) throw new GraphicsException("Could not create shader");
 
         /* create vertex shader */
         this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        if (vertexShaderId == 0)
-            throw new GraphicsException("Error creating vertex shader.");
+        if (vertexShaderId == 0) throw new GraphicsException("Error creating vertex shader.");
+
         GL20.glShaderSource(vertexShaderId, this.vertexShaderSource);
         GL20.glCompileShader(vertexShaderId);
         if (GL20.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0)
@@ -178,7 +177,7 @@ public class Shader implements MemoryResource {
         return fragmentShaderSource;
     }
 
-    // TODO: return back to protected
+    // TODO: maybe change back to protected. This is very error prone because a uniform bind is a state change that must be observed by the Renderer2D.
     public final void bindUniforms(final HashMap<String, Object> uniforms) {
         if (uniforms == null) return;
         for (Map.Entry<String, Object> entry : uniforms.entrySet()) {
