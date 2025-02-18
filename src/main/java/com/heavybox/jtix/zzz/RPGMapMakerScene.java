@@ -25,7 +25,7 @@ public class RPGMapMakerScene implements Scene {
     private Texture terrainWater;
     private Texture terrainGrass;
     private Texture terrainRoad;
-    private Texture terrainWheat;
+//    private Texture terrainWheat;
 
     private final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
 
@@ -53,7 +53,7 @@ public class RPGMapMakerScene implements Scene {
         terrainWater = Assets.get("assets/app-textures/terrain-water-1024.png");
         terrainGrass = Assets.get("assets/app-textures/terrain-grass-1024.png");
         terrainRoad = Assets.get("assets/app-textures/terrain-road-1024.png");
-        terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
+//        terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
 
         ToolBar toolBar = new ToolBar();
 
@@ -121,9 +121,8 @@ public class RPGMapMakerScene implements Scene {
                 cmd_mask = CommandTerrain.GRASS_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
                 cmd_mask = CommandTerrain.ROAD_MASK;
-            } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.R)) {
-                cmd_mask = CommandTerrain.WHEAT_MASK;
             }
+
             boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
             boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
             if (leftJustPressed || leftPressedAndMoved) {
@@ -136,14 +135,6 @@ public class RPGMapMakerScene implements Scene {
                 drawTerrainCommand.mask = cmd_mask;
                 drawTerrainCommand.x = x;
                 drawTerrainCommand.y = y;
-
-
-//                CommandTerrain drawOutlineCommand = new CommandTerrain();
-//                drawOutlineCommand.mask = CommandTerrain.DRAW_OUTLINE;
-//                drawOutlineCommand.r = drawTerrainCommand.r + 2;
-//                drawOutlineCommand.x = x;
-//                drawOutlineCommand.y = y;
-//                commands.add(drawOutlineCommand);
 
                 commands.add(drawTerrainCommand);
             }
@@ -188,22 +179,10 @@ public class RPGMapMakerScene implements Scene {
         renderer2D.setMaskingFunctionEquals(CommandTerrain.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
 
-        renderer2D.setMaskingFunctionEquals(CommandTerrain.WHEAT_MASK);
-        renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
+//        renderer2D.setMaskingFunctionEquals(CommandTerrain.WHEAT_MASK);
+//        renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
 
         renderer2D.disableMasking();
-
-
-
-//        renderer2D.enableMasking();
-//        renderer2D.setMaskingFunctionEquals(CommandTerrain.GRASS_MASK);
-//        for (CommandTerrain commandTerrain : commandsTerrain) {
-//            if (commandTerrain.mask == CommandTerrain.ROAD_MASK) {
-//                //renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
-//            }
-//            //renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
-//        }
-//        renderer2D.disableMasking();
 
 
         renderer2D.end();

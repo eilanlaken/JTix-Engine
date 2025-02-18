@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
 import com.heavybox.jtix.zzz.RPGMapMakerScene;
+import com.heavybox.jtix.zzz.SceneTest_Outline_Shader;
 import com.heavybox.jtix.zzz.SceneTest_UI_Canvas_Primitives_Input;
 import com.heavybox.jtix.zzz.SceneTest_UI_Canvas_Primitives_Input_2;
 
@@ -82,7 +83,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new RPGMapMakerScene());
+        Application.launch(new SceneTest_Outline_Shader());
 
     }
 
