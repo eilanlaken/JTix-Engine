@@ -13,6 +13,5 @@ public class CommandTerrain extends Command {
     // brush type circle
     public float r = 40;
     public int refinement = 100;
-    public float x, y, deg, sclX = 1, sclY = 1;
 
 }

@@ -8,7 +8,9 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.tools.ToolsTexturePacker;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
@@ -18,6 +20,7 @@ public class RPGMapMakerScene implements Scene {
 
     private final Renderer2D renderer2D = new Renderer2D();
     private TexturePack icons;
+    private TexturePack trees;
 
     private final Widget toolbarWidget = new Widget();
     private final Widget menuBarWidget = new Widget();
@@ -31,14 +34,67 @@ public class RPGMapMakerScene implements Scene {
 
     private final Array<Command> commands = new Array<>(true, 100);
     private final Array<CommandTerrain> commandsTerrain = new Array<>(true, 100);
+    private final Array<Command> commandsPutObjects = new Array<>(true, 100);
 
     // active tool. TODO: make static constants of tool indices.
-    private int activeTool = 1;
     int cmd_mask = CommandTerrain.GRASS_MASK;
+
+    private Tool activeTool = Tool.BRUSH;
 
 
     @Override
     public void setup() {
+        try {
+            ToolsTexturePacker.packTextures("assets/app-texture-packs", "icons", 2, 2, ToolsTexturePacker.TexturePackSize.LARGE_2048,
+                    // toolbar
+                    "assets/app-icons/brush.png",
+                    "assets/app-icons/export.png",
+                    "assets/app-icons/path.png",
+                    "assets/app-icons/select.png",
+                    "assets/app-icons/terrain.png",
+                    "assets/app-icons/text.png",
+                    "assets/app-icons/move.png",
+                    // menu-bar
+                    "assets/app-icons/new.png",
+                    "assets/app-icons/open.png",
+                    "assets/app-icons/blank.png",
+                    "assets/app-icons/save.png",
+                    "assets/app-icons/exit.png"
+            );
+        } catch (Exception ignored) {} // PACK ICONS
+        try {
+            ToolsTexturePacker.packTextures("assets/app-texture-packs", "trees", 0, 2, ToolsTexturePacker.TexturePackSize.X_LARGE_4096,
+                    "assets/app-trees/flower_1.png",
+                    "assets/app-trees/flower_2.png",
+                    "assets/app-trees/flower_3.png",
+                    "assets/app-trees/flower_4.png",
+
+                    "assets/app-trees/tree_cypress_1.png",
+                    "assets/app-trees/tree_cypress_2.png",
+                    "assets/app-trees/tree_cypress_3.png",
+                    "assets/app-trees/tree_cypress_4.png",
+
+                    "assets/app-trees/tree_regular_1.png",
+                    "assets/app-trees/tree_regular_2.png",
+                    "assets/app-trees/tree_regular_3.png",
+                    "assets/app-trees/tree_regular_4.png",
+                    "assets/app-trees/tree_regular_5.png",
+                    "assets/app-trees/tree_regular_6.png",
+
+                    "assets/app-trees/tree_regular_trunk_1.png",
+                    "assets/app-trees/tree_regular_trunk_2.png",
+                    "assets/app-trees/tree_regular_trunk_3.png",
+                    "assets/app-trees/tree_regular_trunk_4.png",
+                    "assets/app-trees/tree_regular_trunk_5.png",
+                    "assets/app-trees/tree_regular_trunk_6.png",
+                    "assets/app-trees/tree_regular_trunk_7.png",
+                    "assets/app-trees/tree_regular_trunk_8.png",
+                    "assets/app-trees/tree_regular_trunk_9.png",
+                    "assets/app-trees/tree_regular_trunk_10.png",
+
+                    "assets/app-trees/tree_regular_fruits.png"
+            );
+        } catch (Exception ignored) {} // PACK TREES
         // TODO: make the program CRASH and not thread-locked when file can't load.
         Assets.loadTexture("assets/app-textures/terrain-water-1024.png");
         Assets.loadTexture("assets/app-textures/terrain-grass-1024.png");
@@ -47,9 +103,11 @@ public class RPGMapMakerScene implements Scene {
 
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
+        Assets.loadTexturePack("assets/app-texture-packs/trees.yml");
         Assets.finishLoading();
 
         icons = Assets.get("assets/app-texture-packs/icons.yml");
+        trees = Assets.get("assets/app-texture-packs/trees.yml");
         terrainWater = Assets.get("assets/app-textures/terrain-water-1024.png");
         terrainGrass = Assets.get("assets/app-textures/terrain-grass-1024.png");
         terrainRoad = Assets.get("assets/app-textures/terrain-road-1024.png");
@@ -114,7 +172,10 @@ public class RPGMapMakerScene implements Scene {
             // TODO: set zoom limits
         }
 
-        if (activeTool == 1) {
+        boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
+        boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
+
+        if (activeTool == Tool.TERRAIN) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 cmd_mask = CommandTerrain.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
@@ -123,8 +184,6 @@ public class RPGMapMakerScene implements Scene {
                 cmd_mask = CommandTerrain.ROAD_MASK;
             }
 
-            boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
-            boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
             if (leftJustPressed || leftPressedAndMoved) {
                 screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
                 camera.unProject(screen);
@@ -137,6 +196,24 @@ public class RPGMapMakerScene implements Scene {
                 drawTerrainCommand.y = y;
 
                 commands.add(drawTerrainCommand);
+            }
+        }
+
+        if (activeTool == Tool.BRUSH) {
+            if (leftJustPressed || leftPressedAndMoved) {
+                screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
+                camera.unProject(screen);
+                float x = screen.x;
+                float y = screen.y;
+
+                CommandBrush commandBrush = new CommandBrush();
+                commandBrush.x = x;
+                commandBrush.y = y;
+                commandBrush.treeType = MathUtils.randomUniformInt(1,6);
+                commandBrush.trunkType = MathUtils.randomUniformInt(1,11);
+                commandBrush.tree = trees.getRegion("assets/app-trees/tree_regular_3.png"); // TODO
+                commandBrush.trunk = trees.getRegion("assets/app-trees/tree_regular_trunk_3.png"); // TODO
+                commands.add(commandBrush);
             }
         }
 
@@ -153,6 +230,15 @@ public class RPGMapMakerScene implements Scene {
         }
         //commandsTerrain.sort(Comparator.comparingInt(o -> o.mask)); TODO: need to sort by masking? No.
 
+        commandsPutObjects.clear();
+        for (Command command : commands) {
+            if (command instanceof CommandBrush) {
+                CommandBrush cmd = (CommandBrush) command;
+                commandsPutObjects.add(cmd);
+            }
+        }
+        // sort by y value.
+
         // render scene
         renderer2D.begin(camera);
 
@@ -165,25 +251,27 @@ public class RPGMapMakerScene implements Scene {
         }
         renderer2D.endStencil();
 
+        // draw terrain
         renderer2D.enableMasking();
         renderer2D.setMaskingFunctionEquals(CommandTerrain.WATER_MASK);
         renderer2D.drawTexture(terrainWater, 0, 0, 0, 1, 1);
         renderer2D.disableMasking();
-
         // TODO: apply object outlining here. Maybe with stencil, maybe with another frame buffer.
         renderer2D.enableMasking();
-        // draw grass
         renderer2D.setMaskingFunctionEquals(CommandTerrain.GRASS_MASK);
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
-
         renderer2D.setMaskingFunctionEquals(CommandTerrain.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
-
-//        renderer2D.setMaskingFunctionEquals(CommandTerrain.WHEAT_MASK);
-//        renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
-
         renderer2D.disableMasking();
 
+        // draw map objects
+        for (Command command : commandsPutObjects) {
+            if (command instanceof CommandBrush) {
+                CommandBrush drawObjectCommand = (CommandBrush) command;
+                renderer2D.drawTextureRegion(drawObjectCommand.tree, drawObjectCommand.x, drawObjectCommand.y, drawObjectCommand.deg, drawObjectCommand.sclX, drawObjectCommand.sclY);
+                renderer2D.drawTextureRegion(drawObjectCommand.trunk, drawObjectCommand.x, drawObjectCommand.y, drawObjectCommand.deg, drawObjectCommand.sclX, drawObjectCommand.sclY);
+            }
+        }
 
         renderer2D.end();
 

@@ -30,7 +30,7 @@ public class SceneTest_Outline_Shader implements Scene {
         Assets.finishLoading();
 
         outlineShader = Assets.get("outline");
-        //outlineShader = new Shader("assets/shaders/graphics-2d-shader-outline.vert", "assets/shaders/graphics-2d-shader-outline.frag");
+        //outlineShader = new Shader("assets/shaders/graphics-2d-shader-texture-outline.vert", "assets/shaders/graphics-2d-shader-texture-outline.frag");
         outline = Assets.get("assets/textures/test_outline.png");
 
         System.out.println(Arrays.toString(outlineShader.uniformNames));

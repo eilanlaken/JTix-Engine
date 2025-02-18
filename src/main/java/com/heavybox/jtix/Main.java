@@ -12,22 +12,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        ToolsTexturePacker.packTextures("assets/app-texture-packs", "icons", 2,2, ToolsTexturePacker.TexturePackSize.LARGE_2048,
-                // toolbar
-                "assets/app-icons/brush.png",
-                "assets/app-icons/export.png",
-                "assets/app-icons/path.png",
-                "assets/app-icons/select.png",
-                "assets/app-icons/terrain.png",
-                "assets/app-icons/text.png",
-                "assets/app-icons/move.png",
-                // menu-bar
-                "assets/app-icons/new.png",
-                "assets/app-icons/open.png",
-                "assets/app-icons/blank.png",
-                "assets/app-icons/save.png",
-                "assets/app-icons/exit.png"
-                );
+
+
 //        try {
 //            //ToolsTextureGenerator.generateTextureMapNormal("assets/textures", "stoneN", "assets/textures/stones512.jpg", 0.5f,true);
 //        } catch (Exception e) {
