@@ -35,8 +35,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private static final float WHITE_TINT                = Color.WHITE.toFloatBits();
     private static final int   STENCIL_MODE_INCREMENT    = 0;
     private static final int   STENCIL_MODE_DECREMENT    = 1;
-    private static final int   STENCIL_MODE_REPLACE_1    = 2;
-    private static final int   STENCIL_MODE_REPLACE_0    = 3;
+    private static final int   STENCIL_MODE_REPLACE      = 2;
 
     /* defaults */ // TODO: maybe make them static?
     private static final Shader  defaultShader  = createDefaultShaderProgram();
@@ -318,44 +317,30 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glStencilMask(0xFF);
         GL11.glColorMask(false, false, false, false); // Disable color buffer writes
         GL11.glDepthMask(false); // Disable depth buffer writes
-        setStencilModeSetOnes();
+        setStencilModeSetValue(1);
     }
 
-    public void setStencilModeSet(int value) {
+    public void setStencilModeSetValue(int value) {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
         flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, value, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
-        stencilMode = STENCIL_MODE_REPLACE_1;
-    }
-
-    public void setStencilModeSetOnes() {
-        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_REPLACE_1) flush();
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
-        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
-        stencilMode = STENCIL_MODE_REPLACE_1;
-    }
-
-    public void setStencilModeSetZeros() {
-        if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_REPLACE_0) flush();
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 0, 0xFF); // Always pass, ref value = 1
-        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
-        stencilMode = STENCIL_MODE_REPLACE_0;
+        stencilMode = STENCIL_MODE_REPLACE;
     }
 
     public void setStencilModeIncrement() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
         if (stencilMode != STENCIL_MODE_INCREMENT) flush();
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
-        GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);   // Replace stencil value with ref (1)
+        // always increase stencil value by 1
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);
         stencilMode = STENCIL_MODE_INCREMENT;
     }
 
     public void setStencilModeDecrement() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
         if (stencilMode != STENCIL_MODE_DECREMENT) flush();
+        // always decrease stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);   // Replace stencil value with ref (1)
         stencilMode = STENCIL_MODE_DECREMENT;
@@ -384,7 +369,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     // enable disable masking
     public void enableMasking() {
-        if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
+        //if (drawingToStencil) throw new GraphicsException("Cannot apply mask when drawing to a stencil buffer");
         maskingEnabled = true;
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         setMaskingFunctionEquals(1);

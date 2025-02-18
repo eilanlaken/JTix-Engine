@@ -164,10 +164,12 @@ public class RPGMapMakerScene implements Scene {
 
         // render scene
         renderer2D.begin(camera);
+
+        // create terrain stencil mask
         renderer2D.beginStencil();
         renderer2D.stencilMaskClear(CommandTerrain.GRASS_MASK);
         for (CommandTerrain command : commandsTerrain) {
-            renderer2D.setStencilModeSet(command.mask);
+            renderer2D.setStencilModeSetValue(command.mask);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
         renderer2D.endStencil();
@@ -177,29 +179,32 @@ public class RPGMapMakerScene implements Scene {
         renderer2D.drawTexture(terrainWater, 0, 0, 0, 1, 1);
         renderer2D.disableMasking();
 
-        // TODO: not good. stencil outline should be calculated.
-//        renderer2D.enableMasking();
-//        renderer2D.setMaskingFunctionEquals(CommandTerrain.DRAW_OUTLINE);
-//        renderer2D.setColor(1.235f, 0.2196f, 0.176f, 1);
-//        renderer2D.drawRectangleFilled(1024, 1024, 0, 0, 0, 1, 1); // TODO: change width and height to image resolution.
-//        renderer2D.setColor(1,1,1,1);
-//        renderer2D.disableMasking();
-
         // TODO: apply object outlining here. Maybe with stencil, maybe with another frame buffer.
         renderer2D.enableMasking();
+        // draw grass
         renderer2D.setMaskingFunctionEquals(CommandTerrain.GRASS_MASK);
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
-        renderer2D.disableMasking();
 
-        renderer2D.enableMasking();
         renderer2D.setMaskingFunctionEquals(CommandTerrain.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
-        renderer2D.disableMasking();
 
-        renderer2D.enableMasking();
         renderer2D.setMaskingFunctionEquals(CommandTerrain.WHEAT_MASK);
         renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
+
         renderer2D.disableMasking();
+
+
+
+//        renderer2D.enableMasking();
+//        renderer2D.setMaskingFunctionEquals(CommandTerrain.GRASS_MASK);
+//        for (CommandTerrain commandTerrain : commandsTerrain) {
+//            if (commandTerrain.mask == CommandTerrain.ROAD_MASK) {
+//                //renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
+//            }
+//            //renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
+//        }
+//        renderer2D.disableMasking();
+
 
         renderer2D.end();
 
