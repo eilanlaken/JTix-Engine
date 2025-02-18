@@ -11,7 +11,6 @@ import org.lwjgl.stb.STBImage;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-// TODO: from String (filepath) constructor.
 public class Texture implements MemoryResource {
 
     private       int       handle;

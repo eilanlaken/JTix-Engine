@@ -370,8 +370,16 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     public void stencilMaskClear() {
-        if (drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call stencilMaskEnd() first.");
+        //if (!drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call endStencil() first.");
+        GL11.glClearStencil(0); // Set stencil clear value to 1
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+    }
+
+    public void stencilMaskClear(int value) {
+        //if (!drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call stencilMaskEnd() first.");
+        GL11.glClearStencil(value); // Set stencil clear value to 1
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClearStencil(0); // Set stencil clear value to 1
     }
 
     // enable disable masking
@@ -415,7 +423,7 @@ public class Renderer2D implements MemoryResourceHolder {
     }
 
     private void setMaskingFunction(int glStencilFunc, int reference) {
-        if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
+        //if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
         if (!maskingEnabled) throw new GraphicsException("setMaskingFunction() should be called only between enableMasking() and disableMasking().");
         if (reference != maskingRef || maskingFunction != glStencilFunc) flush();
         maskingRef = reference;
