@@ -337,7 +337,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void setStencilModeIncrement() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_INCREMENT) flush();
+        flush();
         // always increase stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
         GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);
@@ -346,7 +346,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void setStencilModeDecrement() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_DECREMENT) flush();
+        flush();
         // always decrease stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);   // Replace stencil value with ref (1)
@@ -371,7 +371,7 @@ public class Renderer2D implements MemoryResourceHolder {
         //if (!drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call stencilMaskEnd() first.");
         GL11.glClearStencil(value); // Set stencil clear value to 1
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-        GL11.glClearStencil(0); // Set stencil clear value to 1
+        GL11.glClearStencil(0); // Set stencil clear value to 0
     }
 
     // enable disable masking

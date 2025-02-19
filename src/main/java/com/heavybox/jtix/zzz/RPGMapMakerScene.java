@@ -175,6 +175,13 @@ public class RPGMapMakerScene implements Scene {
         boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
         boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.O)) {
+            activeTool = Tool.TERRAIN;
+        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.P)) {
+            activeTool = Tool.BRUSH;
+        }
+
         if (activeTool == Tool.TERRAIN) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 cmd_mask = CommandTerrain.WATER_MASK;
