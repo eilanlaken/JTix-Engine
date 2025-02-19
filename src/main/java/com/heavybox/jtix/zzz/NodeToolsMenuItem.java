@@ -8,7 +8,7 @@ import com.heavybox.jtix.widgets_4.NodeContainerHorizontal;
 import com.heavybox.jtix.widgets_4.NodeImage;
 import com.heavybox.jtix.widgets_4.NodeText;
 
-public class ToolsMenuItem extends NodeContainerHorizontal {
+public class NodeToolsMenuItem extends NodeContainerHorizontal {
 
     public static final Color COLOR_UNSELECTED = Color.valueOf("1D1D1D");
     public static final Color COLOR_SELECTED = Color.valueOf("AD1D1D");
@@ -19,7 +19,7 @@ public class ToolsMenuItem extends NodeContainerHorizontal {
     protected NodeText nameNode;
     protected NodeText hotkeyNode;
 
-    public ToolsMenuItem(TextureRegion iconRegion, String name, String hotkey) {
+    public NodeToolsMenuItem(TextureRegion iconRegion, String name, String hotkey) {
         boxHeightSizing = Sizing.DYNAMIC;
         boxWidthSizing = Sizing.STATIC;
         boxWidth = 240;
@@ -47,18 +47,18 @@ public class ToolsMenuItem extends NodeContainerHorizontal {
         addChild(hotkeyNode);
 
         onClick = () -> {
-            ToolBar toolBar = (ToolBar) container;
+            NodeToolBar toolBar = (NodeToolBar) container;
             toolBar.select(this);
         };
 
         onMouseEnter = () -> {
-            ToolBar toolBar = (ToolBar) container;
+            NodeToolBar toolBar = (NodeToolBar) container;
             if (toolBar.selected == this) return;
             boxBackgroudColor = Color.valueOf("2D2D4D");
         };
 
         onMouseLeave = () -> {
-            ToolBar toolBar = (ToolBar) container;
+            NodeToolBar toolBar = (NodeToolBar) container;
             if (toolBar.selected == this) return;
             boxBackgroudColor = Color.valueOf("1D1D1D");
         };

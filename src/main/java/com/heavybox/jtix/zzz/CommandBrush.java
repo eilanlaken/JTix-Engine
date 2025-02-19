@@ -11,4 +11,13 @@ public class CommandBrush extends Command {
     public TextureRegion tree;
     public TextureRegion trunk;
 
+    @Override
+    protected void execute() {
+
+    }
+
+    @Override
+    protected void undo() {
+
+    }
 }

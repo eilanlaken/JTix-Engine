@@ -14,7 +14,7 @@ import com.heavybox.jtix.tools.ToolsTexturePacker;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
-public class RPGMapMakerScene implements Scene {
+public class SceneRPGMapMaker implements Scene {
 
     private static final Vector3 screen = new Vector3();
 
@@ -113,16 +113,16 @@ public class RPGMapMakerScene implements Scene {
         terrainRoad = Assets.get("assets/app-textures/terrain-road-1024.png");
 //        terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
 
-        ToolBar toolBar = new ToolBar();
+        NodeToolBar toolBar = new NodeToolBar();
 
         NodeContainerHorizontal menuBarContainer = new NodeContainerHorizontal();
         menuBarContainer.boxWidthSizing = NodeContainer.Sizing.VIEWPORT;
         menuBarContainer.boxWidth = 1;
         menuBarContainer.boxHeightSizing = NodeContainer.Sizing.DYNAMIC;
 
-        MenuButton file = new MenuButton("File");
-        MenuButton edit = new MenuButton("Edit");
-        MenuButton help = new MenuButton("Help");
+        NodeMenuButton file = new NodeMenuButton("File");
+        NodeMenuButton edit = new NodeMenuButton("Edit");
+        NodeMenuButton help = new NodeMenuButton("Help");
         menuBarContainer.boxBackgroudColor = Color.valueOf("1D1D1D");
         menuBarContainer.boxBackgroundEnabled = true;
         menuBarContainer.boxBorderSize = 0;
@@ -318,5 +318,33 @@ public class RPGMapMakerScene implements Scene {
     public void windowResized(int width, int height) {
         camera.viewportWidth = Graphics.getWindowWidth();
         camera.viewportHeight = Graphics.getWindowHeight();
+    }
+
+    public enum Tool {
+
+        SELECT,
+        MOVE,
+        TERRAIN,
+        BRUSH,
+        PATH,
+        TEXT,
+        EXPORT
+
+    }
+
+    // represents a map object:
+    // a tree + trunk + fruits, text, house, etc.
+    // TODO: add a bounding rectangle for selection etc.
+    public abstract static class MapItem {
+
+        protected float x, y, deg, sclX, sclY;
+
+        public abstract void render();
+
+        public void translate(float x, float y) {
+            this.x += x;
+            this.y += y;
+        }
+
     }
 }

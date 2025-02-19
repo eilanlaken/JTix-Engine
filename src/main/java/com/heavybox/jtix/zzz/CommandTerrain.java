@@ -14,4 +14,13 @@ public class CommandTerrain extends Command {
     public float r = 40;
     public int refinement = 100;
 
+    @Override
+    protected void execute() {
+
+    }
+
+    @Override
+    protected void undo() {
+
+    }
 }

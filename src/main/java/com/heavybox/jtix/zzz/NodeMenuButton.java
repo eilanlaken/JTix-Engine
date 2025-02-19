@@ -4,11 +4,11 @@ import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.widgets_4.NodeContainerHorizontal;
 import com.heavybox.jtix.widgets_4.NodeText;
 
-public class MenuButton extends NodeContainerHorizontal {
+public class NodeMenuButton extends NodeContainerHorizontal {
 
     public static final int SIZE = 12;
 
-    public MenuButton(String name) {
+    public NodeMenuButton(String name) {
         boxPaddingLeft = 4;
         boxPaddingRight = 4;
         boxPaddingTop = 1;

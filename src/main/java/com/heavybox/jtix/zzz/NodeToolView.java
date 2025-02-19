@@ -3,9 +3,9 @@ package com.heavybox.jtix.zzz;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.widgets_4.*;
 
-public class ToolView extends NodeContainerVertical {
+public class NodeToolView extends NodeContainerVertical {
 
-    public ToolView(String title, float width) {
+    public NodeToolView(String title, float width) {
         margin = 4;
         boxPaddingLeft = 5;
         boxPaddingRight = 5;
