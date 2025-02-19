@@ -142,6 +142,8 @@ public class SceneRPGMapMaker implements Scene {
         menuBarWidget.anchor = Widget.Anchor.TOP_CENTER;
         menuBarWidget.anchorY = 0;
         menuBarWidget.addNode(menuBarContainer);
+
+        Graphics.setContinuousRendering(false);
     }
 
     @Override
@@ -151,6 +153,7 @@ public class SceneRPGMapMaker implements Scene {
 
     @Override
     public void update() {
+        System.out.println("hello");
         ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
         for (int i = 0; i < codepointsPressed.size; i++) {
             int codepoint = codepointsPressed.get(i);
