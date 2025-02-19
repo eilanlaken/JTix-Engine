@@ -87,8 +87,9 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* masking */
     private boolean drawingToStencil = false;
-    private int     stencilMode      = STENCIL_MODE_INCREMENT;
     private boolean maskingEnabled   = false;
+    // TODO: remove
+    private int     stencilMode      = STENCIL_MODE_INCREMENT;
     private int     maskingRef       = 1;
     private int     maskingFunction  = GL11.GL_EQUAL;
 
@@ -417,9 +418,7 @@ public class Renderer2D implements MemoryResourceHolder {
     private void setMaskingFunction(int glStencilFunc, int reference) {
         //if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
         if (!maskingEnabled) throw new GraphicsException("setMaskingFunction() should be called only between enableMasking() and disableMasking().");
-        if (reference != maskingRef || maskingFunction != glStencilFunc) flush();
-        maskingRef = reference;
-        maskingFunction = glStencilFunc;
+        flush();
         GL11.glStencilFunc(glStencilFunc, reference, 0xFF);
     }
 

@@ -87,8 +87,9 @@ public final class Renderer2D_new {
 
     /* masking */
     private static boolean drawingToStencil = false;
-    private static int     stencilMode      = STENCIL_MODE_INCREMENT;
     private static boolean maskingEnabled   = false;
+    // TODO: remove
+    private static int     stencilMode      = STENCIL_MODE_INCREMENT;
     private static int     maskingRef       = 1;
     private static int     maskingFunction  = GL11.GL_EQUAL;
 
@@ -337,7 +338,7 @@ public final class Renderer2D_new {
 
     public static void setStencilModeIncrement() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_INCREMENT) flush();
+        flush();
         // always increase stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
         GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);
@@ -346,7 +347,7 @@ public final class Renderer2D_new {
 
     public static void setStencilModeDecrement() {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
-        if (stencilMode != STENCIL_MODE_DECREMENT) flush();
+        flush();
         // always decrease stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);   // Replace stencil value with ref (1)
@@ -417,9 +418,7 @@ public final class Renderer2D_new {
     private static void setMaskingFunction(int glStencilFunc, int reference) {
         //if (drawingToStencil) throw new GraphicsException("setMaskingFunction should not be used while drawing to the stencil buffer, only when reading from it.");
         if (!maskingEnabled) throw new GraphicsException("setMaskingFunction() should be called only between enableMasking() and disableMasking().");
-        if (reference != maskingRef || maskingFunction != glStencilFunc) flush();
-        maskingRef = reference;
-        maskingFunction = glStencilFunc;
+        flush();
         GL11.glStencilFunc(glStencilFunc, reference, 0xFF);
     }
 
