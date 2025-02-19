@@ -272,6 +272,7 @@ public class RPGMapMakerScene implements Scene {
         renderer2D.disableMasking();
 
         // draw map objects
+        // TODO: first, calculate map items array
         for (Command command : commandsPutObjects) {
             if (command instanceof CommandBrush) {
                 CommandBrush drawObjectCommand = (CommandBrush) command;
@@ -279,6 +280,10 @@ public class RPGMapMakerScene implements Scene {
                 renderer2D.drawTextureRegion(drawObjectCommand.trunk, drawObjectCommand.x, drawObjectCommand.y, drawObjectCommand.deg, drawObjectCommand.sclX, drawObjectCommand.sclY);
             }
         }
+        renderer2D.end();
+
+        // render tool-overlay
+        renderer2D.begin();
 
         renderer2D.end();
 
@@ -290,9 +295,17 @@ public class RPGMapMakerScene implements Scene {
 
     }
 
-    float phase;
+
     @Override
     public void finish() {
+
+    }
+
+    public void save() {
+
+    }
+
+    public void export() {
 
     }
 
