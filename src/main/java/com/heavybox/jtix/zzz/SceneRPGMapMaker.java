@@ -65,9 +65,6 @@ public class SceneRPGMapMaker implements Scene {
         try {
             ToolsTexturePacker.packTextures("assets/app-texture-packs", "trees", 0, 2, ToolsTexturePacker.TexturePackSize.X_LARGE_4096,
                     "assets/app-trees/flower_1.png",
-                    "assets/app-trees/flower_2.png",
-                    "assets/app-trees/flower_3.png",
-                    "assets/app-trees/flower_4.png",
 
                     "assets/app-trees/tree_cypress_1.png",
                     "assets/app-trees/tree_cypress_2.png",
@@ -92,7 +89,8 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-trees/tree_regular_trunk_9.png",
                     "assets/app-trees/tree_regular_trunk_10.png",
 
-                    "assets/app-trees/tree_regular_fruits.png"
+                    "assets/app-trees/tree_regular_fruits.png",
+                    "assets/app-trees/tree_cypress_fruits.png"
             );
         } catch (Exception ignored) {} // PACK TREES
         // TODO: make the program CRASH and not thread-locked when file can't load.
@@ -143,7 +141,7 @@ public class SceneRPGMapMaker implements Scene {
         menuBarWidget.anchorY = 0;
         menuBarWidget.addNode(menuBarContainer);
 
-        Graphics.setContinuousRendering(false);
+        //Graphics.setContinuousRendering(false);
     }
 
     @Override
@@ -153,7 +151,6 @@ public class SceneRPGMapMaker implements Scene {
 
     @Override
     public void update() {
-        System.out.println("hello");
         ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
         for (int i = 0; i < codepointsPressed.size; i++) {
             int codepoint = codepointsPressed.get(i);

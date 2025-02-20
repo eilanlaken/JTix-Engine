@@ -7,8 +7,8 @@ regions:
   packedHeight: 136
   packedWidth: 148
   textureIndex: 0
-  x: 265
-  y: 144
+  x: 133
+  y: 241
 - name: assets/app-trees/tree_regular_6.png
   offsetX: 64
   offsetY: 253
@@ -17,8 +17,8 @@ regions:
   packedHeight: 132
   packedWidth: 129
   textureIndex: 0
-  x: 69
-  y: 249
+  x: 285
+  y: 285
 - name: assets/app-trees/tree_regular_1.png
   offsetX: 66
   offsetY: 264
@@ -27,8 +27,8 @@ regions:
   packedHeight: 137
   packedWidth: 124
   textureIndex: 0
-  x: 377
-  y: 2
+  x: 327
+  y: 144
 - name: assets/app-trees/tree_cypress_2.png
   offsetX: 101
   offsetY: 251
@@ -47,7 +47,7 @@ regions:
   packedHeight: 138
   packedWidth: 108
   textureIndex: 0
-  x: 265
+  x: 327
   y: 2
 - name: assets/app-trees/tree_cypress_1.png
   offsetX: 103
@@ -67,8 +67,8 @@ regions:
   packedHeight: 121
   packedWidth: 120
   textureIndex: 0
-  x: 202
-  y: 284
+  x: 2
+  y: 251
 - name: assets/app-trees/tree_cypress_3.png
   offsetX: 103
   offsetY: 250
@@ -97,8 +97,18 @@ regions:
   packedHeight: 105
   packedWidth: 99
   textureIndex: 0
-  x: 326
-  y: 284
+  x: 2
+  y: 376
+- name: assets/app-trees/tree_cypress_fruits.png
+  offsetX: 90
+  offsetY: 284
+  originalHeight: 512
+  originalWidth: 256
+  packedHeight: 142
+  packedWidth: 58
+  textureIndex: 0
+  x: 265
+  y: 2
 - name: assets/app-trees/tree_regular_trunk_8.png
   offsetX: 100
   offsetY: 246
@@ -107,8 +117,8 @@ regions:
   packedHeight: 95
   packedWidth: 56
   textureIndex: 0
-  x: 429
-  y: 352
+  x: 418
+  y: 316
 - name: assets/app-trees/tree_regular_fruits.png
   offsetX: 90
   offsetY: 288
@@ -117,8 +127,8 @@ regions:
   packedHeight: 74
   packedWidth: 70
   textureIndex: 0
-  x: 326
-  y: 393
+  x: 255
+  y: 421
 - name: assets/app-trees/tree_regular_trunk_10.png
   offsetX: 104
   offsetY: 242
@@ -127,8 +137,8 @@ regions:
   packedHeight: 104
   packedWidth: 47
   textureIndex: 0
-  x: 429
-  y: 143
+  x: 455
+  y: 2
 - name: assets/app-trees/tree_regular_trunk_7.png
   offsetX: 104
   offsetY: 246
@@ -137,8 +147,8 @@ regions:
   packedHeight: 101
   packedWidth: 48
   textureIndex: 0
-  x: 2
-  y: 251
+  x: 455
+  y: 110
 - name: assets/app-trees/tree_regular_trunk_5.png
   offsetX: 103
   offsetY: 248
@@ -147,8 +157,8 @@ regions:
   packedHeight: 97
   packedWidth: 48
   textureIndex: 0
-  x: 429
-  y: 251
+  x: 455
+  y: 215
 - name: assets/app-trees/tree_regular_trunk_9.png
   offsetX: 104
   offsetY: 247
@@ -157,8 +167,8 @@ regions:
   packedHeight: 94
   packedWidth: 47
   textureIndex: 0
-  x: 2
-  y: 356
+  x: 105
+  y: 381
 - name: assets/app-trees/tree_regular_trunk_2.png
   offsetX: 110
   offsetY: 252
@@ -167,8 +177,8 @@ regions:
   packedHeight: 87
   packedWidth: 50
   textureIndex: 0
-  x: 98
-  y: 385
+  x: 201
+  y: 381
 - name: assets/app-trees/tree_regular_trunk_4.png
   offsetX: 103
   offsetY: 251
@@ -177,8 +187,8 @@ regions:
   packedHeight: 91
   packedWidth: 41
   textureIndex: 0
-  x: 53
-  y: 385
+  x: 156
+  y: 381
 - name: assets/app-trees/tree_regular_trunk_1.png
   offsetX: 112
   offsetY: 253
@@ -187,8 +197,8 @@ regions:
   packedHeight: 69
   packedWidth: 41
   textureIndex: 0
-  x: 190
-  y: 409
+  x: 456
+  y: 415
 - name: assets/app-trees/tree_regular_trunk_6.png
   offsetX: 111
   offsetY: 251
@@ -197,8 +207,8 @@ regions:
   packedHeight: 81
   packedWidth: 34
   textureIndex: 0
-  x: 152
-  y: 385
+  x: 418
+  y: 415
 - name: assets/app-trees/tree_regular_trunk_3.png
   offsetX: 122
   offsetY: 251
@@ -207,9 +217,9 @@ regions:
   packedHeight: 67
   packedWidth: 23
   textureIndex: 0
-  x: 400
-  y: 393
-- name: assets/app-trees/flower_3.png
+  x: 329
+  y: 421
+- name: assets/app-trees/flower_1.png
   offsetX: 118
   offsetY: 254
   originalHeight: 512
@@ -217,38 +227,8 @@ regions:
   packedHeight: 46
   packedWidth: 26
   textureIndex: 0
-  x: 235
-  y: 409
-- name: assets/app-trees/flower_2.png
-  offsetX: 118
-  offsetY: 255
-  originalHeight: 512
-  originalWidth: 256
-  packedHeight: 45
-  packedWidth: 26
-  textureIndex: 0
-  x: 265
-  y: 409
-- name: assets/app-trees/flower_1.png
-  offsetX: 118
-  offsetY: 255
-  originalHeight: 512
-  originalWidth: 256
-  packedHeight: 44
-  packedWidth: 26
-  textureIndex: 0
-  x: 427
-  y: 451
-- name: assets/app-trees/flower_4.png
-  offsetX: 118
-  offsetY: 254
-  originalHeight: 512
-  originalWidth: 256
-  packedHeight: 45
-  packedWidth: 25
-  textureIndex: 0
-  x: 295
-  y: 409
+  x: 356
+  y: 421
 textures:
 - file: trees_0.png
   height: 512
