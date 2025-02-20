@@ -63,21 +63,18 @@ public class SceneRPGMapMaker implements Scene {
             );
         } catch (Exception ignored) {} // PACK ICONS
         try {
-            ToolsTexturePacker.packTextures("assets/app-texture-packs", "trees", 0, 2, ToolsTexturePacker.TexturePackSize.X_LARGE_4096,
+            ToolsTexturePacker.packTextures("assets/app-texture-packs", "medieval-pack", 0, 2, ToolsTexturePacker.TexturePackSize.XX_LARGE_8192,
                     "assets/app-trees/flower_1.png",
-
                     "assets/app-trees/tree_cypress_1.png",
                     "assets/app-trees/tree_cypress_2.png",
                     "assets/app-trees/tree_cypress_3.png",
                     "assets/app-trees/tree_cypress_4.png",
-
                     "assets/app-trees/tree_regular_1.png",
                     "assets/app-trees/tree_regular_2.png",
                     "assets/app-trees/tree_regular_3.png",
                     "assets/app-trees/tree_regular_4.png",
                     "assets/app-trees/tree_regular_5.png",
                     "assets/app-trees/tree_regular_6.png",
-
                     "assets/app-trees/tree_regular_trunk_1.png",
                     "assets/app-trees/tree_regular_trunk_2.png",
                     "assets/app-trees/tree_regular_trunk_3.png",
@@ -88,13 +85,48 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-trees/tree_regular_trunk_8.png",
                     "assets/app-trees/tree_regular_trunk_9.png",
                     "assets/app-trees/tree_regular_trunk_10.png",
-
                     "assets/app-trees/tree_regular_fruits.png",
-                    "assets/app-trees/tree_cypress_fruits.png"
-            );
-        } catch (Exception ignored) {} // PACK TREES
-        try {
-            ToolsTexturePacker.packTextures("assets/app-texture-packs", "cities", 0, 2, ToolsTexturePacker.TexturePackSize.X_LARGE_4096,
+                    "assets/app-trees/tree_cypress_fruits.png",
+
+                    "assets/app-rural/rural_house_1.png",
+                    "assets/app-rural/rural_house_2.png",
+                    "assets/app-rural/rural_house_3.png",
+                    "assets/app-rural/rural_house_4.png",
+                    "assets/app-rural/rural_house_5.png",
+                    "assets/app-rural/rural_house_6.png",
+                    "assets/app-rural/rural_house_7.png",
+                    "assets/app-rural/rural_house_8.png",
+                    "assets/app-rural/rural_house_9.png",
+                    "assets/app-rural/rural_house_10.png",
+                    "assets/app-rural/rural_house_11.png",
+                    "assets/app-rural/rural_house_12.png",
+                    "assets/app-rural/rural_house_13.png",
+                    "assets/app-rural/rural_house_14.png",
+                    "assets/app-rural/rural_house_15.png",
+                    "assets/app-rural/rural_house_16.png",
+                    "assets/app-rural/rural_house_17.png",
+                    "assets/app-rural/rural_house_18.png",
+                    "assets/app-rural/rural_house_19.png",
+                    "assets/app-rural/rural_house_20.png",
+                    "assets/app-rural/rural_house_21.png",
+                    "assets/app-rural/rural_house_22.png",
+                    "assets/app-rural/rural_house_23.png",
+                    "assets/app-rural/rural_house_24.png",
+                    "assets/app-rural/rural_house_25.png",
+                    "assets/app-rural/rural_prop_fence_bar.png",
+                    "assets/app-rural/rural_prop_fence_post.png",
+                    "assets/app-rural/rural_prop_log_1.png",
+                    "assets/app-rural/rural_prop_log_2.png",
+                    "assets/app-rural/rural_prop_log_3.png",
+                    "assets/app-rural/rural_prop_trunk_chopped.png",
+                    "assets/app-rural/rural_prop_well.png",
+                    "assets/app-rural/rural_prop_windmill.png",
+                    "assets/app-rural/rural_tower_1.png",
+                    "assets/app-rural/rural_tower_2.png",
+                    "assets/app-rural/rural_tower_3.png",
+                    "assets/app-rural/rural_tower_4.png",
+                    "assets/app-rural/rural_tower_5.png",
+
                     "assets/app-city/city-house_1.png",
                     "assets/app-city/city-house_2.png",
                     "assets/app-city/city-house_3.png",
@@ -126,11 +158,8 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-city/city-house_29.png",
                     "assets/app-city/city-house_30.png",
                     "assets/app-city/city-house_31.png",
-                    "assets/app-city/city-house_32.png"
-            );
-        } catch (Exception ignored) {} // PACK CITIES
-        try {
-            ToolsTexturePacker.packTextures("assets/app-texture-packs", "castles", 0, 2, ToolsTexturePacker.TexturePackSize.X_LARGE_4096,
+                    "assets/app-city/city-house_32.png",
+
                     "assets/app-castles/castle-building-block_1.png",
                     "assets/app-castles/castle-building-block_2.png",
                     "assets/app-castles/castle-building-block_3.png",
@@ -159,7 +188,6 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-castles/castle-building-block_26.png",
                     "assets/app-castles/castle-building-block_27.png",
                     "assets/app-castles/castle-building-block_28.png",
-
                     "assets/app-castles/castle-tower-block_1.png",
                     "assets/app-castles/castle-tower-block_2.png",
                     "assets/app-castles/castle-tower-block_3.png",
@@ -176,7 +204,6 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-castles/castle-tower-block_14.png",
                     "assets/app-castles/castle-tower-block_15.png",
                     "assets/app-castles/castle-tower-block_16.png",
-
                     "assets/app-castles/castle-wall-back-block_1.png",
                     "assets/app-castles/castle-wall-back-block_2.png",
                     "assets/app-castles/castle-wall-back-block_3.png",
@@ -185,7 +212,6 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-castles/castle-wall-back-block_6.png",
                     "assets/app-castles/castle-wall-back-block_7.png",
                     "assets/app-castles/castle-wall-back-block_8.png",
-
                     "assets/app-castles/castle-wall-front-block_1.png",
                     "assets/app-castles/castle-wall-front-block_2.png",
                     "assets/app-castles/castle-wall-front-block_3.png",
@@ -195,7 +221,7 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-castles/castle-wall-front-block_7.png",
                     "assets/app-castles/castle-wall-front-block_8.png"
             );
-        } catch (Exception ignored) {} // PACK CASTLES
+        } catch (Exception ignored) {} // PACK TREES
 
         // TODO: make the program CRASH and not thread-locked when file can't load.
         Assets.loadTexture("assets/app-textures/terrain-water-1024.png");
