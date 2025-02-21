@@ -11,43 +11,43 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
-import com.heavybox.jtix.widgets_4.*;
+import com.heavybox.jtix.widgets_4.NodeContainer;
+import com.heavybox.jtix.widgets_4.NodeContainerHorizontal;
+import com.heavybox.jtix.widgets_4.Widget;
 import org.lwjgl.opengl.GL11;
 
-public class SceneRPGMapMaker implements Scene {
+public class SceneRPGMapMaker2 implements Scene {
 
     private static final Vector3 screen = new Vector3();
-
     private final Renderer2D renderer2D = new Renderer2D();
+
+    /* assets */
     private TexturePack icons;
     private TexturePack props;
-
-    private final Widget toolbarWidget = new Widget();
-    private final Widget menuBarWidget = new Widget();
-
     private Texture terrainWater;
     private Texture terrainGrass;
     private Texture terrainRoad;
-//    private Texture terrainWheat;
+    //private Texture terrainWheat;
 
-    public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
-
-    private final Array<Command> commands = new Array<>(true, 100);
-    private final Array<CommandTerrainPaint> commandsTerrain = new Array<>(true, 100);
-    private final Array<Command> commandsPutObjects = new Array<>(true, 100);
-
-    // active tool. TODO: make static constants of tool indices.
-    int cmd_mask = CommandTerrainPaint.GRASS_MASK;
-
-    //private Tool activeTool = Tool.BRUSH;
-
+    // tools
     private Tool activeTool = null;
     private Tool toolTerrain = new ToolTerrain();
     private Tool toolBrushTrees = new ToolBrushTrees();
 
-    // edit
+    // scene
+    @Deprecated private final Array<Command> commands = new Array<>(true, 100);
+    @Deprecated private final Array<CommandTerrainPaint> commandsTerrain = new Array<>(true, 100);
+    @Deprecated private final Array<Command> commandsPutObjects = new Array<>(true, 100);
+    @Deprecated int cmd_mask = CommandTerrainPaint.GRASS_MASK;
+    public final Array<MapItem> mapItems = new Array<>(true, 10);
+    public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandChain = new Array<>(true, 10);
+    private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
     public int commandChainIndex = -1;
+
+    /* ui */
+    private final Widget toolbarWidget = new Widget();
+    private final Widget menuBarWidget = new Widget();
 
     @Override
     public void setup() {

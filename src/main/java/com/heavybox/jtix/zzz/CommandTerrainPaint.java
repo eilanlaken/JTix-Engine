@@ -1,6 +1,6 @@
 package com.heavybox.jtix.zzz;
 
-public class CommandTerrain extends Command {
+public class CommandTerrainPaint extends Command {
 
 //    public static final int DRAW_OUTLINE = 1;
     public static final int WATER_MASK = 0;
