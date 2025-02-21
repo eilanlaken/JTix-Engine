@@ -1,14 +1,9 @@
-package com.heavybox.jtix.zzz;
+package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.graphics.*;
-import com.heavybox.jtix.input.Input;
-import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 

@@ -1,4 +1,4 @@
-package com.heavybox.jtix.zzz;
+package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
@@ -12,7 +12,7 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
-public class SceneTest_UI_Canvas_Primitives_Input_2 implements Scene {
+public class SceneTest_UI_Canvas_Primitives_Input_3 implements Scene {
 
 
     private final Renderer2D renderer2D = new Renderer2D();
@@ -152,6 +152,10 @@ public class SceneTest_UI_Canvas_Primitives_Input_2 implements Scene {
             a.deg += 3;
         }
 
+        if (Input.mouse.getXDelta() > 0 && Input.mouse.isButtonPressed(Mouse.Button.LEFT)) {
+            // drag
+
+        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
         GL11.glClearColor(1f,1f,1f,1);

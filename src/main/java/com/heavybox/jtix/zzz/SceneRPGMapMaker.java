@@ -14,13 +14,15 @@ import com.heavybox.jtix.tools.ToolsTexturePacker;
 import com.heavybox.jtix.widgets_4.*;
 import org.lwjgl.opengl.GL11;
 
+import java.util.LinkedList;
+
 public class SceneRPGMapMaker implements Scene {
 
     private static final Vector3 screen = new Vector3();
 
     private final Renderer2D renderer2D = new Renderer2D();
     private TexturePack icons;
-    private TexturePack trees;
+    private TexturePack props;
 
     private final Widget toolbarWidget = new Widget();
     private final Widget menuBarWidget = new Widget();
@@ -39,8 +41,15 @@ public class SceneRPGMapMaker implements Scene {
     // active tool. TODO: make static constants of tool indices.
     int cmd_mask = CommandTerrain.GRASS_MASK;
 
-    private Tool activeTool = Tool.BRUSH;
+    //private Tool activeTool = Tool.BRUSH;
 
+    private Tool activeTool = null;
+    private Tool toolBrushTrees = new ToolBrushTrees();
+    private Tool toolTerrain = new ToolTerrain();
+
+    // edit
+    private Array<Command> commandChain = new Array<>(true, 10);
+    private int commandChainIndex = -1;
 
     @Override
     public void setup() {
@@ -221,7 +230,7 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-castles/castle-wall-front-block_7.png",
                     "assets/app-castles/castle-wall-front-block_8.png"
             );
-        } catch (Exception ignored) {} // PACK TREES
+        } catch (Exception ignored) {} // PACK MEDIEVAL MAP PROPS
 
         // TODO: make the program CRASH and not thread-locked when file can't load.
         Assets.loadTexture("assets/app-textures/terrain-water-1024.png");
@@ -231,15 +240,16 @@ public class SceneRPGMapMaker implements Scene {
 
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
-        Assets.loadTexturePack("assets/app-texture-packs/trees.yml");
+        Assets.loadTexturePack("assets/app-texture-packs/medieval-pack.yml");
         Assets.finishLoading();
 
         icons = Assets.get("assets/app-texture-packs/icons.yml");
-        trees = Assets.get("assets/app-texture-packs/trees.yml");
+        props = Assets.get("assets/app-texture-packs/medieval-pack.yml");
+
         terrainWater = Assets.get("assets/app-textures/terrain-water-1024.png");
         terrainGrass = Assets.get("assets/app-textures/terrain-grass-1024.png");
         terrainRoad = Assets.get("assets/app-textures/terrain-road-1024.png");
-//        terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
+        //terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
 
         NodeToolBar toolBar = new NodeToolBar();
 
@@ -272,6 +282,7 @@ public class SceneRPGMapMaker implements Scene {
         menuBarWidget.addNode(menuBarContainer);
 
         //Graphics.setContinuousRendering(false);
+        //Graphics.setTargetFps(30);
     }
 
     @Override
@@ -306,13 +317,13 @@ public class SceneRPGMapMaker implements Scene {
         boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.O)) {
-            activeTool = Tool.TERRAIN;
+            selectTool(toolTerrain);
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.P)) {
-            activeTool = Tool.BRUSH;
+            selectTool(toolBrushTrees);
         }
 
-        if (activeTool == Tool.TERRAIN) {
+        if (toolTerrain.active) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 cmd_mask = CommandTerrain.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
@@ -336,7 +347,7 @@ public class SceneRPGMapMaker implements Scene {
             }
         }
 
-        if (activeTool == Tool.BRUSH) {
+        if (toolBrushTrees.active) {
             if (leftJustPressed || leftPressedAndMoved) {
                 screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
                 camera.unProject(screen);
@@ -348,8 +359,8 @@ public class SceneRPGMapMaker implements Scene {
                 commandBrush.y = y;
                 commandBrush.treeType = MathUtils.randomUniformInt(1,6);
                 commandBrush.trunkType = MathUtils.randomUniformInt(1,11);
-                commandBrush.tree = trees.getRegion("assets/app-trees/tree_regular_3.png"); // TODO
-                commandBrush.trunk = trees.getRegion("assets/app-trees/tree_regular_trunk_3.png"); // TODO
+                commandBrush.tree = props.getRegion("assets/app-trees/tree_regular_3.png"); // TODO
+                commandBrush.trunk = props.getRegion("assets/app-trees/tree_regular_trunk_3.png"); // TODO
                 commands.add(commandBrush);
             }
         }
@@ -425,10 +436,15 @@ public class SceneRPGMapMaker implements Scene {
 
     }
 
-
-    @Override
-    public void finish() {
-
+    private void selectTool(Tool tool) {
+        if (activeTool == null) {
+            activeTool = tool;
+            activeTool.active = true;
+        } else if (activeTool != tool) { // already selected, do nothing
+            activeTool.active = false;
+            tool.active = true;
+            activeTool = tool;
+        }
     }
 
     public void save() {
@@ -438,6 +454,20 @@ public class SceneRPGMapMaker implements Scene {
     public void export() {
 
     }
+
+    public void undo() {
+
+    }
+
+    public void redo() {
+
+    }
+
+    @Override
+    public void finish() {
+
+    }
+
 
     @Override
     public void windowFilesDraggedAndDropped(Array<String> filePaths) {
@@ -450,17 +480,16 @@ public class SceneRPGMapMaker implements Scene {
         camera.viewportHeight = Graphics.getWindowHeight();
     }
 
-    public enum Tool {
-
-        SELECT,
-        MOVE,
-        TERRAIN,
-        BRUSH,
-        PATH,
-        TEXT,
-        EXPORT
-
-    }
+//    public enum Tool {
+//
+//        SELECT,
+//        TERRAIN,
+//        BRUSH,
+//        PATH,
+//        TEXT,
+//        EXPORT
+//
+//    }
 
     // represents a map object:
     // a tree + trunk + fruits, text, house, etc.

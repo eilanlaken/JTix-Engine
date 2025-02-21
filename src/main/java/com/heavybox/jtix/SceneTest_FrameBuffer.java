@@ -1,4 +1,4 @@
-package com.heavybox.jtix.zzz;
+package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
@@ -6,11 +6,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.widgets_4.Node;
-import com.heavybox.jtix.widgets_4.Polygon;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Arrays;
 
 public class SceneTest_FrameBuffer implements Scene {
 
