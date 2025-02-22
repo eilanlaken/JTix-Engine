@@ -65,7 +65,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRPGMapMaker2());
+        Application.launch(new SceneRPGMapMaker3());
 
     }
 

@@ -16,7 +16,7 @@ import com.heavybox.jtix.widgets_4.NodeContainerHorizontal;
 import com.heavybox.jtix.widgets_4.Widget;
 import org.lwjgl.opengl.GL11;
 
-public class SceneRPGMapMaker2 implements Scene {
+public class SceneRPGMapMaker3 implements Scene {
 
     private static final Vector3 screen = new Vector3();
     private final Renderer2D renderer2D = new Renderer2D();
@@ -39,10 +39,10 @@ public class SceneRPGMapMaker2 implements Scene {
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
 
     // scene
-    @Deprecated private final Array<Command> commands = new Array<>(true, 100);
-    @Deprecated private final Array<CommandTerrainPaint> commandsTerrain = new Array<>(true, 100);
-    @Deprecated private final Array<Command> commandsPutObjects = new Array<>(true, 100);
-    @Deprecated int cmd_mask = CommandTerrainPaint.GRASS_MASK;
+    //@Deprecated private final Array<Command> commands = new Array<>(true, 100);
+    //@Deprecated private final Array<CommandTerrainPaint> commandsTerrain = new Array<>(true, 100);
+    //@Deprecated private final Array<Command> commandsPutObjects = new Array<>(true, 100);
+    //@Deprecated int cmd_mask = CommandTerrainPaint.GRASS_MASK;
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
@@ -318,12 +318,13 @@ public class SceneRPGMapMaker2 implements Scene {
 
         // TODO
         if (toolTerrain.active) {
+
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
-                cmd_mask = CommandTerrainPaint.WATER_MASK;
+                toolTerrain.mask = CommandTerrainPaint.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-                cmd_mask = CommandTerrainPaint.GRASS_MASK;
+                toolTerrain.mask = CommandTerrainPaint.GRASS_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
-                cmd_mask = CommandTerrainPaint.ROAD_MASK;
+                toolTerrain.mask = CommandTerrainPaint.ROAD_MASK;
             }
 
             if (leftJustPressed || leftPressedAndMoved) {
@@ -333,11 +334,12 @@ public class SceneRPGMapMaker2 implements Scene {
                 float y = screen.y;
 
                 CommandTerrainPaint drawTerrainCommand = new CommandTerrainPaint();
-                drawTerrainCommand.mask = cmd_mask;
+                drawTerrainCommand.mask = toolTerrain.mask;
                 drawTerrainCommand.x = x;
                 drawTerrainCommand.y = y;
 
-                commands.add(drawTerrainCommand);
+                commandHistory.add(drawTerrainCommand);
+                //commands.add(drawTerrainCommand);
             }
         }
 
@@ -373,22 +375,21 @@ public class SceneRPGMapMaker2 implements Scene {
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
 
         // get all terrain draw commands history
-        commandsTerrain.clear();
-        for (Command command : commands) {
+        commandsTerrainPaint.clear();
+        for (Command command : commandHistory) { // TODO: iterate until last index.
             if (command instanceof CommandTerrainPaint) {
                 CommandTerrainPaint cmd = (CommandTerrainPaint) command;
-                commandsTerrain.add(cmd);
+                commandsTerrainPaint.add(cmd);
             }
         }
-        //commandsTerrain.sort(Comparator.comparingInt(o -> o.mask)); TODO: need to sort by masking? No.
 
-        commandsPutObjects.clear();
-        for (Command command : commands) {
-            if (command instanceof CommandBrush) {
-                CommandBrush cmd = (CommandBrush) command;
-                commandsPutObjects.add(cmd);
-            }
-        }
+//        commandsPutObjects.clear();
+//        for (Command command : commands) {
+//            if (command instanceof CommandBrush) {
+//                CommandBrush cmd = (CommandBrush) command;
+//                commandsPutObjects.add(cmd);
+//            }
+//        }
         // sort by y value.
 
         // render scene
@@ -398,8 +399,8 @@ public class SceneRPGMapMaker2 implements Scene {
         // create terrain stencil mask
         renderer2D.beginStencil();
         renderer2D.stencilMaskClear(CommandTerrainPaint.GRASS_MASK);
-        System.out.println(commandsTerrain.size);
-        for (CommandTerrainPaint command : commandsTerrain) {
+        System.out.println(commandsTerrainPaint.size);
+        for (CommandTerrainPaint command : commandsTerrainPaint) {
             renderer2D.setStencilModeSetValue(command.mask);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
