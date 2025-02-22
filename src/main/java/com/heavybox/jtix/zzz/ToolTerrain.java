@@ -7,8 +7,4 @@ public class ToolTerrain extends Tool {
     public ToolTerrain() {
     }
 
-    @Override
-    public void update() {
-
-    }
 }

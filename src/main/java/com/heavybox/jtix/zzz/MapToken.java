@@ -5,22 +5,27 @@ import com.heavybox.jtix.graphics.TextureRegion;
 
 public abstract class MapToken {
 
-    protected final TextureRegion[] regions;
+    protected final Type type;
     protected float x, y, deg, sclX, sclY;
 
-    public MapToken(TextureRegion[] regions) {
-        this.regions = regions;
+    public MapToken(Type type) {
+        this.type = type;
     }
 
-    public void render(Renderer2D renderer2D) {
-        for (TextureRegion region : regions) {
-            renderer2D.drawTextureRegion(region, x, y, deg, sclX, sclY);
-        }
-    }
+    public abstract void render(Renderer2D renderer2D);
 
     public void translate(float x, float y) {
         this.x += x;
         this.y += y;
+    }
+
+    public enum Type {
+        TREE,
+        HOUSE_RURAL,
+        HOUSE_CITY,
+        PROP,
+        CASTLE_BLOCK,
+        TEXT,
     }
 
 }

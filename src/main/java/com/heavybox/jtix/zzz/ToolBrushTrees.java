@@ -2,7 +2,6 @@ package com.heavybox.jtix.zzz;
 
 public class ToolBrushTrees extends Tool {
 
-    public static final float BASE_SCALE = 0.20f;
     public static final String[] regionsRegular = {
             "assets/app-trees/tree_regular_1.png",
             "assets/app-trees/tree_regular_2.png",
@@ -33,25 +32,13 @@ public class ToolBrushTrees extends Tool {
     public static final String regionFruitsCypress = "assets/app-trees/tree_cypress_fruits.png";
 
 
-    public Mode mode = Mode.REGULAR;
+    public MapTokenTree.Species species = MapTokenTree.Species.REGULAR;
     public float density = 1;
     public float scaleRange = 0.1f;
+    public float scale = 0.20f;
     public boolean addFruits = false; // change to probability
 
     public float lastCreatedX = Float.NEGATIVE_INFINITY;
     public float lastCreatedY = Float.NEGATIVE_INFINITY;
-
-    public ToolBrushTrees() {
-    }
-
-    @Override
-    public void update() {
-
-    }
-
-    public enum Mode {
-        REGULAR,
-        CYPRESS
-    }
 
 }

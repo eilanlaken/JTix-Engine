@@ -11,7 +11,7 @@ public class CommandTerrainPaint extends Command {
     public int mask = 1;
 
     // brush type circle
-    public float r = 40;
+    public float r = 18;
     public int refinement = 100;
 
     @Override

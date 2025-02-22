@@ -9,6 +9,7 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
 import com.heavybox.jtix.widgets_4.NodeContainer;
@@ -16,10 +17,16 @@ import com.heavybox.jtix.widgets_4.NodeContainerHorizontal;
 import com.heavybox.jtix.widgets_4.Widget;
 import org.lwjgl.opengl.GL11;
 
+import java.util.LinkedList;
+
 public class SceneRPGMapMaker2 implements Scene {
 
     private static final Vector3 screen = new Vector3();
     private final Renderer2D renderer2D = new Renderer2D();
+
+    /* ui */
+    private final Widget toolbarWidget = new Widget();
+    private final Widget menuBarWidget = new Widget();
 
     /* assets */
     private TexturePack icons;
@@ -31,23 +38,20 @@ public class SceneRPGMapMaker2 implements Scene {
 
     // tools
     private Tool activeTool = null;
-    private Tool toolTerrain = new ToolTerrain();
-    private Tool toolBrushTrees = new ToolBrushTrees();
+    private final ToolTerrain toolTerrain = new ToolTerrain();
+    private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
 
     // scene
     @Deprecated private final Array<Command> commands = new Array<>(true, 100);
     @Deprecated private final Array<CommandTerrainPaint> commandsTerrain = new Array<>(true, 100);
     @Deprecated private final Array<Command> commandsPutObjects = new Array<>(true, 100);
     @Deprecated int cmd_mask = CommandTerrainPaint.GRASS_MASK;
-    public final Array<MapItem> mapItems = new Array<>(true, 10);
-    public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
-    public Array<Command> commandChain = new Array<>(true, 10);
-    private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
-    public int commandChainIndex = -1;
 
-    /* ui */
-    private final Widget toolbarWidget = new Widget();
-    private final Widget menuBarWidget = new Widget();
+    public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
+    public Array<Command> commandHistory = new Array<>(true, 10);
+    public int commandChainIndex = -1;
+    private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
+    public final Array<MapItem> mapItems = new Array<>(true, 10);
 
     @Override
     public void setup() {
@@ -248,7 +252,10 @@ public class SceneRPGMapMaker2 implements Scene {
         terrainGrass = Assets.get("assets/app-textures/terrain-grass-1024.png");
         terrainRoad = Assets.get("assets/app-textures/terrain-road-1024.png");
         //terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
+    }
 
+    @Override
+    public void start() {
         NodeToolBar toolBar = new NodeToolBar();
 
         NodeContainerHorizontal menuBarContainer = new NodeContainerHorizontal();
@@ -284,24 +291,14 @@ public class SceneRPGMapMaker2 implements Scene {
     }
 
     @Override
-    public void start() {
-
-    }
-
-    @Override
     public void update() {
-        ArrayInt codepointsPressed = Input.keyboard.getCodepointPressed();
-        for (int i = 0; i < codepointsPressed.size; i++) {
-            int codepoint = codepointsPressed.get(i);
-//            text.append((char)  codepoint);
-        }
-
+        // update ui
         menuBarWidget.update(Graphics.getDeltaTime());
         menuBarWidget.handleInput(Graphics.getDeltaTime());
         toolbarWidget.update(Graphics.getDeltaTime());
         toolbarWidget.handleInput(Graphics.getDeltaTime());
 
-
+        // update camera
         if (Input.mouse.getVerticalScroll() != 0) {
             camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
         }
@@ -312,6 +309,7 @@ public class SceneRPGMapMaker2 implements Scene {
         }
 
         boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
+        boolean leftJustRelease = Input.mouse.isButtonReleased(Mouse.Button.LEFT);
         boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.O)) {
@@ -321,6 +319,7 @@ public class SceneRPGMapMaker2 implements Scene {
             selectTool(toolBrushTrees);
         }
 
+        // TODO
         if (toolTerrain.active) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 cmd_mask = CommandTerrainPaint.WATER_MASK;
@@ -338,28 +337,38 @@ public class SceneRPGMapMaker2 implements Scene {
 
                 CommandTerrainPaint drawTerrainCommand = new CommandTerrainPaint();
                 drawTerrainCommand.mask = cmd_mask;
-                drawTerrainCommand.x = x;
-                drawTerrainCommand.y = y;
+                //drawTerrainCommand.x = x;
+                //drawTerrainCommand.y = y;
 
                 commands.add(drawTerrainCommand);
             }
         }
 
         if (toolBrushTrees.active) {
+
             if (leftJustPressed || leftPressedAndMoved) {
                 screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
                 camera.unProject(screen);
                 float x = screen.x;
                 float y = screen.y;
 
-                CommandBrush commandBrush = new CommandBrush();
-                commandBrush.x = x;
-                commandBrush.y = y;
-                commandBrush.treeType = MathUtils.randomUniformInt(1,6);
-                commandBrush.trunkType = MathUtils.randomUniformInt(1,11);
-                commandBrush.tree = props.getRegion("assets/app-trees/tree_regular_3.png"); // TODO
-                commandBrush.trunk = props.getRegion("assets/app-trees/tree_regular_trunk_3.png"); // TODO
-                commands.add(commandBrush);
+                float dst = Vector2.dst(x, y, toolBrushTrees.lastCreatedX, toolBrushTrees.lastCreatedY);
+
+                // control density.
+                boolean regular = toolBrushTrees.species == MapTokenTree.Species.REGULAR;
+                int baseIndex = regular ? MathUtils.randomUniformInt(1,7) : MathUtils.randomUniformInt(1,5);
+                int trunkIndex = MathUtils.randomUniformInt(1,11);
+                boolean fruits = toolBrushTrees.addFruits;
+
+                CommandMapTokenCreateTree addTree = new CommandMapTokenCreateTree(toolBrushTrees.species, baseIndex, trunkIndex, fruits);
+                addTree.x = x;
+                addTree.y = y;
+                addTree.sclX = toolBrushTrees.scale;
+                addTree.sclY = toolBrushTrees.scale;
+                addTree.isAnchor = leftJustPressed;
+
+                toolBrushTrees.lastCreatedX = x;
+                toolBrushTrees.lastCreatedY = y;
             }
         }
 

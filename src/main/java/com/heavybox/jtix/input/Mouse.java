@@ -124,6 +124,11 @@ public class Mouse {
         return mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
 
+    // TODO: test
+    public boolean isButtonJustReleased(final Button button) {
+        return mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE && mouseButtonsPrevStates[button.glfwCode] == GLFW.GLFW_PRESS;
+    }
+
     public boolean isButtonClicked(final Button button) {
         return mouseButtonsPrevStates[button.glfwCode] == GLFW.GLFW_PRESS && mouseButtonsCurrentStates[button.glfwCode] == GLFW.GLFW_RELEASE;
     }
@@ -147,7 +152,6 @@ public class Mouse {
         mouseButtonsPrevStates[GLFW.GLFW_MOUSE_BUTTON_3] = mouseButtonsCurrentStates[GLFW.GLFW_MOUSE_BUTTON_3];
         mouseButtonsPrevStates[GLFW.GLFW_MOUSE_BUTTON_4] = mouseButtonsCurrentStates[GLFW.GLFW_MOUSE_BUTTON_4];
         mouseButtonsPrevStates[GLFW.GLFW_MOUSE_BUTTON_5] = mouseButtonsCurrentStates[GLFW.GLFW_MOUSE_BUTTON_5];
-
         cursorEnteredWindow = false;
         cursorLeftWindow = false;
     }
