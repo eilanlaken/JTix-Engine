@@ -398,8 +398,8 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(type, baseIndex);
                 addCastleBlock.x = x;
                 addCastleBlock.y = y;
-                addCastleBlock.sclX = toolCastleGenerator.scale;
-                addCastleBlock.sclY = toolCastleGenerator.scale;
+                addCastleBlock.sclX = 0.4f;//toolCastleGenerator.scale;
+                addCastleBlock.sclY = 0.4f;//toolCastleGenerator.scale;
                 addCastleBlock.isAnchor = leftJustPressed;
 
 
@@ -465,11 +465,16 @@ public class SceneRPGMapMaker3 implements Scene {
         for (MapToken token : mapTokens) {
             token.render(renderer2D);
         }
+
+        // render tool overlay here
+        if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
+
+
         renderer2D.end();
 
         // render tool-overlay
         renderer2D.begin();
-        if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
+        //if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f, -Input.mouse.getY() + Graphics.getWindowHeight() * 0.5f, 0, 1,1);
         renderer2D.end();
 
         // render UI

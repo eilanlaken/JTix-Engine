@@ -28,6 +28,80 @@ public class MapTokenCastleBlock extends MapToken {
             "assets/app-castles/castle-tower-block_15.png",
     };
 
+    public static final String[] regionsBuildingTallLeft = {
+            "assets/app-castles/castle-building-block_5.png",
+            "assets/app-castles/castle-building-block_6.png",
+            "assets/app-castles/castle-building-block_7.png",
+            "assets/app-castles/castle-building-block_8.png",
+            "assets/app-castles/castle-building-block_9.png",
+            "assets/app-castles/castle-building-block_10.png",
+    };
+
+    public static final String[] regionsBuildingTallMiddle = {
+            "assets/app-castles/castle-building-block_11.png",
+            "assets/app-castles/castle-building-block_12.png",
+            "assets/app-castles/castle-building-block_13.png",
+            "assets/app-castles/castle-building-block_14.png",
+            "assets/app-castles/castle-building-block_15.png",
+            "assets/app-castles/castle-building-block_16.png",
+            "assets/app-castles/castle-building-block_17.png",
+            "assets/app-castles/castle-building-block_18.png",
+            "assets/app-castles/castle-building-block_19.png",
+            "assets/app-castles/castle-building-block_20.png",
+            "assets/app-castles/castle-building-block_21.png",
+            "assets/app-castles/castle-building-block_22.png",
+            "assets/app-castles/castle-building-block_23.png",
+            "assets/app-castles/castle-building-block_27.png",
+            "assets/app-castles/castle-building-block_28.png",
+    };
+
+    public static final String[] regionsBuildingShortLeft = {
+            "assets/app-castles/castle-building-block_1.png",
+            "assets/app-castles/castle-building-block_2.png",
+            "assets/app-castles/castle-building-block_3.png",
+            "assets/app-castles/castle-building-block_4.png",
+    };
+
+    public static final String[] regionsBuildingShortMiddle = {
+            "assets/app-castles/castle-building-block_24.png",
+            "assets/app-castles/castle-building-block_25.png",
+            "assets/app-castles/castle-building-block_26.png",
+    };
+
+    public static final String[] regionsWallFrontLeft = {
+            "assets/app-castles/castle-wall-front-block_2.png",
+            "assets/app-castles/castle-wall-front-block_4.png",
+            "assets/app-castles/castle-wall-front-block_6.png",
+            "assets/app-castles/castle-wall-front-block_8.png",
+            "assets/app-castles/castle-wall-front-block_10.png",
+    };
+
+    public static final String[] regionsWallFrontMiddle = regionsBuildingTallMiddle;
+
+    public static final String[] regionsWallFrontRight = {
+            "assets/app-castles/castle-wall-front-block_1.png",
+            "assets/app-castles/castle-wall-front-block_3.png",
+            "assets/app-castles/castle-wall-front-block_5.png",
+            "assets/app-castles/castle-wall-front-block_7.png",
+            "assets/app-castles/castle-wall-front-block_9.png",
+    };
+
+    public static final String[] regionsWallBackLeft = {
+            "assets/app-castles/castle-wall-back-block_2.png",
+            "assets/app-castles/castle-wall-back-block_4.png",
+            "assets/app-castles/castle-wall-back-block_6.png",
+            "assets/app-castles/castle-wall-back-block_8.png",
+    };
+
+    public static final String[] regionsWallBackMiddle = regionsBuildingTallMiddle;
+
+    public static final String[] regionsWallBackRight = {
+            "assets/app-castles/castle-wall-back-block_1.png",
+            "assets/app-castles/castle-wall-back-block_3.png",
+            "assets/app-castles/castle-wall-back-block_5.png",
+            "assets/app-castles/castle-wall-back-block_7.png",
+    };
+
     public final BlockType type;
     public final int index;
 
@@ -38,10 +112,27 @@ public class MapTokenCastleBlock extends MapToken {
         this.type = type;
         this.index = index;
 
-        if (type == BlockType.TOWER_TALL)
-            this.region = props.getRegion(regionsTowerTall[index % regionsTowerTall.length]);
-        if (type == BlockType.TOWER_SHORT)
-            this.region = props.getRegion(regionsTowerShort[index % regionsTowerShort.length]);
+        this.region = switch (type) {
+            case TOWER_TALL -> props.getRegion(regionsTowerTall[index % regionsTowerTall.length]);
+            case TOWER_SHORT -> props.getRegion(regionsTowerShort[index % regionsTowerShort.length]);
+
+            case BUILDING_TALL_LEFT -> props.getRegion(regionsBuildingTallLeft[index % regionsBuildingTallLeft.length]);
+            case BUILDING_TALL_MIDDLE -> props.getRegion(regionsBuildingTallMiddle[index % regionsBuildingTallMiddle.length]);
+            case BUILDING_TALL_RIGHT -> props.getRegion(regionsBuildingTallLeft[index % regionsBuildingTallLeft.length]);
+
+            case BUILDING_SHORT_LEFT -> props.getRegion(regionsBuildingShortLeft[index % regionsBuildingShortLeft.length]);
+            case BUILDING_SHORT_MIDDLE -> props.getRegion(regionsBuildingShortMiddle[index % regionsBuildingShortMiddle.length]);
+            case BUILDING_SHORT_RIGHT -> props.getRegion(regionsBuildingShortLeft[index % regionsBuildingShortLeft.length]);
+
+            case WALL_BACK_LEFT -> props.getRegion(regionsWallBackLeft[index % regionsWallBackLeft.length]);
+            case WALL_BACK_MIDDLE -> props.getRegion(regionsWallBackMiddle[index % regionsWallBackMiddle.length]);
+            case WALL_BACK_RIGHT -> props.getRegion(regionsWallBackLeft[index % regionsWallBackLeft.length]);
+
+            case WALL_FRONT_LEFT -> props.getRegion(regionsWallFrontLeft[index % regionsWallFrontLeft.length]);
+            case WALL_FRONT_MIDDLE -> props.getRegion(regionsWallFrontMiddle[index % regionsWallFrontMiddle.length]);
+            case WALL_FRONT_RIGHT -> props.getRegion(regionsWallFrontLeft[index % regionsWallFrontLeft.length]);
+        };
+
     }
 
     @Override
