@@ -6,13 +6,21 @@ import com.heavybox.jtix.graphics.TextureRegion;
 public abstract class MapToken {
 
     protected final Type type;
-    protected float x, y, deg, sclX, sclY;
+    protected float x, y, deg, sclX = 1, sclY = 1;
 
     public MapToken(Type type) {
         this.type = type;
     }
 
     public abstract void render(Renderer2D renderer2D);
+
+    public void setTransform(Command command) {
+        this.x = command.x;
+        this.y = command.y;
+        this.deg = command.deg;
+        this.sclX = command.sclX;
+        this.sclY = command.sclY;
+    }
 
     public void translate(float x, float y) {
         this.x += x;

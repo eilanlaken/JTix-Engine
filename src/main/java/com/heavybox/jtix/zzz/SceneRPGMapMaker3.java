@@ -16,6 +16,8 @@ import com.heavybox.jtix.widgets_4.NodeContainerHorizontal;
 import com.heavybox.jtix.widgets_4.Widget;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Comparator;
+
 public class SceneRPGMapMaker3 implements Scene {
 
     private static final Vector3 screen = new Vector3();
@@ -337,9 +339,9 @@ public class SceneRPGMapMaker3 implements Scene {
                 drawTerrainCommand.mask = toolTerrain.mask;
                 drawTerrainCommand.x = x;
                 drawTerrainCommand.y = y;
+                drawTerrainCommand.isAnchor = leftJustPressed;
 
                 commandHistory.add(drawTerrainCommand);
-                //commands.add(drawTerrainCommand);
             }
         }
 
@@ -351,12 +353,12 @@ public class SceneRPGMapMaker3 implements Scene {
                 float x = screen.x;
                 float y = screen.y;
 
+                // TODO: control density.
                 float dst = Vector2.dst(x, y, toolBrushTrees.lastCreatedX, toolBrushTrees.lastCreatedY);
 
-                // control density.
                 boolean regular = toolBrushTrees.species == MapTokenTree.Species.REGULAR;
-                int baseIndex = regular ? MathUtils.randomUniformInt(1,7) : MathUtils.randomUniformInt(1,5);
-                int trunkIndex = MathUtils.randomUniformInt(1,11);
+                int baseIndex = regular ? MathUtils.randomUniformInt(0,6) : MathUtils.randomUniformInt(0,4);
+                int trunkIndex = MathUtils.randomUniformInt(0,10);
                 boolean fruits = toolBrushTrees.addFruits;
 
                 CommandMapTokenCreateTree addTree = new CommandMapTokenCreateTree(toolBrushTrees.species, baseIndex, trunkIndex, fruits);
@@ -365,9 +367,16 @@ public class SceneRPGMapMaker3 implements Scene {
                 addTree.sclX = toolBrushTrees.scale;
                 addTree.sclY = toolBrushTrees.scale;
                 addTree.isAnchor = leftJustPressed;
-
                 toolBrushTrees.lastCreatedX = x;
                 toolBrushTrees.lastCreatedY = y;
+
+                commandHistory.add(addTree);
+
+                // TODO: see if and how to use command.execute().
+                MapTokenTree tree = new MapTokenTree(props, addTree.species, addTree.baseIndex, addTree.trunkIndex, addTree.withFruit);
+                tree.setTransform(addTree);
+
+                mapTokens.add(tree);
             }
         }
 
@@ -399,7 +408,6 @@ public class SceneRPGMapMaker3 implements Scene {
         // create terrain stencil mask
         renderer2D.beginStencil();
         renderer2D.stencilMaskClear(CommandTerrainPaint.GRASS_MASK);
-        System.out.println(commandsTerrainPaint.size);
         for (CommandTerrainPaint command : commandsTerrainPaint) {
             renderer2D.setStencilModeSetValue(command.mask);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
@@ -420,6 +428,7 @@ public class SceneRPGMapMaker3 implements Scene {
 
         // draw map objects
         // TODO: first, calculate map items array
+        mapTokens.sort(Comparator.comparingInt(o -> -(int) o.y));
         for (MapToken token : mapTokens) {
             token.render(renderer2D);
         }
