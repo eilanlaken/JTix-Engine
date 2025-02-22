@@ -1,5 +1,7 @@
 package com.heavybox.jtix.zzz;
 
+import com.heavybox.jtix.graphics.Renderer2D;
+
 public class ToolBrushTrees extends Tool {
 
     public static final String[] regionsRegular = {
@@ -33,6 +35,7 @@ public class ToolBrushTrees extends Tool {
 
 
     public MapTokenTree.Species species = MapTokenTree.Species.REGULAR;
+    public float flux = 1;
     public float density = 1;
     public float scaleRange = 0.1f;
     public float scale = 0.20f;
@@ -41,4 +44,8 @@ public class ToolBrushTrees extends Tool {
     public float lastCreatedX = Float.NEGATIVE_INFINITY;
     public float lastCreatedY = Float.NEGATIVE_INFINITY;
 
+    @Override
+    public void renderToolOverlay(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
+        renderer2D.drawCircleThin(flux * 20, 30, x, y, deg, sclX, sclY);
+    }
 }

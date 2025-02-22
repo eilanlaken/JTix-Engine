@@ -3,7 +3,6 @@ package com.heavybox.jtix.zzz;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.graphics.TextureRegion;
-import com.heavybox.jtix.math.MathUtils;
 
 public class MapTokenTree extends MapToken {
 

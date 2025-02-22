@@ -39,18 +39,14 @@ public class SceneRPGMapMaker3 implements Scene {
     private Tool activeTool = null;
     private final ToolTerrain toolTerrain = new ToolTerrain();
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
-
-    // scene
-    //@Deprecated private final Array<Command> commands = new Array<>(true, 100);
-    //@Deprecated private final Array<CommandTerrainPaint> commandsTerrain = new Array<>(true, 100);
-    //@Deprecated private final Array<Command> commandsPutObjects = new Array<>(true, 100);
-    //@Deprecated int cmd_mask = CommandTerrainPaint.GRASS_MASK;
+    private final ToolCastleGenerator toolCastleGenerator = new ToolCastleGenerator();
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
     public int commandChainIndex = -1;
     private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
     public final Array<MapToken> mapTokens = new Array<>(true, 10);
+    // TODO: make a copy array of map tokens for clearing(), copying(), sorting() then rendering().
 
     @Override
     public void setup() {
@@ -298,25 +294,33 @@ public class SceneRPGMapMaker3 implements Scene {
         toolbarWidget.handleInput(Graphics.getDeltaTime());
 
         // update camera
-        if (Input.mouse.getVerticalScroll() != 0) {
-            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
+        // CAMERA ZOOM
+//        if (Input.mouse.getVerticalScroll() != 0) {
+//            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
+//        }
+        if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
+            camera.zoom += Input.mouse.getYDelta() * 0.01f;
         }
         if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             camera.position.x -= 1.5f * Input.mouse.getXDelta();
             camera.position.y += 1.5f * Input.mouse.getYDelta();
             // TODO: set zoom limits
         }
+        screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
+        camera.unProject(screen);
 
         boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
         boolean leftJustRelease = Input.mouse.isButtonReleased(Mouse.Button.LEFT);
         boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.O)) {
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_1)) {
             selectTool(toolTerrain);
-        }
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.P)) {
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_2)) {
             selectTool(toolBrushTrees);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
+            selectTool(toolCastleGenerator);
         }
+
 
         // TODO
         if (toolTerrain.active) {
@@ -330,8 +334,6 @@ public class SceneRPGMapMaker3 implements Scene {
             }
 
             if (leftJustPressed || leftPressedAndMoved) {
-                screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
-                camera.unProject(screen);
                 float x = screen.x;
                 float y = screen.y;
 
@@ -348,8 +350,7 @@ public class SceneRPGMapMaker3 implements Scene {
         if (toolBrushTrees.active) {
 
             if (leftJustPressed || leftPressedAndMoved) {
-                screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
-                camera.unProject(screen);
+
                 float x = screen.x;
                 float y = screen.y;
 
@@ -377,6 +378,38 @@ public class SceneRPGMapMaker3 implements Scene {
                 tree.setTransform(addTree);
 
                 mapTokens.add(tree);
+            }
+        }
+
+        if (toolCastleGenerator.active) {
+            if (Input.mouse.isButtonClicked(Mouse.Button.MIDDLE)) {
+                toolCastleGenerator.baseIndex++;
+            }
+            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+                toolCastleGenerator.selectNext();
+            }
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+
+                MapTokenCastleBlock.BlockType type = toolCastleGenerator.currentType;
+                int baseIndex = toolCastleGenerator.baseIndex;
+
+                CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(type, baseIndex);
+                addCastleBlock.x = x;
+                addCastleBlock.y = y;
+                addCastleBlock.sclX = toolCastleGenerator.scale;
+                addCastleBlock.sclY = toolCastleGenerator.scale;
+                addCastleBlock.isAnchor = leftJustPressed;
+
+
+                commandHistory.add(addCastleBlock);
+
+                // TODO: see if and how to use command.execute().
+                MapTokenCastleBlock block = new MapTokenCastleBlock(props, type, addCastleBlock.baseIndex);
+                block.setTransform(addCastleBlock);
+
+                mapTokens.add(block);
             }
         }
 
@@ -436,7 +469,7 @@ public class SceneRPGMapMaker3 implements Scene {
 
         // render tool-overlay
         renderer2D.begin();
-
+        if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
         renderer2D.end();
 
         // render UI
@@ -448,13 +481,19 @@ public class SceneRPGMapMaker3 implements Scene {
     }
 
     private void selectTool(Tool tool) {
-        if (activeTool == null) {
+        if (tool == null) {
+            activeTool.active = false;
+            activeTool = null;
+            //Graphics.setCursorDefault(); // TODO
+        } else if (activeTool == null) {
             activeTool = tool;
             activeTool.active = true;
+            //Graphics.setCursorNone();
         } else if (activeTool != tool) { // already selected, do nothing
             activeTool.active = false;
             tool.active = true;
             activeTool = tool;
+            //Graphics.setCursorNone();
         }
     }
 
