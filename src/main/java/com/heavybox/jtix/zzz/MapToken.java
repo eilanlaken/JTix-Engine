@@ -1,7 +1,6 @@
 package com.heavybox.jtix.zzz;
 
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.graphics.TextureRegion;
 
 public abstract class MapToken {
 
@@ -29,9 +28,8 @@ public abstract class MapToken {
 
     public enum Type {
         TREE,
-        HOUSE_RURAL,
-        HOUSE_CITY,
-        PROP,
+        HOUSE,
+        PROP, // windmill, well, tower, fence, flowers etc.
         CASTLE_BLOCK,
         TEXT,
     }

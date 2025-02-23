@@ -40,6 +40,8 @@ public class SceneRPGMapMaker3 implements Scene {
     private final ToolTerrain toolTerrain = new ToolTerrain();
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
     private final ToolCastleGenerator toolCastleGenerator = new ToolCastleGenerator();
+    private final ToolStampHouses toolStampHouses = new ToolStampHouses();
+    private final ToolStampProps toolStampProps = new ToolStampProps();
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
@@ -225,7 +227,36 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-castles/castle-wall-front-block_5.png",
                     "assets/app-castles/castle-wall-front-block_6.png",
                     "assets/app-castles/castle-wall-front-block_7.png",
-                    "assets/app-castles/castle-wall-front-block_8.png"
+                    "assets/app-castles/castle-wall-front-block_8.png",
+
+                    "assets/app-ground/ground_bump_1.png",
+                    "assets/app-ground/ground_bump_2.png",
+                    "assets/app-ground/ground_bump_3.png",
+                    "assets/app-ground/ground_bump_4.png",
+                    "assets/app-ground/ground_bump_5.png",
+                    "assets/app-ground/ground_bump_6.png",
+                    "assets/app-ground/ground_bump_7.png",
+                    "assets/app-ground/ground_bump_8.png",
+                    "assets/app-ground/ground_bump_9.png",
+                    "assets/app-ground/ground_bump_10.png",
+                    "assets/app-ground/ground_bump_11.png",
+                    "assets/app-ground/ground_bump_12.png",
+                    "assets/app-ground/ground_bump_13.png",
+                    "assets/app-ground/ground_line_1.png",
+                    "assets/app-ground/ground_line_2.png",
+                    "assets/app-ground/ground_line_3.png",
+                    "assets/app-ground/ground_line_4.png",
+                    "assets/app-ground/ground_line_5.png",
+                    "assets/app-ground/ground_line_6.png",
+                    "assets/app-ground/ground_line_7.png",
+                    "assets/app-ground/ground_line_8.png",
+                    "assets/app-ground/ground_line_9.png",
+                    "assets/app-ground/ground_line_10.png",
+                    "assets/app-ground/ground_line_11.png",
+                    "assets/app-ground/ground_line_12.png",
+                    "assets/app-ground/ground_line_13.png",
+                    "assets/app-ground/ground_line_14.png",
+                    "assets/app-ground/ground_line_15.png"
             );
         } catch (Exception ignored) {} // PACK MEDIEVAL MAP PROPS
 
@@ -319,6 +350,10 @@ public class SceneRPGMapMaker3 implements Scene {
             selectTool(toolBrushTrees);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
             selectTool(toolCastleGenerator);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_4)) {
+            selectTool(toolStampHouses);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_5)) {
+            selectTool(toolStampProps);
         }
 
 
@@ -339,6 +374,7 @@ public class SceneRPGMapMaker3 implements Scene {
 
                 CommandTerrainPaint drawTerrainCommand = new CommandTerrainPaint();
                 drawTerrainCommand.mask = toolTerrain.mask;
+                drawTerrainCommand.r = toolTerrain.r;
                 drawTerrainCommand.x = x;
                 drawTerrainCommand.y = y;
                 drawTerrainCommand.isAnchor = leftJustPressed;
@@ -413,6 +449,65 @@ public class SceneRPGMapMaker3 implements Scene {
             }
         }
 
+        if (toolStampHouses.active) {
+            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+                toolStampHouses.selectRandom();
+            }
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+
+                MapTokenHouse.HouseType type = toolStampHouses.currentType;
+                int baseIndex = toolStampHouses.index;
+
+                CommandMapTokenCreateHouse addHouseVillage = new CommandMapTokenCreateHouse(type, baseIndex);
+                addHouseVillage.x = x;
+                addHouseVillage.y = y;
+                addHouseVillage.sclX = 0.35f;//toolCastleGenerator.scale;
+                addHouseVillage.sclY = 0.35f;//toolCastleGenerator.scale;
+                addHouseVillage.deg = MathUtils.randomUniformFloat(-12,12);
+                addHouseVillage.isAnchor = leftJustPressed;
+
+
+                commandHistory.add(addHouseVillage);
+
+                // TODO: see if and how to use command.execute().
+                MapTokenHouse house = new MapTokenHouse(props, type, addHouseVillage.baseIndex);
+                house.setTransform(addHouseVillage);
+                mapTokens.add(house);
+
+                toolStampHouses.selectRandom();
+            }
+        }
+
+        if (toolStampProps.active) {
+            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+                toolStampProps.selectRandom();
+            }
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+
+                int baseIndex = toolStampProps.index;
+
+                CommandMapTokenCreateProp addVillageProp = new CommandMapTokenCreateProp(baseIndex);
+                addVillageProp.x = x;
+                addVillageProp.y = y;
+                addVillageProp.sclX = 0.35f;//toolCastleGenerator.scale;
+                addVillageProp.sclY = 0.35f;//toolCastleGenerator.scale;
+                addVillageProp.deg = 0;
+                addVillageProp.isAnchor = true;
+
+
+                commandHistory.add(addVillageProp);
+
+                // TODO: see if and how to use command.execute().
+                MapTokenRuralProp prop = new MapTokenRuralProp(props, addVillageProp.baseIndex);
+                prop.setTransform(addVillageProp);
+                mapTokens.add(prop);
+            }
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); // should probably clear the stencil
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
 
@@ -443,6 +538,7 @@ public class SceneRPGMapMaker3 implements Scene {
         renderer2D.stencilMaskClear(CommandTerrainPaint.GRASS_MASK);
         for (CommandTerrainPaint command : commandsTerrainPaint) {
             renderer2D.setStencilModeSetValue(command.mask);
+            System.out.println(command.r);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
         renderer2D.endStencil();
