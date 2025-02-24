@@ -27,6 +27,7 @@ public abstract class MapToken {
     }
 
     public enum Type {
+        GROUND,
         TREE,
         HOUSE,
         PROP, // windmill, well, tower, fence, flowers etc.

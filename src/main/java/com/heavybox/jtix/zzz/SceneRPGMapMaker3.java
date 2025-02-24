@@ -37,16 +37,18 @@ public class SceneRPGMapMaker3 implements Scene {
 
     // tools
     private Tool activeTool = null;
-    private final ToolTerrain toolTerrain = new ToolTerrain();
+    private final ToolTerrainPaint toolTerrainPaint = new ToolTerrainPaint();
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
     private final ToolCastleGenerator toolCastleGenerator = new ToolCastleGenerator();
     private final ToolStampHouses toolStampHouses = new ToolStampHouses();
     private final ToolStampProps toolStampProps = new ToolStampProps();
+    private final ToolTerrainDeform toolTerrainDeform = new ToolTerrainDeform();
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
     public int commandChainIndex = -1;
     private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
+    private final Array<CommandTerrainDeform> commandsTerrainDeform = new Array<>(true, 100);
     public final Array<MapToken> mapTokens = new Array<>(true, 10);
     // TODO: make a copy array of map tokens for clearing(), copying(), sorting() then rendering().
 
@@ -341,11 +343,11 @@ public class SceneRPGMapMaker3 implements Scene {
         camera.unProject(screen);
 
         boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
-        boolean leftJustRelease = Input.mouse.isButtonReleased(Mouse.Button.LEFT);
+        boolean leftJustRelease = Input.mouse.isButtonJustReleased(Mouse.Button.LEFT);
         boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_1)) {
-            selectTool(toolTerrain);
+            selectTool(toolTerrainPaint);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_2)) {
             selectTool(toolBrushTrees);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
@@ -354,18 +356,20 @@ public class SceneRPGMapMaker3 implements Scene {
             selectTool(toolStampHouses);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_5)) {
             selectTool(toolStampProps);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_6)) {
+            selectTool(toolTerrainDeform);
         }
 
 
         // TODO
-        if (toolTerrain.active) {
+        if (toolTerrainPaint.active) {
 
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
-                toolTerrain.mask = CommandTerrainPaint.WATER_MASK;
+                toolTerrainPaint.mask = CommandTerrainPaint.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-                toolTerrain.mask = CommandTerrainPaint.GRASS_MASK;
+                toolTerrainPaint.mask = CommandTerrainPaint.GRASS_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
-                toolTerrain.mask = CommandTerrainPaint.ROAD_MASK;
+                toolTerrainPaint.mask = CommandTerrainPaint.ROAD_MASK;
             }
 
             if (leftJustPressed || leftPressedAndMoved) {
@@ -373,8 +377,8 @@ public class SceneRPGMapMaker3 implements Scene {
                 float y = screen.y;
 
                 CommandTerrainPaint drawTerrainCommand = new CommandTerrainPaint();
-                drawTerrainCommand.mask = toolTerrain.mask;
-                drawTerrainCommand.r = toolTerrain.r;
+                drawTerrainCommand.mask = toolTerrainPaint.mask;
+                drawTerrainCommand.r = toolTerrainPaint.r;
                 drawTerrainCommand.x = x;
                 drawTerrainCommand.y = y;
                 drawTerrainCommand.isAnchor = leftJustPressed;
@@ -508,26 +512,68 @@ public class SceneRPGMapMaker3 implements Scene {
             }
         }
 
+        if (toolStampProps.active) {
+            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+                toolStampProps.selectRandom();
+            }
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+
+                int baseIndex = toolStampProps.index;
+
+                CommandMapTokenCreateProp addVillageProp = new CommandMapTokenCreateProp(baseIndex);
+                addVillageProp.x = x;
+                addVillageProp.y = y;
+                addVillageProp.sclX = 0.35f;//toolCastleGenerator.scale;
+                addVillageProp.sclY = 0.35f;//toolCastleGenerator.scale;
+                addVillageProp.deg = 0;
+                addVillageProp.isAnchor = true;
+
+
+                commandHistory.add(addVillageProp);
+
+                // TODO: see if and how to use command.execute().
+                MapTokenRuralProp prop = new MapTokenRuralProp(props, addVillageProp.baseIndex);
+                prop.setTransform(addVillageProp);
+                mapTokens.add(prop);
+            }
+        }
+
+        if (toolTerrainDeform.active) {
+            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
+                toolTerrainDeform.selectRandom();
+            }
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+
+                CommandTerrainDeform addGroundFold = new CommandTerrainDeform(props, toolTerrainDeform.currentType, toolTerrainDeform.index);
+                addGroundFold.x = x;
+                addGroundFold.y = y;
+                addGroundFold.sclX = 0.8f;//toolCastleGenerator.scale;
+                addGroundFold.sclY = 1f;//toolCastleGenerator.scale;
+                addGroundFold.deg = 0;
+                addGroundFold.isAnchor = true;
+                commandHistory.add(addGroundFold);
+            }
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); // should probably clear the stencil
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
 
         // get all terrain draw commands history
         commandsTerrainPaint.clear();
+        commandsTerrainDeform.clear();
         for (Command command : commandHistory) { // TODO: iterate until last index.
             if (command instanceof CommandTerrainPaint) {
                 CommandTerrainPaint cmd = (CommandTerrainPaint) command;
                 commandsTerrainPaint.add(cmd);
+            } else if (command instanceof CommandTerrainDeform) {
+                CommandTerrainDeform cmd = (CommandTerrainDeform) command;
+                commandsTerrainDeform.add(cmd);
             }
         }
-
-//        commandsPutObjects.clear();
-//        for (Command command : commands) {
-//            if (command instanceof CommandBrush) {
-//                CommandBrush cmd = (CommandBrush) command;
-//                commandsPutObjects.add(cmd);
-//            }
-//        }
-        // sort by y value.
 
         // render scene
         renderer2D.begin(camera);
@@ -538,7 +584,6 @@ public class SceneRPGMapMaker3 implements Scene {
         renderer2D.stencilMaskClear(CommandTerrainPaint.GRASS_MASK);
         for (CommandTerrainPaint command : commandsTerrainPaint) {
             renderer2D.setStencilModeSetValue(command.mask);
-            System.out.println(command.r);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
         renderer2D.endStencil();
@@ -553,6 +598,13 @@ public class SceneRPGMapMaker3 implements Scene {
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
+        renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.GRASS_MASK);
+        renderer2D.setColor(1,1,1,0.7f);
+        for (CommandTerrainDeform deform : commandsTerrainDeform) {
+            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY); // base should never be null.
+            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY); // base should never be null.
+        }
+        renderer2D.setColor(Color.WHITE);
         renderer2D.disableMasking();
 
         // draw map objects

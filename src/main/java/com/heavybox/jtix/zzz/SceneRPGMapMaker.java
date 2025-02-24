@@ -42,7 +42,7 @@ public class SceneRPGMapMaker implements Scene {
     //private Tool activeTool = Tool.BRUSH;
 
     private Tool activeTool = null;
-    private Tool toolTerrain = new ToolTerrain();
+    private Tool toolTerrain = new ToolTerrainPaint();
     private Tool toolBrushTrees = new ToolBrushTrees();
 
     // edit

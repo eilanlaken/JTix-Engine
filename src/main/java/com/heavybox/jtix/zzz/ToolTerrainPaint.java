@@ -2,12 +2,12 @@ package com.heavybox.jtix.zzz;
 
 import com.heavybox.jtix.graphics.Renderer2D;
 
-public class ToolTerrain extends Tool {
+public class ToolTerrainPaint extends Tool {
 
     public int mask = CommandTerrainPaint.GRASS_MASK;
-    public float r = 1;
+    public float r = 6;
 
-    public ToolTerrain() {
+    public ToolTerrainPaint() {
     }
 
     @Override

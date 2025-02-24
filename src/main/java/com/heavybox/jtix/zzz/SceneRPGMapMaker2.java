@@ -35,7 +35,7 @@ public class SceneRPGMapMaker2 implements Scene {
 
     // tools
     private Tool activeTool = null;
-    private final ToolTerrain toolTerrain = new ToolTerrain();
+    private final ToolTerrainPaint toolTerrainPaint = new ToolTerrainPaint();
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
 
     // scene
@@ -310,14 +310,14 @@ public class SceneRPGMapMaker2 implements Scene {
         boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.O)) {
-            selectTool(toolTerrain);
+            selectTool(toolTerrainPaint);
         }
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.P)) {
             selectTool(toolBrushTrees);
         }
 
         // TODO
-        if (toolTerrain.active) {
+        if (toolTerrainPaint.active) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 cmd_mask = CommandTerrainPaint.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
