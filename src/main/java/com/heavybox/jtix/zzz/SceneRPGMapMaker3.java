@@ -97,6 +97,12 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-trees/tree_regular_trunk_10.png",
                     "assets/app-trees/tree_regular_fruits.png",
                     "assets/app-trees/tree_cypress_fruits.png",
+                    "assets/app-trees/bush_1.png",
+                    "assets/app-trees/bush_2.png",
+                    "assets/app-trees/bush_3.png",
+                    "assets/app-trees/bush_4.png",
+                    "assets/app-trees/bush_5.png",
+                    "assets/app-trees/bush_6.png",
 
                     "assets/app-rural/rural_house_1.png",
                     "assets/app-rural/rural_house_2.png",
@@ -263,10 +269,10 @@ public class SceneRPGMapMaker3 implements Scene {
         } catch (Exception ignored) {} // PACK MEDIEVAL MAP PROPS
 
         // TODO: make the program CRASH and not thread-locked when file can't load.
-        Assets.loadTexture("assets/app-textures/terrain-water-1024.png");
-        Assets.loadTexture("assets/app-textures/terrain-grass-1024.png");
-        Assets.loadTexture("assets/app-textures/terrain-road-1024.png");
-        Assets.loadTexture("assets/app-textures/terrain-wheat-1024.png");
+        Assets.loadTexture("assets/app-terrain/grass-saturated-1024.png");
+        Assets.loadTexture("assets/app-terrain/water-1024.png");
+        Assets.loadTexture("assets/app-terrain/road-1024.png");
+//        Assets.loadTexture("assets/app-textures/terrain-wheat-1024.png");
 
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
@@ -276,9 +282,9 @@ public class SceneRPGMapMaker3 implements Scene {
         icons = Assets.get("assets/app-texture-packs/icons.yml");
         props = Assets.get("assets/app-texture-packs/medieval-pack.yml");
 
-        terrainWater = Assets.get("assets/app-textures/terrain-water-1024.png");
-        terrainGrass = Assets.get("assets/app-textures/terrain-grass-1024.png");
-        terrainRoad = Assets.get("assets/app-textures/terrain-road-1024.png");
+        terrainWater = Assets.get("assets/app-terrain/water-1024.png");
+        terrainGrass = Assets.get("assets/app-terrain/grass-saturated-1024.png");
+        terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
         //terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
     }
 
