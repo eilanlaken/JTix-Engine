@@ -416,8 +416,9 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateTree addTree = new CommandMapTokenCreateTree(toolBrushTrees.species, baseIndex, trunkIndex, fruits);
                 addTree.x = x;
                 addTree.y = y;
-                addTree.sclX = toolBrushTrees.scale + MathUtils.randomUniformFloat(-toolBrushTrees.scaleRange, toolBrushTrees.scaleRange);
-                addTree.sclY = toolBrushTrees.scale + MathUtils.randomUniformFloat(-toolBrushTrees.scaleRange, toolBrushTrees.scaleRange);;
+                float randomScale = MathUtils.randomUniformFloat(-toolBrushTrees.scaleRange, toolBrushTrees.scaleRange);
+                addTree.sclX = toolBrushTrees.scale + randomScale;
+                addTree.sclY = toolBrushTrees.scale + randomScale;
                 addTree.isAnchor = leftJustPressed;
                 toolBrushTrees.lastCreatedX = x;
                 toolBrushTrees.lastCreatedY = y;
@@ -498,8 +499,9 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateHouse addHouseVillage = new CommandMapTokenCreateHouse(type, baseIndex);
                 addHouseVillage.x = x;
                 addHouseVillage.y = y;
-                addHouseVillage.sclX = 0.35f;//toolCastleGenerator.scale;
-                addHouseVillage.sclY = 0.35f;//toolCastleGenerator.scale;
+                float randomScale = MathUtils.randomUniformFloat(-toolStampHouses.randomScaleRange, toolStampHouses.randomScaleRange);
+                addHouseVillage.sclX = toolStampHouses.scale + randomScale;
+                addHouseVillage.sclY = toolStampHouses.scale + randomScale;
                 addHouseVillage.deg = MathUtils.randomUniformFloat(-12,12);
                 addHouseVillage.isAnchor = leftJustPressed;
 
@@ -556,8 +558,8 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateProp addVillageProp = new CommandMapTokenCreateProp(baseIndex);
                 addVillageProp.x = x;
                 addVillageProp.y = y;
-                addVillageProp.sclX = 0.35f;//toolCastleGenerator.scale;
-                addVillageProp.sclY = 0.35f;//toolCastleGenerator.scale;
+                addVillageProp.sclX = toolStampProps.scale;
+                addVillageProp.sclY = toolStampProps.scale;
                 addVillageProp.deg = 0;
                 addVillageProp.isAnchor = true;
 

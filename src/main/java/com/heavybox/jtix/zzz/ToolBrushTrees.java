@@ -37,8 +37,9 @@ public class ToolBrushTrees extends Tool {
     public MapTokenTree.Species species = MapTokenTree.Species.REGULAR;
     public float flux = 1;
     public float density = 1;
-    public float scaleRange = 0.05f;
-    public float scale = 0.20f;
+    public float scaleRange = 0.0f;
+    //public float scale = 0.20f;
+    public float scale = 1;
     public boolean addFruits = false; // change to probability
 
     public float lastCreatedX = Float.NEGATIVE_INFINITY;

@@ -37,4 +37,40 @@
         <object type="BUILDING_TALL_RIGHT" x="-33.18181" y="-55.181816"/>
     </combination>
 
+    <combination>
+        <object type="BUILDING_TALL_LEFT" x="32.71663" y="27.950012"/>
+        <object type="WALL_BACK_MIDDLE" x="-6.2833633" y="20.149979"/>
+        <object type="WALL_BACK_LEFT" x="-20.583344" y="-5.849991"/>
+        <object type="WALL_FRONT_LEFT" x="-24.483284" y="-5.849991"/>
+        <object type="TOWER_TALL" x="-6.2833633" y="-8.450027"/>
+        <object type="WALL_FRONT_MIDDLE" x="24.916656" y="-27.950027"/>
+    </combination>
+
+    <combination>
+        <object type="BUILDING_SHORT_LEFT" x="75.375015" y="-8.000036"/>
+        <object type="BUILDING_SHORT_RIGHT" x="-36.625023" y="-10.99999"/>
+        <object type="BUILDING_TALL_RIGHT" x="-7.6250076" y="-24.00002"/>
+        <object type="BUILDING_SHORT_LEFT" x="-44.624973" y="-60.999996"/>
+    </combination>
+
+    <combination>
+        <object type="BUILDING_SHORT_MIDDLE" x="-37.51422" y="37.671417"/>
+        <object type="BUILDING_SHORT_RIGHT" x="-26.514252" y="18.671448"/>
+        <object type="BUILDING_SHORT_LEFT" x="52.48578" y="13.671448"/>
+        <object type="BUILDING_SHORT_LEFT" x="24.68573" y="-1.6286011"/>
+        <object type="TOWER_TALL" x="-22.114258" y="-1.6286011"/>
+        <object type="WALL_FRONT_LEFT" x="-6.514282" y="-22.428558"/>
+        <object type="BUILDING_TALL_MIDDLE" x="15.485779" y="-44.328583"/>
+    </combination>
+
+    <combination>
+        <object type="BUILDING_SHORT_MIDDLE" x="-56.571426" y="58.14286"/>
+        <object type="BUILDING_SHORT_LEFT" x="43.428566" y="57.142876"/>
+        <object type="TOWER_TALL" x="13.42857" y="44.142845"/>
+        <object type="BUILDING_SHORT_RIGHT" x="50.428574" y="10.142851"/>
+        <object type="WALL_FRONT_MIDDLE" x="47.42858" y="-25.85714"/>
+        <object type="BUILDING_TALL_MIDDLE" x="-91.57143" y="-45.857147"/>
+        <object type="WALL_BACK_LEFT" x="-6.5714264" y="-97.85713"/>
+    </combination>
+
 </combinations>
