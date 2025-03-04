@@ -37,7 +37,7 @@ public class ToolBrushTrees extends Tool {
     public MapTokenTree.Species species = MapTokenTree.Species.REGULAR;
     public float flux = 1;
     public float density = 1;
-    public float scaleRange = 0.1f;
+    public float scaleRange = 0.05f;
     public float scale = 0.20f;
     public boolean addFruits = false; // change to probability
 
@@ -48,4 +48,5 @@ public class ToolBrushTrees extends Tool {
     public void renderToolOverlay(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
         renderer2D.drawCircleThin(flux * 20, 30, x, y, deg, sclX, sclY);
     }
+
 }

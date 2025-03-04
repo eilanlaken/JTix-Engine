@@ -1,0 +1,40 @@
+<combinations>
+
+    <combination>
+        <object type="BUILDING_TALL_LEFT" x="15.968727" y="37.187523"/>
+        <object type="WALL_BACK_LEFT" x="8.968769" y="28.437458"/>
+        <object type="WALL_BACK_RIGHT" x="17.718767" y="28.437458"/>
+        <object type="TOWER_TALL" x="15.968727" y="3.9375315"/>
+        <object type="TOWER_SHORT" x="-27.781265" y="3.9375315"/>
+        <object type="WALL_BACK_MIDDLE" x="-83.781204" y="3.9375315"/>
+        <object type="WALL_FRONT_LEFT" x="1.9687424" y="-41.562527"/>
+        <object type="WALL_FRONT_MIDDLE" x="50.968723" y="-64.31248"/>
+    </combination>
+
+    <combination>
+        <object type="BUILDING_SHORT_MIDDLE" x="-19.000023" y="89.44443"/>
+        <object type="BUILDING_SHORT_RIGHT" x="-121.99997" y="64.444466"/>
+        <object type="BUILDING_TALL_LEFT" x="84.999985" y="35.44445"/>
+        <object type="TOWER_TALL" x="45.999973" y="17.444439"/>
+        <object type="TOWER_SHORT" x="2.0000381" y="16.444454"/>
+        <object type="BUILDING_SHORT_LEFT" x="-57.999996" y="-23.555561"/>
+        <object type="BUILDING_SHORT_LEFT" x="-82.99999" y="-42.555557"/>
+        <object type="BUILDING_TALL_MIDDLE" x="90.99997" y="-61.55555"/>
+        <object type="BUILDING_TALL_RIGHT" x="58.00002" y="-95.55554"/>
+    </combination>
+
+    <combination>
+        <object type="WALL_FRONT_MIDDLE" x="35.818203" y="90.818184"/>
+        <object type="WALL_BACK_LEFT" x="-17.181824" y="21.818184"/>
+        <object type="BUILDING_SHORT_MIDDLE" x="-69.18182" y="13.818192"/>
+        <object type="BUILDING_TALL_MIDDLE" x="4.818144" y="11.818192"/>
+        <object type="TOWER_TALL" x="45.8182" y="3.8181992"/>
+        <object type="BUILDING_TALL_MIDDLE" x="-108.1818" y="1.8181992"/>
+        <object type="TOWER_SHORT" x="68.81815" y="-2.1817932"/>
+        <object type="BUILDING_SHORT_MIDDLE" x="76.818184" y="-5.1818085"/>
+        <object type="BUILDING_SHORT_LEFT" x="52.81817" y="-39.1818"/>
+        <object type="BUILDING_SHORT_RIGHT" x="-57.18182" y="-42.181816"/>
+        <object type="BUILDING_TALL_RIGHT" x="-33.18181" y="-55.181816"/>
+    </combination>
+
+</combinations>

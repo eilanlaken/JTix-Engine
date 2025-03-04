@@ -14,7 +14,6 @@ public class MapTokenRuralProp extends MapToken {
             "assets/app-rural/rural_prop_log_2.png",
             "assets/app-rural/rural_prop_log_3.png",
             "assets/app-rural/rural_prop_trunk_chopped.png",
-            "assets/app-rural/rural_prop_well.png",
             "assets/app-rural/rural_prop_windmill.png",
             "assets/app-rural/rural_tower_1.png",
             "assets/app-rural/rural_tower_2.png",

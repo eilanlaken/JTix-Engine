@@ -39,7 +39,7 @@ public class SceneRPGMapMaker3 implements Scene {
     private Tool activeTool = null;
     private final ToolTerrainPaint toolTerrainPaint = new ToolTerrainPaint();
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
-    private final ToolCastleGenerator toolCastleGenerator = new ToolCastleGenerator();
+    private ToolCastleGenerator toolCastleGenerator;
     private final ToolStampHouses toolStampHouses = new ToolStampHouses();
     private final ToolStampProps toolStampProps = new ToolStampProps();
     private final ToolTerrainDeform toolTerrainDeform = new ToolTerrainDeform();
@@ -104,6 +104,13 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-trees/bush_5.png",
                     "assets/app-trees/bush_6.png",
 
+                    "assets/app-clouds/clouds_1.png",
+                    "assets/app-clouds/clouds_2.png",
+                    "assets/app-clouds/clouds_3.png",
+                    "assets/app-clouds/clouds_4.png",
+                    "assets/app-clouds/clouds_5.png",
+                    "assets/app-clouds/clouds_6.png",
+
                     "assets/app-rural/rural_house_1.png",
                     "assets/app-rural/rural_house_2.png",
                     "assets/app-rural/rural_house_3.png",
@@ -135,7 +142,6 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-rural/rural_prop_log_2.png",
                     "assets/app-rural/rural_prop_log_3.png",
                     "assets/app-rural/rural_prop_trunk_chopped.png",
-                    "assets/app-rural/rural_prop_well.png",
                     "assets/app-rural/rural_prop_windmill.png",
                     "assets/app-rural/rural_tower_1.png",
                     "assets/app-rural/rural_tower_2.png",
@@ -269,7 +275,7 @@ public class SceneRPGMapMaker3 implements Scene {
         } catch (Exception ignored) {} // PACK MEDIEVAL MAP PROPS
 
         // TODO: make the program CRASH and not thread-locked when file can't load.
-        Assets.loadTexture("assets/app-terrain/grass-saturated-1024.png");
+        Assets.loadTexture("assets/app-terrain/grass-1024.png");
         Assets.loadTexture("assets/app-terrain/water-1024.png");
         Assets.loadTexture("assets/app-terrain/road-1024.png");
 //        Assets.loadTexture("assets/app-textures/terrain-wheat-1024.png");
@@ -283,7 +289,7 @@ public class SceneRPGMapMaker3 implements Scene {
         props = Assets.get("assets/app-texture-packs/medieval-pack.yml");
 
         terrainWater = Assets.get("assets/app-terrain/water-1024.png");
-        terrainGrass = Assets.get("assets/app-terrain/grass-saturated-1024.png");
+        terrainGrass = Assets.get("assets/app-terrain/grass-1024.png");
         terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
         //terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
     }
@@ -322,6 +328,8 @@ public class SceneRPGMapMaker3 implements Scene {
 
         //Graphics.setContinuousRendering(false);
         //Graphics.setTargetFps(30);
+        toolCastleGenerator = new ToolCastleGenerator(props);
+        selectTool(toolCastleGenerator);
     }
 
     @Override
@@ -334,11 +342,8 @@ public class SceneRPGMapMaker3 implements Scene {
 
         // update camera
         // CAMERA ZOOM
-//        if (Input.mouse.getVerticalScroll() != 0) {
-//            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
-//        }
-        if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
-            camera.zoom += Input.mouse.getYDelta() * 0.01f;
+        if (Input.mouse.getVerticalScroll() != 0) {
+            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
         }
         if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             camera.position.x -= 1.5f * Input.mouse.getXDelta();
@@ -411,8 +416,8 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateTree addTree = new CommandMapTokenCreateTree(toolBrushTrees.species, baseIndex, trunkIndex, fruits);
                 addTree.x = x;
                 addTree.y = y;
-                addTree.sclX = toolBrushTrees.scale;
-                addTree.sclY = toolBrushTrees.scale;
+                addTree.sclX = toolBrushTrees.scale + MathUtils.randomUniformFloat(-toolBrushTrees.scaleRange, toolBrushTrees.scaleRange);
+                addTree.sclY = toolBrushTrees.scale + MathUtils.randomUniformFloat(-toolBrushTrees.scaleRange, toolBrushTrees.scaleRange);;
                 addTree.isAnchor = leftJustPressed;
                 toolBrushTrees.lastCreatedX = x;
                 toolBrushTrees.lastCreatedY = y;
@@ -428,8 +433,27 @@ public class SceneRPGMapMaker3 implements Scene {
         }
 
         if (toolCastleGenerator.active) {
-            if (Input.mouse.isButtonClicked(Mouse.Button.MIDDLE)) {
-                toolCastleGenerator.baseIndex++;
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.TAB)) { // hack undo
+                if (!mapTokens.isEmpty()) mapTokens.removeValue(toolCastleGenerator.lastCreated, true);
+            }
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ENTER)) {
+                Array<MapTokenCastleBlock> blocks = new Array<>();
+                Vector2 cm = new Vector2();
+                for (MapToken token : mapTokens) {
+                    if (!(token instanceof MapTokenCastleBlock)) continue;
+                    MapTokenCastleBlock block = (MapTokenCastleBlock) token;
+                    blocks.add(block);
+                    cm.add(block.x, block.y);
+                }
+                if (!blocks.isEmpty()) {
+                    cm.scl(1f / blocks.size);
+                    blocks.sort(Comparator.comparingInt(o -> -(int) o.y));
+                    for (MapTokenCastleBlock block : blocks) {
+                        System.out.println(block.type);
+                        System.out.println(block.x - cm.x);
+                        System.out.println(block.y - cm.y);
+                    }
+                }
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
                 toolCastleGenerator.selectNext();
@@ -444,11 +468,11 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(type, baseIndex);
                 addCastleBlock.x = x;
                 addCastleBlock.y = y;
-                addCastleBlock.sclX = 0.4f;//toolCastleGenerator.scale;
-                addCastleBlock.sclY = 0.4f;//toolCastleGenerator.scale;
+                System.out.println("x : " + x + ", y: " + y);
+                addCastleBlock.sclX = toolCastleGenerator.scale;
+                if (addCastleBlock.type.isRight()) addCastleBlock.sclX *= -1;
+                addCastleBlock.sclY = toolCastleGenerator.scale;
                 addCastleBlock.isAnchor = leftJustPressed;
-
-
                 commandHistory.add(addCastleBlock);
 
                 // TODO: see if and how to use command.execute().
@@ -456,6 +480,7 @@ public class SceneRPGMapMaker3 implements Scene {
                 block.setTransform(addCastleBlock);
 
                 mapTokens.add(block);
+                toolCastleGenerator.lastCreated = block;
             }
         }
 
@@ -621,8 +646,12 @@ public class SceneRPGMapMaker3 implements Scene {
         }
 
         // render tool overlay here
-        if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
+        //if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
+        if (activeTool != null) activeTool.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
 
+        renderer2D.setColor(Color.RED);
+        renderer2D.drawCircleFilled(10, 25, 0,0,0,1,1);
+        renderer2D.setColor(Color.WHITE);
 
         renderer2D.end();
 
