@@ -15,12 +15,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import java.io.File;
 
-import static com.heavybox.jtix.zzz.MapTokenCastleBlock.regionsBuildingTallMiddle;
-import static com.heavybox.jtix.zzz.MapTokenCastleBlock.regionsTowerTall;
-
 public class ToolCastleGenerator extends Tool {
 
-    private static final Combination[] combinations = new Combination[100];
+    private static final Array<Combination> combinations = new Array<>(true, 10);
     static {
 
         Combination a1 = new Combination();
@@ -33,14 +30,22 @@ public class ToolCastleGenerator extends Tool {
             doc.getDocumentElement().normalize();
 
             NodeList combinationList = doc.getElementsByTagName("combination");
-
             for (int i = 0; i < combinationList.getLength(); i++) {
-                Element combination = (Element) combinationList.item(i);
-                NodeList blocks = combination.getElementsByTagName("object");
+                Element combinationElement = (Element) combinationList.item(i);
+                NodeList blocks = combinationElement.getElementsByTagName("object");
+                Combination combination = new Combination();
+                combination.blockUnits = new BlockUnit[blocks.getLength()];
                 for (int j = 0; j < blocks.getLength(); j++) {
                     Element block = (Element) blocks.item(j);
-
+                    MapTokenCastleBlock.BlockType type = MapTokenCastleBlock.BlockType.values()[Integer.parseInt(block.getAttribute("type"))];
+                    float x = Float.parseFloat(block.getAttribute("x"));
+                    float y = Float.parseFloat(block.getAttribute("y"));
+                    combination.blockUnits[j] = new BlockUnit();
+                    combination.blockUnits[j].type = type;
+                    combination.blockUnits[j].offsetX = x;
+                    combination.blockUnits[j].offsetY = y;
                 }
+                combinations.add(combination);
             }
 
         } catch (Exception e) {
@@ -58,76 +63,64 @@ public class ToolCastleGenerator extends Tool {
     public float scale = 1;
     public MapTokenCastleBlock.BlockType currentType = allTypes[0]; // TOWER_TALL, TOWER_SHORT, BUILDING_TALL_LEFT, ...
     public int baseIndex = 0;
-
-    @Deprecated private final Array<BlockUnit> middleBlocks = new Array<>();
-    public int comboIndex = MathUtils.randomUniformInt(0, combinations.length);
-
+    public int comboIndex = MathUtils.randomUniformInt(0, combinations.size);
     public TextureRegion region;
+
+    public Mode mode = Mode.SINGLES;
 
     public ToolCastleGenerator(TexturePack props) {
         this.props = props;
         region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
 
-
+        comboIndex = 0;
 
     }
 
     public void selectNext() {
-        int nextIndex = (currentType.ordinal() + 1) % allTypes.length;
-        currentType = allTypes[nextIndex];
-        region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
+        if (mode == Mode.SINGLES) {
+            int nextIndex = (currentType.ordinal() + 1) % allTypes.length;
+            currentType = allTypes[nextIndex];
+            region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
+        } else {
+            System.out.println(comboIndex);
+            comboIndex++;
+            comboIndex %= combinations.size;
+        }
     }
 
-    public void regenerate() {
-        comboIndex++;
-        comboIndex %= combinations.length;
-        // generate back
-
-        // generate middle
-        middleBlocks.clear();
-        BlockUnit blockUnit = new BlockUnit();
-        blockUnit.type = MapTokenCastleBlock.BlockType.TOWER_TALL;
-        blockUnit.index = MathUtils.randomUniformInt(0, regionsTowerTall.length);
-        blockUnit.region = props.getRegion(regionsTowerTall[blockUnit.index]);
-        blockUnit.offsetX = 0;
-        blockUnit.offsetY = 0;
-        middleBlocks.add(blockUnit);
-
-        BlockUnit blockUnit2 = new BlockUnit();
-        blockUnit2.type = MapTokenCastleBlock.BlockType.BUILDING_TALL_MIDDLE;
-        blockUnit2.index = MathUtils.randomUniformInt(0, regionsBuildingTallMiddle.length);
-        blockUnit2.region = props.getRegion(regionsBuildingTallMiddle[blockUnit2.index]);
-        blockUnit2.offsetX = blockUnit.region.packedWidthHalf;
-        blockUnit2.offsetY = 0;
-        middleBlocks.add(blockUnit2);
-
-        // generate front
+    public void toggleMode() {
+        if (mode == Mode.SINGLES) mode = Mode.COMBOS;
+        else mode = Mode.SINGLES;
     }
 
     @Override
     public void renderToolOverlay(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
-        float realSclX = scale;
-        if (currentType.isRight()) realSclX *= -1;
-        renderer2D.drawTextureRegion(region, x, y, deg, realSclX, scale);
-
-        if (true) return;
-        // TODO this is the real one.
-        // render the current selected combination layout + species.
-        renderer2D.setColor(1,1,1,0.5f);
-        // render back walls
-        // render middle
-        for (BlockUnit unit : middleBlocks) {
-            renderer2D.drawTextureRegion(unit.region, x + unit.offsetX, y + unit.offsetY, 0, scale, scale);
+        if (mode == Mode.SINGLES) {
+            float realSclX = scale;
+            if (currentType.isRight()) realSclX *= -1;
+            renderer2D.setColor(1, 1, 1, 0.5f);
+            renderer2D.drawTextureRegion(region, x, y, deg, realSclX, scale);
+            renderer2D.setColor(1, 1, 1, 1);
+        } else {
+            Combination combination = combinations.get(comboIndex);
+            BlockUnit[] blocks = combination.blockUnits;
+            renderer2D.setColor(1,1,1,0.5f);
+            System.out.println(blocks.length);
+            for (BlockUnit b : blocks) {
+                TextureRegion blockRegion = MapTokenCastleBlock.BlockType.getRegion(props, b.type, 0);
+                float worldX = x + b.offsetX;
+                float worldY = y + b.offsetY;
+                float realSclX = scale;
+                if (currentType.isRight()) realSclX *= -1;
+                renderer2D.drawTextureRegion(blockRegion, worldX, worldY, deg, realSclX, scale);
+            }
+            renderer2D.setColor(1,1,1,1);
         }
-        // render front
-        renderer2D.setColor(1,1,1,1);
     }
 
     private static final class BlockUnit {
 
         MapTokenCastleBlock.BlockType type;
-        TextureRegion region;
-        int index;
         float offsetX;
         float offsetY;
 
@@ -137,6 +130,12 @@ public class ToolCastleGenerator extends Tool {
 
         BlockUnit[] blockUnits;
 
+    }
+
+    public enum Mode {
+        SINGLES,
+        COMBOS,
+        ;
     }
 
 }

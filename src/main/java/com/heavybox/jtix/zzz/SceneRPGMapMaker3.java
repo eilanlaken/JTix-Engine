@@ -434,6 +434,9 @@ public class SceneRPGMapMaker3 implements Scene {
         }
 
         if (toolCastleGenerator.active) {
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_SHIFT)) { // hack undo
+                toolCastleGenerator.toggleMode();
+            }
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.TAB)) { // hack undo
                 if (!mapTokens.isEmpty()) mapTokens.removeValue(toolCastleGenerator.lastCreated, true);
             }
@@ -451,10 +454,7 @@ public class SceneRPGMapMaker3 implements Scene {
                     blocks.sort(Comparator.comparingInt(o -> -(int) o.y));
                     System.out.println("<combination>");
                     for (MapTokenCastleBlock block : blocks) {
-                        System.out.println("\t" + "<block type=\"" + block.type.ordinal() + "\" x=\"" + (block.x - cm.x) + "\" y=\"" + (block.y - cm.y) + "\"/>");
-//                        System.out.println(block.type.ordinal());
-//                        System.out.println(block.x - cm.x);
-//                        System.out.println(block.y - cm.y);
+                        System.out.println("\t" + "<object type=\"" + block.type.ordinal() + "\" x=\"" + (block.x - cm.x) + "\" y=\"" + (block.y - cm.y) + "\"/>");
                     }
                     System.out.println("</combination>");
                 }
