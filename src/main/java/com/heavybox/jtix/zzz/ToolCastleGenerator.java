@@ -39,7 +39,7 @@ public class ToolCastleGenerator extends Tool {
                 NodeList blocks = combination.getElementsByTagName("object");
                 for (int j = 0; j < blocks.getLength(); j++) {
                     Element block = (Element) blocks.item(j);
-                    System.out.println(block.getAttribute("type"));
+
                 }
             }
 
@@ -76,7 +76,6 @@ public class ToolCastleGenerator extends Tool {
         int nextIndex = (currentType.ordinal() + 1) % allTypes.length;
         currentType = allTypes[nextIndex];
         region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
-        System.out.println(currentType);
     }
 
     public void regenerate() {

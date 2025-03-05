@@ -449,11 +449,14 @@ public class SceneRPGMapMaker3 implements Scene {
                 if (!blocks.isEmpty()) {
                     cm.scl(1f / blocks.size);
                     blocks.sort(Comparator.comparingInt(o -> -(int) o.y));
+                    System.out.println("<combination>");
                     for (MapTokenCastleBlock block : blocks) {
-                        System.out.println(block.type);
-                        System.out.println(block.x - cm.x);
-                        System.out.println(block.y - cm.y);
+                        System.out.println("\t" + "<block type=\"" + block.type.ordinal() + "\" x=\"" + (block.x - cm.x) + "\" y=\"" + (block.y - cm.y) + "\"/>");
+//                        System.out.println(block.type.ordinal());
+//                        System.out.println(block.x - cm.x);
+//                        System.out.println(block.y - cm.y);
                     }
+                    System.out.println("</combination>");
                 }
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
@@ -469,11 +472,11 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(type, baseIndex);
                 addCastleBlock.x = x;
                 addCastleBlock.y = y;
-                System.out.println("x : " + x + ", y: " + y);
                 addCastleBlock.sclX = toolCastleGenerator.scale;
                 if (addCastleBlock.type.isRight()) addCastleBlock.sclX *= -1;
                 addCastleBlock.sclY = toolCastleGenerator.scale;
                 addCastleBlock.isAnchor = leftJustPressed;
+                addCastleBlock.deg = MathUtils.randomUniformFloat(-3, 3);
                 commandHistory.add(addCastleBlock);
 
                 // TODO: see if and how to use command.execute().

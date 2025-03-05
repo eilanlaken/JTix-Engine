@@ -109,26 +109,6 @@ public class MapTokenCastleBlock extends MapToken {
         this.index = index;
 
         this.region = BlockType.getRegion(props, type, index);
-//        this.region = switch (type) {
-//            case TOWER_TALL -> props.getRegion(regionsTowerTall[index % regionsTowerTall.length]);
-//            case TOWER_SHORT -> props.getRegion(regionsTowerShort[index % regionsTowerShort.length]);
-//
-//            case BUILDING_TALL_LEFT -> props.getRegion(regionsBuildingTallLeft[index % regionsBuildingTallLeft.length]);
-//            case BUILDING_TALL_MIDDLE -> props.getRegion(regionsBuildingTallMiddle[index % regionsBuildingTallMiddle.length]);
-//            case BUILDING_TALL_RIGHT -> props.getRegion(regionsBuildingTallRight[index % regionsBuildingTallLeft.length]);
-//
-//            case BUILDING_SHORT_LEFT -> props.getRegion(regionsBuildingShortLeft[index % regionsBuildingShortLeft.length]);
-//            case BUILDING_SHORT_MIDDLE -> props.getRegion(regionsBuildingShortMiddle[index % regionsBuildingShortMiddle.length]);
-//            case BUILDING_SHORT_RIGHT -> props.getRegion(regionsBuildingShortRight[index % regionsBuildingShortLeft.length]);
-//
-//            case WALL_BACK_LEFT -> props.getRegion(regionsWallBackLeft[index % regionsWallBackLeft.length]);
-//            case WALL_BACK_MIDDLE -> props.getRegion(regionsWallBackMiddle[index % regionsWallBackMiddle.length]);
-//            case WALL_BACK_RIGHT -> props.getRegion(regionsWallBackRight[index % regionsWallBackLeft.length]);
-//
-//            case WALL_FRONT_LEFT -> props.getRegion(regionsWallFrontLeft[index % regionsWallFrontLeft.length]);
-//            case WALL_FRONT_MIDDLE -> props.getRegion(regionsWallFrontMiddle[index % regionsWallFrontMiddle.length]);
-//            case WALL_FRONT_RIGHT -> props.getRegion(regionsWallFrontRight[index % regionsWallFrontLeft.length]);
-//        };
 
     }
 

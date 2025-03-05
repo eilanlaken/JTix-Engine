@@ -101,7 +101,7 @@ regions:
   y: 2
 - name: assets/app-castles/castle-wall-front-block_1.png
   offsetX: 111
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -111,7 +111,7 @@ regions:
   y: 153
 - name: assets/app-castles/castle-wall-front-block_2.png
   offsetX: 2
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -121,7 +121,7 @@ regions:
   y: 142
 - name: assets/app-castles/castle-wall-front-block_3.png
   offsetX: 111
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -131,7 +131,7 @@ regions:
   y: 153
 - name: assets/app-castles/castle-wall-front-block_4.png
   offsetX: 2
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -141,7 +141,7 @@ regions:
   y: 144
 - name: assets/app-castles/castle-wall-front-block_5.png
   offsetX: 111
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -151,7 +151,7 @@ regions:
   y: 144
 - name: assets/app-castles/castle-wall-front-block_6.png
   offsetX: 2
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -161,7 +161,7 @@ regions:
   y: 144
 - name: assets/app-castles/castle-wall-front-block_7.png
   offsetX: 111
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -171,7 +171,7 @@ regions:
   y: 143
 - name: assets/app-castles/castle-wall-front-block_8.png
   offsetX: 2
-  offsetY: 192
+  offsetY: 166
   originalHeight: 445
   originalWidth: 220
   packedHeight: 135
@@ -281,7 +281,7 @@ regions:
   y: 225
 - name: assets/app-castles/castle-wall-back-block_1.png
   offsetX: 109
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -291,7 +291,7 @@ regions:
   y: 292
 - name: assets/app-castles/castle-wall-back-block_2.png
   offsetX: 6
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -301,7 +301,7 @@ regions:
   y: 282
 - name: assets/app-castles/castle-wall-back-block_3.png
   offsetX: 109
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -311,7 +311,7 @@ regions:
   y: 292
 - name: assets/app-castles/castle-wall-back-block_4.png
   offsetX: 6
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -321,7 +321,7 @@ regions:
   y: 292
 - name: assets/app-castles/castle-wall-back-block_5.png
   offsetX: 109
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -331,7 +331,7 @@ regions:
   y: 282
 - name: assets/app-castles/castle-wall-back-block_6.png
   offsetX: 6
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -341,7 +341,7 @@ regions:
   y: 283
 - name: assets/app-castles/castle-wall-back-block_7.png
   offsetX: 109
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
@@ -351,7 +351,7 @@ regions:
   y: 283
 - name: assets/app-castles/castle-wall-back-block_8.png
   offsetX: 6
-  offsetY: 250
+  offsetY: 181
   originalHeight: 445
   originalWidth: 220
   packedHeight: 118
