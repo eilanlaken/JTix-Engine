@@ -82,7 +82,6 @@ public class ToolCastleGenerator extends Tool {
             currentType = allTypes[nextIndex];
             region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
         } else {
-            System.out.println(comboIndex);
             comboIndex++;
             comboIndex %= combinations.size;
         }

@@ -75,6 +75,21 @@ public class CommandTerrainDeform extends Command {
         BUMP_LEFT,
         BUMP_MIDDLE,
         BUMP_RIGHT,
+        ;
+
+        public boolean isRight() {
+            return this == BUMP_RIGHT;
+        }
+
+        public static TextureRegion getRegion(TexturePack props, GroundType type, int index) {
+            return switch (type) {
+                case LINE -> props.getRegion(regionsGroundLine[index % regionsGroundLine.length]);
+                case BUMP_LEFT -> props.getRegion(regionsGroundBumpLeft[index % regionsGroundBumpLeft.length]);
+                case BUMP_MIDDLE -> props.getRegion(regionsGroundBumpMiddle[index % regionsGroundBumpMiddle.length]);
+                case BUMP_RIGHT -> props.getRegion(regionsGroundBumpRight[index % regionsGroundBumpRight.length]);
+            };
+        }
+
     }
 
 }

@@ -42,7 +42,7 @@ public class SceneRPGMapMaker3 implements Scene {
     private ToolCastleGenerator toolCastleGenerator;
     private final ToolStampHouses toolStampHouses = new ToolStampHouses();
     private final ToolStampProps toolStampProps = new ToolStampProps();
-    private final ToolTerrainDeform toolTerrainDeform = new ToolTerrainDeform();
+    private ToolTerrainDeform toolTerrainDeform;
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
@@ -331,6 +331,7 @@ public class SceneRPGMapMaker3 implements Scene {
         //Graphics.setContinuousRendering(false);
         //Graphics.setTargetFps(30);
         toolCastleGenerator = new ToolCastleGenerator(props);
+        toolTerrainDeform = new ToolTerrainDeform(props);
         selectTool(toolCastleGenerator);
     }
 
@@ -598,8 +599,15 @@ public class SceneRPGMapMaker3 implements Scene {
         }
 
         if (toolTerrainDeform.active) {
-            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-                toolTerrainDeform.selectRandom();
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_SHIFT)) {
+                toolTerrainDeform.toggleType();
+            }
+            if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
+                toolTerrainDeform.angle += Input.mouse.getYDelta();
+                toolTerrainDeform.angle %= 360;
+            }
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_CONTROL)) {
+                toolTerrainDeform.selectNext();
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
@@ -608,11 +616,13 @@ public class SceneRPGMapMaker3 implements Scene {
                 CommandTerrainDeform addGroundFold = new CommandTerrainDeform(props, toolTerrainDeform.currentType, toolTerrainDeform.index);
                 addGroundFold.x = x;
                 addGroundFold.y = y;
-                addGroundFold.sclX = 0.8f;//toolCastleGenerator.scale;
-                addGroundFold.sclY = 1f;//toolCastleGenerator.scale;
-                addGroundFold.deg = 0;
+                addGroundFold.sclX = toolTerrainDeform.scale * (toolTerrainDeform.currentType.isRight() ? -1 : 1);
+                addGroundFold.sclY = toolTerrainDeform.scale;
+                addGroundFold.deg = (toolTerrainDeform.currentType == CommandTerrainDeform.GroundType.LINE) ? toolTerrainDeform.angle : MathUtils.randomUniformFloat(-3,3);
                 addGroundFold.isAnchor = true;
                 commandHistory.add(addGroundFold);
+
+                // NOTE: ground deformation objects are not map tokens.
             }
         }
 
@@ -656,12 +666,19 @@ public class SceneRPGMapMaker3 implements Scene {
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.GRASS_MASK);
-        renderer2D.setColor(1,1,1,0.7f);
+        commandsTerrainDeform.sort(Comparator.comparing((CommandTerrainDeform t) -> t.type == CommandTerrainDeform.GroundType.LINE ? 0 : 1)
+                .thenComparingInt(t -> -(int) t.y));
+        renderer2D.setColor(1,1,1,0.5f);
         for (CommandTerrainDeform deform : commandsTerrainDeform) {
-            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY); // base should never be null.
-            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY); // base should never be null.
+            if (deform.type != CommandTerrainDeform.GroundType.LINE) continue;
+            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY);
+            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY);
         }
         renderer2D.setColor(Color.WHITE);
+        for (CommandTerrainDeform deform : commandsTerrainDeform) {
+            if (deform.type == CommandTerrainDeform.GroundType.LINE) continue;
+            renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY); // base should never be null.
+        }
         renderer2D.disableMasking();
 
         // draw map objects
