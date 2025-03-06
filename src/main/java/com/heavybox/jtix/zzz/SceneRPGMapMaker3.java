@@ -242,6 +242,8 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-castles/castle-wall-front-block_6.png",
                     "assets/app-castles/castle-wall-front-block_7.png",
                     "assets/app-castles/castle-wall-front-block_8.png",
+                    "assets/app-castles/castle-wall-front-block_9.png",
+                    "assets/app-castles/castle-wall-front-block_10.png",
 
                     "assets/app-ground/ground_bump_1.png",
                     "assets/app-ground/ground_bump_2.png",
@@ -466,25 +468,44 @@ public class SceneRPGMapMaker3 implements Scene {
                 float x = screen.x;
                 float y = screen.y;
 
-                MapTokenCastleBlock.BlockType type = toolCastleGenerator.currentType;
-                int baseIndex = toolCastleGenerator.baseIndex;
+                if (toolCastleGenerator.mode == ToolCastleGenerator.Mode.SINGLES) {
+                    MapTokenCastleBlock.BlockType type = toolCastleGenerator.currentType;
+                    int baseIndex = toolCastleGenerator.baseIndex;
 
-                CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(type, baseIndex);
-                addCastleBlock.x = x;
-                addCastleBlock.y = y;
-                addCastleBlock.sclX = toolCastleGenerator.scale;
-                if (addCastleBlock.type.isRight()) addCastleBlock.sclX *= -1;
-                addCastleBlock.sclY = toolCastleGenerator.scale;
-                addCastleBlock.isAnchor = leftJustPressed;
-                addCastleBlock.deg = MathUtils.randomUniformFloat(-3, 3);
-                commandHistory.add(addCastleBlock);
+                    CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(type, baseIndex);
+                    addCastleBlock.x = x;
+                    addCastleBlock.y = y;
+                    addCastleBlock.sclX = toolCastleGenerator.scale;
+                    if (addCastleBlock.type.isRight()) addCastleBlock.sclX *= -1;
+                    addCastleBlock.sclY = toolCastleGenerator.scale;
+                    addCastleBlock.isAnchor = leftJustPressed;
+                    addCastleBlock.deg = MathUtils.randomUniformFloat(-3, 3);
+                    commandHistory.add(addCastleBlock);
 
-                // TODO: see if and how to use command.execute().
-                MapTokenCastleBlock block = new MapTokenCastleBlock(props, type, addCastleBlock.baseIndex);
-                block.setTransform(addCastleBlock);
+                    // TODO: see if and how to use command.execute().
+                    MapTokenCastleBlock block = new MapTokenCastleBlock(props, type, addCastleBlock.baseIndex);
+                    block.setTransform(addCastleBlock);
 
-                mapTokens.add(block);
-                toolCastleGenerator.lastCreated = block;
+                    mapTokens.add(block);
+                    toolCastleGenerator.lastCreated = block;
+                } else {
+                    ToolCastleGenerator.BlockUnit[] blocks = toolCastleGenerator.getCombination();
+                    for (ToolCastleGenerator.BlockUnit b : blocks) {
+                        CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(b.type, 0);
+                        addCastleBlock.x = x + b.offsetX;
+                        addCastleBlock.y = y + b.offsetY;
+                        addCastleBlock.sclX = toolCastleGenerator.scale;
+                        if (b.type.isRight()) addCastleBlock.sclX *= -1;
+                        addCastleBlock.sclY = toolCastleGenerator.scale;
+                        addCastleBlock.deg = MathUtils.randomUniformFloat(-3, 3);
+                        commandHistory.add(addCastleBlock);
+
+                        MapTokenCastleBlock block = new MapTokenCastleBlock(props, b.type, MathUtils.randomUniformInt(0, 100));
+                        block.setTransform(addCastleBlock);
+
+                        mapTokens.add(block);
+                    }
+                }
             }
         }
 

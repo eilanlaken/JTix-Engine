@@ -93,6 +93,11 @@ public class ToolCastleGenerator extends Tool {
         else mode = Mode.SINGLES;
     }
 
+    public BlockUnit[] getCombination() {
+        Combination combination = combinations.get(comboIndex);
+        return combination.blockUnits;
+    }
+
     @Override
     public void renderToolOverlay(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
         if (mode == Mode.SINGLES) {
@@ -105,20 +110,19 @@ public class ToolCastleGenerator extends Tool {
             Combination combination = combinations.get(comboIndex);
             BlockUnit[] blocks = combination.blockUnits;
             renderer2D.setColor(1,1,1,0.5f);
-            System.out.println(blocks.length);
             for (BlockUnit b : blocks) {
                 TextureRegion blockRegion = MapTokenCastleBlock.BlockType.getRegion(props, b.type, 0);
                 float worldX = x + b.offsetX;
                 float worldY = y + b.offsetY;
                 float realSclX = scale;
-                if (currentType.isRight()) realSclX *= -1;
+                if (b.type.isRight()) realSclX *= -1;
                 renderer2D.drawTextureRegion(blockRegion, worldX, worldY, deg, realSclX, scale);
             }
             renderer2D.setColor(1,1,1,1);
         }
     }
 
-    private static final class BlockUnit {
+    public static final class BlockUnit {
 
         MapTokenCastleBlock.BlockType type;
         float offsetX;
@@ -126,7 +130,7 @@ public class ToolCastleGenerator extends Tool {
 
     }
 
-    private static final class Combination {
+    public static final class Combination {
 
         BlockUnit[] blockUnits;
 

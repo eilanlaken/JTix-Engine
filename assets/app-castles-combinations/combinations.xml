@@ -59,4 +59,155 @@
         <object type="1" x="-1.3750134" y="-90.875"/>
     </combination>
 
+    <combination>
+        <object type="2" x="-33.333317" y="27.000004"/>
+        <object type="4" x="30.666653" y="23.999994"/>
+        <object type="3" x="2.6666641" y="-51.0"/>
+    </combination>
+
+    <combination>
+        <object type="2" x="32.3333" y="34.000015"/>
+        <object type="0" x="36.333317" y="25.99997"/>
+        <object type="3" x="-7.6666565" y="1.0000086"/>
+        <object type="1" x="-62.66665" y="-5.000014"/>
+        <object type="4" x="39.333347" y="-15.999989"/>
+        <object type="12" x="-37.666656" y="-39.999992"/>
+    </combination>
+
+    <combination>
+        <object type="6" x="55.166687" y="52.000015"/>
+        <object type="6" x="53.16664" y="15.000008"/>
+        <object type="6" x="52.166656" y="-16.00003"/>
+        <object type="3" x="-53.83332" y="-17.000015"/>
+        <object type="3" x="-89.83334" y="-17.000015"/>
+        <object type="3" x="-16.833353" y="-17.000015"/>
+    </combination>
+
+    <combination>
+        <object type="5" x="44.999985" y="81.99999"/>
+        <object type="4" x="-49.000023" y="49.999977"/>
+        <object type="5" x="118.000015" y="34.999977"/>
+        <object type="3" x="-79.000015" y="-30.999992"/>
+        <object type="2" x="-45.999992" y="-58.000034"/>
+        <object type="7" x="24.000004" y="-77.00003"/>
+    </combination>
+
+    <combination>
+        <object type="8" x="2.0000086" y="69.166664"/>
+        <object type="2" x="51.00002" y="64.16663"/>
+        <object type="0" x="19.999962" y="36.166656"/>
+        <object type="9" x="-87.0" y="-25.833364"/>
+        <object type="11" x="-2.0000057" y="-47.833313"/>
+        <object type="3" x="16.000023" y="-95.83332"/>
+    </combination>
+
+    <combination>
+        <object type="12" x="30.76923" y="104.69229"/>
+        <object type="10" x="86.76921" y="100.69231"/>
+        <object type="4" x="-71.23077" y="86.69229"/>
+        <object type="4" x="-36.230774" y="42.692276"/>
+        <object type="4" x="3.7692237" y="22.692291"/>
+        <object type="0" x="148.76924" y="11.692291"/>
+        <object type="3" x="-107.23075" y="5.692322"/>
+        <object type="4" x="45.769226" y="-2.307724"/>
+        <object type="5" x="-58.230778" y="-36.307716"/>
+        <object type="3" x="-114.23075" y="-69.3077"/>
+        <object type="11" x="-30.230751" y="-72.30768"/>
+        <object type="13" x="77.769196" y="-74.30768"/>
+        <object type="12" x="23.76926" y="-120.30769"/>
+    </combination>
+
+    <combination>
+        <object type="13" x="-13.99999" y="61.333298"/>
+        <object type="8" x="-15.999996" y="9.3333435"/>
+        <object type="3" x="89.99998" y="-1.6666565"/>
+        <object type="0" x="-25.999996" y="-13.666702"/>
+        <object type="11" x="-15.999996" y="-27.666656"/>
+        <object type="13" x="-18.000004" y="-27.666656"/>
+    </combination>
+
+    <combination>
+        <object type="7" x="16.666668" y="21.333336"/>
+        <object type="6" x="-48.33333" y="0.33332062"/>
+        <object type="5" x="31.666668" y="-21.666634"/>
+    </combination>
+
+    <combination>
+        <object type="12" x="76.8333" y="61.333336"/>
+        <object type="1" x="-3.1666546" y="58.33332"/>
+        <object type="7" x="-74.16667" y="34.33335"/>
+        <object type="3" x="137.83336" y="6.3333206"/>
+        <object type="9" x="-110.16665" y="-70.66664"/>
+        <object type="11" x="-27.16667" y="-89.66664"/>
+    </combination>
+
+    <combination>
+        <object type="10" x="34.4" y="37.000015"/>
+        <object type="8" x="32.399998" y="37.000015"/>
+        <object type="2" x="-36.600014" y="5.9999695"/>
+        <object type="7" x="35.399986" y="-35.000023"/>
+        <object type="4" x="-65.59998" y="-44.999985"/>
+    </combination>
+
+    <combination>
+        <object type="6" x="-6.5714226" y="73.85716"/>
+        <object type="5" x="98.428566" y="50.85711"/>
+        <object type="7" x="-107.57144" y="45.857132"/>
+        <object type="6" x="-5.5714417" y="4.857128"/>
+        <object type="7" x="102.42858" y="-50.142857"/>
+        <object type="5" x="-78.57143" y="-52.142853"/>
+        <object type="6" x="-2.5714111" y="-73.14285"/>
+    </combination>
+
+    <combination>
+        <object type="9" x="-18.0" y="28.0"/>
+        <object type="3" x="20.00003" y="27.000015"/>
+        <object type="4" x="-77.00001" y="2.0"/>
+        <object type="5" x="87.99998" y="1.0000153"/>
+        <object type="7" x="-13.0" y="-58.0"/>
+    </combination>
+
+    <combination>
+        <object type="6" x="-48.875004" y="65.249985"/>
+        <object type="5" x="51.124985" y="46.25"/>
+        <object type="6" x="-50.874973" y="24.249985"/>
+        <object type="1" x="45.125004" y="16.25"/>
+        <object type="6" x="-46.874996" y="-15.7500305"/>
+        <object type="4" x="57.12497" y="-32.75"/>
+        <object type="3" x="-11.875" y="-38.750023"/>
+        <object type="5" x="5.1250076" y="-64.75002"/>
+    </combination>
+
+    <combination>
+        <object type="4" x="-32.000023" y="60.857132"/>
+        <object type="5" x="76.0" y="41.857136"/>
+        <object type="0" x="6.9999886" y="23.857124"/>
+        <object type="6" x="-93.999985" y="16.857174"/>
+        <object type="3" x="-23.999992" y="-47.142845"/>
+        <object type="3" x="15.000019" y="-48.142857"/>
+        <object type="3" x="51.999985" y="-48.142857"/>
+    </combination>
+
+    <combination>
+        <object type="1" x="20.142874" y="49.57143"/>
+        <object type="10" x="55.14287" y="49.57143"/>
+        <object type="2" x="-48.857132" y="31.571423"/>
+        <object type="13" x="59.14281" y="8.57143"/>
+        <object type="6" x="-73.85713" y="-19.428596"/>
+        <object type="0" x="41.142857" y="-45.42857"/>
+        <object type="7" x="-52.857147" y="-74.42856"/>
+    </combination>
+
+    <combination>
+        <object type="10" x="-0.22219086" y="79.22219"/>
+        <object type="4" x="-41.22221" y="61.222244"/>
+        <object type="3" x="1.7777767" y="28.222229"/>
+        <object type="0" x="62.777756" y="15.222202"/>
+        <object type="5" x="-13.222221" y="-12.777771"/>
+        <object type="7" x="95.77778" y="-28.777754"/>
+        <object type="9" x="-46.22221" y="-46.77779"/>
+        <object type="9" x="-82.22223" y="-46.77779"/>
+        <object type="6" x="22.777761" y="-48.77779"/>
+    </combination>
+
 </combinations>

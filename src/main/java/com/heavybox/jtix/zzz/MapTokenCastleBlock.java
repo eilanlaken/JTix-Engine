@@ -114,8 +114,6 @@ public class MapTokenCastleBlock extends MapToken {
 
     @Override
     public void render(Renderer2D renderer2D) {
-        // TODO: flip sclY for short buildings.
-        // TODO: set sclY to sclY * 0.5f for short middle buildings.
         renderer2D.drawTextureRegion(region, x, y, deg, sclX, sclY); // base should never be null.
     }
 
