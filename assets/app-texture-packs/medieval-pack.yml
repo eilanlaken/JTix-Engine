@@ -1460,10 +1460,10 @@ regions:
   x: 42
   y: 722
 - name: assets/app-ground/ground_bump_11.png
-  offsetX: 0
+  offsetX: 3
   offsetY: 0
   originalHeight: 60
-  originalWidth: 54
+  originalWidth: 59
   packedHeight: 60
   packedWidth: 54
   textureIndex: 0
@@ -1607,7 +1607,7 @@ regions:
   packedHeight: 14
   packedWidth: 157
   textureIndex: 0
-  x: 1841
+  x: 1839
   y: 817
 - name: assets/app-rural/rural_prop_log_2.png
   offsetX: 34
@@ -1640,10 +1640,10 @@ regions:
   x: 1545
   y: 746
 - name: assets/app-ground/ground_bump_10.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 44
-  originalWidth: 42
+  offsetX: 9
+  offsetY: 8
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 44
   packedWidth: 42
   textureIndex: 0
@@ -1657,48 +1657,38 @@ regions:
   packedHeight: 16
   packedWidth: 106
   textureIndex: 0
-  x: 1731
+  x: 1729
   y: 817
 - name: assets/app-ground/ground_bump_6.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 29
-  originalWidth: 58
+  offsetX: 1
+  offsetY: 16
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 29
   packedWidth: 58
   textureIndex: 0
   x: 1545
   y: 790
 - name: assets/app-ground/ground_bump_12.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 31
-  originalWidth: 53
+  offsetX: 3
+  offsetY: 15
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 31
   packedWidth: 53
   textureIndex: 0
   x: 1064
   y: 790
 - name: assets/app-ground/ground_bump_3.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 30
-  originalWidth: 54
+  offsetX: 3
+  offsetY: 15
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 30
   packedWidth: 54
   textureIndex: 0
   x: 1343
   y: 790
-- name: assets/app-ground/ground_bump_4.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 27
-  originalWidth: 59
-  packedHeight: 27
-  packedWidth: 59
-  textureIndex: 0
-  x: 1607
-  y: 791
 - name: assets/app-trees/tree_regular_trunk_3.png
   offsetX: 122
   offsetY: 251
@@ -1709,51 +1699,61 @@ regions:
   textureIndex: 0
   x: 1971
   y: 652
+- name: assets/app-ground/ground_bump_4.png
+  offsetX: 2
+  offsetY: 17
+  originalHeight: 60
+  originalWidth: 59
+  packedHeight: 27
+  packedWidth: 57
+  textureIndex: 0
+  x: 1607
+  y: 791
 - name: assets/app-ground/ground_bump_7.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 29
-  originalWidth: 53
+  offsetX: 3
+  offsetY: 16
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 29
   packedWidth: 53
   textureIndex: 0
   x: 864
   y: 791
 - name: assets/app-ground/ground_bump_9.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 36
-  originalWidth: 42
+  offsetX: 9
+  offsetY: 12
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 36
   packedWidth: 42
   textureIndex: 0
   x: 692
   y: 774
 - name: assets/app-ground/ground_bump_2.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 26
-  originalWidth: 57
+  offsetX: 1
+  offsetY: 17
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 26
   packedWidth: 57
   textureIndex: 0
-  x: 1670
+  x: 1668
   y: 791
 - name: assets/app-ground/ground_bump_8.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 31
-  originalWidth: 48
+  offsetX: 6
+  offsetY: 15
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 31
   packedWidth: 47
   textureIndex: 0
   x: 1121
   y: 790
 - name: assets/app-ground/ground_bump_13.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 35
-  originalWidth: 39
+  offsetX: 10
+  offsetY: 13
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 35
   packedWidth: 39
   textureIndex: 0
@@ -1770,20 +1770,20 @@ regions:
   x: 440
   y: 817
 - name: assets/app-ground/ground_bump_5.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 29
-  originalWidth: 42
+  offsetX: 9
+  offsetY: 16
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 29
   packedWidth: 42
   textureIndex: 0
   x: 1172
   y: 790
 - name: assets/app-ground/ground_bump_1.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 21
-  originalWidth: 57
+  offsetX: 1
+  offsetY: 20
+  originalHeight: 60
+  originalWidth: 59
   packedHeight: 21
   packedWidth: 57
   textureIndex: 0
@@ -1927,7 +1927,7 @@ regions:
   packedHeight: 6
   packedWidth: 41
   textureIndex: 0
-  x: 2002
+  x: 2000
   y: 817
 - name: assets/app-ground/ground_line_2.png
   offsetX: 0

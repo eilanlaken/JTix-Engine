@@ -9,7 +9,7 @@ public class ToolTerrainDeform extends Tool {
 
     private static final CommandTerrainDeform.GroundType[] allTypes = CommandTerrainDeform.GroundType.values();
 
-    public float scale = 1;
+    public float scale = 2;
     public float angle = 0;
     public int index = 0;
 
@@ -58,7 +58,8 @@ public class ToolTerrainDeform extends Tool {
             renderer2D.drawTextureRegion(region, x, y, angle, scale, scale);
         } else {
             float realScaleX = scale * (currentType.isRight() ? -1 : 1);
-            renderer2D.drawTextureRegion(region, x, y, 0, realScaleX, scale);
+            float actualDeg = currentType == CommandTerrainDeform.GroundType.BUMP_MIDDLE ? angle : 0;
+            renderer2D.drawTextureRegion(region, x, y, actualDeg, realScaleX, scale);
         }
         renderer2D.setColor(Color.WHITE);
     }

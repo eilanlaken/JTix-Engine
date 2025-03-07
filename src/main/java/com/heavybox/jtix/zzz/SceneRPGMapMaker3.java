@@ -618,7 +618,7 @@ public class SceneRPGMapMaker3 implements Scene {
                 addGroundFold.y = y;
                 addGroundFold.sclX = toolTerrainDeform.scale * (toolTerrainDeform.currentType.isRight() ? -1 : 1);
                 addGroundFold.sclY = toolTerrainDeform.scale;
-                addGroundFold.deg = (toolTerrainDeform.currentType == CommandTerrainDeform.GroundType.LINE) ? toolTerrainDeform.angle : MathUtils.randomUniformFloat(-3,3);
+                addGroundFold.deg = (toolTerrainDeform.currentType == CommandTerrainDeform.GroundType.LINE || toolTerrainDeform.currentType == CommandTerrainDeform.GroundType.BUMP_MIDDLE) ? toolTerrainDeform.angle : MathUtils.randomUniformFloat(-3,3);
                 addGroundFold.isAnchor = true;
                 commandHistory.add(addGroundFold);
 
@@ -674,12 +674,12 @@ public class SceneRPGMapMaker3 implements Scene {
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY);
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY);
         }
+        renderer2D.disableMasking();
         renderer2D.setColor(Color.WHITE);
         for (CommandTerrainDeform deform : commandsTerrainDeform) {
             if (deform.type == CommandTerrainDeform.GroundType.LINE) continue;
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY); // base should never be null.
         }
-        renderer2D.disableMasking();
 
         // draw map objects
         // TODO: first, calculate map items array
