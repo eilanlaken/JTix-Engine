@@ -143,6 +143,7 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-rural/rural_prop_log_3.png",
                     "assets/app-rural/rural_prop_trunk_chopped.png",
                     "assets/app-rural/rural_prop_windmill.png",
+                    "assets/app-rural/rural_prop_windmill_2.png",
                     "assets/app-rural/rural_tower_1.png",
                     "assets/app-rural/rural_tower_2.png",
                     "assets/app-rural/rural_tower_3.png",
@@ -572,7 +573,7 @@ public class SceneRPGMapMaker3 implements Scene {
 
         if (toolStampProps.active) {
             if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-                toolStampProps.selectRandom();
+                toolStampProps.selectNext();
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;

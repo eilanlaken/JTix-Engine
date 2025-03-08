@@ -6,7 +6,7 @@ import com.heavybox.jtix.math.MathUtils;
 
 public class ToolStampProps extends Tool {
 
-    public float scale = 1;
+    public float scale = 0.4f;
     public int index = 0;
 
 

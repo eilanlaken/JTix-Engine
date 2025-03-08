@@ -9,7 +9,7 @@ public class ToolStampHouses extends Tool {
     private static final MapTokenHouse.HouseType[] allTypes = MapTokenHouse.HouseType.values();
 
     public float randomScaleRange = 0;
-    public float scale = 1;
+    public float scale = 0.4f;
     public int index = 0;
 
     public MapTokenHouse.HouseType currentType = MapTokenHouse.HouseType.SMALL_VILLAGE_HOUSE;

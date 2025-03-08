@@ -15,6 +15,7 @@ public class MapTokenRuralProp extends MapToken {
             "assets/app-rural/rural_prop_log_3.png",
             "assets/app-rural/rural_prop_trunk_chopped.png",
             "assets/app-rural/rural_prop_windmill.png",
+            "assets/app-rural/rural_prop_windmill_2.png",
             "assets/app-rural/rural_tower_1.png",
             "assets/app-rural/rural_tower_2.png",
             "assets/app-rural/rural_tower_3.png",
@@ -28,7 +29,6 @@ public class MapTokenRuralProp extends MapToken {
     public MapTokenRuralProp(TexturePack props, int index) {
         super(Type.PROP);
         this.index = index;
-
         this.region = props.getRegion(regionsProps[index % regionsProps.length]);
     }
 
