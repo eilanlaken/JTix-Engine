@@ -21,6 +21,16 @@ public class CommandTerrainDeform extends Command {
             "assets/app-ground/ground_line_13.png",
             "assets/app-ground/ground_line_14.png",
             "assets/app-ground/ground_line_15.png",
+            "assets/app-ground/ground_line_16.png",
+            "assets/app-ground/ground_line_17.png",
+            "assets/app-ground/ground_line_18.png",
+            "assets/app-ground/ground_line_19.png",
+            "assets/app-ground/ground_line_20.png",
+            "assets/app-ground/ground_line_21.png",
+            "assets/app-ground/ground_line_22.png",
+            "assets/app-ground/ground_line_23.png",
+            "assets/app-ground/ground_line_24.png",
+            "assets/app-ground/ground_line_25.png"
     };
 
     public static final String[] regionsGroundBumpLeft = {

@@ -2092,7 +2092,7 @@ public class Renderer2D implements MemoryResourceHolder {
         arrayIntPool.free(triangles);
     }
 
-    public void drawPolygonFilled(float[] polygon, float x, float y, float deg, float scaleX, float scaleY) {
+    public void drawPolygonFilled(float[] polygon, Texture texture, float x, float y, float deg, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
         if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
         if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
@@ -2100,6 +2100,7 @@ public class Renderer2D implements MemoryResourceHolder {
         int count = polygon.length / 2;
         if (!ensureCapacity(count, count * 6)) flush();
 
+        setTexture(texture);
         setMode(GL11.GL_TRIANGLES);
 
         ArrayFloat vertices = arrayFloatPool.allocate();
@@ -2132,6 +2133,49 @@ public class Renderer2D implements MemoryResourceHolder {
         vertexIndex += count;
         arrayFloatPool.free(vertices);
         arrayIntPool.free(triangles);
+    }
+
+    public void drawPolygonFilled(float[] polygon, float x, float y, float deg, float scaleX, float scaleY) {
+        drawPolygonFilled(polygon, (Texture) null, x, y, deg, scaleX, scaleY);
+//        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+//        if (polygon.length < 6) throw new GraphicsException("A polygon requires a minimum of 3 vertices, so the polygon array must be of length > 6. Got: " + polygon.length);
+//        if (polygon.length % 2 != 0) throw new GraphicsException("Polygon must be represented as a flat array of vertices, each vertex must have x and y coordinates: [x0,y0,  x1,y1, ...]. Therefore, polygon array length must be even.");
+//
+//        int count = polygon.length / 2;
+//        if (!ensureCapacity(count, count * 6)) flush();
+//
+//        setMode(GL11.GL_TRIANGLES);
+//
+//        ArrayFloat vertices = arrayFloatPool.allocate();
+//        ArrayInt triangles = arrayIntPool.allocate();
+//        try {
+//            MathUtils.polygonTriangulate(polygon, vertices, triangles);
+//        } catch (Exception e) { // Probably the polygon has collapsed into a single point.
+//            return;
+//        }
+//
+//        Vector2 vertex = vectors2Pool.allocate();
+//        for (int i = 0; i < vertices.size; i += 2) {
+//            float poly_x = vertices.get(i);
+//            float poly_y = vertices.get(i + 1);
+//            float u = 0.5f + (poly_x * currentTexture.invWidth * pixelScaleWidth);
+//            float v = 0.5f - (poly_y * currentTexture.invHeight * pixelScaleHeight);
+//            textCoords.put(u).put(v);
+//            vertex.set(poly_x, poly_y);
+//            vertex.scl(scaleX, scaleY).rotateDeg(deg).add(x, y);
+//            positions.put(vertex.x).put(vertex.y);
+//            colors.put(currentTint);
+//        }
+//        vectors2Pool.free(vertex);
+//
+//        int startVertex = this.vertexIndex;
+//        for (int i = 0; i < triangles.size; i ++) {
+//            indices.put(startVertex + triangles.get(i));
+//        }
+//
+//        vertexIndex += count;
+//        arrayFloatPool.free(vertices);
+//        arrayIntPool.free(triangles);
     }
 
     // TODO: test

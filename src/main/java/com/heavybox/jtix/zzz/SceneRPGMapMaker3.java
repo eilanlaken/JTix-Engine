@@ -20,9 +20,11 @@ import java.util.Comparator;
 
 public class SceneRPGMapMaker3 implements Scene {
 
+    private final FrameBuffer frameBufferOutlinedObjects = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
+
     private static final Vector3 screen = new Vector3();
     private final Renderer2D renderer2D = new Renderer2D();
-
+    private Shader outlineShader;
     /* ui */
     private final Widget toolbarWidget = new Widget();
     private final Widget menuBarWidget = new Widget();
@@ -33,7 +35,7 @@ public class SceneRPGMapMaker3 implements Scene {
     private Texture terrainWater;
     private Texture terrainGrass;
     private Texture terrainRoad;
-    //private Texture terrainWheat;
+    private Texture terrainWheat;
 
     // tools
     private Tool activeTool = null;
@@ -43,12 +45,14 @@ public class SceneRPGMapMaker3 implements Scene {
     private final ToolStampHouses toolStampHouses = new ToolStampHouses();
     private final ToolStampProps toolStampProps = new ToolStampProps();
     private ToolTerrainDeform toolTerrainDeform;
+    private ToolWheatField toolWheatField;
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
     public int commandChainIndex = -1;
     private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
     private final Array<CommandTerrainDeform> commandsTerrainDeform = new Array<>(true, 100);
+    private final Array<CommandTerrainDrawWheat> commandsDrawWheat = new Array<>(true, 5);
     public final Array<MapToken> mapTokens = new Array<>(true, 10);
     // TODO: make a copy array of map tokens for clearing(), copying(), sorting() then rendering().
 
@@ -144,11 +148,6 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-rural/rural_prop_trunk_chopped.png",
                     "assets/app-rural/rural_prop_windmill.png",
                     "assets/app-rural/rural_prop_windmill_2.png",
-                    "assets/app-rural/rural_tower_1.png",
-                    "assets/app-rural/rural_tower_2.png",
-                    "assets/app-rural/rural_tower_3.png",
-                    "assets/app-rural/rural_tower_4.png",
-                    "assets/app-rural/rural_tower_5.png",
 
                     "assets/app-city/city-house_1.png",
                     "assets/app-city/city-house_2.png",
@@ -227,6 +226,11 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-castles/castle-tower-block_14.png",
                     "assets/app-castles/castle-tower-block_15.png",
                     "assets/app-castles/castle-tower-block_16.png",
+                    "assets/app-castles/castle-tower-block_17.png",
+                    "assets/app-castles/castle-tower-block_18.png",
+                    "assets/app-castles/castle-tower-block_19.png",
+                    "assets/app-castles/castle-tower-block_20.png",
+                    "assets/app-castles/castle-tower-block_21.png",
                     "assets/app-castles/castle-wall-back-block_1.png",
                     "assets/app-castles/castle-wall-back-block_2.png",
                     "assets/app-castles/castle-wall-back-block_3.png",
@@ -273,7 +277,17 @@ public class SceneRPGMapMaker3 implements Scene {
                     "assets/app-ground/ground_line_12.png",
                     "assets/app-ground/ground_line_13.png",
                     "assets/app-ground/ground_line_14.png",
-                    "assets/app-ground/ground_line_15.png"
+                    "assets/app-ground/ground_line_15.png",
+                    "assets/app-ground/ground_line_16.png",
+                    "assets/app-ground/ground_line_17.png",
+                    "assets/app-ground/ground_line_18.png",
+                    "assets/app-ground/ground_line_19.png",
+                    "assets/app-ground/ground_line_20.png",
+                    "assets/app-ground/ground_line_21.png",
+                    "assets/app-ground/ground_line_22.png",
+                    "assets/app-ground/ground_line_23.png",
+                    "assets/app-ground/ground_line_24.png",
+                    "assets/app-ground/ground_line_25.png"
             );
         } catch (Exception ignored) {} // PACK MEDIEVAL MAP PROPS
 
@@ -281,11 +295,13 @@ public class SceneRPGMapMaker3 implements Scene {
         Assets.loadTexture("assets/app-terrain/grass-1024.png");
         Assets.loadTexture("assets/app-terrain/water-1024.png");
         Assets.loadTexture("assets/app-terrain/road-1024.png");
-//        Assets.loadTexture("assets/app-textures/terrain-wheat-1024.png");
+        Assets.loadTexture("assets/app-terrain/wheat-field.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
         Assets.loadTexturePack("assets/app-texture-packs/medieval-pack.yml");
+        Assets.loadShader("outline", "assets/app-shaders/graphics-2d-shader-texture-outline.vert", "assets/app-shaders/graphics-2d-shader-texture-outline.frag");
+
         Assets.finishLoading();
 
         icons = Assets.get("assets/app-texture-packs/icons.yml");
@@ -294,7 +310,9 @@ public class SceneRPGMapMaker3 implements Scene {
         terrainWater = Assets.get("assets/app-terrain/water-1024.png");
         terrainGrass = Assets.get("assets/app-terrain/grass-1024.png");
         terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
-        //terrainWheat = Assets.get("assets/app-textures/terrain-wheat-1024.png");
+        terrainWheat = Assets.get("assets/app-terrain/wheat-field.png");
+
+        outlineShader = Assets.get("outline");
     }
 
     @Override
@@ -333,6 +351,7 @@ public class SceneRPGMapMaker3 implements Scene {
         //Graphics.setTargetFps(30);
         toolCastleGenerator = new ToolCastleGenerator(props);
         toolTerrainDeform = new ToolTerrainDeform(props);
+        toolWheatField = new ToolWheatField();
         selectTool(toolCastleGenerator);
     }
 
@@ -373,6 +392,8 @@ public class SceneRPGMapMaker3 implements Scene {
             selectTool(toolStampProps);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_6)) {
             selectTool(toolTerrainDeform);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_7)) {
+            selectTool(toolWheatField);
         }
 
 
@@ -545,7 +566,7 @@ public class SceneRPGMapMaker3 implements Scene {
 
         if (toolStampProps.active) {
             if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-                toolStampProps.selectRandom();
+                toolStampProps.selectNext();
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
@@ -627,12 +648,27 @@ public class SceneRPGMapMaker3 implements Scene {
             }
         }
 
+        if (toolWheatField.active) {
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+                CommandTerrainDrawWheat drawWheat = new CommandTerrainDrawWheat(toolWheatField.currentPolygon, toolWheatField.currentColor);
+                drawWheat.x = x;
+                drawWheat.y = y;
+                drawWheat.isAnchor = true;
+                commandHistory.add(drawWheat);
+
+                // NOTE: ground deformation objects are not map tokens.
+            }
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT); // should probably clear the stencil
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
 
         // get all terrain draw commands history
         commandsTerrainPaint.clear();
         commandsTerrainDeform.clear();
+        commandsDrawWheat.clear();
         for (Command command : commandHistory) { // TODO: iterate until last index.
             if (command instanceof CommandTerrainPaint) {
                 CommandTerrainPaint cmd = (CommandTerrainPaint) command;
@@ -640,10 +676,22 @@ public class SceneRPGMapMaker3 implements Scene {
             } else if (command instanceof CommandTerrainDeform) {
                 CommandTerrainDeform cmd = (CommandTerrainDeform) command;
                 commandsTerrainDeform.add(cmd);
+            } else if (command instanceof CommandTerrainDrawWheat) {
+                CommandTerrainDrawWheat cmd = (CommandTerrainDrawWheat) command;
+                commandsDrawWheat.add(cmd);
             }
         }
 
+        FrameBufferBinder.bind(frameBufferOutlinedObjects);
+        renderer2D.begin(camera);
+        for (CommandTerrainDrawWheat wheat : commandsDrawWheat) {
+            renderer2D.drawPolygonFilled(wheat.polygon, terrainWheat, wheat.x, wheat.y, wheat.deg, 1, 1);
+        }
+        renderer2D.end();
+
         // render scene
+        FrameBufferBinder.bind(null);
+
         renderer2D.begin(camera);
 
         // draw terrain
@@ -675,7 +723,15 @@ public class SceneRPGMapMaker3 implements Scene {
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y, deform.deg, deform.sclX, deform.sclY);
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY);
         }
+
+        // draw wheat fields here. they are masked by the ground.
+        renderer2D.setColor(1,1,1,1);
+        renderer2D.setShader(outlineShader);
+        renderer2D.setShaderAttribute("n", 8); // outlining does not work here because it outlines the TEXTURE, not the polygon.
+        renderer2D.drawTexture(frameBufferOutlinedObjects.getColorAttachment(), 0, 0, 0, 1, 1); // TODO: why is it inverted?
+        renderer2D.setShader(null);
         renderer2D.disableMasking();
+
         renderer2D.setColor(Color.WHITE);
         for (CommandTerrainDeform deform : commandsTerrainDeform) {
             if (deform.type == CommandTerrainDeform.GroundType.LINE) continue;

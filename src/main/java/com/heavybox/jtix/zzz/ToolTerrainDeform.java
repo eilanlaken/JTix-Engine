@@ -7,9 +7,12 @@ import com.heavybox.jtix.graphics.TextureRegion;
 
 public class ToolTerrainDeform extends Tool {
 
+    public static final float SCALE_LINE = 1;
+    public static final float SCALE_BUMP = 2;
+
     private static final CommandTerrainDeform.GroundType[] allTypes = CommandTerrainDeform.GroundType.values();
 
-    public float scale = 2;
+    public float scale = SCALE_LINE;
     public float angle = 0;
     public int index = 0;
 
@@ -29,6 +32,8 @@ public class ToolTerrainDeform extends Tool {
         type_ordinal++;
         type_ordinal %= CommandTerrainDeform.GroundType.values().length;
         currentType = CommandTerrainDeform.GroundType.values()[type_ordinal];
+        if (currentType == CommandTerrainDeform.GroundType.LINE) scale = SCALE_LINE;
+        else scale = SCALE_BUMP;
         index = 0;
         region = CommandTerrainDeform.GroundType.getRegion(props, currentType, index);
     }

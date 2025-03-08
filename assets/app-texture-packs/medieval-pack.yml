@@ -17,7 +17,7 @@ regions:
   packedHeight: 219
   packedWidth: 80
   textureIndex: 0
-  x: 349
+  x: 433
   y: 2
 - name: assets/app-castles/castle-tower-block_3.png
   offsetX: 0
@@ -27,7 +27,7 @@ regions:
   packedHeight: 219
   packedWidth: 80
   textureIndex: 0
-  x: 601
+  x: 517
   y: 2
 - name: assets/app-castles/castle-tower-block_4.png
   offsetX: 0
@@ -37,7 +37,7 @@ regions:
   packedHeight: 219
   packedWidth: 80
   textureIndex: 0
-  x: 433
+  x: 601
   y: 2
 - name: assets/app-castles/castle-tower-block_5.png
   offsetX: 0
@@ -47,7 +47,7 @@ regions:
   packedHeight: 219
   packedWidth: 80
   textureIndex: 0
-  x: 517
+  x: 265
   y: 2
 - name: assets/app-castles/castle-tower-block_6.png
   offsetX: 0
@@ -57,7 +57,7 @@ regions:
   packedHeight: 219
   packedWidth: 80
   textureIndex: 0
-  x: 265
+  x: 349
   y: 2
 - name: assets/app-trees/tree_regular_6.png
   offsetX: 64
@@ -177,8 +177,8 @@ regions:
   packedHeight: 135
   packedWidth: 109
   textureIndex: 0
-  x: 1312
-  y: 144
+  x: 1193
+  y: 153
 - name: assets/app-castles/castle-wall-front-block_9.png
   offsetX: 111
   offsetY: 166
@@ -197,8 +197,8 @@ regions:
   packedHeight: 135
   packedWidth: 109
   textureIndex: 0
-  x: 1193
-  y: 153
+  x: 1312
+  y: 144
 - name: assets/app-trees/tree_cypress_1.png
   offsetX: 103
   offsetY: 252
@@ -247,8 +247,8 @@ regions:
   packedHeight: 125
   packedWidth: 110
   textureIndex: 0
-  x: 133
-  y: 241
+  x: 398
+  y: 225
 - name: assets/app-castles/castle-building-block_6.png
   offsetX: 34
   offsetY: 192
@@ -257,29 +257,9 @@ regions:
   packedHeight: 125
   packedWidth: 110
   textureIndex: 0
-  x: 398
-  y: 225
+  x: 133
+  y: 241
 - name: assets/app-castles/castle-building-block_7.png
-  offsetX: 34
-  offsetY: 192
-  originalHeight: 445
-  originalWidth: 179
-  packedHeight: 125
-  packedWidth: 110
-  textureIndex: 0
-  x: 1837
-  y: 281
-- name: assets/app-castles/castle-building-block_8.png
-  offsetX: 34
-  offsetY: 192
-  originalHeight: 445
-  originalWidth: 179
-  packedHeight: 125
-  packedWidth: 110
-  textureIndex: 0
-  x: 2
-  y: 251
-- name: assets/app-castles/castle-building-block_9.png
   offsetX: 34
   offsetY: 192
   originalHeight: 445
@@ -289,7 +269,7 @@ regions:
   textureIndex: 0
   x: 1651
   y: 282
-- name: assets/app-castles/castle-building-block_10.png
+- name: assets/app-castles/castle-building-block_8.png
   offsetX: 34
   offsetY: 192
   originalHeight: 445
@@ -299,27 +279,27 @@ regions:
   textureIndex: 0
   x: 512
   y: 225
+- name: assets/app-castles/castle-building-block_9.png
+  offsetX: 34
+  offsetY: 192
+  originalHeight: 445
+  originalWidth: 179
+  packedHeight: 125
+  packedWidth: 110
+  textureIndex: 0
+  x: 1837
+  y: 281
+- name: assets/app-castles/castle-building-block_10.png
+  offsetX: 34
+  offsetY: 192
+  originalHeight: 445
+  originalWidth: 179
+  packedHeight: 125
+  packedWidth: 110
+  textureIndex: 0
+  x: 2
+  y: 251
 - name: assets/app-castles/castle-wall-back-block_1.png
-  offsetX: 109
-  offsetY: 181
-  originalHeight: 445
-  originalWidth: 220
-  packedHeight: 118
-  packedWidth: 109
-  textureIndex: 0
-  x: 1190
-  y: 292
-- name: assets/app-castles/castle-wall-back-block_2.png
-  offsetX: 6
-  offsetY: 181
-  originalHeight: 445
-  originalWidth: 220
-  packedHeight: 118
-  packedWidth: 109
-  textureIndex: 0
-  x: 511
-  y: 354
-- name: assets/app-castles/castle-wall-back-block_3.png
   offsetX: 109
   offsetY: 181
   originalHeight: 445
@@ -329,18 +309,8 @@ regions:
   textureIndex: 0
   x: 398
   y: 354
-- name: assets/app-castles/castle-wall-back-block_4.png
+- name: assets/app-castles/castle-wall-back-block_2.png
   offsetX: 6
-  offsetY: 181
-  originalHeight: 445
-  originalWidth: 220
-  packedHeight: 118
-  packedWidth: 109
-  textureIndex: 0
-  x: 1430
-  y: 283
-- name: assets/app-castles/castle-wall-back-block_5.png
-  offsetX: 109
   offsetY: 181
   originalHeight: 445
   originalWidth: 220
@@ -349,7 +319,17 @@ regions:
   textureIndex: 0
   x: 626
   y: 341
-- name: assets/app-castles/castle-wall-back-block_6.png
+- name: assets/app-castles/castle-wall-back-block_3.png
+  offsetX: 109
+  offsetY: 181
+  originalHeight: 445
+  originalWidth: 220
+  packedHeight: 118
+  packedWidth: 109
+  textureIndex: 0
+  x: 1190
+  y: 292
+- name: assets/app-castles/castle-wall-back-block_4.png
   offsetX: 6
   offsetY: 181
   originalHeight: 445
@@ -359,7 +339,7 @@ regions:
   textureIndex: 0
   x: 1077
   y: 292
-- name: assets/app-castles/castle-wall-back-block_7.png
+- name: assets/app-castles/castle-wall-back-block_5.png
   offsetX: 109
   offsetY: 181
   originalHeight: 445
@@ -369,7 +349,7 @@ regions:
   textureIndex: 0
   x: 964
   y: 292
-- name: assets/app-castles/castle-wall-back-block_8.png
+- name: assets/app-castles/castle-wall-back-block_6.png
   offsetX: 6
   offsetY: 181
   originalHeight: 445
@@ -379,6 +359,26 @@ regions:
   textureIndex: 0
   x: 851
   y: 292
+- name: assets/app-castles/castle-wall-back-block_7.png
+  offsetX: 109
+  offsetY: 181
+  originalHeight: 445
+  originalWidth: 220
+  packedHeight: 118
+  packedWidth: 109
+  textureIndex: 0
+  x: 1430
+  y: 283
+- name: assets/app-castles/castle-wall-back-block_8.png
+  offsetX: 6
+  offsetY: 181
+  originalHeight: 445
+  originalWidth: 220
+  packedHeight: 118
+  packedWidth: 109
+  textureIndex: 0
+  x: 511
+  y: 354
 - name: assets/app-castles/castle-building-block_25.png
   offsetX: 23
   offsetY: 212
@@ -407,8 +407,8 @@ regions:
   packedHeight: 84
   packedWidth: 135
   textureIndex: 0
-  x: 394
-  y: 571
+  x: 116
+  y: 563
 - name: assets/app-castles/castle-building-block_18.png
   offsetX: 22
   offsetY: 214
@@ -417,7 +417,7 @@ regions:
   packedHeight: 84
   packedWidth: 135
   textureIndex: 0
-  x: 255
+  x: 394
   y: 571
 - name: assets/app-castles/castle-building-block_19.png
   offsetX: 22
@@ -427,8 +427,8 @@ regions:
   packedHeight: 84
   packedWidth: 135
   textureIndex: 0
-  x: 1898
-  y: 564
+  x: 255
+  y: 571
 - name: assets/app-castles/castle-building-block_20.png
   offsetX: 22
   offsetY: 214
@@ -437,19 +437,9 @@ regions:
   packedHeight: 84
   packedWidth: 135
   textureIndex: 0
-  x: 116
-  y: 563
+  x: 1898
+  y: 564
 - name: assets/app-castles/castle-building-block_21.png
-  offsetX: 22
-  offsetY: 214
-  originalHeight: 445
-  originalWidth: 179
-  packedHeight: 84
-  packedWidth: 135
-  textureIndex: 0
-  x: 562
-  y: 558
-- name: assets/app-castles/castle-building-block_22.png
   offsetX: 22
   offsetY: 214
   originalHeight: 445
@@ -459,6 +449,16 @@ regions:
   textureIndex: 0
   x: 1759
   y: 512
+- name: assets/app-castles/castle-building-block_22.png
+  offsetX: 22
+  offsetY: 214
+  originalHeight: 445
+  originalWidth: 179
+  packedHeight: 84
+  packedWidth: 135
+  textureIndex: 0
+  x: 928
+  y: 511
 - name: assets/app-castles/castle-building-block_28.png
   offsetX: 23
   offsetY: 215
@@ -467,8 +467,8 @@ regions:
   packedHeight: 84
   packedWidth: 135
   textureIndex: 0
-  x: 928
-  y: 511
+  x: 562
+  y: 558
 - name: assets/app-castles/castle-building-block_23.png
   offsetX: 31
   offsetY: 215
@@ -517,7 +517,7 @@ regions:
   packedHeight: 147
   packedWidth: 75
   textureIndex: 0
-  x: 1013
+  x: 934
   y: 2
 - name: assets/app-castles/castle-tower-block_8.png
   offsetX: 5
@@ -527,7 +527,7 @@ regions:
   packedHeight: 147
   packedWidth: 75
   textureIndex: 0
-  x: 934
+  x: 1013
   y: 2
 - name: assets/app-castles/castle-tower-block_9.png
   offsetX: 5
@@ -567,19 +567,9 @@ regions:
   packedHeight: 98
   packedWidth: 110
   textureIndex: 0
-  x: 2
-  y: 380
+  x: 1430
+  y: 405
 - name: assets/app-castles/castle-building-block_2.png
-  offsetX: 34
-  offsetY: 193
-  originalHeight: 445
-  originalWidth: 179
-  packedHeight: 98
-  packedWidth: 110
-  textureIndex: 0
-  x: 1765
-  y: 410
-- name: assets/app-castles/castle-building-block_3.png
   offsetX: 34
   offsetY: 193
   originalHeight: 445
@@ -589,6 +579,16 @@ regions:
   textureIndex: 0
   x: 1303
   y: 408
+- name: assets/app-castles/castle-building-block_3.png
+  offsetX: 34
+  offsetY: 193
+  originalHeight: 445
+  originalWidth: 179
+  packedHeight: 98
+  packedWidth: 110
+  textureIndex: 0
+  x: 1765
+  y: 410
 - name: assets/app-castles/castle-building-block_4.png
   offsetX: 34
   offsetY: 193
@@ -597,8 +597,8 @@ regions:
   packedHeight: 98
   packedWidth: 110
   textureIndex: 0
-  x: 1430
-  y: 405
+  x: 2
+  y: 380
 - name: assets/app-castles/castle-tower-block_1.png
   offsetX: 15
   offsetY: 216
@@ -657,8 +657,8 @@ regions:
   packedHeight: 91
   packedWidth: 110
   textureIndex: 0
-  x: 334
-  y: 476
+  x: 220
+  y: 468
 - name: assets/app-rural/rural_house_12.png
   offsetX: 9
   offsetY: 19
@@ -677,8 +677,8 @@ regions:
   packedHeight: 91
   packedWidth: 110
   textureIndex: 0
-  x: 624
-  y: 463
+  x: 334
+  y: 476
 - name: assets/app-rural/rural_house_25.png
   offsetX: 9
   offsetY: 19
@@ -687,8 +687,8 @@ regions:
   packedHeight: 91
   packedWidth: 110
   textureIndex: 0
-  x: 220
-  y: 468
+  x: 624
+  y: 463
 - name: assets/app-rural/rural_house_7.png
   offsetX: 9
   offsetY: 20
@@ -697,8 +697,8 @@ regions:
   packedHeight: 90
   packedWidth: 110
   textureIndex: 0
-  x: 1531
-  y: 509
+  x: 448
+  y: 476
 - name: assets/app-rural/rural_house_10.png
   offsetX: 9
   offsetY: 20
@@ -707,8 +707,8 @@ regions:
   packedHeight: 90
   packedWidth: 110
   textureIndex: 0
-  x: 2
-  y: 482
+  x: 1645
+  y: 509
 - name: assets/app-rural/rural_house_21.png
   offsetX: 9
   offsetY: 19
@@ -717,7 +717,7 @@ regions:
   packedHeight: 90
   packedWidth: 110
   textureIndex: 0
-  x: 1645
+  x: 1531
   y: 509
 - name: assets/app-city/city-house_26.png
   offsetX: 10
@@ -737,8 +737,8 @@ regions:
   packedHeight: 90
   packedWidth: 110
   textureIndex: 0
-  x: 448
-  y: 476
+  x: 2
+  y: 482
 - name: assets/app-trees/bush_2.png
   offsetX: 68
   offsetY: 252
@@ -747,8 +747,8 @@ regions:
   packedHeight: 75
   packedWidth: 120
   textureIndex: 0
-  x: 787
-  y: 601
+  x: 1417
+  y: 603
 - name: assets/app-clouds/clouds_2.png
   offsetX: 10
   offsetY: 0
@@ -757,8 +757,8 @@ regions:
   packedHeight: 75
   packedWidth: 120
   textureIndex: 0
-  x: 1417
-  y: 603
+  x: 787
+  y: 601
 - name: assets/app-trees/bush_6.png
   offsetX: 64
   offsetY: 253
@@ -797,8 +797,8 @@ regions:
   packedHeight: 73
   packedWidth: 107
   textureIndex: 0
-  x: 1615
-  y: 603
+  x: 533
+  y: 646
 - name: assets/app-clouds/clouds_4.png
   offsetX: 21
   offsetY: 1
@@ -807,8 +807,8 @@ regions:
   packedHeight: 73
   packedWidth: 107
   textureIndex: 0
-  x: 533
-  y: 646
+  x: 1615
+  y: 603
 - name: assets/app-castles/castle-tower-block_16.png
   offsetX: 21
   offsetY: 218
@@ -837,8 +837,8 @@ regions:
   packedHeight: 93
   packedWidth: 76
   textureIndex: 0
-  x: 840
-  y: 414
+  x: 1664
+  y: 411
 - name: assets/app-castles/castle-tower-block_15.png
   offsetX: 4
   offsetY: 216
@@ -847,8 +847,8 @@ regions:
   packedHeight: 93
   packedWidth: 76
   textureIndex: 0
-  x: 1664
-  y: 411
+  x: 840
+  y: 414
 - name: assets/app-castles/castle-tower-block_13.png
   offsetX: 5
   offsetY: 216
@@ -857,7 +857,7 @@ regions:
   packedHeight: 93
   packedWidth: 75
   textureIndex: 0
-  x: 999
+  x: 920
   y: 414
 - name: assets/app-castles/castle-tower-block_14.png
   offsetX: 5
@@ -867,7 +867,7 @@ regions:
   packedHeight: 93
   packedWidth: 75
   textureIndex: 0
-  x: 920
+  x: 999
   y: 414
 - name: assets/app-city/city-house_11.png
   offsetX: 24
@@ -887,7 +887,7 @@ regions:
   packedHeight: 55
   packedWidth: 120
   textureIndex: 0
-  x: 1110
+  x: 986
   y: 685
 - name: assets/app-castles/castle-building-block_26.png
   offsetX: 30
@@ -897,7 +897,7 @@ regions:
   packedHeight: 55
   packedWidth: 120
   textureIndex: 0
-  x: 986
+  x: 1110
   y: 685
 - name: assets/app-castles/castle-building-block_11.png
   offsetX: 66
@@ -907,7 +907,7 @@ regions:
   packedHeight: 138
   packedWidth: 46
   textureIndex: 0
-  x: 1624
+  x: 1674
   y: 2
 - name: assets/app-castles/castle-building-block_12.png
   offsetX: 66
@@ -917,7 +917,7 @@ regions:
   packedHeight: 138
   packedWidth: 46
   textureIndex: 0
-  x: 1674
+  x: 1624
   y: 2
 - name: assets/app-castles/castle-building-block_13.png
   offsetX: 66
@@ -927,7 +927,7 @@ regions:
   packedHeight: 138
   packedWidth: 46
   textureIndex: 0
-  x: 1524
+  x: 1424
   y: 2
 - name: assets/app-castles/castle-building-block_14.png
   offsetX: 66
@@ -937,7 +937,7 @@ regions:
   packedHeight: 138
   packedWidth: 46
   textureIndex: 0
-  x: 1474
+  x: 1524
   y: 2
 - name: assets/app-castles/castle-building-block_15.png
   offsetX: 66
@@ -947,7 +947,7 @@ regions:
   packedHeight: 138
   packedWidth: 46
   textureIndex: 0
-  x: 1424
+  x: 1474
   y: 2
 - name: assets/app-castles/castle-building-block_16.png
   offsetX: 66
@@ -959,7 +959,7 @@ regions:
   textureIndex: 0
   x: 1574
   y: 2
-- name: assets/app-rural/rural_tower_4.png
+- name: assets/app-castles/castle-tower-block_20.png
   offsetX: 7
   offsetY: 125
   originalHeight: 291
@@ -969,7 +969,7 @@ regions:
   textureIndex: 0
   x: 1965
   y: 256
-- name: assets/app-rural/rural_tower_5.png
+- name: assets/app-castles/castle-tower-block_21.png
   offsetX: 7
   offsetY: 125
   originalHeight: 291
@@ -1017,19 +1017,9 @@ regions:
   packedHeight: 45
   packedWidth: 123
   textureIndex: 0
-  x: 198
-  y: 730
-- name: assets/app-city/city-house_15.png
-  offsetX: 4
-  offsetY: 44
-  originalHeight: 129
-  originalWidth: 129
-  packedHeight: 45
-  packedWidth: 123
-  textureIndex: 0
   x: 384
   y: 729
-- name: assets/app-city/city-house_16.png
+- name: assets/app-city/city-house_15.png
   offsetX: 4
   offsetY: 44
   originalHeight: 129
@@ -1039,6 +1029,16 @@ regions:
   textureIndex: 0
   x: 517
   y: 723
+- name: assets/app-city/city-house_16.png
+  offsetX: 4
+  offsetY: 44
+  originalHeight: 129
+  originalWidth: 129
+  packedHeight: 45
+  packedWidth: 123
+  textureIndex: 0
+  x: 198
+  y: 730
 - name: assets/app-city/city-house_17.png
   offsetX: 4
   offsetY: 44
@@ -1087,8 +1087,8 @@ regions:
   packedHeight: 55
   packedWidth: 96
   textureIndex: 0
-  x: 1757
-  y: 686
+  x: 1234
+  y: 685
 - name: assets/app-clouds/clouds_5.png
   offsetX: 24
   offsetY: 1
@@ -1097,8 +1097,8 @@ regions:
   packedHeight: 55
   packedWidth: 96
   textureIndex: 0
-  x: 1234
-  y: 685
+  x: 1757
+  y: 686
 - name: assets/app-rural/rural_house_2.png
   offsetX: 23
   offsetY: 32
@@ -1107,8 +1107,8 @@ regions:
   packedHeight: 65
   packedWidth: 80
   textureIndex: 0
-  x: 1615
-  y: 680
+  x: 2
+  y: 662
 - name: assets/app-city/city-house_2.png
   offsetX: 24
   offsetY: 33
@@ -1117,8 +1117,8 @@ regions:
   packedHeight: 65
   packedWidth: 80
   textureIndex: 0
-  x: 2
-  y: 662
+  x: 1615
+  y: 680
 - name: assets/app-trees/tree_regular_fruits.png
   offsetX: 90
   offsetY: 288
@@ -1137,8 +1137,8 @@ regions:
   packedHeight: 42
   packedWidth: 120
   textureIndex: 0
-  x: 1113
-  y: 744
+  x: 1461
+  y: 748
 - name: assets/app-rural/rural_house_11.png
   offsetX: 4
   offsetY: 44
@@ -1147,7 +1147,7 @@ regions:
   packedHeight: 42
   packedWidth: 120
   textureIndex: 0
-  x: 1237
+  x: 1699
   y: 745
 - name: assets/app-rural/rural_house_22.png
   offsetX: 4
@@ -1157,8 +1157,8 @@ regions:
   packedHeight: 42
   packedWidth: 120
   textureIndex: 0
-  x: 1461
-  y: 748
+  x: 1237
+  y: 745
 - name: assets/app-city/city-house_30.png
   offsetX: 5
   offsetY: 45
@@ -1167,8 +1167,8 @@ regions:
   packedHeight: 42
   packedWidth: 120
   textureIndex: 0
-  x: 1699
-  y: 745
+  x: 1113
+  y: 744
 - name: assets/app-city/city-house_9.png
   offsetX: 27
   offsetY: 31
@@ -1197,8 +1197,8 @@ regions:
   packedHeight: 41
   packedWidth: 120
   textureIndex: 0
-  x: 1823
-  y: 771
+  x: 511
+  y: 772
 - name: assets/app-city/city-house_31.png
   offsetX: 5
   offsetY: 46
@@ -1217,8 +1217,8 @@ regions:
   packedHeight: 41
   packedWidth: 120
   textureIndex: 0
-  x: 511
-  y: 772
+  x: 1823
+  y: 771
 - name: assets/app-trees/tree_regular_trunk_10.png
   offsetX: 104
   offsetY: 242
@@ -1229,7 +1229,7 @@ regions:
   textureIndex: 0
   x: 739
   y: 341
-- name: assets/app-rural/rural_tower_1.png
+- name: assets/app-castles/castle-tower-block_17.png
   offsetX: 19
   offsetY: 123
   originalHeight: 291
@@ -1239,7 +1239,7 @@ regions:
   textureIndex: 0
   x: 780
   y: 2
-- name: assets/app-rural/rural_tower_2.png
+- name: assets/app-castles/castle-tower-block_18.png
   offsetX: 19
   offsetY: 123
   originalHeight: 291
@@ -1277,7 +1277,7 @@ regions:
   packedHeight: 103
   packedWidth: 46
   textureIndex: 0
-  x: 297
+  x: 247
   y: 361
 - name: assets/app-rural/rural_house_9.png
   offsetX: 41
@@ -1297,7 +1297,7 @@ regions:
   packedHeight: 103
   packedWidth: 46
   textureIndex: 0
-  x: 247
+  x: 297
   y: 361
 - name: assets/app-city/city-house_28.png
   offsetX: 42
@@ -1329,7 +1329,7 @@ regions:
   textureIndex: 0
   x: 1879
   y: 410
-- name: assets/app-rural/rural_tower_3.png
+- name: assets/app-castles/castle-tower-block_19.png
   offsetX: 7
   offsetY: 125
   originalHeight: 291
@@ -1377,8 +1377,8 @@ regions:
   packedHeight: 41
   packedWidth: 89
   textureIndex: 0
-  x: 1361
-  y: 750
+  x: 1585
+  y: 749
 - name: assets/app-city/city-house_23.png
   offsetX: 20
   offsetY: 45
@@ -1387,8 +1387,8 @@ regions:
   packedHeight: 41
   packedWidth: 89
   textureIndex: 0
-  x: 1585
-  y: 749
+  x: 1361
+  y: 750
 - name: assets/app-city/city-house_24.png
   offsetX: 20
   offsetY: 45
@@ -1427,7 +1427,7 @@ regions:
   packedHeight: 40
   packedWidth: 89
   textureIndex: 0
-  x: 188
+  x: 2
   y: 779
 - name: assets/app-city/city-house_5.png
   offsetX: 20
@@ -1437,7 +1437,7 @@ regions:
   packedHeight: 40
   packedWidth: 89
   textureIndex: 0
-  x: 2
+  x: 95
   y: 779
 - name: assets/app-city/city-house_6.png
   offsetX: 20
@@ -1447,7 +1447,7 @@ regions:
   packedHeight: 40
   packedWidth: 89
   textureIndex: 0
-  x: 95
+  x: 188
   y: 779
 - name: assets/app-city/city-house_7.png
   offsetX: 20
@@ -1490,10 +1490,10 @@ regions:
   x: 644
   y: 719
 - name: assets/app-ground/ground_line_15.png
-  offsetX: 0
+  offsetX: 21
   offsetY: 0
   originalHeight: 25
-  originalWidth: 114
+  originalWidth: 157
   packedHeight: 25
   packedWidth: 114
   textureIndex: 0
@@ -1590,10 +1590,10 @@ regions:
   x: 1342
   y: 676
 - name: assets/app-ground/ground_line_12.png
-  offsetX: 0
+  offsetX: 32
   offsetY: 0
   originalHeight: 25
-  originalWidth: 92
+  originalWidth: 157
   packedHeight: 25
   packedWidth: 92
   textureIndex: 0
@@ -1611,8 +1611,8 @@ regions:
   y: 791
 - name: assets/app-ground/ground_line_1.png
   offsetX: 0
-  offsetY: 0
-  originalHeight: 14
+  offsetY: 5
+  originalHeight: 25
   originalWidth: 157
   packedHeight: 14
   packedWidth: 157
@@ -1660,10 +1660,10 @@ regions:
   x: 1887
   y: 723
 - name: assets/app-ground/ground_line_10.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 16
-  originalWidth: 106
+  offsetX: 25
+  offsetY: 4
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 16
   packedWidth: 106
   textureIndex: 0
@@ -1689,6 +1689,16 @@ regions:
   textureIndex: 0
   x: 1290
   y: 791
+- name: assets/app-ground/ground_line_17.png
+  offsetX: 3
+  offsetY: 7
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 11
+  packedWidth: 149
+  textureIndex: 0
+  x: 163
+  y: 823
 - name: assets/app-ground/ground_bump_3.png
   offsetX: 3
   offsetY: 15
@@ -1699,6 +1709,16 @@ regions:
   textureIndex: 0
   x: 1729
   y: 791
+- name: assets/app-ground/ground_line_18.png
+  offsetX: 4
+  offsetY: 6
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 11
+  packedWidth: 146
+  textureIndex: 0
+  x: 695
+  y: 824
 - name: assets/app-trees/tree_regular_trunk_3.png
   offsetX: 122
   offsetY: 251
@@ -1739,6 +1759,16 @@ regions:
   textureIndex: 0
   x: 1180
   y: 790
+- name: assets/app-ground/ground_line_16.png
+  offsetX: 2
+  offsetY: 8
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 10
+  packedWidth: 151
+  textureIndex: 0
+  x: 1290
+  y: 826
 - name: assets/app-ground/ground_bump_2.png
   offsetX: 1
   offsetY: 17
@@ -1770,10 +1800,10 @@ regions:
   x: 728
   y: 775
 - name: assets/app-ground/ground_line_14.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 17
-  originalWidth: 72
+  offsetX: 42
+  offsetY: 4
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 17
   packedWidth: 72
   textureIndex: 0
@@ -1810,10 +1840,10 @@ regions:
   x: 1857
   y: 686
 - name: assets/app-ground/ground_line_13.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 11
-  originalWidth: 99
+  offsetX: 28
+  offsetY: 7
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 11
   packedWidth: 99
   textureIndex: 0
@@ -1829,26 +1859,86 @@ regions:
   textureIndex: 0
   x: 1622
   y: 794
+- name: assets/app-ground/ground_line_22.png
+  offsetX: 6
+  offsetY: 11
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 7
+  packedWidth: 141
+  textureIndex: 0
+  x: 1069
+  y: 832
 - name: assets/app-ground/ground_line_5.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 13
-  originalWidth: 74
+  offsetX: 41
+  offsetY: 6
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 13
   packedWidth: 74
   textureIndex: 0
   x: 418
   y: 822
+- name: assets/app-ground/ground_line_23.png
+  offsetX: 23
+  offsetY: 9
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 8
+  packedWidth: 115
+  textureIndex: 0
+  x: 1500
+  y: 825
 - name: assets/app-ground/ground_line_11.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 13
-  originalWidth: 70
+  offsetX: 43
+  offsetY: 6
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 13
   packedWidth: 70
   textureIndex: 0
   x: 621
   y: 822
+- name: assets/app-ground/ground_line_19.png
+  offsetX: 23
+  offsetY: 7
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 8
+  packedWidth: 103
+  textureIndex: 0
+  x: 962
+  y: 826
+- name: assets/app-ground/ground_line_21.png
+  offsetX: 23
+  offsetY: 8
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 7
+  packedWidth: 113
+  textureIndex: 0
+  x: 845
+  y: 832
+- name: assets/app-ground/ground_line_24.png
+  offsetX: 25
+  offsetY: 11
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 7
+  packedWidth: 110
+  textureIndex: 0
+  x: 496
+  y: 837
+- name: assets/app-ground/ground_line_25.png
+  offsetX: 25
+  offsetY: 9
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 7
+  packedWidth: 109
+  textureIndex: 0
+  x: 1445
+  y: 837
 - name: assets/app-rural/rural_prop_fence_bar.png
   offsetX: 61
   offsetY: 57
@@ -1859,16 +1949,26 @@ regions:
   textureIndex: 0
   x: 1622
   y: 820
+- name: assets/app-ground/ground_line_20.png
+  offsetX: 46
+  offsetY: 10
+  originalHeight: 25
+  originalWidth: 157
+  packedHeight: 8
+  packedWidth: 80
+  textureIndex: 0
+  x: 1671
+  y: 826
 - name: assets/app-ground/ground_line_6.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 9
-  originalWidth: 63
+  offsetX: 46
+  offsetY: 8
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 9
   packedWidth: 63
   textureIndex: 0
-  x: 695
-  y: 822
+  x: 316
+  y: 823
 - name: assets/app-rural/rural_prop_trunk_chopped.png
   offsetX: 54
   offsetY: 52
@@ -1880,25 +1980,25 @@ regions:
   x: 281
   y: 779
 - name: assets/app-ground/ground_line_4.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 6
-  originalWidth: 66
+  offsetX: 45
+  offsetY: 9
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 6
   packedWidth: 66
   textureIndex: 0
-  x: 163
-  y: 823
+  x: 1214
+  y: 830
 - name: assets/app-ground/ground_line_9.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 5
-  originalWidth: 71
+  offsetX: 42
+  offsetY: 10
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 5
   packedWidth: 71
   textureIndex: 0
-  x: 278
-  y: 823
+  x: 1848
+  y: 837
 - name: assets/app-rural/rural_prop_fence_post.png
   offsetX: 56
   offsetY: 53
@@ -1910,45 +2010,45 @@ regions:
   x: 304
   y: 779
 - name: assets/app-ground/ground_line_8.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 5
-  originalWidth: 65
+  offsetX: 45
+  offsetY: 10
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 5
   packedWidth: 65
   textureIndex: 0
-  x: 762
-  y: 824
+  x: 1923
+  y: 837
 - name: assets/app-ground/ground_line_7.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 5
-  originalWidth: 53
+  offsetX: 51
+  offsetY: 10
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 5
   packedWidth: 53
   textureIndex: 0
-  x: 353
-  y: 823
+  x: 361
+  y: 836
 - name: assets/app-ground/ground_line_3.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 6
-  originalWidth: 41
+  offsetX: 57
+  offsetY: 9
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 6
   packedWidth: 41
   textureIndex: 0
-  x: 233
-  y: 823
+  x: 316
+  y: 836
 - name: assets/app-ground/ground_line_2.png
-  offsetX: 0
-  offsetY: 0
-  originalHeight: 4
-  originalWidth: 33
+  offsetX: 61
+  offsetY: 10
+  originalHeight: 25
+  originalWidth: 157
   packedHeight: 4
   packedWidth: 33
   textureIndex: 0
-  x: 831
-  y: 824
+  x: 1558
+  y: 837
 textures:
 - file: medieval-pack_0.png
   height: 1024

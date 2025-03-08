@@ -14,6 +14,8 @@ public class MapTokenCastleBlock extends MapToken {
             "assets/app-castles/castle-tower-block_5.png",
             "assets/app-castles/castle-tower-block_6.png",
             "assets/app-castles/castle-tower-block_16.png",
+            "assets/app-castles/castle-tower-block_17.png",
+            "assets/app-castles/castle-tower-block_18.png",
     };
 
     public static final String[] regionsTowerShort = {
@@ -26,6 +28,9 @@ public class MapTokenCastleBlock extends MapToken {
             "assets/app-castles/castle-tower-block_13.png",
             "assets/app-castles/castle-tower-block_14.png",
             "assets/app-castles/castle-tower-block_15.png",
+            "assets/app-castles/castle-tower-block_19.png",
+            "assets/app-castles/castle-tower-block_20.png",
+            "assets/app-castles/castle-tower-block_21.png",
     };
 
     public static final String[] regionsBuildingTallLeft = {

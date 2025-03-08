@@ -12,7 +12,7 @@ uniform int n;
 layout (location = 0) out vec4 out_color;
 
 void main() {
-    vec4 outlineColor = vec4(0.204, 0.184, 0.114, 1.0);
+    vec4 outlineColor = vec4(0.5176, 0.4392, 0.2863, 0.6);
     vec4 texColor = texture(u_texture, uv);
 
     // If the current pixel is not transparent, render normally
@@ -24,23 +24,6 @@ void main() {
     vec2 size = textureSize(u_texture, 0);
     float texelWidth = 1.0 / size.x;
     float texelHeight = 1.0 / size.y;
-
-//    // Sample neighboring pixels
-//    float left   = texture(u_texture, uv + vec2(texelWidth, 0)).a;
-//    float right  = texture(u_texture, uv + vec2(-texelWidth, 0)).a;
-//    float top    = texture(u_texture, uv + vec2(0, texelHeight)).a;
-//    float bottom = texture(u_texture, uv + vec2(0, -texelHeight)).a;
-//
-//    // If any neighbor is opaque, draw outline
-//    if (left > 0.1 || right > 0.1 || top > 0.1 || bottom > 0.1) {
-//        out_color = outlineColor;
-//    } else {
-//        out_color = texColor;  // Keep it transparent
-//    }
-
-
-
-
 
     // Loop over the n x n neighborhood
     //int n = 8;
