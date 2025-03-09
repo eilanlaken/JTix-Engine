@@ -1,12 +1,11 @@
 package com.heavybox.jtix.zzz;
 
-@Deprecated
-public class CommandMapTokenCreateHouse extends Command {
+public class CommandMapTokenCreateVillageHouse extends Command {
 
-    protected final MapTokenHouse.HouseType type;
+    protected final MapTokenVillageHouse.HouseType type;
     public final int baseIndex;
 
-    public CommandMapTokenCreateHouse(MapTokenHouse.HouseType type, int baseIndex) {
+    public CommandMapTokenCreateVillageHouse(MapTokenVillageHouse.HouseType type, int baseIndex) {
         this.type = type;
         this.baseIndex = baseIndex;
     }

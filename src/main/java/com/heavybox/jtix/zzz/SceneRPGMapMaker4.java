@@ -20,11 +20,8 @@ import java.util.Comparator;
 
 public class SceneRPGMapMaker4 implements Scene {
 
-    private final FrameBuffer frameBufferOutlinedObjects = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
-
     private static final Vector3 screen = new Vector3();
     private final Renderer2D renderer2D = new Renderer2D();
-    private Shader outlineShader;
     /* ui */
     private final Widget toolbarWidget = new Widget();
     private final Widget menuBarWidget = new Widget();
@@ -35,7 +32,6 @@ public class SceneRPGMapMaker4 implements Scene {
     private Texture terrainWater;
     private Texture terrainGrass;
     private Texture terrainRoad;
-    private Texture terrainWheat;
     private Texture terrainWheatBase;
     private Texture terrainWheatLines;
 
@@ -44,7 +40,8 @@ public class SceneRPGMapMaker4 implements Scene {
     private final ToolTerrainPaint toolTerrainPaint = new ToolTerrainPaint();
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
     private ToolCastleGenerator toolCastleGenerator;
-    private final ToolStampHouses toolStampHouses = new ToolStampHouses();
+    private ToolVillageGenerator toolVillageGenerator;
+    //private final ToolStampHouses toolStampHouses = new ToolStampHouses();
     private final ToolStampProps toolStampProps = new ToolStampProps();
     private ToolTerrainDeform toolTerrainDeform;
     private ToolWheatField toolWheatField;
@@ -117,38 +114,58 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-clouds/clouds_5.png",
                     "assets/app-clouds/clouds_6.png",
 
-                    "assets/app-rural/rural_house_1.png",
-                    "assets/app-rural/rural_house_2.png",
-                    "assets/app-rural/rural_house_3.png",
-                    "assets/app-rural/rural_house_4.png",
-                    "assets/app-rural/rural_house_5.png",
-                    "assets/app-rural/rural_house_6.png",
-                    "assets/app-rural/rural_house_7.png",
-                    "assets/app-rural/rural_house_8.png",
-                    "assets/app-rural/rural_house_9.png",
-                    "assets/app-rural/rural_house_10.png",
-                    "assets/app-rural/rural_house_11.png",
-                    "assets/app-rural/rural_house_12.png",
-                    "assets/app-rural/rural_house_13.png",
-                    "assets/app-rural/rural_house_14.png",
-                    "assets/app-rural/rural_house_15.png",
-                    "assets/app-rural/rural_house_16.png",
-                    "assets/app-rural/rural_house_17.png",
-                    "assets/app-rural/rural_house_18.png",
-                    "assets/app-rural/rural_house_19.png",
-                    "assets/app-rural/rural_house_20.png",
-                    "assets/app-rural/rural_house_21.png",
-                    "assets/app-rural/rural_house_22.png",
-                    "assets/app-rural/rural_house_23.png",
-                    "assets/app-rural/rural_house_24.png",
-                    "assets/app-rural/rural_house_25.png",
-                    "assets/app-rural/rural_prop_fence_bar.png",
-                    "assets/app-rural/rural_prop_fence_post.png",
-                    "assets/app-rural/rural_prop_log_1.png",
-                    "assets/app-rural/rural_prop_log_2.png",
-                    "assets/app-rural/rural_prop_log_3.png",
-                    "assets/app-rural/rural_prop_trunk_chopped.png",
-                    "assets/app-rural/rural_prop_windmill.png",
+                    "assets/app-village/house_0.png",
+                    "assets/app-village/house_1.png",
+                    "assets/app-village/house_2.png",
+                    "assets/app-village/house_3.png",
+                    "assets/app-village/house_4.png",
+                    "assets/app-village/house_5.png",
+                    "assets/app-village/house_6.png",
+                    "assets/app-village/house_7.png",
+                    "assets/app-village/house_8.png",
+                    "assets/app-village/house_9.png",
+                    "assets/app-village/house_10.png",
+                    "assets/app-village/house_11.png",
+                    "assets/app-village/house_12.png",
+                    "assets/app-village/house_13.png",
+                    "assets/app-village/house_14.png",
+                    "assets/app-village/house_15.png",
+                    "assets/app-village/house_16.png",
+                    "assets/app-village/house_17.png",
+                    "assets/app-village/house_18.png",
+                    "assets/app-village/house_19.png",
+                    "assets/app-village/house_20.png",
+                    "assets/app-village/house_21.png",
+                    "assets/app-village/house_22.png",
+                    "assets/app-village/house_23.png",
+                    "assets/app-village/house_24.png",
+                    "assets/app-village/house_25.png",
+                    "assets/app-village/house_26.png",
+                    "assets/app-village/house_27.png",
+                    "assets/app-village/house_28.png",
+                    "assets/app-village/house_29.png",
+                    "assets/app-village/house_30.png",
+                    "assets/app-village/house_31.png",
+                    "assets/app-village/house_32.png",
+                    "assets/app-village/house_33.png",
+                    "assets/app-village/house_34.png",
+                    "assets/app-village/house_35.png",
+                    "assets/app-village/house_36.png",
+                    "assets/app-village/house_37.png",
+                    "assets/app-village/house_38.png",
+                    "assets/app-village/house_39.png",
+                    "assets/app-village/house_40.png",
+                    "assets/app-village/house_41.png",
+                    "assets/app-village/house_42.png",
+                    "assets/app-village/house_43.png",
+                    "assets/app-village/prop_fence_bar.png",
+                    "assets/app-village/prop_fence_post.png",
+                    "assets/app-village/prop_log_1.png",
+                    "assets/app-village/prop_log_2.png",
+                    "assets/app-village/prop_log_3.png",
+                    "assets/app-village/prop_trunk_chopped.png",
+                    "assets/app-village/prop_windmill_1.png",
+                    "assets/app-village/prop_windmill_2.png",
 
                     "assets/app-city/city-house_1.png",
                     "assets/app-city/city-house_2.png",
@@ -290,15 +307,17 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-ground/ground_line_24.png",
                     "assets/app-ground/ground_line_25.png"
             );
-        } catch (Exception ignored) {} // PACK MEDIEVAL MAP PROPS
+        } catch (Exception e) {
+            e.printStackTrace();
+        } // PACK MEDIEVAL MAP PROPS
 
         // TODO: make the program CRASH and not thread-locked when file can't load.
         Assets.loadTexture("assets/app-terrain/grass-1024.png");
         Assets.loadTexture("assets/app-terrain/water-1024.png");
         Assets.loadTexture("assets/app-terrain/road-1024.png");
         Assets.loadTexture("assets/app-terrain/wheat-field-1024.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
-        //Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
-        //Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
@@ -313,12 +332,9 @@ public class SceneRPGMapMaker4 implements Scene {
         terrainWater = Assets.get("assets/app-terrain/water-1024.png");
         terrainGrass = Assets.get("assets/app-terrain/grass-1024.png");
         terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
-        terrainWheat = Assets.get("assets/app-terrain/wheat-field-1024.png");
+        terrainWheatBase = Assets.get("assets/app-terrain/wheat-field-base.png");
+        terrainWheatLines = Assets.get("assets/app-terrain/wheat-field-lines.png");
 
-        //terrainWheatBase = Assets.get("assets/app-terrain/wheat-field-base.png");
-        //terrainWheatLines = Assets.get("assets/app-terrain/wheat-field-lines.png");
-
-        outlineShader = Assets.get("outline");
     }
 
     @Override
@@ -356,6 +372,8 @@ public class SceneRPGMapMaker4 implements Scene {
         //Graphics.setContinuousRendering(false);
         //Graphics.setTargetFps(30);
         toolCastleGenerator = new ToolCastleGenerator(props);
+        toolVillageGenerator = new ToolVillageGenerator(props);
+
         toolTerrainDeform = new ToolTerrainDeform(props);
         toolWheatField = new ToolWheatField();
         selectTool(toolCastleGenerator);
@@ -393,7 +411,7 @@ public class SceneRPGMapMaker4 implements Scene {
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
             selectTool(toolCastleGenerator);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_4)) {
-            selectTool(toolStampHouses);
+            selectTool(toolVillageGenerator);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_5)) {
             selectTool(toolStampProps);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_6)) {
@@ -409,11 +427,9 @@ public class SceneRPGMapMaker4 implements Scene {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 toolTerrainPaint.mask = CommandTerrainPaint.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-                toolTerrainPaint.mask = CommandTerrainPaint.GRASS_MASK; // TODO: delete. cannot draw grass, only remove other terrain.
+                toolTerrainPaint.mask = CommandTerrainPaint.GRASS_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
                 toolTerrainPaint.mask = CommandTerrainPaint.ROAD_MASK;
-            } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.R)) {
-                toolTerrainPaint.mask = CommandTerrainPaint.WHEAT_MASK;
             }
 
             if (leftJustPressed || leftPressedAndMoved) {
@@ -540,35 +556,77 @@ public class SceneRPGMapMaker4 implements Scene {
             }
         }
 
-        if (toolStampHouses.active) {
+        if (toolVillageGenerator.active) {
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_SHIFT)) { // hack undo
+                toolVillageGenerator.toggleMode();
+            }
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.TAB)) { // hack undo
+                if (!mapTokens.isEmpty()) mapTokens.removeValue(toolVillageGenerator.lastCreated, true);
+            }
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ENTER)) {
+                Array<MapToken> blocks = new Array<>();
+                Vector2 cm = new Vector2();
+                for (MapToken token : mapTokens) { // TODO: include props as well.
+                    if (!(token instanceof MapTokenVillageHouse)) continue;
+                    MapTokenVillageHouse block = (MapTokenVillageHouse) token;
+                    blocks.add(block);
+                    cm.add(block.x, block.y);
+                }
+                if (!blocks.isEmpty()) {
+                    cm.scl(1f / blocks.size);
+                    blocks.sort(Comparator.comparingInt(o -> -(int) o.y));
+                    System.out.println("<combination>");
+                    for (MapToken block : blocks) {
+                        System.out.println("\t" + "<object type=\"" + block.type.ordinal() + "\" x=\"" + (block.x - cm.x) + "\" y=\"" + (block.y - cm.y) + "\"/>");
+                    }
+                    System.out.println("</combination>");
+                }
+            }
             if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-                toolStampHouses.selectRandom();
+                toolVillageGenerator.selectNext();
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
                 float y = screen.y;
 
-                MapTokenHouse.HouseType type = toolStampHouses.currentType;
-                int baseIndex = toolStampHouses.index;
+                if (toolVillageGenerator.mode == ToolVillageGenerator.Mode.SINGLES) {
+                    MapTokenVillageHouse.HouseType type = toolVillageGenerator.currentType;
+                    int baseIndex = toolVillageGenerator.baseIndex;
 
-                CommandMapTokenCreateHouse addHouseVillage = new CommandMapTokenCreateHouse(type, baseIndex);
-                addHouseVillage.x = x;
-                addHouseVillage.y = y;
-                float randomScale = MathUtils.randomUniformFloat(-toolStampHouses.randomScaleRange, toolStampHouses.randomScaleRange);
-                addHouseVillage.sclX = toolStampHouses.scale + randomScale;
-                addHouseVillage.sclY = toolStampHouses.scale + randomScale;
-                addHouseVillage.deg = MathUtils.randomUniformFloat(-12,12);
-                addHouseVillage.isAnchor = leftJustPressed;
+                    CommandMapTokenCreateVillageHouse addVillageHouse = new CommandMapTokenCreateVillageHouse(type, baseIndex);
+                    addVillageHouse.x = x;
+                    addVillageHouse.y = y;
+                    addVillageHouse.sclX = toolCastleGenerator.scale;
+                    if (addVillageHouse.type.isRight()) addVillageHouse.sclX *= -1;
+                    addVillageHouse.sclY = toolCastleGenerator.scale;
+                    addVillageHouse.isAnchor = leftJustPressed;
+                    addVillageHouse.deg = MathUtils.randomUniformFloat(-3, 3);
+                    commandHistory.add(addVillageHouse);
 
+                    // TODO: see if and how to use command.execute().
+                    MapTokenVillageHouse block = new MapTokenVillageHouse(props, type, addVillageHouse.baseIndex);
+                    block.setTransform(addVillageHouse);
 
-                commandHistory.add(addHouseVillage);
-
-                // TODO: see if and how to use command.execute().
-                MapTokenHouse house = new MapTokenHouse(props, type, addHouseVillage.baseIndex);
-                house.setTransform(addHouseVillage);
-                mapTokens.add(house);
-
-                toolStampHouses.selectRandom();
+                    mapTokens.add(block);
+                    toolVillageGenerator.lastCreated = block;
+                } else {
+//                    ToolCastleGenerator.BlockUnit[] blocks = toolCastleGenerator.getCombination();
+//                    for (ToolCastleGenerator.BlockUnit b : blocks) {
+//                        CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(b.type, 0);
+//                        addCastleBlock.x = x + b.offsetX;
+//                        addCastleBlock.y = y + b.offsetY;
+//                        addCastleBlock.sclX = toolCastleGenerator.scale;
+//                        if (b.type.isRight()) addCastleBlock.sclX *= -1;
+//                        addCastleBlock.sclY = toolCastleGenerator.scale;
+//                        addCastleBlock.deg = MathUtils.randomUniformFloat(-3, 3);
+//                        commandHistory.add(addCastleBlock);
+//
+//                        MapTokenCastleBlock block = new MapTokenCastleBlock(props, b.type, MathUtils.randomUniformInt(0, 100));
+//                        block.setTransform(addCastleBlock);
+//
+//                        mapTokens.add(block);
+//                    }
+                }
             }
         }
 
@@ -600,33 +658,7 @@ public class SceneRPGMapMaker4 implements Scene {
             }
         }
 
-        if (toolStampProps.active) {
-            if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-                toolStampProps.selectNext();
-            }
-            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-                float x = screen.x;
-                float y = screen.y;
 
-                int baseIndex = toolStampProps.index;
-
-                CommandMapTokenCreateProp addVillageProp = new CommandMapTokenCreateProp(baseIndex);
-                addVillageProp.x = x;
-                addVillageProp.y = y;
-                addVillageProp.sclX = toolStampProps.scale;
-                addVillageProp.sclY = toolStampProps.scale;
-                addVillageProp.deg = 0;
-                addVillageProp.isAnchor = true;
-
-
-                commandHistory.add(addVillageProp);
-
-                // TODO: see if and how to use command.execute().
-                MapTokenRuralProp prop = new MapTokenRuralProp(props, addVillageProp.baseIndex);
-                prop.setTransform(addVillageProp);
-                mapTokens.add(prop);
-            }
-        }
 
         if (toolTerrainDeform.active) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_SHIFT)) {
@@ -689,16 +721,6 @@ public class SceneRPGMapMaker4 implements Scene {
             }
         }
 
-//        FrameBufferBinder.bind(frameBufferOutlinedObjects);
-//        renderer2D.begin();
-//        GL11.glClearColor(0.0f,0.0f,0.0f,0);
-//        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT); // should probably clear the stencil
-//        for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
-//            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
-//            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
-//        }
-//        renderer2D.end();
-
         // render scene
         FrameBufferBinder.bind(null);
         GL11.glClearColor(0.01f,0.01f,0.01f,1);
@@ -725,10 +747,6 @@ public class SceneRPGMapMaker4 implements Scene {
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
-
-        renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.WHEAT_MASK);
-        renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
-
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.GRASS_MASK);
         commandsTerrainDeform.sort(Comparator.comparing((CommandTerrainDeform t) -> t.type == CommandTerrainDeform.GroundType.LINE ? 0 : 1)
                 .thenComparingInt(t -> -(int) t.y));
@@ -739,12 +757,12 @@ public class SceneRPGMapMaker4 implements Scene {
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY);
         }
 
-//        // draw wheat fields here. they are masked by the ground.
-//        renderer2D.setColor(1,1,1,1);
-//        renderer2D.setShader(outlineShader);
-//        renderer2D.setShaderAttribute("n", 4); // outlining does not work here because it outlines the TEXTURE, not the polygon.
-//        renderer2D.drawTexture(frameBufferOutlinedObjects.getColorAttachment(), 0, 0, 0, 1, -1); // TODO: why is it inverted?
-//        renderer2D.setShader(null);
+        // draw wheat fields here. they are masked by the ground.
+        renderer2D.setColor(1,1,1,1);
+        for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
+            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
+            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
+        }
         renderer2D.disableMasking();
 
         renderer2D.setColor(Color.WHITE);
@@ -831,6 +849,8 @@ public class SceneRPGMapMaker4 implements Scene {
     public void windowResized(int width, int height) {
         camera.viewportWidth = Graphics.getWindowWidth();
         camera.viewportHeight = Graphics.getWindowHeight();
+
+        // TODO: resize frame buffer
     }
 
 }

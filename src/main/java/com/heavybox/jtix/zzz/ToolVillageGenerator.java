@@ -7,15 +7,13 @@ import com.heavybox.jtix.graphics.TextureRegion;
 import com.heavybox.jtix.math.MathUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import java.io.File;
 
-public class ToolCastleGenerator extends Tool {
+public class ToolVillageGenerator extends Tool {
 
     private static final Array<Combination> combinations = new Array<>(true, 10);
     static {
@@ -34,7 +32,7 @@ public class ToolCastleGenerator extends Tool {
                 combination.blockUnits = new BlockUnit[blocks.getLength()];
                 for (int j = 0; j < blocks.getLength(); j++) {
                     Element block = (Element) blocks.item(j);
-                    MapTokenCastleBlock.BlockType type = MapTokenCastleBlock.BlockType.values()[Integer.parseInt(block.getAttribute("type"))];
+                    MapTokenVillageHouse.HouseType type = MapTokenVillageHouse.HouseType.values()[Integer.parseInt(block.getAttribute("type"))];
                     float x = Float.parseFloat(block.getAttribute("x"));
                     float y = Float.parseFloat(block.getAttribute("y"));
                     combination.blockUnits[j] = new BlockUnit();
@@ -45,28 +43,28 @@ public class ToolCastleGenerator extends Tool {
                 combinations.add(combination);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
 
     }
 
-    public MapTokenCastleBlock lastCreated;
+    public MapTokenVillageHouse lastCreated;
 
-    private static final MapTokenCastleBlock.BlockType[] allTypes = MapTokenCastleBlock.BlockType.values();
+    private static final MapTokenVillageHouse.HouseType[] allTypes = MapTokenVillageHouse.HouseType.values();
     private final TexturePack props;
 
     //public float scale = 0.25f;
     public float scale = 1;
-    public MapTokenCastleBlock.BlockType currentType = allTypes[0]; // TOWER_TALL, TOWER_SHORT, BUILDING_TALL_LEFT, ...
+    public MapTokenVillageHouse.HouseType currentType = allTypes[0];
     public int baseIndex = 0;
-    public int comboIndex = MathUtils.randomUniformInt(0, combinations.size);
+    public int comboIndex = 0;//MathUtils.randomUniformInt(0, combinations.size);
     public TextureRegion region;
 
     public Mode mode = Mode.SINGLES;
 
-    public ToolCastleGenerator(TexturePack props) {
+    public ToolVillageGenerator(TexturePack props) {
         this.props = props;
-        region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
+        region = MapTokenVillageHouse.HouseType.getRegion(props, currentType, baseIndex);
 
         comboIndex = 0;
 
@@ -76,7 +74,7 @@ public class ToolCastleGenerator extends Tool {
         if (mode == Mode.SINGLES) {
             int nextIndex = (currentType.ordinal() + 1) % allTypes.length;
             currentType = allTypes[nextIndex];
-            region = MapTokenCastleBlock.BlockType.getRegion(props, currentType, baseIndex);
+            region = MapTokenVillageHouse.HouseType.getRegion(props, currentType, baseIndex);
         } else {
             comboIndex++;
             comboIndex %= combinations.size;
@@ -106,7 +104,7 @@ public class ToolCastleGenerator extends Tool {
             BlockUnit[] blocks = combination.blockUnits;
             renderer2D.setColor(1,1,1,0.5f);
             for (BlockUnit b : blocks) {
-                TextureRegion blockRegion = MapTokenCastleBlock.BlockType.getRegion(props, b.type, 0);
+                TextureRegion blockRegion = MapTokenVillageHouse.HouseType.getRegion(props, b.type, 0);
                 float worldX = x + b.offsetX;
                 float worldY = y + b.offsetY;
                 float realSclX = scale;
@@ -119,7 +117,7 @@ public class ToolCastleGenerator extends Tool {
 
     public static final class BlockUnit {
 
-        MapTokenCastleBlock.BlockType type;
+        MapTokenVillageHouse.HouseType type;
         float offsetX;
         float offsetY;
 

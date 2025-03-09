@@ -295,6 +295,7 @@ public class SceneRPGMapMaker3 implements Scene {
         Assets.loadTexture("assets/app-terrain/grass-1024.png");
         Assets.loadTexture("assets/app-terrain/water-1024.png");
         Assets.loadTexture("assets/app-terrain/road-1024.png");
+        Assets.loadTexture("assets/app-terrain/wheat-field-1024.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
@@ -731,10 +732,10 @@ public class SceneRPGMapMaker3 implements Scene {
 
         // draw wheat fields here. they are masked by the ground.
         renderer2D.setColor(1,1,1,1);
-        renderer2D.setShader(outlineShader);
-        renderer2D.setShaderAttribute("n", 4); // outlining does not work here because it outlines the TEXTURE, not the polygon.
+        //renderer2D.setShader(outlineShader);
+        //renderer2D.setShaderAttribute("n", 4); // outlining does not work here because it outlines the TEXTURE, not the polygon.
         renderer2D.drawTexture(frameBufferOutlinedObjects.getColorAttachment(), 0, 0, 0, 1, -1); // TODO: why is it inverted?
-        renderer2D.setShader(null);
+        //renderer2D.setShader(null);
         renderer2D.disableMasking();
 
         renderer2D.setColor(Color.WHITE);
@@ -821,6 +822,8 @@ public class SceneRPGMapMaker3 implements Scene {
     public void windowResized(int width, int height) {
         camera.viewportWidth = Graphics.getWindowWidth();
         camera.viewportHeight = Graphics.getWindowHeight();
+
+        // TODO: resize frame buffer
     }
 
 }

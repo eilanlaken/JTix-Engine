@@ -5,6 +5,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.graphics.TextureRegion;
 
+@Deprecated
 public class MapTokenHouse extends MapToken {
 
     public static final String[] regionsSmallVillageHouses = {

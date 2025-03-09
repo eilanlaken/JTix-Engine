@@ -4,6 +4,7 @@ import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.math.MathUtils;
 
+@Deprecated
 public class ToolStampHouses extends Tool {
 
     private static final MapTokenHouse.HouseType[] allTypes = MapTokenHouse.HouseType.values();

@@ -1,5 +1,6 @@
 package com.heavybox.jtix.zzz;
 
+@Deprecated
 public class CommandMapTokenCreateProp extends Command {
 
     public final int baseIndex;
