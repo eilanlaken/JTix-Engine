@@ -10,7 +10,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 public class ToolTerrainPaint extends Tool {
 
     public int mask = CommandTerrainPaint.GRASS_MASK;
-    public float r = 6;
+    public float r = 28;
 
     public ToolTerrainPaint() {
     }

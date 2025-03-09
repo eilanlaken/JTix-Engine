@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Comparator;
 
-public class SceneRPGMapMaker3 implements Scene {
+public class SceneRPGMapMaker4 implements Scene {
 
     private final FrameBuffer frameBufferOutlinedObjects = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
 
@@ -35,6 +35,7 @@ public class SceneRPGMapMaker3 implements Scene {
     private Texture terrainWater;
     private Texture terrainGrass;
     private Texture terrainRoad;
+    private Texture terrainWheat;
     private Texture terrainWheatBase;
     private Texture terrainWheatLines;
 
@@ -295,8 +296,9 @@ public class SceneRPGMapMaker3 implements Scene {
         Assets.loadTexture("assets/app-terrain/grass-1024.png");
         Assets.loadTexture("assets/app-terrain/water-1024.png");
         Assets.loadTexture("assets/app-terrain/road-1024.png");
-        Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
-        Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        Assets.loadTexture("assets/app-terrain/wheat-field-1024.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        //Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        //Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
         Assets.loadFont("assets/fonts/OpenSans-Regular.ttf");
         Assets.loadTexturePack("assets/app-texture-packs/icons.yml");
@@ -311,8 +313,10 @@ public class SceneRPGMapMaker3 implements Scene {
         terrainWater = Assets.get("assets/app-terrain/water-1024.png");
         terrainGrass = Assets.get("assets/app-terrain/grass-1024.png");
         terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
-        terrainWheatBase = Assets.get("assets/app-terrain/wheat-field-base.png");
-        terrainWheatLines = Assets.get("assets/app-terrain/wheat-field-lines.png");
+        terrainWheat = Assets.get("assets/app-terrain/wheat-field-1024.png");
+
+        //terrainWheatBase = Assets.get("assets/app-terrain/wheat-field-base.png");
+        //terrainWheatLines = Assets.get("assets/app-terrain/wheat-field-lines.png");
 
         outlineShader = Assets.get("outline");
     }
@@ -405,9 +409,11 @@ public class SceneRPGMapMaker3 implements Scene {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
                 toolTerrainPaint.mask = CommandTerrainPaint.WATER_MASK;
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-                toolTerrainPaint.mask = CommandTerrainPaint.GRASS_MASK;
+                toolTerrainPaint.mask = CommandTerrainPaint.GRASS_MASK; // TODO: delete. cannot draw grass, only remove other terrain.
             } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
                 toolTerrainPaint.mask = CommandTerrainPaint.ROAD_MASK;
+            } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.R)) {
+                toolTerrainPaint.mask = CommandTerrainPaint.WHEAT_MASK;
             }
 
             if (leftJustPressed || leftPressedAndMoved) {
@@ -683,15 +689,15 @@ public class SceneRPGMapMaker3 implements Scene {
             }
         }
 
-        FrameBufferBinder.bind(frameBufferOutlinedObjects);
-        renderer2D.begin();
-        GL11.glClearColor(0.0f,0.0f,0.0f,0);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT); // should probably clear the stencil
-        for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
-            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
-            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
-        }
-        renderer2D.end();
+//        FrameBufferBinder.bind(frameBufferOutlinedObjects);
+//        renderer2D.begin();
+//        GL11.glClearColor(0.0f,0.0f,0.0f,0);
+//        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT); // should probably clear the stencil
+//        for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
+//            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
+//            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
+//        }
+//        renderer2D.end();
 
         // render scene
         FrameBufferBinder.bind(null);
@@ -719,6 +725,10 @@ public class SceneRPGMapMaker3 implements Scene {
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.ROAD_MASK);
         renderer2D.drawTexture(terrainRoad, 0, 0, 0, 1, 1);
+
+        renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.WHEAT_MASK);
+        renderer2D.drawTexture(terrainWheat, 0, 0, 0, 1, 1);
+
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.GRASS_MASK);
         commandsTerrainDeform.sort(Comparator.comparing((CommandTerrainDeform t) -> t.type == CommandTerrainDeform.GroundType.LINE ? 0 : 1)
                 .thenComparingInt(t -> -(int) t.y));
@@ -729,12 +739,12 @@ public class SceneRPGMapMaker3 implements Scene {
             renderer2D.drawTextureRegion(deform.region, deform.x, deform.y - 1, deform.deg, deform.sclX, deform.sclY);
         }
 
-        // draw wheat fields here. they are masked by the ground.
-        renderer2D.setColor(1,1,1,1);
-        renderer2D.setShader(outlineShader);
-        renderer2D.setShaderAttribute("n", 4); // outlining does not work here because it outlines the TEXTURE, not the polygon.
-        renderer2D.drawTexture(frameBufferOutlinedObjects.getColorAttachment(), 0, 0, 0, 1, -1); // TODO: why is it inverted?
-        renderer2D.setShader(null);
+//        // draw wheat fields here. they are masked by the ground.
+//        renderer2D.setColor(1,1,1,1);
+//        renderer2D.setShader(outlineShader);
+//        renderer2D.setShaderAttribute("n", 4); // outlining does not work here because it outlines the TEXTURE, not the polygon.
+//        renderer2D.drawTexture(frameBufferOutlinedObjects.getColorAttachment(), 0, 0, 0, 1, -1); // TODO: why is it inverted?
+//        renderer2D.setShader(null);
         renderer2D.disableMasking();
 
         renderer2D.setColor(Color.WHITE);

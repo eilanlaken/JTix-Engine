@@ -16,9 +16,9 @@ public class ToolWheatField extends Tool {
         currentPolygon.add(100,-20);
         currentPolygon.add(100,20);
         float tint = MathUtils.randomUniformFloat(-0.15f,0);
-        currentColor.r = 1 + tint;
-        currentColor.g = 1 + tint;
-        currentColor.b = 1 + tint;
+//        currentColor.r = 1 + tint;
+//        currentColor.g = 1 + tint;
+//        currentColor.b = 1 + tint;
     }
 
     @Override

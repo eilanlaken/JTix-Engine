@@ -5,6 +5,7 @@ import com.heavybox.jtix.graphics.Color;
 
 public class CommandTerrainDrawWheat extends Command {
 
+    public float linesAngle = 30;
     public Color color;
     public float[] polygon;
 
