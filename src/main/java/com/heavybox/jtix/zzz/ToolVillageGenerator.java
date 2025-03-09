@@ -53,8 +53,8 @@ public class ToolVillageGenerator extends Tool {
     private static final MapTokenVillageHouse.HouseType[] allTypes = MapTokenVillageHouse.HouseType.values();
     private final TexturePack props;
 
-    //public float scale = 0.25f;
-    public float scale = 1;
+    public float scale = 0.6f;
+    //public float scale = 1;
     public MapTokenVillageHouse.HouseType currentType = allTypes[0];
     public int baseIndex = 0;
     public int comboIndex = 0;//MathUtils.randomUniformInt(0, combinations.size);

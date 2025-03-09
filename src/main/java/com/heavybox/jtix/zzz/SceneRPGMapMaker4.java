@@ -41,7 +41,6 @@ public class SceneRPGMapMaker4 implements Scene {
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
     private ToolCastleGenerator toolCastleGenerator;
     private ToolVillageGenerator toolVillageGenerator;
-    //private final ToolStampHouses toolStampHouses = new ToolStampHouses();
     private final ToolStampProps toolStampProps = new ToolStampProps();
     private ToolTerrainDeform toolTerrainDeform;
     private ToolWheatField toolWheatField;
@@ -596,9 +595,9 @@ public class SceneRPGMapMaker4 implements Scene {
                     CommandMapTokenCreateVillageHouse addVillageHouse = new CommandMapTokenCreateVillageHouse(type, baseIndex);
                     addVillageHouse.x = x;
                     addVillageHouse.y = y;
-                    addVillageHouse.sclX = toolCastleGenerator.scale;
+                    addVillageHouse.sclX = toolVillageGenerator.scale;
                     if (addVillageHouse.type.isRight()) addVillageHouse.sclX *= -1;
-                    addVillageHouse.sclY = toolCastleGenerator.scale;
+                    addVillageHouse.sclY = toolVillageGenerator.scale;
                     addVillageHouse.isAnchor = leftJustPressed;
                     addVillageHouse.deg = MathUtils.randomUniformFloat(-3, 3);
                     commandHistory.add(addVillageHouse);
