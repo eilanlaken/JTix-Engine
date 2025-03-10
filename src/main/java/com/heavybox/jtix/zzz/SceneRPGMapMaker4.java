@@ -41,7 +41,7 @@ public class SceneRPGMapMaker4 implements Scene {
     private final ToolBrushTrees toolBrushTrees = new ToolBrushTrees();
     private ToolCastleGenerator toolCastleGenerator;
     private ToolVillageGenerator toolVillageGenerator;
-    private final ToolStampProps toolStampProps = new ToolStampProps();
+    private ToolCityGenerator toolCityGenerator;
     private ToolTerrainDeform toolTerrainDeform;
     private ToolWheatField toolWheatField;
 
@@ -157,47 +157,46 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-village/house_41.png",
                     "assets/app-village/house_42.png",
                     "assets/app-village/house_43.png",
+                    "assets/app-village/house_44.png", // windmill 1
+                    "assets/app-village/house_45.png", // windmill 2
                     "assets/app-village/prop_fence_bar.png",
                     "assets/app-village/prop_fence_post.png",
                     "assets/app-village/prop_log_1.png",
                     "assets/app-village/prop_log_2.png",
                     "assets/app-village/prop_log_3.png",
+                    "assets/app-village/prop_pile_1.png",
+                    "assets/app-village/prop_pile_2.png",
+                    "assets/app-village/prop_sack_of_flour.png",
                     "assets/app-village/prop_trunk_chopped.png",
-                    "assets/app-village/prop_windmill_1.png",
-                    "assets/app-village/prop_windmill_2.png",
 
-                    "assets/app-city/city-house_1.png",
-                    "assets/app-city/city-house_2.png",
-                    "assets/app-city/city-house_3.png",
-                    "assets/app-city/city-house_4.png",
-                    "assets/app-city/city-house_5.png",
-                    "assets/app-city/city-house_6.png",
-                    "assets/app-city/city-house_7.png",
-                    "assets/app-city/city-house_8.png",
-                    "assets/app-city/city-house_9.png",
-                    "assets/app-city/city-house_10.png",
-                    "assets/app-city/city-house_11.png",
-                    "assets/app-city/city-house_12.png",
-                    "assets/app-city/city-house_13.png",
-                    "assets/app-city/city-house_14.png",
-                    "assets/app-city/city-house_15.png",
-                    "assets/app-city/city-house_16.png",
-                    "assets/app-city/city-house_17.png",
-                    "assets/app-city/city-house_18.png",
-                    "assets/app-city/city-house_19.png",
-                    "assets/app-city/city-house_20.png",
-                    "assets/app-city/city-house_21.png",
-                    "assets/app-city/city-house_22.png",
-                    "assets/app-city/city-house_23.png",
-                    "assets/app-city/city-house_24.png",
-                    "assets/app-city/city-house_25.png",
-                    "assets/app-city/city-house_26.png",
-                    "assets/app-city/city-house_27.png",
-                    "assets/app-city/city-house_28.png",
-                    "assets/app-city/city-house_29.png",
-                    "assets/app-city/city-house_30.png",
-                    "assets/app-city/city-house_31.png",
-                    "assets/app-city/city-house_32.png",
+                    "assets/app-city/house_0.png",
+                    "assets/app-city/house_1.png",
+                    "assets/app-city/house_2.png",
+                    "assets/app-city/house_3.png",
+                    "assets/app-city/house_4.png",
+                    "assets/app-city/house_5.png",
+                    "assets/app-city/house_6.png",
+                    "assets/app-city/house_7.png",
+                    "assets/app-city/house_8.png",
+                    "assets/app-city/house_9.png",
+                    "assets/app-city/house_10.png",
+                    "assets/app-city/house_11.png",
+                    "assets/app-city/house_12.png",
+                    "assets/app-city/house_13.png",
+                    "assets/app-city/house_14.png",
+                    "assets/app-city/house_15.png",
+                    "assets/app-city/house_16.png",
+                    "assets/app-city/house_17.png",
+                    "assets/app-city/house_18.png",
+                    "assets/app-city/house_19.png",
+                    "assets/app-city/house_20.png",
+                    "assets/app-city/house_21.png",
+                    "assets/app-city/house_22.png",
+                    "assets/app-city/house_23.png",
+                    "assets/app-city/house_24.png",
+                    "assets/app-city/house_25.png",
+                    "assets/app-city/house_26.png",
+                    "assets/app-city/house_27.png",
 
                     "assets/app-castles/castle-building-block_1.png",
                     "assets/app-castles/castle-building-block_2.png",
@@ -372,6 +371,7 @@ public class SceneRPGMapMaker4 implements Scene {
         //Graphics.setTargetFps(30);
         toolCastleGenerator = new ToolCastleGenerator(props);
         toolVillageGenerator = new ToolVillageGenerator(props);
+        toolCityGenerator = new ToolCityGenerator(props);
 
         toolTerrainDeform = new ToolTerrainDeform(props);
         toolWheatField = new ToolWheatField();
@@ -388,13 +388,15 @@ public class SceneRPGMapMaker4 implements Scene {
 
         // update camera
         // CAMERA ZOOM
-        if (Input.mouse.getVerticalScroll() != 0) {
-            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
-        }
-        if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+//        if (Input.mouse.getVerticalScroll() != 0) {
+//            camera.zoom -= Input.mouse.getVerticalScroll() * 0.15f;
+//        }
+        if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && !Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL)) {
             camera.position.x -= 1.5f * Input.mouse.getXDelta();
             camera.position.y += 1.5f * Input.mouse.getYDelta();
             // TODO: set zoom limits
+        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL)) {
+            camera.zoom += Input.mouse.getYDelta() * 0.05f;
         }
         screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
@@ -412,11 +414,11 @@ public class SceneRPGMapMaker4 implements Scene {
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_4)) {
             selectTool(toolVillageGenerator);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_5)) {
-            selectTool(toolStampProps);
+            selectTool(toolCityGenerator);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_6)) {
-            selectTool(toolTerrainDeform);
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_7)) {
             selectTool(toolWheatField);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_7)) {
+            selectTool(toolTerrainDeform);
         }
 
 
@@ -566,8 +568,8 @@ public class SceneRPGMapMaker4 implements Scene {
                 Array<MapToken> blocks = new Array<>();
                 Vector2 cm = new Vector2();
                 for (MapToken token : mapTokens) { // TODO: include props as well.
-                    if (!(token instanceof MapTokenVillageHouse)) continue;
-                    MapTokenVillageHouse block = (MapTokenVillageHouse) token;
+                    if (!(token instanceof MapTokenHouseVillage)) continue;
+                    MapTokenHouseVillage block = (MapTokenHouseVillage) token;
                     blocks.add(block);
                     cm.add(block.x, block.y);
                 }
@@ -588,11 +590,11 @@ public class SceneRPGMapMaker4 implements Scene {
                 float x = screen.x;
                 float y = screen.y;
 
-                if (toolVillageGenerator.mode == ToolVillageGenerator.Mode.SINGLES) {
-                    MapTokenVillageHouse.HouseType type = toolVillageGenerator.currentType;
+                if (toolVillageGenerator.mode == ToolVillageGenerator.Mode.SINGLES_HOUSES) {
+                    MapTokenHouseVillage.HouseType type = toolVillageGenerator.currentHouseType;
                     int baseIndex = toolVillageGenerator.baseIndex;
 
-                    CommandMapTokenCreateVillageHouse addVillageHouse = new CommandMapTokenCreateVillageHouse(type, baseIndex);
+                    CommandMapTokenCreateHouseVillage addVillageHouse = new CommandMapTokenCreateHouseVillage(type, baseIndex);
                     addVillageHouse.x = x;
                     addVillageHouse.y = y;
                     addVillageHouse.sclX = toolVillageGenerator.scale;
@@ -603,11 +605,32 @@ public class SceneRPGMapMaker4 implements Scene {
                     commandHistory.add(addVillageHouse);
 
                     // TODO: see if and how to use command.execute().
-                    MapTokenVillageHouse block = new MapTokenVillageHouse(props, type, addVillageHouse.baseIndex);
-                    block.setTransform(addVillageHouse);
+                    MapTokenHouseVillage house = new MapTokenHouseVillage(props, type, addVillageHouse.baseIndex);
+                    house.setTransform(addVillageHouse);
 
-                    mapTokens.add(block);
-                    toolVillageGenerator.lastCreated = block;
+                    mapTokens.add(house);
+                    toolVillageGenerator.lastCreated = house;
+
+                } else if (toolVillageGenerator.mode == ToolVillageGenerator.Mode.SINGLES_PROPS) {
+
+                    int baseIndex = toolVillageGenerator.currentPropType;
+
+                    CommandMapTokenCreatePropVillage addVillageProp = new CommandMapTokenCreatePropVillage(baseIndex);
+                    addVillageProp.x = x;
+                    addVillageProp.y = y;
+                    addVillageProp.sclX = toolVillageGenerator.scale;
+                    addVillageProp.sclY = toolVillageGenerator.scale;
+                    addVillageProp.isAnchor = leftJustPressed;
+                    addVillageProp.deg = MathUtils.randomUniformFloat(-3, 3);
+                    commandHistory.add(addVillageProp);
+
+                    // TODO: see if and how to use command.execute().
+                    MapTokenPropVillage prop = new MapTokenPropVillage(props, addVillageProp.baseIndex);
+                    prop.setTransform(addVillageProp);
+
+                    mapTokens.add(prop);
+                    toolVillageGenerator.lastCreated = prop;
+
                 } else {
 //                    ToolCastleGenerator.BlockUnit[] blocks = toolCastleGenerator.getCombination();
 //                    for (ToolCastleGenerator.BlockUnit b : blocks) {
@@ -629,35 +652,100 @@ public class SceneRPGMapMaker4 implements Scene {
             }
         }
 
-        if (toolStampProps.active) {
+        if (toolCityGenerator.active) {
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_SHIFT)) { // hack undo
+                toolCityGenerator.toggleMode();
+            }
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.TAB)) { // hack undo
+                if (!mapTokens.isEmpty()) mapTokens.removeValue(toolCityGenerator.lastCreated, true);
+            }
+            if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ENTER)) {
+                Array<MapToken> blocks = new Array<>();
+                Vector2 cm = new Vector2();
+                for (MapToken token : mapTokens) { // TODO: include props as well.
+                    if (!(token instanceof MapTokenHouseCity)) continue;
+                    MapTokenHouseCity block = (MapTokenHouseCity) token;
+                    blocks.add(block);
+                    cm.add(block.x, block.y);
+                }
+                if (!blocks.isEmpty()) {
+                    cm.scl(1f / blocks.size);
+                    blocks.sort(Comparator.comparingInt(o -> -(int) o.y));
+                    System.out.println("<combination>");
+                    for (MapToken block : blocks) {
+                        System.out.println("\t" + "<object type=\"" + block.type.ordinal() + "\" x=\"" + (block.x - cm.x) + "\" y=\"" + (block.y - cm.y) + "\"/>");
+                    }
+                    System.out.println("</combination>");
+                }
+            }
             if (Input.mouse.isButtonClicked(Mouse.Button.RIGHT)) {
-                toolStampProps.selectNext();
+                toolCityGenerator.selectNext();
             }
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
                 float y = screen.y;
 
-                int baseIndex = toolStampProps.index;
+                if (toolCityGenerator.mode == ToolCityGenerator.Mode.SINGLES) {
+                    MapTokenHouseCity.HouseType type = toolCityGenerator.currentType;
+                    int baseIndex = toolCityGenerator.baseIndex;
 
-                CommandMapTokenCreateProp addVillageProp = new CommandMapTokenCreateProp(baseIndex);
-                addVillageProp.x = x;
-                addVillageProp.y = y;
-                addVillageProp.sclX = 0.35f;//toolCastleGenerator.scale;
-                addVillageProp.sclY = 0.35f;//toolCastleGenerator.scale;
-                addVillageProp.deg = 0;
-                addVillageProp.isAnchor = true;
+                    CommandMapTokenCreateHouseCity addCityHouse = new CommandMapTokenCreateHouseCity(type, baseIndex);
+                    addCityHouse.x = x;
+                    addCityHouse.y = y;
+                    addCityHouse.sclX = toolCityGenerator.scale;
+                    if (addCityHouse.type.isRight()) addCityHouse.sclX *= -1;
+                    addCityHouse.sclY = toolCityGenerator.scale;
+                    addCityHouse.isAnchor = leftJustPressed;
+                    addCityHouse.deg = MathUtils.randomUniformFloat(-3, 3);
+                    commandHistory.add(addCityHouse);
 
+                    // TODO: see if and how to use command.execute().
+                    MapTokenHouseCity house = new MapTokenHouseCity(props, type, addCityHouse.baseIndex);
+                    house.setTransform(addCityHouse);
 
-                commandHistory.add(addVillageProp);
+                    mapTokens.add(house);
+                    toolCityGenerator.lastCreated = house;
 
-                // TODO: see if and how to use command.execute().
-                MapTokenRuralProp prop = new MapTokenRuralProp(props, addVillageProp.baseIndex);
-                prop.setTransform(addVillageProp);
-                mapTokens.add(prop);
+                } else if (toolCityGenerator.mode == ToolCityGenerator.Mode.COMBOS) {
+                    // TODO: handle combos
+                    int baseIndex = toolVillageGenerator.currentPropType;
+
+                    CommandMapTokenCreatePropVillage addVillageProp = new CommandMapTokenCreatePropVillage(baseIndex);
+                    addVillageProp.x = x;
+                    addVillageProp.y = y;
+                    addVillageProp.sclX = toolVillageGenerator.scale;
+                    addVillageProp.sclY = toolVillageGenerator.scale;
+                    addVillageProp.isAnchor = leftJustPressed;
+                    addVillageProp.deg = MathUtils.randomUniformFloat(-3, 3);
+                    commandHistory.add(addVillageProp);
+
+                    // TODO: see if and how to use command.execute().
+                    MapTokenPropVillage prop = new MapTokenPropVillage(props, addVillageProp.baseIndex);
+                    prop.setTransform(addVillageProp);
+
+                    mapTokens.add(prop);
+                    toolVillageGenerator.lastCreated = prop;
+
+                } else {
+//                    ToolCastleGenerator.BlockUnit[] blocks = toolCastleGenerator.getCombination();
+//                    for (ToolCastleGenerator.BlockUnit b : blocks) {
+//                        CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(b.type, 0);
+//                        addCastleBlock.x = x + b.offsetX;
+//                        addCastleBlock.y = y + b.offsetY;
+//                        addCastleBlock.sclX = toolCastleGenerator.scale;
+//                        if (b.type.isRight()) addCastleBlock.sclX *= -1;
+//                        addCastleBlock.sclY = toolCastleGenerator.scale;
+//                        addCastleBlock.deg = MathUtils.randomUniformFloat(-3, 3);
+//                        commandHistory.add(addCastleBlock);
+//
+//                        MapTokenCastleBlock block = new MapTokenCastleBlock(props, b.type, MathUtils.randomUniformInt(0, 100));
+//                        block.setTransform(addCastleBlock);
+//
+//                        mapTokens.add(block);
+//                    }
+                }
             }
         }
-
-
 
         if (toolTerrainDeform.active) {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_SHIFT)) {

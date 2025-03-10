@@ -39,7 +39,8 @@ public class ToolBrushTrees extends Tool {
     public float density = 1;
     public float scaleRange = 0.0f;
     //public float scale = 0.20f;
-    public float scale = 0.5f;
+    public float scale = 1f;
+    public boolean addTrunk = true;
     public boolean addFruits = false; // change to probability
 
     public float lastCreatedX = Float.NEGATIVE_INFINITY;

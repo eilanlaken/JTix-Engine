@@ -210,4 +210,13 @@
         <object type="6" x="22.777761" y="-48.77779"/>
     </combination>
 
+    <combination>
+        <object type="12" x="-69.16665" y="46.999966"/>
+        <object type="1" x="4.8333163" y="21.00002"/>
+        <object type="11" x="-28.166636" y="7.000004"/>
+        <object type="2" x="78.83333" y="3.0000076"/>
+        <object type="3" x="24.833313" y="-37.999992"/>
+        <object type="9" x="-11.166667" y="-40.00002"/>
+    </combination>
+
 </combinations>
