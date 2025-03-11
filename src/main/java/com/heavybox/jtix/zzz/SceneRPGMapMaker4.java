@@ -166,6 +166,9 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-village/prop_log_3.png",
                     "assets/app-village/prop_pile_1.png",
                     "assets/app-village/prop_pile_2.png",
+                    "assets/app-village/prop_tower_1.png",
+                    "assets/app-village/prop_tower_2.png",
+                    "assets/app-village/prop_pile_2.png",
                     "assets/app-village/prop_sack_of_flour.png",
                     "assets/app-village/prop_trunk_chopped.png",
 
@@ -226,6 +229,11 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-castles/castle-building-block_26.png",
                     "assets/app-castles/castle-building-block_27.png",
                     "assets/app-castles/castle-building-block_28.png",
+                    "assets/app-castles/castle-building-block_29.png",
+                    "assets/app-castles/castle-building-block_30.png",
+                    "assets/app-castles/castle-building-block_31.png",
+                    "assets/app-castles/castle-building-block_32.png",
+                    "assets/app-castles/castle-building-block_33.png",
                     "assets/app-castles/castle-tower-block_1.png",
                     "assets/app-castles/castle-tower-block_2.png",
                     "assets/app-castles/castle-tower-block_3.png",
@@ -266,19 +274,20 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-castles/castle-wall-front-block_9.png",
                     "assets/app-castles/castle-wall-front-block_10.png",
 
-                    "assets/app-ground/ground_bump_1.png",
-                    "assets/app-ground/ground_bump_2.png",
-                    "assets/app-ground/ground_bump_3.png",
-                    "assets/app-ground/ground_bump_4.png",
-                    "assets/app-ground/ground_bump_5.png",
-                    "assets/app-ground/ground_bump_6.png",
-                    "assets/app-ground/ground_bump_7.png",
-                    "assets/app-ground/ground_bump_8.png",
-                    "assets/app-ground/ground_bump_9.png",
-                    "assets/app-ground/ground_bump_10.png",
-                    "assets/app-ground/ground_bump_11.png",
-                    "assets/app-ground/ground_bump_12.png",
-                    "assets/app-ground/ground_bump_13.png",
+                    "assets/app-terrain/bump_1.png",
+                    "assets/app-terrain/bump_2.png",
+                    "assets/app-terrain/bump_3.png",
+                    "assets/app-terrain/bump_4.png",
+                    "assets/app-terrain/bump_5.png",
+                    "assets/app-terrain/bump_6.png",
+                    "assets/app-terrain/bump_7.png",
+                    "assets/app-terrain/bump_8.png",
+                    "assets/app-terrain/bump_9.png",
+                    "assets/app-terrain/bump_10.png",
+                    "assets/app-terrain/bump_11.png",
+                    "assets/app-terrain/bump_12.png",
+                    "assets/app-terrain/bump_13.png",
+
                     "assets/app-ground/ground_line_1.png",
                     "assets/app-ground/ground_line_2.png",
                     "assets/app-ground/ground_line_3.png",
@@ -310,9 +319,13 @@ public class SceneRPGMapMaker4 implements Scene {
         } // PACK MEDIEVAL MAP PROPS
 
         // TODO: make the program CRASH and not thread-locked when file can't load.
-        Assets.loadTexture("assets/app-terrain/grass-1024.png");
+        //Assets.loadTexture("assets/app-terrain/grass-1024.png");
+        Assets.loadTexture("assets/app-terrain/grass-new-1024.png");
         Assets.loadTexture("assets/app-terrain/water-1024.png");
-        Assets.loadTexture("assets/app-terrain/road-1024.png");
+        //Assets.loadTexture("assets/app-terrain/water-new-1024.png");
+        //Assets.loadTexture("assets/app-terrain/type-water-base-1024.png");
+        //Assets.loadTexture("assets/app-terrain/road-1024.png");
+        Assets.loadTexture("assets/app-terrain/road-new-1024.png");
         Assets.loadTexture("assets/app-terrain/wheat-field-1024.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
@@ -327,9 +340,12 @@ public class SceneRPGMapMaker4 implements Scene {
         icons = Assets.get("assets/app-texture-packs/icons.yml");
         props = Assets.get("assets/app-texture-packs/medieval-pack.yml");
 
+        //terrainWater = Assets.get("assets/app-terrain/type-water-base-1024.png");
         terrainWater = Assets.get("assets/app-terrain/water-1024.png");
-        terrainGrass = Assets.get("assets/app-terrain/grass-1024.png");
-        terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
+        //terrainGrass = Assets.get("assets/app-terrain/grass-1024.png");
+        terrainGrass = Assets.get("assets/app-terrain/grass-new-1024.png");
+        //terrainRoad = Assets.get("assets/app-terrain/road-1024.png");
+        terrainRoad = Assets.get("assets/app-terrain/road-new-1024.png");
         terrainWheatBase = Assets.get("assets/app-terrain/wheat-field-base.png");
         terrainWheatLines = Assets.get("assets/app-terrain/wheat-field-lines.png");
 
@@ -540,8 +556,8 @@ public class SceneRPGMapMaker4 implements Scene {
                     ToolCastleGenerator.BlockUnit[] blocks = toolCastleGenerator.getCombination();
                     for (ToolCastleGenerator.BlockUnit b : blocks) {
                         CommandMapTokenCreateCastleBlock addCastleBlock = new CommandMapTokenCreateCastleBlock(b.type, 0);
-                        addCastleBlock.x = x + b.offsetX;
-                        addCastleBlock.y = y + b.offsetY;
+                        addCastleBlock.x = x + b.offsetX * toolCastleGenerator.scale;
+                        addCastleBlock.y = y + b.offsetY * toolCastleGenerator.scale;
                         addCastleBlock.sclX = toolCastleGenerator.scale;
                         if (b.type.isRight()) addCastleBlock.sclX *= -1;
                         addCastleBlock.sclY = toolCastleGenerator.scale;
@@ -577,7 +593,8 @@ public class SceneRPGMapMaker4 implements Scene {
                     cm.scl(1f / blocks.size);
                     blocks.sort(Comparator.comparingInt(o -> -(int) o.y));
                     System.out.println("<combination>");
-                    for (MapToken block : blocks) {
+                    for (MapToken b : blocks) {
+                        MapTokenHouseVillage block = (MapTokenHouseVillage) b;
                         System.out.println("\t" + "<object type=\"" + block.type.ordinal() + "\" x=\"" + (block.x - cm.x) + "\" y=\"" + (block.y - cm.y) + "\"/>");
                     }
                     System.out.println("</combination>");

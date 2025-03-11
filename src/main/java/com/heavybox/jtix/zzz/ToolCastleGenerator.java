@@ -55,8 +55,8 @@ public class ToolCastleGenerator extends Tool {
     private static final MapTokenCastleBlock.BlockType[] allTypes = MapTokenCastleBlock.BlockType.values();
     private final TexturePack props;
 
-    //public float scale = 0.25f;
-    public float scale = 1;
+    public float scale = 0.5f;
+    //public float scale = 1;
     public MapTokenCastleBlock.BlockType currentType = allTypes[0]; // TOWER_TALL, TOWER_SHORT, BUILDING_TALL_LEFT, ...
     public int baseIndex = 0;
     public int comboIndex = MathUtils.randomUniformInt(0, combinations.size);
@@ -107,8 +107,8 @@ public class ToolCastleGenerator extends Tool {
             renderer2D.setColor(1,1,1,0.5f);
             for (BlockUnit b : blocks) {
                 TextureRegion blockRegion = MapTokenCastleBlock.BlockType.getRegion(props, b.type, 0);
-                float worldX = x + b.offsetX;
-                float worldY = y + b.offsetY;
+                float worldX = x + b.offsetX * scale;
+                float worldY = y + b.offsetY * scale;
                 float realSclX = scale;
                 if (b.type.isRight()) realSclX *= -1;
                 renderer2D.drawTextureRegion(blockRegion, worldX, worldY, deg, realSclX, scale);

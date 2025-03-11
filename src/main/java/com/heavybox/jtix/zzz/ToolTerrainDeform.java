@@ -5,6 +5,7 @@ import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.TexturePack;
 import com.heavybox.jtix.graphics.TextureRegion;
 
+@Deprecated
 public class ToolTerrainDeform extends Tool {
 
     public static final float SCALE_LINE = 1;

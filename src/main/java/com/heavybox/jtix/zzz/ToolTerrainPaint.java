@@ -7,10 +7,11 @@ import com.heavybox.jtix.graphics.Renderer2D;
 // Then, to construct the current terrain, it will be: render_terrain_texture, draw last operations since terrain texture was updated.
 // maybe even step-bundle = 1.
 // use gl sub pixels.
+@Deprecated
 public class ToolTerrainPaint extends Tool {
 
     public int mask = CommandTerrainPaint.GRASS_MASK;
-    public float r = 28;
+    public float r = 22;
 
     public ToolTerrainPaint() {
     }

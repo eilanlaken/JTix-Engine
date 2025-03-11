@@ -13,6 +13,8 @@ public class MapTokenPropVillage extends MapToken {
             "assets/app-village/prop_trunk_chopped.png",
             "assets/app-village/prop_pile_1.png",
             "assets/app-village/prop_pile_2.png",
+            "assets/app-village/prop_tower_1.png",
+            "assets/app-village/prop_tower_2.png",
             "assets/app-village/prop_sack_of_flour.png",
     };
 

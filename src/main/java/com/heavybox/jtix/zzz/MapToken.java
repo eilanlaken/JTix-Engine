@@ -30,7 +30,7 @@ public abstract class MapToken {
         GROUND,
         TREE,
         HOUSE,
-        PROP, // windmill, well, tower, fence, flowers etc.
+        PROP, // windmill, well, tower, fence, flowers, rocks
         CASTLE_BLOCK,
         TEXT,
     }

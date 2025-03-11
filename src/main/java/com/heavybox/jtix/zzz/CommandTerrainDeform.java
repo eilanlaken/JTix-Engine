@@ -34,22 +34,22 @@ public class CommandTerrainDeform extends Command {
     };
 
     public static final String[] regionsGroundBumpLeft = {
-            "assets/app-ground/ground_bump_9.png",
-            "assets/app-ground/ground_bump_10.png",
-            "assets/app-ground/ground_bump_11.png",
-            "assets/app-ground/ground_bump_12.png",
-            "assets/app-ground/ground_bump_13.png",
+            "assets/app-terrain/bump_9.png",
+            "assets/app-terrain/bump_10.png",
+            "assets/app-terrain/bump_11.png",
+            "assets/app-terrain/bump_12.png",
+            "assets/app-terrain/bump_13.png",
     };
 
     public static final String[] regionsGroundBumpMiddle = {
-            "assets/app-ground/ground_bump_1.png",
-            "assets/app-ground/ground_bump_2.png",
-            "assets/app-ground/ground_bump_3.png",
-            "assets/app-ground/ground_bump_4.png",
-            "assets/app-ground/ground_bump_5.png",
-            "assets/app-ground/ground_bump_6.png",
-            "assets/app-ground/ground_bump_7.png",
-            "assets/app-ground/ground_bump_8.png",
+            "assets/app-terrain/bump_1.png",
+            "assets/app-terrain/bump_2.png",
+            "assets/app-terrain/bump_3.png",
+            "assets/app-terrain/bump_4.png",
+            "assets/app-terrain/bump_5.png",
+            "assets/app-terrain/bump_6.png",
+            "assets/app-terrain/bump_7.png",
+            "assets/app-terrain/bump_8.png",
     };
 
     public static final String[] regionsGroundBumpRight = regionsGroundBumpLeft;

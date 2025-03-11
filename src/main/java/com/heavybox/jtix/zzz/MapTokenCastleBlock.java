@@ -51,6 +51,14 @@ public class MapTokenCastleBlock extends MapToken {
             "assets/app-castles/castle-building-block_16.png",
     };
 
+    public static final String[] regionsBuildingLowMiddle = {
+            "assets/app-castles/castle-building-block_29.png",
+            "assets/app-castles/castle-building-block_30.png",
+            "assets/app-castles/castle-building-block_31.png",
+            "assets/app-castles/castle-building-block_32.png",
+            "assets/app-castles/castle-building-block_33.png",
+    };
+
     public static final String[] regionsBuildingTallWideMiddle = {
             "assets/app-castles/castle-building-block_17.png",
             "assets/app-castles/castle-building-block_18.png",
@@ -142,6 +150,8 @@ public class MapTokenCastleBlock extends MapToken {
         WALL_FRONT_LEFT,
         WALL_FRONT_MIDDLE,
         WALL_FRONT_RIGHT,
+
+        BUILDING_LOW_MIDDLE,
         ;
 
         public boolean isRight() {
@@ -159,6 +169,7 @@ public class MapTokenCastleBlock extends MapToken {
 
                 case BUILDING_TALL_LEFT -> props.getRegion(regionsBuildingTallLeft[index % regionsBuildingTallLeft.length]);
                 case BUILDING_TALL_MIDDLE -> props.getRegion(regionsBuildingTallMiddle[index % regionsBuildingTallMiddle.length]);
+                case BUILDING_LOW_MIDDLE -> props.getRegion(regionsBuildingLowMiddle[index % regionsBuildingLowMiddle.length]);
                 case BUILDING_TALL_RIGHT -> props.getRegion(regionsBuildingTallRight[index % regionsBuildingTallLeft.length]);
 
                 case BUILDING_SHORT_LEFT -> props.getRegion(regionsBuildingShortLeft[index % regionsBuildingShortLeft.length]);

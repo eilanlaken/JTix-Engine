@@ -11,7 +11,6 @@ public class MapTokenHouseCity extends MapToken {
             "assets/app-city/house_5.png",
     };
 
-
     public static final String[] regionsHouseBlueMiddle = {
             "assets/app-city/house_0.png",
             "assets/app-city/house_1.png",
@@ -74,6 +73,31 @@ public class MapTokenHouseCity extends MapToken {
 
     public static final String[] regionsHouseRedRight = regionsHouseRedLeft;
 
+    ////////////////////////////
+
+    public static final String[] regionsHouseRoyalLeft = {
+            "assets/app-castles/castle-building-block_1.png",
+            "assets/app-castles/castle-building-block_2.png",
+            "assets/app-castles/castle-building-block_3.png",
+            "assets/app-castles/castle-building-block_4.png",
+    };
+
+
+    public static final String[] regionsHouseRoyalMiddle = {
+            "assets/app-castles/castle-building-block_24.png",
+            "assets/app-castles/castle-building-block_26.png",
+    };
+
+    public static final String[] regionsHouseRoyalVertical = {
+            "assets/app-castles/castle-building-block_29.png",
+            "assets/app-castles/castle-building-block_30.png",
+            "assets/app-castles/castle-building-block_31.png",
+            "assets/app-castles/castle-building-block_32.png",
+            "assets/app-castles/castle-building-block_33.png",
+    };
+
+    public static final String[] regionsHouseRoyalRight = regionsHouseRoyalLeft;
+
     public final HouseType type;
     public final int index;
     private final TextureRegion region;
@@ -108,12 +132,18 @@ public class MapTokenHouseCity extends MapToken {
         RED_MIDDLE,
         RED_VERTICAL,
         RED_RIGHT,
+
+        ROYAL_LEFT,
+        ROYAL_MIDDLE,
+        ROYAL_VERTICAL,
+        ROYAL_RIGHT,
         ;
 
         public boolean isRight() {
             if (this == BLUE_RIGHT) return true;
             if (this == GREY_RIGHT) return true;
             if (this == RED_RIGHT) return true;
+            if (this == ROYAL_RIGHT) return true;
             return false;
         }
 
@@ -133,6 +163,11 @@ public class MapTokenHouseCity extends MapToken {
                 case RED_MIDDLE -> props.getRegion(regionsHouseRedMiddle[index % regionsHouseRedMiddle.length]);
                 case RED_VERTICAL -> props.getRegion(regionsHouseRedVertical[index % regionsHouseRedVertical.length]);
                 case RED_RIGHT -> props.getRegion(regionsHouseRedRight[index % regionsHouseRedRight.length]);
+
+                case ROYAL_LEFT -> props.getRegion(regionsHouseRoyalLeft[index % regionsHouseRoyalLeft.length]);
+                case ROYAL_MIDDLE -> props.getRegion(regionsHouseRoyalMiddle[index % regionsHouseRoyalMiddle.length]);
+                case ROYAL_VERTICAL -> props.getRegion(regionsHouseRoyalVertical[index % regionsHouseRoyalVertical.length]);
+                case ROYAL_RIGHT -> props.getRegion(regionsHouseRoyalRight[index % regionsHouseRoyalRight.length]);
             };
         }
 
