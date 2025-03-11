@@ -91,6 +91,11 @@ public class MapTokenHouseVillage extends MapToken {
 
     @Override
     public void render(Renderer2D renderer2D) {
+        // render shadow?
+        renderer2D.setColor(0,0,0,0.2f);
+        renderer2D.drawTextureRegion(region, x - 1, y - 1, deg, sclX * 1.05f, sclY * 1.05f); // base should never be null.
+        // render house
+        renderer2D.setColor(1,1,1,1);
         renderer2D.drawTextureRegion(region, x, y, deg, sclX, sclY); // base should never be null.
     }
 

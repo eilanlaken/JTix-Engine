@@ -127,6 +127,11 @@ public class MapTokenCastleBlock extends MapToken {
 
     @Override
     public void render(Renderer2D renderer2D) {
+        // render shadow?
+        renderer2D.setColor(0,0,0,0.2f);
+        renderer2D.drawTextureRegion(region, x - 1, y - 3, deg, sclX * 1.04f, sclY * 1.04f); // base should never be null.
+        // render block
+        renderer2D.setColor(1,1,1,1);
         renderer2D.drawTextureRegion(region, x, y, deg, sclX, sclY); // base should never be null.
     }
 
