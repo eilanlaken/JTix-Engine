@@ -170,6 +170,7 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-village/prop_tower_2.png",
                     "assets/app-village/prop_pile_2.png",
                     "assets/app-village/prop_sack_of_flour.png",
+                    "assets/app-village/prop_scarecrow.png",
                     "assets/app-village/prop_trunk_chopped.png",
 
                     "assets/app-city/house_0.png",
@@ -895,9 +896,10 @@ public class SceneRPGMapMaker4 implements Scene {
         //if (toolBrushTrees.active) toolBrushTrees.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
         if (activeTool != null) activeTool.renderToolOverlay(renderer2D, screen.x, screen.y, 0, 1,1);
 
-        renderer2D.setColor(Color.RED);
-        renderer2D.drawCircleFilled(10, 25, 0,0,0,1,1);
-        renderer2D.setColor(Color.WHITE);
+        // center point
+//        renderer2D.setColor(Color.RED);
+//        renderer2D.drawCircleFilled(10, 25, 0,0,0,1,1);
+//        renderer2D.setColor(Color.WHITE);
 
         renderer2D.end();
 
