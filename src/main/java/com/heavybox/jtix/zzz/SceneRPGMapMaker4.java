@@ -326,7 +326,7 @@ public class SceneRPGMapMaker4 implements Scene {
         //Assets.loadTexture("assets/app-terrain/type-water-base-1024.png");
         //Assets.loadTexture("assets/app-terrain/road-1024.png");
         Assets.loadTexture("assets/app-terrain/road-new-1024.png");
-        Assets.loadTexture("assets/app-terrain/wheat-field-1024.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
+        //Assets.loadTexture("assets/app-terrain/wheat-field-1024.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.loadTexture("assets/app-terrain/wheat-field-base.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
         Assets.loadTexture("assets/app-terrain/wheat-field-lines.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, 1);
 
@@ -390,7 +390,7 @@ public class SceneRPGMapMaker4 implements Scene {
         toolCityGenerator = new ToolCityGenerator(props);
 
         toolTerrainDeform = new ToolTerrainDeform(props);
-        toolWheatField = new ToolWheatField();
+        toolWheatField = new ToolWheatField(terrainWheatBase, terrainWheatLines);
         selectTool(toolCastleGenerator);
     }
 
@@ -864,8 +864,17 @@ public class SceneRPGMapMaker4 implements Scene {
         // draw wheat fields here. they are masked by the ground.
         renderer2D.setColor(1,1,1,1);
         for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
-            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
-            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, 1, 1);
+            // draw base
+            renderer2D.setColor(1f, 1f, 1f, 0.8f);
+            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
+            // draw lines
+            renderer2D.setColor(1,1,1,1);
+            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
+
+            // draw outline
+            renderer2D.setColor(0.5f, 0.5f, 0.5f, 0.7f);
+            renderer2D.drawCurveFilled(terrainWheatBase, 3, 5, wheatCommand.outline, wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
+            renderer2D.setColor(1,1,1,1);
         }
         renderer2D.disableMasking();
 

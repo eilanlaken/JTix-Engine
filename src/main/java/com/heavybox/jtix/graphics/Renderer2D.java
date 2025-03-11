@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
@@ -2452,6 +2453,39 @@ public class Renderer2D implements MemoryResourceHolder {
         }
         vertexIndex += values.length;
     }
+
+    // TODO: test
+    public void drawCurveFilled(@Nullable Texture texture, float stroke, int smoothness, final float[] points, float x, float y, float deg, float scaleX, float scaleY) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        setMode(GL11.GL_TRIANGLES);
+        setTexture(texture);
+
+        Vector2[] points_transformed = new Vector2[points.length / 2];
+        /* transform vertices */
+        for (int i = 0; i < points.length / 2; i++) {
+            Vector2 vertex = new Vector2(points[2*i], points[2*i + 1]);
+            vertex.scl(scaleX, scaleY);
+            vertex.rotateDeg(deg);
+            vertex.add(x, y);
+            points_transformed[i] = vertex;
+        }
+
+        Array<Vector2> vertices = curveFilledCalculateVertices(stroke, smoothness, points_transformed);
+        if (!ensureCapacity(vertices.size, vertices.size)) flush();
+
+        for (int i = 0; i < vertices.size; i++) {
+            Vector2 vertex = vertices.get(i);
+            positions.put(vertex.x).put(vertex.y);
+            colors.put(currentTint);
+            float u = 0.5f + (vertex.x * currentTexture.invWidth * pixelScaleWidth);
+            float v = 0.5f - (vertex.y * currentTexture.invHeight * pixelScaleHeight);
+            textCoords.put(u).put(v);
+            indices.put(vertexIndex + i);
+        }
+
+        vertexIndex += vertices.size;
+    }
+
 
     // The filled curve tesselation algorithm works.
     // It does not handle edge cases of high thickness / segment length ratio, but I that is a degenerate case.
