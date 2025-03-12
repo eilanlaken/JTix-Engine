@@ -164,13 +164,13 @@ public class SceneRPGMapMaker4 implements Scene {
                     "assets/app-village/prop_log_1.png",
                     "assets/app-village/prop_log_2.png",
                     "assets/app-village/prop_log_3.png",
-                    "assets/app-village/prop_pile_1.png",
-                    "assets/app-village/prop_pile_2.png",
+                    "assets/app-village/prop_pile.png",
                     "assets/app-village/prop_tower_1.png",
                     "assets/app-village/prop_tower_2.png",
-                    "assets/app-village/prop_pile_2.png",
                     "assets/app-village/prop_sack_of_flour.png",
                     "assets/app-village/prop_scarecrow.png",
+                    "assets/app-village/prop_straw_1.png",
+                    "assets/app-village/prop_straw_2.png",
                     "assets/app-village/prop_trunk_chopped.png",
 
                     "assets/app-city/house_0.png",
@@ -797,7 +797,7 @@ public class SceneRPGMapMaker4 implements Scene {
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
                 float y = screen.y;
-                CommandTerrainDrawWheat drawWheat = new CommandTerrainDrawWheat(toolWheatField.currentPolygon, toolWheatField.currentColor);
+                CommandTerrainDrawWheat drawWheat = new CommandTerrainDrawWheat(toolWheatField.polygon, toolWheatField.currentColor);
                 drawWheat.x = x;
                 drawWheat.y = y;
                 drawWheat.isAnchor = true;
