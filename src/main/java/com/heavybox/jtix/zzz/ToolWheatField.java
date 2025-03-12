@@ -1,6 +1,5 @@
 package com.heavybox.jtix.zzz;
 
-import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
@@ -9,8 +8,10 @@ import com.heavybox.jtix.math.MathUtils;
 public class ToolWheatField extends Tool {
 
     public Color currentColor = new Color();
+    public float angle = 0;
     public float[] polygon;
     public float[] outline;
+    public float scale = 1;
 
     public boolean lines = true;
     public float linesAngle = 30;
@@ -20,6 +21,12 @@ public class ToolWheatField extends Tool {
 
     private final Texture wheatBase;
     private Texture wheatLines;
+
+    public boolean renderAtAnchor = false;
+    public float screenAnchorX;
+    public float screenAnchorY;
+    public int mouseAnchorX;
+    public int mouseAnchorY;
 
     public ToolWheatField(Texture wheatBase, Texture wheatLines) {
         this.wheatBase = wheatBase;
@@ -45,16 +52,18 @@ public class ToolWheatField extends Tool {
 
     @Override
     public void renderToolOverlay(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
+        float posX = renderAtAnchor ? screenAnchorX : x;
+        float posY = renderAtAnchor ? screenAnchorY : y;
+
         // draw base
         renderer2D.setColor(1f, 1f, 1f, 0.8f);
-        renderer2D.drawPolygonFilled(polygon, wheatBase, x, y, deg, sclX, sclY);
+        renderer2D.drawPolygonFilled(polygon, wheatBase, posX, posY, angle, scale, scale);
         // draw lines
         renderer2D.setColor(1,1,1,1);
-        renderer2D.drawPolygonFilled(outline, wheatLines, uv -> uv.rotateDeg(linesAngle), x, y, deg, sclX, sclY);
-
+        renderer2D.drawPolygonFilled(outline, wheatLines, uv -> uv.rotateDeg(linesAngle), posX, posY, angle, scale, scale);
         // draw outline
         renderer2D.setColor(0.5f, 0.5f, 0.5f, 0.7f);
-        renderer2D.drawCurveFilled(wheatBase, 3, 5, outline, x, y, deg, sclX, sclY);
+        renderer2D.drawCurveFilled(wheatBase, 3, 5, outline, posX, posY, angle, scale, scale);
         renderer2D.setColor(1,1,1,1);
     }
 

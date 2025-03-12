@@ -104,6 +104,11 @@ public class Mouse {
 
     public int getYDelta() { return cursorDeltaY; }
 
+    // TODO: test
+    public void setCursorPosition(float x, float y) {
+        GLFW.glfwSetCursorPos(Application.getWindowHandle(), x, y);
+    }
+
     public boolean isCursorInWindow() {
         return cursorInWindow;
     }

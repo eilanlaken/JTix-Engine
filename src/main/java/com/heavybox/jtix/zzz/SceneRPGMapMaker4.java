@@ -392,7 +392,7 @@ public class SceneRPGMapMaker4 implements Scene {
 
         toolTerrainDeform = new ToolTerrainDeform(props);
         toolWheatField = new ToolWheatField(terrainWheatBase, terrainWheatLines);
-        selectTool(toolCastleGenerator);
+        selectTool(toolWheatField);
     }
 
     @Override
@@ -794,12 +794,36 @@ public class SceneRPGMapMaker4 implements Scene {
         }
 
         if (toolWheatField.active) {
+            if (Input.mouse.isButtonJustPressed(Mouse.Button.RIGHT)) {
+                toolWheatField.screenAnchorX = screen.x;
+                toolWheatField.screenAnchorY = screen.y;
+                toolWheatField.mouseAnchorX = Input.mouse.getX();
+                toolWheatField.mouseAnchorY = Input.mouse.getY();
+                toolWheatField.renderAtAnchor = true;
+            } else if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
+                toolWheatField.angle += Input.mouse.getYDelta();
+                toolWheatField.renderAtAnchor = true;
+            }
+
+            if (Input.mouse.isButtonJustReleased(Mouse.Button.RIGHT)) {
+                Input.mouse.setCursorPosition(toolWheatField.mouseAnchorX, toolWheatField.mouseAnchorY);
+            } else if (Input.mouse.isButtonReleased(Mouse.Button.RIGHT) && Input.mouse.getX() == toolWheatField.mouseAnchorX && Input.mouse.getY() == toolWheatField.mouseAnchorY) {
+                toolWheatField.renderAtAnchor = false;
+            }
+
+
+
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
                 float y = screen.y;
                 CommandTerrainDrawWheat drawWheat = new CommandTerrainDrawWheat(toolWheatField.polygon, toolWheatField.currentColor);
+                drawWheat.linesAngle = toolWheatField.linesAngle;
                 drawWheat.x = x;
                 drawWheat.y = y;
+                drawWheat.deg = toolWheatField.angle;
+                drawWheat.sclX = toolWheatField.scale;
+                drawWheat.sclY = toolWheatField.scale;
+
                 drawWheat.isAnchor = true;
                 commandHistory.add(drawWheat);
 
