@@ -1,5 +1,6 @@
 package com.heavybox.jtix.zzz;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.graphics.Texture;
@@ -7,6 +8,12 @@ import com.heavybox.jtix.math.MathUtils;
 
 public class ToolWheatField extends Tool {
 
+    private static final Array<Shape> shapes = new Array<>();
+    static {
+
+    }
+
+    public int shapeIndex = 0;
     public Color currentColor = new Color();
     public float angle = 0;
     public float[] polygon;
@@ -44,27 +51,40 @@ public class ToolWheatField extends Tool {
         outline[outline.length - 2] = polygon[0];
         outline[outline.length - 1] = polygon[1];
 
-        float tint = MathUtils.randomUniformFloat(-0.15f,0);
-//        currentColor.r = 1 + tint;
-//        currentColor.g = 1 + tint;
-//        currentColor.b = 1 + tint;
+        randomizeColor();
+    }
+
+    public void randomizeColor() {
+        this.currentColor = new Color();
+        float tint = MathUtils.randomUniformFloat(0.0f,-0.22f);
+        currentColor.r = 1 + tint;
+        currentColor.g = 1 + tint;
+        currentColor.b = 1 + tint;
+        currentColor.a = 1;
     }
 
     @Override
     public void renderToolOverlay(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY) {
+        // TODO: bug here: snaps in-and-out of correct position on mouse release.
         float posX = renderAtAnchor ? screenAnchorX : x;
         float posY = renderAtAnchor ? screenAnchorY : y;
-
         // draw base
-        renderer2D.setColor(1f, 1f, 1f, 0.8f);
+        renderer2D.setColor(currentColor.r, currentColor.g, currentColor.b, currentColor.a * 0.5f);
         renderer2D.drawPolygonFilled(polygon, wheatBase, posX, posY, angle, scale, scale);
         // draw lines
-        renderer2D.setColor(1,1,1,1);
+        renderer2D.setColor(1, 1, 1, 1);
         renderer2D.drawPolygonFilled(outline, wheatLines, uv -> uv.rotateDeg(linesAngle), posX, posY, angle, scale, scale);
         // draw outline
-        renderer2D.setColor(0.5f, 0.5f, 0.5f, 0.7f);
+        renderer2D.setColor(currentColor.r * 0.5f, currentColor.g * 0.5f, currentColor.b * 0.5f, currentColor.a * 0.7f);
         renderer2D.drawCurveFilled(wheatBase, 3, 5, outline, posX, posY, angle, scale, scale);
-        renderer2D.setColor(1,1,1,1);
+        renderer2D.setColor(1, 1, 1, 1);
+    }
+
+    private static final class Shape {
+
+        public float[] polygon;
+        public float[] outline;
+
     }
 
 }

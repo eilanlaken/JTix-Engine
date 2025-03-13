@@ -13,12 +13,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
+@Deprecated
 public class ToolCityGenerator extends Tool {
 
     private static final Array<Combination> combinations = new Array<>(true, 10);
     static {
         try {
-            File file = new File("assets/app-castles-combinations/combinations.xml");
+            File file = new File("assets/app-combinations/castles.xml");
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(file);

@@ -17,7 +17,7 @@ public class ToolVillageGenerator extends Tool {
     private static final Array<Combination> combinations = new Array<>(true, 10);
     static {
         try {
-            File file = new File("assets/app-castles-combinations/combinations.xml");
+            File file = new File("assets/app-combinations/castles.xml");
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(file);

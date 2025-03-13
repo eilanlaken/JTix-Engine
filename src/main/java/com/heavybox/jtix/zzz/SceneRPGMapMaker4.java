@@ -794,28 +794,34 @@ public class SceneRPGMapMaker4 implements Scene {
         }
 
         if (toolWheatField.active) {
+            // TODO: "bug" here when rotating. on right mouse release, overview snaps in-and-out of position.
             if (Input.mouse.isButtonJustPressed(Mouse.Button.RIGHT)) {
                 toolWheatField.screenAnchorX = screen.x;
                 toolWheatField.screenAnchorY = screen.y;
                 toolWheatField.mouseAnchorX = Input.mouse.getX();
                 toolWheatField.mouseAnchorY = Input.mouse.getY();
                 toolWheatField.renderAtAnchor = true;
-            } else if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
-                toolWheatField.angle += Input.mouse.getYDelta();
-                toolWheatField.renderAtAnchor = true;
             }
-
             if (Input.mouse.isButtonJustReleased(Mouse.Button.RIGHT)) {
                 Input.mouse.setCursorPosition(toolWheatField.mouseAnchorX, toolWheatField.mouseAnchorY);
-            } else if (Input.mouse.isButtonReleased(Mouse.Button.RIGHT) && Input.mouse.getX() == toolWheatField.mouseAnchorX && Input.mouse.getY() == toolWheatField.mouseAnchorY) {
+            } else if (Input.mouse.isButtonReleased(Mouse.Button.RIGHT)) {
+                toolWheatField.mouseAnchorX = Input.mouse.getX();
+                toolWheatField.mouseAnchorY = Input.mouse.getY();
                 toolWheatField.renderAtAnchor = false;
             }
 
-
+            if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL) && Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
+                toolWheatField.linesAngle += Input.mouse.getYDelta();
+            } else if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
+                toolWheatField.angle += Input.mouse.getYDelta();
+            }
 
             if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
                 float x = screen.x;
                 float y = screen.y;
+
+                toolWheatField.randomizeColor();
+
                 CommandTerrainDrawWheat drawWheat = new CommandTerrainDrawWheat(toolWheatField.polygon, toolWheatField.currentColor);
                 drawWheat.linesAngle = toolWheatField.linesAngle;
                 drawWheat.x = x;
@@ -890,14 +896,13 @@ public class SceneRPGMapMaker4 implements Scene {
         renderer2D.setColor(1,1,1,1);
         for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
             // draw base
-            renderer2D.setColor(1f, 1f, 1f, 0.8f);
+            renderer2D.setColor(wheatCommand.color);
             renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatBase, wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
             // draw lines
             renderer2D.setColor(1,1,1,1);
             renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainWheatLines, uv -> uv.rotateDeg(wheatCommand.linesAngle), wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
-
             // draw outline
-            renderer2D.setColor(0.5f, 0.5f, 0.5f, 0.7f);
+            renderer2D.setColor(wheatCommand.color.r * 0.5f, wheatCommand.color.g * 0.5f, wheatCommand.color.b * 0.5f, wheatCommand.color.a * 0.4f);
             renderer2D.drawCurveFilled(terrainWheatBase, 3, 5, wheatCommand.outline, wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
             renderer2D.setColor(1,1,1,1);
         }
