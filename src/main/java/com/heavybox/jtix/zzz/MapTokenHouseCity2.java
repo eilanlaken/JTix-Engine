@@ -137,22 +137,34 @@ public class MapTokenHouseCity2 extends MapToken {
 
     private TexturePack props;
 
-    public TextureRegion foundation;
-    public TextureRegion foundationOverlay;
-    public TextureRegion roof;
-    public TextureRegion roofOverlay;
+    public TextureRegion regionFoundation;
+    public TextureRegion regionFoundationOverlay;
+    public TextureRegion regionRoof;
+    public TextureRegion regionRoofOverlay;
+    public int foundationOverlayIndex;
+    public int roofOverlayIndex;
 
-    public MapTokenHouseCity2(TexturePack props, Direction direction, Size size, Look look) {
+    public MapTokenHouseCity2(TexturePack props, Direction direction, Size size, Look look, int foundationOverlayIndex, int roofOverlayIndex) {
         super(Type.HOUSE);
         this.props = props;
         this.direction = direction;
         this.size = size;
         this.look = look;
+        this.foundationOverlayIndex = foundationOverlayIndex;
+        this.roofOverlayIndex = roofOverlayIndex;
+
+        regionFoundation = props.getRegion(MapTokenHouseCity2.getRegionFoundation(direction, size));
+        regionFoundationOverlay = props.getRegion(MapTokenHouseCity2.getRegionFoundationOverlay(direction, size, foundationOverlayIndex));
+        regionRoof = props.getRegion(MapTokenHouseCity2.getRegionRoof(direction, size, look));
+        regionRoofOverlay = props.getRegion(MapTokenHouseCity2.getRegionRoofOverlay(direction, size,roofOverlayIndex));
     }
 
     @Override
     public void render(Renderer2D renderer2D) {
-
+        renderer2D.drawTextureRegion(regionRoof, x, y, deg, sclX, sclY);
+        renderer2D.drawTextureRegion(regionRoofOverlay, x, y, deg, sclX, sclY);
+        renderer2D.drawTextureRegion(regionFoundation, x, y, deg, sclX, sclY);
+        renderer2D.drawTextureRegion(regionFoundationOverlay, x, y, deg, sclX, sclY);
     }
 
     public static String getRegionFoundation(Direction direction, Size size) {

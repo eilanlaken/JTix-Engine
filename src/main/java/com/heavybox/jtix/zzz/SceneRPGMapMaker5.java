@@ -768,6 +768,26 @@ public class SceneRPGMapMaker5 implements Scene {
             if (Input.keyboard.isKeyJustPressed(Keyboard.Key.LEFT_CONTROL)) {
                 toolCityBlock.selectNextLook();
             }
+
+            if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
+                float x = screen.x;
+                float y = screen.y;
+
+                CommandMapTokenCreateHouseCity2 addCityHouse = new CommandMapTokenCreateHouseCity2(toolCityBlock.currentDirection, toolCityBlock.currentSize, toolCityBlock.currentLook);
+                addCityHouse.x = x;
+                addCityHouse.y = y;
+                addCityHouse.sclX = toolCityBlock.scale * (toolCityBlock.currentDirection == MapTokenHouseCity2.Direction.RIGHT ? -1 : 1);
+                addCityHouse.sclY = toolCityBlock.scale;
+                addCityHouse.deg = 0;
+                addCityHouse.isAnchor = true;
+                commandHistory.add(addCityHouse);
+
+                // TODO: see if and how to use command.execute().
+                MapTokenHouseCity2 cityHouse = new MapTokenHouseCity2(props, toolCityBlock.currentDirection, toolCityBlock.currentSize, toolCityBlock.currentLook, 0, 0);
+                cityHouse.setTransform(addCityHouse);
+
+                mapTokens.add(cityHouse);
+            }
         }
 
         if (toolTerrainDeform.active) {
