@@ -778,7 +778,7 @@ public class SceneRPGMapMaker5 implements Scene {
                 addCityHouse.y = y;
                 addCityHouse.sclX = toolCityBlock.scale * (toolCityBlock.currentDirection == MapTokenHouseCity2.Direction.RIGHT ? -1 : 1);
                 addCityHouse.sclY = toolCityBlock.scale;
-                addCityHouse.deg = 0;
+                addCityHouse.deg = MathUtils.randomUniformFloat(-3, 3);;
                 addCityHouse.isAnchor = true;
                 commandHistory.add(addCityHouse);
 
