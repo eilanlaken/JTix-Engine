@@ -5,7 +5,11 @@ import com.heavybox.jtix.graphics.Renderer2D;
 public abstract class MapToken {
 
     protected final Type type;
-    protected float x, y, deg, sclX = 1, sclY = 1;
+    protected float x;
+    public float y;
+    protected float deg;
+    protected float sclX = 1;
+    protected float sclY = 1;
 
     public MapToken(Type type) {
         this.type = type;
