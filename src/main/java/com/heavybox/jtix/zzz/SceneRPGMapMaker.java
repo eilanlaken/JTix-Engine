@@ -390,9 +390,9 @@ public class SceneRPGMapMaker implements Scene {
 
         // create terrain stencil mask
         renderer2D.beginStencil();
-        renderer2D.stencilMaskClear(CommandTerrainPaint.GRASS_MASK);
+        renderer2D.stencilBufferClear(CommandTerrainPaint.GRASS_MASK);
         for (CommandTerrainPaint command : commandsTerrain) {
-            renderer2D.setStencilModeSetValue(command.mask);
+            renderer2D.setStencilModeReplace(command.mask);
             renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
         renderer2D.endStencil();

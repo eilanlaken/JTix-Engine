@@ -23,7 +23,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
@@ -326,10 +325,10 @@ public class Renderer2D implements MemoryResourceHolder {
         GL11.glStencilMask(0xFF);
         GL11.glColorMask(false, false, false, false); // Disable color buffer writes
         GL11.glDepthMask(false); // Disable depth buffer writes
-        setStencilModeSetValue(1);
+        setStencilModeReplace(1);
     }
 
-    public void setStencilModeSetValue(int value) {
+    public void setStencilModeReplace(int value) {
         if (!drawingToStencil) throw new GraphicsException("call this method only after beginMask() and endMask()");
         flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, value, 0xFF); // Always pass, ref value = 1
@@ -363,13 +362,13 @@ public class Renderer2D implements MemoryResourceHolder {
         drawingToStencil = false;
     }
 
-    public void stencilMaskClear() {
+    public void stencilBufferClear() {
         //if (!drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call endStencil() first.");
         GL11.glClearStencil(0); // Set stencil clear value to 1
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
     }
 
-    public void stencilMaskClear(int value) {
+    public void stencilBufferClear(int value) {
         //if (!drawingToStencil) throw new GraphicsException("Cannot clear the stencil while drawing to stencil. Must call stencilMaskEnd() first.");
         GL11.glClearStencil(value); // Set stencil clear value to 1
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);

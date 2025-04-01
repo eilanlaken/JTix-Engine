@@ -9,15 +9,19 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.tools.ToolsTexturePacker;
-import com.heavybox.jtix.zzz.*;
+import com.heavybox.jtix.zzz.CommandTerrainPaint;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Comparator;
 
-public class SceneRPGMapMaker implements Scene {
+public class SceneRPGMapMaker2 implements Scene {
 
     private static final Vector3 screen = new Vector3();
     private final Renderer2D renderer2D = new Renderer2D();
+
+    public boolean inputLeftJustPressed;
+    public boolean inputLeftJustRelease;
+    public boolean inputLeftPressedAndMoved;
 
     /* assets */
     private TexturePack props;
@@ -30,16 +34,13 @@ public class SceneRPGMapMaker implements Scene {
 
     public final Camera camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0, 100, 75);
     public Array<Command> commandHistory = new Array<>(true, 10);
-    public int commandChainIndex = -1;
-    private final Array<CommandTerrainPaint> commandsTerrainPaint = new Array<>(true, 100);
-    private final Array<CommandTerrainDrawWheat> commandsDrawWheat = new Array<>(true, 5);
+    private final Array<CommandTerrainCarve> commandTerrainCarves = new Array<>(true, 100);
     public final Array<MapToken> mapTokens = new Array<>(true, 10);
-    // TODO: make a copy array of map tokens for clearing(), copying(), sorting() then rendering().
 
     @Override
     public void setup() {
         try {
-            ToolsTexturePacker.packTextures("assets/app-texture-packs", "medieval-pack", 0, 2, ToolsTexturePacker.TexturePackSize.XX_LARGE_8192,
+            ToolsTexturePacker.packTextures("assets/app-texture-packs-2", "medieval-pack", 0, 2, ToolsTexturePacker.TexturePackSize.XX_LARGE_8192,
                     "assets/app-trees/flower_1.png",
                     "assets/app-trees/tree_cypress_1.png",
                     "assets/app-trees/tree_cypress_2.png",
@@ -77,65 +78,83 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-clouds/clouds_5.png",
                     "assets/app-clouds/clouds_6.png",
 
-                    "assets/app-village/house_0.png",
-                    "assets/app-village/house_1.png",
-                    "assets/app-village/house_2.png",
-                    "assets/app-village/house_3.png",
-                    "assets/app-village/house_4.png",
-                    "assets/app-village/house_5.png",
-                    "assets/app-village/house_6.png",
-                    "assets/app-village/house_7.png",
-                    "assets/app-village/house_8.png",
-                    "assets/app-village/house_9.png",
-                    "assets/app-village/house_10.png",
-                    "assets/app-village/house_11.png",
-                    "assets/app-village/house_12.png",
-                    "assets/app-village/house_13.png",
-                    "assets/app-village/house_14.png",
-                    "assets/app-village/house_15.png",
-                    "assets/app-village/house_16.png",
-                    "assets/app-village/house_17.png",
-                    "assets/app-village/house_18.png",
-                    "assets/app-village/house_19.png",
-                    "assets/app-village/house_20.png",
-                    "assets/app-village/house_21.png",
-                    "assets/app-village/house_22.png",
-                    "assets/app-village/house_23.png",
-                    "assets/app-village/house_24.png",
-                    "assets/app-village/house_25.png",
-                    "assets/app-village/house_26.png",
-                    "assets/app-village/house_27.png",
-                    "assets/app-village/house_28.png",
-                    "assets/app-village/house_29.png",
-                    "assets/app-village/house_30.png",
-                    "assets/app-village/house_31.png",
-                    "assets/app-village/house_32.png",
-                    "assets/app-village/house_33.png",
-                    "assets/app-village/house_34.png",
-                    "assets/app-village/house_35.png",
-                    "assets/app-village/house_36.png",
-                    "assets/app-village/house_37.png",
-                    "assets/app-village/house_38.png",
-                    "assets/app-village/house_39.png",
-                    "assets/app-village/house_40.png",
-                    "assets/app-village/house_41.png",
-                    "assets/app-village/house_42.png",
-                    "assets/app-village/house_43.png",
-                    "assets/app-village/house_44.png", // windmill 1
-                    "assets/app-village/house_45.png", // windmill 2
-                    "assets/app-village/prop_fence_bar.png",
-                    "assets/app-village/prop_fence_post.png",
-                    "assets/app-village/prop_log_1.png",
-                    "assets/app-village/prop_log_2.png",
-                    "assets/app-village/prop_log_3.png",
-                    "assets/app-village/prop_pile.png",
-                    "assets/app-village/prop_tower_1.png",
-                    "assets/app-village/prop_tower_2.png",
-                    "assets/app-village/prop_sack_of_flour.png",
-                    "assets/app-village/prop_scarecrow.png",
-                    "assets/app-village/prop_straw_1.png",
-                    "assets/app-village/prop_straw_2.png",
-                    "assets/app-village/prop_trunk_chopped.png",
+                    // village houses
+                    "assets/app-village-houses/house-diagonal-big-base.png",
+                    "assets/app-village-houses/house-diagonal-big-overlay_0.png",
+                    "assets/app-village-houses/house-diagonal-big-overlay_1.png",
+                    "assets/app-village-houses/house-diagonal-big-overlay_2.png",
+                    "assets/app-village-houses/house-diagonal-big-overlay_3.png",
+                    "assets/app-village-houses/house-diagonal-big-overlay_4.png",
+                    "assets/app-village-houses/house-diagonal-small-base.png",
+                    "assets/app-village-houses/house-diagonal-small-overlay_0.png",
+                    "assets/app-village-houses/house-diagonal-small-overlay_1.png",
+                    "assets/app-village-houses/house-diagonal-small-overlay_2.png",
+                    "assets/app-village-houses/house-diagonal-small-overlay_3.png",
+                    "assets/app-village-houses/house-diagonal-small-overlay_4.png",
+                    "assets/app-village-houses/house-horizontal-big-base.png",
+                    "assets/app-village-houses/house-horizontal-big-overlay_0.png",
+                    "assets/app-village-houses/house-horizontal-big-overlay_1.png",
+                    "assets/app-village-houses/house-horizontal-big-overlay_2.png",
+                    "assets/app-village-houses/house-horizontal-big-overlay_3.png",
+                    "assets/app-village-houses/house-horizontal-big-overlay_4.png",
+                    "assets/app-village-houses/house-horizontal-small-base.png",
+                    "assets/app-village-houses/house-horizontal-small-overlay_0.png",
+                    "assets/app-village-houses/house-horizontal-small-overlay_1.png",
+                    "assets/app-village-houses/house-horizontal-small-overlay_2.png",
+                    "assets/app-village-houses/house-horizontal-small-overlay_3.png",
+                    "assets/app-village-houses/house-horizontal-small-overlay_4.png",
+                    "assets/app-village-houses/house-vertical-big-base.png",
+                    "assets/app-village-houses/house-vertical-big-overlay_0.png",
+                    "assets/app-village-houses/house-vertical-big-overlay_1.png",
+                    "assets/app-village-houses/house-vertical-big-overlay_2.png",
+                    "assets/app-village-houses/house-vertical-big-overlay_3.png",
+                    "assets/app-village-houses/house-vertical-big-overlay_4.png",
+                    "assets/app-village-houses/house-vertical-small-base.png",
+                    "assets/app-village-houses/house-vertical-small-overlay_0.png",
+                    "assets/app-village-houses/house-vertical-small-overlay_1.png",
+                    "assets/app-village-houses/house-vertical-small-overlay_2.png",
+                    "assets/app-village-houses/house-vertical-small-overlay_3.png",
+                    "assets/app-village-houses/house-vertical-small-overlay_4.png",
+                    "assets/app-village-houses/house-vertical-tiny-base.png",
+                    "assets/app-village-houses/house-vertical-tiny-overlay_0.png",
+                    "assets/app-village-houses/house-vertical-tiny-overlay_1.png",
+                    "assets/app-village-houses/house-vertical-tiny-overlay_2.png",
+                    "assets/app-village-houses/house-vertical-tiny-overlay_3.png",
+                    "assets/app-village-houses/house-vertical-tiny-overlay_4.png",
+
+                    // props
+                    "assets/app-props/barrels_0.png",
+                    "assets/app-props/barrels_1.png",
+                    "assets/app-props/barrels_2.png",
+                    "assets/app-props/barrels_3.png",
+                    "assets/app-props/barrels_4.png",
+                    "assets/app-props/boxes_0.png",
+                    "assets/app-props/boxes_1.png",
+                    "assets/app-props/boxes_2.png",
+                    "assets/app-props/boxes_3.png",
+                    "assets/app-props/bridge-part.png",
+                    "assets/app-props/chopped-trunk.png",
+                    "assets/app-props/fence-bar.png",
+                    "assets/app-props/fence-post.png",
+                    "assets/app-props/lodge_0.png",
+                    "assets/app-props/lodge_1.png",
+                    "assets/app-props/lodge_2.png",
+                    "assets/app-props/pile-big.png",
+                    "assets/app-props/pile-small.png",
+                    "assets/app-props/sack.png",
+                    "assets/app-props/scarecrow_0.png",
+                    "assets/app-props/scarecrow_1.png",
+                    "assets/app-props/signs.png",
+                    "assets/app-props/straw_0.png",
+                    "assets/app-props/straw_1.png",
+                    "assets/app-props/tower_0.png",
+                    "assets/app-props/tower_1.png",
+                    "assets/app-props/windmill-base_0.png",
+                    "assets/app-props/windmill-base_1.png",
+                    "assets/app-props/windmill-base_2.png",
+                    "assets/app-props/windmill-base_3.png",
+                    "assets/app-props/windmill-mill_0.png",
+                    "assets/app-props/windmill-mill_1.png",
 
                     "assets/app-city-houses/house-diagonal-big-foundation.png",
                     "assets/app-city-houses/house-diagonal-big-foundation-overlay_0.png",
@@ -327,45 +346,74 @@ public class SceneRPGMapMaker implements Scene {
                     "assets/app-castles/castle-wall-front-block_9.png",
                     "assets/app-castles/castle-wall-front-block_10.png",
 
-                    "assets/app-terrain/bump_1.png",
-                    "assets/app-terrain/bump_2.png",
-                    "assets/app-terrain/bump_3.png",
-                    "assets/app-terrain/bump_4.png",
-                    "assets/app-terrain/bump_5.png",
-                    "assets/app-terrain/bump_6.png",
-                    "assets/app-terrain/bump_7.png",
-                    "assets/app-terrain/bump_8.png",
-                    "assets/app-terrain/bump_9.png",
-                    "assets/app-terrain/bump_10.png",
-                    "assets/app-terrain/bump_11.png",
-                    "assets/app-terrain/bump_12.png",
-                    "assets/app-terrain/bump_13.png",
-
-                    "assets/app-ground/ground_line_1.png",
-                    "assets/app-ground/ground_line_2.png",
-                    "assets/app-ground/ground_line_3.png",
-                    "assets/app-ground/ground_line_4.png",
-                    "assets/app-ground/ground_line_5.png",
-                    "assets/app-ground/ground_line_6.png",
-                    "assets/app-ground/ground_line_7.png",
-                    "assets/app-ground/ground_line_8.png",
-                    "assets/app-ground/ground_line_9.png",
-                    "assets/app-ground/ground_line_10.png",
-                    "assets/app-ground/ground_line_11.png",
-                    "assets/app-ground/ground_line_12.png",
-                    "assets/app-ground/ground_line_13.png",
-                    "assets/app-ground/ground_line_14.png",
-                    "assets/app-ground/ground_line_15.png",
-                    "assets/app-ground/ground_line_16.png",
-                    "assets/app-ground/ground_line_17.png",
-                    "assets/app-ground/ground_line_18.png",
-                    "assets/app-ground/ground_line_19.png",
-                    "assets/app-ground/ground_line_20.png",
-                    "assets/app-ground/ground_line_21.png",
-                    "assets/app-ground/ground_line_22.png",
-                    "assets/app-ground/ground_line_23.png",
-                    "assets/app-ground/ground_line_24.png",
-                    "assets/app-ground/ground_line_25.png"
+                    // terrain
+                    "assets/app-terrain-2/grass-lines_0.png",
+                    "assets/app-terrain-2/grass-lines_1.png",
+                    "assets/app-terrain-2/grass-lines_2.png",
+                    "assets/app-terrain-2/grass-lines_3.png",
+                    "assets/app-terrain-2/grass-lines_4.png",
+                    "assets/app-terrain-2/hills_0.png",
+                    "assets/app-terrain-2/hills_1.png",
+                    "assets/app-terrain-2/hills_2.png",
+                    "assets/app-terrain-2/hills_3.png",
+                    "assets/app-terrain-2/hills_4.png",
+                    "assets/app-terrain-2/hills_5.png",
+                    "assets/app-terrain-2/marks_0.png",
+                    "assets/app-terrain-2/marks_1.png",
+                    "assets/app-terrain-2/marks_2.png",
+                    "assets/app-terrain-2/marks_3.png",
+                    "assets/app-terrain-2/mountain-brown_0.png",
+                    "assets/app-terrain-2/mountain-brown_1.png",
+                    "assets/app-terrain-2/mountain-brown_2.png",
+                    "assets/app-terrain-2/mountain-brown_3.png",
+                    "assets/app-terrain-2/mountain-brown_4.png",
+                    "assets/app-terrain-2/mountain-brown_5.png",
+                    "assets/app-terrain-2/mountain-brown_6.png",
+                    "assets/app-terrain-2/mountain-brown_7.png",
+                    "assets/app-terrain-2/mountain-green_0.png",
+                    "assets/app-terrain-2/mountain-green_1.png",
+                    "assets/app-terrain-2/mountain-green_2.png",
+                    "assets/app-terrain-2/mountain-green_3.png",
+                    "assets/app-terrain-2/mountain-green_4.png",
+                    "assets/app-terrain-2/mountain-green_5.png",
+                    "assets/app-terrain-2/mountain-green_6.png",
+                    "assets/app-terrain-2/mountain-green_7.png",
+                    "assets/app-terrain-2/mountain-grey_0.png",
+                    "assets/app-terrain-2/mountain-grey_1.png",
+                    "assets/app-terrain-2/mountain-grey_2.png",
+                    "assets/app-terrain-2/mountain-grey_3.png",
+                    "assets/app-terrain-2/mountain-grey_4.png",
+                    "assets/app-terrain-2/mountain-grey_5.png",
+                    "assets/app-terrain-2/mountain-grey_6.png",
+                    "assets/app-terrain-2/mountain-grey_7.png",
+                    "assets/app-terrain-2/mountain-olive_0.png",
+                    "assets/app-terrain-2/mountain-olive_1.png",
+                    "assets/app-terrain-2/mountain-olive_2.png",
+                    "assets/app-terrain-2/mountain-olive_3.png",
+                    "assets/app-terrain-2/mountain-olive_4.png",
+                    "assets/app-terrain-2/mountain-olive_5.png",
+                    "assets/app-terrain-2/mountain-olive_6.png",
+                    "assets/app-terrain-2/mountain-olive_7.png",
+                    "assets/app-terrain-2/rock-big_0.png",
+                    "assets/app-terrain-2/rock-big_1.png",
+                    "assets/app-terrain-2/rock-big_2.png",
+                    "assets/app-terrain-2/rock-big_3.png",
+                    "assets/app-terrain-2/rock-big_4.png",
+                    "assets/app-terrain-2/rock-big_5.png",
+                    "assets/app-terrain-2/rock-big_6.png",
+                    "assets/app-terrain-2/rock-big_7.png",
+                    "assets/app-terrain-2/rock-big_8.png",
+                    "assets/app-terrain-2/rock-big_9.png",
+                    "assets/app-terrain-2/rock-small_0.png",
+                    "assets/app-terrain-2/rock-small_1.png",
+                    "assets/app-terrain-2/rock-small_2.png",
+                    "assets/app-terrain-2/rock-small_3.png",
+                    "assets/app-terrain-2/rock-small_4.png",
+                    "assets/app-terrain-2/rock-small_5.png",
+                    "assets/app-terrain-2/horizontal-lines_0.png",
+                    "assets/app-terrain-2/horizontal-lines_1.png",
+                    "assets/app-terrain-2/horizontal-lines_2.png",
+                    "assets/app-terrain-2/horizontal-lines_3.png"
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -406,40 +454,12 @@ public class SceneRPGMapMaker implements Scene {
 
     @Override
     public void update() {
-        if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && !Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL)) {
-            camera.position.x -= 1.5f * Input.mouse.getXDelta();
-            camera.position.y += 1.5f * Input.mouse.getYDelta();
-            // TODO: set zoom limits
-        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL)) {
-            camera.zoom += Input.mouse.getYDelta() * 0.05f;
-        }
-        screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
-        camera.unProject(screen);
-
-        boolean leftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
-        boolean leftJustRelease = Input.mouse.isButtonJustReleased(Mouse.Button.LEFT);
-        boolean leftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
-
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_1)) {
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_2)) {
-            selectTool(toolTerrainCarve);
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
-
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_4)) {
-
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_5)) {
-
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_6)) {
-
-        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_7)) {
-
-        }
+        step();
 
         // get all terrain draw commands history
-        commandsTerrainPaint.clear();
-        commandsDrawWheat.clear();
+        commandTerrainCarves.clear();
         for (Command command : commandHistory) { // TODO: iterate until last index.
-
+            if (command instanceof CommandTerrainCarve) commandTerrainCarves.add((CommandTerrainCarve) command);
         }
 
         // render scene
@@ -452,40 +472,23 @@ public class SceneRPGMapMaker implements Scene {
         // create terrain stencil mask
         renderer2D.beginStencil();
         renderer2D.stencilBufferClear(CommandTerrainPaint.GRASS_MASK);
-        for (CommandTerrainPaint command : commandsTerrainPaint) {
+        for (CommandTerrainCarve command : commandTerrainCarves) {
             renderer2D.setStencilModeReplace(command.mask);
-            renderer2D.drawCircleFilled(command.r, command.refinement, command.x, command.y, command.deg, command.sclX, command.sclY);
+            renderer2D.drawCircleFilled(30, 5, command.x, command.y, command.deg, command.sclX, command.sclY);
         }
         renderer2D.endStencil();
 
         renderer2D.enableMasking();
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.WATER_MASK);
         renderer2D.drawTexture(terrainWater, 0, 0, 0, 1, 1);
-        renderer2D.disableMasking();
-        // TODO: apply object outlining here. Maybe with stencil, maybe with another frame buffer.
+
         renderer2D.enableMasking();
         renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.GRASS_MASK);
         renderer2D.drawTexture(terrainGrass, 0, 0, 0, 1, 1);
-        renderer2D.setMaskingFunctionEquals(CommandTerrainPaint.GRASS_MASK);
-
         // draw wheat fields here. they are masked by the ground.
-        renderer2D.setColor(1,1,1,1);
-        if (false) for (CommandTerrainDrawWheat wheatCommand : commandsDrawWheat) {
-            // draw base
-            renderer2D.setColor(wheatCommand.color);
-            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainFieldBase, uv -> uv.rotateDeg(wheatCommand.linesAngle).scl(1), wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
-            // draw lines
-            renderer2D.setColor(1,1,1,1);
-            renderer2D.drawPolygonFilled(wheatCommand.polygon, terrainFieldLines, uv -> uv.rotateDeg(wheatCommand.linesAngle).scl(1), wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
-            // draw outline
-            renderer2D.setColor(wheatCommand.color.r * 0.5f, wheatCommand.color.g * 0.5f, wheatCommand.color.b * 0.5f, wheatCommand.color.a * 0.4f);
-            renderer2D.drawCurveFilled(terrainFieldBase, 3, 5, wheatCommand.outline, wheatCommand.x, wheatCommand.y, wheatCommand.deg, wheatCommand.sclX, wheatCommand.sclY);
-            renderer2D.setColor(1,1,1,1);
-        }
+
         renderer2D.disableMasking();
         renderer2D.setColor(Color.WHITE);
-        // draw map objects
-        // TODO: first, calculate map items array
         mapTokens.sort(Comparator.comparingInt(o -> -(int) o.y));
         for (MapToken token : mapTokens) {
             token.render(renderer2D);
@@ -503,6 +506,39 @@ public class SceneRPGMapMaker implements Scene {
         renderer2D.begin();
         renderer2D.end();
 
+    }
+
+    private void step() {
+        if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && !Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL)) {
+            camera.position.x -= 1.5f * Input.mouse.getXDelta();
+            camera.position.y += 1.5f * Input.mouse.getYDelta();
+            // TODO: set zoom limits
+        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL)) {
+            camera.zoom += Input.mouse.getYDelta() * 0.05f;
+        }
+        screen.set(Input.mouse.getX(), Input.mouse.getY(), 0);
+        camera.unProject(screen);
+
+        inputLeftJustPressed = Input.mouse.isButtonJustPressed(Mouse.Button.LEFT);
+        inputLeftJustRelease = Input.mouse.isButtonJustReleased(Mouse.Button.LEFT);
+        inputLeftPressedAndMoved = Input.mouse.isButtonPressed(Mouse.Button.LEFT) && (Math.abs(Input.mouse.getXDelta()) > 0 || Math.abs(Input.mouse.getYDelta()) > 0);
+
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_1)) {
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_2)) {
+            selectTool(toolTerrainCarve);
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
+
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_4)) {
+
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_5)) {
+
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_6)) {
+
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_7)) {
+
+        }
+
+        activeTool.frameUpdate();
     }
 
     private void selectTool(Tool tool) {

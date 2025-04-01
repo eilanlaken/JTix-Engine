@@ -3,7 +3,6 @@ package com.heavybox.jtix.widgets_4;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
-import com.heavybox.jtix.input.Input;
 
 /*
 TODO: you would be able to anchor a canvas to one of the screen corners / CENTER.
@@ -126,7 +125,7 @@ public class Widget {
 
     // frame update
     public final void draw(Renderer2D renderer2D) {
-        renderer2D.stencilMaskClear(); // clear stencil buffer in case it was "stained" by previous rendering calls.
+        renderer2D.stencilBufferClear(); // clear stencil buffer in case it was "stained" by previous rendering calls.
         for (Node node : nodes) {
             if (!node.active) continue;
             node.draw(renderer2D);

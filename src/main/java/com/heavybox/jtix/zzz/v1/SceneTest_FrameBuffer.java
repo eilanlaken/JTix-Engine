@@ -1,4 +1,4 @@
-package com.heavybox.jtix;
+package com.heavybox.jtix.zzz.v1;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;

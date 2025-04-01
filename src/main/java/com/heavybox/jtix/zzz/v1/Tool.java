@@ -1,13 +1,14 @@
 package com.heavybox.jtix.zzz.v1;
 
+import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.graphics.Renderer2D;
 
 public abstract class Tool {
 
-    public final SceneRPGMapMaker scene;
+    public final Scene scene;
     public boolean active = false;
 
-    public Tool(final SceneRPGMapMaker scene) {
+    public Tool(final Scene scene) {
         this.scene = scene;
     }
 
@@ -19,6 +20,11 @@ public abstract class Tool {
     public void deselect() {
         onDeselect();
         this.active = false;
+    }
+
+    public void frameUpdate() {
+        if (!active) return;
+        update();
     }
 
     public abstract void update();

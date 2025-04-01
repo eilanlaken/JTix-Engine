@@ -7,7 +7,7 @@ public interface Scene {
     /* Scene life-cycle: setup() -> start() -> update()...[repeat] -> finish() */
     void setup();
     void start();
-    void update();
+    void update(); // TODO: refactor name to "frame"
     void finish();
 
     /* GLFW Window callbacks. */
