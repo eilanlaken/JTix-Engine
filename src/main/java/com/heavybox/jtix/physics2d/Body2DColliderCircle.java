@@ -36,7 +36,7 @@ public final class Body2DColliderCircle extends Body2DCollider {
     @Override
     protected void update() {
         worldCenter.set(offset);
-        worldCenter.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
+        worldCenter.rotateAroundRad(body.local_cmX, body.local_cmY, body.radians);
         worldCenter.add(body.x, body.y);
     }
 

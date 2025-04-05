@@ -64,19 +64,19 @@ public class Constraint2DDistance extends Constraint2D {
         m_invIB = body2.invI;
 
         cA.set(body1.x, body1.y);
-        aA = body1.aRad;
+        aA = body1.radians;
         vA.set(body1.vx, body1.vy);
         wA = body1.wRad;
 
         cB.set(body2.x, body2.y);
-        aB = body2.aRad;
+        aB = body2.radians;
         vB.set(body2.vx, body2.vy);
         wB = body2.wRad;
 
         // use m_u as temporary variable
-        m_u.set(m_localAnchorA).sub(m_localCenterA).rotateRad(body1.aRad);
+        m_u.set(m_localAnchorA).sub(m_localCenterA).rotateRad(body1.radians);
         m_rA.set(m_u);
-        m_u.set(m_localAnchorB).sub(m_localCenterB).rotateRad(body2.aRad);
+        m_u.set(m_localAnchorB).sub(m_localCenterB).rotateRad(body2.radians);
         m_rB.set(m_u);
         m_u.set(body2.x, body2.y).add(m_rB).sub(body1.x, body1.y).sub(m_rA);
 

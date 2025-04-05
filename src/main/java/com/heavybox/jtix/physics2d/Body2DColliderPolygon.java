@@ -70,7 +70,7 @@ public final class Body2DColliderPolygon extends Body2DCollider {
         for (int i = 0; i < vertexCount; i++) {
             worldVertices.get(i)
                     .set(vertices.get(i * 2), vertices.get(i * 2 + 1))
-                    .rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad)
+                    .rotateAroundRad(body.local_cmX, body.local_cmY, body.radians)
                     .add(body.x, body.y);
         }
     }

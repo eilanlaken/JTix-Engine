@@ -732,6 +732,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Circles */
 
+    // BUG HERE.
     public void drawCircleThin(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
@@ -744,10 +745,10 @@ public class Renderer2D implements MemoryResourceHolder {
         Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
         for (int i = 0; i < refinement; i++) {
-            arm.x = x + r * scaleX * MathUtils.cosDeg(da * i);
-            arm.y = y + r * scaleY * MathUtils.sinDeg(da * i);
+            arm.x = r * scaleX * MathUtils.cosDeg(da * i);
+            arm.y = r * scaleY * MathUtils.sinDeg(da * i);
             arm.rotateDeg(degrees);
-            positions.put(arm.x).put(arm.y);
+            positions.put(arm.x + x).put(arm.y + y);
             textCoords.put(0.5f).put(0.5f);
             colors.put(currentTint);
         }
@@ -1007,6 +1008,46 @@ public class Renderer2D implements MemoryResourceHolder {
         vectors2Pool.free(arm1);
         vectors2Pool.free(arm2);
         vectors2Pool.free(arm3);
+    }
+
+    // TODO: test
+    public void drawRectangleThin(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
+        if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
+        if (!ensureCapacity(4, 8)) flush();
+
+        setMode(GL11.GL_LINES);
+        setTexture(defaultTexture);
+
+        // put indices
+        int startVertex = this.vertexIndex;
+        indices
+                .put(startVertex + 0)
+                .put(startVertex + 1)
+                .put(startVertex + 1)
+                .put(startVertex + 2)
+                .put(startVertex + 2)
+                .put(startVertex + 3)
+                .put(startVertex + 3)
+                .put(startVertex + 0)
+        ;
+
+        positions.put(x0).put(y0);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x1).put(y1);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x2).put(y2);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        positions.put(x3).put(y3);
+        colors.put(currentTint);
+        textCoords.put(0.5f).put(0.5f);
+
+        vertexIndex += 4;
     }
 
     public void drawRectangleThin(float width, float height, float cornerRadius, int refinement, float x, float y, float deg, float sclX, float sclY) {

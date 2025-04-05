@@ -2,7 +2,6 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
-import com.heavybox.jtix.zzz.v1.*;
 
 import java.io.IOException;
 
@@ -65,7 +64,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRPGMapMaker2());
+        Application.launch(new ScenePhysics2D());
 
     }
 

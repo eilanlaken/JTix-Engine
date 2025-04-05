@@ -68,7 +68,7 @@ public abstract class Body2DCollider {
 
     public final Vector2 worldCenter() {
         if (body == null) return worldCenter.set(offset.x, offset.y);
-        else return worldCenter.set(offset.x + body.x, offset.y + body.y).rotateAroundRad(body.cmX, body.cmY, body.aRad); // "scale" (by 1) -> rotate -> translate
+        else return worldCenter.set(offset.x + body.x, offset.y + body.y).rotateAroundRad(body.cmX, body.cmY, body.radians); // "scale" (by 1) -> rotate -> translate
     }
 
     public final float area() {

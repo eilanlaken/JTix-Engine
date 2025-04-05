@@ -86,10 +86,10 @@ public final class Body2DColliderRectangle extends Body2DCollider {
         c2.set(+widthHalf, -heightHalf).rotateRad(offsetAngleRad).add(offset);
         c3.set(+widthHalf, +heightHalf).rotateRad(offsetAngleRad).add(offset);
 
-        c0.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
-        c1.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
-        c2.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
-        c3.rotateAroundRad(body.local_cmX, body.local_cmY, body.aRad);
+        c0.rotateAroundRad(body.local_cmX, body.local_cmY, body.radians);
+        c1.rotateAroundRad(body.local_cmX, body.local_cmY, body.radians);
+        c2.rotateAroundRad(body.local_cmX, body.local_cmY, body.radians);
+        c3.rotateAroundRad(body.local_cmX, body.local_cmY, body.radians);
 
         // translate
         c0.add(body.x, body.y);

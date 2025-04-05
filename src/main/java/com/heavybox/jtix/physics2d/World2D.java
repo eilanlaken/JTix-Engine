@@ -1,7 +1,7 @@
 package com.heavybox.jtix.physics2d;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer2D_old;
+import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.memory.MemoryPool;
@@ -277,7 +277,7 @@ public class World2D {
             if (body.motionType == Body2D.MotionType.STATIC) continue;
             body.x += delta * body.vx;
             body.y += delta * body.vy;
-            body.aRad += delta * body.wRad;
+            body.radians += delta * body.wRad;
             body.syncTransform();
         }
 
@@ -321,7 +321,7 @@ public class World2D {
 
     }
 
-    public void render(Renderer2D_old renderer) {
+    public void render(Renderer2D renderer) {
         debugRenderer.render(renderer);
     }
 
@@ -370,7 +370,7 @@ public class World2D {
 
         body.x = x;
         body.y = y;
-        body.aRad = angleDeg * MathUtils.degreesToRadians;
+        body.radians = angleDeg * MathUtils.degreesToRadians;
 
         body.vx = vx;
         body.vy = vy;
@@ -401,7 +401,7 @@ public class World2D {
 
         body.x = x;
         body.y = y;
-        body.aRad = angleDeg * MathUtils.degreesToRadians;
+        body.radians = angleDeg * MathUtils.degreesToRadians;
 
         body.vx = vx;
         body.vy = vy;
@@ -433,7 +433,7 @@ public class World2D {
 
         body.x = x;
         body.y = y;
-        body.aRad = angleDeg * MathUtils.degreesToRadians;
+        body.radians = angleDeg * MathUtils.degreesToRadians;
 
         body.vx = vx;
         body.vy = vy;
@@ -465,7 +465,7 @@ public class World2D {
 
         body.x = x;
         body.y = y;
-        body.aRad = angleDeg * MathUtils.degreesToRadians;
+        body.radians = angleDeg * MathUtils.degreesToRadians;
 
         body.vx = vx;
         body.vy = vy;
@@ -502,7 +502,7 @@ public class World2D {
 
         body.x = x;
         body.y = y;
-        body.aRad = angleDeg * MathUtils.degreesToRadians;
+        body.radians = angleDeg * MathUtils.degreesToRadians;
 
         body.vx = vx;
         body.vy = vy;

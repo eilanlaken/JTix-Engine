@@ -22,7 +22,7 @@ public class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
     protected float local_cmY = 0;
     protected float cmX       = 0;
     protected float cmY       = 0;
-    protected float aRad      = 0; // the angle around the center of mass
+    protected float radians   = 0; // the angle around the center of mass
     // velocity
     protected float vx     = 0;
     protected float vy     = 0;
@@ -94,7 +94,7 @@ public class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
     public void setTransform(float x, float y, float angleRad) {
         this.x = x;
         this.y = y;
-        this.aRad = angleRad;
+        this.radians = angleRad;
         syncTransform();
     }
 
@@ -118,7 +118,7 @@ public class Body2D implements MemoryPool.Reset, Comparable<Body2D> {
         this.y = 0;
         this.local_cmX = 0;
         this.local_cmY = 0;
-        this.aRad = 0;
+        this.radians = 0;
 
         this.vx = 0;
         this.vy = 0;
