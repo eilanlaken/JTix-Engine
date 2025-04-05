@@ -9,6 +9,7 @@ import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryUtils;
 import com.heavybox.jtix.z_deprecated.z_graphics_old.*;
 import com.heavybox.jtix.z_deprecated.z_graphics_old.*;
+import com.heavybox.jtix.z_deprecated.z_graphics_old.Model;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
 import org.lwjgl.opengl.GL11;

@@ -152,8 +152,8 @@ public class Renderer2D implements MemoryResourceHolder {
 
     public void begin(Camera camera) {
         if (drawing) throw new GraphicsException("Already in a drawing state; Must call " + Renderer2D.class.getSimpleName() + ".end() before calling begin().");
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-        GL11.glColorMask(true, true, true, true); // Disable color buffer writes
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT); // TODO: WHY?
+        GL11.glColorMask(true, true, true, true); // enable color buffer writes
         GL20.glDepthMask(false);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
