@@ -732,7 +732,6 @@ public class Renderer2D implements MemoryResourceHolder {
 
     /* Rendering 2D primitives - Circles */
 
-    // BUG HERE.
     public void drawCircleThin(float r, int refinement, float x, float y, float degrees, float scaleX, float scaleY) {
         if (!drawing) throw new GraphicsException("Must call begin() before draw operations.");
 
