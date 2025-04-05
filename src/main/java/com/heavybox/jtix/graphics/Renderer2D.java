@@ -744,10 +744,10 @@ public class Renderer2D implements MemoryResourceHolder {
         Vector2 arm = vectors2Pool.allocate();
         float da = 360f / refinement;
         for (int i = 0; i < refinement; i++) {
-            arm.x = x + r * scaleX * MathUtils.cosDeg(da * i);
-            arm.y = y + r * scaleY * MathUtils.sinDeg(da * i);
+            arm.x = r * scaleX * MathUtils.cosDeg(da * i);
+            arm.y = r * scaleY * MathUtils.sinDeg(da * i);
             arm.rotateDeg(degrees);
-            positions.put(arm.x).put(arm.y);
+            positions.put(arm.x + x).put(arm.y + y);
             textCoords.put(0.5f).put(0.5f);
             colors.put(currentTint);
         }
