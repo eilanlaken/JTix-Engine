@@ -13,7 +13,8 @@ public class FrameBufferBinder {
     }
 
     public static void bind(@Nullable FrameBuffer frameBuffer) {
-        if (Renderer2D_new.isDrawing()) throw new GraphicsException("Cannot switch frame buffers during a drawing sequence (between Renderer2D.begin() and Renderer2D.end(). Call Renderer2D.end() and only then bind a new frame buffer.");
+        //if (Renderer2D_new.isDrawing()) throw new GraphicsException("Cannot switch frame buffers during a drawing sequence (between Renderer2D.begin() and Renderer2D.end(). Call Renderer2D.end() and only then bind a new frame buffer.");
+        if (boundFrameBuffer == frameBuffer) return; // prevent redundant frame buffer binds.
 
         if (frameBuffer == null) {
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
@@ -21,8 +22,6 @@ public class FrameBufferBinder {
             GL20.glViewport(0, 0, Graphics.getWindowWidth(), Graphics.getWindowHeight());
             return;
         }
-
-        if (boundFrameBuffer == frameBuffer) return; // prevent redundant frame buffer binds.
 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer.getFbo());
         boundFrameBuffer = frameBuffer;

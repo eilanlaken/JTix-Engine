@@ -29,8 +29,10 @@ import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-// TODO: make a static version of that.
-// TODO: delete this in favor of the static version of Renderer2D.
+// TODO: convert to a static class. Renderer2D.
+// TODO: in Graphics.cleanup(), call Renderer2D.delete()
+// TODO: in FrameBufferBinder.bind(), throw an exception if Renderer2D or Renderer3D is in drawing state.
+// TODO: in begin(), first check if Renderer3D isDrawing = true. They cannot step on each other.
 public class Renderer2D implements MemoryResourceHolder {
 
     private static final int   VERTICES_CAPACITY         = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)

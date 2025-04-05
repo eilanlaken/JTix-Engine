@@ -1,19 +1,13 @@
 #version 450
 
 // attributes
-layout(location = 0) in vec2 a_position;
-layout(location = 1) in vec4 a_color;
-layout(location = 2) in vec2 a_texCoord0;
+layout(location = 0) in vec3 a_position;
+layout(location = 2) in vec2 a_textCoords0;
 
 // uniforms
+uniform mat4 u_transform;
 uniform mat4 u_camera_combined;
 
-// outputs
-out vec4 color;
-out vec2 uv;
-
 void main() {
-    color = a_color;
-    uv = a_texCoord0;
-    gl_Position = u_camera_combined * vec4(a_position.x, a_position.y, 0.0, 1.0);
-};
+    gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
+}

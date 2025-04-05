@@ -1,15 +1,13 @@
 #version 450
 
 // inputs
-in vec4 color;
-in vec2 uv;
 
 // uniforms
-uniform sampler2D u_texture;
+uniform vec4 color;
 
 // outputs
 layout (location = 0) out vec4 out_color;
 
 void main() {
-    out_color = texture(u_texture, uv);
+    out_color = color;
 }

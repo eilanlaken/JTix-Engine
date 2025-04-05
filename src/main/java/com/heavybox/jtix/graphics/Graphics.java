@@ -355,7 +355,7 @@ public final class Graphics {
         if (cursorResizeNWSE != -1) GLFW.glfwDestroyCursor(cursorResizeNWSE);
         if (cursorResizeAll != -1) GLFW.glfwDestroyCursor(cursorResizeAll);
 
-        Renderer2D_new.delete();
+        //Renderer2D_new.delete();
 
         for (Map.Entry<String, Long> cursorEntry : customCursors.entrySet()) {
             long cursor = cursorEntry.getValue();

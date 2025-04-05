@@ -6,15 +6,30 @@ import com.heavybox.jtix.memory.MemoryPool;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+
 // TODO:
 // draw model surface material ("regular" drawing.)
 // draw model wireframe
 // draw model volume (smoke, clouds, water, jelly, ...)
 // render objects with opacity.
+
+// Note: here, we can't really batch draw calls as the transform cannot be directly applied to the vertices,
+// but rather sent to the GPU as a uniform u_transform.
+// So the only possible optimization is sorting to minimize context switches (shader bindings).
+// You must accept at least 1 draw-call per draw() operation.
+// (for complex models with multiple model parts, expect more).
 public class Renderer3D {
 
     private static final MemoryPool<RenderUnit> renderUnitPool = new MemoryPool<>(RenderUnit.class, 5);
     private static final Array<RenderUnit>      renderUnits    = new Array<>(false, 20);
+
+    // defaults
+    private static final Shader defaultShader = createDefaultShaderProgram();
 
     private static boolean drawing = false;
 
@@ -68,11 +83,57 @@ public class Renderer3D {
 
     }
 
+    private static Shader createDefaultShaderProgram() {
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.vert");
+             BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.frag");
+             BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
+
+            String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return new Shader(vertexShader, fragmentShader);
+        } catch (Exception e) {
+            System.err.println("Could not create shader program from resources. Creating manually.");
+
+            String vertexShader = """
+                    #version 450
+                        
+                    // attributes
+                    layout(location = 0) in vec3 a_position;
+                    layout(location = 2) in vec2 a_textCoords0;
+                        
+                    // uniforms
+                    uniform mat4 u_transform;
+                    uniform mat4 u_camera_combined;
+                        
+                    void main() {
+                        gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
+                    };""";
+
+            String fragmentShader = """
+                    #version 450
+                        
+                    // inputs
+                        
+                    // uniforms
+                    uniform vec4 color;
+                        
+                    // outputs
+                    layout (location = 0) out vec4 out_color;
+                        
+                    void main() {
+                        out_color = color;
+                    }""";
+
+            return new Shader(vertexShader, fragmentShader);
+        }
+    }
+
     private static final class RenderUnit implements MemoryPool.Reset {
 
-        public Model.Mesh mesh;
+        public Model.Mesh     mesh;
         public Model.Material material;
-        public Matrix4x4     transform;
+        public Matrix4x4      transform;
 
         @Override
         public void reset() {
