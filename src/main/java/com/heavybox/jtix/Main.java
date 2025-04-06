@@ -64,7 +64,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new ScenePhysics2D());
+        Application.launch(new SceneRendering_3D());
 
     }
 

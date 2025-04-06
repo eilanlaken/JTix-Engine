@@ -1,15 +1,19 @@
 package com.heavybox.jtix.graphics;
 
-public class Model {
+import com.heavybox.jtix.memory.MemoryResource;
 
-    public Mesh[] meshes;
-    public Material[] materials;
+public class Model implements MemoryResource {
 
-    public static class Material {
+    public ModelMesh[] meshes;
+    public ModelMaterial[] materials;
 
+    // TODO: tmp.
+    public Model(ModelMesh[] meshes) {
+        this.meshes = meshes;
     }
 
-    public static class Mesh {
+    @Override
+    public void delete() {
 
     }
 

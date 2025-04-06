@@ -5,11 +5,14 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 // TODO:
@@ -43,16 +46,28 @@ public class Renderer3D {
 
         GL11.glColorMask(true, true, true, true); // enable color buffer writes
         GL20.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         currentCamera = camera;
         drawing = true;
+
+        ShaderBinder.bind(defaultShader);
     }
 
-    public static void drawModel(Model model, Matrix4x4 transform) {
+    // TODO
+    private void setShader() {
 
+    }
+
+    public static void drawModel_tmp(Model model, Matrix4x4 transform) {
+        GL30.glBindVertexArray(model.meshes[0].vaoId);
+        GL20.glEnableVertexAttribArray(0);
+        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.meshes[0].vertexCount);
+        GL20.glDisableVertexAttribArray(0);
+        GL30.glBindVertexArray(0);
     }
 
     public static void drawModelWireframe(Model model, Matrix4x4 transform) {
@@ -80,7 +95,7 @@ public class Renderer3D {
     }
 
     public static void end() {
-
+        drawing = false;
     }
 
     private static Shader createDefaultShaderProgram() {
@@ -100,8 +115,7 @@ public class Renderer3D {
                         
                     // attributes
                     layout(location = 0) in vec3 a_position;
-                    layout(location = 2) in vec2 a_textCoords0;
-                        
+                                          
                     // uniforms
                     uniform mat4 u_transform;
                     uniform mat4 u_camera_combined;
@@ -131,17 +145,69 @@ public class Renderer3D {
 
     private static final class RenderUnit implements MemoryPool.Reset {
 
-        public Model.Mesh     mesh;
-        public Model.Material material;
-        public Matrix4x4      transform;
+        @Deprecated public ModelMesh mesh;
+        @Deprecated public ModelMaterial material;
+
+        public FloatBuffer meshVertices; // interleaved
+        public Shader materialShader = null;
+        public HashMap<String, Object> materialAttributes = new HashMap<>();
+        public Matrix4x4      transform = null;
+
+        public RenderUnit() {
+
+        }
 
         @Override
         public void reset() {
             this.mesh = null;
             this.material = null;
+
+            meshVertices = null;
+            materialShader = null;
+            materialAttributes.clear();
             this.transform = null;
         }
 
     }
 
 }
+
+/*
+
+public void draw(final ModelPart modelPart, final ComponentTransform_1 transform) {
+        // TODO: maybe updating the bounding sphere should be somewhere else.
+        float centerX = modelPart.mesh.boundingSphereCenter.x;
+        float centerY = modelPart.mesh.boundingSphereCenter.y;
+        float centerZ = modelPart.mesh.boundingSphereCenter.z;
+        Vector3 boundingSphereCenter = new Vector3(centerX + transform.x, centerY + transform.y, centerZ + transform.z);
+        float boundingSphereRadius = MathUtils.max(transform.scaleX, transform.scaleY, transform.scaleZ) * modelPart.mesh.boundingSphereRadius;
+        if (componentGraphicsCamera.lens.frustumIntersectsSphere(boundingSphereCenter, boundingSphereRadius)) {
+            System.out.println("intersects");
+        } else {
+            System.out.println("CULLING");
+        }
+
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        // todo: see when it makes sense to compute the matrix transform
+        currentShader.bindUniform("u_body_transform", transform.world());
+        ModelPartMaterial material = modelPart.material;
+        //currentShader.bindUniforms(material.materialParams);
+        currentShader.bindUniform("colorDiffuse", material.uniformParams.get("colorDiffuse"));
+        ModelPartMesh mesh = modelPart.mesh;
+        System.out.println("ddddd " + mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+            for (VertexAttribute_old attribute : VertexAttribute_old.values()) {
+                System.out.println("attrib: " + attribute.slot);
+                if (mesh.hasVertexAttribute(attribute)) GL20.glEnableVertexAttribArray(attribute.slot);
+            }
+            if (mesh.indexed) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+            for (VertexAttribute_old attribute : VertexAttribute_old.values()) if (mesh.hasVertexAttribute(attribute)) GL20.glDisableVertexAttribArray(attribute.slot);
+        }
+        GL30.glBindVertexArray(0);
+    }
+
+
+ */
