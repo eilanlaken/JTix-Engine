@@ -1,126 +1,114 @@
 package com.heavybox.jtix;
 
-import com.heavybox.jtix.z_deprecated.z_old_application.ApplicationScreen;
-import com.heavybox.jtix.z_deprecated.z_old_assets.AssetStore;
-import com.heavybox.jtix.z_deprecated.z_old_assets.AssetUtils;
-import com.heavybox.jtix.graphics.Graphics;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.Model;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.Renderer3D_old;
-import com.heavybox.jtix.graphics.Shader;
-import com.heavybox.jtix.z_deprecated.z_old_input.Keyboard;
-import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_deprecated.z_ecs_old.Component;
-import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentGraphicsCamera;
-import com.heavybox.jtix.z_deprecated.z_ecs_old.ComponentTransform_1;
+import com.heavybox.jtix.application.Scene;
+import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.input.Input;
+import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-import java.util.HashMap;
-import java.util.Map;
+// contact points polygon vs polygon:
+// https://www.youtube.com/watch?v=5gDC1GU3Ivg
+public class SceneRendering3D_1 implements Scene {
 
-public class SceneRendering3D_1 extends ApplicationScreen {
+    private Camera camera;
 
-    private Renderer3D_old renderer3DOld;
-    private Model model;
-    private Shader shader;
-    private ComponentTransform_1 transform;
-    private ComponentGraphicsCamera componentGraphicsCamera;
+    public Model model;
+    public Matrix4x4 transform = new Matrix4x4();
 
+    Renderer2D renderer2D = new Renderer2D();
 
     public SceneRendering3D_1() {
-        this.renderer3DOld = new Renderer3D_old();
-
-        final String vertexShaderSrc = AssetUtils.getFileContent("assets/shaders/default.vert");
-        final String fragmentShaderSrc = AssetUtils.getFileContent("assets/shaders/default.frag");
-        this.shader = new Shader(vertexShaderSrc, fragmentShaderSrc);
-
-
-        this.componentGraphicsCamera = new ComponentGraphicsCamera(100, 100, 1, 0.1f, 100, 70);
 
     }
 
     @Override
-    public Map<String, Class<? extends MemoryResource>> getRequiredAssets() {
-        Map<String, Class<? extends MemoryResource>> requiredAssets = new HashMap<>();
+    public void setup() {
+        float[] positions = {
+          // Left bottom triangle
+                -0.5f, 0.5f, 0f,
+                -0.5f, -0.5f, 0f,
+                0.5f, -0.5f, 0f,
+                // Right top triangle
+                0.5f, -0.5f, 0f,
+                0.5f, 0.5f, 0f,
+                -0.5f, 0.5f, 0f
+        };
 
-        requiredAssets.put("assets/models/cube-blue.fbx", Model.class);
-
-        return requiredAssets;
+        ModelMesh[] meshes = new ModelMesh[1];
+        meshes[0] = new ModelMesh(positions);
+        model = new Model(meshes, null);
     }
 
     @Override
-    public void show() {
-        transform = Component.createTransform();
-        transform.z = -15;
-        model = AssetStore.get("assets/models/cube-blue.fbx");
-        System.out.println(model.parts[0].material.uniformParams);
-        //environment.add(new EnvironmentLightAmbient(0.2f,0.1f,11.1f,0.2f));
-        //transform3D.matrix4.rotateSelfAxis(Vector3.Y, 30);
+    public void finish() {
+
+    }
+
+    @Override
+    public void start() {
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
+        camera.position.set(0, 0, 3);
+        camera.lookAt(0,0,0);
+
+        camera.update();
+
+
     }
 
 
     @Override
-    public void refresh() {
-        float delta = Graphics.getDeltaTime();
-        float angularSpeed = 200; // degrees per second
+    public void update() {
+        Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
+        camera.unProject(screen);
 
-        // rotate
-        if (Keyboard.isKeyPressed(Keyboard.Key.R)) {
-            transform.angleX += 0.01f;
-        }
-        if (Keyboard.isKeyPressed(Keyboard.Key.T)) {
-            transform.angleY += 0.01f;
-        }
-        if (Keyboard.isKeyPressed(Keyboard.Key.Y)) {
-            transform.angleZ += 0.01f;
+        camera.update();
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.K)) {
+            //world.createConstraintDistance(body_a, body_b, 4);
+            camera.position.z += 0.1f;
         }
 
-        // scale
-        if (Keyboard.isKeyPressed(Keyboard.Key.KEY_1)) {
-            transform.scaleX *= 1.01f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
+            transform.rotateLocalAxisY(1);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.KEY_2)) {
-            transform.scaleY *= 1.01f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+            transform.rotateLocalAxisY(-1);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.KEY_3)) {
-            transform.scaleZ *= 1.01f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            transform.rotateLocalAxisZ(1);
         }
-
-        // translate
-        if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform.x += 0.1f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+            transform.rotateLocalAxisZ(-1);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform.x -= 0.1f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
+            transform.rotateLocalAxisX(1);
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform.y += 0.1f;
-        }
-        if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform.y -= 0.1f;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
+            transform.rotateLocalAxisX(-1);
         }
 
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
+            //body_a.applyForce(1,0, body_a.shape.x(), body_a.shape.y() + 0.2f);
+        }
+
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.SPACE)) {
+            //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0,0,0,1);
-        renderer3DOld.begin(shader);
-        renderer3DOld.setCamera(componentGraphicsCamera);
-        renderer3DOld.draw(model.parts[0], transform);
-        //renderer3DOld.draw(model.parts[1], transform3D.matrix4);
-        renderer3DOld.end();
+        GL11.glClearColor(1,0,0,1);
+
+        renderer2D.begin();
+        renderer2D.drawCircleFilled(400,20,200,200,0,1,1);
+        renderer2D.end();
+
+        Renderer3D.begin(camera);
+        Renderer3D.drawModel_tmp(model, transform);
+        Renderer3D.end();
     }
 
-    @Override
-    public void resize(int width, int height) { }
 
-
-    @Override
-    public void hide() {
-        shader.delete();
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
 
 }

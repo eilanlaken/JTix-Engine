@@ -1,26 +1,27 @@
 package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Scene;
+import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
-import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.physics2d.Body2D;
-import com.heavybox.jtix.physics2d.World2D;
 import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering_3D implements Scene {
+public class SceneRendering3D_2 implements Scene {
 
     private Camera camera;
 
-    public Model model;
+    public Model model_1;
+    public Model model_2;
     public Matrix4x4 transform = new Matrix4x4();
 
-    public SceneRendering_3D() {
+    Renderer2D renderer2D = new Renderer2D();
+
+    public SceneRendering3D_2() {
 
     }
 
@@ -37,9 +38,15 @@ public class SceneRendering_3D implements Scene {
                 -0.5f, 0.5f, 0f
         };
 
+        Assets.loadModel("assets/models/cube.fbx");
+        Assets.finishLoading();
+
         ModelMesh[] meshes = new ModelMesh[1];
         meshes[0] = new ModelMesh(positions);
-        model = new Model(meshes);
+        model_1 = new Model(meshes, null);
+
+        model_2 = Assets.get("assets/models/cube.fbx");
+
     }
 
     @Override
@@ -49,7 +56,10 @@ public class SceneRendering_3D implements Scene {
 
     @Override
     public void start() {
-        camera = new Camera(Camera.Mode.ORTHOGRAPHIC, 640f/32, 480f/32, 1, 0, 100, 75);
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
+        camera.position.set(0, 0, 3);
+        camera.lookAt(0,0,0);
+
         camera.update();
 
 
@@ -61,9 +71,30 @@ public class SceneRendering_3D implements Scene {
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
 
+        camera.update();
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.S)) {
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.K)) {
             //world.createConstraintDistance(body_a, body_b, 4);
+            camera.position.z += 0.1f;
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
+            transform.rotateLocalAxisY(1);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+            transform.rotateLocalAxisY(-1);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            transform.rotateLocalAxisZ(1);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+            transform.rotateLocalAxisZ(-1);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
+            transform.rotateLocalAxisX(1);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
+            transform.rotateLocalAxisX(-1);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
@@ -75,10 +106,15 @@ public class SceneRendering_3D implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1,0,0,1);
+        GL11.glClearColor(0,0,0,1);
+
+        renderer2D.begin();
+        //renderer2D.drawCircleFilled(400,20,200,200,0,1,1);
+        renderer2D.end();
 
         Renderer3D.begin(camera);
-        Renderer3D.drawModel_tmp(model, transform);
+        //Renderer3D.drawModel_tmp(model_1, transform);
+        Renderer3D.drawModel_tmp_2(model_2.meshes[0], transform);
         Renderer3D.end();
     }
 

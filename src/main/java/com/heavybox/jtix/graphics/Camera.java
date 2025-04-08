@@ -1,5 +1,6 @@
 package com.heavybox.jtix.graphics;
 
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 
@@ -58,6 +59,35 @@ public class Camera {
         this.position.set(position);
         this.direction.set(direction);
         this.up.set(up);
+    }
+
+    /** Recalculates the direction of the camera to look at the point (x, y, z). This function assumes the up vector is normalized.
+     * @param x the x-coordinate of the point to look at
+     * @param y the y-coordinate of the point to look at
+     * @param z the z-coordinate of the point to look at */
+    public void lookAt(float x, float y, float z) {
+        Vector3 tmp = new Vector3();
+        tmp.set(x, y, z).sub(position).nor();
+        if (!tmp.isZero()) {
+            float dot = tmp.dot(up); // up and direction must ALWAYS be orthonormal vectors
+            if (Math.abs(dot - 1) < 0.000000001f) {
+                // Collinear
+                up.set(direction).scl(-1);
+            } else if (Math.abs(dot + 1) < 0.000000001f) {
+                // Collinear opposite
+                up.set(direction);
+            }
+            direction.set(tmp);
+            // normalize up
+            tmp.set(direction).crs(up);
+            up.set(tmp).crs(direction).nor();
+        }
+    }
+
+    /** Recalculates the direction of the camera to look at the point (x, y, z).
+     * @param target the point to look at */
+    public void lookAt (Vector3 target) {
+        lookAt(target.x, target.y, target.z);
     }
 
     public void update() {

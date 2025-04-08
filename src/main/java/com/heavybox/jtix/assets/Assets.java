@@ -8,7 +8,6 @@ import com.heavybox.jtix.collections.Queue;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.graphics.Font;
 import com.heavybox.jtix.memory.MemoryResource;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.Model;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.MemoryUtil;
 import org.yaml.snakeyaml.DumperOptions;
@@ -125,6 +124,11 @@ public final class Assets {
         load(Texture.class, filepath, options,false);
     }
 
+    public synchronized static void loadModel(String filepath) {
+        final HashMap<String, Object> options = new HashMap<>();
+        load(Model.class, filepath, options, false);
+    }
+
     public synchronized static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {
@@ -145,6 +149,7 @@ public final class Assets {
         storeLoadQueue.addFirst(descriptor);
     }
 
+    // TODO.
     public static synchronized void unload(final String path) {
 
     }
@@ -178,7 +183,6 @@ public final class Assets {
     }
 
     public static synchronized boolean isLoadingInProgress() {
-        //return !storeLoadQueue.isEmpty() || !storeLoadTasks.isEmpty(); // TODO: was
         return !storeLoadQueue.isEmpty() || !storeLoadTasks.isEmpty() || !storeAfterLoadTasks.isEmpty();
     }
 

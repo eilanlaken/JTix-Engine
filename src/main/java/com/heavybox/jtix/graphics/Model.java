@@ -8,7 +8,7 @@ public class Model implements MemoryResource {
     public ModelMaterial[] materials;
 
     // TODO: tmp.
-    public Model(ModelMesh[] meshes) {
+    public Model(ModelMesh[] meshes, ModelMaterial[] materials) {
         this.meshes = meshes;
     }
 

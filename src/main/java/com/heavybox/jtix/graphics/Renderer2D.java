@@ -35,11 +35,8 @@ import java.util.stream.Collectors;
 // TODO: in begin(), first check if Renderer3D isDrawing = true. They cannot step on each other.
 public class Renderer2D implements MemoryResourceHolder {
 
-    private static final int   VERTICES_CAPACITY         = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
-    private static final float WHITE_TINT                = Color.WHITE.toFloatBits();
-    private static final int   STENCIL_MODE_INCREMENT    = 0;
-    private static final int   STENCIL_MODE_DECREMENT    = 1;
-    private static final int   STENCIL_MODE_REPLACE      = 2;
+    private static final int   VERTICES_CAPACITY = 8000; // The batch can render VERTICES_CAPACITY vertices (so wee need a float buffer of size: VERTICES_CAPACITY * VERTEX_SIZE)
+    private static final float WHITE_TINT        = Color.WHITE.toFloatBits();
 
     /* defaults */ // TODO: maybe make them static?
     private static final Shader  defaultShader  = createDefaultShaderProgram();
@@ -90,10 +87,6 @@ public class Renderer2D implements MemoryResourceHolder {
     /* masking */
     private boolean drawingToStencil = false;
     private boolean maskingEnabled   = false;
-    // TODO: remove
-    private int     stencilMode      = STENCIL_MODE_INCREMENT;
-    private int     maskingRef       = 1;
-    private int     maskingFunction  = GL11.GL_EQUAL;
 
     public Renderer2D() {
         positions  = BufferUtils.createFloatBuffer(VERTICES_CAPACITY * 2);
@@ -169,10 +162,7 @@ public class Renderer2D implements MemoryResourceHolder {
 
         /* stencil buffer and masking */
         drawingToStencil = false;
-        stencilMode = STENCIL_MODE_INCREMENT;
         maskingEnabled = false;
-        maskingRef = 1;
-        maskingFunction = GL11.GL_EQUAL;
 
         /* init blend function with default */
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -335,7 +325,6 @@ public class Renderer2D implements MemoryResourceHolder {
         flush();
         GL11.glStencilFunc(GL11.GL_ALWAYS, value, 0xFF); // Always pass, ref value = 1
         GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);   // Replace stencil value with ref (1)
-        stencilMode = STENCIL_MODE_REPLACE;
     }
 
     public void setStencilModeIncrement() {
@@ -344,7 +333,6 @@ public class Renderer2D implements MemoryResourceHolder {
         // always increase stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
         GL11.glStencilOp(GL11.GL_INCR, GL11.GL_INCR, GL11.GL_INCR);
-        stencilMode = STENCIL_MODE_INCREMENT;
     }
 
     public void setStencilModeDecrement() {
@@ -352,8 +340,7 @@ public class Renderer2D implements MemoryResourceHolder {
         flush();
         // always decrease stencil value by 1
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF); // Always pass, ref value = 1
-        GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);   // Replace stencil value with ref (1)
-        stencilMode = STENCIL_MODE_DECREMENT;
+        GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);
     }
 
     public void endStencil() {
