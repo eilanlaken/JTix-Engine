@@ -1,20 +1,30 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.Color;
-import com.heavybox.jtix.graphics.Model;
-import com.heavybox.jtix.graphics.ModelMesh;
-import com.heavybox.jtix.math.Vector2;
+import com.heavybox.jtix.collections.MapObjectInt;
+import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
+import org.lwjgl.system.MemoryStack;
 
-import java.util.Arrays;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class AssetLoaderModel implements AssetLoader<Model> {
 
+    private static final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
+    static {
+        uniformNameTextureTypes.put("u_baseColor", Assimp.aiTextureType_BASE_COLOR);
+        uniformNameTextureTypes.put("u_diffuse", Assimp.aiTextureType_DIFFUSE);
+    }
+
     private MeshData[] meshesData;
+    private MaterialData[] materialsData;
+    private String folderPath;
 
     @Override
     public void beforeLoad(String path, HashMap<String, Object> options) {
@@ -23,6 +33,8 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     @Override
     public Array<AssetDescriptor> load(String path, HashMap<String, Object> options) {
+        this.folderPath = Paths.get(path).getParent().toString();
+        System.out.println(folderPath);
         // TODO: use the options here.
         final int importFlags =
                 Assimp.aiProcess_Triangulate |
@@ -33,47 +45,102 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 ;
 
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
-            // load meshes:
-        PointerBuffer aiMeshes = aiScene.mMeshes();
 
+        // load meshes:
+        PointerBuffer aiMeshes = aiScene.mMeshes();
         int numMeshes = aiScene.mNumMeshes();
         meshesData = new MeshData[numMeshes];
         for (int i = 0; i < numMeshes; i++) {
-            AIMesh aiMesh = AIMesh.create(aiScene.mMeshes().get(i));
-            int numVertices = aiMesh.mNumVertices();
-            System.out.println(numVertices);
+            AIMesh aiMesh = AIMesh.create(aiMeshes.get(i));
             final MeshData meshData = processMesh(aiMesh);
             meshesData[i] = meshData;
-
         }
 
+        // load materials
+        PointerBuffer aiMaterials  = aiScene.mMaterials();
+        int numMaterials = aiScene.mNumMaterials();
+        materialsData = new MaterialData[numMaterials];
+        for (int i = 0; i < numMaterials; i++) {
+            AIMaterial aiMaterial = AIMaterial.create(aiMaterials.get(i));
+            final MaterialData materialData = processMaterial(aiMaterial);
+            materialsData[i] = materialData;
+        }
 
+        Array<AssetDescriptor> dependencies = new Array<>();
+        // load textures as materials.
+        for (MaterialData materialData : materialsData) {
+            Array<MaterialTextureData> texturesData = materialData.texturesData;
+            for (MaterialTextureData textureData : texturesData) {
+                AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, null); // TODO options
+                dependencies.add(assetDescriptor);
+            }
+        }
 
-        // TODO: return dependencies as part of the materials.
-        return null;
+        return dependencies;
     }
 
     @Override
     public Model afterLoad() {
-        System.out.println();
-
-        System.out.println(Arrays.toString(meshesData[0].positions));
-        System.out.println(meshesData[0].positions.length / 3);
-
-        System.out.println(Arrays.toString(meshesData[0].colors));
-        System.out.println(Arrays.toString(meshesData[0].textureCoords0));
-        System.out.println(Arrays.toString(meshesData[0].normals));
-        System.out.println(Arrays.toString(meshesData[0].indices));
-        //System.out.println(positions.length);
-
         ModelMesh[] modelMeshes = new ModelMesh[meshesData.length];
         for (int i = 0; i < modelMeshes.length; i++) {
             MeshData meshData = meshesData[i];
             modelMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.indices, meshData.boundingSphereRadius);
         }
 
-        return new Model(modelMeshes, null);
+        ModelMaterial[] modelMaterials = new ModelMaterial[materialsData.length];
+        for (int i = 0; i < modelMaterials.length; i++) {
+            MaterialData materialData = materialsData[i];
+            ModelMaterial modelMaterial = new ModelMaterial();
+            // add all the textures
+            for (MaterialTextureData materialTextureData : materialData.texturesData) {
+                Texture texture = Assets.get(materialTextureData.path);
+                modelMaterial.materialAttributes.put(materialTextureData.uniform, texture);
+            }
+            // TODO: add all the colors
+
+            // TODO: add all the props (metallic, roughness etc.).
+
+            modelMaterials[i] = modelMaterial;
+        }
+
+        System.out.println("lenght: " + modelMaterials.length);
+        return new Model(modelMeshes, modelMaterials);
     }
+
+    private MaterialData processMaterial(final AIMaterial aiMaterial) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            MaterialData materialData = new MaterialData();
+
+            AIString ai_name = AIString.calloc();
+            if (Assimp.aiGetMaterialString(aiMaterial, Assimp.AI_MATKEY_NAME, 0, 0, ai_name) == Assimp.aiReturn_SUCCESS) {
+                materialData.name = ai_name.dataString();;
+            }
+
+            for (MapObjectInt.Entry<String> entry : uniformNameTextureTypes) {
+
+                AIString ai_path = AIString.calloc();
+                IntBuffer ai_mapping = stack.mallocInt(1);
+                IntBuffer ai_uvIndex = stack.mallocInt(1);
+                IntBuffer ai_op = stack.mallocInt(1);
+                IntBuffer ai_mapMode = stack.mallocInt(1);
+                FloatBuffer ai_blendMode = stack.mallocFloat(1);
+                int result = Assimp.aiGetMaterialTexture(aiMaterial, entry.value, 0, ai_path, ai_mapping, ai_uvIndex, ai_blendMode, ai_op, ai_mapMode, null);
+                if (result == Assimp.aiReturn_SUCCESS) {
+                    MaterialTextureData materialTexture = new MaterialTextureData();
+                    materialTexture.uniform = entry.key;
+                    Path base = Paths.get(folderPath);
+                    Path fullPath = base.resolve(ai_path.dataString());
+                    materialTexture.path = fullPath.toString();
+                    // ... TODO.
+
+                    materialData.texturesData.add(materialTexture);
+                }
+            }
+
+            return materialData;
+        }
+    }
+
 
     private MeshData processMesh(final AIMesh aiMesh) {
         MeshData meshData = new MeshData();
@@ -192,6 +259,25 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public float[] normals;
         public int[] indices;
         public float   boundingSphereRadius;
+
+    }
+
+    private static class MaterialData {
+
+        public String name;
+        public Array<MaterialTextureData> texturesData = new Array<>();
+
+    }
+
+    private static class MaterialTextureData {
+
+        public String uniform;
+        public String path;
+        public int uvIndex;
+        public int mapping;
+        public int mapMode;
+        public int op;
+        public float blendMode;
 
     }
 

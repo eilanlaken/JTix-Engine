@@ -10,6 +10,7 @@ public class Model implements MemoryResource {
     // TODO: tmp.
     public Model(ModelMesh[] meshes, ModelMaterial[] materials) {
         this.meshes = meshes;
+        this.materials = materials;
     }
 
     @Override
