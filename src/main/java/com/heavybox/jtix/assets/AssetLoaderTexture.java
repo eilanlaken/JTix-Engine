@@ -16,7 +16,6 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     private int        height;
     private ByteBuffer buffer;
     private HashMap<String, Object> options;
-    private String     path;
 
     @Override
     public void beforeLoad(String path, HashMap<String, Object> options) {
@@ -25,7 +24,6 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     @Override
     public Array<AssetDescriptor> load(String path, final HashMap<String, Object> options) {
-        this.path = path;
         this.options = options;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
@@ -43,9 +41,6 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     @Override
     public Texture afterLoad() {
-        int maxTextureSize = Graphics.getMaxTextureSize();
-        if (width > maxTextureSize || height > maxTextureSize) throw new AssetsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
-
         final int anisotropy = options == null || options.get("anisotropy") == null ? Graphics.getMaxAnisotropy() : (int) options.get("anisotropy");
         final Texture.FilterMag magFilter = options == null || options.get("magFilter") == null ? null : (Texture.FilterMag) options.get("magFilter");
         final Texture.FilterMin minFilter = options == null || options.get("minFilter") == null ? null : (Texture.FilterMin) options.get("minFilter");
@@ -55,15 +50,5 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
         STBImage.stbi_image_free(buffer);
         return texture;
     }
-
-//    public static final class Options extends AssetLoader.Options<Texture> {
-//
-//        public int            anisotropy = GraphicsUtils.getMaxAnisotropicFilterLevel();
-//        public Texture.Filter minFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-//        public Texture.Filter magFilter  = Texture.Filter.MIP_MAP_NEAREST_NEAREST;
-//        public Texture.Wrap   uWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-//        public Texture.Wrap   vWrap      = Texture.Wrap.CLAMP_TO_EDGE;
-//
-//    }
 
 }

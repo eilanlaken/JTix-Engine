@@ -224,7 +224,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         for (int i = 0; i < textureCoordinatesBuffer.limit(); i++) {
             AIVector3D coordinates = textureCoordinatesBuffer.get(i);
             textureCoordinates0[2*i] = coordinates.x();
-            textureCoordinates0[2*i+1] = coordinates.y();
+            textureCoordinates0[2*i+1] = 1 - coordinates.y();
         }
         return textureCoordinates0;
     }
