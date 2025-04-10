@@ -139,7 +139,7 @@ public class Shader implements MemoryResource {
             this.uniformNames[i] = entry.key;
             i++;
         }
-
+        System.out.println(Arrays.toString(uniformNames));
         /* instantiate cache */
         this.uniformsCache = new HashMap<>();
 

@@ -18,7 +18,7 @@ public class SceneRendering3D_3 implements Scene {
     public Model model;
     public Matrix4x4 transform = new Matrix4x4();
 
-    Renderer2D renderer2D = new Renderer2D();
+    //Renderer2D renderer2D = new Renderer2D();
 
     Texture t;
 
@@ -111,14 +111,15 @@ public class SceneRendering3D_3 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0,0,0,1);
 
-        renderer2D.begin();
-        renderer2D.drawTexture(t, 0,0,0,1,1);
-        renderer2D.end();
+//        renderer2D.begin();
+//        renderer2D.drawTexture(t, 0,0,0,1,1);
+//        renderer2D.end();
 
         Renderer3D.begin(camera);
         //Renderer3D.drawModel_tmp(model_1, transform);
         //Renderer3D.drawModel_tmp_2(model_2.meshes[0], transform);
-        Renderer3D.drawModel_tmp_2(model.meshes[0], transform);
+        //Renderer3D.drawModel_tmp_2(model.meshes[0], transform);
+        Renderer3D.drawModel_tmp_3(model.meshes[0], model.materials[0], transform);
         Renderer3D.end();
     }
 

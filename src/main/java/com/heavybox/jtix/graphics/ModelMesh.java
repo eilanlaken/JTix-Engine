@@ -32,7 +32,7 @@ public class ModelMesh implements MemoryResource {
         {
             storeDataInAttributeList(VertexAttribute.POSITION_3D, positions, attributesCollector, vbosCollector);
             storeIndicesBuffer(indices, vbosCollector);
-            //storeDataInAttributeList(VertexAttribute.TEXT_COORDS0, uvs, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.TEXT_COORDS0, uvs, attributesCollector, vbosCollector);
             //storeDataInAttributeList(VertexAttribute.COLOR, colors, attributesCollector, vbosCollector);
             //storeDataInAttributeList(VertexAttribute.NORMAL_3D, normals, attributesCollector, vbosCollector);
         }
@@ -73,15 +73,11 @@ public class ModelMesh implements MemoryResource {
 
     private void storeDataInAttributeList(final VertexAttribute attribute, final float[] data, Array<VertexAttribute> attributesCollector, ArrayInt vbosCollector) {
         if (data == null) return;
-        System.out.println("hi");
         int vbo = GL15.glGenBuffers();
-        System.out.println("vbo " + vbo);
-
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo); // bind
         FloatBuffer buffer = MemoryUtils.store(data);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        //GL20.glVertexAttribPointer(attribute.glslLocation, attribute.dimension, attribute.glType, attribute.normalized, 0, 0);
-        GL20.glVertexAttribPointer(0, attribute.dimension, attribute.glType, attribute.normalized, 0, 0);
+        GL20.glVertexAttribPointer(attribute.glslLocation, attribute.dimension, attribute.glType, attribute.normalized, 0, 0);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
         vbosCollector.add(vbo);
         attributesCollector.add(attribute);

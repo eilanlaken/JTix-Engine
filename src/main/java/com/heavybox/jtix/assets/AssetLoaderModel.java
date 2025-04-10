@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class AssetLoaderModel implements AssetLoader<Model> {
@@ -46,9 +47,14 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
 
+        // TODO: this may be wrong. we may have a scenario with multiple meshes and a single material?
+
+
+
         // load meshes:
         PointerBuffer aiMeshes = aiScene.mMeshes();
         int numMeshes = aiScene.mNumMeshes();
+        System.out.println("num meshes: " + numMeshes);
         meshesData = new MeshData[numMeshes];
         for (int i = 0; i < numMeshes; i++) {
             AIMesh aiMesh = AIMesh.create(aiMeshes.get(i));
@@ -71,7 +77,10 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         for (MaterialData materialData : materialsData) {
             Array<MaterialTextureData> texturesData = materialData.texturesData;
             for (MaterialTextureData textureData : texturesData) {
-                AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, null); // TODO options
+                HashMap<String, Object> materialTextureOptions = new HashMap<>();
+                materialTextureOptions.put("uWrap", Texture.Wrap.REPEAT);
+                materialTextureOptions.put("vWrap", Texture.Wrap.REPEAT);
+                AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, materialTextureOptions); // TODO options
                 dependencies.add(assetDescriptor);
             }
         }

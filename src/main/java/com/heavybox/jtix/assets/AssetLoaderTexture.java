@@ -16,6 +16,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
     private int        height;
     private ByteBuffer buffer;
     private HashMap<String, Object> options;
+    private String     path;
 
     @Override
     public void beforeLoad(String path, HashMap<String, Object> options) {
@@ -24,6 +25,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
 
     @Override
     public Array<AssetDescriptor> load(String path, final HashMap<String, Object> options) {
+        this.path = path;
         this.options = options;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer widthBuffer = stack.mallocInt(1);
@@ -35,19 +37,20 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
                     + STBImage.stbi_failure_reason());
             width = widthBuffer.get();
             height = heightBuffer.get();
-            int maxTextureSize = Graphics.getMaxTextureSize();
-            if (width > maxTextureSize || height > maxTextureSize) throw new AssetsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
         }
         return null;
     }
 
     @Override
     public Texture afterLoad() {
-        final int anisotropy = options == null ? Graphics.getMaxAnisotropy() : (int) options.get("anisotropy");
-        final Texture.FilterMag magFilter = options == null ? null : (Texture.FilterMag) options.get("magFilter");
-        final Texture.FilterMin minFilter = options == null ? null : (Texture.FilterMin) options.get("minFilter");
-        final Texture.Wrap uWrap = options == null ? null : (Texture.Wrap) options.get("uWrap");
-        final Texture.Wrap vWrap = options == null ? null : (Texture.Wrap) options.get("vWrap");
+        int maxTextureSize = Graphics.getMaxTextureSize();
+        if (width > maxTextureSize || height > maxTextureSize) throw new AssetsException("Trying to load texture " + path + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+
+        final int anisotropy = options == null || options.get("anisotropy") == null ? Graphics.getMaxAnisotropy() : (int) options.get("anisotropy");
+        final Texture.FilterMag magFilter = options == null || options.get("magFilter") == null ? null : (Texture.FilterMag) options.get("magFilter");
+        final Texture.FilterMin minFilter = options == null || options.get("minFilter") == null ? null : (Texture.FilterMin) options.get("minFilter");
+        final Texture.Wrap uWrap = options == null || options.get("uWrap") == null ? null : (Texture.Wrap) options.get("uWrap");
+        final Texture.Wrap vWrap = options == null || options.get("vWrap") == null ? null : (Texture.Wrap) options.get("vWrap");
         Texture texture = new Texture(width, height, buffer, magFilter, minFilter, uWrap, vWrap, anisotropy);
         STBImage.stbi_image_free(buffer);
         return texture;

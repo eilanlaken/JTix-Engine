@@ -99,6 +99,33 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
+    public static void drawModel_tmp_3(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        defaultShader.bindUniform("u_transform", transform);
+        defaultShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+
+        defaultShader.bindUniform("u_diffuse", material.materialAttributes.get("u_diffuse"));
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+//            for (VertexAttribute attribute : VertexAttribute.values()) {
+//                if (mesh.hasVertexAttribute(attribute)) {
+//                    System.out.println(attribute);
+//                    GL20.glEnableVertexAttribArray(attribute.glslLocation);
+//                }
+//            }
+//            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+//            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+//            for (VertexAttribute attribute : VertexAttribute.values()) if (mesh.hasVertexAttribute(attribute)) GL20.glDisableVertexAttribArray(attribute.glslLocation);
+
+            GL20.glEnableVertexAttribArray(0); // positions
+            GL20.glEnableVertexAttribArray(2); // uvs
+            GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(2);
+        }
+        GL30.glBindVertexArray(0);
+    }
+
     public static void drawModelWireframe(Model model, Matrix4x4 transform) {
 
     }
@@ -137,36 +164,42 @@ public class Renderer3D {
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
-            System.err.println("Could not create shader program from resources. Creating manually.");
+            System.err.println("Could not create shader program from resources. Creating manually. Exception: " + e.getMessage());
 
             String vertexShader = """
                     #version 450
-                    
-                    // attributes
-                    layout(location = 0) in vec3 a_position;
-                    
-                    // uniforms
-                    uniform mat4 u_transform;
-                    uniform mat4 u_camera_combined;
-                    
-                    void main() {
-                        gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
-                    };""";
+                      
+                      // attributes
+                      layout(location = 0) in vec3 a_position;
+                      layout(location = 2) in vec2 a_textCoords0;
+                      
+                      // uniforms
+                      uniform mat4 u_transform;
+                      uniform mat4 u_camera_combined;
+                      
+                      out vec2 uv;
+                      
+                      void main() {
+                          uv = a_textCoords0;
+                          gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
+                      }
+                    """;
 
             String fragmentShader = """
                     #version 450
-                    
-                    // inputs
-                    
-                    // uniforms
-                    uniform vec4 color;
-                    
-                    // outputs
-                    layout (location = 0) out vec4 out_color;
-                    
-                    void main() {
-                        out_color = color;
-                    }""";
+                     
+                     // inputs
+                     in vec2 uv;
+                     
+                     // uniforms
+                     uniform sampler2D u_diffuse;
+                     
+                     // outputs
+                     layout (location = 0) out vec4 out_color;
+                     
+                     void main() {
+                         out_color = texture(u_diffuse, uv);
+                     }""";
 
             return new Shader(vertexShader, fragmentShader);
         }
