@@ -3,6 +3,7 @@ package com.heavybox.jtix.assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.MapObjectInt;
 import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
@@ -14,13 +15,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class AssetLoaderModel implements AssetLoader<Model> {
 
     private static final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
+    private static final Map<String, String>  namedColorParams        = new HashMap<>();
+
     static {
-        uniformNameTextureTypes.put("u_baseColor", Assimp.aiTextureType_BASE_COLOR);
-        uniformNameTextureTypes.put("u_diffuse", Assimp.aiTextureType_DIFFUSE);
+        // all possible material texture parameters
+        uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
+        uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
+
+        // all possible material color parameters
+        namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
     }
 
     private MeshData[] meshesData;
@@ -38,6 +46,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         System.out.println(folderPath);
         // TODO: use the options here.
         final int importFlags =
+
                 Assimp.aiProcess_Triangulate |
                 Assimp.aiProcess_ImproveCacheLocality |
                 Assimp.aiProcess_GenBoundingBoxes |
@@ -101,11 +110,15 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             MaterialData materialData = materialsData[i];
             ModelMaterial modelMaterial = new ModelMaterial();
             // add all the textures
-            for (MaterialTextureData materialTextureData : materialData.texturesData) {
-                Texture texture = Assets.get(materialTextureData.path);
-                modelMaterial.materialAttributes.put(materialTextureData.uniform, texture);
+            for (MaterialTextureData textureData : materialData.texturesData) {
+                Texture texture = Assets.get(textureData.path);
+                modelMaterial.materialAttributes.put(textureData.uniform, texture);
             }
             // TODO: add all the colors
+            for (MaterialColorData colorData : materialData.colorsData) {
+                Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
+                modelMaterial.materialAttributes.put(colorData.uniform, color);
+            }
 
             // TODO: add all the props (metallic, roughness etc.).
 
@@ -143,6 +156,20 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                     // ... TODO.
 
                     materialData.texturesData.add(materialTexture);
+                }
+            }
+
+            AIColor4D aiColor = AIColor4D.create();
+            for (Map.Entry<String, String> colorEntry : namedColorParams.entrySet()) {
+                int result = Assimp.aiGetMaterialColor(aiMaterial, colorEntry.getValue(), Assimp.aiTextureType_NONE, 0, aiColor);
+                if (result == Assimp.aiReturn_SUCCESS) {
+                    MaterialColorData colorData = new MaterialColorData();
+                    colorData.uniform = colorEntry.getKey();
+                    colorData.r = aiColor.r();
+                    colorData.g = aiColor.g();
+                    colorData.b = aiColor.b();
+                    colorData.a = aiColor.a();
+                    materialData.colorsData.add(colorData);
                 }
             }
 
@@ -255,7 +282,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             indices[3*i + 1] = aiFace.mIndices().get(1);
             indices[3*i + 2] = aiFace.mIndices().get(2);
         }
-
         return indices;
     }
 
@@ -275,6 +301,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         public String name;
         public Array<MaterialTextureData> texturesData = new Array<>();
+        public Array<MaterialColorData>   colorsData   = new Array<>();
 
     }
 
@@ -289,5 +316,13 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public float blendMode;
 
     }
+
+    private static class MaterialColorData {
+
+        public String uniform;
+        public float r, g, b, a;
+
+    }
+
 
 }

@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL30;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -33,7 +34,10 @@ public class Renderer3D {
     private static final Array<RenderCommand>      renderUnits    = new Array<>(false, 20);
 
     // defaults
-    private static final Shader defaultShader = createDefaultShaderProgram();
+    private static final Texture defaultTexture = createDefaultTexture();
+    private static final Shader  defaultShader  = createDefaultShaderProgram();
+    private static final Color   defaultColor   = Color.WHITE.clone();
+
 
     private static boolean drawing = false;
 
@@ -103,7 +107,25 @@ public class Renderer3D {
         defaultShader.bindUniform("u_transform", transform);
         defaultShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
 
-        defaultShader.bindUniform("u_diffuse", material.materialAttributes.get("u_diffuse"));
+        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+
+        if (texture_diffuse != null) {
+            defaultShader.bindUniform("u_texture_diffuse", texture_diffuse);
+            defaultShader.bindUniform("u_color_diffuse", Color.WHITE);
+        } else if (color_diffuse != null) {
+            defaultShader.bindUniform("u_texture_diffuse", defaultTexture);
+            defaultShader.bindUniform("u_color_diffuse", color_diffuse);
+        } else { // TODO: handle error: missing both diffuse texture and color.
+
+        }
+
+//        if (texture_diffuse == null) texture_diffuse = defaultTexture;
+//        defaultShader.bindUniform("u_texture_diffuse", texture_diffuse);
+//
+//        if (color_diffuse == null) color_diffuse = defaultColor;
+//        System.out.println(color_diffuse);
+//        defaultShader.bindUniform("u_color_diffuse", Color.WHITE);
 
         GL30.glBindVertexArray(mesh.vaoId);
         {
@@ -192,17 +214,34 @@ public class Renderer3D {
                      in vec2 uv;
                      
                      // uniforms
-                     uniform sampler2D u_diffuse;
+                     uniform sampler2D u_texture_diffuse;
                      
                      // outputs
                      layout (location = 0) out vec4 out_color;
                      
                      void main() {
-                         out_color = texture(u_diffuse, uv);
+                         out_color = texture(u_texture_diffuse, uv);
                      }""";
 
             return new Shader(vertexShader, fragmentShader);
         }
+    }
+
+    /*
+    TODO: this is common to both Renderer2D and Renderer3D and should be refactored.
+    creates a single-white-pixel texture.
+     */
+    private static Texture createDefaultTexture() {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF)); // Red component
+        buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));  // Green component
+        buffer.put((byte) (0xFF));                      // Blue component
+        buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF)); // Alpha component
+        buffer.flip();
+
+        return new Texture(1, 1, buffer,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
     }
 
     private static final class RenderCommand implements MemoryPool.Reset {

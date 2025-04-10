@@ -46,7 +46,7 @@ public class SceneRendering3D_3 implements Scene {
         model = Assets.get("assets/models/head.fbx");
         System.out.println(model.materials);
 
-        t = (Texture) model.materials[0].materialAttributes.get("u_diffuse");
+        t = (Texture) model.materials[0].materialAttributes.get("u_texture_diffuse");
         System.out.println(t);
         //t = Assets.get("assets/models/head/fbm/Material.png");
     }
@@ -59,7 +59,7 @@ public class SceneRendering3D_3 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
-        camera.position.set(0, 0, 3);
+        camera.position.set(0, -3, 0);
 
         camera.lookAt(0,0,0);
 
@@ -81,22 +81,22 @@ public class SceneRendering3D_3 implements Scene {
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform.rotateLocalAxisY(1);
+            transform.rotateGlobalAxisY(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform.rotateLocalAxisY(-1);
+            transform.rotateGlobalAxisY(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform.rotateLocalAxisZ(1);
+            transform.rotateGlobalAxisZ(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform.rotateLocalAxisZ(-1);
+            transform.rotateGlobalAxisZ(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform.rotateLocalAxisX(1);
+            transform.rotateGlobalAxisX(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform.rotateLocalAxisX(-1);
+            transform.rotateGlobalAxisX(-1);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
