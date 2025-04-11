@@ -43,6 +43,7 @@ public class Renderer3D {
 
     private static Camera currentCamera = null;
     private static int    currentMode   = GL11.GL_TRIANGLES;
+    private static Shader currentShader = defaultShader;
 
     // TODO: check if Renderer2D is currently rendering.
     public static void begin(Camera camera) {
@@ -58,9 +59,10 @@ public class Renderer3D {
 
         currentCamera = camera;
         drawing = true;
+        currentShader = defaultShader;
 
         // TODO
-        ShaderBinder.bind(defaultShader);
+        ShaderBinder.bind(currentShader);
     }
 
     // TODO
@@ -69,8 +71,8 @@ public class Renderer3D {
     }
 
     public static void drawModel_tmp(Model model, Matrix4x4 transform) {
-        defaultShader.bindUniform("u_transform", transform);
-        defaultShader.bindUniform("u_camera_combined", currentCamera.combined);
+        currentShader.bindUniform("u_transform", transform);
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined);
         GL30.glBindVertexArray(model.meshes[0].vaoId);
 
         GL20.glEnableVertexAttribArray(0);
@@ -104,28 +106,23 @@ public class Renderer3D {
     }
 
     public static void drawModel_tmp_3(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
-        defaultShader.bindUniform("u_transform", transform);
-        defaultShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+        currentShader.bindUniform("u_transform", transform);
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
 
         if (texture_diffuse != null) {
-            defaultShader.bindUniform("u_texture_diffuse", texture_diffuse);
-            defaultShader.bindUniform("u_color_diffuse", Color.WHITE);
+            currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
+            currentShader.bindUniform("u_color_diffuse", Color.WHITE);
         } else if (color_diffuse != null) {
-            defaultShader.bindUniform("u_texture_diffuse", defaultTexture);
-            defaultShader.bindUniform("u_color_diffuse", color_diffuse);
+            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+            currentShader.bindUniform("u_color_diffuse", color_diffuse);
         } else { // TODO: handle error: missing both diffuse texture and color.
 
         }
 
-//        if (texture_diffuse == null) texture_diffuse = defaultTexture;
-//        defaultShader.bindUniform("u_texture_diffuse", texture_diffuse);
-//
-//        if (color_diffuse == null) color_diffuse = defaultColor;
-//        System.out.println(color_diffuse);
-//        defaultShader.bindUniform("u_color_diffuse", Color.WHITE);
+        System.out.println(Integer.toBinaryString(currentShader.vertexAttributesBitmask));
 
         GL30.glBindVertexArray(mesh.vaoId);
         {
@@ -139,11 +136,67 @@ public class Renderer3D {
 //            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
 //            for (VertexAttribute attribute : VertexAttribute.values()) if (mesh.hasVertexAttribute(attribute)) GL20.glDisableVertexAttribArray(attribute.glslLocation);
 
+            // turn vbos on / off based on the shader and mesh
+
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+                System.out.println(attribute.glslLocation);
+            }
+
             GL20.glEnableVertexAttribArray(0); // positions
             GL20.glEnableVertexAttribArray(2); // uvs
             GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
             GL20.glDisableVertexAttribArray(0);
             GL20.glDisableVertexAttribArray(2);
+
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
+    }
+
+    public static void drawModel_tmp_4(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        currentShader.bindUniform("u_transform", transform);
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+
+        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+
+        if (texture_diffuse != null) {
+            currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
+            currentShader.bindUniform("u_color_diffuse", Color.WHITE);
+        } else if (color_diffuse != null) {
+            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+            currentShader.bindUniform("u_color_diffuse", color_diffuse);
+        } else { // TODO: handle error: missing both diffuse texture and color.
+
+        }
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+
+            // turn vbos on based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+                System.out.println(attribute.glslLocation);
+            }
+
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+
+            // turn vbos off based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
         }
         GL30.glBindVertexArray(0);
     }

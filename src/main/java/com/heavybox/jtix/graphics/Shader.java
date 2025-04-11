@@ -165,6 +165,10 @@ public class Shader implements MemoryResource {
 //        }
     }
 
+    public boolean hasVertexAttribute(final VertexAttribute attribute) {
+        return (vertexAttributesBitmask & attribute.bitmask) != 0;
+    }
+
     @Deprecated private String preprocessVertexShader(final String vertexShaderSource) {
         Matcher comments = GLSL_COMMENT_PATTERN.matcher(vertexShaderSource);
         String noComments = comments.replaceAll("");
