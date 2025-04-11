@@ -195,8 +195,8 @@ public class Shader implements MemoryResource {
     }
 
     public void bindUniform(final String name, final Object value) {
-        //if (value == null) throw new IllegalArgumentException();
-        if (value == null) return;
+        if (value == null) throw new IllegalArgumentException();
+        //if (value == null) return;
         final int location = uniformLocations.get(name, -1);
         // TODO: remove. Good only for debugging, but prevents custom flexible shading.
         if (location == -1) throw new IllegalArgumentException("\n\nError: " + this.getClass().getSimpleName() +  " does not have a uniform named " + name + "." + "\nIf you have defined the uniform but have not used it, the GLSL compiler discarded it.\n");
