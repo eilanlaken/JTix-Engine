@@ -185,6 +185,12 @@ public class Renderer3D {
 
         }
 
+        float metalness = (Float) material.materialAttributes.get("u_prop_metallic");
+        float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        // TODO: conditional uniform binding - based on the shader attribute.
+        currentShader.bindUniform("u_prop_metallic", metalness);
+        currentShader.bindUniform("u_prop_roughness", roughness);
+
         GL30.glBindVertexArray(mesh.vaoId);
         {
 

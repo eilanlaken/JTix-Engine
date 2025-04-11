@@ -23,8 +23,8 @@ uniform PointLight pointLight;
 // uniforms - PBR material
 uniform sampler2D u_texture_diffuse;
 uniform vec4 u_color_diffuse;
-uniform float u_metalness; // TODO: add texture
-uniform float u_roughness; // TODO: add texture
+uniform float u_prop_metallic; // TODO: add texture
+uniform float u_prop_roughness; // TODO: add texture
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -79,7 +79,7 @@ void main()
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)
     vec3 F0 = vec3(0.04);
     vec3 albedo = (u_color_diffuse * texture(u_texture_diffuse, uv)).rgb;
-    F0 = mix(F0, albedo, u_metalness);
+    F0 = mix(F0, albedo, u_prop_metallic);
 
     vec3 Lo = vec3(0.0);
     // for: i = 0...NUM_LIGHTS
@@ -91,8 +91,8 @@ void main()
     vec3 radiance = pointLight.color * attenuation;
 
     // cook torrance BRDF
-    float NDF = DistributionGGX(N, H, u_roughness);
-    float G   = GeometrySmith(N, V, L, u_roughness);
+    float NDF = DistributionGGX(N, H, u_prop_roughness);
+    float G   = GeometrySmith(N, V, L, u_prop_roughness);
     vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
 
     vec3 numerator    = NDF * G * F;
@@ -108,7 +108,7 @@ void main()
     // multiply kD by the inverse metalness such that only non-metals
     // have diffuse lighting, or a linear blend if partly metal (pure metals
     // have no diffuse light).
-    kD *= 1.0 - u_metalness;
+    kD *= 1.0 - u_prop_metallic;
 
     // scale light by NdotL
     float NdotL = max(dot(N, L), 0.0);

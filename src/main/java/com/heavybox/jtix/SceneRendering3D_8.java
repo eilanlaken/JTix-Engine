@@ -16,14 +16,14 @@ import java.util.Map;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_6 implements Scene {
+public class SceneRendering3D_8 implements Scene {
 
     private Camera camera;
 
     public Model model;
     public Matrix4x4 transform = new Matrix4x4();
 
-    public SceneRendering3D_6() {
+    public SceneRendering3D_8() {
 
     }
 
