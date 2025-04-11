@@ -34,7 +34,7 @@ public class ModelMesh implements MemoryResource {
             storeIndicesBuffer(indices, vbosCollector);
             storeDataInAttributeList(VertexAttribute.TEXT_COORDS0, uvs, attributesCollector, vbosCollector);
             //storeDataInAttributeList(VertexAttribute.COLOR, colors, attributesCollector, vbosCollector);
-            //storeDataInAttributeList(VertexAttribute.NORMAL_3D, normals, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.NORMAL_3D, normals, attributesCollector, vbosCollector);
         }
         GL30.glBindVertexArray(0);
 

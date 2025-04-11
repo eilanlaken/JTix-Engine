@@ -64,7 +64,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_5());
+        Application.launch(new SceneRendering3D_6());
 
     }
 

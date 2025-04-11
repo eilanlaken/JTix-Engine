@@ -21,7 +21,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     private static final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
     private static final Map<String, String>  namedColorParams        = new HashMap<>();
-
+    private static final Map<String, String>  namedProps              = new HashMap<>();
     static {
         // all possible material texture parameters
         uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
@@ -29,6 +29,10 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         // all possible material color parameters
         namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
+
+        // all possible material props (metallic, roughness etc)
+        namedProps.put("u_prop_metallic", Assimp.AI_MATKEY_REFLECTIVITY);
+        namedProps.put("u_prop_roughness", Assimp.AI_MATKEY_ROUGHNESS_FACTOR);
     }
 
     private MeshData[] meshesData;
@@ -121,6 +125,11 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             }
 
             // TODO: add all the props (metallic, roughness etc.).
+            for (MaterialPropData propData : materialData.propsData) {
+                String uniform = propData.uniform;
+                float value = propData.value;
+                modelMaterial.materialAttributes.put(uniform, value);
+            }
 
             modelMaterials[i] = modelMaterial;
         }
@@ -170,6 +179,19 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                     colorData.b = aiColor.b();
                     colorData.a = aiColor.a();
                     materialData.colorsData.add(colorData);
+                }
+            }
+
+            PointerBuffer pointerBuffer = stack.mallocPointer(1);
+            for (Map.Entry<String, String> propEntry : namedProps.entrySet()) {
+                int result = Assimp.aiGetMaterialProperty(aiMaterial, propEntry.getValue(), pointerBuffer);
+                if (result == Assimp.aiReturn_SUCCESS) {
+                    AIMaterialProperty property = AIMaterialProperty.create(pointerBuffer.get(0));
+                    MaterialPropData propData = new MaterialPropData();
+                    propData.uniform = propEntry.getKey();
+                    propData.value = property.mData().asFloatBuffer().get();
+                    materialData.propsData.add(propData);
+                    // TODO: check if the data type is 4 bytes to handle custom material props (like booleans).
                 }
             }
 
@@ -302,10 +324,11 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public String name;
         public Array<MaterialTextureData> texturesData = new Array<>();
         public Array<MaterialColorData>   colorsData   = new Array<>();
+        public Array<MaterialPropData>    propsData    = new Array<>();
 
     }
 
-    private static class MaterialTextureData {
+    private static final class MaterialTextureData {
 
         public String uniform;
         public String path;
@@ -317,12 +340,18 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     }
 
-    private static class MaterialColorData {
+    private static final class MaterialColorData {
 
         public String uniform;
         public float r, g, b, a;
 
     }
 
+    private static final class MaterialPropData {
+
+        public String uniform;
+        public float value;
+
+    }
 
 }

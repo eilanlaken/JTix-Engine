@@ -139,7 +139,6 @@ public class Shader implements MemoryResource {
             this.uniformNames[i] = entry.key;
             i++;
         }
-        System.out.println(Arrays.toString(uniformNames));
         /* instantiate cache */
         this.uniformsCache = new HashMap<>();
 
@@ -232,7 +231,8 @@ public class Shader implements MemoryResource {
             }
 
             case GL20.GL_FLOAT -> {
-                float f = (Float) value;
+                //float f = (Float) value;
+                float f = ((Number) value).floatValue();
                 final Float cache = (Float) uniformsCache.get(location);
                 if (cache == null || !cache.equals(f)) {
                     GL20.glUniform1f(location, f); // bind

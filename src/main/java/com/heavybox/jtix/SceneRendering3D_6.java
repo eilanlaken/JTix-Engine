@@ -12,26 +12,28 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Map;
+
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_5 implements Scene {
+public class SceneRendering3D_6 implements Scene {
 
     private Camera camera;
 
     public Model model;
     public Matrix4x4 transform = new Matrix4x4();
 
-    public SceneRendering3D_5() {
+    public SceneRendering3D_6() {
 
     }
 
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/models/plane_demo.fbx");
+        Assets.loadModel("assets/models/cube_green.fbx");
         Assets.finishLoading();
 
-        model = Assets.get("assets/models/plane_demo.fbx");
+        model = Assets.get("assets/models/cube_green.fbx");
 
     }
 
@@ -43,11 +45,15 @@ public class SceneRendering3D_5 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
-        camera.position.set(0, -10, 0);
+        camera.position.set(0, -4, 0);
 
         camera.lookAt(0,0,0);
 
         camera.update();
+
+        for (Map.Entry<String, Object> entry : model.materials[0].materialAttributes.entrySet()) {
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        }
 
     }
 
@@ -93,7 +99,7 @@ public class SceneRendering3D_5 implements Scene {
 
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1,1,0,1);
+        GL11.glClearColor(0,0,0,1);
 
 //        renderer2D.begin();
 //        renderer2D.drawTexture(t, 0,0,0,1,1);

@@ -2,6 +2,7 @@ package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
 import com.heavybox.jtix.z_deprecated.z_graphics_old.VertexAttribute_old;
 import org.lwjgl.opengl.GL11;
@@ -163,6 +164,13 @@ public class Renderer3D {
     public static void drawModel_tmp_4(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         currentShader.bindUniform("u_transform", transform);
         currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+        currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
+        // TODO: bind environment lights when binding the camera.
+        currentShader.bindUniform("pointLight.position", new Vector3(0,0,3));
+        currentShader.bindUniform("pointLight.color", new Vector3(1,1,1));
+        currentShader.bindUniform("pointLight.intensity", 10);
+
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
@@ -185,7 +193,6 @@ public class Renderer3D {
                 if (!currentShader.hasVertexAttribute(attribute)) continue;
                 if (!mesh.hasVertexAttribute(attribute)) continue;
                 GL20.glEnableVertexAttribArray(attribute.glslLocation);
-                System.out.println(attribute.glslLocation);
             }
 
             if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
@@ -230,9 +237,9 @@ public class Renderer3D {
     }
 
     private static Shader createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
