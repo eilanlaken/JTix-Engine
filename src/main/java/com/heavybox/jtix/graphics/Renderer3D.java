@@ -167,8 +167,8 @@ public class Renderer3D {
         currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
 
         // TODO: bind environment lights when binding the camera.
-        currentShader.bindUniform("pointLight.position", new Vector3(0,0,5));
-        currentShader.bindUniform("pointLight.color", new Vector3(1,1,1));
+        currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
+        currentShader.bindUniform("pointLight.color", new Vector3(1,0.2f,0.2f));
         currentShader.bindUniform("pointLight.intensity", 100);
 
 
