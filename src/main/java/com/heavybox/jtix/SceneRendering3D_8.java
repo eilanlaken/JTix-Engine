@@ -72,12 +72,17 @@ public class SceneRendering3D_8 implements Scene {
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-            //world.createConstraintDistance(body_a, body_b, 4);
             transform.translateGlobalAxisXYZ(0,0,-0.05f);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-            //world.createConstraintDistance(body_a, body_b, 4);
             transform.translateGlobalAxisXYZ(0,0,0.05f);
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            transform.translateGlobalAxisXYZ(0,-0.05f, 0);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            transform.translateGlobalAxisXYZ(0,0.05f,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
