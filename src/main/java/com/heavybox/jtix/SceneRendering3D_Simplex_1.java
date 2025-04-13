@@ -13,26 +13,25 @@ import java.util.Map;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_8 implements Scene {
+public class SceneRendering3D_Simplex_1 implements Scene {
 
     private Camera camera;
 
     public Model model;
     public Matrix4x4 transform = new Matrix4x4();
-
     Renderer2D renderer2D = new Renderer2D();
 
-    public SceneRendering3D_8() {
+    public SceneRendering3D_Simplex_1() {
 
     }
 
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/models/cube_green.fbx");
+        Assets.loadModel("assets/models/simplex.fbx");
         Assets.finishLoading();
 
-        model = Assets.get("assets/models/cube_green.fbx");
+        model = Assets.get("assets/models/simplex.fbx");
 
     }
 
@@ -115,12 +114,12 @@ public class SceneRendering3D_8 implements Scene {
         GL11.glClearColor(0.247f,0.247f,0.247f,1);
 
         renderer2D.begin();
-        renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);
+        //renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);
         renderer2D.end();
 
         Renderer3D.begin(camera);
         for (int i = 0; i < model.meshes.length; i++) {
-            //Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
         }
         Renderer3D.end();
     }

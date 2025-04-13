@@ -89,6 +89,7 @@ void main()
     vec3 H = normalize(V + L);
     float distance = length(pointLight.position - world_vertex_position);
     float attenuation = pointLight.intensity / (distance * distance);
+    //float attenuation = pointLight.intensity / (1.0 + 0.01 * distance + 0.001 * distance * distance);
     vec3 radiance = pointLight.color * attenuation;
 
     // cook torrance BRDF
@@ -98,7 +99,7 @@ void main()
 
     vec3 numerator    = NDF * G * F;
     float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
-    vec3 specular = numerator / denominator;
+    vec3 specular     = numerator / denominator;
 
     // kS is equal to Fresnel
     vec3 kS = F;
@@ -120,7 +121,7 @@ void main()
 
     // ambient lighting (note that the next IBL tutorial will replace
     // this ambient lighting with environment lighting).
-    vec3 ambient = vec3(0.03) * albedo * 1; // replace 1 with u_ao
+    vec3 ambient = vec3(0.1) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
 
     vec3 color = ambient + Lo;
 

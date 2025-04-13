@@ -35,9 +35,10 @@ public class Renderer3D {
     private static final Array<RenderCommand>      renderUnits    = new Array<>(false, 20);
 
     // defaults
-    private static final Texture defaultTexture = createDefaultTexture();
-    private static final Shader  defaultShader  = createDefaultShaderProgram();
-    private static final Color   defaultColor   = Color.WHITE.clone();
+    private static final Texture defaultTexture   = createDefaultTexture();
+    private static final Texture normalMapTexture = createNormalMapTexture();
+    private static final Shader  defaultShader    = createDefaultShaderProgram();
+    private static final Color   defaultColor     = Color.WHITE.clone();
 
 
     private static boolean drawing = false;
@@ -164,12 +165,65 @@ public class Renderer3D {
     public static void drawModel_tmp_4(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         currentShader.bindUniform("u_transform", transform);
         currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+        //currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
+        // TODO: bind environment lights when binding the camera.
+        //currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
+        //currentShader.bindUniform("pointLight.color", new Vector3(1,0.2f,0.2f));
+        //currentShader.bindUniform("pointLight.intensity", 100);
+
+
+        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+
+        if (texture_diffuse != null) {
+            currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
+            currentShader.bindUniform("u_color_diffuse", Color.WHITE);
+        } else if (color_diffuse != null) {
+            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+            currentShader.bindUniform("u_color_diffuse", color_diffuse);
+        } else { // TODO: handle error: missing both diffuse texture and color.
+
+        }
+
+        float metalness = (Float) material.materialAttributes.get("u_prop_metallic");
+        float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        // TODO: conditional uniform binding - based on the shader attribute.
+        //currentShader.bindUniform("u_prop_metallic", metalness);
+        //currentShader.bindUniform("u_prop_roughness", roughness);
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+
+            // turn vbos on based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+            }
+
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+
+            // turn vbos off based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
+    }
+
+    public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        currentShader.bindUniform("u_transform", transform);
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
 
         // TODO: bind environment lights when binding the camera.
         currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
-        currentShader.bindUniform("pointLight.color", new Vector3(1,0.2f,0.2f));
-        currentShader.bindUniform("pointLight.intensity", 100);
+        currentShader.bindUniform("pointLight.color", new Vector3(1,1f,1f));
+        currentShader.bindUniform("pointLight.intensity", 5);
 
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
@@ -308,6 +362,23 @@ public class Renderer3D {
         return new Texture(1, 1, buffer,
                 Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
+    }
+
+    /*
+    TODO: this is common to both Renderer2D and Renderer3D and should be refactored.
+    creates a single-white-pixel texture.
+     */
+    private static Texture createNormalMapTexture() {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) 0x80); // Red component (128)
+        buffer.put((byte) 0x80); // Green component (128)
+        buffer.put((byte) 0xFF); // Blue component (255)
+        buffer.put((byte) 0xFF); // Alpha component (255)
+        buffer.flip();
+
+        return new Texture(1, 1, buffer,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
     }
 
     private static final class RenderCommand implements MemoryPool.Reset {

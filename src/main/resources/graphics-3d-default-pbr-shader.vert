@@ -20,11 +20,6 @@ void main()
 {
     uv = a_textCoords0;
     world_vertex_position = vec3(u_transform * vec4(a_position, 1.0));
-    world_vertex_normal = vec3(u_transform * vec4(a_normal, 1.0)); //
+    world_vertex_normal = mat3(transpose(inverse(u_transform))) * a_normal; // handle non-uniform scalings.
     gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
 }
-
-// TODO: NOTE: THIS IS INCORRECT. In case the transform contains
-// TODO: NOTE: non-uniform scaling or shearing, this will not transform
-// TODO: NOTE: the normals properly. below is the correct transform:
-// world_vertex_normal = normal_matrix * a_normal; // where normal_matrix is: transpose(inverse(mat3(u_transform))); bound in the CPU.
