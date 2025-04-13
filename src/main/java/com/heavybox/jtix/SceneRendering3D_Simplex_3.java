@@ -43,7 +43,7 @@ public class SceneRendering3D_Simplex_3 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
-        camera.position.set(0, -4, 0);
+        camera.position.set(5, -12, 10);
 
         camera.lookAt(0,0,0);
 

@@ -224,7 +224,7 @@ public class Renderer3D {
         // TODO: bind environment lights when binding the camera.
         currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
         currentShader.bindUniform("pointLight.color", new Vector3(1,1f,1f));
-        currentShader.bindUniform("pointLight.intensity", 10);
+        currentShader.bindUniform("pointLight.intensity", 1);
 
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
@@ -243,15 +243,14 @@ public class Renderer3D {
         Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
         currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
 
-        float metalness = (Float) material.materialAttributes.get("u_prop_metallic");
+        float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
         float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
         // TODO: conditional uniform binding - based on the shader attribute.
-        currentShader.bindUniform("u_prop_metallic", metalness);
+        currentShader.bindUniform("u_prop_metallic", metallic);
         currentShader.bindUniform("u_prop_roughness", roughness);
 
         GL30.glBindVertexArray(mesh.vaoId);
         {
-
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
                 if (!currentShader.hasVertexAttribute(attribute)) continue;
