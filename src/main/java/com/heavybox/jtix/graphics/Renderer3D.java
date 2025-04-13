@@ -16,6 +16,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 // TODO:
@@ -223,7 +224,7 @@ public class Renderer3D {
         // TODO: bind environment lights when binding the camera.
         currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
         currentShader.bindUniform("pointLight.color", new Vector3(1,1f,1f));
-        currentShader.bindUniform("pointLight.intensity", 5);
+        currentShader.bindUniform("pointLight.intensity", 10);
 
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
@@ -238,6 +239,9 @@ public class Renderer3D {
         } else { // TODO: handle error: missing both diffuse texture and color.
 
         }
+
+        Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
+        currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
 
         float metalness = (Float) material.materialAttributes.get("u_prop_metallic");
         float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
@@ -297,9 +301,9 @@ public class Renderer3D {
     }
 
     private static Shader createDefaultShaderProgram() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-2.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-2.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

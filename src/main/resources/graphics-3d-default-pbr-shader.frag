@@ -88,8 +88,8 @@ void main()
     vec3 L = normalize(pointLight.position - world_vertex_position);
     vec3 H = normalize(V + L);
     float distance = length(pointLight.position - world_vertex_position);
-    float attenuation = pointLight.intensity / (distance * distance);
-    //float attenuation = pointLight.intensity / (1.0 + 0.01 * distance + 0.001 * distance * distance);
+    //float attenuation = pointLight.intensity / (distance * distance);
+    float attenuation = pointLight.intensity / (1.0 + 0.1 * distance + 0.01 * distance * distance);
     vec3 radiance = pointLight.color * attenuation;
 
     // cook torrance BRDF

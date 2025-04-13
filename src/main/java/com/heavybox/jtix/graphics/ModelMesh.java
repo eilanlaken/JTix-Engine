@@ -4,7 +4,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.memory.MemoryUtils;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.VertexAttribute_old;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -12,6 +11,7 @@ import org.lwjgl.opengl.GL30;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
 public class ModelMesh implements MemoryResource {
 
@@ -22,7 +22,7 @@ public class ModelMesh implements MemoryResource {
     public int attributeBitmask;
     public int[] vbos;
 
-    public ModelMesh(float[] positions, float[] uvs, float[] colors, float[] normals, int[] indices, float boundingSphereRadius) {
+    public ModelMesh(float[] positions, float[] uvs, float[] colors, float[] normals, float[] tangents, float[] biTangents, int[] indices, float boundingSphereRadius) {
         Array<VertexAttribute> attributesCollector = new Array<>();
         ArrayInt vbosCollector = new ArrayInt();
         this.vertexCount = indices != null ? indices.length : positions.length / 3;
@@ -30,11 +30,13 @@ public class ModelMesh implements MemoryResource {
         this.vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
         {
-            storeDataInAttributeList(VertexAttribute.POSITION_3D, positions, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.POSITION, positions, attributesCollector, vbosCollector);
             storeIndicesBuffer(indices, vbosCollector);
             storeDataInAttributeList(VertexAttribute.TEXT_COORDS0, uvs, attributesCollector, vbosCollector);
             //storeDataInAttributeList(VertexAttribute.COLOR, colors, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute.NORMAL_3D, normals, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.NORMAL, normals, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.TANGENT, tangents, attributesCollector, vbosCollector);
+            storeDataInAttributeList(VertexAttribute.BI_TANGENT, biTangents, attributesCollector, vbosCollector);
         }
         GL30.glBindVertexArray(0);
 

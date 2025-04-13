@@ -26,6 +26,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         // all possible material texture parameters
         uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
+        uniformNameTextureTypes.put("u_texture_normalMap", Assimp.aiTextureType_NORMALS);
 
         // all possible material color parameters
         namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
@@ -62,8 +63,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         // TODO: this may be wrong. we may have a scenario with multiple meshes and a single material?
 
-
-
         // load meshes:
         PointerBuffer aiMeshes = aiScene.mMeshes();
         int numMeshes = aiScene.mNumMeshes();
@@ -94,6 +93,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 materialTextureOptions.put("uWrap", Texture.Wrap.REPEAT);
                 materialTextureOptions.put("vWrap", Texture.Wrap.REPEAT);
                 AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, materialTextureOptions); // TODO options
+                System.out.println(textureData.path);
                 dependencies.add(assetDescriptor);
             }
         }
@@ -106,7 +106,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         ModelMesh[] modelMeshes = new ModelMesh[meshesData.length];
         for (int i = 0; i < modelMeshes.length; i++) {
             MeshData meshData = meshesData[i];
-            modelMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.indices, meshData.boundingSphereRadius);
+            modelMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.tangents, meshData.biTangents, meshData.indices, meshData.boundingSphereRadius);
         }
 
         ModelMaterial[] modelMaterials = new ModelMaterial[materialsData.length];
@@ -148,7 +148,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             }
 
             for (MapObjectInt.Entry<String> entry : uniformNameTextureTypes) {
-
                 AIString ai_path = AIString.calloc();
                 IntBuffer ai_mapping = stack.mallocInt(1);
                 IntBuffer ai_uvIndex = stack.mallocInt(1);
@@ -206,6 +205,8 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         meshData.colors = getColors(aiMesh);
         meshData.textureCoords0 = getTextureCoords0(aiMesh);
         meshData.normals = getNormals(aiMesh);
+        meshData.tangents = getTangents(aiMesh);
+        meshData.biTangents = getBiTangents(aiMesh);
         meshData.indices = getIndices(aiMesh);
         meshData.vertexCount = getVertexCount(aiMesh);
         //meshData.boundingSphere = getBoundingSphere(aiMesh); TODO: remove this line
@@ -292,6 +293,34 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         return normals;
     }
 
+    // TODO: pack and normalize
+    private float[] getTangents(final AIMesh mesh) {
+        AIVector3D.Buffer tangentsBuffer = mesh.mTangents();
+        if (tangentsBuffer == null) return null;
+        float[] tangents = new float[tangentsBuffer.limit() * 3];
+        for (int i = 0; i < tangentsBuffer.limit(); i++) {
+            AIVector3D vector3D = tangentsBuffer.get(i);
+            tangents[3*i] = vector3D.x();
+            tangents[3*i+1] = vector3D.y();
+            tangents[3*i+2] = vector3D.z();
+        }
+        return tangents;
+    }
+
+    // TODO: pack and normalize
+    private float[] getBiTangents(final AIMesh mesh) {
+        AIVector3D.Buffer biTangentsBuffer = mesh.mBitangents();
+        if (biTangentsBuffer == null) return null;
+        float[] biTangents = new float[biTangentsBuffer.limit() * 3];
+        for (int i = 0; i < biTangentsBuffer.limit(); i++) {
+            AIVector3D vector3D = biTangentsBuffer.get(i);
+            biTangents[3*i] = vector3D.x();
+            biTangents[3*i+1] = vector3D.y();
+            biTangents[3*i+2] = vector3D.z();
+        }
+        return biTangents;
+    }
+
     private int[] getIndices(final AIMesh aiMesh) {
         int faceCount = aiMesh.mNumFaces();
         if (faceCount <= 0) return null;
@@ -314,6 +343,8 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public float[] colors;
         public float[] textureCoords0;
         public float[] normals;
+        public float[] tangents;
+        public float[] biTangents;
         public int[] indices;
         public float   boundingSphereRadius;
 
