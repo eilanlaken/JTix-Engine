@@ -12,28 +12,58 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-// contact points polygon vs polygon:
-// https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_Simplex_3 implements Scene {
+public class SceneRendering3D_Terrain_1 implements Scene {
 
     private Camera camera;
+
+    public Model terrain;
+
+    public Shader blendMapShader;
+    public Texture terrainBlendMap;
+    public Texture terrainEarth;
+    public Texture terrainGrass;
+    public Texture terrainStone;
+    public Texture terrainWater;
 
     public Model model;
     public Matrix4x4 transform = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
-    public SceneRendering3D_Simplex_3() {
+    public SceneRendering3D_Terrain_1() {
 
     }
 
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/models/plane_demo.fbx");
+        String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-blend-map-shader.vert");
+        String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-blend-map-shader.frag");
+
+        this.blendMapShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
+
+        //Assets.loadModel("assets/models/plane_demo.fbx");
+        Assets.loadModel("assets/models/terrain-block.fbx");
+        Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.finishLoading();
 
-        model = Assets.get("assets/models/plane_demo.fbx");
+        terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
+        terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
+        terrainGrass = Assets.get("assets/app-textures/terrain-grass.jpg");
+        terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
+        terrainWater = Assets.get("assets/app-textures/terrain-water.jpg");
 
+        //model = Assets.get("assets/models/plane_demo.fbx");
+        terrain = Assets.get("assets/models/terrain-block.fbx");
+
+        terrain.materials[0].materialAttributes.put("u_texture_background", terrainStone);
+        terrain.materials[0].materialAttributes.put("u_texture_red", terrainEarth);
+        terrain.materials[0].materialAttributes.put("u_texture_green", terrainGrass);
+        terrain.materials[0].materialAttributes.put("u_texture_blue", terrainWater);
+        terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
     }
 
     @Override
@@ -43,16 +73,14 @@ public class SceneRendering3D_Simplex_3 implements Scene {
 
     @Override
     public void start() {
-        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
-        camera.position.set(0, -15, 8);
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 5000, 75);
+        camera.position.set(0, 0, 300);
 
-        camera.lookAt(0,0,0);
+        camera.lookAt(0,10,0);
 
         camera.update();
 
-        for (Map.Entry<String, Object> entry : model.materials[0].materialAttributes.entrySet()) {
-            //System.out.println(entry.getKey() + " = " + entry.getValue());
-        }
+
 
     }
 
@@ -117,9 +145,11 @@ public class SceneRendering3D_Simplex_3 implements Scene {
         renderer2D.end();
 
         Renderer3D.begin(camera);
-        for (int i = 0; i < model.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+        //System.out.println("----");
+        for (int i = 0; i < terrain.meshes.length; i++) {
+            Renderer3D.drawModel_custom_shader(blendMapShader, terrain.meshes[i], terrain.materials[i], transform);
         }
+        //System.out.println("----");
         Renderer3D.end();
     }
 

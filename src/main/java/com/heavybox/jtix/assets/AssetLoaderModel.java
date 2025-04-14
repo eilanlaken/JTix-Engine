@@ -66,7 +66,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         // load meshes:
         PointerBuffer aiMeshes = aiScene.mMeshes();
         int numMeshes = aiScene.mNumMeshes();
-        System.out.println("num meshes: " + numMeshes);
         meshesData = new MeshData[numMeshes];
         for (int i = 0; i < numMeshes; i++) {
             AIMesh aiMesh = AIMesh.create(aiMeshes.get(i));
@@ -77,24 +76,28 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         // load materials
         PointerBuffer aiMaterials  = aiScene.mMaterials();
         int numMaterials = aiScene.mNumMaterials();
-        materialsData = new MaterialData[numMaterials];
-        for (int i = 0; i < numMaterials; i++) {
-            AIMaterial aiMaterial = AIMaterial.create(aiMaterials.get(i));
-            final MaterialData materialData = processMaterial(aiMaterial);
-            materialsData[i] = materialData;
+        if (numMaterials != 0) {
+            materialsData = new MaterialData[numMaterials];
+            for (int i = 0; i < numMaterials; i++) {
+                AIMaterial aiMaterial = AIMaterial.create(aiMaterials.get(i));
+                final MaterialData materialData = processMaterial(aiMaterial);
+                materialsData[i] = materialData;
+            }
         }
 
         Array<AssetDescriptor> dependencies = new Array<>();
         // load textures as materials.
-        for (MaterialData materialData : materialsData) {
-            Array<MaterialTextureData> texturesData = materialData.texturesData;
-            for (MaterialTextureData textureData : texturesData) {
-                HashMap<String, Object> materialTextureOptions = new HashMap<>();
-                materialTextureOptions.put("uWrap", Texture.Wrap.REPEAT);
-                materialTextureOptions.put("vWrap", Texture.Wrap.REPEAT);
-                AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, materialTextureOptions); // TODO options
-                System.out.println(textureData.path);
-                dependencies.add(assetDescriptor);
+        if (materialsData != null) {
+            for (MaterialData materialData : materialsData) {
+                Array<MaterialTextureData> texturesData = materialData.texturesData;
+                for (MaterialTextureData textureData : texturesData) {
+                    HashMap<String, Object> materialTextureOptions = new HashMap<>();
+                    materialTextureOptions.put("uWrap", Texture.Wrap.REPEAT);
+                    materialTextureOptions.put("vWrap", Texture.Wrap.REPEAT);
+                    AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, materialTextureOptions); // TODO options
+                    System.out.println(textureData.path);
+                    dependencies.add(assetDescriptor);
+                }
             }
         }
 
@@ -109,32 +112,34 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             modelMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.tangents, meshData.biTangents, meshData.indices, meshData.boundingSphereRadius);
         }
 
-        ModelMaterial[] modelMaterials = new ModelMaterial[materialsData.length];
-        for (int i = 0; i < modelMaterials.length; i++) {
-            MaterialData materialData = materialsData[i];
-            ModelMaterial modelMaterial = new ModelMaterial();
-            // add all the textures
-            for (MaterialTextureData textureData : materialData.texturesData) {
-                Texture texture = Assets.get(textureData.path);
-                modelMaterial.materialAttributes.put(textureData.uniform, texture);
-            }
-            // TODO: add all the colors
-            for (MaterialColorData colorData : materialData.colorsData) {
-                Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
-                modelMaterial.materialAttributes.put(colorData.uniform, color);
-            }
+        ModelMaterial[] modelMaterials = null;
+        if (materialsData != null) {
+            modelMaterials = new ModelMaterial[materialsData.length];
+            for (int i = 0; i < modelMaterials.length; i++) {
+                MaterialData materialData = materialsData[i];
+                ModelMaterial modelMaterial = new ModelMaterial();
+                // add all the textures
+                for (MaterialTextureData textureData : materialData.texturesData) {
+                    Texture texture = Assets.get(textureData.path);
+                    modelMaterial.materialAttributes.put(textureData.uniform, texture);
+                }
+                // TODO: add all the colors
+                for (MaterialColorData colorData : materialData.colorsData) {
+                    Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
+                    modelMaterial.materialAttributes.put(colorData.uniform, color);
+                }
 
-            // TODO: add all the props (metallic, roughness etc.).
-            for (MaterialPropData propData : materialData.propsData) {
-                String uniform = propData.uniform;
-                float value = propData.value;
-                modelMaterial.materialAttributes.put(uniform, value);
-            }
+                // TODO: add all the props (metallic, roughness etc.).
+                for (MaterialPropData propData : materialData.propsData) {
+                    String uniform = propData.uniform;
+                    float value = propData.value;
+                    modelMaterial.materialAttributes.put(uniform, value);
+                }
 
-            modelMaterials[i] = modelMaterial;
+                modelMaterials[i] = modelMaterial;
+            }
         }
 
-        System.out.println("lenght: " + modelMaterials.length);
         return new Model(modelMeshes, modelMaterials);
     }
 
@@ -338,14 +343,14 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     private static class MeshData {
 
-        public int vertexCount;
+        public int     vertexCount;
         public float[] positions;
         public float[] colors;
         public float[] textureCoords0;
         public float[] normals;
         public float[] tangents;
         public float[] biTangents;
-        public int[] indices;
+        public int[]   indices;
         public float   boundingSphereRadius;
 
     }

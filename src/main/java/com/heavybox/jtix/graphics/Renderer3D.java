@@ -271,6 +271,70 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
+    public static void drawModel_custom_shader(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        ShaderBinder.bind(shader);
+
+        shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+        shader.bindUniform("u_transform", transform);
+        //currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
+        // TODO: bind environment lights when binding the camera.
+        //currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
+        //currentShader.bindUniform("pointLight.color", new Vector3(1,1f,1f));
+        //currentShader.bindUniform("pointLight.intensity", 1);
+
+        // bind custom material uniforms
+        for (String uniform : shader.uniformNames) {
+            Object value = material.materialAttributes.get(uniform);
+            if (value == null) continue;
+            System.out.println("binding: " + uniform);
+            shader.bindUniform(uniform, value);
+        }
+
+//        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+//        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+//
+//        if (texture_diffuse != null) {
+//            currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
+//            currentShader.bindUniform("u_color_diffuse", Color.WHITE);
+//        } else if (color_diffuse != null) {
+//            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+//            currentShader.bindUniform("u_color_diffuse", color_diffuse);
+//        } else { // TODO: handle error: missing both diffuse texture and color.
+//
+//        }
+
+//        Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
+//        currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
+
+        //float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
+        //float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        // TODO: conditional uniform binding - based on the shader attribute.
+        //currentShader.bindUniform("u_prop_metallic", 1f);
+        //currentShader.bindUniform("u_prop_roughness", 1);
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+            // turn vbos on based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!shader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+            }
+
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+
+            // turn vbos off based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!shader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
+    }
+
     public static void drawModelWireframe(Model model, Matrix4x4 transform) {
 
     }

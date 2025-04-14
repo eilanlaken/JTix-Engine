@@ -23,7 +23,7 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-@Deprecated public class AssetLoaderModel_old implements AssetLoader<Model> {
+@Deprecated public class AssetLoaderModelZ_old implements AssetLoader<Model> {
 
     private static final MapObjectInt<String> namedTextureTypes;
     private static final Map<String, String> namedColorParams;

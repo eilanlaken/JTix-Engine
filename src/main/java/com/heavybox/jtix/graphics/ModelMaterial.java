@@ -9,7 +9,6 @@ public class ModelMaterial implements MemoryResource {
 
     public HashMap<String, Object> materialAttributes = new HashMap<>();
 
-
     @Override
     public void delete() {
         for (Map.Entry<String, Object> attribute : materialAttributes.entrySet()) {
