@@ -5,6 +5,7 @@ import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
@@ -43,14 +44,14 @@ public class SceneRendering3D_Simplex_3 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
-        camera.position.set(5, -12, 10);
+        camera.position.set(0, -15, 8);
 
         camera.lookAt(0,0,0);
 
         camera.update();
 
         for (Map.Entry<String, Object> entry : model.materials[0].materialAttributes.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
+            //System.out.println(entry.getKey() + " = " + entry.getValue());
         }
 
     }
@@ -61,27 +62,29 @@ public class SceneRendering3D_Simplex_3 implements Scene {
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
 
+
+        float scroll = 3 * Input.mouse.getVerticalScroll();
+        if (Input.mouse.getVerticalScroll() != 0) {
+            camera.translateForward(scroll);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panHorizontal = Input.mouse.getXDelta() * 0.2f;
+            float panVertical = Input.mouse.getYDelta() * 0.2f;
+            camera.translateRight(-panHorizontal);
+            camera.translateUp(panVertical);
+        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panHorizontal = Input.mouse.getXDelta() * 0.2f;
+            float panVertical = Input.mouse.getYDelta() * 0.2f;
+            camera.rotateAroundUp(panHorizontal);
+            camera.rotateAroundRight(panVertical);
+
+        }
+
+
+
+
         camera.update();
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.K)) {
-            //world.createConstraintDistance(body_a, body_b, 4);
-            camera.position.z += 0.1f;
-        }
-
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-            transform.translateGlobalAxisXYZ(0,0,-0.05f);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-            transform.translateGlobalAxisXYZ(0,0,0.05f);
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-            transform.translateGlobalAxisXYZ(0,-0.05f, 0);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-            transform.translateGlobalAxisXYZ(0,0.05f,0);
-        }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
             transform.rotateGlobalAxisY(1);

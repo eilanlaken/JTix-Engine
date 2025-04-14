@@ -1,6 +1,5 @@
 package com.heavybox.jtix.graphics;
 
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 
@@ -27,9 +26,10 @@ public class Camera {
     private final float[]   frustumPlaneDs;
 
     /* position, direction, up [note: will be updated from the component camera] */
-    public final Vector3 position  = new Vector3(0,0,0);
-    public final Vector3 direction = new Vector3(0,0,-1);
-    public final Vector3 up        = new Vector3(0,1,0);
+    public  final Vector3 position     = new Vector3(0,0,0);
+    private final Vector3 gizmoForward = new Vector3(0,0,-1);
+    private final Vector3 gizmoUp      = new Vector3(0,1,0);
+    private final Vector3 gizmoRight   = new Vector3(1,0,0); // forward X up (cross product)
 
     public Camera(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.mode = mode;
@@ -55,12 +55,6 @@ public class Camera {
         this.frustumPlaneDs = new float[6];
     }
 
-    public void setTransform(Vector3 position, Vector3 direction, Vector3 up) {
-        this.position.set(position);
-        this.direction.set(direction);
-        this.up.set(up);
-    }
-
     /** Recalculates the direction of the camera to look at the point (x, y, z). This function assumes the up vector is normalized.
      * @param x the x-coordinate of the point to look at
      * @param y the y-coordinate of the point to look at
@@ -69,25 +63,59 @@ public class Camera {
         Vector3 tmp = new Vector3();
         tmp.set(x, y, z).sub(position).nor();
         if (!tmp.isZero()) {
-            float dot = tmp.dot(up); // up and direction must ALWAYS be orthonormal vectors
+            float dot = tmp.dot(gizmoUp); // up and direction must ALWAYS be orthonormal vectors
             if (Math.abs(dot - 1) < 0.000000001f) {
                 // Collinear
-                up.set(direction).scl(-1);
+                gizmoUp.set(gizmoForward).scl(-1);
             } else if (Math.abs(dot + 1) < 0.000000001f) {
                 // Collinear opposite
-                up.set(direction);
+                gizmoUp.set(gizmoForward);
             }
-            direction.set(tmp);
+            gizmoForward.set(tmp);
             // normalize up
-            tmp.set(direction).crs(up);
-            up.set(tmp).crs(direction).nor();
+            tmp.set(gizmoForward).crs(gizmoUp);
+            gizmoUp.set(tmp).crs(gizmoForward).nor();
+            gizmoRight.set(gizmoForward).crs(gizmoUp);
         }
     }
 
-    /** Recalculates the direction of the camera to look at the point (x, y, z).
-     * @param target the point to look at */
-    public void lookAt (Vector3 target) {
-        lookAt(target.x, target.y, target.z);
+    public void rotateAroundForward(float degrees) {
+        gizmoUp.rotate(gizmoForward, degrees);
+        gizmoRight.rotate(gizmoForward, degrees);
+    }
+
+    public void rotateAroundUp(float degrees) {
+        gizmoRight.rotate(gizmoUp, degrees);
+        gizmoForward.rotate(gizmoUp, degrees);
+    }
+
+    public void rotateAroundRight(float degrees) {
+        gizmoForward.rotate(gizmoRight, degrees);
+        gizmoUp.rotate(gizmoRight, degrees);
+    }
+
+    public void translateForward(float delta) {
+        position.add(delta * gizmoForward.x, delta * gizmoForward.y,delta * gizmoForward.z);
+    }
+
+    public void translateUp(float delta) {
+        position.add(delta * gizmoUp.x, delta * gizmoUp.y,delta * gizmoUp.z);
+    }
+
+    public void translateRight(float delta) {
+        position.add(delta * gizmoRight.x, delta * gizmoRight.y,delta * gizmoRight.z);
+    }
+
+    public void getForwardVector(Vector3 out) {
+        out.set(gizmoForward);
+    }
+
+    public void getUpVector(Vector3 out) {
+        out.set(gizmoUp);
+    }
+
+    public void getRightVector(Vector3 out) {
+        out.set(gizmoRight);
     }
 
     public void update() {
@@ -99,7 +127,7 @@ public class Camera {
                 this.projection.setToPerspectiveProjection(Math.abs(near), Math.abs(far), fov, viewportWidth / viewportHeight);
                 break;
         }
-        view.setToLookAt(position, tmp.set(position).add(direction), up);
+        view.setToLookAt(position, tmp.set(position).add(gizmoForward), gizmoUp);
         combined.set(projection);
         Matrix4x4.mul(combined.val, view.val);
         invProjectionView.set(combined);
