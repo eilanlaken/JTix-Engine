@@ -19,10 +19,15 @@ import java.util.Map;
 
 public class AssetLoaderModel implements AssetLoader<Model> {
 
-    private static final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
-    private static final Map<String, String>  namedColorParams        = new HashMap<>();
-    private static final Map<String, String>  namedProps              = new HashMap<>();
-    static {
+    private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
+    private final Map<String, String>  namedColorParams        = new HashMap<>();
+    private final Map<String, String>  namedProps              = new HashMap<>();
+
+    private MeshData[] meshesData;
+    private MaterialData[] materialsData;
+    private String folderPath;
+
+    public AssetLoaderModel() {
         // all possible material texture parameters
         uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
@@ -36,10 +41,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         namedProps.put("u_prop_roughness", Assimp.AI_MATKEY_ROUGHNESS_FACTOR);
     }
 
-    private MeshData[] meshesData;
-    private MaterialData[] materialsData;
-    private String folderPath;
-
+    // TODO: make use of
     @Override
     public void beforeLoad(String path, HashMap<String, Object> options) {
         if (!Assets.fileExists(path)) throw new AssetsException("File does not exist: " + path);

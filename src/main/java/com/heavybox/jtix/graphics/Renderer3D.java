@@ -217,6 +217,7 @@ public class Renderer3D {
     }
 
     public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        ShaderBinder.bind(currentShader);
         currentShader.bindUniform("u_transform", transform);
         currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.

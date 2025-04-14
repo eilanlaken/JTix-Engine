@@ -10,8 +10,6 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Map;
-
 public class SceneRendering3D_Terrain_1 implements Scene {
 
     private Camera camera;
@@ -25,8 +23,10 @@ public class SceneRendering3D_Terrain_1 implements Scene {
     public Texture terrainStone;
     public Texture terrainWater;
 
-    public Model model;
-    public Matrix4x4 transform = new Matrix4x4();
+    public Model plane;
+
+    public Matrix4x4 transform_terrain = new Matrix4x4();
+    public Matrix4x4 transform_plane = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
     public SceneRendering3D_Terrain_1() {
@@ -41,7 +41,7 @@ public class SceneRendering3D_Terrain_1 implements Scene {
 
         this.blendMapShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
 
-        //Assets.loadModel("assets/models/plane_demo.fbx");
+        Assets.loadModel("assets/models/plane_demo.fbx");
         Assets.loadModel("assets/models/terrain-block.fbx");
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -64,6 +64,9 @@ public class SceneRendering3D_Terrain_1 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_green", terrainGrass);
         terrain.materials[0].materialAttributes.put("u_texture_blue", terrainWater);
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
+
+        plane = Assets.get("assets/models/plane_demo.fbx");
+
     }
 
     @Override
@@ -74,13 +77,14 @@ public class SceneRendering3D_Terrain_1 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 5000, 75);
-        camera.position.set(0, 0, 300);
+        camera.position.set(0, 0, 20);
 
         camera.lookAt(0,10,0);
 
         camera.update();
 
-
+        transform_plane.translateGlobalAxisXYZ(0,0,20);
+        transform_plane.rotateGlobalAxisZ(180);
 
     }
 
@@ -111,22 +115,22 @@ public class SceneRendering3D_Terrain_1 implements Scene {
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform.rotateLocalAxisY(1);
+            transform_plane.rotateLocalAxisY(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform.rotateLocalAxisY(-1);
+            transform_plane.rotateLocalAxisY(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform.rotateLocalAxisZ(1);
+            transform_plane.rotateLocalAxisZ(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform.rotateLocalAxisZ(-1);
+            transform_plane.rotateLocalAxisZ(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform.rotateLocalAxisX(1);
+            transform_plane.rotateLocalAxisX(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform.rotateLocalAxisX(-1);
+            transform_plane.rotateLocalAxisX(-1);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
@@ -147,8 +151,13 @@ public class SceneRendering3D_Terrain_1 implements Scene {
         Renderer3D.begin(camera);
         //System.out.println("----");
         for (int i = 0; i < terrain.meshes.length; i++) {
-            Renderer3D.drawModel_custom_shader(blendMapShader, terrain.meshes[i], terrain.materials[i], transform);
+            Renderer3D.drawModel_custom_shader(blendMapShader, terrain.meshes[i], terrain.materials[i], transform_terrain);
         }
+
+        for (int i = 0; i < plane.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(plane.meshes[i], plane.materials[i], transform_plane);
+        }
+        Renderer3D.end();
         //System.out.println("----");
         Renderer3D.end();
     }
