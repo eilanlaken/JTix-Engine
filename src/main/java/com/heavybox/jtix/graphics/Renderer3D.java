@@ -4,7 +4,6 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.VertexAttribute_old;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -288,7 +287,6 @@ public class Renderer3D {
         for (String uniform : shader.uniformNames) {
             Object value = material.materialAttributes.get(uniform);
             if (value == null) continue;
-            System.out.println("binding: " + uniform);
             shader.bindUniform(uniform, value);
         }
 
@@ -451,27 +449,23 @@ public class Renderer3D {
 
     private static final class RenderCommand implements MemoryPool.Reset {
 
-
         public ModelMesh mesh;
         public boolean isPrimitive; // represents a "primitive" shape: a quad, cube, sphere, function, curve. The vertices are calculated on the fly and stored in primitiveVertices.
         public FloatBuffer primitiveVertices; // interleaved
 
-
-        public Shader materialShader = null;
-        public HashMap<String, Object> materialAttributes = new HashMap<>();
+        public Shader shader = null;
+        public HashMap<String, Object> materialAttributes;
         public Matrix4x4      transform = null;
 
-        public RenderCommand() {
-
-        }
+        public RenderCommand() {} // using reflection.
 
         @Override
         public void reset() {
             this.mesh = null;
             primitiveVertices = null;
-            materialShader = null;
+            shader = null;
             this.transform = null;
-            materialAttributes.clear();
+            materialAttributes = null;
         }
 
     }

@@ -141,8 +141,9 @@ public class SceneRendering3D_Terrain_1 implements Scene {
             //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
         }
 
+        Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0.247f,0.247f,0.247f,1);
+        GL11.glClearColor(sky.r,sky.g,sky.b,1);
 
         renderer2D.begin();
         //renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);
