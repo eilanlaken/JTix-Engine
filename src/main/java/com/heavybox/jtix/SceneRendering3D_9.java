@@ -28,7 +28,8 @@ public class SceneRendering3D_9 implements Scene {
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/models/plane_demo.fbx");
+        //Assets.loadModel("assets/models/plane_demo.fbx");
+        Assets.loadModel("assets/models/plane_demo.fbx", "assets/models/trees2.fbm");
         Assets.finishLoading();
 
         model = Assets.get("assets/models/plane_demo.fbx");

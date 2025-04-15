@@ -129,6 +129,13 @@ public final class Assets {
         load(Model.class, filepath, options, false);
     }
 
+    // use this if you have a models with common textures path.
+    public synchronized static void loadModel(String filepath, String texturesPath) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("texturesFolderPath", texturesPath);
+        load(Model.class, filepath, options, false);
+    }
+
     public synchronized static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {

@@ -223,7 +223,7 @@ public class Renderer3D {
 
         // TODO: bind environment lights when binding the camera.
         currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
-        currentShader.bindUniform("pointLight.color", new Vector3(0.3f,0.8f,0.8f));
+        currentShader.bindUniform("pointLight.color", new Vector3(1f,0.8f,0.8f));
         currentShader.bindUniform("pointLight.intensity", 3);
 
 

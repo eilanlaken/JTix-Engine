@@ -3,7 +3,6 @@ package com.heavybox.jtix.assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.MapObjectInt;
 import com.heavybox.jtix.graphics.*;
-import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
@@ -13,7 +12,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +24,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     private MeshData[] meshesData;
     private MaterialData[] materialsData;
     private String folderPath;
+    private String texturesFolderPath;
 
     public AssetLoaderModel() {
         // all possible material texture parameters
@@ -49,6 +48,8 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     @Override
     public Array<AssetDescriptor> load(String path, HashMap<String, Object> options) {
+        this.texturesFolderPath = options != null ? (String) options.get("texturesFolderPath") : null;
+        System.out.println(this.texturesFolderPath);
         this.folderPath = Paths.get(path).getParent().toString();
         // TODO: use the options here.
         final int importFlags =
@@ -173,11 +174,18 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 if (result == Assimp.aiReturn_SUCCESS) {
                     MaterialTextureData materialTexture = new MaterialTextureData();
                     materialTexture.uniform = entry.key;
-                    Path base = Paths.get(folderPath);
-                    Path fullPath = base.resolve(ai_path.dataString());
-                    materialTexture.path = fullPath.toString();
-                    // ... TODO.
-
+                    if (texturesFolderPath != null) {
+                        Path base = Paths.get(texturesFolderPath);
+                        String fileName = Paths.get(ai_path.dataString()).getFileName().toString();
+                        Path fullPath = base.resolve(fileName);
+                        materialTexture.path = fullPath.toString();
+                        System.out.println(materialTexture.path);
+                    } else {
+                        Path base = Paths.get(folderPath);
+                        Path fullPath = base.resolve(ai_path.dataString());
+                        materialTexture.path = fullPath.toString();
+                    }
+                    // ... TODO texture filters etc.
                     materialData.texturesData.add(materialTexture);
                 }
             }

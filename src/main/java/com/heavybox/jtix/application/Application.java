@@ -149,6 +149,13 @@ public class Application {
         //errorCallback = GLFWErrorCallback.createPrint(System.err);
         GLFW.glfwSetErrorCallback(errorCallback);
         GLFWErrorCallback.createPrint(System.err).set();
+
+        // TODO: see if this causes problems. Also, must call a cleanup function before exit.
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            throwable.printStackTrace(); // Optional: log the error
+            System.exit(1);              // Crash the program
+        });
+
         if (!GLFW.glfwInit()) throw new ApplicationException("Unable to initialize GLFW.");
         //window = new ApplicationWindow();
         // initialize window

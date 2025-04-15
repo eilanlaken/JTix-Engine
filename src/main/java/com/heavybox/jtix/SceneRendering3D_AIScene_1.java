@@ -29,7 +29,9 @@ public class SceneRendering3D_AIScene_1 implements Scene {
 
 
         //Assets.loadModel("assets/models/cube_accoustic_grid.fbx");
-        Assets.loadModel("assets/models/trees.fbx");
+        //Assets.loadModel("assets/models/trees.fbx");
+        Assets.loadModel("assets/models/trees.fbx", "assets/models/trees2.fbm");
+
         Assets.finishLoading();
 
         model_tree_1 = Assets.get("assets/models/trees.fbx");
