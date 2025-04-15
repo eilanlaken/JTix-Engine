@@ -50,7 +50,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     @Override
     public Array<AssetDescriptor> load(String path, HashMap<String, Object> options) {
         this.folderPath = Paths.get(path).getParent().toString();
-        System.out.println(folderPath);
         // TODO: use the options here.
         final int importFlags =
 
@@ -62,7 +61,10 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 ;
 
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
-
+        System.out.println(aiScene.mRootNode().mNumChildren());
+        PointerBuffer children = aiScene.mRootNode().mChildren();
+        AINode node = AINode.create(children.get(0));
+        System.out.println(node.mName().dataString());
         // TODO: this may be wrong. we may have a scenario with multiple meshes and a single material?
 
         // load meshes:
@@ -97,7 +99,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                     materialTextureOptions.put("uWrap", Texture.Wrap.REPEAT);
                     materialTextureOptions.put("vWrap", Texture.Wrap.REPEAT);
                     AssetDescriptor assetDescriptor = new AssetDescriptor(Texture.class, textureData.path, materialTextureOptions); // TODO options
-                    System.out.println(textureData.path);
                     dependencies.add(assetDescriptor);
                 }
             }
@@ -114,35 +115,42 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             modelMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.tangents, meshData.biTangents, meshData.indices, meshData.boundingSphereRadius);
         }
 
-        ModelMaterial[] modelMaterials = null;
-        if (materialsData != null) {
-            modelMaterials = new ModelMaterial[materialsData.length];
-            for (int i = 0; i < modelMaterials.length; i++) {
-                MaterialData materialData = materialsData[i];
-                ModelMaterial modelMaterial = new ModelMaterial();
-                // add all the textures
-                for (MaterialTextureData textureData : materialData.texturesData) {
-                    Texture texture = Assets.get(textureData.path);
-                    modelMaterial.materialAttributes.put(textureData.uniform, texture);
-                }
-                // TODO: add all the colors
-                for (MaterialColorData colorData : materialData.colorsData) {
-                    Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
-                    modelMaterial.materialAttributes.put(colorData.uniform, color);
-                }
+        ModelMaterial[] allDifferentMaterials = new ModelMaterial[materialsData.length];
+        for (int i = 0; i < allDifferentMaterials.length; i++) {
+            MaterialData materialData = materialsData[i];
+            ModelMaterial modelMaterial = new ModelMaterial();
 
-                // TODO: add all the props (metallic, roughness etc.).
-                for (MaterialPropData propData : materialData.propsData) {
-                    String uniform = propData.uniform;
-                    float value = propData.value;
-                    modelMaterial.materialAttributes.put(uniform, value);
-                }
-
-                modelMaterials[i] = modelMaterial;
+            // add all the textures
+            for (MaterialTextureData textureData : materialData.texturesData) {
+                Texture texture = Assets.get(textureData.path);
+                modelMaterial.materialAttributes.put(textureData.uniform, texture);
             }
+            // add all the colors
+            for (MaterialColorData colorData : materialData.colorsData) {
+                Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
+                modelMaterial.materialAttributes.put(colorData.uniform, color);
+            }
+            // add all the props (metallic, roughness etc.).
+            for (MaterialPropData propData : materialData.propsData) {
+                String uniform = propData.uniform;
+                float value = propData.value;
+                modelMaterial.materialAttributes.put(uniform, value);
+            }
+
+            allDifferentMaterials[i] = modelMaterial;
         }
 
-        return new Model(modelMeshes, modelMaterials);
+        // model may contain M number of meshes and N number of materials, where M != N.
+        // we create a materials array matching the meshes array. In the materials array
+        // we may store reference replicas. The final result are two arrays of the same
+        // size where mesh[0],material[0]...mesh[M],material[M] is the entire model.
+        ModelMaterial[] modelMaterials = new ModelMaterial[modelMeshes.length];
+        for (int i = 0; i < modelMaterials.length; i++) {
+            ModelMaterial material = allDifferentMaterials[meshesData[i].materialIndex];
+            modelMaterials[i] = material;
+        }
+
+        return new Model(modelMeshes, modelMaterials); // TODO: this is wrong. use aiMesh.mMaterialIndex()
     }
 
     private MaterialData processMaterial(final AIMaterial aiMaterial) {
@@ -208,6 +216,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     private MeshData processMesh(final AIMesh aiMesh) {
         MeshData meshData = new MeshData();
+        meshData.materialIndex = aiMesh.mMaterialIndex();
         meshData.positions = getPositions(aiMesh);
         meshData.colors = getColors(aiMesh);
         meshData.textureCoords0 = getTextureCoords0(aiMesh);
@@ -354,6 +363,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public float[] biTangents;
         public int[]   indices;
         public float   boundingSphereRadius;
+        public int     materialIndex;
 
     }
 
