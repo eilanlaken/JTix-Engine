@@ -675,4 +675,21 @@ public class Vector3 implements MemoryPool.Reset {
         return this;
     }
 
+    // TODO: write unit tests
+    public static boolean areOrthonormal(Vector3 a, Vector3 b, Vector3 c) {
+        return Math.abs(a.dot(b)) < MathUtils.FLOAT_ROUNDING_ERROR &&
+                Math.abs(a.dot(c)) < MathUtils.FLOAT_ROUNDING_ERROR &&
+                Math.abs(b.dot(c)) < MathUtils.FLOAT_ROUNDING_ERROR &&
+                Math.abs(a.len() - 1f) < 1e-6 &&
+                Math.abs(b.len() - 1f) < 1e-6 &&
+                Math.abs(c.len() - 1f) < 1e-6;
+    }
+
+    // TODO: write unit tests
+    public static boolean areOrthonormal(Vector3 a, Vector3 b) {
+        return Math.abs(a.dot(b)) < MathUtils.FLOAT_ROUNDING_ERROR &&
+                Math.abs(a.len() - 1f) < 1e-6 &&
+                Math.abs(b.len() - 1f) < 1e-6;
+    }
+
 }

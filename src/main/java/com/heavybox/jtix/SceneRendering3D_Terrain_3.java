@@ -101,21 +101,26 @@ public class SceneRendering3D_Terrain_3 implements Scene {
 
         float scroll = 3 * Input.mouse.getVerticalScroll();
         if (Input.mouse.getVerticalScroll() != 0) {
-            camera.translateForward(scroll);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
-            float panHorizontal = Input.mouse.getXDelta() * 0.2f;
-            float panVertical = Input.mouse.getYDelta() * 0.2f;
+            camera.translateForward(scroll * 10);
+        } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panHorizontal = Input.mouse.getXDelta();
+            float panVertical = Input.mouse.getYDelta();
             camera.translateRight(-panHorizontal);
             camera.translateUp(panVertical);
+        } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panVertical = Input.mouse.getYDelta();
+            camera.translateForward(-panVertical);
         } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta() * 0.2f;
             float panVertical = Input.mouse.getYDelta() * 0.2f;
-            camera.rotateAroundUp(panHorizontal * 5);
+            //camera.rotateAroundUp(panHorizontal * 5);
+            //camera.rotateAroundRight(panVertical * 5);
+            camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
             camera.rotateAroundRight(panVertical * 5);
         }
 
         camera.update();
+
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {

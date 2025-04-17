@@ -80,18 +80,25 @@ public class Camera {
     }
 
     public void rotateAroundForward(float degrees) {
-        gizmoUp.rotate(gizmoForward, degrees);
-        gizmoRight.rotate(gizmoForward, degrees);
+        gizmoUp.rotate(gizmoForward, degrees).nor();
+        gizmoRight.rotate(gizmoForward, degrees).nor();
     }
 
     public void rotateAroundUp(float degrees) {
-        gizmoRight.rotate(gizmoUp, degrees);
-        gizmoForward.rotate(gizmoUp, degrees);
+        gizmoRight.rotate(gizmoUp, degrees).nor();
+        gizmoForward.rotate(gizmoUp, degrees).nor();
+        System.out.println("3: " + Vector3.areOrthonormal(gizmoForward, gizmoUp, gizmoRight));
     }
 
     public void rotateAroundRight(float degrees) {
-        gizmoForward.rotate(gizmoRight, degrees);
-        gizmoUp.rotate(gizmoRight, degrees);
+        gizmoForward.rotate(gizmoRight, degrees).nor();
+        gizmoUp.rotate(gizmoRight, degrees).nor();
+    }
+
+    public void rotateAroundAxis(float degrees, float axisX, float axisY, float axisZ) {
+        gizmoForward.rotate(degrees, axisX, axisY, axisZ).nor();
+        gizmoUp.rotate(degrees, axisX, axisY, axisZ).nor();
+        gizmoRight.rotate(degrees, axisX, axisY, axisZ).nor();
     }
 
     public void translateForward(float delta) {
