@@ -11,6 +11,7 @@ import org.lwjgl.stb.STBImage;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+// TODO: unify texture constructors.
 public class Texture implements MemoryResource {
 
     private       int       handle;
@@ -148,8 +149,6 @@ public class Texture implements MemoryResource {
                 + STBImage.stbi_failure_reason());
         width = widthBuffer.get();
         height = heightBuffer.get();
-        System.out.println("width: " + width);
-        System.out.println("width: " + height);
         int maxTextureSize = Graphics.getMaxTextureSize();
         if (width > maxTextureSize || height > maxTextureSize) throw new AssetsException("Trying to load texture " + filepath + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
 

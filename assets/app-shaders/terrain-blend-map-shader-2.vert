@@ -1,6 +1,6 @@
 #version 450
 
-#define MAX_HEIGHT 100
+#define MAX_HEIGHT 25
 
 // attributes
 layout(location = 0) in vec3 a_position;

@@ -222,9 +222,9 @@ public class Renderer3D {
         currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
 
         // TODO: bind environment lights when binding the camera.
-        currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
+        currentShader.bindUniform("pointLight.position", new Vector3(0,0,5));
         currentShader.bindUniform("pointLight.color", new Vector3(1f,0.8f,0.8f));
-        currentShader.bindUniform("pointLight.intensity", 3);
+        currentShader.bindUniform("pointLight.intensity", 1);
 
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");

@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +63,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 ;
 
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
-        System.out.println(aiScene.mRootNode().mNumChildren());
         PointerBuffer children = aiScene.mRootNode().mChildren();
         AINode node = AINode.create(children.get(0));
         System.out.println(node.mName().dataString());
@@ -253,6 +253,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         else return aiMesh.mNumVertices();
     }
 
+    // TODO: see what to do with the transform. This only works when the transform is applied.
     private float[] getPositions(final AIMesh aiMesh) {
         AIVector3D.Buffer positionsBuffer = aiMesh.mVertices();
         float[] positions = new float[aiMesh.mVertices().limit() * 3];
