@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: improve options (gen Normals, gen smooth normals)
+// TODO: store the transform of a node. May be very useful in some cases. For example, destructible objects.
 public class AssetLoaderModel implements AssetLoader<Model> {
 
     private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
@@ -53,6 +55,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         System.out.println(this.texturesFolderPath);
         this.folderPath = Paths.get(path).getParent().toString();
         // TODO: use the options here.
+        // TODO: additional flags: Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_GenNormals
         final int importFlags =
 
                 Assimp.aiProcess_Triangulate |
@@ -61,6 +64,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 Assimp.aiProcess_CalcTangentSpace |
                 Assimp.aiProcess_RemoveRedundantMaterials
                 ;
+
 
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
         PointerBuffer children = aiScene.mRootNode().mChildren();

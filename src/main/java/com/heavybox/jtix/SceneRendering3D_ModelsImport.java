@@ -29,10 +29,10 @@ public class SceneRendering3D_ModelsImport implements Scene {
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/app-models/fields-purple.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/rocks-black_3.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
-        model = Assets.get("assets/app-models/fields-purple.fbx");
+        model = Assets.get("assets/app-models/rocks-black_3.fbx");
 
     }
 
