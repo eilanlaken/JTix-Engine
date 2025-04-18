@@ -22,7 +22,7 @@ out vec2 uv;
 out vec3 normal;
 
 float getHeight(float x, float y) {
-    return MAX_HEIGHT * sin(8 * PI * x / (TILE_SIZE * 2)) * sin(8 * PI * y / (TILE_SIZE * 2)) * sin(time);
+    return MAX_HEIGHT * sin(6 * PI * x / (TILE_SIZE * 2)) * sin(6 * PI * y / (TILE_SIZE * 2)) * sin(time);
 }
 
 void main()
