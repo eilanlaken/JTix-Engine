@@ -87,7 +87,6 @@ public class Camera {
     public void rotateAroundUp(float degrees) {
         gizmoRight.rotate(gizmoUp, degrees).nor();
         gizmoForward.rotate(gizmoUp, degrees).nor();
-        System.out.println("3: " + Vector3.areOrthonormal(gizmoForward, gizmoUp, gizmoRight));
     }
 
     public void rotateAroundRight(float degrees) {

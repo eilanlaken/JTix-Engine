@@ -29,10 +29,10 @@ public class SceneRendering3D_ModelsImport implements Scene {
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/app-models/rocks-black_3.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/sea-cruise-ship.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
-        model = Assets.get("assets/app-models/rocks-black_3.fbx");
+        model = Assets.get("assets/app-models/sea-cruise-ship.fbx");
 
     }
 
@@ -43,7 +43,7 @@ public class SceneRendering3D_ModelsImport implements Scene {
 
     @Override
     public void start() {
-        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 5000, 75);
         camera.position.set(0, -15, 8);
 
         camera.lookAt(0,0,0);
