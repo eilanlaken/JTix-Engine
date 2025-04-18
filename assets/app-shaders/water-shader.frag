@@ -21,7 +21,7 @@ uniform DirectionalLight directionalLight;
 
 // uniforms - blend maps
 uniform sampler2D u_texture_water;
-
+uniform float time;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -69,7 +69,7 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 
 void main()
 {
-    vec2 scaled_uv = uv * 2.0;
+    vec2 scaled_uv = (uv + vec2(time / 100, time / 100)) * 2.0;
     vec3 albedo = texture(u_texture_water, scaled_uv).rgb;
 
     //vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);

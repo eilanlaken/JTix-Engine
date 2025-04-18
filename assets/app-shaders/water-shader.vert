@@ -2,7 +2,7 @@
 #version 450
 
 #define PI 3.1415926538
-#define MAX_HEIGHT 25
+#define MAX_HEIGHT 6
 #define TILE_SIZE 256.0
 
 // attributes
@@ -22,7 +22,7 @@ out vec2 uv;
 out vec3 normal;
 
 float getHeight(float x, float y) {
-    return MAX_HEIGHT * sin(PI * x / (TILE_SIZE * 2)) * sin(PI * y / (TILE_SIZE * 2)) * sin(time);
+    return MAX_HEIGHT * sin(8 * PI * x / (TILE_SIZE * 2)) * sin(8 * PI * y / (TILE_SIZE * 2)) * sin(time);
 }
 
 void main()
