@@ -37,17 +37,18 @@ public class Renderer3D {
     private static final Array<RenderCommand>      renderUnits    = new Array<>(false, 20);
 
     // defaults
-    private static final Texture defaultTexture   = createDefaultTexture();
-    private static final Texture normalMapTexture = createNormalMapTexture();
-    private static final Shader  defaultShader    = createDefaultShaderProgram();
-    private static final Color   defaultColor     = Color.WHITE.clone();
+    private static final Texture defaultTexture     = createDefaultTexture();
+    private static final Texture normalMapTexture   = createNormalMapTexture();
+    private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
+    private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
+    private static final Color   defaultColor       = Color.WHITE.clone();
 
 
     private static boolean drawing = false;
 
     private static Camera currentCamera = null;
     private static int    currentMode   = GL11.GL_TRIANGLES;
-    private static Shader currentShader = defaultShader;
+    private static Shader currentShader = defaultShaderPBR;
 
     // TODO: check if Renderer2D is currently rendering.
     public static void begin(Camera camera) {
@@ -63,7 +64,7 @@ public class Renderer3D {
 
         currentCamera = camera;
         drawing = true;
-        currentShader = defaultShader;
+        currentShader = defaultShaderPBR;
 
         // TODO
         ShaderBinder.bind(currentShader);
@@ -87,8 +88,8 @@ public class Renderer3D {
     }
 
     public static void drawModel_tmp_2(ModelMesh mesh, Matrix4x4 transform) {
-        defaultShader.bindUniform("u_transform", transform);
-        defaultShader.bindUniform("u_camera_combined", currentCamera.combined);
+        defaultShaderPBR.bindUniform("u_transform", transform);
+        defaultShaderPBR.bindUniform("u_camera_combined", currentCamera.combined);
 
         GL30.glBindVertexArray(mesh.vaoId);
         {
@@ -225,8 +226,8 @@ public class Renderer3D {
 
         // TODO: bind environment lights when binding the camera.
         currentShader.bindUniform("pointLight.position", new Vector3(0,0,200));
-        currentShader.bindUniform("pointLight.color", new Vector3(1f,0.2f,0.0f));
-        currentShader.bindUniform("pointLight.intensity", 50);
+        currentShader.bindUniform("pointLight.color", new Vector3(1f,1.0f,1.0f));
+        currentShader.bindUniform("pointLight.intensity", 10);
 
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
@@ -405,6 +406,58 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
+    public static void drawModel_custom_unlit_shader(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        ShaderBinder.bind(defaultShaderUnlit);
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
+            lightDir.rotate(1,1,0,0);
+        }
+
+        defaultShaderUnlit.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+        defaultShaderUnlit.bindUniform("u_transform", transform);
+
+//        // bind custom material uniforms
+//        for (String uniform : defaultShaderUnlit.uniformNames) {
+//            Object value = material.materialAttributes.get(uniform);
+//            if (value == null) continue;
+//            defaultShaderUnlit.bindUniform(uniform, value);
+//        }
+
+        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+
+        if (texture_diffuse != null) {
+            defaultShaderUnlit.bindUniform("u_texture_diffuse", texture_diffuse);
+            defaultShaderUnlit.bindUniform("u_color_diffuse", Color.WHITE);
+        } else if (color_diffuse != null) {
+            defaultShaderUnlit.bindUniform("u_texture_diffuse", defaultTexture);
+            defaultShaderUnlit.bindUniform("u_color_diffuse", color_diffuse);
+        } else { // TODO: handle error: missing both diffuse texture and color.
+
+        }
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+            // turn vbos on based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!defaultShaderUnlit.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+            }
+
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+
+            // turn vbos off based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!defaultShaderUnlit.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
+    }
+
     public static void drawModelWireframe(Model model, Matrix4x4 transform) {
 
     }
@@ -433,7 +486,21 @@ public class Renderer3D {
         drawing = false;
     }
 
-    private static Shader createDefaultShaderProgram() {
+    private static Shader createDefaultUnlitShader() {
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-2.vert");
+             BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-2.frag");
+             BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
+
+            String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return new Shader(vertexShader, fragmentShader);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static Shader createDefaultPBRShader() {
         try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-2.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
              InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-2.frag");
