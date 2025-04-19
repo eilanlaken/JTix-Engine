@@ -25,13 +25,13 @@ public class SceneRendering3D_Terrain_4 implements Scene {
     public Texture terrainStone;
     public Texture terrainWater;
 
-    public Model plane;
+    public Model model;
 
     public Matrix4x4 transform_terrain = new Matrix4x4();
     public Matrix4x4 transform_plane = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
-    public Model model;
+    public Model model_big;
     public Matrix4x4 transform = new Matrix4x4();
 
 
@@ -48,8 +48,8 @@ public class SceneRendering3D_Terrain_4 implements Scene {
         this.terrainShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
         System.out.println(Arrays.toString(terrainShader.uniformNames));
 
-        Assets.loadModel("assets/app-models/sea-cruise-ship.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/models/plane_demo.fbx");
+        Assets.loadModel("assets/app-models/oil-rig.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/animal-pterosaur-red.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/models/terrain-block.fbx");
         //Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -72,8 +72,8 @@ public class SceneRendering3D_Terrain_4 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_water", terrainWater);
         terrain.materials[0].materialAttributes.put("time", 0.0f);
 
-        plane = Assets.get("assets/models/plane_demo.fbx");
-        model = Assets.get("assets/app-models/sea-cruise-ship.fbx");
+        model = Assets.get("assets/app-models/animal-pterosaur-red.fbx");
+        model_big = Assets.get("assets/app-models/oil-rig.fbx");
 
         transform_plane.translateGlobalAxisXYZ(0,0,50);
 
@@ -171,12 +171,12 @@ public class SceneRendering3D_Terrain_4 implements Scene {
             Renderer3D.drawModel_custom_shader_2(terrainShader, terrain.meshes[i], terrain.materials[i], transform_terrain);
         }
 
-        for (int i = 0; i < plane.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(plane.meshes[i], plane.materials[i], transform_plane);
+        for (int i = 0; i < model.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform_plane);
         }
 
-        for (int i = 0; i < model.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+        for (int i = 0; i < model_big.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_big.meshes[i], model_big.materials[i], transform);
         }
         Renderer3D.end();
     }
