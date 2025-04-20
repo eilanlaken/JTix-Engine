@@ -1,4 +1,4 @@
 package com.heavybox.jtix.widgets;
 
-public class NodeSelect {
+public interface NodeShape {
 }

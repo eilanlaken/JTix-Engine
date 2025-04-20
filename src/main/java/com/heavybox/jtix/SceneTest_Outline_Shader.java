@@ -4,7 +4,7 @@ import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
-import com.heavybox.jtix.widgets_4.*;
+import com.heavybox.jtix.widgets.*;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;

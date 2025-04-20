@@ -9,9 +9,9 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets_4.NodeContainer;
-import com.heavybox.jtix.widgets_4.NodeDebug;
-import com.heavybox.jtix.widgets_4.Widget;
+import com.heavybox.jtix.widgets.NodeContainer;
+import com.heavybox.jtix.widgets.NodeDebug;
+import com.heavybox.jtix.widgets.Widget;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Canvas_Primitives_Container implements Scene {

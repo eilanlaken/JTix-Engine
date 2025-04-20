@@ -40,18 +40,18 @@ public class NodeInputRadio extends Node implements NodeInput<Boolean> {
     }
 
     @Override
-    protected float getContentWidth() {
+    protected void fixedUpdate(float delta) {
+
+    }
+
+    @Override
+    public float calculateWidth() {
         return size * 2 + borderSize * 2;
     }
 
     @Override
-    protected float getContentHeight() {
+    public float calculateHeight() {
         return size * 2 + borderSize * 2;
-    }
-
-    @Override
-    protected void setDefaultStyle() {
-        style.boxBackgroundEnabled = false;
     }
 
     @Override

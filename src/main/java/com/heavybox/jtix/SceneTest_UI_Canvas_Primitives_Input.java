@@ -9,7 +9,7 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.widgets_4.*;
+import com.heavybox.jtix.widgets.*;
 import org.lwjgl.opengl.GL11;
 
 public class SceneTest_UI_Canvas_Primitives_Input implements Scene {

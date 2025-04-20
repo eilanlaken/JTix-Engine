@@ -1,167 +1,89 @@
 package com.heavybox.jtix.widgets;
 
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector2;
 
-import java.util.Objects;
-
-/*
-Follows CSS' box model, without borders.
-Overflow happen whenever the content exceeds
-the rectangular bounds set by [p0, p1, p2, p3].
-
-draw():
- ----------------------------------------------------------------
-|                            border                              |
-|          --------------------------------------                |
-|         |               padding top            |               |
-|         |          p0----------------p1        |               |
-|         |  padding  |                | padding |               |
-| border  |   left    |                |  right  |    border     |
-|         |           |    content     |         |               |
-|         |           |    render()    |         |               |
-|         |           |                |         |               |
-|         |          p3----------------p2        |               |
-|         |             padding bottom           |               |
-|          --------------------------------------                |
-|                           border                               |
- ----------------------------------------------------------------
-
- */
 public abstract class Node {
 
-    public final int id = Widgets.getID();
-    public final Region region = new Region();
     protected NodeContainer container = null;
-    public boolean active = true;
-
-    /* box-styling */
-    public final Style style = Widgets.getGlobalTheme();
-    public final Array<Style.Animation> animations = new Array<>(); // TODO.
-
-    /* calculated private attributes - computed every frame from the container, the style, etc. */
-    protected int innerOffsetX = 0;
-    protected int innerOffsetY = 0;
-
+    protected Polygon       polygon   = new Polygon();
+    public    boolean       active    = true;
 
     /* input handling */
-    private boolean mouseInside         = false;
-    private boolean mouseJustEntered    = false;
-    private boolean mouseJustLeft       = false;
+    public Runnable onClick     = null;
+    public Runnable onMouseOver  = null;
+    public Runnable onMouseEnter = null;
+    public Runnable onMouseLeave = null;
     private boolean mouseRegisterClicks = false;
-    private boolean dragJustEntered     = false;
+    private boolean mouseInside = false;
+    private boolean mouseInsidePrev = false;
 
-    /* calculated */
-    public float boxWidth = 0;
-    public float boxHeight = 0;
-    public float boxX = 0;
-    public float boxY = 0;
-    public float boxDeg = 0;
-    public float boxSclX = 1;
-    public float boxSclY = 1;
+    /* can be explicitly set by the programmer */
+    public int   zIndex = 0;
+    public float x      = 0;
+    public float y      = 0;
+    public float deg    = 0;
+    public float sclX   = 1;
+    public float sclY   = 1;
 
-    public float contentWidth = 0;
-    public float contentHeight = 0;
-    public float contentX = 0;
-    public float contentY = 0;
-    public float contentDeg = 0;
-    public float contentSclX = 1;
-    public float contentSclY = 1;
+    /* calculated by container and Transform */
+    // TODO: change to protected
+    public int   screenZIndex = 0;
+    public float screenX      = 0;
+    public float screenY      = 0;
+    public float screenDeg    = 0;
+    public float screenSclX   = 1;
+    public float screenSclY   = 1;
 
-    private boolean shouldApplyMasking;
-    private float overflowX;
-    private float overflowY;
+    // calculated by container
+    public float offsetX = 0;
+    public float offsetY = 0;
+    public int maskingIndex = 1; // TODO.
 
-    /* callbacks */
-    protected Node() {
-        setDefaultStyle();
+    protected abstract void fixedUpdate(float delta);
+    protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
+    public abstract float calculateWidth(); // TODO: cache location and implement reset() logic
+    public abstract float calculateHeight(); // TODO: cache location and implement reset() logic
+
+    // TODO: optimize by caching and only change when setting a parent.
+    public final int getMaskingIndex() {
+        if (container != null) return container.getMaskingIndex() + 1;
+        return 1;
     }
 
-    protected Node(final Style inherited) {
-        this.style.set(inherited);
-        setDefaultStyle();
+    protected final void draw(Renderer2D renderer2D) {
+        render(renderer2D, screenX, screenY, screenDeg, screenSclX, screenSclY);
     }
 
-    public void update(float delta) {
+    public final void update(float delta) {
+        transform();
         fixedUpdate(delta);
-
-        // masking
-
-        if (container == null) {
-            //boxRegionWidth = Graphics.getWindowWidth();
-            //boxRegionHeight = Graphics.getWindowHeight();
-        }
-
-
-
-        switch (style.sizingWidth) {
-            case AUTO: // make it so that the component container conforms to its content
-                contentWidth = getContentWidth();
-                contentWidth = MathUtils.clampFloat(contentWidth, style.sizeWidthMin, style.sizeWidthMax); // clamp based on styling
-                boxWidth = contentWidth + style.boxPaddingLeft + style.boxPaddingRight; // add padding.
-//                backgroundX = boxCenterX;
-                contentX = boxX + style.boxPaddingLeft - (style.boxPaddingLeft + style.boxPaddingRight) * 0.5f;
-                break;
-            case ABSOLUTE: // the component size is fixed.
-                contentWidth = style.sizeWidth;
-                contentWidth = MathUtils.clampFloat(contentWidth, style.sizeWidthMin, style.sizeWidthMax); // clamp based on styling
-                boxWidth = contentWidth + style.boxPaddingLeft + style.boxPaddingRight; // add padding.
-//                backgroundX = boxCenterX;
-                contentX = boxX + style.boxPaddingLeft - (style.boxPaddingLeft + style.boxPaddingRight) * 0.5f;
-                break;
-        }
-
-        switch (style.sizingHeight) {
-            case AUTO: // make it so that the component container conforms to its content
-                contentHeight = getContentHeight();
-                contentHeight = MathUtils.clampFloat(contentHeight, style.sizeHeightMin, style.sizeHeightMax); // clamp based on styling
-                boxHeight = contentHeight + style.boxPaddingBottom + style.boxPaddingTop; // add padding.
-//                backgroundY = boxCenterY;
-                contentY = boxY + style.boxPaddingBottom - (style.boxPaddingBottom + style.boxPaddingTop) * 0.5f;
-                break;
-            case ABSOLUTE: // the component size is fixed.
-                contentHeight = style.sizeHeight;
-                contentHeight = MathUtils.clampFloat(contentHeight, style.sizeHeightMin, style.sizeHeightMax); // clamp based on styling
-                boxHeight = contentHeight + style.boxPaddingBottom + style.boxPaddingTop; // add padding.
-//                backgroundY = boxCenterY;
-                contentY = boxY + style.boxPaddingBottom - (style.boxPaddingBottom + style.boxPaddingTop) * 0.5f;
-                break;
-        }
-
-
-        /* update Region or Regions (included, excluded) based on border radius, padding, clip-paths etc. */ // TODO.
-
-        /* update screen positions */
-
-
-
-
-        /* apply transform */
-        region.applyTransform(boxX, boxY, boxDeg, boxSclX, boxSclY);
-
-
     }
 
-//    protected final int getMaskingInteger() {
-//        if (container == null) return 1;
-//        return 1 + container.getMaskingInteger();
-//    }
+    final void setInputRegion() {
+        setPolygon(polygon);
+        polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
+    }
 
-    public void handleInput() { // TODO: delta will be used to detect double clicks.
-        float delta = Graphics.getDeltaTime();
-        /* handle input */
-        float xMouse = Input.mouse.getX() - Graphics.getWindowWidth() * 0.5f;
-        float yMouse = Graphics.getWindowHeight() * 0.5f - Input.mouse.getY();
-        float xMousePrev = Input.mouse.getXPrev() - Graphics.getWindowWidth() * 0.5f;
-        float yMousePrev = Graphics.getWindowHeight() * 0.5f - Input.mouse.getYPrev();
-        mouseInside = region.containsPoint(xMouse, yMouse);
-        boolean mousePrevInside = region.containsPoint(xMousePrev, yMousePrev);
-        mouseJustEntered = !mousePrevInside && mouseInside;
-        mouseJustLeft = !mouseInside && mousePrevInside;
+    // TODO: many bugs here.
+    final void handleInput() {
+        setPolygon(polygon);
+        polygon.applyTransform(screenX, screenY, screenDeg, screenSclX, screenSclY);
+
+        // TODO see how to lift up to widget.
+        float windowHalfWidth = Graphics.getWindowWidth() * 0.5f;
+        float windowHalfHeight = Graphics.getWindowHeight() * 0.5f;
+        float pointerX = Input.mouse.getX() - windowHalfWidth;
+        float pointerY = windowHalfHeight - Input.mouse.getY();
+
+        mouseInsidePrev = mouseInside;
+        mouseInside = containsPoint(pointerX, pointerY);
+        boolean mouseJustEntered = (!mouseInsidePrev && mouseInside) || (Input.mouse.cursorJustEnteredWindow() && mouseInside);
+        boolean mouseJustLeft = (!mouseInside && mouseInsidePrev) || Input.mouse.cursorJustLeftWindow();
         if (Input.mouse.isButtonJustPressed(Mouse.Button.LEFT)) {
             mouseRegisterClicks = mouseInside;
         }
@@ -169,137 +91,84 @@ public abstract class Node {
         /* invoke event callbacks */
         // TODO
         if (mouseRegisterClicks && Input.mouse.isButtonClicked(Mouse.Button.LEFT) && mouseInside) {
-            onClick();
+            if (onClick != null) onClick.run();
         }
         if (mouseJustEntered) {
-            onMouseOver();
+            if (onMouseEnter != null) onMouseEnter.run();
         }
         if (mouseJustLeft) {
-            onMouseOut();
+            if (onMouseLeave != null) onMouseLeave.run();
         }
 
+        frameUpdate();
+    }
+
+    protected void frameUpdate() {
 
     }
 
-    public void draw(Renderer2D renderer2D) {
-        renderBackground(renderer2D);
-        renderBorder(renderer2D);
+    final void transform() {
+        int refZIndex = container == null ? this.zIndex : this.zIndex + container.screenZIndex;
+        float refX = container == null ? 0 : container.screenX;
+        float refY = container == null ? 0 : container.screenY;
+        float refDeg = container == null ? 0 : container.screenDeg;
+        float refSclX = container == null ? 1 : container.screenSclX;
+        float refSclY = container == null ? 1 : container.screenSclY;
+        float cos = MathUtils.cosDeg(refDeg);
+        float sin = MathUtils.sinDeg(refDeg);
+        float x = this.x * cos - this.y * sin;
+        float y = this.x * sin + this.y * cos;
+        screenZIndex = refZIndex + this.zIndex;
+        screenX = refX + x * refSclX + offsetX * cos - offsetY * sin; // add the rotated offset vector x component
+        screenY = refY + y * refSclY + offsetX * sin + offsetY * cos; // add the rotated offset vector y component
+        screenDeg  = this.deg + refDeg;
+        screenSclX = this.sclX * refSclX;
+        screenSclY = this.sclY * refSclY;
+    }
 
-        shouldApplyMasking = (style.contentOverflowX != Style.Overflow.IGNORE || style.contentOverflowY != Style.Overflow.IGNORE)
-                && (overflowX > 0 || overflowY > 0);
 
-        shouldApplyMasking = true;
-        if (shouldApplyMasking) {
-            maskWrite(renderer2D);
-            renderer2D.enableMasking();
-            renderer2D.setMaskingFunctionEquals(1); // TODO: instead of 1, put the correct value for masking.
-            render(renderer2D, contentX, contentY, contentDeg, contentSclX, contentSclY);
-            renderer2D.disableMasking();
-            maskErase(renderer2D);
-        } else {
-            render(renderer2D, contentX, contentY, contentDeg, contentSclX, contentSclY);
+    // kind of a default implementation
+    protected void setPolygon(final Polygon polygon) {
+        polygon.setToRectangle(calculateWidth(), calculateHeight());
+    }
+
+    final boolean containsPoint(float x, float y) {
+        if (container == null) return polygon.containsPoint(x, y);
+
+        if (container.contentOverflowX == NodeContainer.Overflow.VISIBLE && container.contentOverflowY == NodeContainer.Overflow.VISIBLE) {
+            return polygon.containsPoint(x, y);
         }
 
+        if (container.contentOverflowX == NodeContainer.Overflow.VISIBLE && container.contentOverflowY == NodeContainer.Overflow.HIDDEN) {
+            if (MathUtils.isZero(container.sclY)) return false;
 
+            float height = container.calculateHeight() - container.boxBorderSize;
+            Vector2 v = new Vector2(x, y);
+            v.sub(container.screenX, container.screenY);
+            v.rotateDeg(-container.screenDeg);
+            v.scl(0, 1 / container.screenSclY);
 
-        if (Widgets.debug) region.draw(renderer2D);
-    }
-
-    private void maskWrite(Renderer2D renderer2D) {
-        renderer2D.beginStencil();
-        renderer2D.setStencilModeIncrement();
-        renderer2D.drawRectangleFilled(boxWidth, boxHeight,
-                style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
-                style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
-                style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
-                style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                boxX, boxY, boxDeg, boxSclX, boxSclY);
-        renderer2D.endStencil();
-    }
-
-    private void maskErase(Renderer2D renderer2D) {
-        renderer2D.beginStencil();
-        renderer2D.setStencilModeDecrement();
-        renderer2D.drawRectangleFilled(boxWidth, boxHeight,
-                style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
-                style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
-                style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
-                style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                boxX, boxY, boxDeg, boxSclX, boxSclY);
-        renderer2D.endStencil();
-    }
-
-    protected void renderBackground(Renderer2D renderer2D) {
-        if (style.boxBackgroundEnabled) {
-            renderer2D.setColor(style.boxBackgroudColor);
-            renderer2D.drawRectangleFilled(boxWidth, boxHeight,
-                    style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
-                    style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
-                    style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
-                    style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                    boxX, boxY, boxDeg, boxSclX, boxSclY);
+            return polygon.containsPoint(x, y) && Math.abs(v.y) <= Math.abs(height / 2);
         }
-    }
 
-    protected void renderBorder(Renderer2D renderer2D) {
-        if (style.boxBorderSize > 0) {
-            renderer2D.setColor(style.boxBorderColor);
-            renderer2D.drawRectangleBorder(boxWidth, boxHeight, style.boxBorderSize,
-                    style.boxCornerRadiusTopLeft, style.boxCornerSegmentsTopLeft,
-                    style.boxCornerRadiusTopRight, style.boxCornerSegmentsTopRight,
-                    style.boxCornerRadiusBottomRight, style.boxCornerSegmentsBottomRight,
-                    style.boxCornerRadiusBottomLeft, style.boxCornerSegmentsBottomLeft,
-                    boxX, boxY, boxDeg, boxSclX, boxSclY);
+        if (container.contentOverflowX == NodeContainer.Overflow.HIDDEN && container.contentOverflowY == NodeContainer.Overflow.VISIBLE) {
+            if (MathUtils.isZero(container.sclX)) return false;
+
+            float width = container.calculateWidth() - container.boxBorderSize;
+            Vector2 v = new Vector2(x, y);
+            v.sub(container.screenX, container.screenY);
+            v.rotateDeg(-container.screenDeg);
+            v.scl(0, 1 / container.screenSclY);
+
+            return polygon.containsPoint(x, y) && Math.abs(v.x) <= Math.abs(width / 2);
         }
+
+        return polygon.containsPoint(x, y) && container.containsPoint(x, y);
     }
-
-    protected void fixedUpdate(float delta) {}
-    protected abstract void render(Renderer2D renderer2D, float x, float y, float deg, float sclX, float sclY);
-    protected abstract float getContentWidth();
-    protected abstract float getContentHeight();
-    protected abstract void setDefaultStyle();
-
-//    public boolean descendantOf(NodeContainer container) {
-//        if (container.children.contains(this, true)) return true;
-//        boolean result = false;
-//        for (Node child : container.children) {
-//            if (child instanceof NodeContainer) {
-//                result = result || descendantOf((NodeContainer) child);
-//            }
-//        }
-//        return result;
-//    }
-
-    // TODO: replace with callback lambda expression attributes
-    /* Triggered when the element is clicked. */
-    protected void onClick() {}
-    /* Triggered when the mouse button is pressed down. */
-    protected void onMouseDown() {}
-    /* Triggered when the mouse button is released. */
-    protected void onMouseUp() {}
-    /* Triggered when the mouse hovers over the element. */
-    protected void onMouseOver() {}
-    /* Triggered when the mouse moves out of the element. */
-    protected void onMouseOut() {}
-    /* Triggered when the mouse moves over the element. */
-    protected void onMouseMove() {}
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " id: " + id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Node widget = (Node) o;
-        return id == widget.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
+        return this.getClass().getSimpleName();
     }
 
 }
