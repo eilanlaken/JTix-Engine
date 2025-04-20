@@ -1,4 +1,4 @@
-package com.heavybox.jtix;
+package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
@@ -10,9 +10,7 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-
-public class SceneRendering3D_Terrain_4 implements Scene {
+public class ScenePlanesGame_TileBuilder implements Scene {
 
     private Camera camera;
 
@@ -25,58 +23,55 @@ public class SceneRendering3D_Terrain_4 implements Scene {
     public Texture terrainStone;
     public Texture terrainWater;
 
-    public Model model;
+    public Model model_gameobject;
 
     public Matrix4x4 transform_terrain = new Matrix4x4();
-    public Matrix4x4 transform_plane = new Matrix4x4();
+    public Matrix4x4 transform_gameobject = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
-    public Model model_big;
-    public Matrix4x4 transform = new Matrix4x4();
-
-
-    public SceneRendering3D_Terrain_4() {
+    public ScenePlanesGame_TileBuilder() {
 
     }
 
     @Override
     public void setup() {
 
-        String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/water-shader.vert");
-        String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/water-shader.frag");
+        String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.vert");
+        String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.frag");
 
         this.terrainShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
-        System.out.println(Arrays.toString(terrainShader.uniformNames));
 
-        Assets.loadModel("assets/app-models/oil-rig.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/app-models/animal-pterosaur-red.fbx", "assets/app-models/textures");
+        // load game object models.
+        Assets.loadModel(Constants.MODELS_FILE_PATH_RURAL_HOUSES_BIG[5], Constants.MODELS_TEXTURES_PATH);
+
         Assets.loadModel("assets/models/terrain-block.fbx");
-        //Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        //Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        //Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        //Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        //Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.finishLoading();
 
-        //terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
-        //terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
-        //terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
-        //terrainGrass = Assets.get("assets/app-textures/terrain-grass.jpg");
-        //terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
+        terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
+        terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
+        terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
+        terrainGrass = Assets.get("assets/app-textures/terrain-grass.jpg");
+        terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
         terrainWater = Assets.get("assets/app-textures/terrain-water.jpg");
 
         //model = Assets.get("assets/models/plane_demo.fbx");
         terrain = Assets.get("assets/models/terrain-block.fbx");
 
-        terrain.materials[0].materialAttributes.put("u_texture_water", terrainWater);
-        terrain.materials[0].materialAttributes.put("time", 0.0f);
+        terrain.materials[0].materialAttributes.put("u_texture_background", terrainStone);
+        terrain.materials[0].materialAttributes.put("u_texture_red", terrainEarth);
+        terrain.materials[0].materialAttributes.put("u_texture_green", terrainGrass);
+        terrain.materials[0].materialAttributes.put("u_texture_blue", terrainWater);
+        terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
+        terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
-        model = Assets.get("assets/app-models/animal-pterosaur-red.fbx");
-        model_big = Assets.get("assets/app-models/oil-rig.fbx");
-
-        transform_plane.translateGlobalAxisXYZ(0,0,50);
-
+        model_gameobject = Assets.get(Constants.MODELS_FILE_PATH_RURAL_HOUSES_BIG[5]);
+        transform_gameobject.setTranslation(0,200,0);
     }
 
     @Override
@@ -98,10 +93,6 @@ public class SceneRendering3D_Terrain_4 implements Scene {
 
     @Override
     public void update() {
-        float time = (float) terrain.materials[0].materialAttributes.get("time");
-        time += Graphics.getDeltaTime();
-        terrain.materials[0].materialAttributes.put("time", time);
-
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
         float scroll = 3 * Input.mouse.getVerticalScroll();
@@ -118,34 +109,29 @@ public class SceneRendering3D_Terrain_4 implements Scene {
         } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta() * 0.2f;
             float panVertical = Input.mouse.getYDelta() * 0.2f;
-            //camera.rotateAroundUp(panHorizontal * 5);
-            //camera.rotateAroundRight(panVertical * 5);
             camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
             camera.rotateAroundRight(panVertical * 5);
         }
-
         camera.update();
 
-
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform_plane.rotateLocalAxisY(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform_plane.rotateLocalAxisY(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform_plane.rotateLocalAxisZ(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform_plane.rotateLocalAxisZ(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform_plane.rotateLocalAxisX(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform_plane.rotateLocalAxisX(-1);
-        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
+//            transform_gameobject.rotateLocalAxisY(1);
+//        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+//            transform_gameobject.rotateLocalAxisY(-1);
+//        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+//            transform_gameobject.rotateLocalAxisZ(1);
+//        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+//            transform_gameobject.rotateLocalAxisZ(-1);
+//        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
+//            transform_gameobject.rotateLocalAxisX(1);
+//        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
+//            transform_gameobject.rotateLocalAxisX(-1);
+//        }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
             transform_terrain.translateGlobalAxisXYZ(0,0,1);
@@ -169,12 +155,8 @@ public class SceneRendering3D_Terrain_4 implements Scene {
             Renderer3D.drawModel_custom_shader_2(terrainShader, terrain.meshes[i], terrain.materials[i], transform_terrain);
         }
 
-        for (int i = 0; i < model.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform_plane);
-        }
-
-        for (int i = 0; i < model_big.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_big.meshes[i], model_big.materials[i], transform);
+        for (int i = 0; i < model_gameobject.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_gameobject.meshes[i], model_gameobject.materials[i], transform_gameobject);
         }
         Renderer3D.end();
     }
