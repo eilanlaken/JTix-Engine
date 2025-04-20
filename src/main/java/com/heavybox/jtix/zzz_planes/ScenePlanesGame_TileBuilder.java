@@ -29,6 +29,8 @@ public class ScenePlanesGame_TileBuilder implements Scene {
     public Matrix4x4 transform_gameobject = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
+    private GameObjectAirplane airplane = new GameObjectAirplane();
+
     public ScenePlanesGame_TileBuilder() {
 
     }
@@ -141,6 +143,8 @@ public class ScenePlanesGame_TileBuilder implements Scene {
             //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
         }
 
+        update_gameplay();
+
         Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
@@ -161,6 +165,16 @@ public class ScenePlanesGame_TileBuilder implements Scene {
         Renderer3D.end();
     }
 
-
+    private void update_gameplay() {
+        float delta = Graphics.getDeltaTime();
+        Vector3 velocity = new Vector3(camera.gizmoForward).scl(airplane.speed);
+        camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) airplane.speed += delta * 10;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) airplane.speed -= delta * 10;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) camera.rotateAroundForward(delta * -60);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) camera.rotateAroundForward(delta * 60);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) camera.rotateAroundRight(delta * -60);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) camera.rotateAroundRight(delta * 60);
+    }
 
 }

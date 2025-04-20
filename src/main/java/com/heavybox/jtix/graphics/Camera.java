@@ -26,10 +26,10 @@ public class Camera {
     private final float[]   frustumPlaneDs;
 
     /* position, direction, up [note: will be updated from the component camera] */
-    public  final Vector3 position     = new Vector3(0,0,0);
-    private final Vector3 gizmoForward = new Vector3(0,0,-1);
-    private final Vector3 gizmoUp      = new Vector3(0,1,0);
-    private final Vector3 gizmoRight   = new Vector3(1,0,0); // forward X up (cross product)
+    public final Vector3 position     = new Vector3(0,0,0);
+    public final Vector3 gizmoForward = new Vector3(0,0,-1);
+    public final Vector3 gizmoUp      = new Vector3(0,1,0);
+    public final Vector3 gizmoRight   = new Vector3(1,0,0); // forward X up (cross product)
 
     public Camera(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.mode = mode;
