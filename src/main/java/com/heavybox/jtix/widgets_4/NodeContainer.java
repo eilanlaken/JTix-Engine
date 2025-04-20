@@ -5,7 +5,6 @@ import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Renderer2D;
 import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.widgets_3.WidgetsException;
 
 /*
 Follows CSS' box model, more or less -

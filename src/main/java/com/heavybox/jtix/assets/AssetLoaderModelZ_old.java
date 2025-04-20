@@ -7,8 +7,6 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.math.Vector4;
 import com.heavybox.jtix.memory.MemoryUtils;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.*;
-import com.heavybox.jtix.z_deprecated.z_graphics_old.Model;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.*;
@@ -138,33 +136,34 @@ import java.util.Map;
     // TODO: use interleaved vertices.
     @Override
     public Model afterLoad() {
-        ModelPart[] parts = new ModelPart[partsData.length];
-        for (int i = 0; i < parts.length; i++) {
-            // create material
-            ModelPartData partData = partsData[i];
-            ModelPartMaterialData materialData = partData.materialData;
-            ModelPartMeshData meshData = partData.meshData;
-            HashMap<String, Object> materialAttributes = new HashMap<>();
-            for (Map.Entry<String, Object> materialDataEntry : materialData.attributesData.entrySet()) {
-                final String uniform = materialDataEntry.getKey();
-                final Object dataValue = materialDataEntry.getValue();
-                if (dataValue instanceof Color) {
-                    Color color = (Color) dataValue;
-                    materialAttributes.put(uniform, new Color(color.r, color.g, color.b, color.a));
-                } else if (dataValue instanceof TextureParameters) {
-                    TextureParameters params = (TextureParameters) dataValue;
-                    Texture texture = Assets.get(params.path);
-                    materialAttributes.put(uniform, texture);
-                } else if (dataValue instanceof Float) {
-                    materialAttributes.put(uniform, dataValue);
-                }
-            }
-            ModelPartMaterial material = new ModelPartMaterial(materialAttributes);
-            ModelPartMesh mesh = create(meshData);
-            parts[i] = new ModelPart(mesh, material, null);
-        }
-        final ModelArmature armature = new ModelArmature();
-        return new Model(parts, armature);
+//        ModelPart[] parts = new ModelPart[partsData.length];
+//        for (int i = 0; i < parts.length; i++) {
+//            // create material
+//            ModelPartData partData = partsData[i];
+//            ModelPartMaterialData materialData = partData.materialData;
+//            ModelPartMeshData meshData = partData.meshData;
+//            HashMap<String, Object> materialAttributes = new HashMap<>();
+//            for (Map.Entry<String, Object> materialDataEntry : materialData.attributesData.entrySet()) {
+//                final String uniform = materialDataEntry.getKey();
+//                final Object dataValue = materialDataEntry.getValue();
+//                if (dataValue instanceof Color) {
+//                    Color color = (Color) dataValue;
+//                    materialAttributes.put(uniform, new Color(color.r, color.g, color.b, color.a));
+//                } else if (dataValue instanceof TextureParameters) {
+//                    TextureParameters params = (TextureParameters) dataValue;
+//                    Texture texture = Assets.get(params.path);
+//                    materialAttributes.put(uniform, texture);
+//                } else if (dataValue instanceof Float) {
+//                    materialAttributes.put(uniform, dataValue);
+//                }
+//            }
+//            ModelPartMaterial material = new ModelPartMaterial(materialAttributes);
+//            ModelPartMesh mesh = create(meshData);
+//            parts[i] = new ModelPart(mesh, material, null);
+//        }
+//        final ModelArmature armature = new ModelArmature();
+//        return new Model(parts, armature);
+        return null;
     }
 
     private ModelPartMaterialData processMaterial(final AIMaterial aiMaterial) {
@@ -225,13 +224,13 @@ import java.util.Map;
 
     private ModelPartMeshData processMesh(final AIMesh aiMesh) {
         ModelPartMeshData meshData = new ModelPartMeshData();
-        meshData.vertexBuffers.put(VertexAttribute_old.POSITION_3D, getPositions(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute_old.COLOR, getColors(aiMesh)); // TODO: change to color packed.
-        meshData.vertexBuffers.put(VertexAttribute_old.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute_old.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute_old.NORMAL, getNormals(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute_old.TANGENT, getTangents(aiMesh));
-        meshData.vertexBuffers.put(VertexAttribute_old.BI_NORMAL, getBiNormals(aiMesh));
+//        meshData.vertexBuffers.put(VertexAttribute_old.POSITION_3D, getPositions(aiMesh));
+//        meshData.vertexBuffers.put(VertexAttribute_old.COLOR, getColors(aiMesh)); // TODO: change to color packed.
+//        meshData.vertexBuffers.put(VertexAttribute_old.TEXTURE_COORDINATES0, getTextureCoords0(aiMesh));
+//        meshData.vertexBuffers.put(VertexAttribute_old.TEXTURE_COORDINATES1, getTextureCoords1(aiMesh));
+//        meshData.vertexBuffers.put(VertexAttribute_old.NORMAL, getNormals(aiMesh));
+//        meshData.vertexBuffers.put(VertexAttribute_old.TANGENT, getTangents(aiMesh));
+//        meshData.vertexBuffers.put(VertexAttribute_old.BI_NORMAL, getBiNormals(aiMesh));
         meshData.indices = getIndices(aiMesh);
         meshData.materialIndex = aiMesh.mMaterialIndex();
         meshData.vertexCount = getVertexCount(aiMesh);
@@ -390,32 +389,6 @@ import java.util.Map;
         return indices;
     }
 
-    private ModelPartMesh create(final ModelPartMeshData meshData) {
-        Array<VertexAttribute_old> attributesCollector = new Array<>();
-        ArrayInt vbosCollector = new ArrayInt();
-        int vaoId = GL30.glGenVertexArrays();
-        GL30.glBindVertexArray(vaoId);
-        {
-            storeIndicesBuffer(meshData.indices, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.POSITION_3D, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.COLOR, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.TEXTURE_COORDINATES0, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.TEXTURE_COORDINATES1, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.NORMAL, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.TANGENT, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BI_NORMAL, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT0, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT1, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT2, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT3, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT4, meshData, attributesCollector, vbosCollector);
-            storeDataInAttributeList(VertexAttribute_old.BONE_WEIGHT5, meshData, attributesCollector, vbosCollector);
-        }
-        GL30.glBindVertexArray(0);
-        final short bitmask = generateBitmask(attributesCollector);
-        final int[] vbos = vbosCollector.pack();
-        return new ModelPartMesh(vaoId, meshData.vertexCount, bitmask,meshData.indices != null, meshData.boundingSphereCenter, meshData.boundingSphereRadius, vbos);
-    }
 
     private void storeIndicesBuffer(int[] indices, ArrayInt vbosCollector) {
         if (indices == null) return;
@@ -426,32 +399,13 @@ import java.util.Map;
         vbosCollector.add(vbo);
     }
 
-    private void storeDataInAttributeList(final VertexAttribute_old attribute, final ModelPartMeshData meshData, Array<VertexAttribute_old> attributesCollector, ArrayInt vbosCollector) {
-        final float[] data = (float[]) meshData.vertexBuffers.get(attribute);
-        if (data == null) return;
-        final int attributeNumber = attribute.ordinal();
-        final int attributeUnitSize = attribute.length;
-        int vbo = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo); // bind
-        FloatBuffer buffer = MemoryUtils.store(data);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(attributeNumber, attributeUnitSize, GL11.GL_FLOAT, false, 0, 0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // unbind
-        attributesCollector.add(attribute);
-        vbosCollector.add(vbo);
-    }
 
-    private short generateBitmask(final Array<VertexAttribute_old> attributes) {
-        short bitmask = 0b0000;
-        for (final VertexAttribute_old attribute : attributes) {
-            bitmask |= attribute.bitmask;
-        }
-        return bitmask;
-    }
+
+
 
     private static class ModelPartMeshData {
         public int vertexCount;
-        public Map<VertexAttribute_old, Object> vertexBuffers = new HashMap<>();
+        //public Map<VertexAttribute_old, Object> vertexBuffers = new HashMap<>();
         public int materialIndex;
         public int[] indices;
         public Vector3 boundingSphereCenter;
