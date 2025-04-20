@@ -1,6 +1,6 @@
 package com.heavybox.jtix.tools;
 
-public class ToolsException extends RuntimeException {
+public final class ToolsException extends RuntimeException {
 
     public ToolsException(String msg) {
         super(msg);

@@ -86,8 +86,8 @@ void main()
     // cook-torrance brdf
     vec3 L    = normalize(-directionalLight.direction);
     vec3 H    = normalize(V + L);
-    float NDF = distribution_GGX(N, H, 1.0);
-    float G   = geometry_smith(N, V, L, 1.0);
+    float NDF = distribution_GGX(N, H, 0.0);
+    float G   = geometry_smith(N, V, L, 0.0);
     vec3  F   = fresnel_schlick(max(dot(H, V), 0.0), F0);
 
     vec3 numerator    = NDF * G * F;

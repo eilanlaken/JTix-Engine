@@ -12,7 +12,6 @@ public class Input {
 
     public static void init(final Application application) {
         if (initialized) return;
-        Input.application = application;
         Mouse.init(application);
         Keyboard.init();
         initialized = true;

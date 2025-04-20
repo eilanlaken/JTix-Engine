@@ -2,16 +2,9 @@ package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Font;
-import com.heavybox.jtix.graphics.GraphicsException;
-import com.heavybox.jtix.graphics.Texture;
-import com.heavybox.jtix.tools.ToolsFontGenerator;
 
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 // TODO: here is the solution: check if suffix is .ttf or .yaml or yml.
 // If ttf generate bitmap, then load the bitmap font
