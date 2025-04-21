@@ -37,6 +37,7 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
     // tools
     public Tool activeTool;
     public ToolHouseStamp toolHouseStamp;
+    public ToolTreeStamp toolTreeStamp;
 
     public ScenePlanesGame_TileBuilder_3() {
 
@@ -54,6 +55,10 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         //Assets.loadModel(Constants.MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS[0], Constants.MODELS_TEXTURES_PATH);
         // load all rural props
         for (String fieldsPath : Constants.MODELS_FILE_PATH_FIELDS) {
+            Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
+        }
+
+        for (String fieldsPath : Constants.MODELS_FILE_PATH_TREES) {
             Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
         }
 
@@ -117,7 +122,9 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         camera.update();
 
         this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects);
+        this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects);
 
+        this.activeTool = toolHouseStamp;
     }
 
 
@@ -128,6 +135,10 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         transform_gameobject.setTranslation(screen.x, screen.y, 0);
 
         float scroll = Input.mouse.getVerticalScroll();
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.INSERT)) {
+            if (camera.mode == Camera.Mode.ORTHOGRAPHIC) camera.mode = Camera.Mode.PERSPECTIVE;
+            else camera.mode = Camera.Mode.ORTHOGRAPHIC;
+        }
         if (Input.mouse.getVerticalScroll() != 0) {
             if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 30);
             else camera.zoom += 0.04f * scroll;
@@ -139,17 +150,22 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panVertical = Input.mouse.getYDelta();
             camera.translateForward(-panVertical);
-        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE) && camera.mode == Camera.Mode.PERSPECTIVE) {
             float panHorizontal = Input.mouse.getXDelta() * 0.2f;
             float panVertical = Input.mouse.getYDelta() * 0.2f;
-            //camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
-            //camera.rotateAroundRight(panVertical * 5);
+            camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
+            camera.rotateAroundRight(panVertical * 5);
         }
         camera.update();
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_1)) {
+            activeTool = toolHouseStamp;
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_2)) {
+            activeTool = toolTreeStamp;
+        }
 
         // update tools
-        toolHouseStamp.update();
+        if (activeTool != null) activeTool.update();
 
 //        if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
 //            transform_gameobject.rotateLocalAxisZ(Input.mouse.getYDelta());
@@ -183,7 +199,7 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
 //        }
 
         // draw tools overlay
-        toolHouseStamp.render();
+        if (activeTool != null) activeTool.render();
 
         for (GameObject gameObject : gameObjects) {
             Model model = gameObject.model;
