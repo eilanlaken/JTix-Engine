@@ -4,6 +4,7 @@ import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
 import com.heavybox.jtix.zzz_planes.ScenePlanesGame_TileBuilder;
 import com.heavybox.jtix.zzz_planes.ScenePlanesGame_TileBuilder_2;
+import com.heavybox.jtix.zzz_planes.ScenePlanesGame_TileBuilder_3;
 
 import java.io.IOException;
 
@@ -66,7 +67,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new ScenePlanesGame_TileBuilder_2());
+        Application.launch(new ScenePlanesGame_TileBuilder_3());
 
     }
 
