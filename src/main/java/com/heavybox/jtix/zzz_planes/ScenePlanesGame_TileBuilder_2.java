@@ -2,6 +2,7 @@ package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -10,7 +11,7 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-public class ScenePlanesGame_TileBuilder implements Scene {
+public class ScenePlanesGame_TileBuilder_2 implements Scene {
 
     private Camera camera;
 
@@ -31,7 +32,9 @@ public class ScenePlanesGame_TileBuilder implements Scene {
 
     private GameObjectAirplane airplane = new GameObjectAirplane();
 
-    public ScenePlanesGame_TileBuilder() {
+    private Array<GameObject> gameObjects = new Array<>(false, 10);
+
+    public ScenePlanesGame_TileBuilder_2() {
 
     }
 
@@ -44,7 +47,12 @@ public class ScenePlanesGame_TileBuilder implements Scene {
         this.terrainShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
 
         // load game object models.
-        Assets.loadModel(Constants.MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS[0], Constants.MODELS_TEXTURES_PATH);
+        //Assets.loadModel(Constants.MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS[0], Constants.MODELS_TEXTURES_PATH);
+        // load all rural props
+        for (String fieldsPath : Constants.MODELS_FILE_PATH_FIELDS) {
+            Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
+        }
+
 
         Assets.loadModel("assets/models/terrain-block.fbx");
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -72,7 +80,7 @@ public class ScenePlanesGame_TileBuilder implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
-        model_gameobject = Assets.get(Constants.MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS[0]);
+        model_gameobject = Assets.get(Constants.MODELS_FILE_PATH_FIELDS[3]);
         transform_gameobject.setTranslation(0,200,0);
     }
 
@@ -98,6 +106,8 @@ public class ScenePlanesGame_TileBuilder implements Scene {
     public void update() {
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
+        transform_gameobject.setTranslation(screen.x, screen.y, 0);
+
         float scroll = Input.mouse.getVerticalScroll();
         if (Input.mouse.getVerticalScroll() != 0) {
             if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 30);
@@ -113,18 +123,22 @@ public class ScenePlanesGame_TileBuilder implements Scene {
         } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta() * 0.2f;
             float panVertical = Input.mouse.getYDelta() * 0.2f;
-            camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
-            camera.rotateAroundRight(panVertical * 5);
+            //camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
+            //camera.rotateAroundRight(panVertical * 5);
         }
         camera.update();
 
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-//            transform_gameobject.rotateLocalAxisY(1);
-//        }
+        if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
+            transform_gameobject.rotateLocalAxisZ(Input.mouse.getYDelta());
+        }
 
 
         if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) { // export json
-            System.out.println(Input.mouse.getY());
+            System.out.println(screen);
+        }
+
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ENTER)) {
+            toJSON();
         }
 
         //update_gameplay();
@@ -147,6 +161,10 @@ public class ScenePlanesGame_TileBuilder implements Scene {
             Renderer3D.drawModel_tmp_5(model_gameobject.meshes[i], model_gameobject.materials[i], transform_gameobject);
         }
         Renderer3D.end();
+    }
+
+    private void toJSON() {
+
     }
 
     private void update_gameplay() {

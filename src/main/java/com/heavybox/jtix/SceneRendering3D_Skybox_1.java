@@ -8,6 +8,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.zzz_planes.GameObjectAirplane;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -33,6 +34,8 @@ public class SceneRendering3D_Skybox_1 implements Scene {
 
     public Model model_big;
     public Matrix4x4 transform = new Matrix4x4();
+
+    private GameObjectAirplane airplane = new GameObjectAirplane();
 
 
     public SceneRendering3D_Skybox_1() {
@@ -138,27 +141,6 @@ public class SceneRendering3D_Skybox_1 implements Scene {
 
         camera.update();
 
-
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform_model.rotateLocalAxisY(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform_model.rotateLocalAxisY(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform_model.rotateLocalAxisZ(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform_model.rotateLocalAxisZ(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform_model.rotateLocalAxisX(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform_model.rotateLocalAxisX(-1);
-        }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
             transform_terrain.translateGlobalAxisXYZ(0,0,1);
         }
@@ -166,6 +148,8 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.SPACE)) {
             //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
         }
+
+        update_gameplay();
 
         Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -192,6 +176,16 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         Renderer3D.end();
     }
 
-
+    private void update_gameplay() {
+        float delta = Graphics.getDeltaTime();
+        Vector3 velocity = new Vector3(camera.gizmoForward).scl(airplane.speed);
+        camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) airplane.speed += delta * 20;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) airplane.speed -= delta * 20;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) camera.rotateAroundForward(delta * -90);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) camera.rotateAroundForward(delta * 90);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) camera.rotateAroundRight(delta * -90);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) camera.rotateAroundRight(delta * 90);
+    }
 
 }

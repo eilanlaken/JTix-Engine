@@ -127,7 +127,6 @@ public class Renderer3D {
 
         }
 
-        System.out.println(Integer.toBinaryString(currentShader.vertexAttributesBitmask));
 
         GL30.glBindVertexArray(mesh.vaoId);
         {

@@ -1,6 +1,7 @@
 package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Shader;
 import com.heavybox.jtix.graphics.Texture;
@@ -18,6 +19,8 @@ public class TerrainTile {
     public Texture terrainGrass;
     public Texture terrainStone;
     public Texture terrainWater;
+
+    public Array<GameObject> staticGameObjects = new Array<>(false, 5); // trees, houses, buildings, roads, props.
 
     public TerrainTile(int i, int j, Texture heightmap, Texture blendmap) {
         String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.vert");
@@ -39,6 +42,12 @@ public class TerrainTile {
         model.materials[0].materialAttributes.put("u_texture_blue", terrainWater);
         model.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         model.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
+
+        // set terrain transform based on i,j
+    }
+
+    private void buildStaticTile() {
+
     }
 
 }

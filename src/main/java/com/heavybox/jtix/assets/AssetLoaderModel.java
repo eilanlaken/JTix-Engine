@@ -52,7 +52,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     @Override
     public Array<AssetDescriptor> load(String path, HashMap<String, Object> options) {
         this.texturesFolderPath = options != null ? (String) options.get("texturesFolderPath") : null;
-        System.out.println(this.texturesFolderPath);
         this.folderPath = Paths.get(path).getParent().toString();
         // TODO: use the options here.
         // TODO: additional flags: Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_GenNormals
@@ -69,7 +68,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
         PointerBuffer children = aiScene.mRootNode().mChildren();
         AINode node = AINode.create(children.get(0));
-        System.out.println(node.mName().dataString());
         // TODO: this may be wrong. we may have a scenario with multiple meshes and a single material?
 
         // load meshes:
@@ -183,7 +181,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                         String fileName = Paths.get(ai_path.dataString()).getFileName().toString();
                         Path fullPath = base.resolve(fileName);
                         materialTexture.path = fullPath.toString();
-                        System.out.println(materialTexture.path);
                     } else {
                         Path base = Paths.get(folderPath);
                         Path fullPath = base.resolve(ai_path.dataString());
