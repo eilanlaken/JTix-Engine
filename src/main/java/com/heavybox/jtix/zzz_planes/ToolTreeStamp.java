@@ -14,9 +14,11 @@ import com.heavybox.jtix.math.Vector3;
 
 public class ToolTreeStamp extends Tool {
 
+    private static final int[] allowedIndices = {3,6,7,8};
+
     public Camera camera;
     public TreeType currentType = TreeType.BRIGHT_GREEN;
-    public int currentIndex = 0;
+    public int currentIndex = allowedIndices[0];
     public GameObject house;
 
     public Array<GameObject> gameObjects;
@@ -43,7 +45,7 @@ public class ToolTreeStamp extends Tool {
             go.model = house.model;
             go.transform = house.transform.cpy();
             gameObjects.add(go);
-            currentIndex = MathUtils.randomUniformInt(0, 6);
+            currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
             house.model = getModel(currentType, currentIndex);
         }
 
@@ -53,7 +55,7 @@ public class ToolTreeStamp extends Tool {
             currentType = TreeType.values()[nextOrdinal];
             house.model = getModel(currentType, currentIndex);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
-            currentIndex = MathUtils.randomUniformInt(0, 6);
+            currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
             house.model = getModel(currentType, currentIndex);
         }
     }
