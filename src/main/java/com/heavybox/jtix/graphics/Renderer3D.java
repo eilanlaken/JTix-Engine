@@ -224,17 +224,17 @@ public class Renderer3D {
         currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
 
         // TODO: bind environment lights when binding the camera.
-        currentShader.bindUniform("pointLights[0].position", new Vector3(0,-5,5));
-        currentShader.bindUniform("pointLights[0].color", new Vector3(1f,0.0f,0.0f));
-        currentShader.bindUniform("pointLights[0].intensity", 1);
+//        currentShader.bindUniform("pointLights[0].position", new Vector3(0,-5,5));
+//        currentShader.bindUniform("pointLights[0].color", new Vector3(1f,0.0f,0.0f));
+//        currentShader.bindUniform("pointLights[0].intensity", 1);
+//
+//        currentShader.bindUniform("pointLights[1].position", new Vector3(0,-5,-5));
+//        currentShader.bindUniform("pointLights[1].color", new Vector3(0f,0.0f,1.0f));
+//        currentShader.bindUniform("pointLights[1].intensity", 1);
 
-        currentShader.bindUniform("pointLights[1].position", new Vector3(0,-5,-5));
-        currentShader.bindUniform("pointLights[1].color", new Vector3(0f,0.0f,1.0f));
-        currentShader.bindUniform("pointLights[1].intensity", 1);
-
-//        currentShader.bindUniform("directionalLights[0].direction", new Vector3(0,1,0));
-//        currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1.0f,1.0f));
-//        currentShader.bindUniform("directionalLights[0].intensity", 1f);
+        currentShader.bindUniform("directionalLights[0].direction", lightDir);
+        currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1.0f,1.0f));
+        currentShader.bindUniform("directionalLights[0].intensity", 0.3f);
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");

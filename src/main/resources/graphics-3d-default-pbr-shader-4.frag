@@ -92,7 +92,8 @@ void main()
     // summation over all point light sources
     for (int i = 0; i < NUM_POINT_LIGHTS; i++) {
         float distance_to_light = length(vertex_to_light[i]);
-        float attenuation = 1.0 / (1.0 + 0.1 * distance_to_light + 0.01 * distance_to_light * distance_to_light);
+        //float attenuation = 1.0 / (1.0 + 0.1 * distance_to_light + 0.01 * distance_to_light * distance_to_light);
+        float attenuation = 1.0 / (distance_to_light);
         vec3 radiance = pointLights[i].intensity * pointLights[i].color * attenuation;
 
         // cook-torrance brdf
@@ -140,8 +141,10 @@ void main()
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
+    //color = unreal(color);
     color = color / (color + vec3(0.05));
     // gamma correct
     //color = pow(color, vec3(1.0/2.2));
     out_color = vec4(color, 1.0);
 }
+
