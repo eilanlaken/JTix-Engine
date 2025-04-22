@@ -1,6 +1,6 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
-
+//https://github.com/NCCA/NormalMapping/blob/main/shaders/NormalMapVert.glsl
 // attributes
 layout(location = 0) in vec3 a_position;
 layout(location = 2) in vec2 a_textCoords0;
@@ -23,12 +23,18 @@ void main()
 {
     vec4 vertex_position = u_transform * vec4(a_position, 1.0);
     gl_Position = u_camera_combined * vertex_position;
-    mat3 normal_matrix = mat3(transpose(inverse(u_transform)));
-    vec3 T = normalize(vec3(normal_matrix * a_tangent));
-    vec3 B = normalize(vec3(normal_matrix * a_biTangent));
-    vec3 N = normalize(vec3(normal_matrix * a_normal));
+
+    // above is accurate by taking into account non-uniform scaling, but far more expensinve.
+//    mat3 normal_matrix = mat3(transpose(inverse(u_transform)));
+//    vec3 T = normalize(vec3(normal_matrix * a_tangent));
+//    vec3 B = normalize(vec3(normal_matrix * a_biTangent));
+//    vec3 N = normalize(vec3(normal_matrix * a_normal));
+    vec3 T = normalize(vec3(u_transform * vec4(a_tangent, 0.0)));
+    vec3 B = normalize(vec3(u_transform * vec4(a_biTangent, 0.0)));
+    vec3 N = normalize(vec3(u_transform * vec4(a_normal, 0.0)));
     mat3 TBN = mat3(T, B, N);
     invTBN = transpose(TBN); // TBN is orthogonal therefore inverse(TBN) = transpose(TBN)
+    //invTBN = TBN;
 
     unit_vertex_to_camera = normalize(invTBN * (u_camera_position - vertex_position.xyz));
     world_vertex_position = vertex_position.xyz;

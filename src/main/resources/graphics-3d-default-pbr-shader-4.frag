@@ -19,9 +19,10 @@ struct DirectionalLight {
 
 // inputs
 in vec2 uv;
-in mat3 invTBN;
 in vec3 unit_vertex_to_camera;
 in vec3 world_vertex_position;
+in vec3 vertex_to_light[NUM_POINT_LIGHTS];
+in vec3 light_direction[NUM_DIRECTIONAL_LIGHTS];
 
 // uniforms - lights
 uniform PointLight pointLights[NUM_POINT_LIGHTS];
@@ -90,13 +91,12 @@ void main()
 
     // summation over all point light sources
     for (int i = 0; i < NUM_POINT_LIGHTS; i++) {
-        vec3 vertex_to_light = invTBN * (pointLights[i].position - world_vertex_position);
-        float distance_to_light = length(vertex_to_light);
+        float distance_to_light = length(vertex_to_light[i]);
         float attenuation = 1.0 / (1.0 + 0.1 * distance_to_light + 0.01 * distance_to_light * distance_to_light);
         vec3 radiance = pointLights[i].intensity * pointLights[i].color * attenuation;
 
         // cook-torrance brdf
-        vec3 L = normalize(vertex_to_light);
+        vec3 L = normalize(vertex_to_light[i]);
         vec3 H = normalize(V + L);
         float NDF = distribution_GGX(N, H, u_prop_roughness);
         float G = geometry_smith(N, V, L, u_prop_roughness);
@@ -118,7 +118,7 @@ void main()
         vec3 radiance = directionalLights[i].intensity * directionalLights[i].color;
 
         // cook-torrance brdf
-        vec3 L = normalize(invTBN * -directionalLights[i].direction);
+        vec3 L = normalize(light_direction[i]);
         vec3 H = normalize(V + L);
         float NDF = distribution_GGX(N, H, u_prop_roughness);
         float G = geometry_smith(N, V, L, u_prop_roughness);

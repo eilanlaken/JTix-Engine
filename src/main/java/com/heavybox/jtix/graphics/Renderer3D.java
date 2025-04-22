@@ -225,13 +225,16 @@ public class Renderer3D {
 
         // TODO: bind environment lights when binding the camera.
         currentShader.bindUniform("pointLights[0].position", new Vector3(0,-5,5));
-        currentShader.bindUniform("pointLights[0].color", new Vector3(1f,1.0f,1.0f));
+        currentShader.bindUniform("pointLights[0].color", new Vector3(1f,0.0f,0.0f));
         currentShader.bindUniform("pointLights[0].intensity", 1);
 
         currentShader.bindUniform("pointLights[1].position", new Vector3(0,-5,-5));
         currentShader.bindUniform("pointLights[1].color", new Vector3(0f,0.0f,1.0f));
         currentShader.bindUniform("pointLights[1].intensity", 1);
 
+//        currentShader.bindUniform("directionalLights[0].direction", new Vector3(0,1,0));
+//        currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1.0f,1.0f));
+//        currentShader.bindUniform("directionalLights[0].intensity", 1f);
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
@@ -504,9 +507,9 @@ public class Renderer3D {
     }
 
     private static Shader createDefaultPBRShader() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-3.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-4.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-3.frag");
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-4.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

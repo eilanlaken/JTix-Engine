@@ -101,6 +101,9 @@ public class SceneRendering3D_Simplex_2 implements Scene {
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
             transform.rotateGlobalAxisX(-1);
         }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.H)) {
+            transform.translateGlobalAxisXYZ(0,1,0);
+        }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
             //body_a.applyForce(1,0, body_a.shape.x(), body_a.shape.y() + 0.2f);
