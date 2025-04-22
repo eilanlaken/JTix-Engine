@@ -6,7 +6,7 @@ layout(location = 0) in vec3 a_position;
 layout(location = 2) in vec2 a_textCoords0;
 layout(location = 4) in vec3 a_normal;;
 layout(location = 5) in vec3 a_tangent;;
-layout(location = 6) in vec3 a_biTangent;;
+//layout(location = 6) in vec3 a_biTangent;;
 
 #define NUM_POINT_LIGHTS 2
 #define NUM_DIRECTIONAL_LIGHTS 2
@@ -45,11 +45,12 @@ void main()
     // above is accurate by taking into account non-uniform scaling, but far more expensinve.
     mat3 normal_matrix = mat3(transpose(inverse(u_transform)));
     vec3 T = normalize(vec3(normal_matrix * a_tangent));
-    vec3 B = normalize(vec3(normal_matrix * a_biTangent));
     vec3 N = normalize(vec3(normal_matrix * a_normal));
-//    vec3 T = normalize(vec3(u_transform * vec4(a_tangent, 0.0)));
-//    vec3 B = normalize(vec3(u_transform * vec4(a_biTangent, 0.0)));
-//    vec3 N = normalize(vec3(u_transform * vec4(a_normal, 0.0)));
+    T = normalize(T - dot(T, N) * N); // re-orthogonalize T with respect to N (grahm-schmidt)
+    vec3 B = cross(N, T);
+    //vec3 T = normalize(vec3(normal_matrix * a_tangent));
+    //vec3 N = normalize(vec3(normal_matrix * a_normal));
+    //vec3 B = normalize(vec3(normal_matrix * a_biTangent));
     mat3 TBN = mat3(T, B, N);
     mat3 invTBN = transpose(TBN); // TBN is orthogonal therefore inverse(TBN) = transpose(TBN)
 
