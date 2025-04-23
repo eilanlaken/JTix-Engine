@@ -67,7 +67,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new ScenePlanesGame_TileBuilder_3());
+        Application.launch(new SceneRendering3D_Clouds_1());
 
     }
 

@@ -11,6 +11,7 @@ import org.lwjgl.stb.STBImage;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+// TODO: refactor into a base class and a specific class: Texture + Texture2D
 // TODO: unify texture constructors.
 public class Texture implements MemoryResource {
 
@@ -198,6 +199,7 @@ public class Texture implements MemoryResource {
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, this.biasLOD);
     }
 
+    // TODO: untested.
     public Color getPixelColor(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) throw new IndexOutOfBoundsException("Trying to read out of bounds pixel: (" + x + ", " + y + ") of " + Texture.class.getSimpleName() + " with dimensions: " + "(" + width + ", " + height + ")");
 
@@ -213,7 +215,6 @@ public class Texture implements MemoryResource {
         int g = pixmapBytes.get(index + 1) & 0xFF;
         int b = pixmapBytes.get(index + 2) & 0xFF;
         int a = pixmapBytes.get(index + 3) & 0xFF;
-        Color.WHITE.toFloatBits();
         return new Color(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
     }
 

@@ -214,6 +214,11 @@ public class Shader implements MemoryResource {
                 }
             }
 
+            // TODO: 3d textures
+            case GL20.GL_SAMPLER_3D -> {
+
+            }
+
             case GL20.GL_BOOL -> {
                 boolean b = (Boolean) value;
                 final Boolean cache = (Boolean) uniformsCache.get(location);

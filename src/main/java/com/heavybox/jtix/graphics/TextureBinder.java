@@ -46,6 +46,14 @@ public class TextureBinder {
         texture.setSlot(-1);
     }
 
+    // TODO: bind other texture types: texture 3d, cube maps.
+    public static int bind(final Texture3D texture) {
+        //GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_S, texture.sWrap.glValue);
+        //GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_T, texture.tWrap.glValue);
+        //GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_WRAP_R, texture.tWrap.glValue);
+        return -1;
+    }
+
     public static int getCurrentActiveSlot() {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer slot = stack.mallocInt(1);

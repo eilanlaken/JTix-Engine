@@ -1,8 +1,9 @@
 package com.heavybox.jtix.graphics;
 
+// TODO: change name to Texture2DRegion
 public class TextureRegion {
 
-    public final Texture texture;
+    public final Texture texture; // TODO: this will be Texture2D
 
     public final float x;
     public final float y;

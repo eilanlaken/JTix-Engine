@@ -5,14 +5,14 @@ import com.heavybox.jtix.memory.MemoryResource;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+// TODO: change name to Texture2DPack
 // TODO: add string constructor.
 public final class TexturePack implements MemoryResource {
 
-    public final Texture[]               textures;
+    public final Texture[] textures; // TODO: delete.
+
     public final HashMap<String, TextureRegion> namedRegions;
 
     // TODO: continue.
@@ -68,5 +68,20 @@ public final class TexturePack implements MemoryResource {
             texture.delete();
         }
     }
+
+    /* TODO: this is a replacement after we delete the textures array.
+    @Override
+    public void delete() {
+        Set<Texture> allTextures = new HashSet<>();
+        for (var entry : this.namedRegions.entrySet()) {
+            Texture texture = entry.getValue().texture;
+            allTextures.add(texture);
+        }
+        for (var t : allTextures) {
+            t.delete();
+        }
+    }
+
+     */
 
 }

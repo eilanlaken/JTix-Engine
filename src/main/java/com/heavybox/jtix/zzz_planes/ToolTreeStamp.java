@@ -14,12 +14,12 @@ import com.heavybox.jtix.math.Vector3;
 
 public class ToolTreeStamp extends Tool {
 
-    private static final int[] allowedIndices = {3,6,7,8};
+    private static final int[] allowedIndices = {3};
 
     public Camera camera;
     public TreeType currentType = TreeType.BRIGHT_GREEN;
     public int currentIndex = allowedIndices[0];
-    public GameObject house;
+    public GameObject tree;
 
     public Array<GameObject> gameObjects;
 
@@ -27,43 +27,44 @@ public class ToolTreeStamp extends Tool {
         this.camera = camera;
         this.gameObjects = gameObjects;
 
-        this.house = new GameObject();
-        this.house.transform = new Matrix4x4();
-        this.house.model = getModel(currentType, currentIndex);
+        this.tree = new GameObject();
+        this.tree.transform = new Matrix4x4();
+        this.tree.model = getModel(currentType, currentIndex);
     }
 
     @Override
     public void update() {
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
-        house.transform.setTranslation(screen.x, screen.y, 0);
+        tree.transform.setTranslation(screen.x, screen.y, 0);
 
         if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
-            house.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
+            tree.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
             GameObject go = new GameObject();
-            go.model = house.model;
-            go.transform = house.transform.cpy();
+            go.model = tree.model;
+            go.transform = tree.transform.cpy();
+            go.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
             gameObjects.add(go);
             currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
-            house.model = getModel(currentType, currentIndex);
+            tree.model = getModel(currentType, currentIndex);
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
             currentIndex = 0;
             int nextOrdinal = (currentType.ordinal() + 1) % TreeType.values().length;
             currentType = TreeType.values()[nextOrdinal];
-            house.model = getModel(currentType, currentIndex);
+            tree.model = getModel(currentType, currentIndex);
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.W)) {
             currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
-            house.model = getModel(currentType, currentIndex);
+            tree.model = getModel(currentType, currentIndex);
         }
     }
 
     @Override
     public void render() {
-        for (int i = 0; i < house.model.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(house.model.meshes[i], house.model.materials[i], house.transform);
+        for (int i = 0; i < tree.model.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(tree.model.meshes[i], tree.model.materials[i], tree.transform);
         }
     }
 
