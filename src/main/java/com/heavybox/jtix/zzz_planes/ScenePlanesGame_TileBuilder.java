@@ -151,7 +151,7 @@ public class ScenePlanesGame_TileBuilder implements Scene {
 
     private void update_gameplay() {
         float delta = Graphics.getDeltaTime();
-        Vector3 velocity = new Vector3(camera.gizmoForward).scl(airplane.speed);
+        Vector3 velocity = new Vector3(camera.forward).scl(airplane.speed);
         camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) airplane.speed += delta * 20;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) airplane.speed -= delta * 20;

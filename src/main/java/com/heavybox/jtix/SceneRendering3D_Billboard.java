@@ -95,39 +95,39 @@ public class SceneRendering3D_Billboard implements Scene {
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-            transformSimplex.translateGlobalAxisXYZ(0,0,-0.05f);
+            transformCloud.translateGlobalAxisXYZ(0,0,-0.05f);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-            transformSimplex.translateGlobalAxisXYZ(0,0,0.05f);
+            transformCloud.translateGlobalAxisXYZ(0,0,0.05f);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-            transformSimplex.translateGlobalAxisXYZ(0,-0.05f, 0);
+            transformCloud.translateGlobalAxisXYZ(-0.05f,0, 0);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-            transformSimplex.translateGlobalAxisXYZ(0,0.05f,0);
+            transformCloud.translateGlobalAxisXYZ(0.05f,0,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transformSimplex.rotateGlobalAxisY(1);
+            transformCloud.rotateGlobalAxisY(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transformSimplex.rotateGlobalAxisY(-1);
+            transformCloud.rotateGlobalAxisY(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transformSimplex.rotateGlobalAxisZ(1);
+            transformCloud.rotateGlobalAxisZ(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transformSimplex.rotateGlobalAxisZ(-1);
+            transformCloud.rotateGlobalAxisZ(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transformSimplex.rotateGlobalAxisX(1);
+            transformCloud.rotateGlobalAxisX(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transformSimplex.rotateGlobalAxisX(-1);
+            transformCloud.rotateGlobalAxisX(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.H)) {
-            transformSimplex.translateGlobalAxisXYZ(0,1,0);
+            transformCloud.translateGlobalAxisXYZ(0,1,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
@@ -150,10 +150,29 @@ public class SceneRendering3D_Billboard implements Scene {
             Renderer3D.drawModel_tmp_5(modelSimplex.meshes[i], modelSimplex.materials[i], transformSimplex);
         }
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.X)) {
+            System.out.println("===============\n");
+            System.out.println(transformCloud);
+            Vector3 position = transformCloud.getPosition(new Vector3());
+            Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
+            System.out.println("billboard -> camera = " + desiredDir);
+            System.out.println("camera forward: " + camera.forward);
+            System.out.println("camera up: " + camera.up);
+            System.out.println("camera right: " + camera.right);
+
+            Vector3 bx = new Vector3();
+            transformCloud.getBasisX(bx);
+            Vector3 by = new Vector3();
+            transformCloud.getBasisY(by);
+            Vector3 bz = new Vector3();
+            transformCloud.getBasisZ(bz);
+
+            bz.set(desiredDir);
+            bx.set(bz).crs(by);
+            transformCloud.setFromBasis(bx, by, bz, position);
+        }
+
         for (int i = 0; i < modelCloud.meshes.length; i++) {
-            Vector3 tmp = new Vector3();
-            tmp.set(camera.position).sub(transformCloud.getPosition(new Vector3())).nor();
-            transformCloud.setToLookAt(tmp, camera.gizmoUp).rotateLocalAxisX(90);
             Renderer3D.drawModel_custom_unlit_shader(modelCloud.meshes[i], modelCloud.materials[i], transformCloud);
         }
 //        for (int i = 0; i < modelCloud.meshes.length; i++) {

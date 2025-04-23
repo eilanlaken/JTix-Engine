@@ -26,10 +26,10 @@ public class Camera {
     private final float[]   frustumPlaneDs;
 
     /* position, direction, up [note: will be updated from the component camera] */
-    public final Vector3 position     = new Vector3(0,0,0);
-    public final Vector3 gizmoForward = new Vector3(0,0,-1);
-    public final Vector3 gizmoUp      = new Vector3(0,1,0);
-    public final Vector3 gizmoRight   = new Vector3(1,0,0); // forward X up (cross product)
+    public final Vector3 position = new Vector3(0,0,0);
+    public final Vector3 forward  = new Vector3(0,0,-1);
+    public final Vector3 up       = new Vector3(0,1,0);
+    public final Vector3 right    = new Vector3(1,0,0); // forward X up (cross product)
 
     public Camera(Mode mode, float viewportWidth, float viewportHeight, float zoom, float near, float far, float fov) {
         this.mode = mode;
@@ -63,65 +63,65 @@ public class Camera {
         Vector3 tmp = new Vector3();
         tmp.set(x, y, z).sub(position).nor();
         if (!tmp.isZero()) {
-            float dot = tmp.dot(gizmoUp); // up and direction must ALWAYS be orthonormal vectors
+            float dot = tmp.dot(up); // up and direction must ALWAYS be orthonormal vectors
             if (Math.abs(dot - 1) < 0.000000001f) {
                 // Collinear
-                gizmoUp.set(gizmoForward).scl(-1);
+                up.set(forward).scl(-1);
             } else if (Math.abs(dot + 1) < 0.000000001f) {
                 // Collinear opposite
-                gizmoUp.set(gizmoForward);
+                up.set(forward);
             }
-            gizmoForward.set(tmp);
+            forward.set(tmp);
             // normalize up
-            tmp.set(gizmoForward).crs(gizmoUp);
-            gizmoUp.set(tmp).crs(gizmoForward).nor();
-            gizmoRight.set(gizmoForward).crs(gizmoUp);
+            tmp.set(forward).crs(up);
+            up.set(tmp).crs(forward).nor();
+            right.set(forward).crs(up);
         }
     }
 
     public void rotateAroundForward(float degrees) {
-        gizmoUp.rotate(gizmoForward, degrees).nor();
-        gizmoRight.rotate(gizmoForward, degrees).nor();
+        up.rotate(forward, degrees).nor();
+        right.rotate(forward, degrees).nor();
     }
 
     public void rotateAroundUp(float degrees) {
-        gizmoRight.rotate(gizmoUp, degrees).nor();
-        gizmoForward.rotate(gizmoUp, degrees).nor();
+        right.rotate(up, degrees).nor();
+        forward.rotate(up, degrees).nor();
     }
 
     public void rotateAroundRight(float degrees) {
-        gizmoForward.rotate(gizmoRight, degrees).nor();
-        gizmoUp.rotate(gizmoRight, degrees).nor();
+        forward.rotate(right, degrees).nor();
+        up.rotate(right, degrees).nor();
     }
 
     public void rotateAroundAxis(float degrees, float axisX, float axisY, float axisZ) {
-        gizmoForward.rotate(degrees, axisX, axisY, axisZ).nor();
-        gizmoUp.rotate(degrees, axisX, axisY, axisZ).nor();
-        gizmoRight.rotate(degrees, axisX, axisY, axisZ).nor();
+        forward.rotate(degrees, axisX, axisY, axisZ).nor();
+        up.rotate(degrees, axisX, axisY, axisZ).nor();
+        right.rotate(degrees, axisX, axisY, axisZ).nor();
     }
 
     public void translateForward(float delta) {
-        position.add(delta * gizmoForward.x, delta * gizmoForward.y,delta * gizmoForward.z);
+        position.add(delta * forward.x, delta * forward.y,delta * forward.z);
     }
 
     public void translateUp(float delta) {
-        position.add(delta * gizmoUp.x, delta * gizmoUp.y,delta * gizmoUp.z);
+        position.add(delta * up.x, delta * up.y,delta * up.z);
     }
 
     public void translateRight(float delta) {
-        position.add(delta * gizmoRight.x, delta * gizmoRight.y,delta * gizmoRight.z);
+        position.add(delta * right.x, delta * right.y,delta * right.z);
     }
 
     public void getForwardVector(Vector3 out) {
-        out.set(gizmoForward);
+        out.set(forward);
     }
 
     public void getUpVector(Vector3 out) {
-        out.set(gizmoUp);
+        out.set(up);
     }
 
     public void getRightVector(Vector3 out) {
-        out.set(gizmoRight);
+        out.set(right);
     }
 
     public void update() {
@@ -133,7 +133,7 @@ public class Camera {
                 this.projection.setToPerspectiveProjection(Math.abs(near), Math.abs(far), fov, viewportWidth / viewportHeight);
                 break;
         }
-        view.setToLookAt(position, tmp.set(position).add(gizmoForward), gizmoUp);
+        view.setToLookAt(position, tmp.set(position).add(forward), up);
         combined.set(projection);
         Matrix4x4.mul(combined.val, view.val);
         invProjectionView.set(combined);
