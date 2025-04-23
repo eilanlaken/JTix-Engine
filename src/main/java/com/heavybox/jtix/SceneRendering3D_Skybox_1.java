@@ -149,7 +149,7 @@ public class SceneRendering3D_Skybox_1 implements Scene {
             //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
         }
 
-        update_gameplay();
+        //update_gameplay();
 
         Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

@@ -234,7 +234,7 @@ public class Renderer3D {
 
         currentShader.bindUniform("directionalLights[0].direction", lightDir);
         currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
-        currentShader.bindUniform("directionalLights[0].intensity", 0.4f);
+        currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
@@ -348,10 +348,6 @@ public class Renderer3D {
     public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
         //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            lightDir.rotate(1,1,0,0);
-        }
 
         shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         shader.bindUniform("u_transform", transform);

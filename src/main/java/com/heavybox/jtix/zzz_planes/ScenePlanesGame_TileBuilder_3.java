@@ -144,8 +144,8 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
     @Override
     public void start() {
         //camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 5000, 75);
-        camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 5000, 75);
-        camera.position.set(0, 0, 150);
+        camera = new Camera(Camera.Mode.ORTHOGRAPHIC, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1f/4, 1, 5000, 75);
+        camera.position.set(0, 0, 30);
 
         camera.lookAt(0,0,0);
 

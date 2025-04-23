@@ -10,9 +10,13 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 
 public class ToolTreeStamp extends Tool {
+
+    public static final float BRUSH_SIZE = 10;
+    public static final int TREES_MAX_FLUX = 10;
 
     private static final int[] allowedIndices = {3};
 
@@ -22,6 +26,8 @@ public class ToolTreeStamp extends Tool {
     public GameObject tree;
 
     public Array<GameObject> gameObjects;
+
+    public Array<Vector2> occupied = new Array<>();
 
     public ToolTreeStamp(Camera camera, Array<GameObject> gameObjects) {
         this.camera = camera;
@@ -41,13 +47,35 @@ public class ToolTreeStamp extends Tool {
         if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
             tree.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            GameObject go = new GameObject();
-            go.model = tree.model;
-            go.transform = tree.transform.cpy();
-            go.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
-            gameObjects.add(go);
-            currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
-            tree.model = getModel(currentType, currentIndex);
+            // place tree
+            for (int i = 0; i < TREES_MAX_FLUX; i++) {
+                Vector2 middle = new Vector2(tree.transform.getPositionX(), tree.transform.getPositionY());
+                Vector2 placement = new Vector2(middle.x + MathUtils.randomUniformFloat(-BRUSH_SIZE / 2, BRUSH_SIZE / 2),
+                        middle.y + MathUtils.randomUniformFloat(-BRUSH_SIZE / 2, BRUSH_SIZE / 2));
+                // check if position is occupied
+                boolean positionOccupied = false;
+                for (Vector2 position : occupied) {
+                    positionOccupied |= Vector2.dst(position, placement) < 1.5f;
+                }
+                if (positionOccupied) {
+                    System.out.println("occupied");
+                    continue;
+                }
+
+                Vector2 offset = new Vector2(placement.x - middle.x, placement.y - middle.y);
+                GameObject go = new GameObject();
+                go.model = tree.model;
+                go.transform = tree.transform.cpy();
+                go.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
+                go.transform.translateGlobalAxisXYZ(offset.x, offset.y, 0);
+                gameObjects.add(go);
+                currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
+                tree.model = getModel(currentType, currentIndex);
+                Vector2 placed = new Vector2(go.transform.getPositionX(), go.transform.getPositionY());
+                occupied.add(placed);
+            }
+
+
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
