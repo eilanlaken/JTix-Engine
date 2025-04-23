@@ -349,6 +349,10 @@ public class Renderer3D {
         ShaderBinder.bind(shader);
         //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
 
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
+            lightDir.rotate(1,1,0,0);
+        }
+
         shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         shader.bindUniform("u_transform", transform);
         shader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
