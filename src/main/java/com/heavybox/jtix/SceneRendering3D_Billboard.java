@@ -59,7 +59,7 @@ public class SceneRendering3D_Billboard implements Scene {
         camera.update();
 
         transformSimplex.translateGlobalAxisXYZ(0,6,0);
-        //transformCloud.translateGlobalAxisXYZ(3,0,0);
+        transformCloud.scale(3,1,1);
 
     }
 
@@ -151,31 +151,7 @@ public class SceneRendering3D_Billboard implements Scene {
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.X)) {
-            System.out.println("===============\n");
-            System.out.println(transformCloud);
-            Vector3 position = transformCloud.getPosition(new Vector3());
-            Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
-            System.out.println("billboard -> camera = " + desiredDir);
-            System.out.println("camera forward: " + camera.forward);
-            System.out.println("camera up: " + camera.up);
-            System.out.println("camera right: " + camera.right);
-
-            Vector3 bx = new Vector3();
-            transformCloud.getBasisX(bx);
-            System.out.println("basis x: " + bx);
-            Vector3 by = new Vector3();
-            transformCloud.getBasisY(by);
-            System.out.println("basis y: " + by);
-            Vector3 bz = new Vector3();
-            transformCloud.getBasisZ(bz);
-            System.out.println("basis z: " + bz);
-
-            by.set(desiredDir);
-            bz.set(by).crs(bx);
-            transformCloud.setFromBasis(bx, by, bz, position);
-
-            System.out.println(transformCloud);
-
+            orient_billboard();
         }
 
         for (int i = 0; i < modelCloud.meshes.length; i++) {
@@ -187,6 +163,35 @@ public class SceneRendering3D_Billboard implements Scene {
         Renderer3D.end();
     }
 
+    // KEYWORDS: decals, billboards
+    private void orient_billboard() {
+        System.out.println("===============\n");
+        System.out.println(transformCloud);
+        Vector3 position = transformCloud.getPosition(new Vector3());
+        Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
+        System.out.println("billboard -> camera = " + desiredDir);
+        System.out.println("camera forward: " + camera.forward);
+        System.out.println("camera up: " + camera.up);
+        System.out.println("camera right: " + camera.right);
 
+        Vector3 bx = new Vector3();
+        transformCloud.getBasisX(bx);
+        System.out.println("basis x: " + bx);
+        Vector3 by = new Vector3();
+        transformCloud.getBasisY(by);
+        System.out.println("basis y: " + by);
+        Vector3 bz = new Vector3();
+        transformCloud.getBasisZ(bz);
+        System.out.println("basis z: " + bz);
+
+        Vector3 scale = new Vector3();
+        transformCloud.getScale(scale);
+
+        by.set(desiredDir); // TODO: preserve original scale. Due to floating point rounding errors, scale isn't preserved 100% which will accumulate.
+        bz.set(by).crs(bx).nor();
+        transformCloud.setFromBasis(bx, by, bz, position);
+
+        System.out.println(transformCloud.getScale(new Vector3()));
+    }
 
 }

@@ -38,6 +38,7 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
     public Tool activeTool;
     public ToolHouseStamp toolHouseStamp;
     public ToolTreeStamp toolTreeStamp;
+    public ToolPropStamp toolPropStamp;
 
     public ScenePlanesGame_TileBuilder_3() {
 
@@ -51,14 +52,24 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
 
         this.terrainShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
 
-        // load game object models.
-        //Assets.loadModel(Constants.MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS[0], Constants.MODELS_TEXTURES_PATH);
-        // load all rural props
-
         // load fields
         for (String fieldsPath : Constants.MODELS_FILE_PATH_FIELDS) {
             Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
         }
+
+        // load rocks
+        Assets.loadModel("assets/app-models/rocks-black_1.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-black_2.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-black_3.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-black_4.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-grey_1.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-grey_2.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-grey_3.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-grey_4.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-white_1.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-white_2.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-white_3.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/rocks-white_4.fbx", Constants.MODELS_TEXTURES_PATH);
 
         // load trees
         for (String fieldsPath : Constants.MODELS_FILE_PATH_TREES) {
@@ -80,7 +91,18 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         Assets.loadModel("assets/app-models/rural-house-big_6.fbx", Constants.MODELS_TEXTURES_PATH);
 
         // load props
-
+        Assets.loadModel("assets/app-models/prop-fence.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-satellite-dish-small.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-shipping-container_1.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-shipping-container_2.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-shipping-container_3.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-solar-panels.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-transmission-tower.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-transmission-tower-lines.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-wind-turbine-fan.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-wind-turbine-tower.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-windmill_1.fbx", Constants.MODELS_TEXTURES_PATH);
+        Assets.loadModel("assets/app-models/prop-windmill_2.fbx", Constants.MODELS_TEXTURES_PATH);
 
         // load terrain
         Assets.loadModel("assets/models/terrain-block.fbx");
@@ -131,6 +153,7 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
 
         this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects);
         this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects);
+        this.toolPropStamp = new ToolPropStamp(camera, gameObjects);
 
         this.activeTool = toolHouseStamp;
     }
@@ -170,6 +193,8 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
             activeTool = toolHouseStamp;
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_2)) {
             activeTool = toolTreeStamp;
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
+            activeTool = toolPropStamp;
         }
 
         // update tools
