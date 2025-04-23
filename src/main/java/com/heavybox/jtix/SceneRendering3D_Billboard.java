@@ -162,14 +162,20 @@ public class SceneRendering3D_Billboard implements Scene {
 
             Vector3 bx = new Vector3();
             transformCloud.getBasisX(bx);
+            System.out.println("basis x: " + bx);
             Vector3 by = new Vector3();
             transformCloud.getBasisY(by);
+            System.out.println("basis y: " + by);
             Vector3 bz = new Vector3();
             transformCloud.getBasisZ(bz);
+            System.out.println("basis z: " + bz);
 
-            bz.set(desiredDir);
-            bx.set(bz).crs(by);
+            by.set(desiredDir);
+            bz.set(by).crs(bx);
             transformCloud.setFromBasis(bx, by, bz, position);
+
+            System.out.println(transformCloud);
+
         }
 
         for (int i = 0; i < modelCloud.meshes.length; i++) {

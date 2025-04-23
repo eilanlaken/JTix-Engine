@@ -347,6 +347,8 @@ public class Renderer3D {
 
     public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
+        //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
+
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             lightDir.rotate(1,1,0,0);
         }
