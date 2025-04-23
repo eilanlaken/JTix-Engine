@@ -54,14 +54,18 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         // load game object models.
         //Assets.loadModel(Constants.MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS[0], Constants.MODELS_TEXTURES_PATH);
         // load all rural props
+
+        // load fields
         for (String fieldsPath : Constants.MODELS_FILE_PATH_FIELDS) {
             Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
         }
 
+        // load trees
         for (String fieldsPath : Constants.MODELS_FILE_PATH_TREES) {
             Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
         }
 
+        // load houses
         Assets.loadModel("assets/app-models/rural-house-small_1.fbx", Constants.MODELS_TEXTURES_PATH);
         Assets.loadModel("assets/app-models/rural-house-small_2.fbx", Constants.MODELS_TEXTURES_PATH);
         Assets.loadModel("assets/app-models/rural-house-small_3.fbx", Constants.MODELS_TEXTURES_PATH);
@@ -75,6 +79,10 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         Assets.loadModel("assets/app-models/rural-house-big_5.fbx", Constants.MODELS_TEXTURES_PATH);
         Assets.loadModel("assets/app-models/rural-house-big_6.fbx", Constants.MODELS_TEXTURES_PATH);
 
+        // load props
+
+
+        // load terrain
         Assets.loadModel("assets/models/terrain-block.fbx");
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());

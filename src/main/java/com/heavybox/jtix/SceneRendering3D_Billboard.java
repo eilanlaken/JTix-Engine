@@ -10,11 +10,9 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Map;
-
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
 //https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
-public class SceneRendering3D_Clouds_1 implements Scene {
+public class SceneRendering3D_Billboard implements Scene {
 
     private Camera camera;
 
@@ -26,7 +24,7 @@ public class SceneRendering3D_Clouds_1 implements Scene {
 
     public Shader cloudShader;
 
-    public SceneRendering3D_Clouds_1() {
+    public SceneRendering3D_Billboard() {
 
     }
 
@@ -34,11 +32,11 @@ public class SceneRendering3D_Clouds_1 implements Scene {
     public void setup() {
 
         Assets.loadModel("assets/models/simplex.fbx");
-        Assets.loadModel("assets/models/cube-blue.fbx");
+        Assets.loadModel("assets/models/cloud-fake.fbx");
         Assets.finishLoading();
 
         modelSimplex = Assets.get("assets/models/simplex.fbx");
-        modelCloud = Assets.get("assets/models/cube-blue.fbx");
+        modelCloud = Assets.get("assets/models/cloud-fake.fbx");
 
         String vertexShaderSrc = Assets.getFileContent("assets/shaders/cloud.vert.glsl");
         String fragmentShaderSrc = Assets.getFileContent("assets/shaders/cloud.frag.glsl");
@@ -61,7 +59,7 @@ public class SceneRendering3D_Clouds_1 implements Scene {
         camera.update();
 
         transformSimplex.translateGlobalAxisXYZ(0,6,0);
-        transformCloud.translateGlobalAxisXYZ(3,0,0);
+        //transformCloud.translateGlobalAxisXYZ(3,0,0);
 
     }
 
@@ -77,21 +75,21 @@ public class SceneRendering3D_Clouds_1 implements Scene {
             else camera.mode = Camera.Mode.ORTHOGRAPHIC;
         }
         if (Input.mouse.getVerticalScroll() != 0) {
-            if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 30);
+            if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 5);
             else camera.zoom += 0.04f * scroll;
         } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta();
             float panVertical = Input.mouse.getYDelta();
-            camera.translateRight(-panHorizontal);
-            camera.translateUp(panVertical);
+            camera.translateRight(-panHorizontal * 0.1f);
+            camera.translateUp(panVertical * 0.1f);
         } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panVertical = Input.mouse.getYDelta();
             camera.translateForward(-panVertical);
         } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta() * 0.2f;
             float panVertical = Input.mouse.getYDelta() * 0.2f;
-            camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
-            camera.rotateAroundRight(panVertical * 5);
+            camera.rotateAroundAxis(panHorizontal,0,0,1);
+            camera.rotateAroundRight(panVertical);
         }
         camera.update();
 
@@ -153,7 +151,10 @@ public class SceneRendering3D_Clouds_1 implements Scene {
         }
 
         for (int i = 0; i < modelCloud.meshes.length; i++) {
-            Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud);
+            Vector3 tmp = new Vector3();
+            tmp.set(camera.position).sub(transformCloud.getPosition(new Vector3())).nor();
+            transformCloud.setToLookAt(tmp, camera.gizmoUp).rotateLocalAxisX(90);
+            Renderer3D.drawModel_custom_unlit_shader(modelCloud.meshes[i], modelCloud.materials[i], transformCloud);
         }
 //        for (int i = 0; i < modelCloud.meshes.length; i++) {
 //            Renderer3D.drawModel_tmp_5(modelCloud.meshes[i], modelCloud.materials[i], transformCloud);

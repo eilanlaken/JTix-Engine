@@ -347,7 +347,6 @@ public class Renderer3D {
 
     public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             lightDir.rotate(1,1,0,0);
         }
@@ -355,11 +354,14 @@ public class Renderer3D {
         shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         shader.bindUniform("u_transform", transform);
         shader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
-
         // TODO: bind environment lights when binding the camera.
-        shader.bindUniform("directionalLight.direction", lightDir);
-        shader.bindUniform("directionalLight.color", new Vector3(1,1f,1f));
-        shader.bindUniform("directionalLight.intensity", 1.2f);
+        try {
+            shader.bindUniform("directionalLight.direction", lightDir);
+            shader.bindUniform("directionalLight.color", new Vector3(1,1f,1f));
+            shader.bindUniform("directionalLight.intensity", 1.2f);
+        } catch (Exception e) {
+
+        }
 
         // bind custom material uniforms
         for (String uniform : shader.uniformNames) {
@@ -410,6 +412,7 @@ public class Renderer3D {
             }
         }
         GL30.glBindVertexArray(0);
+
     }
 
     public static void drawModel_custom_unlit_shader(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
