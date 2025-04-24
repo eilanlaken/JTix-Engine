@@ -67,7 +67,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         AIScene aiScene = Assimp.aiImportFile(path, importFlags);
         PointerBuffer children = aiScene.mRootNode().mChildren();
-        AINode node = AINode.create(children.get(0));
+        //AINode node = AINode.create(children.get(0));
         // TODO: this may be wrong. we may have a scenario with multiple meshes and a single material?
 
         // load meshes:

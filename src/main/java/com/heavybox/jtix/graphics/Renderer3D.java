@@ -343,7 +343,7 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    private static Vector3 lightDir = new Vector3(0,0,-1);
+    public static Vector3 lightDir = new Vector3(0,0,-1);
 
     public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);

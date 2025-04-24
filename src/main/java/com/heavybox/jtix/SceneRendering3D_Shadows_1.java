@@ -14,25 +14,29 @@ import java.util.Map;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_Simplex_2 implements Scene {
+public class SceneRendering3D_Shadows_1 implements Scene {
 
     private Camera camera;
 
-    public Model model;
-    public Matrix4x4 transform = new Matrix4x4();
+    public Model model_blue_box;
+    public Model model_floor;
+    public Matrix4x4 transform_blue_box = new Matrix4x4();
+    public Matrix4x4 transform_floor = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
-    public SceneRendering3D_Simplex_2() {
+    public SceneRendering3D_Shadows_1() {
 
     }
 
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/models/cube_accoustic_grid.fbx");
+        Assets.loadModel("assets/models/floor.fbx");
+        Assets.loadModel("assets/models/cube-blue.fbx");
         Assets.finishLoading();
 
-        model = Assets.get("assets/models/cube_accoustic_grid.fbx");
+        model_floor = Assets.get("assets/models/floor.fbx");
+        model_blue_box = Assets.get("assets/models/cube-blue.fbx");
 
     }
 
@@ -43,16 +47,14 @@ public class SceneRendering3D_Simplex_2 implements Scene {
 
     @Override
     public void start() {
-        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
-        camera.position.set(0, -4, 0);
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
+        camera.position.set(0, -7, 5);
 
         camera.lookAt(0,0,0);
 
         camera.update();
 
-        for (Map.Entry<String, Object> entry : model.materials[0].materialAttributes.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-        }
+        transform_blue_box.translateGlobalAxisXYZ(0,0,3);
 
     }
 
@@ -68,7 +70,7 @@ public class SceneRendering3D_Simplex_2 implements Scene {
             else camera.mode = Camera.Mode.ORTHOGRAPHIC;
         }
         if (Input.mouse.getVerticalScroll() != 0) {
-            if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 30);
+            if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 10);
             else camera.zoom += 0.04f * scroll;
         } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta();
@@ -81,49 +83,46 @@ public class SceneRendering3D_Simplex_2 implements Scene {
         } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
             float panHorizontal = Input.mouse.getXDelta() * 0.2f;
             float panVertical = Input.mouse.getYDelta() * 0.2f;
-            camera.rotateAroundAxis(panHorizontal * 5,0,0,1);
-            camera.rotateAroundRight(panVertical * 5);
+            camera.rotateAroundAxis(panHorizontal * 2,0,0,1);
+            camera.rotateAroundRight(panVertical * 2);
         }
         camera.update();
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            Renderer3D.lightDir.rotate(1f,1,0,0);
-        }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-            transform.translateGlobalAxisXYZ(0,0,-0.05f);
+            transform_blue_box.translateGlobalAxisXYZ(0,0,-0.05f);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-            transform.translateGlobalAxisXYZ(0,0,0.05f);
+            transform_blue_box.translateGlobalAxisXYZ(0,0,0.05f);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-            transform.translateGlobalAxisXYZ(0,-0.05f, 0);
+            transform_blue_box.translateGlobalAxisXYZ(0,-0.05f, 0);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-            transform.translateGlobalAxisXYZ(0,0.05f,0);
+            transform_blue_box.translateGlobalAxisXYZ(0,0.05f,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform.rotateGlobalAxisY(1);
+            transform_blue_box.rotateGlobalAxisY(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform.rotateGlobalAxisY(-1);
+            transform_blue_box.rotateGlobalAxisY(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform.rotateGlobalAxisZ(1);
+            transform_blue_box.rotateGlobalAxisZ(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform.rotateGlobalAxisZ(-1);
+            transform_blue_box.rotateGlobalAxisZ(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform.rotateGlobalAxisX(1);
+            transform_blue_box.rotateGlobalAxisX(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform.rotateGlobalAxisX(-1);
+            transform_blue_box.rotateGlobalAxisX(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.H)) {
-            transform.translateGlobalAxisXYZ(0,1,0);
+            transform_blue_box.translateGlobalAxisXYZ(0,1,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
@@ -134,6 +133,11 @@ public class SceneRendering3D_Simplex_2 implements Scene {
             //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
         }
 
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
+            Renderer3D.lightDir.rotate(1f,1,0,0);
+            System.out.println(Renderer3D.lightDir);
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0.247f,0.247f,0.247f,1);
 
@@ -142,8 +146,12 @@ public class SceneRendering3D_Simplex_2 implements Scene {
         renderer2D.end();
 
         Renderer3D.begin(camera);
-        for (int i = 0; i < model.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+        for (int i = 0; i < model_blue_box.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_blue_box.meshes[i], model_blue_box.materials[i], transform_blue_box);
+        }
+
+        for (int i = 0; i < model_floor.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
         }
         Renderer3D.end();
     }
