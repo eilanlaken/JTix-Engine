@@ -5,6 +5,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Renderer3D;
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -20,16 +21,14 @@ public class ToolTreeStamp extends Tool {
 
     private static final int[] allowedIndices = {3};
 
-    public Camera camera;
     public TreeType currentType = TreeType.BRIGHT_GREEN;
     public int currentIndex = allowedIndices[0];
     public GameObject tree;
 
-    public Array<GameObject> gameObjects;
-
     public Array<Vector2> occupied = new Array<>();
 
-    public ToolTreeStamp(Camera camera, Array<GameObject> gameObjects) {
+    public ToolTreeStamp(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+        super(camera, gameObjects, heightMap);
         this.camera = camera;
         this.gameObjects = gameObjects;
 
@@ -68,6 +67,9 @@ public class ToolTreeStamp extends Tool {
                 go.transform = tree.transform.cpy();
                 go.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
                 go.transform.translateGlobalAxisXYZ(offset.x, offset.y, 0);
+                Vector2 xy = new Vector2(go.transform.getPositionX(), go.transform.getPositionY());
+                float z = getHeight(xy.x, xy.y);
+                go.transform.translateGlobalAxisXYZ(0, 0, z);
                 gameObjects.add(go);
                 currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
                 tree.model = getModel(currentType, currentIndex);

@@ -151,9 +151,9 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
 
         camera.update();
 
-        this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects);
-        this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects);
-        this.toolPropStamp = new ToolPropStamp(camera, gameObjects);
+        this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects, terrainHeightMap);
+        this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects, terrainHeightMap);
+        this.toolPropStamp = new ToolPropStamp(camera, gameObjects, terrainHeightMap);
 
         this.activeTool = toolHouseStamp;
     }

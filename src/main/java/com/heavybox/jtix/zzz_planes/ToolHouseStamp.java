@@ -5,6 +5,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Renderer3D;
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -14,17 +15,12 @@ import com.heavybox.jtix.math.Vector3;
 
 public class ToolHouseStamp extends Tool {
 
-    public Camera camera;
     public HouseType currentType = HouseType.SMALL;
     public int currentIndex = 0;
     public GameObject house;
 
-    public Array<GameObject> gameObjects;
-
-    public ToolHouseStamp(Camera camera, Array<GameObject> gameObjects) {
-        this.camera = camera;
-        this.gameObjects = gameObjects;
-
+    public ToolHouseStamp(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+        super(camera, gameObjects, heightMap);
         this.house = new GameObject();
         this.house.transform = new Matrix4x4();
         this.house.model = getModel(currentType, currentIndex);
@@ -45,9 +41,8 @@ public class ToolHouseStamp extends Tool {
             gameObjects.add(go);
             currentIndex = MathUtils.randomUniformInt(0, 6);
             house.model = getModel(currentType, currentIndex);
-        }
-
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
+            getHeight(go.transform.getPositionX(), go.transform.getPositionY());
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
             currentIndex = 0;
             if (currentType == HouseType.SMALL) currentType = HouseType.BIG;
             else currentType = HouseType.SMALL;

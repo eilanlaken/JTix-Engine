@@ -157,9 +157,9 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
 
         camera.update();
 
-        this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects);
-        this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects);
-        this.toolPropStamp = new ToolPropStamp(camera, gameObjects);
+        this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects, terrainHeightMap);
+        this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects, terrainHeightMap);
+        this.toolPropStamp = new ToolPropStamp(camera, gameObjects, terrainHeightMap);
 
         this.activeTool = toolHouseStamp;
     }
@@ -205,16 +205,10 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         // update tools
         if (activeTool != null) activeTool.update();
 
-//        if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
-//            transform_gameobject.rotateLocalAxisZ(Input.mouse.getYDelta());
-//        } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) { // export json
-//            GameObject go = new GameObject();
-//            go.model = model_gameobject;
-//            go.transform = transform_gameobject.cpy();
-//            gameObjects.add(go);
-//        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ENTER)) {
-//            toJSON();
-//        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.ENTER)) {
+            //getHeight(0,0);
+            toJSON();
+        }
 
         //update_gameplay();
 
@@ -251,6 +245,16 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
 
     private void toJSON() {
 
+    }
+
+    private void getHeight(float x, float y) {
+        // convert to index:
+        int i = (int) (((x + 256) / 512f) * 256);
+        int j = (int) (((256 - y) / 512f) * 256);
+        System.out.println(i + ", " + j);
+        // sample color
+        Color color = terrainHeightMap.getPixelColor(i, j);
+        System.out.println(color);
     }
 
     private void update_gameplay() {

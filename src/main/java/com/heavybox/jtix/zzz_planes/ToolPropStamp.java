@@ -5,6 +5,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.graphics.Renderer3D;
+import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -16,16 +17,12 @@ public class ToolPropStamp extends Tool {
 
     private static final int[] allowedIndices = {3};
 
-    public Camera camera;
     public PropType currentType = PropType.values()[0];
     public int currentIndex = allowedIndices[0];
     public GameObject prop;
 
-    public Array<GameObject> gameObjects;
-
-    public ToolPropStamp(Camera camera, Array<GameObject> gameObjects) {
-        this.camera = camera;
-        this.gameObjects = gameObjects;
+    public ToolPropStamp(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+        super(camera, gameObjects, heightMap);
 
         this.prop = new GameObject();
         this.prop.transform = new Matrix4x4();
