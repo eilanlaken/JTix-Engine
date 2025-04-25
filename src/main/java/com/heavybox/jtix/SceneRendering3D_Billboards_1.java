@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
 //https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
-public class SceneRendering3D_Billboard implements Scene {
+public class SceneRendering3D_Billboards_1 implements Scene {
 
     private Camera camera;
 
@@ -24,7 +24,7 @@ public class SceneRendering3D_Billboard implements Scene {
 
     public Shader cloudShader;
 
-    public SceneRendering3D_Billboard() {
+    public SceneRendering3D_Billboards_1() {
 
     }
 

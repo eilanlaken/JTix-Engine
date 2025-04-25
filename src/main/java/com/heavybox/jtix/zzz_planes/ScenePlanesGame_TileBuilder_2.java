@@ -32,7 +32,7 @@ public class ScenePlanesGame_TileBuilder_2 implements Scene {
 
     private GameObjectAirplane airplane = new GameObjectAirplane();
 
-    private Array<GameObject> gameObjects = new Array<>(false, 10);
+    private Array<TerrainToken> gameObjects = new Array<>(false, 10);
 
     public ScenePlanesGame_TileBuilder_2() {
 

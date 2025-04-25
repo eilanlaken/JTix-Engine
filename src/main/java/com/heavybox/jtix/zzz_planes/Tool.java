@@ -12,10 +12,10 @@ public abstract class Tool {
     public static final float TILE_SIZE = 512;
 
     public Camera camera;
-    public Array<GameObject> gameObjects;
+    public Array<TerrainToken> gameObjects;
     public Texture heightMap;
 
-    public Tool(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+    public Tool(Camera camera, Array<TerrainToken> gameObjects, Texture heightMap) {
         this.camera = camera;
         this.gameObjects = gameObjects;
         this.heightMap = heightMap;

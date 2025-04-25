@@ -23,16 +23,16 @@ public class ToolTreeStamp extends Tool {
 
     public TreeType currentType = TreeType.BRIGHT_GREEN;
     public int currentIndex = allowedIndices[0];
-    public GameObject tree;
+    public TerrainToken tree;
 
     public Array<Vector2> occupied = new Array<>();
 
-    public ToolTreeStamp(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+    public ToolTreeStamp(Camera camera, Array<TerrainToken> gameObjects, Texture heightMap) {
         super(camera, gameObjects, heightMap);
         this.camera = camera;
         this.gameObjects = gameObjects;
 
-        this.tree = new GameObject();
+        this.tree = new TerrainToken();
         this.tree.transform = new Matrix4x4();
         this.tree.model = getModel(currentType, currentIndex);
     }
@@ -62,7 +62,7 @@ public class ToolTreeStamp extends Tool {
                 }
 
                 Vector2 offset = new Vector2(placement.x - middle.x, placement.y - middle.y);
-                GameObject go = new GameObject();
+                TerrainToken go = new TerrainToken();
                 go.model = tree.model;
                 go.transform = tree.transform.cpy();
                 go.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));

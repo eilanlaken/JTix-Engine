@@ -1,5 +1,6 @@
 package com.heavybox.jtix.zzz_planes;
 
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Model;
 import com.heavybox.jtix.math.Matrix4x4;
 
@@ -7,5 +8,13 @@ public class GameObject {
 
     public Matrix4x4 transform;
     public Model model;
+    public Array<Logic> logics = new Array<>();
+
+    public static abstract class Logic {
+
+        public abstract void start();
+        public abstract void update();
+
+    }
 
 }

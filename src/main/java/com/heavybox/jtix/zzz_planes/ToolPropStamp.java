@@ -19,12 +19,12 @@ public class ToolPropStamp extends Tool {
 
     public PropType currentType = PropType.values()[0];
     public int currentIndex = allowedIndices[0];
-    public GameObject prop;
+    public TerrainToken prop;
 
-    public ToolPropStamp(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+    public ToolPropStamp(Camera camera, Array<TerrainToken> gameObjects, Texture heightMap) {
         super(camera, gameObjects, heightMap);
 
-        this.prop = new GameObject();
+        this.prop = new TerrainToken();
         this.prop.transform = new Matrix4x4();
         this.prop.model = getModel(currentType);
     }
@@ -38,7 +38,7 @@ public class ToolPropStamp extends Tool {
         if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
             prop.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            GameObject go = new GameObject();
+            TerrainToken go = new TerrainToken();
             go.model = prop.model;
             go.transform = prop.transform.cpy();
             // adjustments

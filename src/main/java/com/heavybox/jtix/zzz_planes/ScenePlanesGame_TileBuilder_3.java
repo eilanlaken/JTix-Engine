@@ -32,7 +32,7 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
 
     private GameObjectAirplane airplane = new GameObjectAirplane();
 
-    private Array<GameObject> gameObjects = new Array<>(false, 10);
+    private Array<TerrainToken> gameObjects = new Array<>(false, 10);
 
     // tools
     public Tool activeTool;
@@ -234,9 +234,9 @@ public class ScenePlanesGame_TileBuilder_3 implements Scene {
         // draw tools overlay
         if (activeTool != null) activeTool.render();
 
-        for (GameObject gameObject : gameObjects) {
-            Model model = gameObject.model;
-            Matrix4x4 transform = gameObject.transform;
+        for (TerrainToken terrainToken : gameObjects) {
+            Model model = terrainToken.model;
+            Matrix4x4 transform = terrainToken.transform;
             for (int i = 0; i < model.meshes.length; i++) {
                 Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
             }

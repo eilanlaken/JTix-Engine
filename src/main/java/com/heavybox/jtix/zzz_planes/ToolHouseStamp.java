@@ -17,11 +17,11 @@ public class ToolHouseStamp extends Tool {
 
     public HouseType currentType = HouseType.SMALL;
     public int currentIndex = 0;
-    public GameObject house;
+    public TerrainToken house;
 
-    public ToolHouseStamp(Camera camera, Array<GameObject> gameObjects, Texture heightMap) {
+    public ToolHouseStamp(Camera camera, Array<TerrainToken> gameObjects, Texture heightMap) {
         super(camera, gameObjects, heightMap);
-        this.house = new GameObject();
+        this.house = new TerrainToken();
         this.house.transform = new Matrix4x4();
         this.house.model = getModel(currentType, currentIndex);
     }
@@ -35,7 +35,7 @@ public class ToolHouseStamp extends Tool {
         if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
             house.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            GameObject go = new GameObject();
+            TerrainToken go = new TerrainToken();
             go.model = house.model;
             go.transform = house.transform.cpy();
             gameObjects.add(go);

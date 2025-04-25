@@ -20,7 +20,7 @@ public class TerrainTile {
     public Texture terrainStone;
     public Texture terrainWater;
 
-    public Array<GameObject> staticGameObjects = new Array<>(false, 5); // trees, houses, buildings, roads, props.
+    public Array<TerrainToken> staticGameObjects = new Array<>(false, 5); // trees, houses, buildings, roads, props.
 
     public TerrainTile(int i, int j, Texture heightmap, Texture blendmap) {
         String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.vert");

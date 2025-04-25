@@ -13,7 +13,8 @@ import org.lwjgl.opengl.GL11;
 import java.util.Map;
 
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
-//https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
+// https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
+// https://blog.uhawkvr.com/
 public class SceneRendering3D_Clouds_1 implements Scene {
 
     private Camera camera;
@@ -141,7 +142,7 @@ public class SceneRendering3D_Clouds_1 implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0.247f,0.247f,0.247f,1);
+        GL11.glClearColor(1,0.247f,0.247f,1);
 
         renderer2D.begin();
         //renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);
@@ -161,6 +162,35 @@ public class SceneRendering3D_Clouds_1 implements Scene {
         Renderer3D.end();
     }
 
+    // KEYWORDS: decals, billboards
+    private void orient_billboard() {
+        System.out.println("===============\n");
+        System.out.println(transformCloud);
+        Vector3 position = transformCloud.getPosition(new Vector3());
+        Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
+        System.out.println("billboard -> camera = " + desiredDir);
+        System.out.println("camera forward: " + camera.forward);
+        System.out.println("camera up: " + camera.up);
+        System.out.println("camera right: " + camera.right);
 
+        Vector3 bx = new Vector3();
+        transformCloud.getBasisX(bx);
+        System.out.println("basis x: " + bx);
+        Vector3 by = new Vector3();
+        transformCloud.getBasisY(by);
+        System.out.println("basis y: " + by);
+        Vector3 bz = new Vector3();
+        transformCloud.getBasisZ(bz);
+        System.out.println("basis z: " + bz);
+
+        Vector3 scale = new Vector3();
+        transformCloud.getScale(scale);
+
+        by.set(desiredDir); // TODO: preserve original scale. Due to floating point rounding errors, scale isn't preserved 100% which will accumulate.
+        bz.set(by).crs(bx).nor();
+        transformCloud.setFromBasis(bx, by, bz, position);
+
+        System.out.println(transformCloud.getScale(new Vector3()));
+    }
 
 }

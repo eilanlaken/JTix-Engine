@@ -224,7 +224,7 @@ public final class Assets {
         return new Yaml(representer);
     }
 
-    public static Gson gson() {
+    public static Gson json() {
         return new Gson();
     }
 

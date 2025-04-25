@@ -353,16 +353,18 @@ public class Renderer3D {
             lightDir.rotate(1,1,0,0);
         }
 
-        shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
-        shader.bindUniform("u_transform", transform);
-        shader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
         // TODO: bind environment lights when binding the camera.
         try {
+            shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+            shader.bindUniform("u_transform", transform);
+            shader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
             shader.bindUniform("directionalLight.direction", lightDir);
             shader.bindUniform("directionalLight.color", new Vector3(1,1f,1f));
             shader.bindUniform("directionalLight.intensity", 1.2f);
         } catch (Exception e) {
-
+            //System.out.println(e.getMessage());
         }
 
         // bind custom material uniforms
