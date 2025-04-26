@@ -10,6 +10,10 @@ public class GameObject {
     public Model model;
     public Array<Logic> logics = new Array<>();
 
+    public GameObject(Matrix4x4 transform, Model model) {
+
+    }
+
     public static abstract class Logic {
 
         public abstract void start();

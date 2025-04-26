@@ -28,7 +28,7 @@ void main()
     float fade = clamp((distance_camera_to_vertex - fadeEnd) / (fadeStart - fadeEnd), 0.0, 1.0);
     vec2 newUV = remap_uv(uv, u_frame, 8); // for 8x8 atlas
     vec4 color = texture(u_texture_atlas, newUV);
-    color.a *= fade;
+    color.a *= fade * 0.8;
     if (color.a < 0.001) discard;
     out_color = color;
 }

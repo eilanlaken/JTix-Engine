@@ -6,7 +6,6 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
@@ -17,40 +16,25 @@ import org.lwjgl.opengl.GL20;
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
 // https://www.youtube.com/watch?v=sNXj0RN09ps
-public class SceneRendering3D_Clouds_4 implements Scene {
+public class SceneRendering3D_Billboards_5 implements Scene {
 
     private Camera camera;
 
-    public Model modelCloud;
-    public Matrix4x4[] transformClouds = new Matrix4x4[30];
-    public Texture cloudOpacity;
-    public Texture cloudAtlas;
-    public Shader cloudShader;
+    public Model billboard;
+    public Matrix4x4 transform_static = new Matrix4x4();
+    public Matrix4x4 transform_billboard = new Matrix4x4();
 
-    public SceneRendering3D_Clouds_4() {
+    public SceneRendering3D_Billboards_5() {
 
     }
 
     @Override
     public void setup() {
 
-        Assets.loadTexture("assets/app-textures/cloud-fade.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/app-textures/cloud-atlas.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadModel("assets/app-models/plane.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/billboard.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
-        modelCloud = Assets.get("assets/app-models/plane.fbx");
-        cloudOpacity = Assets.get("assets/app-textures/cloud-fade.png");
-        cloudAtlas = Assets.get("assets/app-textures/cloud-atlas.png");
-        // set the attributes
-        modelCloud.materials[0].materialAttributes.put("u_time", 0.0f);
-        modelCloud.materials[0].materialAttributes.put("u_frame", 0);
-        modelCloud.materials[0].materialAttributes.put("u_texture_opacity", cloudOpacity);
-        modelCloud.materials[0].materialAttributes.put("u_texture_atlas", cloudAtlas);
-
-        String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/cloud-shader.vert");
-        String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/cloud-shader.frag");
-        cloudShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
+        billboard = Assets.get("assets/app-models/billboard.fbx");
     }
 
     @Override
@@ -61,18 +45,14 @@ public class SceneRendering3D_Clouds_4 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0.1f, 10000, 75);
-        camera.position.set(0, -8, 0);
+        camera.position.set(0, -4, 0);
 
         camera.lookAt(0,0,0);
 
         camera.update();
 
-        final float range = 1.5f;
-        for (int i = 0; i < transformClouds.length; i++) {
-            this.transformClouds[i] = new Matrix4x4();
-            transformClouds[i].scale(2,2,2);
-            transformClouds[i].translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range));
-        }
+        this.transform_billboard = new Matrix4x4();
+        transform_billboard.translateGlobalAxisXYZ(0,0,0);
 
     }
 
@@ -157,23 +137,36 @@ public class SceneRendering3D_Clouds_4 implements Scene {
 
         // TODO: sort by distance to camera!
         //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
-        GL20.glDepthMask(false);
-        for (int i = 0; i < modelCloud.meshes.length; i++) {
-            for (int j = 0; j < transformClouds.length; j++) {
-                Renderer3D.drawModel_cloud_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformClouds[j], j);
-            }
+        //GL20.glDepthMask(false);
+        for (int i = 0; i < billboard.meshes.length; i++) {
+                Renderer3D.drawModel_custom_unlit_shader(billboard.meshes[i], billboard.materials[i], transform_static);
+                Renderer3D.drawModel_custom_unlit_shader(billboard.meshes[i], billboard.materials[i], transform_billboard);
         }
         //GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
-        GL20.glDepthMask(true);
-
+        //GL20.glDepthMask(true);
 
         Renderer3D.end();
-        update_gameplay();
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.M) || true) {
-            for (int i = 0; i < transformClouds.length; i++) {
-                orient_2(transformClouds[i]);
-            }
+
+
+        //update_gameplay();
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.M)) {
+            orient_2(transform_billboard);
         }
+    }
+
+    private void orient_1(Matrix4x4 transform) {
+        Vector3 scaling = new Vector3(3,3,3);
+        Vector3 position = transform.getPosition(new Vector3());
+        Vector3 current_orientation = transform.getBasisY(new Vector3()).negate();
+        Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
+        Quaternion q_rotation = new Quaternion().setFromCross(current_orientation, target_orientation);
+        Matrix4x4 m_rotation = new Matrix4x4(q_rotation);
+        // rotate the entire gizmo
+        Vector3 basisX = transform.getBasisX(new Vector3()).rot(m_rotation).nor();
+        Vector3 basisY = transform.getBasisY(new Vector3()).rot(m_rotation).nor();
+        Vector3 basisZ = transform.getBasisZ(new Vector3()).rot(m_rotation).nor();
+        transform.setFromBasis(basisX, basisY, basisZ, position);
+        transform.scale(scaling);
     }
 
     private void orient_2(Matrix4x4 transform) {

@@ -419,6 +419,59 @@ public class Renderer3D {
 
     }
 
+    public static void drawModel_cloud_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform, int index) {
+        ShaderBinder.bind(shader);
+        GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
+            lightDir.rotate(1,1,0,0);
+        }
+
+
+        // TODO: bind environment lights when binding the camera.
+        try {
+            shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+            shader.bindUniform("u_transform", transform);
+            shader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
+            shader.bindUniform("directionalLight.direction", lightDir);
+            shader.bindUniform("directionalLight.color", new Vector3(1,1f,1f));
+            shader.bindUniform("directionalLight.intensity", 1.2f);
+        } catch (Exception e) {
+            //System.out.println(e.getMessage());
+        }
+
+        // bind custom material uniforms
+        for (String uniform : shader.uniformNames) {
+            Object value = material.materialAttributes.get(uniform);
+            if (value == null) continue;
+            shader.bindUniform(uniform, value);
+        }
+        shader.bindUniform("u_frame", index);
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+            // turn vbos on based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!shader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+            }
+
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+
+            // turn vbos off based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!shader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
+        GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
+    }
+
     public static void drawModel_custom_unlit_shader(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(defaultShaderUnlit);
 
