@@ -8,13 +8,13 @@ import java.util.Arrays;
 
 public class ToolCloudAtlasGenerator {
 
-    public static final String directory = "C:\\Users\\eilan\\OneDrive\\Desktop\\Eilan\\Assets\\engine-development\\cloud_512";
+    public static final String directory = "C:\\Users\\eilan\\OneDrive\\Desktop\\Eilan\\Assets\\engine-development\\clouds_512_hd";
 
     public static void run() {
         File dir = new File(directory);
         File[] files = dir.listFiles();
 
-        BufferedImage atlas = new BufferedImage(4096, 4096, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage atlas = new BufferedImage(2048, 2048, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = atlas.createGraphics();
 
         //Arrays.sort(files); // optional: ensure consistent order
@@ -23,8 +23,8 @@ public class ToolCloudAtlasGenerator {
             int index = 0;
             for (File file : files) {
                 BufferedImage img = ImageIO.read(file);
-                int x = (index % 8) * 512;
-                int y = (index / 8) * 512;
+                int x = (index % 8) * 256;
+                int y = (index / 8) * 256;
                 g.drawImage(img, x, y, null);
                 index++;
             }
