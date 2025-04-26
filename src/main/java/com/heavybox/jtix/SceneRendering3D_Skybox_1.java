@@ -51,16 +51,19 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         this.terrainShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
         System.out.println(Arrays.toString(terrainShader.uniformNames));
 
-        Assets.loadTexture("assets/app-models/textures/skybox-2/nx.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
-        Assets.loadTexture("assets/app-models/textures/skybox-2/ny.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
-        Assets.loadTexture("assets/app-models/textures/skybox-2/nz.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
-        Assets.loadTexture("assets/app-models/textures/skybox-2/px.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
-        Assets.loadTexture("assets/app-models/textures/skybox-2/py.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
-        Assets.loadTexture("assets/app-models/textures/skybox-2/pz.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        Assets.loadTexture("assets/app-models/textures/skybox-3/nx.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        Assets.loadTexture("assets/app-models/textures/skybox-3/ny.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        Assets.loadTexture("assets/app-models/textures/skybox-3/nz.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        Assets.loadTexture("assets/app-models/textures/skybox-3/px.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        Assets.loadTexture("assets/app-models/textures/skybox-3/py.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        Assets.loadTexture("assets/app-models/textures/skybox-3/pz.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
         Assets.finishLoading();
 
+        System.out.println(Assets.getStoreCatalog());
+
+
         Assets.loadModel("assets/app-models/oil-rig.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/app-models/skybox_1.fbx", "assets/app-models/textures/skybox-2");
+        Assets.loadModel("assets/app-models/skybox_1.fbx", "assets/app-models/textures/skybox-3");
         Assets.loadModel("assets/models/terrain-block.fbx");
         //Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -68,9 +71,8 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         //Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-
-
         Assets.finishLoading();
+
 
         //terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
         //terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
@@ -79,7 +81,7 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         //terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
         terrainWater = Assets.get("assets/app-textures/terrain-water.jpg");
 
-        //model = Assets.get("assets/models/plane_demo.fbx");
+
         terrain = Assets.get("assets/models/terrain-block.fbx");
 
         terrain.materials[0].materialAttributes.put("u_texture_water", terrainWater);
@@ -88,7 +90,8 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         model = Assets.get("assets/app-models/skybox_1.fbx");
         model_big = Assets.get("assets/app-models/oil-rig.fbx");
 
-        transform_model.setToScaling(5000,5000,5000);
+        transform_model.setToScaling(4000,4000,4000);
+
 
     }
 
@@ -151,9 +154,9 @@ public class SceneRendering3D_Skybox_1 implements Scene {
 
         //update_gameplay();
 
-        Color sky = Color.valueOf("#87CEEB");
+        Color sky = Color.valueOf("#18267f");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(sky.r,sky.g,sky.b,1);
+        GL11.glClearColor(0,0,0,1);
 
         renderer2D.begin();
         //renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);

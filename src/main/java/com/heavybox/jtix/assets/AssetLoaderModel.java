@@ -180,11 +180,11 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                         Path base = Paths.get(texturesFolderPath);
                         String fileName = Paths.get(ai_path.dataString()).getFileName().toString();
                         Path fullPath = base.resolve(fileName);
-                        materialTexture.path = fullPath.toString();
+                        materialTexture.path = fullPath.toString().replace("\\", "/");
                     } else {
                         Path base = Paths.get(folderPath);
                         Path fullPath = base.resolve(ai_path.dataString());
-                        materialTexture.path = fullPath.toString();
+                        materialTexture.path = fullPath.toString().replace("\\", "/");
                     }
                     // ... TODO texture filters etc.
                     materialData.texturesData.add(materialTexture);

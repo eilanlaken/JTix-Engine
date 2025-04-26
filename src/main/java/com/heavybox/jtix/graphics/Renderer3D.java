@@ -492,6 +492,11 @@ public class Renderer3D {
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
 
+//        System.out.println(texture_diffuse.sWrap);
+//        System.out.println(texture_diffuse.tWrap);
+//        System.out.println(texture_diffuse.filterMag);
+//        System.out.println(texture_diffuse.filterMin);
+
         if (texture_diffuse != null) {
             defaultShaderUnlit.bindUniform("u_texture_diffuse", texture_diffuse);
             defaultShaderUnlit.bindUniform("u_color_diffuse", Color.WHITE);
@@ -562,8 +567,9 @@ public class Renderer3D {
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
-            return null;
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     private static Shader createDefaultPBRShader() {

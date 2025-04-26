@@ -23,8 +23,8 @@ vec2 remap_uv(vec2 uv, int frame, int gridSize)
 
 void main()
 {
-    float fadeStart = 4.0; // distance where fading begins
-    float fadeEnd = 2.5; // TODO
+    float fadeStart = 50.0; // distance where fading begins
+    float fadeEnd = 5.0; // TODO
     float fade = clamp((distance_camera_to_vertex - fadeEnd) / (fadeStart - fadeEnd), 0.0, 1.0);
     vec2 newUV = remap_uv(uv, u_frame, 8); // for 8x8 atlas
     vec4 color = texture(u_texture_atlas, newUV);

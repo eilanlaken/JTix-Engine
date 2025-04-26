@@ -42,6 +42,14 @@ public final class Assets {
 
     /* store */
 
+    public static synchronized String getStoreCatalog() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (var entry : store.entrySet()) {
+            stringBuilder.append(entry.getKey()).append(" ::: ").append(entry.getValue().data.getClass().getSimpleName()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
     public static synchronized void update() {
         for (AssetLoadingTask task : storeLoadTasks) {
             if (task.readyToCreate())  {
