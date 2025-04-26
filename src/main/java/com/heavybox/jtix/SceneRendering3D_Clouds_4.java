@@ -22,7 +22,7 @@ public class SceneRendering3D_Clouds_4 implements Scene {
     private Camera camera;
 
     public Model modelCloud;
-    public Matrix4x4[] transformClouds = new Matrix4x4[50];
+    public Matrix4x4[] transformClouds = new Matrix4x4[500];
     public Texture cloudOpacity;
     public Texture cloudAtlas;
     public Shader cloudShader;
@@ -61,16 +61,16 @@ public class SceneRendering3D_Clouds_4 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0.1f, 10000, 75);
-        camera.position.set(0, -30, 0);
+        camera.position.set(0, -250, 0);
 
         camera.lookAt(0,0,0);
 
         camera.update();
 
-        final float range = 50f;
+        final float range = 200;
         for (int i = 0; i < transformClouds.length; i++) {
             this.transformClouds[i] = new Matrix4x4();
-            transformClouds[i].scale(40,40,40);
+            transformClouds[i].scale(50,50,50);
             transformClouds[i].translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range));
         }
 

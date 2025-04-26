@@ -447,7 +447,7 @@ public class Renderer3D {
             if (value == null) continue;
             shader.bindUniform(uniform, value);
         }
-        shader.bindUniform("u_frame", index);
+        shader.bindUniform("u_frame", index % 64);
 
         GL30.glBindVertexArray(mesh.vaoId);
         {
