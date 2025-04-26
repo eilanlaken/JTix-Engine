@@ -8,13 +8,18 @@ layout(location = 2) in vec2 a_textCoords0;
 // uniforms
 uniform mat4 u_transform;
 uniform mat4 u_camera_combined;
+uniform vec3 u_camera_position;
 uniform float u_time;
 
 // outputs
 out vec2 uv;
+out float distance_camera_to_vertex;
 
 void main()
 {
     uv = a_textCoords0;
-    gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
+    vec4 world_position = u_transform * vec4(a_position, 1.0);
+    gl_Position = u_camera_combined * world_position;
+
+    distance_camera_to_vertex = length(u_camera_position - world_position.xyz);
 }

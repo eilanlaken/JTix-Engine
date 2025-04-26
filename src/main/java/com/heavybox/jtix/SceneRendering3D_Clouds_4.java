@@ -17,17 +17,21 @@ import org.lwjgl.opengl.GL20;
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
 // https://www.youtube.com/watch?v=sNXj0RN09ps
-public class SceneRendering3D_Billboards_4 implements Scene {
+public class SceneRendering3D_Clouds_4 implements Scene {
 
     private Camera camera;
 
     public Model modelCloud;
     public Matrix4x4 transformCloud_1 = new Matrix4x4();
+    public Matrix4x4 transformCloud_2 = new Matrix4x4();
+    public Matrix4x4 transformCloud_3 = new Matrix4x4();
+    public Matrix4x4 transformCloud_4 = new Matrix4x4();
+    public Matrix4x4 transformCloud_5 = new Matrix4x4();
     public Texture cloudOpacity;
     public Texture cloudAtlas;
     public Shader cloudShader;
 
-    public SceneRendering3D_Billboards_4() {
+    public SceneRendering3D_Clouds_4() {
 
     }
 
@@ -68,7 +72,16 @@ public class SceneRendering3D_Billboards_4 implements Scene {
         camera.update();
 
         transformCloud_1.scale(3,3,3);
-        //transformCloud_1.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-0.6f,0.6f), MathUtils.randomUniformFloat(-1,1),MathUtils.randomUniformFloat(-0.6f,0.6f));
+        transformCloud_2.scale(3,3,3);
+        transformCloud_3.scale(3,3,3);
+        transformCloud_4.scale(3,3,3);
+        transformCloud_5.scale(3,3,3);
+        final float range = 1.5f;
+        transformCloud_1.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range),MathUtils.randomUniformFloat(-range,range));
+        transformCloud_2.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range),MathUtils.randomUniformFloat(-range,range));
+        transformCloud_3.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range),MathUtils.randomUniformFloat(-range,range));
+        transformCloud_4.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range),MathUtils.randomUniformFloat(-range,range));
+        transformCloud_5.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range),MathUtils.randomUniformFloat(-range,range));
 
     }
 
@@ -171,6 +184,10 @@ public class SceneRendering3D_Billboards_4 implements Scene {
         GL20.glDepthMask(false);
         for (int i = 0; i < modelCloud.meshes.length; i++) {
             Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud_1);
+            Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud_2);
+            Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud_3);
+            Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud_4);
+            Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud_5);
         }
         //GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
         GL20.glDepthMask(true);
