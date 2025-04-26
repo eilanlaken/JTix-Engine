@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
+import com.heavybox.jtix.zzz_planes.ToolCloudAtlasGenerator;
 
 import java.io.IOException;
 
@@ -60,11 +61,13 @@ public class Main {
 //        Application.create();
 //        Application.launch(new ScreenLoading());
 
+        //ToolCloudAtlasGenerator.run();
+        //if (true) return;
 
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_Billboards_3());
+        Application.launch(new SceneRendering3D_Clouds_3());
 
     }
 
