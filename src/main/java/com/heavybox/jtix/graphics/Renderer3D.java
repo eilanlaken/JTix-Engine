@@ -343,7 +343,7 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    public static Vector3 lightDir = new Vector3(0,0,-1);
+    public static Vector3 lightDir = new Vector3(0,1,-1).nor();
 
     public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
@@ -422,10 +422,6 @@ public class Renderer3D {
     public static void drawModel_cloud_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform, int index) {
         ShaderBinder.bind(shader);
         GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            lightDir.rotate(1,1,0,0);
-        }
 
 
         // TODO: bind environment lights when binding the camera.
@@ -558,9 +554,9 @@ public class Renderer3D {
     }
 
     private static Shader createDefaultUnlitShader() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-2.vert");
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-3.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-2.frag");
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-3.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
 
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));

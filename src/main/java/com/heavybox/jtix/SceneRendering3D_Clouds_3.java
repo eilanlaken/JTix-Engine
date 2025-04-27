@@ -212,7 +212,7 @@ public class SceneRendering3D_Clouds_3 implements Scene {
         Vector3 position = transform.getPosition(new Vector3());
         Vector3 current_orientation = transform.getBasisY(new Vector3()).negate();
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
-        Quaternion q_rotation = new Quaternion().setFromCross(current_orientation, target_orientation);
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(current_orientation, target_orientation);
         Matrix4x4 m_rotation = new Matrix4x4(q_rotation);
         // rotate the entire gizmo
         Vector3 basisX = transform.getBasisX(new Vector3()).rot(m_rotation).nor();

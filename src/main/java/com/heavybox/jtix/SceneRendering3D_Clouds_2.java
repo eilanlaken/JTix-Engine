@@ -229,7 +229,7 @@ public class SceneRendering3D_Clouds_2 implements Scene {
         Vector3 cloudPosition = transformCloud_1.getPosition(new Vector3());
         Vector3 basisZNew = new Vector3(camera.position).sub(cloudPosition).nor();
         // if identity, return
-        Quaternion q = new Quaternion().setFromCross(basisZ, basisZNew);
+        Quaternion q = new Quaternion().setFromSourceToTarget(basisZ, basisZNew);
         Matrix4x4 rotation = new Matrix4x4(q);
         Vector3 basisY = transformCloud_1.getBasisY(new Vector3()).nor().rot(rotation);
         Vector3 basisX = new Vector3(basisY).crs(basisZNew).nor();
@@ -268,7 +268,7 @@ public class SceneRendering3D_Clouds_2 implements Scene {
         Vector3 position = transform.getPosition(new Vector3());
         Vector3 current_orientation = transform.getBasisY(new Vector3()).negate();
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
-        Quaternion q_rotation = new Quaternion().setFromCross(current_orientation, target_orientation);
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(current_orientation, target_orientation);
         Matrix4x4 m_rotation = new Matrix4x4(q_rotation);
         // rotate the entire gizmo
         Vector3 basisX = transform.getBasisX(new Vector3()).rot(m_rotation).nor();

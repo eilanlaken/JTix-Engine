@@ -748,7 +748,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param v2 The target vector
      * @return This matrix for the purpose of chaining methods together */
     public Matrix4x4 setToRotation(final Vector3 v1, final Vector3 v2) {
-        return setToPositionRotationScaling(quaternion.setFromCross(v1, v2));
+        return setToPositionRotationScaling(quaternion.setFromSourceToTarget(v1, v2));
     }
 
     /** Set the matrix to a rotation matrix between two vectors.
@@ -760,7 +760,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param z2 The target vector z value
      * @return This matrix for the purpose of chaining methods together */
     public Matrix4x4 setToRotation(final float x1, final float y1, final float z1, final float x2, final float y2, final float z2) {
-        return setToPositionRotationScaling(quaternion.setFromCross(x1, y1, z1, x2, y2, z2));
+        return setToPositionRotationScaling(quaternion.setFromSourceToTarget(x1, y1, z1, x2, y2, z2));
     }
 
     /** Sets this matrix to a rotation matrix from the given euler angles.
@@ -1436,7 +1436,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param v2 The target vector
      * @return This matrix for the purpose of chaining methods together */
     public Matrix4x4 rotateLocalAxis(final Vector3 v1, final Vector3 v2) {
-        return rotateLocalAxis(quaternion.setFromCross(v1, v2));
+        return rotateLocalAxis(quaternion.setFromSourceToTarget(v1, v2));
     }
 
     /** Post-multiplies this matrix by a rotation toward a direction.

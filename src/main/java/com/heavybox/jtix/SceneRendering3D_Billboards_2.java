@@ -216,7 +216,7 @@ public class SceneRendering3D_Billboards_2 implements Scene {
         Vector3 cloudPosition = transformCloud_1.getPosition(new Vector3());
         Vector3 basisZNew = new Vector3(camera.position).sub(cloudPosition).nor();
         // if identity, return
-        Quaternion q = new Quaternion().setFromCross(basisZ, basisZNew);
+        Quaternion q = new Quaternion().setFromSourceToTarget(basisZ, basisZNew);
         Matrix4x4 rotation = new Matrix4x4(q);
         Vector3 basisY = transformCloud_1.getBasisY(new Vector3()).nor().rot(rotation);
         Vector3 basisX = new Vector3(basisY).crs(basisZNew).nor();

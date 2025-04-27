@@ -10,7 +10,6 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
@@ -159,7 +158,7 @@ public class SceneRendering3D_Billboards_5 implements Scene {
         Vector3 position = transform.getPosition(new Vector3());
         Vector3 current_orientation = transform.getBasisY(new Vector3()).negate();
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
-        Quaternion q_rotation = new Quaternion().setFromCross(current_orientation, target_orientation);
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(current_orientation, target_orientation);
         Matrix4x4 m_rotation = new Matrix4x4(q_rotation);
         // rotate the entire gizmo
         Vector3 basisX = transform.getBasisX(new Vector3()).rot(m_rotation).nor();
@@ -173,7 +172,7 @@ public class SceneRendering3D_Billboards_5 implements Scene {
         Vector3 scale = transform.getScale(new Vector3());
         Vector3 position = transform.getPosition(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
-        Quaternion q_rotation = new Quaternion().setFromCross(new Vector3(0,-1,0), target_orientation);
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,-1,0), target_orientation);
         transform.setToPositionRotationScaling(position, q_rotation, scale);
     }
 

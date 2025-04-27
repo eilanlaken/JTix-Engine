@@ -2,10 +2,12 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
@@ -16,17 +18,17 @@ import org.lwjgl.opengl.GL20;
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
 // https://www.youtube.com/watch?v=sNXj0RN09ps
-public class SceneRendering3D_Billboards_4 implements Scene {
+public class SceneRendering3D_Clouds_5 implements Scene {
 
     private Camera camera;
 
     public Model modelCloud;
-    public Matrix4x4 transformCloud_1 = new Matrix4x4();
+    public Matrix4x4[] transformClouds = new Matrix4x4[500];
     public Texture cloudOpacity;
     public Texture cloudAtlas;
     public Shader cloudShader;
 
-    public SceneRendering3D_Billboards_4() {
+    public SceneRendering3D_Clouds_5() {
 
     }
 
@@ -60,14 +62,18 @@ public class SceneRendering3D_Billboards_4 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 0.1f, 10000, 75);
-        camera.position.set(0, -2, 0);
+        camera.position.set(0, -250, 0);
 
         camera.lookAt(0,0,0);
 
         camera.update();
 
-        transformCloud_1.scale(3,3,3);
-        //transformCloud_1.translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-0.6f,0.6f), MathUtils.randomUniformFloat(-1,1),MathUtils.randomUniformFloat(-0.6f,0.6f));
+        final float range = 130;
+        for (int i = 0; i < transformClouds.length; i++) {
+            this.transformClouds[i] = new Matrix4x4();
+            transformClouds[i].scale(30,30,30);
+            transformClouds[i].translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range/10,range/10));
+        }
 
     }
 
@@ -142,62 +148,50 @@ public class SceneRendering3D_Billboards_4 implements Scene {
 //            camera.rotateAroundRight(-1f);
 //        }
 
+        for (int i = 0; i < transformClouds.length; i++) {
+            orient_2(transformClouds[i]);
+        }
 
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1,0.247f,0.247f,1);
 
-
-        float time = (float) modelCloud.materials[0].materialAttributes.get("u_time");
-        time += Graphics.getDeltaTime();
-        modelCloud.materials[0].materialAttributes.put("u_time", time);
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.K)) {
-            int frame = (int) modelCloud.materials[0].materialAttributes.get("u_frame");
-            frame++;
-            frame %= 64;
-            modelCloud.materials[0].materialAttributes.put("u_frame", frame);
-        } else {
-            int frame = (int) Math.floor(time * 1);
-            frame %= 64;
-            modelCloud.materials[0].materialAttributes.put("u_frame", frame);
-        }
+        Vector3 position_o1 = new Vector3();
+        Vector3 position_o2 = new Vector3();
 
         Renderer3D.begin(camera);
+//        Collections.sort(transformClouds, (o1, o2) -> {
+//            float d1 = camera.position.dst2(o1.getPosition(position_o1));
+//            float d2 = camera.position.dst2(o2.getPosition(position_o2));
+//            return Float.compare(d2, d1); // farthest first
+//        });
 
         // TODO: sort by distance to camera!
-        //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
+        //GL11.glDisable(GL11.GL_CULL_FACE); //
         GL20.glDepthMask(false);
+        GL20.glDisable(GL20.GL_DEPTH_TEST);
         for (int i = 0; i < modelCloud.meshes.length; i++) {
-            Renderer3D.drawModel_custom_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformCloud_1);
+            System.out.println(modelCloud.materials.length);
+            for (int j = 0; j < transformClouds.length; j++) {
+                Renderer3D.drawModel_cloud_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformClouds[j], j);
+            }
         }
-        //GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
+
+        GL20.glEnable(GL20.GL_DEPTH_TEST);
         GL20.glDepthMask(true);
-
-
-
+        GL11.glEnable(GL11.GL_CULL_FACE); //
 
         Renderer3D.end();
         update_gameplay();
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.M) || true) {
-            orient_1(transformCloud_1);
-        }
+
     }
 
-    private void orient_1(Matrix4x4 transform) {
-        Vector3 scaling = new Vector3(3,3,3);
+    private void orient_2(Matrix4x4 transform) {
+        Vector3 scale = transform.getScale(new Vector3());
         Vector3 position = transform.getPosition(new Vector3());
-        Vector3 current_orientation = transform.getBasisY(new Vector3()).negate();
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
-        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(current_orientation, target_orientation);
-        Matrix4x4 m_rotation = new Matrix4x4(q_rotation);
-        // rotate the entire gizmo
-        Vector3 basisX = transform.getBasisX(new Vector3()).rot(m_rotation).nor();
-        Vector3 basisY = transform.getBasisY(new Vector3()).rot(m_rotation).nor();
-        Vector3 basisZ = transform.getBasisZ(new Vector3()).rot(m_rotation).nor();
-        transform.setFromBasis(basisX, basisY, basisZ, position);
-        transform.scale(scaling);
-        System.out.println(Vector3.areOrthonormal(basisX, basisY, basisZ));
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,-1,0), target_orientation);
+        transform.setToPositionRotationScaling(position, q_rotation, scale);
     }
 
     private void orient_billboard(Matrix4x4 transform) {
@@ -218,7 +212,6 @@ public class SceneRendering3D_Billboards_4 implements Scene {
         tmp2.set(dir).crs(tmp).nor();
         rotation.setFromAxes(tmp.x, tmp2.x, dir.x, tmp.y, tmp2.y, dir.y, tmp.z, tmp2.z, dir.z);
         transform.setToPositionRotationScaling(position, rotation, scaling);
-        System.out.println(transform);
     }
 
     private float speed = 1;

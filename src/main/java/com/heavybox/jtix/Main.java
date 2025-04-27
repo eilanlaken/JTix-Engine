@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
+import com.heavybox.jtix.zzz_planes.SceneRendering3D_Scene_Basic_1;
 import com.heavybox.jtix.zzz_planes.ToolCloudAtlasGenerator;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_Clouds_4());
+        Application.launch(new SceneRendering3D_Transparency_1());
 
     }
 
