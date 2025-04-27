@@ -471,27 +471,12 @@ public class Renderer3D {
     public static void drawModel_custom_unlit_shader(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(defaultShaderUnlit);
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            lightDir.rotate(1,1,0,0);
-        }
-
         defaultShaderUnlit.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         defaultShaderUnlit.bindUniform("u_transform", transform);
-
-//        // bind custom material uniforms
-//        for (String uniform : defaultShaderUnlit.uniformNames) {
-//            Object value = material.materialAttributes.get(uniform);
-//            if (value == null) continue;
-//            defaultShaderUnlit.bindUniform(uniform, value);
-//        }
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
 
-//        System.out.println(texture_diffuse.sWrap);
-//        System.out.println(texture_diffuse.tWrap);
-//        System.out.println(texture_diffuse.filterMag);
-//        System.out.println(texture_diffuse.filterMin);
 
         if (texture_diffuse != null) {
             defaultShaderUnlit.bindUniform("u_texture_diffuse", texture_diffuse);

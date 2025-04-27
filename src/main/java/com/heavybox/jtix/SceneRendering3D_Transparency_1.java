@@ -6,6 +6,7 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
@@ -21,8 +22,8 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
     public Model modelCubeSolid;
     public Model modelCubeRedAlpha;
-    public Model modelCubeGreenAlpha;
-    public Model modelCubeBlueAlpha;
+    //public Model modelCubeGreenAlpha;
+    //public Model modelCubeBlueAlpha;
 
     public Matrix4x4[] transformSolids = new Matrix4x4[4];
     public Matrix4x4[] transformAlphas = new Matrix4x4[4];
@@ -30,7 +31,11 @@ public class SceneRendering3D_Transparency_1 implements Scene {
     public SceneRendering3D_Transparency_1() {
 
         for (int i = 0; i < transformSolids.length; i++) {
-            transformSolids[i] = new Matrix4x4().translateGlobalAxisXYZ(0, i*3, 0);
+            transformSolids[i] = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-1,1), i*3, 0);
+        }
+
+        for (int i = 0; i < transformAlphas.length; i++) {
+            transformAlphas[i] = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-1,1), i*3 + 1.5f, 0);
         }
 
     }
@@ -46,8 +51,8 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
         modelCubeSolid = Assets.get("assets/app-models/cube-solid.fbx");
         modelCubeRedAlpha = Assets.get("assets/app-models/cube-red-alpha.fbx");
-        modelCubeGreenAlpha = Assets.get("assets/app-models/cube-green-alpha.fbx");
-        modelCubeBlueAlpha = Assets.get("assets/app-models/cube-blue-alpha.fbx");
+        //modelCubeGreenAlpha = Assets.get("assets/app-models/cube-green-alpha.fbx");
+        //modelCubeBlueAlpha = Assets.get("assets/app-models/cube-blue-alpha.fbx");
     }
 
     @Override
@@ -146,6 +151,13 @@ public class SceneRendering3D_Transparency_1 implements Scene {
         for (Matrix4x4 transformSolid : transformSolids) {
             for (int j = 0; j < modelCubeSolid.meshes.length; j++) {
                 Renderer3D.drawModel_tmp_5(modelCubeSolid.meshes[j], modelCubeSolid.materials[j], transformSolid);
+            }
+        }
+
+
+        for (Matrix4x4 transformAlpha : transformAlphas) {
+            for (int j = 0; j < modelCubeRedAlpha.meshes.length; j++) {
+                Renderer3D.drawModel_custom_unlit_shader(modelCubeRedAlpha.meshes[j], modelCubeRedAlpha.materials[j], transformAlpha);
             }
         }
 
