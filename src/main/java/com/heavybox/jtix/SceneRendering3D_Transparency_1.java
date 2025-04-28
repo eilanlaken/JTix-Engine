@@ -144,7 +144,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(1,0.247f,0.247f,1);
+        GL11.glClearColor(0,1f,0f,1);
 
         Renderer3D.begin(camera);
 

@@ -37,7 +37,7 @@ public class Renderer3D {
     private static final Array<RenderCommand>      renderUnits    = new Array<>(false, 20);
 
     // defaults
-    private static final Texture defaultTexture     = createDefaultTexture();
+    private static final Texture whitePixelTexture  = createDefaultTexture();
     private static final Texture normalMapTexture   = createNormalMapTexture();
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
@@ -121,7 +121,7 @@ public class Renderer3D {
             currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
             currentShader.bindUniform("u_color_diffuse", Color.WHITE);
         } else if (color_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+            currentShader.bindUniform("u_texture_diffuse", whitePixelTexture);
             currentShader.bindUniform("u_color_diffuse", color_diffuse);
         } else { // TODO: handle error: missing both diffuse texture and color.
 
@@ -182,7 +182,7 @@ public class Renderer3D {
             currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
             currentShader.bindUniform("u_color_diffuse", Color.WHITE);
         } else if (color_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+            currentShader.bindUniform("u_texture_diffuse", whitePixelTexture);
             currentShader.bindUniform("u_color_diffuse", color_diffuse);
         } else { // TODO: handle error: missing both diffuse texture and color.
 
@@ -243,7 +243,7 @@ public class Renderer3D {
             currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
             currentShader.bindUniform("u_color_diffuse", Color.WHITE);
         } else if (color_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", defaultTexture);
+            currentShader.bindUniform("u_texture_diffuse", whitePixelTexture);
             currentShader.bindUniform("u_color_diffuse", color_diffuse);
         } else { // TODO: handle error: missing both diffuse texture and color.
 
@@ -476,13 +476,13 @@ public class Renderer3D {
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
-
+        System.out.println(color_diffuse.r + ", " + color_diffuse.g + ", " + color_diffuse.b + ", " + color_diffuse.a);
 
         if (texture_diffuse != null) {
             defaultShaderUnlit.bindUniform("u_texture_diffuse", texture_diffuse);
             defaultShaderUnlit.bindUniform("u_color_diffuse", Color.WHITE);
         } else if (color_diffuse != null) {
-            defaultShaderUnlit.bindUniform("u_texture_diffuse", defaultTexture);
+            defaultShaderUnlit.bindUniform("u_texture_diffuse", whitePixelTexture);
             defaultShaderUnlit.bindUniform("u_color_diffuse", color_diffuse);
         } else { // TODO: handle error: missing both diffuse texture and color.
 

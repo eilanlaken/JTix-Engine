@@ -37,10 +37,12 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         // all possible material color parameters
         namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
+        // Assimp.AI_MATKEY_OPACITY
 
         // all possible material props (metallic, roughness etc)
         namedProps.put("u_prop_metallic", Assimp.AI_MATKEY_REFLECTIVITY);
         namedProps.put("u_prop_roughness", Assimp.AI_MATKEY_ROUGHNESS_FACTOR);
+
     }
 
     // TODO: make use of
