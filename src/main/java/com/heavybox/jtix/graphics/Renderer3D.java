@@ -476,7 +476,6 @@ public class Renderer3D {
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
-        System.out.println(color_diffuse.r + ", " + color_diffuse.g + ", " + color_diffuse.b + ", " + color_diffuse.a);
 
         if (texture_diffuse != null) {
             defaultShaderUnlit.bindUniform("u_texture_diffuse", texture_diffuse);
@@ -486,6 +485,19 @@ public class Renderer3D {
             defaultShaderUnlit.bindUniform("u_color_diffuse", color_diffuse);
         } else { // TODO: handle error: missing both diffuse texture and color.
 
+        }
+
+        Texture texture_opacity = (Texture) material.materialAttributes.get("u_texture_opacity");
+        Float opacity = (Float) material.materialAttributes.get("u_prop_opacity");
+        if (texture_opacity != null) {
+            defaultShaderUnlit.bindUniform("u_texture_opacity", texture_opacity);
+            defaultShaderUnlit.bindUniform("u_prop_opacity", 1);
+        } else if (opacity != null) {
+            defaultShaderUnlit.bindUniform("u_texture_opacity", whitePixelTexture);
+            defaultShaderUnlit.bindUniform("u_prop_opacity", opacity);
+        } else {
+            defaultShaderUnlit.bindUniform("u_texture_opacity", whitePixelTexture);
+            defaultShaderUnlit.bindUniform("u_prop_opacity",1);
         }
 
         GL30.glBindVertexArray(mesh.vaoId);

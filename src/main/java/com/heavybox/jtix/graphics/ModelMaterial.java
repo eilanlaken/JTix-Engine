@@ -5,6 +5,8 @@ import com.heavybox.jtix.memory.MemoryResource;
 import java.util.HashMap;
 import java.util.Map;
 
+
+// TODO: make clone()able
 public class ModelMaterial implements MemoryResource {
 
     public HashMap<String, Object> materialAttributes = new HashMap<>();

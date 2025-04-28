@@ -34,14 +34,15 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
         uniformNameTextureTypes.put("u_texture_normalMap", Assimp.aiTextureType_NORMALS);
+        uniformNameTextureTypes.put("u_texture_opacity", Assimp.aiTextureType_OPACITY);
 
         // all possible material color parameters
         namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
-        // Assimp.AI_MATKEY_OPACITY
 
         // all possible material props (metallic, roughness etc)
         namedProps.put("u_prop_metallic", Assimp.AI_MATKEY_REFLECTIVITY);
         namedProps.put("u_prop_roughness", Assimp.AI_MATKEY_ROUGHNESS_FACTOR);
+        namedProps.put("u_prop_opacity", Assimp.AI_MATKEY_OPACITY);
 
     }
 
