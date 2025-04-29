@@ -141,7 +141,7 @@ public class SceneRendering3D_Basic_3 implements Scene {
         for (int i = 1; i < entities.size; i++) {
             Entity cloud = entities.get(i);
             //camera.orientBillboard(cloud.transform);
-            orient2(cloud.transform);
+            orient(cloud.transform);
         }
 
         // rendering system
@@ -190,12 +190,13 @@ public class SceneRendering3D_Basic_3 implements Scene {
         transform.setToPositionRotationScaling(position, q_rotation, scale);
     }
 
+    // well, this *seems* like just orient(). Also: what happens when Z_UNIT overlaps camera.forward / up / right?
     // this solves the spinning issue but the scale is hard-coded.
     private void orient2(Matrix4x4 transform) {
         Vector3 position = transform.getPosition(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor(); // this will be the 3rd column
-        Vector3 up = new Vector3(target_orientation).crs(Vector3.Z_UNIT);
-        Vector3 right = new Vector3(target_orientation).crs(up);
+        Vector3 up = new Vector3(target_orientation).crs(Vector3.Z_UNIT).nor();
+        Vector3 right = new Vector3(target_orientation).crs(up).nor();
         transform.setFromBasis(right, up, target_orientation, position, new Vector3(40,40,40));
     }
 
