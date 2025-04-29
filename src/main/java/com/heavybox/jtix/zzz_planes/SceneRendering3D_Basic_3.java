@@ -141,7 +141,7 @@ public class SceneRendering3D_Basic_3 implements Scene {
         for (int i = 1; i < entities.size; i++) {
             Entity cloud = entities.get(i);
             //camera.orientBillboard(cloud.transform);
-            orient(cloud.transform);
+            orient2(cloud.transform);
         }
 
         // rendering system
