@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL20;
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
 // https://www.youtube.com/watch?v=sNXj0RN09ps
-public class SceneRendering3D_Basic_2 implements Scene {
+public class SceneRendering3D_Basic_3 implements Scene {
 
     private Camera camera;
 
@@ -34,7 +34,7 @@ public class SceneRendering3D_Basic_2 implements Scene {
     public Array<RenderUnit> rendrables_opaque = new Array<>();
     public Array<RenderUnit> rendrables_transparent = new Array<>();
 
-    public SceneRendering3D_Basic_2() {
+    public SceneRendering3D_Basic_3() {
     }
 
     @Override
@@ -78,8 +78,9 @@ public class SceneRendering3D_Basic_2 implements Scene {
         cockpit.model = modelCockpit;
         entities.add(cockpit);
 
-        final float range = 130;
-        for (int i = 0; i < 500; i++) {
+        final int CLOUDS_COUNT = 500;
+        final float range = 0.26f * CLOUDS_COUNT;
+        for (int i = 0; i < CLOUDS_COUNT; i++) {
             Entity entity = new Entity();
             entity.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range/10,range/10));
             entity.transform.scale(30,30,30);
@@ -182,15 +183,10 @@ public class SceneRendering3D_Basic_2 implements Scene {
         Vector3 scale = transform.getScale(new Vector3());
         Vector3 position = transform.getPosition(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
-        Quaternion q_rotation_1 = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
-        Quaternion q_rotation_2 = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
-
-
-
-        transform.setToPositionRotationScaling(position, q_rotation_1, scale);
-
-
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
+        transform.setToPositionRotationScaling(position, q_rotation, scale);
     }
+
 
     private float speed = 1;
 

@@ -3,6 +3,7 @@ package com.heavybox.jtix;
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
 import com.heavybox.jtix.zzz_planes.SceneRendering3D_Basic_2;
+import com.heavybox.jtix.zzz_planes.SceneRendering3D_Basic_3;
 
 import java.io.IOException;
 
@@ -67,7 +68,7 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_Basic_2());
+        Application.launch(new SceneRendering3D_Basic_3());
 
     }
 

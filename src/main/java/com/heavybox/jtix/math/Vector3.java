@@ -675,6 +675,13 @@ public class Vector3 implements MemoryPool.Reset {
         return this;
     }
 
+    // TODO: test with unit tests
+    public static float angleBetweenDeg(final Vector3 a, final Vector3 b) {
+        float aL = a.len();
+        float bL = b.len();
+        return (float) Math.acos(Vector3.dot(a, b) / (aL * bL)) * MathUtils.radiansToDegrees;
+    }
+
     // TODO: write unit tests
     public static boolean areOrthonormal(Vector3 a, Vector3 b, Vector3 c) {
         return Math.abs(a.dot(b)) < MathUtils.FLOAT_ROUNDING_ERROR &&

@@ -231,23 +231,26 @@ public class Camera {
         worldCoordinates.z = (worldCoordinates.z + 1) / 2;
     }
 
-    private void orientBillboard(Matrix4x4 transform) {
-        /*
+    /*
         Sets the rotation 3x3 part of the model matrix to the transpose of the 3x3 rotation part of the view matrix.
         The rotation in the model matrix will now cancel out the rotation in the view matrix, meaning that no rotation is applied to the billboard.
-         */
         // https://www.youtube.com/watch?v=6PkjU9LaDTQ
-        transform.val[Matrix4x4.M00] = view.val[Matrix4x4.M00];
-        transform.val[Matrix4x4.M01] = view.val[Matrix4x4.M10];
-        transform.val[Matrix4x4.M02] = view.val[Matrix4x4.M20];
+    */
+    public void orientBillboard(Matrix4x4 transform) {
+        Vector3 scale = new Vector3();
+        transform.getScale(scale);
 
-        transform.val[Matrix4x4.M10] = view.val[Matrix4x4.M01];
-        transform.val[Matrix4x4.M11] = view.val[Matrix4x4.M11];
-        transform.val[Matrix4x4.M12] = view.val[Matrix4x4.M21];
+        transform.val[Matrix4x4.M00] = scale.x * view.val[Matrix4x4.M00];
+        transform.val[Matrix4x4.M01] = scale.x * view.val[Matrix4x4.M10];
+        transform.val[Matrix4x4.M02] = scale.x * view.val[Matrix4x4.M20];
 
-        transform.val[Matrix4x4.M20] = view.val[Matrix4x4.M02];
-        transform.val[Matrix4x4.M21] = view.val[Matrix4x4.M12];
-        transform.val[Matrix4x4.M22] = view.val[Matrix4x4.M22];
+        transform.val[Matrix4x4.M10] = scale.y * view.val[Matrix4x4.M01];
+        transform.val[Matrix4x4.M11] = scale.y * view.val[Matrix4x4.M11];
+        transform.val[Matrix4x4.M12] = scale.y * view.val[Matrix4x4.M21];
+
+        transform.val[Matrix4x4.M20] = scale.z * view.val[Matrix4x4.M02];
+        transform.val[Matrix4x4.M21] = scale.z * view.val[Matrix4x4.M12];
+        transform.val[Matrix4x4.M22] = scale.z * view.val[Matrix4x4.M22];
     }
 
     public float getViewportWidth() {
