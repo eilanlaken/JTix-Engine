@@ -47,7 +47,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
     public void setup() {
 
         Assets.loadModel("assets/app-models/cube-solid.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/app-models/billboard-2.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/billboard.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-red-transparent.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-green-transparent.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-blue-transparent.fbx", "assets/app-models/textures");
@@ -59,7 +59,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
         Assets.finishLoading();
 
         modelCubeSolid = Assets.get("assets/app-models/cube-solid.fbx");
-        modelHelloBillboard = Assets.get("assets/app-models/billboard-2.fbx");
+        modelHelloBillboard = Assets.get("assets/app-models/billboard.fbx");
         modelPlaneTransparentRed = Assets.get("assets/app-models/plane-red-transparent.fbx");
         modelPlaneTransparentGreen = Assets.get("assets/app-models/plane-green-transparent.fbx");
         modelPlaneTransparentBlue = Assets.get("assets/app-models/plane-blue-transparent.fbx");
@@ -87,7 +87,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
             entities.add(entity);
         }
         Entity billboard = new Entity();
-        billboard.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-1,1), -2, 0);
+        billboard.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-1,1), -2, 0).scale(2,1,1);
         billboard.model = modelHelloBillboard;
         entities.add(billboard);
 
@@ -164,6 +164,13 @@ public class SceneRendering3D_Transparency_1 implements Scene {
             entities.get(activePlane).transform.translateGlobalAxisXYZ(0.05f,0f,0);
         }
 
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+            camera.rotateAroundForward(-1f);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            camera.rotateAroundForward(1f);
+        }
+
         // rendering system
 
 
@@ -228,7 +235,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
         Renderer3D.end();
 
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.F)) {
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.F) || true) {
             orient(entities.get(3).transform);
         }
     }
@@ -250,24 +257,29 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
     private void orient(Matrix4x4 transform) {
         // This method will orient the model's forward (z vector) to always face the camera, as if no rotation is applied.
+        Vector3 scale = new Vector3();
+        transform.getScale(scale);
+        /*
+        Sets the rotation 3x3 part of the model matrix to the transpose of the 3x3 rotation part of the view matrix.
+        The rotation in the model matrix will now cancel out the rotation in the view matrix, meaning that no rotation is applied to the billboard.
+         */
+        // https://www.youtube.com/watch?v=6PkjU9LaDTQ
 
-        Vector3 col1view = camera.view.getBasisX(new Vector3());
-        Vector3 col2view = camera.view.getBasisY(new Vector3());
-        Vector3 col3view = camera.view.getBasisZ(new Vector3());
+        // so this method simply takes the encoded 3x3 rotation matrix of the view matrix, inverts it and puts it in the
+        // encoded 3x3 rotation matrix of the model matrix.
+        transform.val[Matrix4x4.M00] = camera.view.val[Matrix4x4.M00];
+        transform.val[Matrix4x4.M01] = camera.view.val[Matrix4x4.M10];
+        transform.val[Matrix4x4.M02] = camera.view.val[Matrix4x4.M20];
 
-        // set rows
-        transform.val[Matrix4x4.M00] = col1view.x;
-        transform.val[Matrix4x4.M01] = col1view.y;
-        transform.val[Matrix4x4.M02] = col1view.z;
+        transform.val[Matrix4x4.M10] = camera.view.val[Matrix4x4.M01];
+        transform.val[Matrix4x4.M11] = camera.view.val[Matrix4x4.M11];
+        transform.val[Matrix4x4.M12] = camera.view.val[Matrix4x4.M21];
 
-        transform.val[Matrix4x4.M10] = col2view.x;
-        transform.val[Matrix4x4.M11] = col2view.y;
-        transform.val[Matrix4x4.M12] = col2view.z;
+        transform.val[Matrix4x4.M20] = camera.view.val[Matrix4x4.M02];
+        transform.val[Matrix4x4.M21] = camera.view.val[Matrix4x4.M12];
+        transform.val[Matrix4x4.M22] = camera.view.val[Matrix4x4.M22];
 
-        transform.val[Matrix4x4.M20] = col3view.x;
-        transform.val[Matrix4x4.M21] = col3view.y;
-        transform.val[Matrix4x4.M22] = col3view.z;
-
+        // does not consider scaling for now.
     }
 
 
