@@ -80,10 +80,13 @@ public class SceneRendering3D_Basic_3 implements Scene {
 
         final int CLOUDS_COUNT = 500;
         final float range = 0.26f * CLOUDS_COUNT;
+        final float scale = 10.4f * (CLOUDS_COUNT / range);
+
+        System.out.println(scale);
         for (int i = 0; i < CLOUDS_COUNT; i++) {
             Entity entity = new Entity();
-            entity.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range/10,range/10));
-            entity.transform.scale(30,30,30);
+            entity.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range/4,range/4));
+            entity.transform.scale(scale,scale,scale);
             entity.model = modelCloud;
             entities.add(entity);
         }
@@ -138,7 +141,7 @@ public class SceneRendering3D_Basic_3 implements Scene {
         for (int i = 1; i < entities.size; i++) {
             Entity cloud = entities.get(i);
             //camera.orientBillboard(cloud.transform);
-            orient(cloud.transform);
+            orient2(cloud.transform);
         }
 
         // rendering system
@@ -187,6 +190,14 @@ public class SceneRendering3D_Basic_3 implements Scene {
         transform.setToPositionRotationScaling(position, q_rotation, scale);
     }
 
+    // this solves the spinning issue but the scale is hard-coded.
+    private void orient2(Matrix4x4 transform) {
+        Vector3 position = transform.getPosition(new Vector3());
+        Vector3 target_orientation = new Vector3(camera.position).sub(position).nor(); // this will be the 3rd column
+        Vector3 up = new Vector3(target_orientation).crs(Vector3.Z_UNIT);
+        Vector3 right = new Vector3(target_orientation).crs(up);
+        transform.setFromBasis(right, up, target_orientation, position, new Vector3(40,40,40));
+    }
 
     private float speed = 1;
 

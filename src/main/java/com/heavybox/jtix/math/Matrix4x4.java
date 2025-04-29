@@ -1431,6 +1431,32 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
+    // TODO: test
+    public Matrix4x4 setFromBasis(Vector3 b1, Vector3 b2, Vector3 b3, Vector3 position, Vector3 scale) {
+        val[M00] = scale.x * b1.x;
+        val[M10] = scale.x * b1.y;
+        val[M20] = scale.x * b1.z;
+
+        val[M01] = scale.y * b2.x;
+        val[M11] = scale.y * b2.y;
+        val[M21] = scale.y * b2.z;
+
+        val[M02] = scale.z * b3.x;
+        val[M12] = scale.z * b3.y;
+        val[M22] = scale.z * b3.z;
+
+        val[M03] = position.x;
+        val[M13] = position.y;
+        val[M23] = position.z;
+
+        val[M30] = 0f;
+        val[M31] = 0f;
+        val[M32] = 0f;
+        val[M33] = 1f;
+
+        return this;
+    }
+
     /** Postmultiplies this matrix by the rotation between two vectors.
      * @param v1 The base vector
      * @param v2 The target vector
