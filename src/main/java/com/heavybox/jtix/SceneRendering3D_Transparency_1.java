@@ -10,6 +10,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.zzz_planes.GameObject;
 import org.lwjgl.opengl.GL11;
@@ -23,10 +24,12 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
     private Camera camera;
 
+    public Model modelHelloBillboard;
     public Model modelCubeSolid;
     public Model modelPlaneTransparentRed;
     public Model modelPlaneTransparentGreen;
     public Model modelPlaneTransparentBlue;
+    public Model[] modelsTransparent;
 
     //public Matrix4x4[] transformSolids = new Matrix4x4[1];
     //public Matrix4x4[] transformAlphas = new Matrix4x4[2];
@@ -44,6 +47,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
     public void setup() {
 
         Assets.loadModel("assets/app-models/cube-solid.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/billboard-2.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-red-transparent.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-green-transparent.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-blue-transparent.fbx", "assets/app-models/textures");
@@ -55,12 +59,13 @@ public class SceneRendering3D_Transparency_1 implements Scene {
         Assets.finishLoading();
 
         modelCubeSolid = Assets.get("assets/app-models/cube-solid.fbx");
+        modelHelloBillboard = Assets.get("assets/app-models/billboard-2.fbx");
         modelPlaneTransparentRed = Assets.get("assets/app-models/plane-red-transparent.fbx");
         modelPlaneTransparentGreen = Assets.get("assets/app-models/plane-green-transparent.fbx");
         modelPlaneTransparentBlue = Assets.get("assets/app-models/plane-blue-transparent.fbx");
-        //modelCubeRedAlpha = Assets.get("assets/app-models/cube-red-alpha.fbx");
-        //modelCubeGreenAlpha = Assets.get("assets/app-models/cube-green-alpha.fbx");
-        //modelCubeBlueAlpha = Assets.get("assets/app-models/cube-blue-alpha.fbx");
+
+        modelsTransparent = new Model[] {modelPlaneTransparentRed, modelPlaneTransparentGreen, modelPlaneTransparentBlue};
+
     }
 
     @Override
@@ -81,11 +86,15 @@ public class SceneRendering3D_Transparency_1 implements Scene {
             entity.model = modelCubeSolid;
             entities.add(entity);
         }
+        Entity billboard = new Entity();
+        billboard.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-1,1), -2, 0);
+        billboard.model = modelHelloBillboard;
+        entities.add(billboard);
 
         for (int i = 0; i < 2; i++) {
             Entity entity = new Entity();
             entity.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-1,1), i*3 + 1.5f, 0);
-            entity.model = modelPlaneTransparentRed;
+            entity.model = modelsTransparent[i % modelsTransparent.length];
             entities.add(entity);
         }
 
@@ -99,6 +108,7 @@ public class SceneRendering3D_Transparency_1 implements Scene {
                 renderUnit.material = model.materials[i];
                 renderUnit.transform = entity.transform;
 
+                // TODO: see what is the best way to decide if a material contains transparency
                 Float opacity = (Float) renderUnit.material.materialAttributes.get("u_prop_opacity");
                 if (opacity == null) rendrables_opaque.add(renderUnit);
                 else if (MathUtils.floatsEqual(opacity, 1.0f)) rendrables_opaque.add(renderUnit);
@@ -218,6 +228,9 @@ public class SceneRendering3D_Transparency_1 implements Scene {
 
         Renderer3D.end();
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.F)) {
+            orient(entities.get(3).transform);
+        }
     }
 
     public static class Entity {
@@ -232,6 +245,28 @@ public class SceneRendering3D_Transparency_1 implements Scene {
         public Matrix4x4 transform;
         public ModelMesh mesh;
         public ModelMaterial material;
+
+    }
+
+    private void orient(Matrix4x4 transform) {
+        // This method will orient the model's forward (z vector) to always face the camera, as if no rotation is applied.
+
+        Vector3 col1view = camera.view.getBasisX(new Vector3());
+        Vector3 col2view = camera.view.getBasisY(new Vector3());
+        Vector3 col3view = camera.view.getBasisZ(new Vector3());
+
+        // set rows
+        transform.val[Matrix4x4.M00] = col1view.x;
+        transform.val[Matrix4x4.M01] = col1view.y;
+        transform.val[Matrix4x4.M02] = col1view.z;
+
+        transform.val[Matrix4x4.M10] = col2view.x;
+        transform.val[Matrix4x4.M11] = col2view.y;
+        transform.val[Matrix4x4.M12] = col2view.z;
+
+        transform.val[Matrix4x4.M20] = col3view.x;
+        transform.val[Matrix4x4.M21] = col3view.y;
+        transform.val[Matrix4x4.M22] = col3view.z;
 
     }
 
