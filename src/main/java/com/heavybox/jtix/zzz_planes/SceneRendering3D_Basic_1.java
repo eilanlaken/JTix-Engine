@@ -17,20 +17,19 @@ import org.lwjgl.opengl.GL20;
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
 // https://www.youtube.com/watch?v=sNXj0RN09ps
-public class SceneRendering3D_Scene_Basic_1 implements Scene {
+public class SceneRendering3D_Basic_1 implements Scene {
 
     private Camera camera;
 
     public Model modelCloud;
     public Matrix4x4[] transformClouds = new Matrix4x4[500];
-    public Texture cloudOpacity;
     public Texture cloudAtlas;
     public Shader cloudShader;
 
     public Model modelCockpit;
     public Matrix4x4 transformCockpit = new Matrix4x4();
 
-    public SceneRendering3D_Scene_Basic_1() {
+    public SceneRendering3D_Basic_1() {
 
     }
 
@@ -45,16 +44,14 @@ public class SceneRendering3D_Scene_Basic_1 implements Scene {
 
         modelCloud = Assets.get("assets/app-models/plane.fbx");
         modelCockpit = Assets.get("assets/app-models/cockpit-demo-noncommercial.fbx");
-        cloudOpacity = Assets.get("assets/app-textures/cloud-fade.png");
         cloudAtlas = Assets.get("assets/app-textures/cloud-atlas.png");
         // set the attributes
         modelCloud.materials[0].materialAttributes.put("u_time", 0.0f);
         modelCloud.materials[0].materialAttributes.put("u_frame", 0);
-        modelCloud.materials[0].materialAttributes.put("u_texture_opacity", cloudOpacity);
         modelCloud.materials[0].materialAttributes.put("u_texture_atlas", cloudAtlas);
 
-        String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/cloud-shader.vert");
-        String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/cloud-shader.frag");
+        String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/cloud-shader-2.vert");
+        String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/cloud-shader-2.frag");
         cloudShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
     }
 
@@ -114,46 +111,6 @@ public class SceneRendering3D_Scene_Basic_1 implements Scene {
         camera.update();
 
 
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,0,-0.05f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,0,0.05f);
-//        }
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,-0.05f, 0);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,0.05f,0);
-//        }
-
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) {
-//            transformCloud_1.translateGlobalAxisXYZ(-0.05f,0, 0);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.X)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0.05f,0,0);
-//        }
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-//            camera.rotateAroundForward(1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-//            camera.rotateAroundForward(-1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-//            camera.rotateAroundUp(1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-//            camera.rotateAroundUp(-1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-//            camera.rotateAroundRight(1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-//            camera.rotateAroundRight(-1f);
-//        }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             Renderer3D.lightDir.rotate(1,1,0,0);
         }
@@ -181,11 +138,9 @@ public class SceneRendering3D_Scene_Basic_1 implements Scene {
 //        });
 
         // TODO: sort by distance to camera!
-        //GL11.glDisable(GL11.GL_CULL_FACE); //
-        //GL20.glDepthMask(true);
-        //GL20.glDisable(GL20.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL20.glDepthMask(false);
         for (int i = 0; i < modelCloud.meshes.length; i++) {
-            System.out.println(modelCloud.materials.length);
             for (int j = 0; j < transformClouds.length; j++) {
                 Renderer3D.drawModel_cloud_shader_2(cloudShader, modelCloud.meshes[i], modelCloud.materials[i], transformClouds[j], j);
             }
