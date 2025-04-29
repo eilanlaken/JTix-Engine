@@ -162,10 +162,8 @@ public class SceneRendering3D_Basic_2 implements Scene {
             float d2 = camera.position.dst2(t2.getPosition(position_o2));
             return Float.compare(d2, d1); // farthest first
         });
-        int index = 0;
         for (RenderUnit renderUnit : rendrables_transparent) {
             Renderer3D.drawModel_cloud_shader_2(cloudShader, renderUnit.mesh, renderUnit.material, renderUnit.transform, renderUnit.userData);
-            index++;
         }
 
 
