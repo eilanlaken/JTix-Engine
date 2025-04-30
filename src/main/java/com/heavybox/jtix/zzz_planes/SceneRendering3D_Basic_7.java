@@ -38,7 +38,7 @@ public class SceneRendering3D_Basic_7 implements Scene {
     public Array<RenderUnit> rendrables_transparent = new Array<>();
 
     public Entity cockpit;
-    public Vector3 CAMERA_OFFSET_DEFAULT = new Vector3(0, -1f, 1.2f);
+    public Vector3 CAMERA_OFFSET_DEFAULT = new Vector3(0, -0.3f, 1.2f);
     public Vector3 COCKPIT_LOOK_AT_TARGET = new Vector3(0, 1.78f, 1.05f);
 
     public SceneRendering3D_Basic_7() {
@@ -238,11 +238,10 @@ public class SceneRendering3D_Basic_7 implements Scene {
         cockpit.transform.translateGlobalAxisXYZ(velocity.x * delta, velocity.y * delta, velocity.z * delta);
         if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
             cockpit.transform.rotateLocalAxisY(-1);
-            camera.rotateAroundForward(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
             cockpit.transform.rotateLocalAxisY(1);
-            camera.rotateAroundForward(1);
+//            camera.rotateAroundForward(1);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
@@ -254,6 +253,7 @@ public class SceneRendering3D_Basic_7 implements Scene {
             camera.rotateAroundRight(1);
         }
 
+        camera.up.set(cockpit.transform.getBasisZ(new Vector3()));
         Vector3 cockpitPosition = cockpit.transform.getPosition(new Vector3());
         Vector3 lookAt = new Vector3(COCKPIT_LOOK_AT_TARGET);
         lookAt.rot(cockpit.transform).add(cockpitPosition);
