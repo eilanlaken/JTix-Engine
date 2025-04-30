@@ -17,7 +17,7 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
     private Camera camera;
 
     public Model model_truck;
-    public Model model_ball;
+    public Model model_demo;
     public Model model_floor;
     public Matrix4x4 transform_truck = new Matrix4x4();
     public Matrix4x4 transform_floor = new Matrix4x4();
@@ -33,12 +33,12 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 
         Assets.loadModel("assets/models/floor.fbx");
         Assets.loadModel("assets/app-models/vehicle-truck_4.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/app-models/ball-PBR.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/city-block_1.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
         model_floor = Assets.get("assets/models/floor.fbx");
         model_truck = Assets.get("assets/app-models/vehicle-truck_4.fbx");
-        model_ball = Assets.get("assets/app-models/ball-PBR.fbx");
+        model_demo = Assets.get("assets/app-models/city-block_1.fbx");
 
     }
 
@@ -49,7 +49,7 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 
     @Override
     public void start() {
-        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 100, 75);
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
         camera.position.set(0, -7, 5);
 
         camera.lookAt(0,0,0);
@@ -157,8 +157,8 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
             //Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
         }
 
-        for (int i = 0; i < model_ball.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_ball.meshes[i], model_ball.materials[i], transform_ball);
+        for (int i = 0; i < model_demo.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_demo.meshes[i], model_demo.materials[i], transform_ball);
         }
         Renderer3D.end();
     }
