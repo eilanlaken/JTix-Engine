@@ -251,11 +251,25 @@ public class Renderer3D {
         Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
         currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
 
+        Texture texture_metallicMap = (Texture) material.materialAttributes.get("u_texture_metalness");
         float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
+        if (texture_metallicMap != null) {
+            currentShader.bindUniform("u_texture_metalness", texture_metallicMap);
+            currentShader.bindUniform("u_prop_metallic", 1);
+        } else {
+            currentShader.bindUniform("u_texture_metalness", whitePixelTexture);
+            currentShader.bindUniform("u_prop_metallic", metallic);
+        }
+
+        Texture texture_roughnessMap = (Texture) material.materialAttributes.get("u_texture_roughness");
         float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
-        // TODO: conditional uniform binding - based on the shader attribute.
-        currentShader.bindUniform("u_prop_metallic", metallic);
-        currentShader.bindUniform("u_prop_roughness", roughness);
+        if (texture_roughnessMap != null) {
+            currentShader.bindUniform("u_texture_roughness", texture_roughnessMap);
+            currentShader.bindUniform("u_prop_roughness", 1);
+        } else {
+            currentShader.bindUniform("u_texture_roughness", whitePixelTexture);
+            currentShader.bindUniform("u_prop_roughness", roughness);
+        }
 
         GL30.glBindVertexArray(mesh.vaoId);
         {

@@ -30,6 +30,8 @@ uniform DirectionalLight directionalLights[NUM_DIRECTIONAL_LIGHTS];
 
 // uniforms - PBR material
 uniform sampler2D u_texture_diffuse;
+uniform sampler2D u_texture_metalness;
+uniform sampler2D u_texture_roughness;
 uniform sampler2D u_texture_normalMap;
 uniform vec4 u_color_diffuse;
 uniform float u_prop_metallic; // TODO: add texture
@@ -83,9 +85,11 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 void main()
 {
     vec3 albedo = (u_color_diffuse * texture(u_texture_diffuse, uv)).rgb;
+    float metalness = u_prop_metallic * texture(u_texture_metalness, uv).r;
+    float roughness = u_prop_roughness * texture(u_texture_roughness, uv).r;
     vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
     vec3 V = unit_vertex_to_camera;
-    vec3 F0 = mix(vec3(0.04), albedo, u_prop_metallic);
+    vec3 F0 = mix(vec3(0.04), albedo, metalness);
 
     vec3 Lo = vec3(0.0);
 
@@ -99,8 +103,8 @@ void main()
         // cook-torrance brdf
         vec3 L = normalize(vertex_to_light[i]);
         vec3 H = normalize(V + L);
-        float NDF = distribution_GGX(N, H, u_prop_roughness);
-        float G = geometry_smith(N, V, L, u_prop_roughness);
+        float NDF = distribution_GGX(N, H, roughness);
+        float G = geometry_smith(N, V, L, roughness);
         vec3 F = fresnel_schlick(max(dot(H, V), 0.0), F0);
 
         vec3 numerator = NDF * G * F;
@@ -108,7 +112,7 @@ void main()
         vec3 specular = numerator / denominator;
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - u_prop_metallic;
+        kD *= 1.0 - metalness;
         // add to outgoing radiance Lo
         float NdotL = max(dot(N, L), 0.0);
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
@@ -121,8 +125,8 @@ void main()
         // cook-torrance brdf
         vec3 L = normalize(light_direction[i]);
         vec3 H = normalize(V + L);
-        float NDF = distribution_GGX(N, H, u_prop_roughness);
-        float G = geometry_smith(N, V, L, u_prop_roughness);
+        float NDF = distribution_GGX(N, H, roughness);
+        float G = geometry_smith(N, V, L, roughness);
         vec3 F = fresnel_schlick(max(dot(H, V), 0.0), F0);
 
         vec3 numerator = NDF * G * F;
@@ -130,7 +134,7 @@ void main()
         vec3 specular = numerator / denominator;
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - u_prop_metallic;
+        kD *= 1.0 - metalness;
         // add to outgoing radiance Lo
         float NdotL = max(dot(N, L), 0.0);
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
@@ -145,6 +149,9 @@ void main()
     color = color / (color + vec3(0.05));
     // gamma correct
     //color = pow(color, vec3(1.0/2.2));
+
     out_color = vec4(color, 1.0);
+    //out_color = vec4(u_prop_metallic, u_prop_metallic, u_prop_metallic, 1.0);
+    //out_color = vec4(roughness, roughness, roughness, 1.0);
 }
 

@@ -154,7 +154,7 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 //        }
 
         for (int i = 0; i < model_floor.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
+            //Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
         }
 
         for (int i = 0; i < model_ball.meshes.length; i++) {
