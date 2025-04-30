@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL20;
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
 // https://www.youtube.com/watch?v=sNXj0RN09ps
-public class SceneRendering3D_Basic_7 implements Scene {
+public class SceneRendering3D_Basic_8 implements Scene {
 
     private Camera camera;
 
@@ -38,10 +38,10 @@ public class SceneRendering3D_Basic_7 implements Scene {
     public Array<RenderUnit> rendrables_transparent = new Array<>();
 
     public Entity cockpit;
-    public Vector3 CAMERA_OFFSET_DEFAULT = new Vector3(0, -0.3f, 1.2f);
+    public Vector3 CAMERA_OFFSET_DEFAULT = new Vector3(0, -0.1f, 1.1f);
     public Vector3 COCKPIT_LOOK_AT_TARGET = new Vector3(0, 1.78f, 1.05f);
 
-    public SceneRendering3D_Basic_7() {
+    public SceneRendering3D_Basic_8() {
     }
 
     @Override
@@ -247,24 +247,29 @@ public class SceneRendering3D_Basic_7 implements Scene {
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
             cockpit.transform.rotateLocalAxisX(-1);
-            camera.rotateAroundRight(-1);
+            //camera.rotateAroundRight(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
             cockpit.transform.rotateLocalAxisX(1);
-            camera.rotateAroundRight(1);
+            //camera.rotateAroundRight(1);
         }
 
-        camera.up.set(cockpit.transform.getBasisZ(new Vector3()));
+        // Do this with the target look at as well.
+        Vector3 targetUp = cockpit.transform.getBasisZ(new Vector3());
         Vector3 cockpitPosition = cockpit.transform.getPosition(new Vector3());
-        Vector3 lookAt = new Vector3(COCKPIT_LOOK_AT_TARGET);
-        lookAt.rot(cockpit.transform).add(cockpitPosition);
+
+        Vector3 targetLookAt = new Vector3(COCKPIT_LOOK_AT_TARGET);
+        targetLookAt.rot(cockpit.transform).add(cockpitPosition);
         Vector3 cameraPosition = new Vector3(CAMERA_OFFSET_DEFAULT);
         cameraPosition.rot(cockpit.transform).add(cockpitPosition);
 
-
+        Vector3 forward = camera.forward;
+        Vector3 targetForward = new Vector3(COCKPIT_LOOK_AT_TARGET).sub(CAMERA_OFFSET_DEFAULT).rot(cockpit.transform);
 
         camera.position.set(cameraPosition);
-        camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+        camera.up.slerp(targetUp, 0.1f);
+        camera.forward.slerp(targetForward, 0.1f);
+        //camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
         camera.update();
     }
 
