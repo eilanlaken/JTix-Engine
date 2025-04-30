@@ -38,7 +38,7 @@ public class SceneRendering3D_Basic_8 implements Scene {
     public Array<RenderUnit> rendrables_transparent = new Array<>();
 
     public Entity cockpit;
-    public Vector3 CAMERA_OFFSET_DEFAULT = new Vector3(0, -0.1f, 1.1f);
+    public Vector3 CAMERA_OFFSET_DEFAULT = new Vector3(0, -0.0f, 1.1f);
     public Vector3 COCKPIT_LOOK_AT_TARGET = new Vector3(0, 1.78f, 1.05f);
 
     public SceneRendering3D_Basic_8() {
@@ -260,15 +260,15 @@ public class SceneRendering3D_Basic_8 implements Scene {
 
         Vector3 targetLookAt = new Vector3(COCKPIT_LOOK_AT_TARGET);
         targetLookAt.rot(cockpit.transform).add(cockpitPosition);
-        Vector3 cameraPosition = new Vector3(CAMERA_OFFSET_DEFAULT);
-        cameraPosition.rot(cockpit.transform).add(cockpitPosition);
+        Vector3 cameraTargetPosition = new Vector3(CAMERA_OFFSET_DEFAULT);
+        cameraTargetPosition.rot(cockpit.transform).add(cockpitPosition);
 
         Vector3 forward = camera.forward;
         Vector3 targetForward = new Vector3(COCKPIT_LOOK_AT_TARGET).sub(CAMERA_OFFSET_DEFAULT).rot(cockpit.transform);
 
-        camera.position.set(cameraPosition);
-        camera.up.slerp(targetUp, 0.1f);
-        camera.forward.slerp(targetForward, 0.1f);
+        camera.position.set(cameraTargetPosition);
+        camera.up.slerp(targetUp, 0.08f);
+        camera.forward.slerp(targetForward, 0.08f);
         //camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
         camera.update();
     }
