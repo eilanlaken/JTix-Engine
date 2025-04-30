@@ -238,7 +238,6 @@ public class Renderer3D {
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
-
         if (texture_diffuse != null) {
             currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
             currentShader.bindUniform("u_color_diffuse", Color.WHITE);

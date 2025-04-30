@@ -35,6 +35,8 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
         uniformNameTextureTypes.put("u_texture_normalMap", Assimp.aiTextureType_NORMALS);
         uniformNameTextureTypes.put("u_texture_opacity", Assimp.aiTextureType_OPACITY);
+        uniformNameTextureTypes.put("u_texture_metalness", Assimp.aiTextureType_METALNESS);
+        uniformNameTextureTypes.put("u_texture_roughness", Assimp.aiTextureType_SHININESS); // TODO
 
         // all possible material color parameters
         namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
@@ -179,6 +181,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 if (result == Assimp.aiReturn_SUCCESS) {
                     MaterialTextureData materialTexture = new MaterialTextureData();
                     materialTexture.uniform = entry.key;
+                    System.out.println(entry.key + " ::: " + ai_path.dataString());
                     if (texturesFolderPath != null) {
                         Path base = Paths.get(texturesFolderPath);
                         String fileName = Paths.get(ai_path.dataString()).getFileName().toString();
