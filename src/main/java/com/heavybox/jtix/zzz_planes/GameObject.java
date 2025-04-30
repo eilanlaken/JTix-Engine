@@ -11,7 +11,8 @@ public class GameObject {
     public Array<Logic> logics = new Array<>();
 
     public GameObject(Matrix4x4 transform, Model model) {
-
+        this.transform = transform;
+        this.model = model;
     }
 
     public static abstract class Logic {

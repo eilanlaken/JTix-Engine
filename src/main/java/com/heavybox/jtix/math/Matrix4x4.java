@@ -1431,8 +1431,8 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    // TODO: test
-    public Matrix4x4 setFromBasis(Vector3 b1, Vector3 b2, Vector3 b3, Vector3 position, Vector3 scale) {
+    // TODO: remove this. this is questionable.
+    @Deprecated public Matrix4x4 setFromBasis(Vector3 b1, Vector3 b2, Vector3 b3, Vector3 position, Vector3 scale) {
         val[M00] = scale.x * b1.x;
         val[M10] = scale.x * b1.y;
         val[M20] = scale.x * b1.z;
