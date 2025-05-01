@@ -24,8 +24,6 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
     public Texture terrainStone;
     public Texture terrainWater;
 
-    public Model model_gameobject;
-
     public Matrix4x4 transform_terrain = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
 
@@ -138,7 +136,6 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
-        model_gameobject = Assets.get(Constants.MODELS_FILE_PATH_FIELDS[3]);
 
     }
 
