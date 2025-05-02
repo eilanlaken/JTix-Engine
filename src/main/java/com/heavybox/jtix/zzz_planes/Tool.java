@@ -38,6 +38,7 @@ public abstract class Tool {
         token.userData.put("path", path);
         token.userData.put("position", token.transform.getPosition(new Vector3()));
         token.userData.put("rotation", token.transform.getRotation(new Quaternion()));
+        token.userData.put("scale", token.transform.getScale(new Vector3()));
     }
 
     public abstract void render();
