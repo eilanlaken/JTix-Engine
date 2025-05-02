@@ -5,10 +5,10 @@ public class Constants {
     public static final String MODELS_TEXTURES_PATH = "assets/app-models/textures";
 
     public static final String[] MODELS_FILE_PATH_FIELDS = {
-            "assets/app-models/fields-green.fbx",
-            "assets/app-models/fields-purple.fbx",
-            "assets/app-models/fields-red.fbx",
-            "assets/app-models/fields-yellow.fbx",
+            "assets/app-models/prop-fields-green.fbx",
+            "assets/app-models/prop-fields-purple.fbx",
+            "assets/app-models/prop-fields-red.fbx",
+            "assets/app-models/prop-fields-yellow.fbx",
     };
 
     public static final String[] MODELS_FILE_PATH_PROP_SHIPPING_CONTAINERS = {

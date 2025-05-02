@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-public class ScenePlanesGame_TileBuilder_4 implements Scene {
+public class ScenePlanesGame_TileBuilder_5 implements Scene {
 
     private Camera camera;
 
@@ -37,7 +37,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
     public ToolTreeStamp toolTreeStamp;
     public ToolPropStamp toolPropStamp;
 
-    public ScenePlanesGame_TileBuilder_4() {
+    public ScenePlanesGame_TileBuilder_5() {
 
     }
 

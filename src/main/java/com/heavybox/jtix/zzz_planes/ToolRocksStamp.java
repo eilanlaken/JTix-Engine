@@ -38,9 +38,7 @@ public class ToolRocksStamp extends Tool {
             scale += Math.signum(-Input.mouse.getYDelta()) * 0.1f;
             System.out.println(scale);
             Vector3 currentScale = rock.transform.getScale(new Vector3());
-
             rock.transform.scale(scale / currentScale.x, scale / currentScale.y, scale / currentScale.z);
-            System.out.println(rock.transform);
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
             TerrainToken token = new TerrainToken();
             token.model = rock.model;

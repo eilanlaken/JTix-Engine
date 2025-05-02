@@ -11,6 +11,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 
 public class ToolPropStamp extends Tool {
@@ -45,6 +46,10 @@ public class ToolPropStamp extends Tool {
             if (currentType == PropType.TRANSMISSION_TOWER_LINES) {
                 token.transform.translateLocalAxis(0,0,10.002f);
             }
+            Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+            float z = getHeight(xy.x, xy.y);
+            token.transform.translateGlobalAxisXYZ(0, 0, z);
+
             gameObjects.add(token);
             currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
             prop.model = getModel(currentType);
@@ -83,7 +88,10 @@ public class ToolPropStamp extends Tool {
         WIND_TURBINE_FAN("assets/app-models/prop-wind-turbine-tower.fbx"),
         WINDMILL_1("assets/app-models/prop-windmill_1.fbx"),
         WINDMILL_2("assets/app-models/prop-windmill_2.fbx"),
-
+        WHEAT_FIELD_1("assets/app-models/prop-fields-green.fbx"),
+        WHEAT_FIELD_2("assets/app-models/prop-fields-purple.fbx"),
+        WHEAT_FIELD_3("assets/app-models/prop-fields-red.fbx"),
+        WHEAT_FIELD_4("assets/app-models/prop-fields-yellow.fbx"),
         ;
 
         public final String prefix;
