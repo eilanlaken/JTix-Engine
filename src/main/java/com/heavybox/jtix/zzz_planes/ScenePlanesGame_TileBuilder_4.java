@@ -11,6 +11,8 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Map;
+
 public class ScenePlanesGame_TileBuilder_4 implements Scene {
 
     private Camera camera;
@@ -25,11 +27,8 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
     public Texture terrainWater;
 
     public Matrix4x4 transform_terrain = new Matrix4x4();
-    Renderer2D renderer2D = new Renderer2D();
 
-    private GameObjectAirplane airplane = new GameObjectAirplane();
-
-    private Array<TerrainToken> gameObjects = new Array<>(false, 10);
+    private final Array<TerrainToken> tokens = new Array<>(false, 10);
 
     // tools
     public Tool activeTool;
@@ -154,9 +153,9 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
 
         camera.update();
 
-        this.toolHouseStamp = new ToolHouseStamp(camera, gameObjects, terrainHeightMap);
-        this.toolTreeStamp = new ToolTreeStamp(camera, gameObjects, terrainHeightMap);
-        this.toolPropStamp = new ToolPropStamp(camera, gameObjects, terrainHeightMap);
+        this.toolHouseStamp = new ToolHouseStamp(camera, tokens, terrainHeightMap);
+        this.toolTreeStamp = new ToolTreeStamp(camera, tokens, terrainHeightMap);
+        this.toolPropStamp = new ToolPropStamp(camera, tokens, terrainHeightMap);
 
         this.activeTool = toolHouseStamp;
     }
@@ -166,13 +165,11 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
     public void update() {
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
-
         float scroll = Input.mouse.getVerticalScroll();
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.INSERT)) {
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.TAB)) {
             if (camera.mode == Camera.Mode.ORTHOGRAPHIC) camera.mode = Camera.Mode.PERSPECTIVE;
             else camera.mode = Camera.Mode.ORTHOGRAPHIC;
-        }
-        if (Input.mouse.getVerticalScroll() != 0) {
+        } else if (Input.mouse.getVerticalScroll() != 0) {
             if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 30);
             else camera.zoom += 0.04f * scroll;
         } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
@@ -190,6 +187,10 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
             camera.rotateAroundRight(panVertical * 5);
         }
         camera.update();
+
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.X)) {
+            if (tokens.size != 0) tokens.removeIndex(tokens.size - 1);
+        }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_1)) {
             activeTool = toolHouseStamp;
@@ -212,10 +213,6 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
 
-        renderer2D.begin();
-        //renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);
-        renderer2D.end();
-
         Renderer3D.begin(camera);
         //System.out.println("----");
         for (int i = 0; i < terrain.meshes.length; i++) {
@@ -229,7 +226,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         // draw tools overlay
         if (activeTool != null) activeTool.render();
 
-        for (TerrainToken terrainToken : gameObjects) {
+        for (TerrainToken terrainToken : tokens) {
             Model model = terrainToken.model;
             Matrix4x4 transform = terrainToken.transform;
             for (int i = 0; i < model.meshes.length; i++) {
@@ -241,34 +238,25 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
 
     private void toXML() {
         System.out.println("<tokens>");
-        for (TerrainToken terrainToken : gameObjects) {
-            System.out.println("\t<obj>");
-            System.out.println("\t\t" + "<object type=/>");
-            System.out.println("\t</obj>");
+        for (TerrainToken terrainToken : tokens) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("\t<").append("token");
+            for (Map.Entry<String, Object> entry : terrainToken.userData.entrySet()) {
+                sb.append(" ").append(entry.getKey())
+                        .append("=\"").append(escapeXml(entry.getValue().toString())).append("\"");
+            }
+            sb.append(" />\n");
+            System.out.print(sb);
         }
         System.out.println("</tokens>");
     }
 
-    private void getHeight(float x, float y) {
-        // convert to index:
-        int i = (int) (((x + 256) / 512f) * 256);
-        int j = (int) (((256 - y) / 512f) * 256);
-        System.out.println(i + ", " + j);
-        // sample color
-        Color color = terrainHeightMap.getPixelColor(i, j);
-        System.out.println(color);
-    }
-
-    private void update_gameplay() {
-        float delta = Graphics.getDeltaTime();
-        Vector3 velocity = new Vector3(camera.forward).scl(airplane.speed);
-        camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) airplane.speed += delta * 20;
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) airplane.speed -= delta * 20;
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) camera.rotateAroundForward(delta * -90);
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) camera.rotateAroundForward(delta * 90);
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) camera.rotateAroundRight(delta * -90);
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) camera.rotateAroundRight(delta * 90);
+    private static String escapeXml(String s) {
+        return s.replace("&", "&amp;")
+                .replace("\"", "&quot;")
+                .replace("'", "&apos;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
     }
 
 }

@@ -38,16 +38,17 @@ public class ToolPropStamp extends Tool {
         if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
             prop.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            TerrainToken go = new TerrainToken();
-            go.model = prop.model;
-            go.transform = prop.transform.cpy();
+            TerrainToken token = new TerrainToken();
+            token.model = prop.model;
+            token.transform = prop.transform.cpy();
             // adjustments
             if (currentType == PropType.TRANSMISSION_TOWER_LINES) {
-                go.transform.translateLocalAxis(0,0,10.002f);
+                token.transform.translateLocalAxis(0,0,10.002f);
             }
-            gameObjects.add(go);
+            gameObjects.add(token);
             currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
             prop.model = getModel(currentType);
+            writeData(token, PropType.class.getSimpleName(), currentType.prefix);
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {

@@ -4,11 +4,13 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Color;
 import com.heavybox.jtix.graphics.Texture;
+import com.heavybox.jtix.math.Quaternion;
+import com.heavybox.jtix.math.Vector3;
 
 public abstract class Tool {
 
     public static final float MAX_HEIGHT = 25.0f;
-    public static final float MIN_HEIGHT = -25.0f;
+    public static final float MIN_HEIGHT = -MAX_HEIGHT;
     public static final float TILE_SIZE = 512;
 
     public Camera camera;
@@ -23,13 +25,19 @@ public abstract class Tool {
 
     public float getHeight(float x, float y) {
         // convert to index:
-        int i = (int) (((x + 256) / 512f) * 256);
-        int j = (int) (((256 - y) / 512f) * 256);
-        System.out.println(i + ", " + j);
+        int i = (int) (((x + 256f) / TILE_SIZE) * 256f);
+        int j = (int) (((256f - y) / TILE_SIZE) * 256f);
         // sample color
         Color color = heightMap.getPixelColor(i, j);
         float height = color.r;
         return MIN_HEIGHT + height * (MAX_HEIGHT - MIN_HEIGHT);
+    }
+
+    public void writeData(TerrainToken token, String type, String path) {
+        token.userData.put("type", type);
+        token.userData.put("path", path);
+        token.userData.put("position", token.transform.getPosition(new Vector3()));
+        token.userData.put("rotation", token.transform.getRotation(new Quaternion()));
     }
 
     public abstract void render();

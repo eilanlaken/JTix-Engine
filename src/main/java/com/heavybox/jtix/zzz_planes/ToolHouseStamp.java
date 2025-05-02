@@ -11,6 +11,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Vector2;
 import com.heavybox.jtix.math.Vector3;
 
 public class ToolHouseStamp extends Tool {
@@ -35,13 +36,16 @@ public class ToolHouseStamp extends Tool {
         if (Input.mouse.isButtonPressed(Mouse.Button.RIGHT)) {
             house.transform.rotateLocalAxisZ(Input.mouse.getYDelta());
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
-            TerrainToken go = new TerrainToken();
-            go.model = house.model;
-            go.transform = house.transform.cpy();
-            gameObjects.add(go);
+            TerrainToken token = new TerrainToken();
+            token.model = house.model;
+            token.transform = house.transform.cpy();
+            Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+            float z = getHeight(xy.x, xy.y);
+            token.transform.translateGlobalAxisXYZ(0, 0, z);
+            gameObjects.add(token);
             currentIndex = MathUtils.randomUniformInt(0, 6);
             house.model = getModel(currentType, currentIndex);
-            getHeight(go.transform.getPositionX(), go.transform.getPositionY());
+            writeData(token, HouseType.class.getSimpleName(), currentType.prefix + (currentIndex + 1) + ".fbx");
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
             currentIndex = 0;
             if (currentType == HouseType.SMALL) currentType = HouseType.BIG;

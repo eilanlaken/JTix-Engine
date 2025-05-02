@@ -181,7 +181,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 if (result == Assimp.aiReturn_SUCCESS) {
                     MaterialTextureData materialTexture = new MaterialTextureData();
                     materialTexture.uniform = entry.key;
-                    System.out.println(entry.key + " ::: " + ai_path.dataString());
                     if (texturesFolderPath != null) {
                         Path base = Paths.get(texturesFolderPath);
                         String fileName = Paths.get(ai_path.dataString()).getFileName().toString();

@@ -9,15 +9,12 @@ import com.heavybox.jtix.graphics.Texture;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
-import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Vector2;
-import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.math.*;
 
 public class ToolTreeStamp extends Tool {
 
-    public static final float BRUSH_SIZE = 10;
-    public static final int TREES_MAX_FLUX = 10;
+    public static final float BRUSH_SIZE = 15;
+    public static final int TREES_MAX_FLUX = 15;
 
     private static final int[] allowedIndices = {3};
 
@@ -57,23 +54,27 @@ public class ToolTreeStamp extends Tool {
                     positionOccupied |= Vector2.dst(position, placement) < 1.5f;
                 }
                 if (positionOccupied) {
-                    System.out.println("occupied");
                     continue;
                 }
 
                 Vector2 offset = new Vector2(placement.x - middle.x, placement.y - middle.y);
-                TerrainToken go = new TerrainToken();
-                go.model = tree.model;
-                go.transform = tree.transform.cpy();
-                go.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
-                go.transform.translateGlobalAxisXYZ(offset.x, offset.y, 0);
-                Vector2 xy = new Vector2(go.transform.getPositionX(), go.transform.getPositionY());
+                TerrainToken token = new TerrainToken();
+                token.model = tree.model;
+                token.transform = tree.transform.cpy();
+                token.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
+                token.transform.translateGlobalAxisXYZ(offset.x, offset.y, 0);
+                Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
                 float z = getHeight(xy.x, xy.y);
-                go.transform.translateGlobalAxisXYZ(0, 0, z);
-                gameObjects.add(go);
+                token.transform.translateGlobalAxisXYZ(0, 0, z);
+                writeData(token, TreeType.class.getSimpleName(), currentType.prefix + (currentIndex + 1) + ".fbx");
+//                token.userData.put("type", TreeType.class.getSimpleName());
+//                token.userData.put("path", currentType.prefix + (currentIndex + 1) + ".fbx");
+//                token.userData.put("position", token.transform.getPosition(new Vector3()));
+//                token.userData.put("rotation", token.transform.getRotation(new Quaternion()));
+                gameObjects.add(token);
                 currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
                 tree.model = getModel(currentType, currentIndex);
-                Vector2 placed = new Vector2(go.transform.getPositionX(), go.transform.getPositionY());
+                Vector2 placed = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
                 occupied.add(placed);
             }
 
