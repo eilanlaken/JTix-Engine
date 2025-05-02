@@ -83,6 +83,7 @@ public class ToolPropStamp extends Tool {
         WIND_TURBINE_FAN("assets/app-models/prop-wind-turbine-tower.fbx"),
         WINDMILL_1("assets/app-models/prop-windmill_1.fbx"),
         WINDMILL_2("assets/app-models/prop-windmill_2.fbx"),
+
         ;
 
         public final String prefix;

@@ -33,6 +33,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
     // tools
     public Tool activeTool;
     public ToolHouseStamp toolHouseStamp;
+    public ToolRocksStamp toolRockStamp;
     public ToolTreeStamp toolTreeStamp;
     public ToolPropStamp toolPropStamp;
 
@@ -154,6 +155,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         camera.update();
 
         this.toolHouseStamp = new ToolHouseStamp(camera, tokens, terrainHeightMap);
+        this.toolRockStamp = new ToolRocksStamp(camera, tokens, terrainHeightMap);
         this.toolTreeStamp = new ToolTreeStamp(camera, tokens, terrainHeightMap);
         this.toolPropStamp = new ToolPropStamp(camera, tokens, terrainHeightMap);
 
@@ -198,6 +200,8 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
             activeTool = toolTreeStamp;
         } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_3)) {
             activeTool = toolPropStamp;
+        } else if (Input.keyboard.isKeyJustPressed(Keyboard.Key.KEY_4)) {
+            activeTool = toolRockStamp;
         }
 
         // update tools
