@@ -37,12 +37,16 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
     public ToolTreeStamp toolTreeStamp;
     public ToolPropStamp toolPropStamp;
 
+    public Model model_demo;
+
+
     public ScenePlanesGame_TileBuilder_4() {
 
     }
 
     @Override
     public void setup() {
+        Assets.loadModel("assets/app-models/city-block_2.fbx", "assets/app-models/textures");
 
         String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.vert");
         String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.frag");
@@ -113,7 +117,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         // load terrain
         Assets.loadModel("assets/models/terrain-block.fbx");
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/heightmap-sea-level.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -121,7 +125,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         Assets.finishLoading();
 
         terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
-        terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
+        terrainHeightMap = Assets.get("assets/app-textures/heightmap-sea-level.png");
         terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
         terrainGrass = Assets.get("assets/app-textures/terrain-grass.jpg");
         terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
@@ -136,6 +140,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
+        model_demo = Assets.get("assets/app-models/city-block_2.fbx");
 
     }
 
@@ -243,6 +248,13 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
                 Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
             }
         }
+
+        for (int i = 0; i < model_demo.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_demo.meshes[i], model_demo.materials[i], new Matrix4x4().translateGlobalAxisXYZ(0,0,0.5f));
+        }
+
+
+
         Renderer3D.end();
     }
 
