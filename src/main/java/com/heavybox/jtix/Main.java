@@ -2,10 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
-import com.heavybox.jtix.zzz_planes.ScenePlanesGame_TileBuilder_4;
-import com.heavybox.jtix.zzz_planes.ScenePlanesGame_TileBuilder_5;
-import com.heavybox.jtix.zzz_planes.SceneRendering3D_Basic_9;
-import com.heavybox.jtix.zzz_planes.SceneRendering3D_Trailer_1;
+import com.heavybox.jtix.zzz_planes.*;
 
 import java.io.IOException;
 
@@ -72,7 +69,7 @@ public class Main {
         //settings.height = 1080;
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new ScenePlanesGame_TileBuilder_4());
+        Application.launch(new ScenePlanesGame_Mountains_1());
 
     }
 

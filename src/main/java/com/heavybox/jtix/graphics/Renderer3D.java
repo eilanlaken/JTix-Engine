@@ -362,11 +362,6 @@ public class Renderer3D {
         ShaderBinder.bind(shader);
         //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            lightDir.rotate(1,1,0,0);
-        }
-
-
         // TODO: bind environment lights when binding the camera.
         try {
             shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.

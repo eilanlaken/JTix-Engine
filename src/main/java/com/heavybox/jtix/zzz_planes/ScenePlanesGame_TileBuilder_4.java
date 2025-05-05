@@ -46,7 +46,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
 
     @Override
     public void setup() {
-        Assets.loadModel("assets/app-models/city-block_2.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/city-block_1.fbx", "assets/app-models/textures");
 
         String vertexShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.vert");
         String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/terrain-shader.frag");
@@ -140,7 +140,7 @@ public class ScenePlanesGame_TileBuilder_4 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
-        model_demo = Assets.get("assets/app-models/city-block_2.fbx");
+        model_demo = Assets.get("assets/app-models/city-block_1.fbx");
 
     }
 
