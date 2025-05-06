@@ -77,10 +77,13 @@ void main()
     float slope = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
     slope = slope * slope * slope;
     float snowWeight = smoothstep(0, MAX_HEIGHT, height);
-    vec4 grass = texture(u_texture_grass, uv);
-    vec4 rock = texture(u_texture_stone, uv);
-    vec4 snow = texture(u_texture_snow, uv);
-    vec4 blend_map_color = (snow * snowWeight + grass * (1 - snowWeight)) * (slope) + rock * (1 - slope);
+    vec2 scaled_uv = uv * 4.0;
+    vec4 grass = texture(u_texture_grass, scaled_uv);
+    vec4 rock = texture(u_texture_stone, scaled_uv);
+    vec4 snow = texture(u_texture_snow, scaled_uv);
+    float not_rock_factor = slope;
+    float rock_factor = 1 - not_rock_factor;
+    vec4 blend_map_color = (snow * snowWeight + grass * (1 - snowWeight)) * (not_rock_factor) + rock * rock_factor;
     vec3 albedo = blend_map_color.rgb;
 
     vec3 V = unit_vertex_to_camera;

@@ -57,7 +57,7 @@ public class ScenePlanesGame_Mountains_1 implements Scene {
 
         // load terrain
         Assets.loadModel("assets/models/terrain-block.fbx");
-        Assets.loadModel("assets/app-models/mountains.fbx");
+        Assets.loadModel("assets/app-models/mountain-1024_2.fbx");
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/heightmap-sea-level.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -84,7 +84,7 @@ public class ScenePlanesGame_Mountains_1 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
-        mountain = Assets.get("assets/app-models/mountains.fbx");
+        mountain = Assets.get("assets/app-models/mountain-1024_2.fbx");
         mountain.materials[0].materialAttributes.put("u_texture_grass", terrainGrass);
         mountain.materials[0].materialAttributes.put("u_texture_stone", terrainStone);
         mountain.materials[0].materialAttributes.put("u_texture_snow", terrainSnow);
