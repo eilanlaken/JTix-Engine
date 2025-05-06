@@ -88,10 +88,10 @@ public class ToolPropStamp extends Tool {
         WIND_TURBINE_FAN("assets/app-models/prop-wind-turbine-tower.fbx"),
         WINDMILL_1("assets/app-models/prop-windmill_1.fbx"),
         WINDMILL_2("assets/app-models/prop-windmill_2.fbx"),
-        WHEAT_FIELD_1("assets/app-models/prop-fields-green.fbx"),
-        WHEAT_FIELD_2("assets/app-models/prop-fields-purple.fbx"),
-        WHEAT_FIELD_3("assets/app-models/prop-fields-red.fbx"),
-        WHEAT_FIELD_4("assets/app-models/prop-fields-yellow.fbx"),
+        WHEAT_FIELD_1("assets/app-models/fields_1.fbx"),
+        WHEAT_FIELD_2("assets/app-models/fields_2.fbx"),
+        WHEAT_FIELD_3("assets/app-models/fields_3.fbx"),
+        WHEAT_FIELD_4("assets/app-models/fields_4.fbx"),
         ;
 
         public final String prefix;

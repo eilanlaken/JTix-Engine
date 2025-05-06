@@ -29,7 +29,8 @@ public class ScenePlanesGame_Mountains_2 implements Scene {
 
     private final Array<TerrainToken> tokens = new Array<>(false, 10);
 
-    public Model mountain;
+    public Model mountain_1;
+    public Model mountain_2;
     public Shader mountainShader;
 
 
@@ -56,6 +57,7 @@ public class ScenePlanesGame_Mountains_2 implements Scene {
         // load terrain
         Assets.loadModel("assets/models/terrain-block.fbx");
         Assets.loadModel("assets/app-models/mountain_3.fbx");
+        Assets.loadModel("assets/app-models/mountain_2.fbx");
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -82,10 +84,15 @@ public class ScenePlanesGame_Mountains_2 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
-        mountain = Assets.get("assets/app-models/mountain_3.fbx");
-        mountain.materials[0].materialAttributes.put("u_texture_grass", terrainGrass);
-        mountain.materials[0].materialAttributes.put("u_texture_stone", terrainStone);
-        mountain.materials[0].materialAttributes.put("u_texture_snow", terrainSnow);
+        mountain_1 = Assets.get("assets/app-models/mountain_3.fbx");
+        mountain_1.materials[0].materialAttributes.put("u_texture_grass", terrainGrass);
+        mountain_1.materials[0].materialAttributes.put("u_texture_stone", terrainStone);
+        mountain_1.materials[0].materialAttributes.put("u_texture_snow", terrainSnow);
+
+        mountain_2 = Assets.get("assets/app-models/mountain_2.fbx");
+        mountain_2.materials[0].materialAttributes.put("u_texture_grass", terrainGrass);
+        mountain_2.materials[0].materialAttributes.put("u_texture_stone", terrainStone);
+        mountain_2.materials[0].materialAttributes.put("u_texture_snow", terrainSnow);
     }
 
     @Override
@@ -153,8 +160,12 @@ public class ScenePlanesGame_Mountains_2 implements Scene {
             Renderer3D.drawModel_custom_shader_2(terrainShader, terrain.meshes[i], terrain.materials[i], transform_terrain);
         }
 
-        for (int i = 0; i < mountain.meshes.length; i++) {
-            Renderer3D.drawModel_custom_shader_2(mountainShader, mountain.meshes[i], mountain.materials[i], new Matrix4x4().translateGlobalAxisXYZ(1024,0,0));
+        for (int i = 0; i < mountain_1.meshes.length; i++) {
+            Renderer3D.drawModel_custom_shader_2(mountainShader, mountain_1.meshes[i], mountain_1.materials[i], new Matrix4x4().translateGlobalAxisXYZ(512+255,0,0));
+        }
+
+        for (int i = 0; i < mountain_2.meshes.length; i++) {
+            Renderer3D.drawModel_custom_shader_2(mountainShader, mountain_2.meshes[i], mountain_2.materials[i], new Matrix4x4().translateGlobalAxisXYZ(512+255,1024,0));
         }
 
         for (TerrainToken terrainToken : tokens) {
