@@ -85,7 +85,9 @@ public class ScenePlanesGame_Mountains_1 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
 
         mountain = Assets.get("assets/app-models/mountains.fbx");
+        mountain.materials[0].materialAttributes.put("u_texture_grass", terrainGrass);
         mountain.materials[0].materialAttributes.put("u_texture_stone", terrainStone);
+        mountain.materials[0].materialAttributes.put("u_texture_snow", terrainSnow);
     }
 
     @Override
@@ -96,7 +98,7 @@ public class ScenePlanesGame_Mountains_1 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
-        camera.position.set(0, -40, 0);
+        camera.position.set(0, -550, 250);
         camera.lookAt(0,0,0);
         camera.update();
     }

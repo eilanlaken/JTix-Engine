@@ -2,6 +2,7 @@
 #version 450
 
 #define PI 3.1415926538
+#define MAX_HEIGHT 762.318
 
 // structs defitions
 struct DirectionalLight {
@@ -73,13 +74,17 @@ void main()
     float height = world_vertex_position.z;
     vec3 N = normal;
 
-    // TODO: for now, draw a single texture. Next, we combine 3 textures based on height and normal.
-    vec4 blend_map_color = texture(u_texture_stone, uv);
+    float slope = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
+    slope = slope * slope * slope;
+    float snowWeight = smoothstep(0, MAX_HEIGHT, height);
+    vec4 grass = texture(u_texture_grass, uv);
+    vec4 rock = texture(u_texture_stone, uv);
+    vec4 snow = texture(u_texture_snow, uv);
+    vec4 blend_map_color = (snow * snowWeight + grass * (1 - snowWeight)) * (slope) + rock * (1 - slope);
     vec3 albedo = blend_map_color.rgb;
 
     vec3 V = unit_vertex_to_camera;
     vec3 F0 = mix(vec3(0.04), albedo, 0.0);
-
     vec3 Lo = vec3(0.0);
 
     // summation over all point light sources
