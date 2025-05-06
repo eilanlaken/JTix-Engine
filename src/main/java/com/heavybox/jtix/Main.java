@@ -69,7 +69,7 @@ public class Main {
         //settings.height = 1080;
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new ScenePlanesGame_TileBuilder_5());
+        Application.launch(new SceneRendering3D_ModelsImport_2());
 
     }
 

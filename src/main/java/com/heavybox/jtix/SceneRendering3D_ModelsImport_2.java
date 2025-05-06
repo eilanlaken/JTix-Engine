@@ -16,8 +16,7 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 
     private Camera camera;
 
-    public Model model_truck;
-    public Model model_demo;
+    public Model model_import;
     public Model model_floor;
     public Matrix4x4 transform_truck = new Matrix4x4();
     public Matrix4x4 transform_floor = new Matrix4x4();
@@ -32,13 +31,12 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
     public void setup() {
 
         Assets.loadModel("assets/models/floor.fbx");
-        Assets.loadModel("assets/app-models/vehicle-truck_4.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/plane_1.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/city-block_1.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
         model_floor = Assets.get("assets/models/floor.fbx");
-        model_truck = Assets.get("assets/app-models/vehicle-truck_4.fbx");
-        model_demo = Assets.get("assets/app-models/city-block_1.fbx");
+        model_import = Assets.get("assets/app-models/plane_1.fbx");
 
     }
 
@@ -142,23 +140,21 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0.247f,0.247f,0.247f,1);
+        GL11.glClearColor(0,0,0,1);
 
         renderer2D.begin();
         //renderer2D.drawCircleFilled(300, 30,0,0,0,1,1);
         renderer2D.end();
 
         Renderer3D.begin(camera);
-//        for (int i = 0; i < model_truck.meshes.length; i++) {
-//            Renderer3D.drawModel_tmp_5(model_truck.meshes[i], model_truck.materials[i], transform_truck);
-//        }
+
 
         for (int i = 0; i < model_floor.meshes.length; i++) {
-            //Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
+            Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
         }
 
-        for (int i = 0; i < model_demo.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_demo.meshes[i], model_demo.materials[i], transform_ball);
+        for (int i = 0; i < model_import.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_import.meshes[i], model_import.materials[i], transform_truck);
         }
         Renderer3D.end();
     }

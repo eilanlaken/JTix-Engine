@@ -49,7 +49,7 @@ public class SceneRendering3D_Skybox_1 implements Scene {
         String fragmentShaderSrc = Assets.getFileContent("assets/app-shaders/water-shader.frag");
 
         this.terrainShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
-        System.out.println(Arrays.toString(terrainShader.uniformNames));
+
 
         Assets.loadTexture("assets/app-models/textures/skybox-3/nx.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
         Assets.loadTexture("assets/app-models/textures/skybox-3/ny.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
