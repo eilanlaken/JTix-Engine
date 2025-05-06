@@ -69,7 +69,7 @@ public class Main {
         //settings.height = 1080;
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new ScenePlanesGame_Mountains_1());
+        Application.launch(new ScenePlanesGame_Mountains_2());
 
     }
 
