@@ -18,7 +18,8 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 
     public Model model_import;
     public Model model_floor;
-    public Matrix4x4 transform_truck = new Matrix4x4();
+    public Model model_tree;
+    public Matrix4x4 transform_import = new Matrix4x4();
     public Matrix4x4 transform_floor = new Matrix4x4();
     public Matrix4x4 transform_ball = new Matrix4x4();
     Renderer2D renderer2D = new Renderer2D();
@@ -31,12 +32,14 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
     public void setup() {
 
         Assets.loadModel("assets/models/floor.fbx");
-        Assets.loadModel("assets/app-models/plane_1.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/app-models/city-block_1.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/tree-bright-green-flowers_4.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/plane_2.fbx", "assets/app-models/textures");
+        //Assets.loadModel("assets/app-models/city-block_1.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
         model_floor = Assets.get("assets/models/floor.fbx");
-        model_import = Assets.get("assets/app-models/plane_1.fbx");
+        model_import = Assets.get("assets/app-models/plane_2.fbx");
+        model_tree = Assets.get("assets/app-models/tree-bright-green-flowers_4.fbx");
 
     }
 
@@ -54,7 +57,7 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 
         camera.update();
 
-        transform_truck.translateGlobalAxisXYZ(0,0,3);
+        transform_import.translateGlobalAxisXYZ(0,0,3);
         transform_ball.translateGlobalAxisXYZ(0,0,2);
 
     }
@@ -91,39 +94,39 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
 
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-            transform_truck.translateGlobalAxisXYZ(0,0,-0.05f);
+            transform_import.translateGlobalAxisXYZ(0,0,-0.05f);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-            transform_truck.translateGlobalAxisXYZ(0,0,0.05f);
+            transform_import.translateGlobalAxisXYZ(0,0,0.05f);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-            transform_truck.translateGlobalAxisXYZ(0,-0.05f, 0);
+            transform_import.translateGlobalAxisXYZ(0,-0.05f, 0);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-            transform_truck.translateGlobalAxisXYZ(0,0.05f,0);
+            transform_import.translateGlobalAxisXYZ(0,0.05f,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform_truck.rotateGlobalAxisY(1);
+            transform_import.rotateLocalAxisY(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform_truck.rotateGlobalAxisY(-1);
+            transform_import.rotateLocalAxisY(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform_truck.rotateGlobalAxisZ(1);
+            transform_import.rotateLocalAxisZ(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform_truck.rotateGlobalAxisZ(-1);
+            transform_import.rotateLocalAxisZ(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform_truck.rotateGlobalAxisX(1);
+            transform_import.rotateLocalAxisX(1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform_truck.rotateGlobalAxisX(-1);
+            transform_import.rotateLocalAxisX(-1);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.H)) {
-            transform_truck.translateGlobalAxisXYZ(0,1,0);
+            transform_import.translateGlobalAxisXYZ(0,1,0);
         }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
@@ -154,8 +157,13 @@ public class SceneRendering3D_ModelsImport_2 implements Scene {
         }
 
         for (int i = 0; i < model_import.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_import.meshes[i], model_import.materials[i], transform_truck);
+            Renderer3D.drawModel_tmp_5(model_import.meshes[i], model_import.materials[i], transform_import);
         }
+
+        for (int i = 0; i < model_tree.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model_tree.meshes[i], model_tree.materials[i], new Matrix4x4());
+        }
+
         Renderer3D.end();
     }
 
