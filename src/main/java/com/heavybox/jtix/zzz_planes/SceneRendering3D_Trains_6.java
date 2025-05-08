@@ -98,17 +98,30 @@ public class SceneRendering3D_Trains_6 implements Scene {
         Renderer3D.begin(camera);
 
         Matrix4x4 a = new Matrix4x4();
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.K)) {
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
             Matrix4x4 b = new Matrix4x4();
             Quaternion q = new Quaternion();
             q.setFromAxisDeg(Vector3.Y_UNIT, 90);
             b.setToTranslationRotationScaling(new Vector3(0,0,0), q, new Vector3(1,1,1));
-//            transform_train.interpolate(b, t); // TODO: mistake here. You are using the existing value as the starting input for the interpolation.
-            // use constant value.
             transform_train.setToInterpolate(a, b, t);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+
+            Matrix4x4 b = new Matrix4x4();
+            Vector3 position = new Vector3(4,4,0);
+            Vector3 direction = new Vector3(0,1,0).rotate(180, 0,0,1);
+            Vector3 up = Vector3.Z_UNIT;
+            Vector3 b1 = new Vector3(direction).crs(up);
+            b.setFromBasis(b1, direction, up, position);
+
+            transform_train.setToInterpolate(a, b, t);
+            t += Graphics.getDeltaTime() / 10;
+            System.out.println(t);
+        }
+
         for (int i = 0; i < model_train.meshes.length; i++) {
             Renderer3D.drawModel_tmp_5(model_train.meshes[i], model_train.materials[i], transform_train);
         }
