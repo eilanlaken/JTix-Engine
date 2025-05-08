@@ -173,6 +173,44 @@ public class Texture implements MemoryResource {
         STBImage.stbi_image_free(buffer);
     }
 
+    // TODO: use this all args constructor.
+    public Texture(int width, int height, ByteBuffer bytes, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy, int internalFormat, int externalFormat) {
+        this.handle = GL11.glGenTextures();
+        this.slot = -1;
+
+        int maxTextureSize = Graphics.getMaxTextureSize();
+        if (width > maxTextureSize || height > maxTextureSize)
+            throw new IllegalStateException("Trying to create " + Texture.class + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+
+        this.width = width;
+        this.height = height;
+        this.invWidth = 1.0f / width;
+        this.invHeight = 1.0f / height;
+
+        this.filterMag = filterMag != null ? filterMag : FilterMag.NEAREST;
+        this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
+        this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.anisotropy = MathUtils.nextPowerOf2i(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
+        this.biasLOD = 0;
+
+        TextureBinder.bind(this);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalFormat, width, height, 0, externalFormat, GL11.GL_UNSIGNED_BYTE, bytes);
+        if (this.filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
+                this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
+                this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
+                this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+            if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+        } else {
+            this.anisotropy = 1;
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
+        }
+    }
+
     void setSlot(final int slot) { this.slot = slot; }
     int  getSlot() { return slot; }
     int  getHandle() { return handle; }

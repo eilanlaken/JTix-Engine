@@ -46,7 +46,7 @@ public class AssetLoaderTexture implements AssetLoader<Texture> {
         final Texture.FilterMin minFilter = options == null || options.get("minFilter") == null ? null : (Texture.FilterMin) options.get("minFilter");
         final Texture.Wrap uWrap = options == null || options.get("uWrap") == null ? null : (Texture.Wrap) options.get("uWrap");
         final Texture.Wrap vWrap = options == null || options.get("vWrap") == null ? null : (Texture.Wrap) options.get("vWrap");
-        Texture texture = new Texture(width, height, buffer, magFilter, minFilter, uWrap, vWrap, anisotropy);
+        Texture texture = new Texture(width, height, buffer, magFilter, minFilter, uWrap, vWrap, anisotropy); // TODO: query for format options and use the all args texture constructor.
         STBImage.stbi_image_free(buffer);
         return texture;
     }
