@@ -2,11 +2,13 @@ package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
@@ -152,6 +154,29 @@ public class SceneRendering3D_Trains_1 implements Scene {
         Renderer3D.end();
     }
 
+
+    class Path {
+
+        public Array<Vector3> positions = new Array<>();
+        public Array<Quaternion> rotations = new Array<>();
+
+        public void setToLine(Vector3 start, Vector3 end) {
+            positions.clear();
+
+            recalculateRotations();
+        }
+
+        public void setToCircle(Vector3 center, Vector3 up, float r, float angle) {
+            positions.clear();
+
+            recalculateRotations();
+        }
+
+        private void recalculateRotations() {
+            rotations.clear();
+        }
+
+    }
 
 
 }
