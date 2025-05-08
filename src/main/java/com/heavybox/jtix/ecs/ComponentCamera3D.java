@@ -36,7 +36,7 @@ public class ComponentCamera3D implements ComponentCamera {
     }
 
     protected void applyTransform(final Matrix4x4 transform) {
-        position.set(transform.getPositionX(), transform.getPositionY(), transform.getPositionZ());
+        position.set(transform.getTranslationX(), transform.getTranslationY(), transform.getTranslationZ());
         direction.set(0, 0, -1);
         up.set(0,1,0);
         direction.rot(transform);

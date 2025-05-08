@@ -63,19 +63,20 @@ public class Matrix4x4 implements MemoryPool.Reset {
 
     protected static final Matrix4x4 rotation = new Matrix4x4();
 
-    private static final Quaternion quaternion = new Quaternion();
-    private static final Vector3    l_vez      = new Vector3();
-    private static final Vector3    l_vex      = new Vector3();
-    private static final Vector3    l_vey      = new Vector3();
-    private static final Vector3    tmpVec     = new Vector3();
-    private static final Matrix4x4  tmpMat     = new Matrix4x4();
-    private static final Vector3    right      = new Vector3();
-    private static final Vector3    tmpForward = new Vector3();
-    private static final Vector3    tmpUp      = new Vector3();
-    private static final Vector3    currentX   = new Vector3();
-    private static final Vector3    currentY   = new Vector3();
-    private static final Vector3    newX       = new Vector3();
-    private static final Vector3    newY       = new Vector3();
+    private static final Quaternion quaternion  = new Quaternion();
+    private static final Quaternion quaternion2 = new Quaternion();
+    private static final Vector3    l_vez       = new Vector3();
+    private static final Vector3    l_vex       = new Vector3();
+    private static final Vector3    l_vey       = new Vector3();
+    private static final Vector3    tmpVec      = new Vector3();
+    private static final Matrix4x4  tmpMat      = new Matrix4x4();
+    private static final Vector3    right       = new Vector3();
+    private static final Vector3    tmpForward  = new Vector3();
+    private static final Vector3    tmpUp       = new Vector3();
+    private static final Vector3    currentX    = new Vector3();
+    private static final Vector3    currentY    = new Vector3();
+    private static final Vector3    newX        = new Vector3();
+    private static final Vector3    newY        = new Vector3();
 
     public final float[] val = new float[16];
 
@@ -104,15 +105,15 @@ public class Matrix4x4 implements MemoryPool.Reset {
     /** Constructs a rotation matrix from the given {@link Quaternion}.
      * @param quaternion The quaternion to be copied. (The quaternion is not modified) */
     public Matrix4x4(Quaternion quaternion) {
-        setToPositionRotationScaling(quaternion);
+        setToTranslationRotationScaling(quaternion);
     }
 
     /** Construct a matrix from the given translation, rotation and scale.
-     * @param position The translation
+     * @param translation The translation
      * @param rotation The rotation, must be normalized
      * @param scale The scale */
-    public Matrix4x4(Vector3 position, Quaternion rotation, Vector3 scale) {
-        setToPositionRotationScaling(position, rotation, scale);
+    public Matrix4x4(Vector3 translation, Quaternion rotation, Vector3 scale) {
+        setToTranslationRotationScaling(translation, rotation, scale);
     }
 
     /** Sets the matrix to the given matrix.
@@ -136,7 +137,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
     /** Sets the matrix to a rotation matrix representing the quaternion.
      * @param quaternion The quaternion that is to be used to set this matrix.
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 setToPositionRotationScaling(Quaternion quaternion) {
+    public Matrix4x4 setToTranslationRotationScaling(Quaternion quaternion) {
         return set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
     }
 
@@ -152,11 +153,11 @@ public class Matrix4x4 implements MemoryPool.Reset {
     }
 
     /** Set this matrix to the specified translation and rotation.
-     * @param position The translation
+     * @param translation The translation
      * @param orientation The rotation, must be normalized
      * @return This matrix for chaining */
-    public Matrix4x4 set(Vector3 position, Quaternion orientation) {
-        return set(position.x, position.y, position.z, orientation.x, orientation.y, orientation.z, orientation.w);
+    public Matrix4x4 set(Vector3 translation, Quaternion orientation) {
+        return set(translation.x, translation.y, translation.z, orientation.x, orientation.y, orientation.z, orientation.w);
     }
 
     /** Sets the matrix to a rotation matrix representing the translation and quaternion.
@@ -198,18 +199,18 @@ public class Matrix4x4 implements MemoryPool.Reset {
     }
 
     /** Set this matrix to the specified translation, rotation and scale.
-     * @param position The translation
+     * @param translation The translation
      * @param orientation The rotation, must be normalized
      * @param scale The scale
      * @return This matrix for chaining */
-    public Matrix4x4 setToPositionRotationScaling(Vector3 position, Quaternion orientation, Vector3 scale) {
-        return setToPositionRotationScaling(position.x, position.y, position.z, orientation.x, orientation.y, orientation.z, orientation.w, scale.x, scale.y,
+    public Matrix4x4 setToTranslationRotationScaling(Vector3 translation, Quaternion orientation, Vector3 scale) {
+        return setToTranslationRotationScaling(translation.x, translation.y, translation.z, orientation.x, orientation.y, orientation.z, orientation.w, scale.x, scale.y,
                 scale.z);
     }
 
     public Matrix4x4 setToPositionEulerScaling(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
         quaternion.setEulerAnglesDeg(degX, degY, degZ);
-        return setToPositionRotationScaling(x, y, z, quaternion.x, quaternion.y, quaternion.z, quaternion.w, sclX, sclY, sclZ);
+        return setToTranslationRotationScaling(x, y, z, quaternion.x, quaternion.y, quaternion.z, quaternion.w, sclX, sclY, sclZ);
     }
 
     /** Sets the matrix to a rotation matrix representing the translation and quaternion.
@@ -224,8 +225,8 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param scaleY The Y component of the scaling that is to be used to set this matrix.
      * @param scaleZ The Z component of the scaling that is to be used to set this matrix.
      * @return This matrix for the purpose of chaining methods together. */
-    public Matrix4x4 setToPositionRotationScaling(float translationX, float translationY, float translationZ, float quaternionX, float quaternionY,
-                                                  float quaternionZ, float quaternionW, float scaleX, float scaleY, float scaleZ) {
+    public Matrix4x4 setToTranslationRotationScaling(float translationX, float translationY, float translationZ, float quaternionX, float quaternionY,
+                                                     float quaternionZ, float quaternionW, float scaleX, float scaleY, float scaleZ) {
         final float xs = quaternionX * 2f, ys = quaternionY * 2f, zs = quaternionZ * 2f;
         final float wx = quaternionW * xs, wy = quaternionW * ys, wz = quaternionW * zs;
         final float xx = quaternionX * xs, xy = quaternionX * ys, xz = quaternionX * zs;
@@ -259,7 +260,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param yAxis The y-axis.
      * @param zAxis The z-axis.
      * @param pos The translation vector. */
-    public Matrix4x4 setToPositionRotationScaling(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, Vector3 pos) {
+    public Matrix4x4 setToTranslationRotationScaling(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, Vector3 pos) {
         val[M00] = xAxis.x;
         val[M01] = xAxis.y;
         val[M02] = xAxis.z;
@@ -700,7 +701,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
             idt();
             return this;
         }
-        return setToPositionRotationScaling(quaternion.setDeg(axis, degrees));
+        return setToTranslationRotationScaling(quaternion.setDeg(axis, degrees));
     }
 
     /** Sets the matrix to a rotation matrix around the given axis.
@@ -712,7 +713,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
             idt();
             return this;
         }
-        return setToPositionRotationScaling(quaternion.setFromAxisRad(axis, radians));
+        return setToTranslationRotationScaling(quaternion.setFromAxisRad(axis, radians));
     }
 
     /** Sets the matrix to a rotation matrix around the given axis.
@@ -726,7 +727,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
             idt();
             return this;
         }
-        return setToPositionRotationScaling(quaternion.setFromAxisDeg(axisX, axisY, axisZ, degrees));
+        return setToTranslationRotationScaling(quaternion.setFromAxisDeg(axisX, axisY, axisZ, degrees));
     }
 
     /** Sets the matrix to a rotation matrix around the given axis.
@@ -740,7 +741,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
             idt();
             return this;
         }
-        return setToPositionRotationScaling(quaternion.setFromAxisRad(axisX, axisY, axisZ, radians));
+        return setToTranslationRotationScaling(quaternion.setFromAxisRad(axisX, axisY, axisZ, radians));
     }
 
     /** Set the matrix to a rotation matrix between two vectors.
@@ -748,7 +749,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param v2 The target vector
      * @return This matrix for the purpose of chaining methods together */
     public Matrix4x4 setToRotation(final Vector3 v1, final Vector3 v2) {
-        return setToPositionRotationScaling(quaternion.setFromSourceToTarget(v1, v2));
+        return setToTranslationRotationScaling(quaternion.setFromSourceToTarget(v1, v2));
     }
 
     /** Set the matrix to a rotation matrix between two vectors.
@@ -760,7 +761,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @param z2 The target vector z value
      * @return This matrix for the purpose of chaining methods together */
     public Matrix4x4 setToRotation(final float x1, final float y1, final float z1, final float x2, final float y2, final float z2) {
-        return setToPositionRotationScaling(quaternion.setFromSourceToTarget(x1, y1, z1, x2, y2, z2));
+        return setToTranslationRotationScaling(quaternion.setFromSourceToTarget(x1, y1, z1, x2, y2, z2));
     }
 
     /** Sets this matrix to a rotation matrix from the given euler angles.
@@ -770,7 +771,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @return This matrix */
     public Matrix4x4 setFromEulerAngles(float yaw, float pitch, float roll) {
         quaternion.setEulerAnglesDeg(yaw, pitch, roll);
-        return setToPositionRotationScaling(quaternion);
+        return setToTranslationRotationScaling(quaternion);
     }
 
     /** Sets this matrix to a rotation matrix from the given euler angles.
@@ -780,7 +781,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
      * @return This matrix */
     public Matrix4x4 setFromEulerAnglesRad(float yaw, float pitch, float roll) {
         quaternion.setEulerAnglesRad(yaw, pitch, roll);
-        return setToPositionRotationScaling(quaternion);
+        return setToTranslationRotationScaling(quaternion);
     }
 
     /** Sets this matrix to a scaling matrix
@@ -845,7 +846,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
         tmpForward.set(forward).nor();
         right.set(tmpForward).crs(up).nor();
         tmpUp.set(right).crs(tmpForward).nor();
-        setToPositionRotationScaling(right, tmpUp, tmpForward.scl(-1), position);
+        setToTranslationRotationScaling(right, tmpUp, tmpForward.scl(-1), position);
         return this;
     }
 
@@ -902,22 +903,22 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    public Vector3 getPosition(Vector3 position) {
-        position.x = val[M03];
-        position.y = val[M13];
-        position.z = val[M23];
-        return position;
+    public Vector3 getTranslation(Vector3 translation) {
+        translation.x = val[M03];
+        translation.y = val[M13];
+        translation.z = val[M23];
+        return translation;
     }
 
-    public float getPositionX() {
+    public float getTranslationX() {
         return val[M03];
     }
 
-    public float getPositionY() {
+    public float getTranslationY() {
         return val[M13];
     }
 
-    public float getPositionZ() {
+    public float getTranslationZ() {
         return val[M23];
     }
 
@@ -1027,6 +1028,24 @@ public class Matrix4x4 implements MemoryPool.Reset {
         for (int i = 0; i < vector3s.length; i++) {
             vector3s[i].rot(m);
         }
+    }
+
+    public static void interpolate(Matrix4x4 source, Matrix4x4 target, float a, Matrix4x4 out) {
+        Vector3 s_scale = source.getScale(new Vector3());
+        Quaternion s_rotation = source.getRotation(new Quaternion());
+        Vector3 s_position = source.getTranslation(new Vector3());
+
+        Vector3 t_scale = target.getScale(new Vector3());
+        Quaternion t_rotation = target.getRotation(new Quaternion());
+        Vector3 t_position = target.getTranslation(new Vector3());
+
+        out.idt();
+        s_scale.lerp(t_scale, a);
+        out.setToScaling(s_scale);
+        s_rotation.slerp(t_rotation, a);
+        out.rotateLocalAxis(s_rotation);
+        s_position.lerp(t_position, a);
+        out.translateGlobalAxisXYZ(s_position);
     }
 
     // TODO: implement unit tests.

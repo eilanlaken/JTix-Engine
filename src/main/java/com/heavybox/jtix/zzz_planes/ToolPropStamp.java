@@ -46,7 +46,7 @@ public class ToolPropStamp extends Tool {
             if (currentType == PropType.TRANSMISSION_TOWER_LINES) {
                 token.transform.translateLocalAxis(0,0,10.002f);
             }
-            Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+            Vector2 xy = new Vector2(token.transform.getTranslationX(), token.transform.getTranslationY());
             float z = getHeight(xy.x, xy.y);
             token.transform.translateGlobalAxisXYZ(0, 0, z);
 

@@ -39,7 +39,7 @@ public class ToolHouseStamp extends Tool {
             TerrainToken token = new TerrainToken();
             token.model = house.model;
             token.transform = house.transform.cpy();
-            Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+            Vector2 xy = new Vector2(token.transform.getTranslationX(), token.transform.getTranslationY());
             float z = getHeight(xy.x, xy.y);
             token.transform.translateGlobalAxisXYZ(0, 0, z);
             gameObjects.add(token);

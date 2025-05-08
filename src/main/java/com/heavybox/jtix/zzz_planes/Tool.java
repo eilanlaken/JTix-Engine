@@ -36,7 +36,7 @@ public abstract class Tool {
     public void writeData(TerrainToken token, String type, String path) {
         token.userData.put("type", type);
         token.userData.put("path", path);
-        token.userData.put("position", token.transform.getPosition(new Vector3()));
+        token.userData.put("position", token.transform.getTranslation(new Vector3()));
         token.userData.put("rotation", token.transform.getRotation(new Quaternion()));
         token.userData.put("scale", token.transform.getScale(new Vector3()));
     }

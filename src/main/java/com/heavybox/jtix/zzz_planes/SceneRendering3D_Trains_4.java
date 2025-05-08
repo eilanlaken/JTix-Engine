@@ -3,7 +3,10 @@ package com.heavybox.jtix.zzz_planes;
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.graphics.Camera;
+import com.heavybox.jtix.graphics.Graphics;
+import com.heavybox.jtix.graphics.Model;
+import com.heavybox.jtix.graphics.Renderer3D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
@@ -14,26 +17,33 @@ import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_Trains_2 implements Scene {
+public class SceneRendering3D_Trains_4 implements Scene {
 
     private Camera camera;
 
     public Model model_train;
     public Matrix4x4 transform_train = new Matrix4x4();
+    public Array<Matrix4x4> trainTransforms = new Array<>();
+    public Matrix4x4 transform_target = new Matrix4x4();
+    public float t = 0;
 
     public Model model_tracks;
     public Matrix4x4 transform_tracks = new Matrix4x4();
 
     public Path path = new Path();
 
-    public SceneRendering3D_Trains_2() {
+    public SceneRendering3D_Trains_4() {
         //path.setToQuadraticBezier(new Vector3(0,0, 0), new Vector3(15,40,0), new Vector3(30,0,0));
         float step = 0.01f;
         Vector3 p0 = new Vector3(0,0,0);
         Vector3 p1 = new Vector3(15,20,0);
         Vector3 p2 = new Vector3(30,0,0);
         path.setToQuadraticBezier(p0, p1, p2, 0.03f);
+
         System.out.println(path.approximateBezierLength(p0, p1, p2));
+
+        trainTransforms.add(new Matrix4x4());
+        trainTransforms.add(new Matrix4x4());
     }
 
     @Override
@@ -45,7 +55,6 @@ public class SceneRendering3D_Trains_2 implements Scene {
 
         model_train = Assets.get("assets/app-models/train-car_1.fbx");
         model_tracks = Assets.get("assets/app-models/train-rails-block.fbx");
-
     }
 
     @Override
@@ -90,43 +99,6 @@ public class SceneRendering3D_Trains_2 implements Scene {
             camera.rotateAroundRight(panVertical * 2);
         }
         camera.update();
-//
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-//            transform_tracks.translateGlobalAxisXYZ(0,0,-0.05f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-//            transform_tracks.translateGlobalAxisXYZ(0,0,0.05f);
-//        }
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-//            transform_tracks.translateGlobalAxisXYZ(0,-0.05f, 0);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-//            transform_tracks.translateGlobalAxisXYZ(0,0.05f,0);
-//        }
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-//            transform_tracks.rotateLocalAxisY(1);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-//            transform_tracks.rotateLocalAxisY(-1);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-//            transform_tracks.rotateLocalAxisZ(1);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-//            transform_tracks.rotateLocalAxisZ(-1);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-//            transform_tracks.rotateLocalAxisX(1);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-//            transform_tracks.rotateLocalAxisX(-1);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.H)) {
-//            transform_tracks.translateGlobalAxisXYZ(0,1,0);
-//        }
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             Renderer3D.lightDir.rotate(1f,1,0,0);
@@ -138,9 +110,46 @@ public class SceneRendering3D_Trains_2 implements Scene {
         Renderer3D.begin(camera);
 
 
-        for (int i = 0; i < model_train.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_train.meshes[i], model_train.materials[i], transform_train);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            Matrix4x4 src = transform_train;
+            Matrix4x4 dst = new Matrix4x4();
+            Vector3 p0 = new Vector3(0,0,0);
+            Vector3 p1 = new Vector3(15,20,0);
+            Vector3 p2 = new Vector3(30,0,0);
+            path.calculateTransform(p0, p1, p2, t, dst);
+            Matrix4x4.interpolate(src, dst, t, transform_train);
+            t += Graphics.getDeltaTime();
         }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+            Vector3 p0 = new Vector3(0,0,0);
+            Vector3 p1 = new Vector3(15,20,0);
+            Vector3 p2 = new Vector3(30,0,0);
+
+            Matrix4x4 src1 = trainTransforms.get(0);
+            Matrix4x4 dst1 = new Matrix4x4();
+            path.calculateTransform(p0, p1, p2, t, dst1);
+            Matrix4x4.interpolate(src1, dst1, t, src1);
+
+            Matrix4x4 src2 = trainTransforms.get(1);
+            Matrix4x4 dst2 = new Matrix4x4();
+            path.calculateTransform(p0, p1, p2, t - 0.1f, dst2);
+            Matrix4x4.interpolate(src2, dst2, t - 0.1f, src2);
+
+            t += Graphics.getDeltaTime();
+        }
+
+
+
+        for (Matrix4x4 transform : trainTransforms) {
+            for (int i = 0; i < model_train.meshes.length; i++) {
+                Renderer3D.drawModel_tmp_5(model_train.meshes[i], model_train.materials[i], transform);
+            }
+        }
+
+//        for (int i = 0; i < model_train.meshes.length; i++) {
+//            Renderer3D.drawModel_tmp_5(model_train.meshes[i], model_train.materials[i], transform_train);
+//        }
 
         for (int i = 0; i < path.positions.size; i++) {
             Matrix4x4 transform = new Matrix4x4();
@@ -158,11 +167,26 @@ public class SceneRendering3D_Trains_2 implements Scene {
         Renderer3D.end();
     }
 
-
     class Path {
 
         public Array<Vector3> positions = new Array<>();
         public Array<Vector3> directions = new Array<>();
+
+        public void calculateTransform(Vector3 p0, Vector3 p1, Vector3 p2, float t, Matrix4x4 out) {
+            Vector3 position = new Vector3();
+            position.x = (1 - t) * (1 - t) * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x;
+            position.y = (1 - t) * (1 - t) * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y;
+
+            Vector3 direction = new Vector3();
+            direction.x = 2 * (1 - t) * (p1.x - p0.x) + 2 * t * (p2.x - p1.x);
+            direction.y = 2 * (1 - t) * (p1.y - p0.y) + 2 * t * (p2.y - p1.y);
+            direction.nor();
+
+            out.idt();
+            Vector3 up = Vector3.Z_UNIT;
+            Vector3 b1 = new Vector3(direction).crs(up);
+            out.setFromBasis(b1, direction, up, position);
+        }
 
         // p1 = control point
         public void setToQuadraticBezier(Vector3 p0, Vector3 p1, Vector3 p2, float step) {

@@ -165,8 +165,8 @@ public class SceneRendering3D_Basic_3 implements Scene {
         Collections.sort(rendrables_transparent, (o1, o2) -> {
             Matrix4x4 t1 = o1.transform;
             Matrix4x4 t2 = o2.transform;
-            float d1 = camera.position.dst2(t1.getPosition(position_o1));
-            float d2 = camera.position.dst2(t2.getPosition(position_o2));
+            float d1 = camera.position.dst2(t1.getTranslation(position_o1));
+            float d2 = camera.position.dst2(t2.getTranslation(position_o2));
             return Float.compare(d2, d1); // farthest first
         });
         for (RenderUnit renderUnit : rendrables_transparent) {
@@ -184,16 +184,16 @@ public class SceneRendering3D_Basic_3 implements Scene {
 
     private void orient(Matrix4x4 transform) {
         Vector3 scale = transform.getScale(new Vector3());
-        Vector3 position = transform.getPosition(new Vector3());
+        Vector3 position = transform.getTranslation(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
         Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
-        transform.setToPositionRotationScaling(position, q_rotation, scale);
+        transform.setToTranslationRotationScaling(position, q_rotation, scale);
     }
 
     // well, this *seems* like just orient(). Also: what happens when Z_UNIT overlaps camera.forward / up / right?
     // this solves the spinning issue but the scale is hard-coded.
     private void orient2(Matrix4x4 transform) {
-        Vector3 position = transform.getPosition(new Vector3());
+        Vector3 position = transform.getTranslation(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor(); // this will be the 3rd column
         Vector3 up = new Vector3(target_orientation).crs(Vector3.Z_UNIT).nor();
         Vector3 right = new Vector3(target_orientation).crs(up).nor();

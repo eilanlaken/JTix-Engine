@@ -157,15 +157,15 @@ public class SceneRendering3D_Basic_1 implements Scene {
 
     private void orient_2(Matrix4x4 transform) {
         Vector3 scale = transform.getScale(new Vector3());
-        Vector3 position = transform.getPosition(new Vector3());
+        Vector3 position = transform.getTranslation(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
         Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,-1,0), target_orientation);
-        transform.setToPositionRotationScaling(position, q_rotation, scale);
+        transform.setToTranslationRotationScaling(position, q_rotation, scale);
     }
 
     private void orient_billboard(Matrix4x4 transform) {
         Quaternion rotation = new Quaternion();
-        Vector3 position = new Vector3(transform.getPosition(new Vector3()));
+        Vector3 position = new Vector3(transform.getTranslation(new Vector3()));
         Vector3 scaling = new Vector3(3,3,3);
         Vector3 tmp = new Vector3();
         Vector3 tmp2 = new Vector3();
@@ -180,7 +180,7 @@ public class SceneRendering3D_Basic_1 implements Scene {
 
         tmp2.set(dir).crs(tmp).nor();
         rotation.setFromAxes(tmp.x, tmp2.x, dir.x, tmp.y, tmp2.y, dir.y, tmp.z, tmp2.z, dir.z);
-        transform.setToPositionRotationScaling(position, rotation, scaling);
+        transform.setToTranslationRotationScaling(position, rotation, scaling);
     }
 
     private float speed = 1;

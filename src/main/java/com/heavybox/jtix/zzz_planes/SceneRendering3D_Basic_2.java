@@ -161,8 +161,8 @@ public class SceneRendering3D_Basic_2 implements Scene {
         Collections.sort(rendrables_transparent, (o1, o2) -> {
             Matrix4x4 t1 = o1.transform;
             Matrix4x4 t2 = o2.transform;
-            float d1 = camera.position.dst2(t1.getPosition(position_o1));
-            float d2 = camera.position.dst2(t2.getPosition(position_o2));
+            float d1 = camera.position.dst2(t1.getTranslation(position_o1));
+            float d2 = camera.position.dst2(t2.getTranslation(position_o2));
             return Float.compare(d2, d1); // farthest first
         });
         for (RenderUnit renderUnit : rendrables_transparent) {
@@ -180,14 +180,14 @@ public class SceneRendering3D_Basic_2 implements Scene {
 
     private void orient(Matrix4x4 transform) {
         Vector3 scale = transform.getScale(new Vector3());
-        Vector3 position = transform.getPosition(new Vector3());
+        Vector3 position = transform.getTranslation(new Vector3());
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
         Quaternion q_rotation_1 = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
         Quaternion q_rotation_2 = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
 
 
 
-        transform.setToPositionRotationScaling(position, q_rotation_1, scale);
+        transform.setToTranslationRotationScaling(position, q_rotation_1, scale);
 
 
     }

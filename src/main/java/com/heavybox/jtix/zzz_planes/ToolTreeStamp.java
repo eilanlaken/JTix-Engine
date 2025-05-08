@@ -45,7 +45,7 @@ public class ToolTreeStamp extends Tool {
         } else if (Input.mouse.isButtonClicked(Mouse.Button.LEFT)) {
             // place tree
             for (int i = 0; i < TREES_MAX_FLUX; i++) {
-                Vector2 middle = new Vector2(tree.transform.getPositionX(), tree.transform.getPositionY());
+                Vector2 middle = new Vector2(tree.transform.getTranslationX(), tree.transform.getTranslationY());
                 Vector2 placement = new Vector2(middle.x + MathUtils.randomUniformFloat(-BRUSH_SIZE / 2, BRUSH_SIZE / 2),
                         middle.y + MathUtils.randomUniformFloat(-BRUSH_SIZE / 2, BRUSH_SIZE / 2));
                 // check if position is occupied
@@ -63,7 +63,7 @@ public class ToolTreeStamp extends Tool {
                 token.transform = tree.transform.cpy();
                 token.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));
                 token.transform.translateGlobalAxisXYZ(offset.x, offset.y, 0);
-                Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+                Vector2 xy = new Vector2(token.transform.getTranslationX(), token.transform.getTranslationY());
                 float z = getHeight(xy.x, xy.y);
                 token.transform.translateGlobalAxisXYZ(0, 0, z);
                 writeData(token, TreeType.class.getSimpleName(), currentType.prefix + (currentIndex + 1) + ".fbx");
@@ -74,7 +74,7 @@ public class ToolTreeStamp extends Tool {
                 gameObjects.add(token);
                 currentIndex = allowedIndices[MathUtils.randomUniformInt(0, allowedIndices.length)];//MathUtils.randomUniformInt(0, 9);
                 tree.model = getModel(currentType, currentIndex);
-                Vector2 placed = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+                Vector2 placed = new Vector2(token.transform.getTranslationX(), token.transform.getTranslationY());
                 occupied.add(placed);
             }
 

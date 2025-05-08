@@ -36,4 +36,18 @@ public final class ComponentTransform3D extends Matrix4x4 implements ComponentTr
         return world == null ? this : world;
     }
 
+    @Override
+    public float getPositionX() {
+        return 0;
+    }
+
+    @Override
+    public float getPositionY() {
+        return 0;
+    }
+
+    @Override
+    public float getPositionZ() {
+        return 0;
+    }
 }

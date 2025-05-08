@@ -43,7 +43,7 @@ public class ToolRocksStamp extends Tool {
             TerrainToken token = new TerrainToken();
             token.model = rock.model;
             token.transform = rock.transform.cpy();
-            Vector2 xy = new Vector2(token.transform.getPositionX(), token.transform.getPositionY());
+            Vector2 xy = new Vector2(token.transform.getTranslationX(), token.transform.getTranslationY());
             float z = getHeight(xy.x, xy.y);
             token.transform.translateGlobalAxisXYZ(0, 0, z);
             token.transform.rotateLocalAxisZ(MathUtils.randomUniformInt(0,360));

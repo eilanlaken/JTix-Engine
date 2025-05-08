@@ -167,7 +167,7 @@ public class SceneRendering3D_Billboards_1 implements Scene {
     private void orient_billboard() {
         System.out.println("===============\n");
         System.out.println(transformCloud);
-        Vector3 position = transformCloud.getPosition(new Vector3());
+        Vector3 position = transformCloud.getTranslation(new Vector3());
         Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
         System.out.println("billboard -> camera = " + desiredDir);
         System.out.println("camera forward: " + camera.forward);

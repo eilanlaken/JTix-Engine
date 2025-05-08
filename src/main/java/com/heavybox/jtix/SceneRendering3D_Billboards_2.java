@@ -185,7 +185,7 @@ public class SceneRendering3D_Billboards_2 implements Scene {
     }
 
     private void orient_2() {
-        Vector3 cloudPosition = transformCloud_1.getPosition(new Vector3());
+        Vector3 cloudPosition = transformCloud_1.getTranslation(new Vector3());
 
         Vector3 basisY = transformCloud_1.getBasisY(new Vector3());
         Vector3 basisZ = new Vector3(camera.position).sub(cloudPosition).nor();
@@ -197,7 +197,7 @@ public class SceneRendering3D_Billboards_2 implements Scene {
     }
 
     private void orient_3() {
-        Vector3 cloudPosition = transformCloud_1.getPosition(new Vector3());
+        Vector3 cloudPosition = transformCloud_1.getTranslation(new Vector3());
 
         Vector3 basisY = transformCloud_1.getBasisY(new Vector3());
         Vector3 basisZ = new Vector3(camera.forward).negate();
@@ -213,7 +213,7 @@ public class SceneRendering3D_Billboards_2 implements Scene {
         Vector3 scale = transformCloud_1.getScale(new Vector3()); // TODO.
 
         Vector3 basisZ = transformCloud_1.getBasisZ(new Vector3()).nor();
-        Vector3 cloudPosition = transformCloud_1.getPosition(new Vector3());
+        Vector3 cloudPosition = transformCloud_1.getTranslation(new Vector3());
         Vector3 basisZNew = new Vector3(camera.position).sub(cloudPosition).nor();
         // if identity, return
         Quaternion q = new Quaternion().setFromSourceToTarget(basisZ, basisZNew);
@@ -243,7 +243,7 @@ public class SceneRendering3D_Billboards_2 implements Scene {
     private void orient_1() {
         //System.out.println("===============\n");
         //System.out.println(transformCloud);
-        Vector3 position = transformCloud_1.getPosition(new Vector3());
+        Vector3 position = transformCloud_1.getTranslation(new Vector3());
         Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
         //System.out.println("billboard -> camera = " + desiredDir);
         //System.out.println("camera forward: " + camera.forward);

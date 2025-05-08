@@ -10,9 +10,7 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
-import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.zzz_planes.GameObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -204,8 +202,8 @@ public class SceneRendering3D_Transparency_1 implements Scene {
         Collections.sort(rendrables_transparent, (o1, o2) -> {
             Matrix4x4 t1 = o1.transform;
             Matrix4x4 t2 = o2.transform;
-            float d1 = camera.position.dst2(t1.getPosition(position_o1));
-            float d2 = camera.position.dst2(t2.getPosition(position_o2));
+            float d1 = camera.position.dst2(t1.getTranslation(position_o1));
+            float d2 = camera.position.dst2(t2.getTranslation(position_o2));
             return Float.compare(d2, d1); // farthest first
         });
         for (RenderUnit renderUnit : rendrables_transparent) {

@@ -10,8 +10,6 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Map;
-
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
 // https://blog.uhawkvr.com/
@@ -166,7 +164,7 @@ public class SceneRendering3D_Clouds_1 implements Scene {
     private void orient_billboard() {
         System.out.println("===============\n");
         System.out.println(transformCloud);
-        Vector3 position = transformCloud.getPosition(new Vector3());
+        Vector3 position = transformCloud.getTranslation(new Vector3());
         Vector3 desiredDir = new Vector3(camera.position).sub(position).nor();
         System.out.println("billboard -> camera = " + desiredDir);
         System.out.println("camera forward: " + camera.forward);
