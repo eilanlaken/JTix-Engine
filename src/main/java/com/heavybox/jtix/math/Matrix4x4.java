@@ -881,6 +881,34 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
+    // TODO: understand or delete.
+    public Matrix4x4 interpolate(Matrix4x4 target, float factor) {
+        getScale(tmpVec);
+        target.getScale(tmpForward);
+        getRotation(quaternion);
+        target.getRotation(quaternion2);
+        getTranslation(tmpUp);
+        target.getTranslation(right);
+        setToScaling(tmpVec.scl(1-factor).add(tmpForward.scl(factor)));
+        rotateLocalAxis(quaternion.slerp(quaternion2, factor));
+        setTranslation(tmpUp.scl(1-factor).add(right.scl(factor)));
+        return this;
+    }
+
+    public Matrix4x4 setToInterpolate(Matrix4x4 source, Matrix4x4 target, float factor) {
+        source.getScale(tmpVec);
+        target.getScale(tmpForward);
+        source.getRotation(quaternion);
+        target.getRotation(quaternion2);
+        source.getTranslation(tmpUp);
+        target.getTranslation(right);
+
+        setToScaling(tmpVec.scl(1-factor).add(tmpForward.scl(factor)));
+        rotateLocalAxis(quaternion.slerp(quaternion2, factor));
+        setTranslation(tmpUp.scl(1-factor).add(right.scl(factor)));
+        return this;
+    }
+
     // TODO: careful
     public Matrix4x4 stretch(float scale) {
         val[M00] *= scale;
