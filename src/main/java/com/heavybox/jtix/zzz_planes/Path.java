@@ -67,6 +67,15 @@ public class Path {
         return out;
     }
 
+    public Vector3 getDirection(float t, Vector3 out) {
+        int segment = (int) Math.floor(t);
+        Vector3 dir0 = dirs.getCyclic(segment);
+        Vector3 dir1 = dirs.getCyclic(segment + 1);
+        float fraction = t - (int) Math.floor(t);
+        out.set(dir0).slerp(dir1, fraction);
+        return out;
+    }
+
     public Path begin() {
         if (betweenBeginAndEnd) throw new IllegalStateException("Must end() the path first.");
 

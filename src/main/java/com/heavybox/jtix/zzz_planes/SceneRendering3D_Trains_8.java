@@ -33,7 +33,7 @@ public class SceneRendering3D_Trains_8 implements Scene {
 
         path
                 .begin()
-                .connect(Path.ofBezierLinear(new Vector3(0,0, 0), new Vector3(20,0, 0), 3))
+                .connect(Path.ofBezierLinear(new Vector3(0,0, 0), new Vector3(20,0, 0), 10))
                 .connect(Path.ofBezierQuadratic(new Vector3(20,0, 0), new Vector3(20,-15, 0), new Vector3(10,-15, 0), 10))
                 .connect(Path.ofBezierQuadratic(new Vector3(10,-15, 0), new Vector3(0,-15, 0), new Vector3(0,0,0), 10))
                 .end(true);
@@ -70,20 +70,28 @@ public class SceneRendering3D_Trains_8 implements Scene {
     public void update() {
         updateCamera();
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            current_t += Graphics.getDeltaTime();
-            Vector3 position = new Vector3();
-            path.getPosition(current_t, position);
-            transform_train.setTranslation(position);
-        }
+//        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
+//            current_t += Graphics.getDeltaTime();
+//            Vector3 position = new Vector3();
+//            path.getPosition(current_t, position);
+//            transform_train.setTranslation(position);
+//        }
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
             float distance = speed * Graphics.getDeltaTime();
             current_t = path.advance(current_t, distance);
-            Vector3 position = new Vector3();
-            path.getPosition(current_t, position);
-            transform_train.setTranslation(position);
-            //System.out.println(current_t);
+            Vector3 pos = new Vector3();
+            path.getPosition(current_t, pos);
+
+            Vector3 dir = new Vector3();
+            path.getDirection(current_t, dir);
+
+            Vector3 up = Vector3.Z_UNIT;
+            Vector3 right = new Vector3(dir).crs(up);
+            transform_train.setFromBasis(right, dir, up, pos);
+            //transform_train.setTranslation(pos);
+
+
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

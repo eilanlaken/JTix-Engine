@@ -935,6 +935,19 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return out;
     }
 
+    public static Matrix4x4 interpolationRotation(final Matrix4x4 source, final Matrix4x4 target, final float factor, Matrix4x4 out) {
+        source.getRotation(quaternion);
+        target.getRotation(quaternion2);
+
+        out.getScale(tmpUp); // <- tmpUp stores original scale
+        out.getTranslation(right); // <- right stores original translation
+
+        out.setToScaling(tmpUp);
+        out.rotateLocalAxis(quaternion.slerp(quaternion2, factor));
+        out.setTranslation(right);
+        return out;
+    }
+
 
 
     // TODO: careful
