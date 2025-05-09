@@ -70,13 +70,6 @@ public class SceneRendering3D_Trains_8 implements Scene {
     public void update() {
         updateCamera();
 
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-//            current_t += Graphics.getDeltaTime();
-//            Vector3 position = new Vector3();
-//            path.getPosition(current_t, position);
-//            transform_train.setTranslation(position);
-//        }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
             float distance = speed * Graphics.getDeltaTime();
             current_t = path.advance(current_t, distance);
@@ -89,9 +82,6 @@ public class SceneRendering3D_Trains_8 implements Scene {
             Vector3 up = Vector3.Z_UNIT;
             Vector3 right = new Vector3(dir).crs(up);
             transform_train.setFromBasis(right, dir, up, pos);
-            //transform_train.setTranslation(pos);
-
-
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
