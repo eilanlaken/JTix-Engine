@@ -1,6 +1,7 @@
 package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.math.Vector3;
 
 // TODO: move this to the math package after properly formatting.
@@ -9,11 +10,13 @@ public class Path {
     private boolean closed = false; // for this project, assume closed paths only.
     public Array<Vector3> points = new Array<>(true, 10);
     public Array<Vector3> dirs = new Array<>(true, 10);
+    public ArrayFloat lengths = new ArrayFloat(true, 10);
     private boolean betweenBeginAndEnd = false;
 
     public Path clear() {
         points.clear();
         dirs.clear();
+        lengths.clear();
         return this;
     }
 
@@ -33,30 +36,27 @@ public class Path {
 
     // returns a floating point number that represents the point on the path
     // : integer part represents the segment index and the decimal part represents t.
-    public float calculatePointOnPath(float t, float distance) {
-
+    public float advance(float t, float distance) {
         int current_s = (int) Math.floor(t);
         float current_t = t - (float) Math.floor(t);
 
         // calculate current segment length:
-        Vector3 p_t = points.get(current_s);
-        Vector3 p_tNext = points.getCyclic(current_s + 1);
-
-        float L = Vector3.dst(p_t, p_tNext);
+        float L = lengths.getCyclic(current_s);
         if (L * current_t + distance < L) {
             return current_s + (L * current_t + distance) / L;
         }
 
-        distance = distance - L * current_t;
-        int n = current_s + 1 % points.size;
-        do {
-
-        } while (distance >= 0);
-
-        return 0;
+        distance = distance - L * (1 - current_t); // trim the remainder
+        int n = (current_s + 1) % points.size;
+        float currentLength = lengths.getCyclic(n);
+        while (distance - currentLength >= 0) {
+            n++;
+            distance = distance - currentLength;
+            currentLength = lengths.getCyclic(n);
+        }
+        return n + distance / lengths.getCyclic(n);
     }
 
-    // TODO
     public Vector3 getPosition(float t, Vector3 out) {
         int segment = (int) Math.floor(t);
         Vector3 p0 = points.getCyclic(segment);
@@ -80,11 +80,13 @@ public class Path {
         // recalculate directions
         if (!betweenBeginAndEnd) throw new IllegalStateException("Must call path.begin() before calling path.end()");
 
+        // handle closed paths
         this.closed = closed;
         if (closed) {
             if (points.first().epsilonEquals(points.last())) points.pop();
         }
-        dirs.clear();
+
+        // calculate dirs list
         if (closed) {
             for (int i = 0; i < points.size; i++) {
                 Vector3 prev = points.getCyclic(i - 1);
@@ -112,6 +114,14 @@ public class Path {
             Vector3 dirLast = new Vector3(points.get(points.size - 1)).sub(points.get(points.size - 2)).nor();
             dirs.add(dirLast);
         }
+
+        // calculate lengths list
+        int endIndex = closed ? points.size : points.size - 1;
+        for (int i = 0; i < endIndex; i++) {
+            float length = Vector3.dst(points.getCyclic(i), points.getCyclic(i +1));
+            lengths.add(length);
+        }
+
         betweenBeginAndEnd = false;
     }
 

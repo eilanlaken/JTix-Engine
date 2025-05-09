@@ -25,7 +25,6 @@ public class SceneRendering3D_Trains_8 implements Scene {
 
     Path path = new Path();
 
-    int current_n = 0;
     float current_t = 0;
     float speed = 10;
     float acceleration = 0;
@@ -34,7 +33,7 @@ public class SceneRendering3D_Trains_8 implements Scene {
 
         path
                 .begin()
-                .connect(Path.ofBezierLinear(new Vector3(0,0, 0), new Vector3(20,0, 0), 10))
+                .connect(Path.ofBezierLinear(new Vector3(0,0, 0), new Vector3(20,0, 0), 3))
                 .connect(Path.ofBezierQuadratic(new Vector3(20,0, 0), new Vector3(20,-15, 0), new Vector3(10,-15, 0), 10))
                 .connect(Path.ofBezierQuadratic(new Vector3(10,-15, 0), new Vector3(0,-15, 0), new Vector3(0,0,0), 10))
                 .end(true);
@@ -76,6 +75,15 @@ public class SceneRendering3D_Trains_8 implements Scene {
             Vector3 position = new Vector3();
             path.getPosition(current_t, position);
             transform_train.setTranslation(position);
+        }
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
+            float distance = speed * Graphics.getDeltaTime();
+            current_t = path.advance(current_t, distance);
+            Vector3 position = new Vector3();
+            path.getPosition(current_t, position);
+            transform_train.setTranslation(position);
+            //System.out.println(current_t);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
