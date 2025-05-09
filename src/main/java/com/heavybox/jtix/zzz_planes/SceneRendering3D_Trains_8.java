@@ -2,7 +2,6 @@ package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Model;
@@ -10,7 +9,6 @@ import com.heavybox.jtix.graphics.Renderer3D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
-import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
@@ -33,10 +31,25 @@ public class SceneRendering3D_Trains_8 implements Scene {
         //path.setToQuadraticBezier(new Vector3(0,0, 0), new Vector3(15,40,0), new Vector3(30,0,0));
         //path.setToQuadraticBezier(p0, p1, p2, 0.03f);
 
-        path.joinLine(new Vector3(0,0, 0), new Vector3(20,0, 0), 10)
-                .joinBezierQuadratic(new Vector3(21, 0,0), new Vector3(41, 0, 0), new Vector3(41, -30, 0), 20)
-                .update();
-        ;
+//        path.joinLine(new Vector3(0,0, 0), new Vector3(20,0, 0), 10)
+//                .joinBezierQuadratic(new Vector3(21, 0,0), new Vector3(41, 0, 0), new Vector3(41, -30, 0), 20)
+//                .update();
+//        ;
+
+        path.clear();
+
+
+        path
+                .begin()
+                .connect(Path.ofBezierLinear(new Vector3(0,0, 0), new Vector3(20,0, 0), 10))
+                .connect(Path.ofBezierQuadratic(new Vector3(20,0, 0), new Vector3(20,-15, 0), new Vector3(10,-15, 0), 10))
+                .connect(Path.ofBezierQuadratic(new Vector3(10,-15, 0), new Vector3(0,-15, 0), new Vector3(0,0,0), 10))
+                .end(true);
+
+//        path.clear();
+//        path.joinLine(new Vector3(0,0, 0), new Vector3(20,0, 0), 5).
+//        joinLine(new Vector3(20,0, 0), new Vector3(20,-20, 0), 5)
+//                .update();
 
         transform_train.setTranslation(path.points.get(0));
     }
@@ -110,7 +123,7 @@ public class SceneRendering3D_Trains_8 implements Scene {
             Quaternion q = new Quaternion();
             q.setFromAxisDeg(Vector3.Y_UNIT, 90);
             b.setToTranslationRotationScaling(new Vector3(0,0,0), q, new Vector3(1,1,1));
-            transform_train.setToInterpolate(a, b, t);
+            transform_train.setToInterpolation(a, b, t);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }
@@ -124,7 +137,22 @@ public class SceneRendering3D_Trains_8 implements Scene {
             Vector3 b1 = new Vector3(direction).crs(up);
             b.setFromBasis(b1, direction, up, position);
 
-            transform_train.setToInterpolate(a, b, t);
+            transform_train.setToInterpolation(a, b, t);
+            t += Graphics.getDeltaTime() / 10;
+            System.out.println(t);
+        }
+
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
+
+            Matrix4x4 b = new Matrix4x4();
+            Vector3 position = new Vector3(4,4,0);
+            Vector3 direction = new Vector3(0,1,0).rotate(180, 0,0,1);
+            Vector3 up = Vector3.Z_UNIT;
+            Vector3 b1 = new Vector3(direction).crs(up);
+            b.setFromBasis(b1, direction, up, position);
+
+            Matrix4x4.interpolationPositionRotation(a, b, t, transform_train);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }
@@ -146,7 +174,7 @@ public class SceneRendering3D_Trains_8 implements Scene {
             Vector3 b1 = new Vector3(direction).crs(up);
             target.setFromBasis(b1, direction, up, position);
 
-            transform_train.setToInterpolate(source, target, t);
+            transform_train.setToInterpolation(source, target, t);
             t += Graphics.getDeltaTime(); // currently, it takes exactly 1 second (t: 0 -> 1) to walk along ANY segment, regardless of its length.
             // we need to remedy this. First, we find which segment we are currently traveling on. Then we calculate its length. Then, based on the
             // desired speed of the train, we update t.

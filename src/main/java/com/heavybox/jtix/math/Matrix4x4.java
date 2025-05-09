@@ -208,7 +208,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
                 scale.z);
     }
 
-    public Matrix4x4 setToPositionEulerScaling(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
+    public Matrix4x4 setToTranslationEulerScaling(float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
         quaternion.setEulerAnglesDeg(degX, degY, degZ);
         return setToTranslationRotationScaling(x, y, z, quaternion.x, quaternion.y, quaternion.z, quaternion.w, sclX, sclY, sclZ);
     }
@@ -895,7 +895,7 @@ public class Matrix4x4 implements MemoryPool.Reset {
         return this;
     }
 
-    public Matrix4x4 setToInterpolate(Matrix4x4 source, Matrix4x4 target, float factor) {
+    public Matrix4x4 setToInterpolation(Matrix4x4 source, Matrix4x4 target, float factor) {
         source.getScale(tmpVec);
         target.getScale(tmpForward);
         source.getRotation(quaternion);
@@ -908,6 +908,34 @@ public class Matrix4x4 implements MemoryPool.Reset {
         setTranslation(tmpUp.scl(1-factor).add(right.scl(factor)));
         return this;
     }
+
+    public static Matrix4x4 interpolation(final Matrix4x4 source, final Matrix4x4 target, final float factor, Matrix4x4 out) {
+        source.getScale(tmpVec);
+        target.getScale(tmpForward);
+        source.getRotation(quaternion);
+        target.getRotation(quaternion2);
+        source.getTranslation(tmpUp);
+        target.getTranslation(right);
+
+        out.setToScaling(tmpVec.scl(1-factor).add(tmpForward.scl(factor)));
+        out.rotateLocalAxis(quaternion.slerp(quaternion2, factor));
+        out.setTranslation(tmpUp.scl(1-factor).add(right.scl(factor)));
+        return out;
+    }
+
+    public static Matrix4x4 interpolationPositionRotation(final Matrix4x4 source, final Matrix4x4 target, final float factor, Matrix4x4 out) {
+        source.getRotation(quaternion);
+        target.getRotation(quaternion2);
+        source.getTranslation(tmpUp);
+        target.getTranslation(right);
+
+        out.setToScaling(out.getScaleX(), out.getScaleY(), out.getScaleZ());
+        out.rotateLocalAxis(quaternion.slerp(quaternion2, factor));
+        out.setTranslation(tmpUp.scl(1-factor).add(right.scl(factor)));
+        return out;
+    }
+
+
 
     // TODO: careful
     public Matrix4x4 stretch(float scale) {

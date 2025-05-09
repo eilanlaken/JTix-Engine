@@ -105,7 +105,7 @@ public class SceneRendering3D_Trains_7 implements Scene {
             Quaternion q = new Quaternion();
             q.setFromAxisDeg(Vector3.Y_UNIT, 90);
             b.setToTranslationRotationScaling(new Vector3(0,0,0), q, new Vector3(1,1,1));
-            transform_train.setToInterpolate(a, b, t);
+            transform_train.setToInterpolation(a, b, t);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }
@@ -119,7 +119,7 @@ public class SceneRendering3D_Trains_7 implements Scene {
             Vector3 b1 = new Vector3(direction).crs(up);
             b.setFromBasis(b1, direction, up, position);
 
-            transform_train.setToInterpolate(a, b, t);
+            transform_train.setToInterpolation(a, b, t);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }
@@ -141,7 +141,7 @@ public class SceneRendering3D_Trains_7 implements Scene {
             Vector3 b1 = new Vector3(direction).crs(up);
             target.setFromBasis(b1, direction, up, position);
 
-            transform_train.setToInterpolate(source, target, t);
+            transform_train.setToInterpolation(source, target, t);
             t += Graphics.getDeltaTime(); // currently, it takes exactly 1 second (t: 0 -> 1) to walk along ANY segment, regardless of its length.
             // we need to remedy this. First, we find which segment we are currently traveling on. Then we calculate its length. Then, based on the
             // desired speed of the train, we update t.

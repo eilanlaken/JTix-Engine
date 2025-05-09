@@ -103,7 +103,7 @@ public class SceneRendering3D_Trains_6 implements Scene {
             Quaternion q = new Quaternion();
             q.setFromAxisDeg(Vector3.Y_UNIT, 90);
             b.setToTranslationRotationScaling(new Vector3(0,0,0), q, new Vector3(1,1,1));
-            transform_train.setToInterpolate(a, b, t);
+            transform_train.setToInterpolation(a, b, t);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }
@@ -117,7 +117,7 @@ public class SceneRendering3D_Trains_6 implements Scene {
             Vector3 b1 = new Vector3(direction).crs(up);
             b.setFromBasis(b1, direction, up, position);
 
-            transform_train.setToInterpolate(a, b, t);
+            transform_train.setToInterpolation(a, b, t);
             t += Graphics.getDeltaTime() / 10;
             System.out.println(t);
         }

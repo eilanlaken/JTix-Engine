@@ -22,7 +22,7 @@ public final class ComponentTransform3D extends Matrix4x4 implements ComponentTr
 
     public ComponentTransform3D(boolean isStatic, float x, float y, float z, float degX, float degY, float degZ, float sclX, float sclY, float sclZ) {
         super();
-        setToPositionEulerScaling(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
+        setToTranslationEulerScaling(x, y, z, degX, degY, degZ, sclX, sclY, sclZ);
         this.isStatic = false;
     }
 
