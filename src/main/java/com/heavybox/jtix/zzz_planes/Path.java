@@ -3,6 +3,7 @@ package com.heavybox.jtix.zzz_planes;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.math.Vector3;
 
+// TODO: move this to the math package after properly formatting.
 public class Path {
 
     private boolean closed = false; // for this project, assume closed paths only.
@@ -16,7 +17,6 @@ public class Path {
         return this;
     }
 
-
     public Path connect(final Path path) {
         if (path.points.isEmpty()) return this;
 
@@ -29,6 +29,42 @@ public class Path {
             this.points.addAll(path.points, 1, path.points.size - 1);
         }
         return this;
+    }
+
+    // returns a floating point number that represents the point on the path
+    // : integer part represents the segment index and the decimal part represents t.
+    public float calculatePointOnPath(float t, float distance) {
+
+        int current_s = (int) Math.floor(t);
+        float current_t = t - (float) Math.floor(t);
+
+        // calculate current segment length:
+        Vector3 p_t = points.get(current_s);
+        Vector3 p_tNext = points.getCyclic(current_s + 1);
+
+        float L = Vector3.dst(p_t, p_tNext);
+        if (L * current_t + distance < L) {
+            return current_s + (L * current_t + distance) / L;
+        }
+
+        distance = distance - L * current_t;
+        int n = current_s + 1 % points.size;
+        do {
+
+        } while (distance >= 0);
+
+        return 0;
+    }
+
+    // TODO
+    public Vector3 getPosition(float t, Vector3 out) {
+        int segment = (int) Math.floor(t);
+        Vector3 p0 = points.getCyclic(segment);
+        Vector3 p1 = points.getCyclic(segment + 1);
+        float fraction = t - (int) Math.floor(t);
+        out.x = (1 - fraction) * p0.x + fraction * p1.x;
+        out.y = (1 - fraction) * p0.y + fraction * p1.y;
+        return out;
     }
 
     public Path begin() {
@@ -104,7 +140,5 @@ public class Path {
         } while (t <= 1.0f);
         return path;
     }
-
-
 
 }

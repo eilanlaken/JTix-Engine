@@ -219,6 +219,11 @@ public class Vector3 implements MemoryPool.Reset {
     }
 
     /** @return The Euclidean distance between the two specified vectors */
+    public static float dst (final Vector3 a, final Vector3 b) {
+        return dst(a.x, a.y, a.z, b.x, b.y, b.z);
+    }
+
+    /** @return The Euclidean distance between the two specified vectors */
     public static float dst (final float x1, final float y1, final float z1, final float x2, final float y2, final float z2) {
         final float a = x2 - x1;
         final float b = y2 - y1;
