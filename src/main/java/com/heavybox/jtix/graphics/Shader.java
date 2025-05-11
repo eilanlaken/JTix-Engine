@@ -194,6 +194,11 @@ public class Shader implements MemoryResource {
         }
     }
 
+    public boolean uniformExists(final String name) {
+        final int location = uniformLocations.get(name, -1);
+        return location != -1;
+    }
+
     public void bindUniform(final String name, final Object value) {
         if (value == null) throw new IllegalArgumentException();
         //if (value == null) return;
@@ -212,6 +217,8 @@ public class Shader implements MemoryResource {
                     uniformsCache.put(location, slot);
                 }
             }
+
+            // TODO: cubemaps textures
 
             // TODO: 3d textures
             case GL20.GL_SAMPLER_3D -> {

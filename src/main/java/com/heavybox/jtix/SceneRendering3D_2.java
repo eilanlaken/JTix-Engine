@@ -114,7 +114,7 @@ public class SceneRendering3D_2 implements Scene {
 
         Renderer3D.begin(camera);
         //Renderer3D.drawModel_tmp(model_1, transform);
-        Renderer3D.drawModel_tmp_2(model_2.meshes[0], transform);
+        //Renderer3D.drawModel_tmp_2(model_2.meshes[0], transform);
         Renderer3D.end();
     }
 

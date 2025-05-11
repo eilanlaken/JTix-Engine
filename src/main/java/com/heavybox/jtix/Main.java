@@ -69,7 +69,8 @@ public class Main {
         //settings.height = 1080;
         settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_Trains_8());
+        Application.launch(new SceneRendering3D_ModelsViewer_Trees());
+        //Application.launch(new SceneRendering3D_Transparents_1());
 
     }
 

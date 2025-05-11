@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -106,47 +107,6 @@ public class SceneRendering3D_Clouds_5 implements Scene {
         }
         camera.update();
 
-
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,0,-0.05f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,0,0.05f);
-//        }
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,-0.05f, 0);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0,0.05f,0);
-//        }
-
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) {
-//            transformCloud_1.translateGlobalAxisXYZ(-0.05f,0, 0);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.X)) {
-//            transformCloud_1.translateGlobalAxisXYZ(0.05f,0,0);
-//        }
-//
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-//            camera.rotateAroundForward(1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-//            camera.rotateAroundForward(-1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-//            camera.rotateAroundUp(1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-//            camera.rotateAroundUp(-1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-//            camera.rotateAroundRight(1f);
-//        }
-//        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-//            camera.rotateAroundRight(-1f);
-//        }
-
         for (int i = 0; i < transformClouds.length; i++) {
             orient_2(transformClouds[i]);
         }
@@ -159,11 +119,11 @@ public class SceneRendering3D_Clouds_5 implements Scene {
         Vector3 position_o2 = new Vector3();
 
         Renderer3D.begin(camera);
-//        Collections.sort(transformClouds, (o1, o2) -> {
-//            float d1 = camera.position.dst2(o1.getPosition(position_o1));
-//            float d2 = camera.position.dst2(o2.getPosition(position_o2));
-//            return Float.compare(d2, d1); // farthest first
-//        });
+        Collections.sort(transformClouds, (o1, o2) -> {
+            float d1 = camera.position.dst2(o1.getTranslation(position_o1));
+            float d2 = camera.position.dst2(o2.getTranslation(position_o2));
+            return Float.compare(d2, d1); // farthest first
+        });
 
         // TODO: sort by distance to camera!
         //GL11.glDisable(GL11.GL_CULL_FACE); //

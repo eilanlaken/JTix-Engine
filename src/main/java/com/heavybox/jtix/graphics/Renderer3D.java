@@ -1,11 +1,10 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.input.Input;
-import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -14,9 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -33,8 +30,10 @@ import java.util.stream.Collectors;
 // (for complex models with multiple model parts, expect more).
 public class Renderer3D {
 
-    private static final MemoryPool<RenderCommand> renderUnitPool = new MemoryPool<>(RenderCommand.class, 5);
-    private static final Array<RenderCommand>      renderUnits    = new Array<>(false, 20);
+    private static final MemoryPool<RenderCommand> renderCommandsPool = new MemoryPool<>(RenderCommand.class, 5);
+    private static final Array<RenderCommand>      renderCommands     = new Array<>(false, 20);
+    // TODO: environment: lights, fog.
+
 
     // defaults
     private static final Texture whitePixelTexture  = createDefaultTexture();
@@ -42,7 +41,6 @@ public class Renderer3D {
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
     private static final Color   defaultColor       = Color.WHITE.clone();
-
 
     private static boolean drawing = false;
 
@@ -66,155 +64,8 @@ public class Renderer3D {
         drawing = true;
         currentShader = defaultShaderPBR;
 
-        // TODO
+        // TODO (remove).
         ShaderBinder.bind(currentShader);
-    }
-
-    // TODO
-    private void setShader() {
-
-    }
-
-    public static void drawModel_tmp(Model model, Matrix4x4 transform) {
-        currentShader.bindUniform("u_transform", transform);
-        currentShader.bindUniform("u_camera_combined", currentCamera.combined);
-        GL30.glBindVertexArray(model.meshes[0].vaoId);
-
-        GL20.glEnableVertexAttribArray(0);
-        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.meshes[0].vertexCount);
-        GL20.glDisableVertexAttribArray(0);
-
-        GL30.glBindVertexArray(0);
-    }
-
-    public static void drawModel_tmp_2(ModelMesh mesh, Matrix4x4 transform) {
-        defaultShaderPBR.bindUniform("u_transform", transform);
-        defaultShaderPBR.bindUniform("u_camera_combined", currentCamera.combined);
-
-        GL30.glBindVertexArray(mesh.vaoId);
-        {
-//            for (VertexAttribute attribute : VertexAttribute.values()) {
-//                if (mesh.hasVertexAttribute(attribute)) {
-//                    System.out.println(attribute);
-//                    GL20.glEnableVertexAttribArray(attribute.glslLocation);
-//                }
-//            }
-//            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
-//            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
-//            for (VertexAttribute attribute : VertexAttribute.values()) if (mesh.hasVertexAttribute(attribute)) GL20.glDisableVertexAttribArray(attribute.glslLocation);
-
-            GL20.glEnableVertexAttribArray(0);
-            GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
-            GL20.glDisableVertexAttribArray(0);
-        }
-        GL30.glBindVertexArray(0);
-    }
-
-    public static void drawModel_tmp_3(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
-        currentShader.bindUniform("u_transform", transform);
-        currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
-
-        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
-        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
-
-        if (texture_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
-            currentShader.bindUniform("u_color_diffuse", Color.WHITE);
-        } else if (color_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", whitePixelTexture);
-            currentShader.bindUniform("u_color_diffuse", color_diffuse);
-        } else { // TODO: handle error: missing both diffuse texture and color.
-
-        }
-
-
-        GL30.glBindVertexArray(mesh.vaoId);
-        {
-//            for (VertexAttribute attribute : VertexAttribute.values()) {
-//                if (mesh.hasVertexAttribute(attribute)) {
-//                    System.out.println(attribute);
-//                    GL20.glEnableVertexAttribArray(attribute.glslLocation);
-//                }
-//            }
-//            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
-//            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
-//            for (VertexAttribute attribute : VertexAttribute.values()) if (mesh.hasVertexAttribute(attribute)) GL20.glDisableVertexAttribArray(attribute.glslLocation);
-
-            // turn vbos on / off based on the shader and mesh
-
-            for (VertexAttribute attribute : VertexAttribute.values()) {
-                if (!currentShader.hasVertexAttribute(attribute)) continue;
-                if (!mesh.hasVertexAttribute(attribute)) continue;
-                GL20.glEnableVertexAttribArray(attribute.glslLocation);
-                System.out.println(attribute.glslLocation);
-            }
-
-            GL20.glEnableVertexAttribArray(0); // positions
-            GL20.glEnableVertexAttribArray(2); // uvs
-            GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
-            GL20.glDisableVertexAttribArray(0);
-            GL20.glDisableVertexAttribArray(2);
-
-            for (VertexAttribute attribute : VertexAttribute.values()) {
-                if (!currentShader.hasVertexAttribute(attribute)) continue;
-                if (!mesh.hasVertexAttribute(attribute)) continue;
-                GL20.glDisableVertexAttribArray(attribute.glslLocation);
-            }
-        }
-        GL30.glBindVertexArray(0);
-    }
-
-    public static void drawModel_tmp_4(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
-        currentShader.bindUniform("u_transform", transform);
-        currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
-        //currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
-
-        // TODO: bind environment lights when binding the camera.
-        //currentShader.bindUniform("pointLight.position", new Vector3(0,-5,0));
-        //currentShader.bindUniform("pointLight.color", new Vector3(1,0.2f,0.2f));
-        //currentShader.bindUniform("pointLight.intensity", 100);
-
-
-        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
-        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
-
-        if (texture_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
-            currentShader.bindUniform("u_color_diffuse", Color.WHITE);
-        } else if (color_diffuse != null) {
-            currentShader.bindUniform("u_texture_diffuse", whitePixelTexture);
-            currentShader.bindUniform("u_color_diffuse", color_diffuse);
-        } else { // TODO: handle error: missing both diffuse texture and color.
-
-        }
-
-        float metalness = (Float) material.materialAttributes.get("u_prop_metallic");
-        float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
-        // TODO: conditional uniform binding - based on the shader attribute.
-        //currentShader.bindUniform("u_prop_metallic", metalness);
-        //currentShader.bindUniform("u_prop_roughness", roughness);
-
-        GL30.glBindVertexArray(mesh.vaoId);
-        {
-
-            // turn vbos on based on the shader and mesh
-            for (VertexAttribute attribute : VertexAttribute.values()) {
-                if (!currentShader.hasVertexAttribute(attribute)) continue;
-                if (!mesh.hasVertexAttribute(attribute)) continue;
-                GL20.glEnableVertexAttribArray(attribute.glslLocation);
-            }
-
-            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
-            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
-
-            // turn vbos off based on the shader and mesh
-            for (VertexAttribute attribute : VertexAttribute.values()) {
-                if (!currentShader.hasVertexAttribute(attribute)) continue;
-                if (!mesh.hasVertexAttribute(attribute)) continue;
-                GL20.glDisableVertexAttribArray(attribute.glslLocation);
-            }
-        }
-        GL30.glBindVertexArray(0);
     }
 
     public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
@@ -530,31 +381,28 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    public static void drawModelWireframe(Model model, Matrix4x4 transform) {
+    private static void flush() {
 
     }
 
-    public static void drawTexture(Texture texture, Matrix4x4 transform) {
+    private void setShader(@Nullable Shader shader) {
+        if (shader == null) shader = defaultShaderPBR;
+        if (currentShader == shader) return;
+        ShaderBinder.bind(shader);
 
-    }
+        if (shader.uniformExists("u_camera_combined")) {
+            currentShader.bindUniform("u_camera_combined", currentCamera.combined);
+        }
+        if (shader.uniformExists("u_camera_position")) {
+            currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+        }
 
-    public static void drawCubeThin(Matrix4x4 transform) {
-
-    }
-
-    public static void drawCubeFilled(Matrix4x4 transform) {
-
-    }
-
-    public static void drawText(Font font, String text, Matrix4x4 transform) {
-
-    }
-
-    private void flush() {
-
+        currentShader = shader;
     }
 
     public static void end() {
+        if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
+        flush();
         drawing = false;
     }
 
@@ -661,23 +509,28 @@ public class Renderer3D {
     private static final class RenderCommand implements MemoryPool.Reset {
 
         public ModelMesh mesh;
-        public boolean isPrimitive; // represents a "primitive" shape: a quad, cube, sphere, function, curve. The vertices are calculated on the fly and stored in primitiveVertices.
-        public FloatBuffer primitiveVertices; // interleaved
-
+        public ModelMaterial material;
         public Shader shader = null;
-        public HashMap<String, Object> materialAttributes;
-        public Matrix4x4      transform = null;
+        public Matrix4x4 transform = null;
 
         public RenderCommand() {} // using reflection.
 
         @Override
         public void reset() {
             this.mesh = null;
-            primitiveVertices = null;
-            shader = null;
+            this.shader = null;
             this.transform = null;
-            materialAttributes = null;
+            this.material = null;
         }
+
+    }
+
+    // TODO: improve to include: multiple light sources, point lights, spot lights, area lights, environmental effects (fog, ?, ...).
+    private static final class RenderEnvironment {
+
+        public Vector3 directionalLightColor = new Vector3(1,1,1);
+        public Vector3 directionalLightDirection = new Vector3(0,0,-1);
+        public float   directionalLightIntensity = 0.2f; // TODO: set these defaults to "0".
 
     }
 

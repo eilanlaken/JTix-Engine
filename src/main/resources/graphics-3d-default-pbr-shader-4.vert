@@ -47,9 +47,6 @@ void main()
     vec3 N = normalize(vec3(normal_matrix * a_normal));
     T = normalize(T - dot(T, N) * N); // re-orthogonalize T with respect to N (grahm-schmidt)
     vec3 B = cross(N, T);
-    //vec3 T = normalize(vec3(normal_matrix * a_tangent));
-    //vec3 N = normalize(vec3(normal_matrix * a_normal));
-    //vec3 B = normalize(vec3(normal_matrix * a_biTangent));
     mat3 TBN = mat3(T, B, N);
     mat3 invTBN = transpose(TBN); // TBN is orthogonal therefore inverse(TBN) = transpose(TBN)
 
