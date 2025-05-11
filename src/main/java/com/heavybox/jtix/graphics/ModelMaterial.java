@@ -9,6 +9,8 @@ import java.util.Map;
 // TODO: make clone()able
 public class ModelMaterial implements MemoryResource {
 
+    public Shader shader = null;
+    public boolean useLights = true;
     public HashMap<String, Object> materialAttributes = new HashMap<>();
 
     @Override

@@ -32,24 +32,19 @@ public class Renderer3D {
 
     @Deprecated public static Vector3 lightDir = new Vector3(0,1,-1).nor(); // TODO: remove
 
-
-    private static final MemoryPool<RenderCommand> renderCommandsPool = new MemoryPool<>(RenderCommand.class, 5);
-    private static final Array<RenderCommand>      renderCommands     = new Array<>(false, 20);
-    private static final RenderEnvironment         renderEnvironment  = new RenderEnvironment();
-
-
     // defaults
     private static final Texture whitePixelTexture  = createDefaultTexture();
     private static final Texture normalMapTexture   = createNormalMapTexture();
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
-    private static final Color   defaultColor       = Color.WHITE.clone();
+
+    private static final MemoryPool<RenderCommand> renderCommandsPool = new MemoryPool<>(RenderCommand.class, 5);
+    private static final Array<RenderCommand>      renderCommands     = new Array<>(false, 20);
+    private static final RenderEnvironment         renderEnvironment  = new RenderEnvironment();
 
     private static boolean drawing = false;
-
-    private static Camera currentCamera = null;
-    private static int    currentMode   = GL11.GL_TRIANGLES;
-    private static Shader currentShader = defaultShaderPBR;
+    private static Camera  currentCamera = null;
+    private static Shader  currentShader = defaultShaderPBR;
 
     // TODO: check if Renderer2D is currently rendering.
     public static void begin(Camera camera) {
@@ -71,7 +66,18 @@ public class Renderer3D {
         ShaderBinder.bind(currentShader);
     }
 
-    public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+    public static void drawModel(Model model, Matrix4x4 transform) {
+        // for every mesh, create a render command
+        for (int i = 0; i < model.meshes.length; i++) {
+            RenderCommand renderCommand = renderCommandsPool.allocate();
+            renderCommand.mesh = model.meshes[i];
+            renderCommand.material = model.materials[i];
+            renderCommand.transform = transform;
+            renderCommands.add(renderCommand);
+        }
+    }
+
+    @Deprecated public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(currentShader);
         currentShader.bindUniform("u_transform", transform);
         currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
@@ -147,7 +153,7 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    public static void drawModel_custom_shader(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+    @Deprecated public static void drawModel_custom_shader(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
 
         shader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
@@ -210,7 +216,7 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+    @Deprecated public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
         //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
 
@@ -279,7 +285,7 @@ public class Renderer3D {
 
     }
 
-    public static void drawModel_cloud_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform, int index) {
+    @Deprecated public static void drawModel_cloud_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform, int index) {
         ShaderBinder.bind(shader);
         GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
 
@@ -328,7 +334,7 @@ public class Renderer3D {
         GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
     }
 
-    public static void drawModel_custom_unlit_shader(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+    @Deprecated public static void drawModel_custom_unlit_shader(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(defaultShaderUnlit);
 
         defaultShaderUnlit.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
@@ -472,7 +478,6 @@ public class Renderer3D {
 
         public ModelMesh mesh;
         public ModelMaterial material;
-        public Shader shader = null;
         public Matrix4x4 transform = null;
 
         public RenderCommand() {} // using reflection.
@@ -480,7 +485,6 @@ public class Renderer3D {
         @Override
         public void reset() {
             this.mesh = null;
-            this.shader = null;
             this.transform = null;
             this.material = null;
         }
