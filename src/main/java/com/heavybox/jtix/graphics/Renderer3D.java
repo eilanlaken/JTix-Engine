@@ -30,9 +30,12 @@ import java.util.stream.Collectors;
 // (for complex models with multiple model parts, expect more).
 public class Renderer3D {
 
+    @Deprecated public static Vector3 lightDir = new Vector3(0,1,-1).nor(); // TODO: remove
+
+
     private static final MemoryPool<RenderCommand> renderCommandsPool = new MemoryPool<>(RenderCommand.class, 5);
     private static final Array<RenderCommand>      renderCommands     = new Array<>(false, 20);
-    // TODO: environment: lights, fog.
+    private static final RenderEnvironment         renderEnvironment  = new RenderEnvironment();
 
 
     // defaults
@@ -207,8 +210,6 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    public static Vector3 lightDir = new Vector3(0,1,-1).nor();
-
     public static void drawModel_custom_shader_2(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(shader);
         //GL11.glDisable(GL11.GL_CULL_FACE); // TODO: enable!
@@ -381,8 +382,11 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
-    private static void flush() {
-
+    public static void end() {
+        if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
+        drawing = false;
+        renderCommandsPool.freeAll(renderCommands);
+        renderCommands.clear();
     }
 
     private void setShader(@Nullable Shader shader) {
@@ -400,11 +404,7 @@ public class Renderer3D {
         currentShader = shader;
     }
 
-    public static void end() {
-        if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
-        flush();
-        drawing = false;
-    }
+
 
     private static Shader createDefaultUnlitShader() {
         try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-3.vert");
@@ -416,9 +416,8 @@ public class Renderer3D {
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException("error creating default shader");
         }
-        return null;
     }
 
     private static Shader createDefaultPBRShader() {
@@ -431,44 +430,7 @@ public class Renderer3D {
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
-            System.err.println("Could not create shader program from resources. Creating manually. Exception: " + e.getMessage());
-
-            String vertexShader = """
-                    #version 450
-                      
-                      // attributes
-                      layout(location = 0) in vec3 a_position;
-                      layout(location = 2) in vec2 a_textCoords0;
-                      
-                      // uniforms
-                      uniform mat4 u_transform;
-                      uniform mat4 u_camera_combined;
-                      
-                      out vec2 uv;
-                      
-                      void main() {
-                          uv = a_textCoords0;
-                          gl_Position = u_camera_combined * u_transform * vec4(a_position, 1.0);
-                      }
-                    """;
-
-            String fragmentShader = """
-                    #version 450
-                     
-                     // inputs
-                     in vec2 uv;
-                     
-                     // uniforms
-                     uniform sampler2D u_texture_diffuse;
-                     
-                     // outputs
-                     layout (location = 0) out vec4 out_color;
-                     
-                     void main() {
-                         out_color = texture(u_texture_diffuse, uv);
-                     }""";
-
-            return new Shader(vertexShader, fragmentShader);
+            throw new RuntimeException("error creating default shader");
         }
     }
 
@@ -531,6 +493,16 @@ public class Renderer3D {
         public Vector3 directionalLightColor = new Vector3(1,1,1);
         public Vector3 directionalLightDirection = new Vector3(0,0,-1);
         public float   directionalLightIntensity = 0.2f; // TODO: set these defaults to "0".
+
+        // TODO: add ambient light
+
+        // TODO: add point lights
+
+        // TODO: add spot lights
+
+        // TODO: add ara lights
+
+        // TODO: add fog
 
     }
 
