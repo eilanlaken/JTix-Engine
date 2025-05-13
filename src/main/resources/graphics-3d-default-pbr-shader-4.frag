@@ -84,9 +84,9 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 //https://github.com/NCCA/NormalMapping/blob/main/shaders/NormalMapVert.glsl
 void main()
 {
-    vec3 albedo = (u_color_diffuse * texture(u_texture_diffuse, uv)).rgb;
+    vec3 albedo = u_color_diffuse.rgb * texture(u_texture_diffuse, uv).rgb;
     float metalness = u_prop_metallic * texture(u_texture_metalness, uv).r;
-    float roughness = u_prop_roughness * texture(u_texture_roughness, uv).r;
+    float roughness = u_prop_roughness * texture(u_texture_roughness, uv).g;
     vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
     vec3 V = unit_vertex_to_camera;
     vec3 F0 = mix(vec3(0.04), albedo, metalness);
