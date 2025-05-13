@@ -33,9 +33,11 @@ uniform sampler2D u_texture_diffuse;
 uniform sampler2D u_texture_metalness;
 uniform sampler2D u_texture_roughness;
 uniform sampler2D u_texture_normalMap;
+uniform sampler2D u_texture_opacity;
 uniform vec4 u_color_diffuse;
-uniform float u_prop_metallic; // TODO: add texture
-uniform float u_prop_roughness; // TODO: add texture
+uniform float u_prop_metallic;
+uniform float u_prop_roughness;
+uniform float u_prop_opacity;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -87,6 +89,7 @@ void main()
     vec3 albedo = u_color_diffuse.rgb * texture(u_texture_diffuse, uv).rgb;
     float metalness = u_prop_metallic * texture(u_texture_metalness, uv).r;
     float roughness = u_prop_roughness * texture(u_texture_roughness, uv).g;
+    float opacity = u_prop_opacity * texture(u_texture_opacity, uv).a;
     vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
     vec3 V = unit_vertex_to_camera;
     vec3 F0 = mix(vec3(0.04), albedo, metalness);
@@ -150,7 +153,7 @@ void main()
     // gamma correct
     //color = pow(color, vec3(1.0/2.2));
 
-    out_color = vec4(color, 1.0);
+    out_color = vec4(color, opacity);
     //out_color = vec4(u_prop_metallic, u_prop_metallic, u_prop_metallic, 1.0);
     //out_color = vec4(roughness, roughness, roughness, 1.0);
 }

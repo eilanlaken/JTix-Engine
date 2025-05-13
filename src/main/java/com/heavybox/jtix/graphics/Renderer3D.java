@@ -74,6 +74,11 @@ public class Renderer3D {
             renderCommand.mesh = model.meshes[i];
             renderCommand.material = model.materials[i];
             renderCommand.transform = transform;
+            renderCommand.shader = renderCommand.material.shader;
+            if (renderCommand.shader == null) {
+                renderCommand.shader = renderCommand.material.useLights ? defaultShaderPBR : defaultShaderUnlit;
+            }
+
             if (renderCommand.material.transparent) {
                 renderCommandsTransparent.add(renderCommand);
             } else {
@@ -134,6 +139,16 @@ public class Renderer3D {
         } else {
             currentShader.bindUniform("u_texture_roughness", whitePixelTexture);
             currentShader.bindUniform("u_prop_roughness", roughness);
+        }
+
+        Texture texture_opacity = (Texture) material.materialAttributes.get("u_texture_opacity");
+        float opacity = (Float) material.materialAttributes.get("u_prop_opacity");
+        if (texture_opacity != null) {
+            currentShader.bindUniform("u_texture_opacity", texture_opacity);
+            currentShader.bindUniform("u_prop_opacity", 1);
+        } else {
+            currentShader.bindUniform("u_texture_opacity", whitePixelTexture);
+            currentShader.bindUniform("u_prop_opacity", opacity);
         }
 
         GL30.glBindVertexArray(mesh.vaoId);
@@ -500,9 +515,10 @@ public class Renderer3D {
 
     private static final class RenderCommand implements MemoryPool.Reset {
 
-        public ModelMesh mesh;
-        public ModelMaterial material;
-        public Matrix4x4 transform = null;
+        public ModelMesh     mesh      = null;
+        public ModelMaterial material  = null;
+        public Matrix4x4     transform = null;
+        public Shader        shader    = null;
 
         public RenderCommand() {} // using reflection.
 
@@ -511,6 +527,7 @@ public class Renderer3D {
             this.mesh = null;
             this.transform = null;
             this.material = null;
+            this.shader = null;
         }
 
     }

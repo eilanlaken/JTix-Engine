@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class Shader implements MemoryResource {
 
-    private static final Pattern GLSL_COMMENT_PATTERN   = Pattern.compile("//.*|/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/");
-    private static final Pattern GLSL_LAYOUT_IN_PATTERN = Pattern.compile("layout\\s*\\(\\s*location\\s*=\\s*\\d+\\s*\\)\\s*(in|attribute)");
+    @Deprecated private static final Pattern GLSL_COMMENT_PATTERN   = Pattern.compile("//.*|/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*/");
+    @Deprecated private static final Pattern GLSL_LAYOUT_IN_PATTERN = Pattern.compile("layout\\s*\\(\\s*location\\s*=\\s*\\d+\\s*\\)\\s*(in|attribute)");
 
     private boolean deleted = false;
 
@@ -199,12 +199,14 @@ public class Shader implements MemoryResource {
         return location != -1;
     }
 
+    public int getUniformLocation(final String name) {
+        return uniformLocations.get(name, -1);
+    }
+
     public void bindUniform(final String name, final Object value) {
-        if (value == null) throw new IllegalArgumentException();
-        //if (value == null) return;
+        if (value == null) throw new GraphicsException("Trying to bind null value to a uniform variable.");
         final int location = uniformLocations.get(name, -1);
-        // TODO: remove. Good only for debugging, but prevents custom flexible shading.
-        if (location == -1) throw new IllegalArgumentException("\n\nError: " + this.getClass().getSimpleName() +  " does not have a uniform named " + name + "." + "\nIf you have defined the uniform but have not used it, the GLSL compiler discarded it.\n");
+        if (location == -1) throw new GraphicsException("\n\nError: " + this.getClass().getSimpleName() +  " does not have a uniform named " + name + "." + "\nIf you have defined the uniform but have not used it, the GLSL compiler discarded it.\n");
         final int type = uniformTypes.get(name, -1);
         switch (type) {
 
