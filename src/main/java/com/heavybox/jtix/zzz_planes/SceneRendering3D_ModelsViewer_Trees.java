@@ -148,7 +148,6 @@ public class SceneRendering3D_ModelsViewer_Trees implements Scene {
 
         Renderer3D.begin(camera);
 
-
         for (int i = 0; i < model_floor.meshes.length; i++) {
             Renderer3D.drawModel_tmp_5(model_floor.meshes[i], model_floor.materials[i], transform_floor);
         }

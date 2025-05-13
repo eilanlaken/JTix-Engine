@@ -58,8 +58,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     public Array<AssetDescriptor> load(String path, HashMap<String, Object> options) {
         this.texturesFolderPath = options != null ? (String) options.get("texturesFolderPath") : null;
         this.folderPath = Paths.get(path).getParent().toString();
-        // TODO: use the options here.
-        // TODO: additional flags: Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_GenNormals
         final int importFlags =
 
                 Assimp.aiProcess_Triangulate |
