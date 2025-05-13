@@ -39,6 +39,10 @@ public class SceneRendering3D_ModelsViewer_Trees implements Scene {
         model_import = Assets.get("assets/app-models/plane_2.fbx");
         model_tree = Assets.get("assets/app-models/tree-green_1.fbx");
 
+        for (int i = 0; i < model_tree.meshes.length; i++) {
+            ModelMaterial material = model_tree.materials[i];
+            System.out.println(material.transparent);
+        }
     }
 
     @Override
@@ -137,7 +141,6 @@ public class SceneRendering3D_ModelsViewer_Trees implements Scene {
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             Renderer3D.lightDir.rotate(1f,1,0,0);
-            System.out.println(Renderer3D.lightDir);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

@@ -36,7 +36,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         uniformNameTextureTypes.put("u_texture_normalMap", Assimp.aiTextureType_NORMALS);
         uniformNameTextureTypes.put("u_texture_opacity", Assimp.aiTextureType_OPACITY);
         uniformNameTextureTypes.put("u_texture_metalness", Assimp.aiTextureType_METALNESS);
-        uniformNameTextureTypes.put("u_texture_roughness", Assimp.aiTextureType_SHININESS); // TODO
+        uniformNameTextureTypes.put("u_texture_roughness", Assimp.aiTextureType_SHININESS);
 
         // all possible material color parameters
         namedColorParams.put("u_color_diffuse", Assimp.AI_MATKEY_COLOR_DIFFUSE);
@@ -145,6 +145,19 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 modelMaterial.materialAttributes.put(uniform, value);
             }
 
+            // determine if material is fully opaque or uses transparency
+            boolean transparent = false;
+            if (modelMaterial.materialAttributes.get("u_prop_opacity") != null) {
+                float opacityValue = (Float) modelMaterial.materialAttributes.get("u_prop_opacity");
+                if (opacityValue < 1.0f) transparent = true;
+            }
+            Texture opacityTexture = (Texture) modelMaterial.materialAttributes.get("u_texture_opacity");
+            if (opacityTexture != null) {
+                transparent = true;
+            }
+            modelMaterial.transparent = transparent;
+            // determine if material is fully opaque or uses transparency
+
             allDifferentMaterials[i] = modelMaterial;
         }
 
@@ -236,7 +249,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         meshData.textureCoords0 = getTextureCoords0(aiMesh);
         meshData.normals = getNormals(aiMesh);
         meshData.tangents = getTangents(aiMesh);
-        meshData.biTangents = getBiTangents(aiMesh);
+        meshData.biTangents = getBiTangents(aiMesh); // TODO: remove. This is calculated in the shader.
         meshData.indices = getIndices(aiMesh);
         meshData.vertexCount = getVertexCount(aiMesh);
         //meshData.boundingSphere = getBoundingSphere(aiMesh); TODO: remove this line
@@ -339,7 +352,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     }
 
     // TODO: pack and normalize
-    private float[] getBiTangents(final AIMesh mesh) {
+    @Deprecated private float[] getBiTangents(final AIMesh mesh) {
         AIVector3D.Buffer biTangentsBuffer = mesh.mBitangents();
         if (biTangentsBuffer == null) return null;
         float[] biTangents = new float[biTangentsBuffer.limit() * 3];
@@ -388,6 +401,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         public Array<MaterialTextureData> texturesData = new Array<>();
         public Array<MaterialColorData>   colorsData   = new Array<>();
         public Array<MaterialPropData>    propsData    = new Array<>();
+        public boolean                    transparent  = false;
 
     }
 
@@ -395,25 +409,25 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
         public String uniform;
         public String path;
-        public int uvIndex;
-        public int mapping;
-        public int mapMode;
-        public int op;
-        public float blendMode;
+        public int    uvIndex;
+        public int    mapping;
+        public int    mapMode;
+        public int    op;
+        public float  blendMode;
 
     }
 
     private static final class MaterialColorData {
 
         public String uniform;
-        public float r, g, b, a;
+        public float  r, g, b, a;
 
     }
 
     private static final class MaterialPropData {
 
         public String uniform;
-        public float value;
+        public float  value;
 
     }
 

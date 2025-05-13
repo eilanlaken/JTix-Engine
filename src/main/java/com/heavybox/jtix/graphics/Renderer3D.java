@@ -38,9 +38,10 @@ public class Renderer3D {
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
 
-    private static final MemoryPool<RenderCommand> renderCommandsPool = new MemoryPool<>(RenderCommand.class, 5);
-    private static final Array<RenderCommand>      renderCommands     = new Array<>(false, 20);
-    private static final RenderEnvironment         renderEnvironment  = new RenderEnvironment();
+    private static final MemoryPool<RenderCommand> renderCommandsPool        = new MemoryPool<>(RenderCommand.class, 5);
+    private static final Array<RenderCommand>      renderCommandsOpaque      = new Array<>(false, 20);
+    private static final Array<RenderCommand>      renderCommandsTransparent = new Array<>(false, 20);
+    private static final RenderEnvironment         renderEnvironment         = new RenderEnvironment();
 
     private static boolean drawing = false;
     private static Camera  currentCamera = null;
@@ -73,7 +74,11 @@ public class Renderer3D {
             renderCommand.mesh = model.meshes[i];
             renderCommand.material = model.materials[i];
             renderCommand.transform = transform;
-            renderCommands.add(renderCommand);
+            if (renderCommand.material.transparent) {
+                renderCommandsTransparent.add(renderCommand);
+            } else {
+                renderCommandsOpaque.add(renderCommand);
+            }
         }
     }
 
@@ -390,9 +395,16 @@ public class Renderer3D {
 
     public static void end() {
         if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
+
+        // draw all opaque objects
+
+        // draw all transparent object
+
         drawing = false;
-        renderCommandsPool.freeAll(renderCommands);
-        renderCommands.clear();
+        renderCommandsPool.freeAll(renderCommandsOpaque);
+        renderCommandsPool.freeAll(renderCommandsTransparent);
+        renderCommandsOpaque.clear();
+        renderCommandsTransparent.clear();
     }
 
     private void setShader(@Nullable Shader shader) {
@@ -410,14 +422,27 @@ public class Renderer3D {
         currentShader = shader;
     }
 
+    private static void bindCameraParametersToShader() {
 
+    }
+
+    private static void bindEnvironmentParametersToShader() {
+
+    }
+
+    private static void bindModelMaterialParametersToShader() {
+
+    }
+
+    private static void bindModelTransformToShader() {
+
+    }
 
     private static Shader createDefaultUnlitShader() {
         try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-3.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
              InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-unlit-shader-3.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
-
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
@@ -431,7 +456,6 @@ public class Renderer3D {
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
              InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-default-pbr-shader-4.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
-
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);

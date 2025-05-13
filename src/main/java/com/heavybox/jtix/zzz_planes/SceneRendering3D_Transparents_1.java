@@ -160,12 +160,6 @@ public class SceneRendering3D_Transparents_1 implements Scene {
             Renderer3D.drawModel_cloud_shader_2(cloudShader, renderUnit.mesh, renderUnit.material, renderUnit.transform, renderUnit.userData);
         }
 
-
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL20.glEnable(GL20.GL_DEPTH_TEST);
-        GL20.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE); //
-
         Renderer3D.end();
     }
 

@@ -11,6 +11,7 @@ public class ModelMaterial implements MemoryResource {
 
     public Shader shader = null;
     public boolean useLights = true;
+    public boolean transparent = false;
     public HashMap<String, Object> materialAttributes = new HashMap<>();
 
     @Override
