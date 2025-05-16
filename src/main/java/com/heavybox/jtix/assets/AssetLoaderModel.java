@@ -12,7 +12,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,8 +98,8 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         // load textures as materials.
         if (materialsData != null) {
             for (MaterialData materialData : materialsData) {
-                Array<MaterialTextureData> texturesData = materialData.texturesData;
-                for (MaterialTextureData textureData : texturesData) {
+                Array<MaterialDataTexture> texturesData = materialData.texturesData;
+                for (MaterialDataTexture textureData : texturesData) {
                     HashMap<String, Object> materialTextureOptions = new HashMap<>();
                     materialTextureOptions.put("uWrap", Texture.Wrap.REPEAT);
                     materialTextureOptions.put("vWrap", Texture.Wrap.REPEAT);
@@ -127,17 +126,17 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             ModelMaterial modelMaterial = new ModelMaterial();
 
             // add all the textures
-            for (MaterialTextureData textureData : materialData.texturesData) {
+            for (MaterialDataTexture textureData : materialData.texturesData) {
                 Texture texture = Assets.get(textureData.path);
                 modelMaterial.materialAttributes.put(textureData.uniform, texture);
             }
             // add all the colors
-            for (MaterialColorData colorData : materialData.colorsData) {
+            for (MaterialDataColor colorData : materialData.colorsData) {
                 Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
                 modelMaterial.materialAttributes.put(colorData.uniform, color);
             }
             // add all the props (metallic, roughness etc.).
-            for (MaterialPropData propData : materialData.propsData) {
+            for (MaterialDataProp propData : materialData.propsData) {
                 String uniform = propData.uniform;
                 float value = propData.value;
                 modelMaterial.materialAttributes.put(uniform, value);
@@ -190,7 +189,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 FloatBuffer ai_blendMode = stack.mallocFloat(1);
                 int result = Assimp.aiGetMaterialTexture(aiMaterial, entry.value, 0, ai_path, ai_mapping, ai_uvIndex, ai_blendMode, ai_op, ai_mapMode, null);
                 if (result == Assimp.aiReturn_SUCCESS) {
-                    MaterialTextureData materialTexture = new MaterialTextureData();
+                    MaterialDataTexture materialTexture = new MaterialDataTexture();
                     materialTexture.uniform = entry.key;
                     if (texturesFolderPath != null) {
                         Path base = Paths.get(texturesFolderPath);
@@ -211,7 +210,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             for (Map.Entry<String, String> colorEntry : namedColorParams.entrySet()) {
                 int result = Assimp.aiGetMaterialColor(aiMaterial, colorEntry.getValue(), Assimp.aiTextureType_NONE, 0, aiColor);
                 if (result == Assimp.aiReturn_SUCCESS) {
-                    MaterialColorData colorData = new MaterialColorData();
+                    MaterialDataColor colorData = new MaterialDataColor();
                     colorData.uniform = colorEntry.getKey();
                     colorData.r = aiColor.r();
                     colorData.g = aiColor.g();
@@ -226,7 +225,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
                 int result = Assimp.aiGetMaterialProperty(aiMaterial, propEntry.getValue(), pointerBuffer);
                 if (result == Assimp.aiReturn_SUCCESS) {
                     AIMaterialProperty property = AIMaterialProperty.create(pointerBuffer.get(0));
-                    MaterialPropData propData = new MaterialPropData();
+                    MaterialDataProp propData = new MaterialDataProp();
                     propData.uniform = propEntry.getKey();
                     propData.value = property.mData().asFloatBuffer().get();
                     materialData.propsData.add(propData);
@@ -396,14 +395,14 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     private static class MaterialData {
 
         public String name;
-        public Array<MaterialTextureData> texturesData = new Array<>();
-        public Array<MaterialColorData>   colorsData   = new Array<>();
-        public Array<MaterialPropData>    propsData    = new Array<>();
+        public Array<MaterialDataTexture> texturesData = new Array<>();
+        public Array<MaterialDataColor>   colorsData   = new Array<>();
+        public Array<MaterialDataProp>    propsData    = new Array<>();
         public boolean                    transparent  = false;
 
     }
 
-    private static final class MaterialTextureData {
+    private static final class MaterialDataTexture {
 
         public String uniform;
         public String path;
@@ -415,14 +414,14 @@ public class AssetLoaderModel implements AssetLoader<Model> {
 
     }
 
-    private static final class MaterialColorData {
+    private static final class MaterialDataColor {
 
         public String uniform;
         public float  r, g, b, a;
 
     }
 
-    private static final class MaterialPropData {
+    private static final class MaterialDataProp {
 
         public String uniform;
         public float  value;

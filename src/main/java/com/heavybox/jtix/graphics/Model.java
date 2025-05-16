@@ -4,9 +4,9 @@ import com.heavybox.jtix.memory.MemoryResource;
 
 public class Model implements MemoryResource {
 
-    public ModelMesh[] meshes;
+    public ModelMesh[]     meshes;
     public ModelMaterial[] materials;
-    public Shader shader;
+    public Shader          shader;
 
     public Model(ModelMesh[] meshes, ModelMaterial[] materials) {
         this.meshes = meshes;

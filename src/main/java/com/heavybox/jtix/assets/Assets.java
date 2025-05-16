@@ -144,6 +144,12 @@ public final class Assets {
         load(Model.class, filepath, options, false);
     }
 
+    public synchronized static void loadScene(String filepath, String texturesPath) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("texturesFolderPath", texturesPath);
+        load(ModelScene.class, filepath, options, false);
+    }
+
     public synchronized static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {
@@ -207,6 +213,7 @@ public final class Assets {
         if (type == TexturePack.class) return new AssetLoaderTexturePack();
         if (type == Font.class)        return new AssetLoaderFont();
         if (type == Model.class)       return new AssetLoaderModel();
+        if (type == ModelScene.class)  return new AssetLoaderScene();
 
         throw new AssetsException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
                 "Type must be one of the following: " +
