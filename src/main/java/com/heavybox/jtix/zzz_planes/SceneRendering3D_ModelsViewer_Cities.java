@@ -18,6 +18,7 @@ public class SceneRendering3D_ModelsViewer_Cities implements Scene {
 
     public Model model_import;
     public Model city_base;
+    public Model city_scrapers;
     public Model model_tree;
     public Matrix4x4 transform_import = new Matrix4x4();
     public Matrix4x4 transform_floor = new Matrix4x4();
@@ -34,16 +35,14 @@ public class SceneRendering3D_ModelsViewer_Cities implements Scene {
         Assets.loadModel("assets/app-models/tree-green_1.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane_2.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/city_base.fbx", "assets/app-models/textures");
+        Assets.loadModel("assets/app-models/city_scrapers.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
         city_base = Assets.get("assets/app-models/city_base.fbx");
+        city_scrapers = Assets.get("assets/app-models/city_scrapers.fbx");
         model_import = Assets.get("assets/app-models/plane_2.fbx");
         model_tree = Assets.get("assets/app-models/tree-green_1.fbx");
 
-        for (int i = 0; i < model_tree.meshes.length; i++) {
-            ModelMaterial material = model_tree.materials[i];
-            System.out.println(material.transparent);
-        }
     }
 
     @Override
@@ -151,6 +150,10 @@ public class SceneRendering3D_ModelsViewer_Cities implements Scene {
 
         for (int i = 0; i < city_base.meshes.length; i++) {
             Renderer3D.drawModel_tmp_5(city_base.meshes[i], city_base.materials[i], transform_floor);
+        }
+
+        for (int i = 0; i < city_scrapers.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(city_scrapers.meshes[i], city_scrapers.materials[i], transform_floor);
         }
 
         for (int i = 0; i < model_import.meshes.length; i++) {
