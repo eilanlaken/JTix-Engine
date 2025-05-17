@@ -168,7 +168,7 @@ public class AssetLoaderModel implements AssetLoader<Model> {
             modelMaterials[i] = material;
         }
 
-        return new Model(modelMeshes, modelMaterials); // TODO: this is wrong. use aiMesh.mMaterialIndex()
+        return new Model(modelMeshes, modelMaterials);
     }
 
     private MaterialData processMaterial(final AIMaterial aiMaterial) {

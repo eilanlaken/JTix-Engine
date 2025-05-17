@@ -1,6 +1,7 @@
 package com.heavybox.jtix.assets;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.collections.MapObjectInt;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.math.Matrix4x4;
@@ -16,15 +17,17 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.heavybox.jtix.math.Matrix4x4.*;
+
 // TODO: improve options (gen Normals, gen smooth normals)
 // TODO: store the transform of a node. May be very useful in some cases. For example, destructible objects.
-public class AssetLoaderScene implements AssetLoader<Model> {
+public class AssetLoaderScene implements AssetLoader<ModelScene> {
 
     private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
     private final Map<String, String>  namedColorParams        = new HashMap<>();
     private final Map<String, String>  namedProps              = new HashMap<>();
 
-    private NodeData[] nodesData;
+    private final Array<NodeData> nodesData = new Array<>();
     private MeshData[] meshesData;
     private MaterialData[] materialsData;
     private String folderPath;
@@ -96,7 +99,6 @@ public class AssetLoaderScene implements AssetLoader<Model> {
 
         AINode root = aiScene.mRootNode();
         AIMatrix4x4 transform = root.mTransformation();
-        Array<NodeData> nodesData = new Array<>();
         collectNodes(root, transform, nodesData);
 
         Array<AssetDescriptor> dependencies = new Array<>();
@@ -118,11 +120,11 @@ public class AssetLoaderScene implements AssetLoader<Model> {
     }
 
     @Override
-    public Model afterLoad() {
-        ModelMesh[] modelMeshes = new ModelMesh[meshesData.length];
-        for (int i = 0; i < modelMeshes.length; i++) {
+    public ModelScene afterLoad() {
+        ModelMesh[] allSceneMeshes = new ModelMesh[meshesData.length];
+        for (int i = 0; i < allSceneMeshes.length; i++) {
             MeshData meshData = meshesData[i];
-            modelMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.tangents, meshData.biTangents, meshData.indices, meshData.boundingSphereRadius);
+            allSceneMeshes[i] = new ModelMesh(meshData.positions, meshData.textureCoords0, meshData.colors, meshData.normals, meshData.tangents, meshData.biTangents, meshData.indices, meshData.boundingSphereRadius);
         }
 
         ModelMaterial[] allDifferentMaterials = new ModelMaterial[materialsData.length];
@@ -167,13 +169,33 @@ public class AssetLoaderScene implements AssetLoader<Model> {
         // we create a materials array matching the meshes array. In the materials array
         // we may store reference replicas. The final result are two arrays of the same
         // size where mesh[0],material[0]...mesh[M],material[M] is the entire model.
-        ModelMaterial[] modelMaterials = new ModelMaterial[modelMeshes.length];
-        for (int i = 0; i < modelMaterials.length; i++) {
+        ModelMaterial[] allSceneMaterials = new ModelMaterial[allSceneMeshes.length];
+        for (int i = 0; i < allSceneMaterials.length; i++) {
             ModelMaterial material = allDifferentMaterials[meshesData[i].materialIndex];
-            modelMaterials[i] = material;
+            allSceneMaterials[i] = material;
         }
 
-        return new Model(modelMeshes, modelMaterials); // TODO: this is wrong. use aiMesh.mMaterialIndex()
+        ModelScene scene = new ModelScene();
+        scene.allMaterials = allSceneMaterials;
+        scene.allMeshes = allSceneMeshes;
+        for (NodeData nodeData : nodesData) {
+            ModelScene.Node node = new ModelScene.Node();
+            node.name = nodeData.name;
+            node.transform = nodeData.transform;
+            ModelMesh[] nodeMeshes = new ModelMesh[nodeData.meshes.size];
+            for (int i = 0; i < nodeData.meshes.size; i++) {
+                nodeMeshes[i] = allSceneMeshes[nodeData.meshes.get(i)];
+            }
+            ModelMaterial[] nodeMaterials = new ModelMaterial[nodeData.materials.size];
+            for (int i = 0; i < nodeData.materials.size; i++) {
+                nodeMaterials[i] = allSceneMaterials[nodeData.materials.get(i)];
+            }
+            node.model = new Model(nodeMeshes, nodeMaterials);
+            scene.nodes.add(node);
+        }
+
+
+        return scene;
     }
 
     private MaterialData processMaterial(final AIMaterial aiMaterial) {
@@ -382,7 +404,7 @@ public class AssetLoaderScene implements AssetLoader<Model> {
         return indices;
     }
 
-    private static void collectNodes(AINode node, AIMatrix4x4 parentTransform, Array<NodeData> outNodes) {
+    private void collectNodes(AINode node, AIMatrix4x4 parentTransform, Array<NodeData> outNodes) {
         if (node == null) return;
 
         AIMatrix4x4 currentTransform = AIMatrix4x4.calloc();
@@ -391,26 +413,74 @@ public class AssetLoaderScene implements AssetLoader<Model> {
 
         NodeData nodeData = new NodeData();
         nodeData.name = node.mName().dataString();
-        nodeData.transform = currentTransform;
+        nodeData.transform = convertToMatrix4x4(currentTransform);
+
+        int numMeshes = node.mNumMeshes();
+        nodeData.meshData = new MeshData[numMeshes];
+        IntBuffer meshIndices = node.mMeshes();
+        for (int i = 0; i < numMeshes; i++) {
+            int meshIndex = meshIndices.get(i);
+            nodeData.meshData[i] = meshesData[meshIndex];
+            nodeData.meshes.add(meshIndex);
+        }
+
+        nodeData.materialData = new MaterialData[numMeshes];
+        for (int i = 0; i < numMeshes; i++) {
+            int materialIndex = nodeData.meshData[i].materialIndex;
+            nodeData.materialData[i] = materialsData[materialIndex];
+            nodeData.materials.add(materialIndex);
+        }
+
         System.out.println("======================");
         System.out.println(nodeData.name);
         System.out.println(nodeData.transform);
         outNodes.add(nodeData);
 
+
         int numChildren = node.mNumChildren();
         PointerBuffer children = node.mChildren();
         for (int i = 0; i < numChildren; i++) {
+            //collectNodes(AINode.create(children.get(i)), currentTransform, outNodes);
             collectNodes(AINode.create(children.get(i)), currentTransform, outNodes);
+
         }
 
         //currentTransform.free();
     }
 
+    private Matrix4x4 convertToMatrix4x4(AIMatrix4x4 aiMatrix4x4) {
+        Matrix4x4 m = new Matrix4x4();
+        m.val[M00] = aiMatrix4x4.a1();
+        m.val[M01] = aiMatrix4x4.a2();
+        m.val[M02] = aiMatrix4x4.a3();
+        m.val[M03] = aiMatrix4x4.a4();
+
+        m.val[M10] = aiMatrix4x4.b1();
+        m.val[M11] = aiMatrix4x4.b2();
+        m.val[M12] = aiMatrix4x4.b3();
+        m.val[M13] = aiMatrix4x4.b4();
+
+        m.val[M20] = aiMatrix4x4.c1();
+        m.val[M21] = aiMatrix4x4.c2();
+        m.val[M22] = aiMatrix4x4.c3();
+        m.val[M23] = aiMatrix4x4.c4();
+
+        m.val[M30] = aiMatrix4x4.d1();
+        m.val[M31] = aiMatrix4x4.d2();
+        m.val[M32] = aiMatrix4x4.d3();
+        m.val[M33] = aiMatrix4x4.d4();
+        return m;
+    }
+
     private static class NodeData {
 
-        public String name;
-        public NodeData parent;
-        public AIMatrix4x4 transform;
+        public NodeData    parent;
+        public String      name;
+        @Deprecated public MeshData[] meshData;
+        public ArrayInt meshes = new ArrayInt();
+        @Deprecated public MaterialData[] materialData;
+        public ArrayInt materials = new ArrayInt();
+        public Matrix4x4 transform;
 
     }
 

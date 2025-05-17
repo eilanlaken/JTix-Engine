@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_ModelsViewer_Scenes implements Scene {
+public class SceneRendering3D_ModelsViewer_Scenes_1 implements Scene {
 
     private Camera camera;
 
@@ -23,7 +23,7 @@ public class SceneRendering3D_ModelsViewer_Scenes implements Scene {
     public Matrix4x4 transform_floor = new Matrix4x4();
     public Matrix4x4 transform_ball = new Matrix4x4();
 
-    public SceneRendering3D_ModelsViewer_Scenes() {
+    public SceneRendering3D_ModelsViewer_Scenes_1() {
 
     }
 
