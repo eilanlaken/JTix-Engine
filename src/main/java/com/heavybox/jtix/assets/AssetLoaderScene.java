@@ -409,25 +409,23 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
 
         AIMatrix4x4 currentTransform = AIMatrix4x4.calloc();
         currentTransform.set(node.mTransformation());
-        Assimp.aiMultiplyMatrix4(currentTransform, parentTransform);
+        //Assimp.aiMultiplyMatrix4(currentTransform, parentTransform);
 
         NodeData nodeData = new NodeData();
         nodeData.name = node.mName().dataString();
         nodeData.transform = convertToMatrix4x4(currentTransform);
 
         int numMeshes = node.mNumMeshes();
-        nodeData.meshData = new MeshData[numMeshes];
         IntBuffer meshIndices = node.mMeshes();
         for (int i = 0; i < numMeshes; i++) {
             int meshIndex = meshIndices.get(i);
-            nodeData.meshData[i] = meshesData[meshIndex];
             nodeData.meshes.add(meshIndex);
         }
 
-        nodeData.materialData = new MaterialData[numMeshes];
         for (int i = 0; i < numMeshes; i++) {
-            int materialIndex = nodeData.meshData[i].materialIndex;
-            nodeData.materialData[i] = materialsData[materialIndex];
+            int meshIndex = nodeData.meshes.get(i);
+            MeshData meshData = meshesData[meshIndex];
+            int materialIndex = meshData.materialIndex;
             nodeData.materials.add(materialIndex);
         }
 
@@ -476,9 +474,7 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
 
         public NodeData    parent;
         public String      name;
-        @Deprecated public MeshData[] meshData;
         public ArrayInt meshes = new ArrayInt();
-        @Deprecated public MaterialData[] materialData;
         public ArrayInt materials = new ArrayInt();
         public Matrix4x4 transform;
 
