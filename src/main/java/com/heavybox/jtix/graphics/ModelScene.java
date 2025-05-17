@@ -17,8 +17,10 @@ public class ModelScene implements MemoryResource {
 
     public static class Node {
 
+        // TODO: add parent. The node hierarchy should be a tree, not a list.
+        public Node parent;
         public String name;
-        public Matrix4x4 transform;
+        public Matrix4x4 localTransform;
         public Model model;
         public Node[] children;
 
@@ -31,7 +33,9 @@ public class ModelScene implements MemoryResource {
         sb.append("materials: ").append(allMaterials.length).append('\n');
         sb.append("nodes: ").append(nodes.size).append('\n');
         for (Node node : nodes) {
+            sb.append("---\n");
             sb.append(node.name).append('\n');
+            sb.append(node.localTransform).append('\n');
         }
         return sb.toString();
     }

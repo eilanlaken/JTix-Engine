@@ -51,7 +51,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
-        camera.position.set(0, -7, 5);
+        camera.position.set(0, -7, 0);
 
         camera.lookAt(0,0,0);
 
@@ -147,7 +147,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
         Renderer3D.begin(camera);
 
         for (ModelScene.Node node : modelScene.nodes) {
-            Matrix4x4 transform = node.transform;
+            Matrix4x4 transform = node.localTransform;
             Model model = node.model;
             for (int i = 0; i < model.meshes.length; i++) {
                 Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);

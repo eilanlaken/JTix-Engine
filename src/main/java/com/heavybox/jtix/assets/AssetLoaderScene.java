@@ -19,8 +19,7 @@ import java.util.Map;
 
 import static com.heavybox.jtix.math.Matrix4x4.*;
 
-// TODO: improve options (gen Normals, gen smooth normals)
-// TODO: store the transform of a node. May be very useful in some cases. For example, destructible objects.
+// TODO: call .free() for AIMatrix4's
 public class AssetLoaderScene implements AssetLoader<ModelScene> {
 
     private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
@@ -98,8 +97,7 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
         }
 
         AINode root = aiScene.mRootNode();
-        AIMatrix4x4 transform = root.mTransformation();
-        collectNodes(root, transform, nodesData);
+        collectNodes(root,null, nodesData);
 
         Array<AssetDescriptor> dependencies = new Array<>();
         // load textures as materials.
@@ -181,7 +179,7 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
         for (NodeData nodeData : nodesData) {
             ModelScene.Node node = new ModelScene.Node();
             node.name = nodeData.name;
-            node.transform = nodeData.transform;
+            node.localTransform = convertToMatrix4x4(nodeData.matrix);
             ModelMesh[] nodeMeshes = new ModelMesh[nodeData.meshes.size];
             for (int i = 0; i < nodeData.meshes.size; i++) {
                 nodeMeshes[i] = allSceneMeshes[nodeData.meshes.get(i)];
@@ -404,16 +402,17 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
         return indices;
     }
 
-    private void collectNodes(AINode node, AIMatrix4x4 parentTransform, Array<NodeData> outNodes) {
+    private void collectNodes(AINode node, NodeData parent, Array<NodeData> outNodes) {
         if (node == null) return;
 
         AIMatrix4x4 currentTransform = AIMatrix4x4.calloc();
         currentTransform.set(node.mTransformation());
-        //Assimp.aiMultiplyMatrix4(currentTransform, parentTransform);
+        //if (parent != null) Assimp.aiMultiplyMatrix4(currentTransform, parent.matrix);
 
         NodeData nodeData = new NodeData();
+        nodeData.parent = parent;
         nodeData.name = node.mName().dataString();
-        nodeData.transform = convertToMatrix4x4(currentTransform);
+        nodeData.matrix = currentTransform;
 
         int numMeshes = node.mNumMeshes();
         IntBuffer meshIndices = node.mMeshes();
@@ -429,18 +428,11 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
             nodeData.materials.add(materialIndex);
         }
 
-        System.out.println("======================");
-        System.out.println(nodeData.name);
-        System.out.println(nodeData.transform);
         outNodes.add(nodeData);
-
-
         int numChildren = node.mNumChildren();
         PointerBuffer children = node.mChildren();
         for (int i = 0; i < numChildren; i++) {
-            //collectNodes(AINode.create(children.get(i)), currentTransform, outNodes);
-            collectNodes(AINode.create(children.get(i)), currentTransform, outNodes);
-
+            collectNodes(AINode.create(children.get(i)), nodeData, outNodes);
         }
 
         //currentTransform.free();
@@ -448,25 +440,14 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
 
     private Matrix4x4 convertToMatrix4x4(AIMatrix4x4 aiMatrix4x4) {
         Matrix4x4 m = new Matrix4x4();
-        m.val[M00] = aiMatrix4x4.a1();
-        m.val[M01] = aiMatrix4x4.a2();
-        m.val[M02] = aiMatrix4x4.a3();
-        m.val[M03] = aiMatrix4x4.a4();
-
-        m.val[M10] = aiMatrix4x4.b1();
-        m.val[M11] = aiMatrix4x4.b2();
-        m.val[M12] = aiMatrix4x4.b3();
-        m.val[M13] = aiMatrix4x4.b4();
-
-        m.val[M20] = aiMatrix4x4.c1();
-        m.val[M21] = aiMatrix4x4.c2();
-        m.val[M22] = aiMatrix4x4.c3();
-        m.val[M23] = aiMatrix4x4.c4();
-
-        m.val[M30] = aiMatrix4x4.d1();
-        m.val[M31] = aiMatrix4x4.d2();
-        m.val[M32] = aiMatrix4x4.d3();
-        m.val[M33] = aiMatrix4x4.d4();
+        // row 0
+        m.val[M00] = aiMatrix4x4.a1(); m.val[M01] = aiMatrix4x4.a2(); m.val[M02] = aiMatrix4x4.a3(); m.val[M03] = aiMatrix4x4.a4();
+        // row 1
+        m.val[M10] = aiMatrix4x4.b1(); m.val[M11] = aiMatrix4x4.b2(); m.val[M12] = aiMatrix4x4.b3(); m.val[M13] = aiMatrix4x4.b4();
+        // row 2
+        m.val[M20] = aiMatrix4x4.c1(); m.val[M21] = aiMatrix4x4.c2(); m.val[M22] = aiMatrix4x4.c3(); m.val[M23] = aiMatrix4x4.c4();
+        // row 3 [0,0,0,1]
+        m.val[M30] = aiMatrix4x4.d1(); m.val[M31] = aiMatrix4x4.d2(); m.val[M32] = aiMatrix4x4.d3(); m.val[M33] = aiMatrix4x4.d4();
         return m;
     }
 
@@ -474,9 +455,9 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
 
         public NodeData    parent;
         public String      name;
-        public ArrayInt meshes = new ArrayInt();
-        public ArrayInt materials = new ArrayInt();
-        public Matrix4x4 transform;
+        public ArrayInt    meshes    = new ArrayInt();
+        public ArrayInt    materials = new ArrayInt();
+        public AIMatrix4x4 matrix; // TODO: free before returning
 
     }
 
