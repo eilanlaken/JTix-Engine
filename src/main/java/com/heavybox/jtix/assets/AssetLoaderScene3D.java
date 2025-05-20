@@ -20,19 +20,19 @@ import java.util.Map;
 import static com.heavybox.jtix.math.Matrix4x4.*;
 
 // TODO: call .free() for AIMatrix4's
-public class AssetLoaderScene implements AssetLoader<ModelScene> {
+public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
 
     private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
     private final Map<String, String>  namedColorParams        = new HashMap<>();
     private final Map<String, String>  namedProps              = new HashMap<>();
 
-    private final Array<NodeData> nodesData = new Array<>();
+    private NodeData rootNodeData;
     private MeshData[] meshesData;
     private MaterialData[] materialsData;
     private String folderPath;
     private String texturesFolderPath;
 
-    public AssetLoaderScene() {
+    public AssetLoaderScene3D() {
         // all possible material texture parameters
         uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
@@ -96,8 +96,9 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
             }
         }
 
-        AINode root = aiScene.mRootNode();
-        collectNodes(root,null, nodesData);
+        //AINode root = aiScene.mRootNode();
+        //collectNodes(aiScene.mRootNode(),null, nodesData);
+        rootNodeData = collectNodes(aiScene.mRootNode(), null);
 
         Array<AssetDescriptor> dependencies = new Array<>();
         // load textures as materials.
@@ -118,7 +119,7 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
     }
 
     @Override
-    public ModelScene afterLoad() {
+    public Scene3D afterLoad() {
         ModelMesh[] allSceneMeshes = new ModelMesh[meshesData.length];
         for (int i = 0; i < allSceneMeshes.length; i++) {
             MeshData meshData = meshesData[i];
@@ -173,25 +174,12 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
             allSceneMaterials[i] = material;
         }
 
-        ModelScene scene = new ModelScene();
+        Scene3D scene = new Scene3D();
         scene.allMaterials = allSceneMaterials;
         scene.allMeshes = allSceneMeshes;
-        for (NodeData nodeData : nodesData) {
-            ModelScene.Node node = new ModelScene.Node();
-            node.name = nodeData.name;
-            node.localTransform = convertToMatrix4x4(nodeData.matrix);
-            ModelMesh[] nodeMeshes = new ModelMesh[nodeData.meshes.size];
-            for (int i = 0; i < nodeData.meshes.size; i++) {
-                nodeMeshes[i] = allSceneMeshes[nodeData.meshes.get(i)];
-            }
-            ModelMaterial[] nodeMaterials = new ModelMaterial[nodeData.materials.size];
-            for (int i = 0; i < nodeData.materials.size; i++) {
-                nodeMaterials[i] = allSceneMaterials[nodeData.materials.get(i)];
-            }
-            node.model = new Model(nodeMeshes, nodeMaterials);
-            scene.nodes.add(node);
-        }
-
+        scene.root = buildNodeTree(allSceneMeshes, allSceneMaterials, rootNodeData, null);
+        scene.allNodes = getAllNodesAsArray(scene.root);
+        scene.namedNodes = getNamedNodesMap(scene.allNodes);
 
         return scene;
     }
@@ -402,7 +390,7 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
         return indices;
     }
 
-    private void collectNodes(AINode node, NodeData parent, Array<NodeData> outNodes) {
+    @Deprecated private void collectNodes(AINode node, NodeData parent, Array<NodeData> outNodes) {
         if (node == null) return;
 
         AIMatrix4x4 currentTransform = AIMatrix4x4.calloc();
@@ -438,16 +426,98 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
         //currentTransform.free();
     }
 
+    private NodeData collectNodes(AINode node, NodeData parent) {
+        if (node == null) return null;
+
+        AIMatrix4x4 currentTransform = AIMatrix4x4.calloc();
+        currentTransform.set(node.mTransformation());
+        //if (parent != null) Assimp.aiMultiplyMatrix4(currentTransform, parent.matrix);
+
+        NodeData nodeData = new NodeData();
+        nodeData.parent = parent;
+        nodeData.name = node.mName().dataString();
+        nodeData.matrix = currentTransform;
+
+        int numMeshes = node.mNumMeshes();
+        IntBuffer meshIndices = node.mMeshes();
+        for (int i = 0; i < numMeshes; i++) {
+            int meshIndex = meshIndices.get(i);
+            nodeData.meshes.add(meshIndex);
+        }
+
+        for (int i = 0; i < numMeshes; i++) {
+            int meshIndex = nodeData.meshes.get(i);
+            MeshData meshData = meshesData[meshIndex];
+            int materialIndex = meshData.materialIndex;
+            nodeData.materials.add(materialIndex);
+        }
+
+        int numChildren = node.mNumChildren();
+        nodeData.children = new NodeData[numChildren];
+        PointerBuffer children = node.mChildren();
+        for (int i = 0; i < numChildren; i++) {
+            nodeData.children[i] = collectNodes(AINode.create(children.get(i)), nodeData);
+        }
+
+        return nodeData;
+    }
+
+    private Scene3D.Node buildNodeTree(ModelMesh[] allSceneMeshes, ModelMaterial[] allSceneMaterials, final NodeData nodeData, final Scene3D.Node parent) {
+        if (nodeData == null) return null;
+
+        Scene3D.Node node = new Scene3D.Node();
+        node.parent = parent;
+        node.name = nodeData.name;
+        node.localTransform = convertToMatrix4x4(nodeData.matrix);
+        ModelMesh[] nodeMeshes = new ModelMesh[nodeData.meshes.size];
+        for (int i = 0; i < nodeData.meshes.size; i++) {
+            nodeMeshes[i] = allSceneMeshes[nodeData.meshes.get(i)];
+        }
+        ModelMaterial[] nodeMaterials = new ModelMaterial[nodeData.materials.size];
+        for (int i = 0; i < nodeData.materials.size; i++) {
+            nodeMaterials[i] = allSceneMaterials[nodeData.materials.get(i)];
+        }
+        node.model = new Model(nodeMeshes, nodeMaterials);
+
+        node.children = new Scene3D.Node[nodeData.children.length];
+        for (int i = 0; i < nodeData.children.length; i++) {
+            node.children[i] = buildNodeTree(allSceneMeshes, allSceneMaterials, nodeData.children[i], node);
+        }
+
+        return node;
+    }
+
+    private Scene3D.Node[] getAllNodesAsArray(Scene3D.Node root) {
+        Array<Scene3D.Node> nodes = new Array<>();
+        getAllNodesAsArrayHelper(root, nodes);
+        nodes.pack();
+        return nodes.toArray(Scene3D.Node.class);
+    }
+
+    private void getAllNodesAsArrayHelper(Scene3D.Node node, Array<Scene3D.Node> out) {
+        if (node == null) return;
+        out.add(node);
+        if (node.children != null) {
+            for (Scene3D.Node child : node.children) {
+                getAllNodesAsArrayHelper(child, out);
+            }
+        }
+    }
+
+    private HashMap<String, Scene3D.Node> getNamedNodesMap(Scene3D.Node[] allNodes) {
+        HashMap<String, Scene3D.Node> namedNodes = new HashMap<>();
+        for (Scene3D.Node node : allNodes) {
+            namedNodes.put(node.name, node);
+        }
+        return namedNodes;
+    }
+
     private Matrix4x4 convertToMatrix4x4(AIMatrix4x4 aiMatrix4x4) {
         Matrix4x4 m = new Matrix4x4();
-        // row 0
-        m.val[M00] = aiMatrix4x4.a1(); m.val[M01] = aiMatrix4x4.a2(); m.val[M02] = aiMatrix4x4.a3(); m.val[M03] = aiMatrix4x4.a4();
-        // row 1
-        m.val[M10] = aiMatrix4x4.b1(); m.val[M11] = aiMatrix4x4.b2(); m.val[M12] = aiMatrix4x4.b3(); m.val[M13] = aiMatrix4x4.b4();
-        // row 2
-        m.val[M20] = aiMatrix4x4.c1(); m.val[M21] = aiMatrix4x4.c2(); m.val[M22] = aiMatrix4x4.c3(); m.val[M23] = aiMatrix4x4.c4();
-        // row 3 [0,0,0,1]
-        m.val[M30] = aiMatrix4x4.d1(); m.val[M31] = aiMatrix4x4.d2(); m.val[M32] = aiMatrix4x4.d3(); m.val[M33] = aiMatrix4x4.d4();
+        m.val[M00] = aiMatrix4x4.a1(); m.val[M01] = aiMatrix4x4.a2(); m.val[M02] = aiMatrix4x4.a3(); m.val[M03] = aiMatrix4x4.a4(); // row 0
+        m.val[M10] = aiMatrix4x4.b1(); m.val[M11] = aiMatrix4x4.b2(); m.val[M12] = aiMatrix4x4.b3(); m.val[M13] = aiMatrix4x4.b4(); // row 1
+        m.val[M20] = aiMatrix4x4.c1(); m.val[M21] = aiMatrix4x4.c2(); m.val[M22] = aiMatrix4x4.c3(); m.val[M23] = aiMatrix4x4.c4(); // row 2
+        m.val[M30] = aiMatrix4x4.d1(); m.val[M31] = aiMatrix4x4.d2(); m.val[M32] = aiMatrix4x4.d3(); m.val[M33] = aiMatrix4x4.d4(); // row 3
         return m;
     }
 
@@ -457,6 +527,7 @@ public class AssetLoaderScene implements AssetLoader<ModelScene> {
         public String      name;
         public ArrayInt    meshes    = new ArrayInt();
         public ArrayInt    materials = new ArrayInt();
+        public NodeData[]  children;
         public AIMatrix4x4 matrix; // TODO: free before returning
 
     }

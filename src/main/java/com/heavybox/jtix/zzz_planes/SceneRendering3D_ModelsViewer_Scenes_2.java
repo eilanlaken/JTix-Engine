@@ -17,7 +17,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_2 implements Scene {
     private Camera camera;
 
     public Model model_import;
-    public ModelScene modelScene;
+    public Scene3D scene3D;
     public Model model_tree;
     public Matrix4x4 transform_import = new Matrix4x4();
     public Matrix4x4 transform_floor = new Matrix4x4();
@@ -38,9 +38,9 @@ public class SceneRendering3D_ModelsViewer_Scenes_2 implements Scene {
 
         model_import = Assets.get("assets/app-models/plane_2.fbx");
         model_tree = Assets.get("assets/app-models/tree-green_1.fbx");
-        modelScene = Assets.get("assets/app-models/scene_simple.fbx");
+        scene3D = Assets.get("assets/app-models/scene_simple.fbx");
 
-        System.out.println(modelScene);
+        System.out.println(scene3D);
     }
 
     @Override
@@ -145,14 +145,6 @@ public class SceneRendering3D_ModelsViewer_Scenes_2 implements Scene {
         GL11.glClearColor(1,0,0,1);
 
         Renderer3D.begin(camera);
-
-        for (ModelScene.Node node : modelScene.nodes) {
-            Matrix4x4 transform = node.localTransform;
-            Model model = node.model;
-            for (int i = 0; i < model.meshes.length; i++) {
-                Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
-            }
-        }
 
         for (int i = 0; i < model_import.meshes.length; i++) {
             Renderer3D.drawModel_tmp_5(model_import.meshes[i], model_import.materials[i], transform_import);

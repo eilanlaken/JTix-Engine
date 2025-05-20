@@ -147,7 +147,7 @@ public final class Assets {
     public synchronized static void loadScene(String filepath, String texturesPath) {
         final HashMap<String, Object> options = new HashMap<>();
         options.put("texturesFolderPath", texturesPath);
-        load(ModelScene.class, filepath, options, false);
+        load(Scene3D.class, filepath, options, false);
     }
 
     public synchronized static void loadShader(final String name,
@@ -213,7 +213,7 @@ public final class Assets {
         if (type == TexturePack.class) return new AssetLoaderTexturePack();
         if (type == Font.class)        return new AssetLoaderFont();
         if (type == Model.class)       return new AssetLoaderModel();
-        if (type == ModelScene.class)  return new AssetLoaderScene();
+        if (type == Scene3D.class)  return new AssetLoaderScene3D();
 
         throw new AssetsException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
                 "Type must be one of the following: " +

@@ -22,18 +22,6 @@ public class Model implements MemoryResource {
         this.shader = null;
     }
 
-    // TODO: use the (mesh, material) constructor instead.
-    @Deprecated public void addMaterial(ModelMaterial material) {
-        if (materials == null) {
-            materials = new ModelMaterial[] { material };
-        } else {
-            ModelMaterial[] newMaterials = new ModelMaterial[materials.length + 1];
-            System.arraycopy(materials, 0, newMaterials, 0, materials.length);
-            newMaterials[materials.length] = material;
-            materials = newMaterials;
-        }
-    }
-
     @Override
     public void delete() {
 

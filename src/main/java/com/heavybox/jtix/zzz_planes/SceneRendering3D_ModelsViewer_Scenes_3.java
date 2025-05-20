@@ -16,12 +16,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
 
     private Camera camera;
 
-    public Model model_import;
-    public ModelScene modelScene;
-    public Model model_tree;
-    public Matrix4x4 transform_import = new Matrix4x4();
-    public Matrix4x4 transform_floor = new Matrix4x4();
-    public Matrix4x4 transform_ball = new Matrix4x4();
+    public Scene3D scene3D;
 
     public SceneRendering3D_ModelsViewer_Scenes_3() {
 
@@ -30,17 +25,12 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/models/floor.fbx");
-        Assets.loadModel("assets/app-models/tree-green_1.fbx", "assets/app-models/textures");
-        Assets.loadModel("assets/app-models/plane_2.fbx", "assets/app-models/textures");
-        Assets.loadScene("assets/app-models/scene_simple_2.fbx", "assets/app-models/textures");
+        Assets.loadScene("assets/app-models/scene-simple-parenting.fbx", "assets/app-models/textures");
         Assets.finishLoading();
 
-        model_import = Assets.get("assets/app-models/plane_2.fbx");
-        model_tree = Assets.get("assets/app-models/tree-green_1.fbx");
-        modelScene = Assets.get("assets/app-models/scene_simple_2.fbx");
+        scene3D = Assets.get("assets/app-models/scene-simple-parenting.fbx");
 
-        System.out.println(modelScene);
+        System.out.println(scene3D);
     }
 
     @Override
@@ -56,9 +46,6 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
         camera.lookAt(0,0,0);
 
         camera.update();
-
-        transform_import.translateGlobalAxisXYZ(0,0,3);
-        transform_ball.translateGlobalAxisXYZ(0,0,2);
 
     }
 
@@ -93,42 +80,6 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
         camera.update();
 
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
-            transform_import.translateGlobalAxisXYZ(0,0,-0.05f);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
-            transform_import.translateGlobalAxisXYZ(0,0,0.05f);
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
-            transform_import.translateGlobalAxisXYZ(0,-0.05f, 0);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
-            transform_import.translateGlobalAxisXYZ(0,0.05f,0);
-        }
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.E)) {
-            transform_import.rotateLocalAxisY(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-            transform_import.rotateLocalAxisY(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            transform_import.rotateLocalAxisZ(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.S)) {
-            transform_import.rotateLocalAxisZ(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) {
-            transform_import.rotateLocalAxisX(1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
-            transform_import.rotateLocalAxisX(-1);
-        }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.H)) {
-            transform_import.translateGlobalAxisXYZ(0,1,0);
-        }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
             //body_a.applyForce(1,0, body_a.shape.x(), body_a.shape.y() + 0.2f);
         }
@@ -146,20 +97,11 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
 
         Renderer3D.begin(camera);
 
-        for (ModelScene.Node node : modelScene.nodes) {
-            Matrix4x4 transform = node.localTransform;
-            Model model = node.model;
-            for (int i = 0; i < model.meshes.length; i++) {
+        Scene3D.Node node = scene3D.namedNodes.get("house");
+        Matrix4x4 transform = node.localTransform;
+        Model model = node.model;
+        for (int i = 0; i < model.meshes.length; i++) {
                 Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
-            }
-        }
-
-        for (int i = 0; i < model_import.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_import.meshes[i], model_import.materials[i], transform_import);
-        }
-
-        for (int i = 0; i < model_tree.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model_tree.meshes[i], model_tree.materials[i], new Matrix4x4());
         }
 
         Renderer3D.end();
