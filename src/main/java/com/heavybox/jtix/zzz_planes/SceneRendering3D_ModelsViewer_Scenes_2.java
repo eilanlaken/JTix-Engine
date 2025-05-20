@@ -146,6 +146,8 @@ public class SceneRendering3D_ModelsViewer_Scenes_2 implements Scene {
 
         Renderer3D.begin(camera);
 
+
+
         for (int i = 0; i < model_import.meshes.length; i++) {
             Renderer3D.drawModel_tmp_5(model_import.meshes[i], model_import.materials[i], transform_import);
         }

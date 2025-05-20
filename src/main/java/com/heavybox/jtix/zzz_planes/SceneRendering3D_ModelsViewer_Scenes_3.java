@@ -97,12 +97,27 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
 
         Renderer3D.begin(camera);
 
-        Scene3D.Node node = scene3D.namedNodes.get("house");
-        Matrix4x4 transform = node.localTransform;
-        Model model = node.model;
-        for (int i = 0; i < model.meshes.length; i++) {
-                Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+
+        Scene3D.Node nodeHouse = scene3D.namedNodes.get("house");
+        Matrix4x4 transformHouse = nodeHouse.localTransform;
+        Model modelHouse = nodeHouse.model;
+        for (int i = 0; i < modelHouse.meshes.length; i++) {
+                Renderer3D.drawModel_tmp_5(modelHouse.meshes[i], modelHouse.materials[i], transformHouse);
         }
+
+        Scene3D.Node balloon = scene3D.namedNodes.get("hotairbaloon");
+        Matrix4x4 transformBalloon = balloon.localTransform;
+        Matrix4x4 t = new Matrix4x4(transformBalloon).mulLeft(transformHouse);
+        //transform.mul(transformHouse);
+        Model model = balloon.model;
+        for (int i = 0; i < model.meshes.length; i++) {
+            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], t);
+        }
+
+
+
+
+
 
         Renderer3D.end();
     }
