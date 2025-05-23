@@ -4,6 +4,9 @@ Rendering curves with stroke:
 https://www.codeproject.com/Articles/226569/Drawing-polylines-by-tessellation
 https://stackoverflow.com/questions/1109536/an-algorithm-for-inflating-deflating-offsetting-buffering-polygons
 
+// water rendering:
+https://www.shadertoy.com/view/Ms2SD1
+
 Lights
 Radiance Cascades:
 https://github.com/simondevyoutube/Shaders_RadianceCascades

@@ -107,8 +107,8 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
 
         Scene3D.Node balloon = scene3D.namedNodes.get("hotairbaloon");
         Matrix4x4 transformBalloon = balloon.localTransform;
-        Matrix4x4 t = new Matrix4x4(transformBalloon).mulLeft(transformHouse);
-        //transform.mul(transformHouse);
+        Matrix4x4 t = new Matrix4x4(transformBalloon).mulLeft(transformHouse); // to apply the transform, multiply from the left
+        // TODO: need to consider entire tree
         Model model = balloon.model;
         for (int i = 0; i < model.meshes.length; i++) {
             Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], t);
