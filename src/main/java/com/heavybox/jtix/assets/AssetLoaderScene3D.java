@@ -87,6 +87,7 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
         // load materials
         PointerBuffer aiMaterials  = aiScene.mMaterials();
         int numMaterials = aiScene.mNumMaterials();
+        System.out.println("NUM: " + numMaterials);
         if (numMaterials != 0) {
             materialsData = new MaterialData[numMaterials];
             for (int i = 0; i < numMaterials; i++) {
@@ -164,20 +165,10 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
             allDifferentMaterials[i] = modelMaterial;
         }
 
-        // model may contain M number of meshes and N number of materials, where M != N.
-        // we create a materials array matching the meshes array. In the materials array
-        // we may store reference replicas. The final result are two arrays of the same
-        // size where mesh[0],material[0]...mesh[M],material[M] is the entire model.
-        ModelMaterial[] allSceneMaterials = new ModelMaterial[allSceneMeshes.length];
-        for (int i = 0; i < allSceneMaterials.length; i++) {
-            ModelMaterial material = allDifferentMaterials[meshesData[i].materialIndex];
-            allSceneMaterials[i] = material;
-        }
-
         Scene3D scene = new Scene3D();
-        scene.allMaterials = allSceneMaterials;
+        scene.allMaterials = allDifferentMaterials;
         scene.allMeshes = allSceneMeshes;
-        scene.root = buildNodeTree(allSceneMeshes, allSceneMaterials, rootNodeData, null);
+        scene.root = buildNodeTree(allSceneMeshes, allDifferentMaterials, rootNodeData, null);
         scene.allNodes = getAllNodesAsArray(scene.root);
         scene.namedNodes = getNamedNodesMap(scene.allNodes);
 

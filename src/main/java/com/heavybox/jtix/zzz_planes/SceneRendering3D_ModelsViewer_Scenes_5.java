@@ -31,6 +31,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_5 implements Scene {
         scene3D = Assets.get("assets/game-models/scene-outdoors.fbx");
 
         System.out.println(scene3D);
+        System.out.println(scene3D.allMaterials.length);
     }
 
     @Override
