@@ -12,23 +12,23 @@ import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
+public class SceneRendering3D_ModelsViewer_Scenes_5 implements Scene {
 
     private Camera camera;
 
     public Scene3D scene3D;
 
-    public SceneRendering3D_ModelsViewer_Scenes_3() {
+    public SceneRendering3D_ModelsViewer_Scenes_5() {
 
     }
 
     @Override
     public void setup() {
 
-        Assets.loadScene("assets/app-models/scene-simple-parenting.fbx", "assets/app-models/textures");
+        Assets.loadScene("assets/game-models/scene-outdoors.fbx", "assets/game-textures");
         Assets.finishLoading();
 
-        scene3D = Assets.get("assets/app-models/scene-simple-parenting.fbx");
+        scene3D = Assets.get("assets/game-models/scene-outdoors.fbx");
 
         System.out.println(scene3D);
     }
@@ -41,7 +41,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
-        camera.position.set(0, -7, 0);
+        camera.position.set(0, -40, 60);
 
         camera.lookAt(0,0,0);
 
@@ -98,15 +98,18 @@ public class SceneRendering3D_ModelsViewer_Scenes_3 implements Scene {
         Renderer3D.begin(camera);
 
 
-        Scene3D.Node nodeHouse = scene3D.namedNodes.get("house");
+        Scene3D.Node nodeHouse = scene3D.namedNodes.get("windmill_base");
         Matrix4x4 transformHouse = nodeHouse.localTransform;
+        transformHouse.idt();
+        transformHouse.rotateLocalAxisZ(30);
         Model modelHouse = nodeHouse.model;
         for (int i = 0; i < modelHouse.meshes.length; i++) {
                 Renderer3D.drawModel_tmp_5(modelHouse.meshes[i], modelHouse.materials[i], transformHouse);
         }
 
-        Scene3D.Node balloon = scene3D.namedNodes.get("hotairbaloon");
+        Scene3D.Node balloon = scene3D.namedNodes.get("windmill_cap");
         Matrix4x4 transformBalloon = balloon.localTransform;
+        transformBalloon.rotateLocalAxisY(1);
         Matrix4x4 t = new Matrix4x4(transformBalloon).mulLeft(transformHouse); // to apply the transform, multiply from the left
         // TODO: need to consider entire tree
         Model model = balloon.model;

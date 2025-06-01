@@ -390,42 +390,6 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
         return indices;
     }
 
-    @Deprecated private void collectNodes(AINode node, NodeData parent, Array<NodeData> outNodes) {
-        if (node == null) return;
-
-        AIMatrix4x4 currentTransform = AIMatrix4x4.calloc();
-        currentTransform.set(node.mTransformation());
-        //if (parent != null) Assimp.aiMultiplyMatrix4(currentTransform, parent.matrix);
-
-        NodeData nodeData = new NodeData();
-        nodeData.parent = parent;
-        nodeData.name = node.mName().dataString();
-        nodeData.matrix = currentTransform;
-
-        int numMeshes = node.mNumMeshes();
-        IntBuffer meshIndices = node.mMeshes();
-        for (int i = 0; i < numMeshes; i++) {
-            int meshIndex = meshIndices.get(i);
-            nodeData.meshes.add(meshIndex);
-        }
-
-        for (int i = 0; i < numMeshes; i++) {
-            int meshIndex = nodeData.meshes.get(i);
-            MeshData meshData = meshesData[meshIndex];
-            int materialIndex = meshData.materialIndex;
-            nodeData.materials.add(materialIndex);
-        }
-
-        outNodes.add(nodeData);
-        int numChildren = node.mNumChildren();
-        PointerBuffer children = node.mChildren();
-        for (int i = 0; i < numChildren; i++) {
-            collectNodes(AINode.create(children.get(i)), nodeData, outNodes);
-        }
-
-        //currentTransform.free();
-    }
-
     private NodeData collectNodes(AINode node, NodeData parent) {
         if (node == null) return null;
 

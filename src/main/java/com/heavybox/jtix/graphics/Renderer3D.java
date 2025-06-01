@@ -43,7 +43,7 @@ public class Renderer3D {
     private static final Array<RenderCommand>      renderCommandsTransparent = new Array<>(false, 20);
     private static final RenderEnvironment         renderEnvironment         = new RenderEnvironment();
 
-    private static boolean drawing = false;
+    private static boolean drawing       = false;
     private static Camera  currentCamera = null;
     private static Shader  currentShader = defaultShaderPBR;
 
