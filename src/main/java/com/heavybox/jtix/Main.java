@@ -67,9 +67,8 @@ public class Main {
         ApplicationSettings settings = new ApplicationSettings();
         //settings.width = 1920;
         //settings.height = 1080;
-        settings.decorated = true;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_ModelsViewer_Scenes_5());
+        Application.launch(new SceneRendering3D_ModelsViewer_Scenes_6());
         //Application.launch(new SceneRendering3D_Transparents_1());
         //Application.launch(new ScenePlanesGame_Mountains_2());
 

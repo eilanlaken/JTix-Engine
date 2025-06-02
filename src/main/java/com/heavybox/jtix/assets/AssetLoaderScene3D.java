@@ -181,7 +181,7 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
 
             AIString ai_name = AIString.calloc();
             if (Assimp.aiGetMaterialString(aiMaterial, Assimp.AI_MATKEY_NAME, 0, 0, ai_name) == Assimp.aiReturn_SUCCESS) {
-                materialData.name = ai_name.dataString();;
+                materialData.name = ai_name.dataString();
             }
 
             for (MapObjectInt.Entry<String> entry : uniformNameTextureTypes) {
