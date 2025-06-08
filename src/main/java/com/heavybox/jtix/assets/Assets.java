@@ -212,8 +212,8 @@ public final class Assets {
         if (type == Shader.class)      return new AssetLoaderShader();
         if (type == TexturePack.class) return new AssetLoaderTexturePack();
         if (type == Font.class)        return new AssetLoaderFont();
-        if (type == Model.class)       return new AssetLoaderModel();
-        if (type == Scene3D.class)  return new AssetLoaderScene3D();
+        if (type == Model.class)       return new AssetLoader3DModel();
+        if (type == Scene3D.class)  return new AssetLoader3DScene();
 
         throw new AssetsException("Type: " + type.getSimpleName() + " is not a loadable class type. " +
                 "Type must be one of the following: " +

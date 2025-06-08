@@ -14,10 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 // TODO: improve options (gen Normals, gen smooth normals)
 // TODO: store the transform of a node. May be very useful in some cases. For example, destructible objects.
-public class AssetLoaderModel implements AssetLoader<Model> {
+public class AssetLoader3DModel implements AssetLoader<Model> {
 
     private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
     private final Map<String, String>  namedColorParams        = new HashMap<>();
@@ -28,9 +29,9 @@ public class AssetLoaderModel implements AssetLoader<Model> {
     private String folderPath;
     private String texturesFolderPath;
 
-    public AssetLoaderModel() {
+    public AssetLoader3DModel() {
         // all possible material texture parameters
-        uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
+        //uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR); // TODO: delete, not needed for PBR
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
         uniformNameTextureTypes.put("u_texture_normalMap", Assimp.aiTextureType_NORMALS);
         uniformNameTextureTypes.put("u_texture_opacity", Assimp.aiTextureType_OPACITY);
@@ -44,7 +45,6 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         namedProps.put("u_prop_metallic", Assimp.AI_MATKEY_REFLECTIVITY);
         namedProps.put("u_prop_roughness", Assimp.AI_MATKEY_ROUGHNESS_FACTOR);
         namedProps.put("u_prop_opacity", Assimp.AI_MATKEY_OPACITY);
-
     }
 
     // TODO: make use of
@@ -123,41 +123,43 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         ModelMaterial[] allDifferentMaterials = new ModelMaterial[materialsData.length];
         for (int i = 0; i < allDifferentMaterials.length; i++) {
             MaterialData materialData = materialsData[i];
-            ModelMaterial modelMaterial = new ModelMaterial();
+            ModelMaterial modelMaterial = convertMaterialDataToPBRModelMaterial(materialData);
 
-            // add all the textures
-            for (MaterialDataTexture textureData : materialData.texturesData) {
-                Texture texture = Assets.get(textureData.path);
-                modelMaterial.materialAttributes.put(textureData.uniform, texture);
-            }
-            // add all the colors
-            for (MaterialDataColor colorData : materialData.colorsData) {
-                Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
-                modelMaterial.materialAttributes.put(colorData.uniform, color);
-            }
-            // add all the props (metallic, roughness etc.).
-            for (MaterialDataProp propData : materialData.propsData) {
-                String uniform = propData.uniform;
-                float value = propData.value;
-                modelMaterial.materialAttributes.put(uniform, value);
-            }
+//            modelMaterial.name = materialData.name;
+//            // add all the textures
+//            for (MaterialDataTexture textureData : materialData.texturesData) {
+//                Texture texture = Assets.get(textureData.path);
+//                modelMaterial.materialAttributes.put(textureData.uniform, texture);
+//            }
+//            // add all the colors
+//            for (MaterialDataColor colorData : materialData.colorsData) {
+//                Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
+//                modelMaterial.materialAttributes.put(colorData.uniform, color);
+//            }
+//            // add all the props (metallic, roughness etc.).
+//            for (MaterialDataProp propData : materialData.propsData) {
+//                String uniform = propData.uniform;
+//                float value = propData.value;
+//                modelMaterial.materialAttributes.put(uniform, value);
+//            }
+//
+//            // determine if material is fully opaque or uses transparency
+//            boolean transparent = false;
+//            if (modelMaterial.materialAttributes.get("u_prop_opacity") != null) {
+//                float opacityValue = (Float) modelMaterial.materialAttributes.get("u_prop_opacity");
+//                if (opacityValue < 1.0f) transparent = true;
+//            }
+//            Texture opacityTexture = (Texture) modelMaterial.materialAttributes.get("u_texture_opacity");
+//            if (opacityTexture != null) {
+//                transparent = true;
+//            }
+//            modelMaterial.transparent = transparent;
 
-            // determine if material is fully opaque or uses transparency
-            boolean transparent = false;
-            if (modelMaterial.materialAttributes.get("u_prop_opacity") != null) {
-                float opacityValue = (Float) modelMaterial.materialAttributes.get("u_prop_opacity");
-                if (opacityValue < 1.0f) transparent = true;
-            }
-            Texture opacityTexture = (Texture) modelMaterial.materialAttributes.get("u_texture_opacity");
-            if (opacityTexture != null) {
-                transparent = true;
-            }
-            modelMaterial.transparent = transparent;
-            // determine if material is fully opaque or uses transparency
 
             allDifferentMaterials[i] = modelMaterial;
         }
 
+        // TODO: maybe revise. See AssetLoaderScene3D for constructing nodes.
         // model may contain M number of meshes and N number of materials, where M != N.
         // we create a materials array matching the meshes array. In the materials array
         // we may store reference replicas. The final result are two arrays of the same
@@ -169,6 +171,94 @@ public class AssetLoaderModel implements AssetLoader<Model> {
         }
 
         return new Model(modelMeshes, modelMaterials);
+    }
+
+    // TODO
+    private ModelMaterial convertMaterialDataToPBRModelMaterial(final MaterialData materialData) {
+        ModelMaterial material = new ModelMaterial();
+
+        material.name = materialData.name;
+        // add all the textures
+        for (MaterialDataTexture textureData : materialData.texturesData) {
+            Texture texture = Assets.get(textureData.path);
+            material.materialAttributes.put(textureData.uniform, texture);
+        }
+        // add all the colors
+        for (MaterialDataColor colorData : materialData.colorsData) {
+            Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
+            material.materialAttributes.put(colorData.uniform, color);
+        }
+        // add all the props (metallic, roughness etc.).
+        for (MaterialDataProp propData : materialData.propsData) {
+            String uniform = propData.uniform;
+            float value = propData.value;
+            material.materialAttributes.put(uniform, value);
+        }
+
+        // determine if material is fully opaque or uses transparency
+        boolean transparent = false;
+        if (material.materialAttributes.get("u_prop_opacity") != null) {
+            float opacityValue = (Float) material.materialAttributes.get("u_prop_opacity");
+            if (opacityValue < 1.0f) transparent = true;
+        }
+        Texture opacityTexture = (Texture) material.materialAttributes.get("u_texture_opacity");
+        if (opacityTexture != null) {
+            transparent = true;
+        }
+        material.transparent = transparent;
+
+        if (true) return material; // TODO: error here downwards.
+        // in order to make sure a PBR material has all required uniforms, we check for missing attributes and "fill" them with default values
+        /* make sure diffuse texture is available */
+        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        if (texture_diffuse == null) {
+            material.materialAttributes.put("u_texture_diffuse", Graphics.getTextureSingleWhitePixel());
+        }
+        /* make sure diffuse color is available */
+        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+        if (color_diffuse == null) {
+            material.materialAttributes.put("u_color_diffuse", Color.WHITE.clone());
+        }
+        /* make sure normal map value (texture) is available */
+        Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
+        if (texture_normalMap == null) { // missing normal map, use default
+            material.materialAttributes.put("u_texture_normalMap", Graphics.getTextureSinglePixelNormalMap());
+        }
+        /* make sure metallic map (texture) is available */
+        Texture texture_metallicMap = (Texture) material.materialAttributes.get("u_texture_metalness");
+        if (texture_metallicMap == null) {
+            material.materialAttributes.put("u_texture_metalness", Graphics.getTextureSingleWhitePixel());
+        }
+        /* make sure metallic value is available */
+        Float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
+        if (metallic == null) {
+            material.materialAttributes.put("u_prop_metallic", 1);
+        }
+        /* make sure roughness map (texture) is available */
+        Texture texture_roughnessMap = (Texture) material.materialAttributes.get("u_texture_roughness");
+        if (texture_roughnessMap == null) {
+            material.materialAttributes.put("u_texture_roughness", Graphics.getTextureSingleWhitePixel());
+        }
+        /* make sure roughness value is available */
+        Float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        if (roughness == null) {
+            material.materialAttributes.put("u_prop_roughness", 1);
+        }
+        /* make sure opacity map is available */
+        Texture texture_opacity = (Texture) material.materialAttributes.get("u_texture_opacity");
+        if (texture_opacity == null) {
+            material.materialAttributes.put("u_texture_opacity", Graphics.getTextureSingleWhitePixel());
+        }
+        /* make sure opacity value is available */
+        Float opacity = (Float) material.materialAttributes.get("u_prop_opacity");
+        if (opacity == null) {
+            material.materialAttributes.put("u_prop_opacity", 1);
+        }
+
+        System.out.println(material.name + ":");
+        System.out.println(material.materialAttributes);
+
+        return material;
     }
 
     private MaterialData processMaterial(final AIMaterial aiMaterial) {

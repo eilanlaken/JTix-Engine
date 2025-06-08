@@ -6,12 +6,10 @@ public class Model implements MemoryResource {
 
     public ModelMesh[]     meshes;
     public ModelMaterial[] materials;
-    public Shader          shader;
 
     public Model(ModelMesh[] meshes, ModelMaterial[] materials) {
         this.meshes = meshes;
         this.materials = materials;
-        this.shader = null; // uses default shader
     }
 
     public Model(ModelMesh mesh, ModelMaterial material) {
@@ -19,7 +17,6 @@ public class Model implements MemoryResource {
         this.meshes[0] = mesh;
         this.materials = new ModelMaterial[1];
         this.materials[0] = material;
-        this.shader = null;
     }
 
     @Override

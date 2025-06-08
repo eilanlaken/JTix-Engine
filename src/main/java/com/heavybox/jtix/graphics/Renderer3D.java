@@ -4,6 +4,7 @@ import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -33,8 +34,9 @@ public class Renderer3D {
     @Deprecated public static Vector3 lightDir = new Vector3(0,1,-1).nor(); // TODO: remove
 
     // defaults
-    private static final Texture whitePixelTexture  = createDefaultTexture();
-    private static final Texture normalMapTexture   = createNormalMapTexture();
+    private static final Texture whitePixelTexture  = Graphics.getTextureSingleWhitePixel();
+    private static final Texture blackPixelTexture  = Graphics.getTextureSingleBlackPixel();
+    private static final Texture normalMapTexture   = Graphics.getTextureSinglePixelNormalMap();
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
 
@@ -107,7 +109,9 @@ public class Renderer3D {
         currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        if (texture_diffuse == null) System.out.println("X diffuse map");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+        if (color_diffuse == null) System.out.println("X diffuse color");
         if (texture_diffuse != null) {
             currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
             currentShader.bindUniform("u_color_diffuse", Color.WHITE);
@@ -119,6 +123,7 @@ public class Renderer3D {
         }
 
         Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
+        if (texture_normalMap == null) System.out.println("missing normal map");
         currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
 
         Texture texture_metallicMap = (Texture) material.materialAttributes.get("u_texture_metalness");
@@ -132,7 +137,9 @@ public class Renderer3D {
         }
 
         Texture texture_roughnessMap = (Texture) material.materialAttributes.get("u_texture_roughness");
-        float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        if (texture_roughnessMap == null) System.out.println("X roughness map");
+        Float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        if (roughness == null) System.out.println("X roughness value");
         if (texture_roughnessMap != null) {
             currentShader.bindUniform("u_texture_roughness", texture_roughnessMap);
             currentShader.bindUniform("u_prop_roughness", 1);
@@ -422,34 +429,75 @@ public class Renderer3D {
         renderCommandsTransparent.clear();
     }
 
-    private void setShader(@Nullable Shader shader) {
-        if (shader == null) shader = defaultShaderPBR;
+    private static void setShader(@NotNull Shader shader) {
         if (currentShader == shader) return;
         ShaderBinder.bind(shader);
 
+        // bind camera uniforms
         if (shader.uniformExists("u_camera_combined")) {
             currentShader.bindUniform("u_camera_combined", currentCamera.combined);
         }
         if (shader.uniformExists("u_camera_position")) {
-            currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+            currentShader.bindUniform("u_camera_position", currentCamera.position);
+        }
+
+        // bind environment uniforms
+        if (shader.uniformExists("directionalLights[0].direction")) {
+            currentShader.bindUniform("directionalLights[0].direction", lightDir);
+        }
+        if (shader.uniformExists("directionalLights[0].color")) {
+            currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
+        }
+        if (shader.uniformExists("directionalLights[0].intensity")) {
+            currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
         }
 
         currentShader = shader;
     }
 
-    private static void bindCameraParametersToShader() {
+    public static void drawMesh(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        setShader(shader);
 
+        /* bind transform, if present. */
+        if (currentShader.uniformExists("u_transform")) {
+            currentShader.bindUniform("u_transform", transform);
+        }
+
+        // TODO: bind skeletal animation, if present.
+
+        /* bind material parameters */
+        for (String uniform : currentShader.uniformNames) {
+            Object value = material.materialAttributes.get(uniform);
+            if (value == null) continue;
+            currentShader.bindUniform(uniform, value);
+        }
+
+        /* the actual draw call */
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+            // turn on VBOs based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+            }
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0); // draw!
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount); // draw!
+            // turn off VBOs based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
     }
 
-    private static void bindEnvironmentParametersToShader() {
+    // TODO: remove these two methods. Right at the draw call, you will bind transforms and materials for each mesh.
+    @Deprecated private static void bindModelMaterialParametersToShader() {
 
     }
-
-    private static void bindModelMaterialParametersToShader() {
-
-    }
-
-    private static void bindModelTransformToShader() {
+    @Deprecated private static void bindModelTransformToShader() {
 
     }
 
@@ -483,7 +531,7 @@ public class Renderer3D {
     TODO: this is common to both Renderer2D and Renderer3D and should be refactored.
     creates a single-white-pixel texture.
      */
-    private static Texture createDefaultTexture() {
+    @Deprecated private static Texture createDefaultTexture() {
         ByteBuffer buffer = ByteBuffer.allocateDirect(4);
         buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF)); // Red component
         buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));  // Green component
@@ -500,7 +548,7 @@ public class Renderer3D {
     TODO: this is common to both Renderer2D and Renderer3D and should be refactored.
     creates a single-white-pixel texture.
      */
-    private static Texture createNormalMapTexture() {
+    @Deprecated private static Texture createNormalMapTexture() {
         ByteBuffer buffer = ByteBuffer.allocateDirect(4);
         buffer.put((byte) 0x80); // Red component (128)
         buffer.put((byte) 0x80); // Green component (128)

@@ -20,7 +20,7 @@ import java.util.Map;
 import static com.heavybox.jtix.math.Matrix4x4.*;
 
 // TODO: call .free() for AIMatrix4's
-public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
+public class AssetLoader3DScene implements AssetLoader<Scene3D> {
 
     private final MapObjectInt<String> uniformNameTextureTypes = new MapObjectInt<>();
     private final Map<String, String>  namedColorParams        = new HashMap<>();
@@ -32,7 +32,7 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
     private String folderPath;
     private String texturesFolderPath;
 
-    public AssetLoaderScene3D() {
+    public AssetLoader3DScene() {
         // all possible material texture parameters
         uniformNameTextureTypes.put("u_texture_baseColor", Assimp.aiTextureType_BASE_COLOR);
         uniformNameTextureTypes.put("u_texture_diffuse", Assimp.aiTextureType_DIFFUSE);
@@ -87,7 +87,6 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
         // load materials
         PointerBuffer aiMaterials  = aiScene.mMaterials();
         int numMaterials = aiScene.mNumMaterials();
-        System.out.println("NUM: " + numMaterials);
         if (numMaterials != 0) {
             materialsData = new MaterialData[numMaterials];
             for (int i = 0; i < numMaterials; i++) {
@@ -132,6 +131,7 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
             MaterialData materialData = materialsData[i];
             ModelMaterial modelMaterial = new ModelMaterial();
 
+            modelMaterial.name = materialData.name;
             // add all the textures
             for (MaterialDataTexture textureData : materialData.texturesData) {
                 Texture texture = Assets.get(textureData.path);
@@ -403,8 +403,7 @@ public class AssetLoaderScene3D implements AssetLoader<Scene3D> {
         for (int i = 0; i < numMeshes; i++) {
             int meshIndex = nodeData.meshes.get(i);
             MeshData meshData = meshesData[meshIndex];
-            int materialIndex = meshData.materialIndex;
-            nodeData.materials.add(materialIndex);
+            nodeData.materials.add(meshData.materialIndex);
         }
 
         int numChildren = node.mNumChildren();

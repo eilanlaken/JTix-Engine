@@ -57,6 +57,11 @@ public final class Graphics {
     /* freetype library */
     private static long freeType = -1;
 
+    /* useful textures */
+    private static Texture singleWhitePixel;
+    private static Texture singleBlackPixel;
+    private static Texture singleNormalMapPixel;
+
     private Graphics() {}
 
     public static void update() {
@@ -240,6 +245,56 @@ public final class Graphics {
         return lineWidth[1];
     }
 
+    /* Textures */
+
+    public static Texture getTextureSingleWhitePixel() {
+        if (singleWhitePixel != null) return singleWhitePixel;
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) ((0xFFFFFFFF >> 16) & 0xFF)); // Red component
+        buffer.put((byte) ((0xFFFFFFFF >> 8) & 0xFF));  // Green component
+        buffer.put((byte) (0xFF));                      // Blue component
+        buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF)); // Alpha component
+        buffer.flip();
+
+        singleWhitePixel = new Texture(1, 1, buffer,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
+        return singleWhitePixel;
+    }
+
+    public static Texture getTextureSingleBlackPixel() {
+        if (singleBlackPixel != null) return singleBlackPixel;
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) (0)); // Red component
+        buffer.put((byte) (0)); // Green component
+        buffer.put((byte) (0)); // Blue component
+        buffer.put((byte) ((0xFFFFFFFF >> 24) & 0xFF)); // Alpha component
+        buffer.flip();
+
+        singleBlackPixel = new Texture(1, 1, buffer,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE,1);
+        return singleBlackPixel;
+    }
+
+    public static Texture getTextureSinglePixelNormalMap() {
+        if (singleNormalMapPixel != null) return singleNormalMapPixel;
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) 0x80); // Red component (128)
+        buffer.put((byte) 0x80); // Green component (128)
+        buffer.put((byte) 0xFF); // Blue component (255)
+        buffer.put((byte) 0xFF); // Alpha component (255)
+        buffer.flip();
+
+        singleNormalMapPixel = new Texture(1, 1, buffer,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        return singleNormalMapPixel;
+    }
+
     /* set cursor */
 
     // create cursors
@@ -356,6 +411,7 @@ public final class Graphics {
         if (cursorResizeAll != -1) GLFW.glfwDestroyCursor(cursorResizeAll);
 
         //Renderer2D_new.delete();
+        // TODO: delete internal textures
 
         for (Map.Entry<String, Long> cursorEntry : customCursors.entrySet()) {
             long cursor = cursorEntry.getValue();

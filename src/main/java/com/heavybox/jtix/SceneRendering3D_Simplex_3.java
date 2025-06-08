@@ -33,7 +33,8 @@ public class SceneRendering3D_Simplex_3 implements Scene {
         Assets.finishLoading();
 
         model = Assets.get("assets/models/plane_demo.fbx");
-
+        System.out.println(model.materials[1].materialAttributes.get("u_texture_baseColor"));
+        System.out.println(model.materials[1].materialAttributes.get("u_texture_diffuse"));
     }
 
     @Override
@@ -103,12 +104,8 @@ public class SceneRendering3D_Simplex_3 implements Scene {
             transform.rotateLocalAxisX(-1);
         }
 
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.R)) {
-            //body_a.applyForce(1,0, body_a.shape.x(), body_a.shape.y() + 0.2f);
-        }
-
-        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.SPACE)) {
-            //world.createConstraintWeld(body_a, body_b, new Vector2(1,0));
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
+            Renderer3D.lightDir.rotate(1f,1,0,0);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -119,7 +116,12 @@ public class SceneRendering3D_Simplex_3 implements Scene {
         renderer2D.end();
 
         Renderer3D.begin(camera);
+//        for (int i = 0; i < model.meshes.length; i++) {
+//            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+//        }
+
         for (int i = 0; i < model.meshes.length; i++) {
+            if (i != 1) continue;
             Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
         }
         Renderer3D.end();
