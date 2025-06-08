@@ -108,6 +108,8 @@ public class Renderer3D {
         currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
 
+        System.out.println("=====  " + material.name + " =======");
+
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
         if (texture_diffuse == null) System.out.println("X diffuse map");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
@@ -123,11 +125,13 @@ public class Renderer3D {
         }
 
         Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
-        if (texture_normalMap == null) System.out.println("missing normal map");
+        if (texture_normalMap == null) System.out.println("X normal map");
         currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
 
         Texture texture_metallicMap = (Texture) material.materialAttributes.get("u_texture_metalness");
-        float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
+        if (texture_metallicMap == null) System.out.println("X metalness map");
+        Float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
+        if (metallic == null) System.out.println("X metalness value");
         if (texture_metallicMap != null) {
             currentShader.bindUniform("u_texture_metalness", texture_metallicMap);
             currentShader.bindUniform("u_prop_metallic", 1);
@@ -156,6 +160,56 @@ public class Renderer3D {
         } else {
             currentShader.bindUniform("u_texture_opacity", whitePixelTexture);
             currentShader.bindUniform("u_prop_opacity", opacity);
+        }
+
+        GL30.glBindVertexArray(mesh.vaoId);
+        {
+            // turn vbos on based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glEnableVertexAttribArray(attribute.glslLocation);
+            }
+
+            if (mesh.useIndices) GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.vertexCount, GL11.GL_UNSIGNED_INT, 0);
+            else GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.vertexCount);
+
+            // turn vbos off based on the shader and mesh
+            for (VertexAttribute attribute : VertexAttribute.values()) {
+                if (!currentShader.hasVertexAttribute(attribute)) continue;
+                if (!mesh.hasVertexAttribute(attribute)) continue;
+                GL20.glDisableVertexAttribArray(attribute.glslLocation);
+            }
+        }
+        GL30.glBindVertexArray(0);
+    }
+
+    @Deprecated public static void drawModel_tmp_6(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        ShaderBinder.bind(currentShader);
+        currentShader.bindUniform("u_transform", transform);
+        currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
+        currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
+
+        // TODO: bind environment lights when binding the camera.
+//        currentShader.bindUniform("pointLights[0].position", new Vector3(0,-5,5));
+//        currentShader.bindUniform("pointLights[0].color", new Vector3(1f,0.0f,0.0f));
+//        currentShader.bindUniform("pointLights[0].intensity", 1);
+//
+//        currentShader.bindUniform("pointLights[1].position", new Vector3(0,-5,-5));
+//        currentShader.bindUniform("pointLights[1].color", new Vector3(0f,0.0f,1.0f));
+//        currentShader.bindUniform("pointLights[1].intensity", 1);
+
+        currentShader.bindUniform("directionalLights[0].direction", lightDir);
+        currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
+        currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
+
+        System.out.println("=====  " + material.name + " =======");
+
+        // bind custom material uniforms
+        for (String uniform : currentShader.uniformNames) {
+            Object value = material.materialAttributes.get(uniform);
+            if (value == null) continue;
+            currentShader.bindUniform(uniform, value);
         }
 
         GL30.glBindVertexArray(mesh.vaoId);

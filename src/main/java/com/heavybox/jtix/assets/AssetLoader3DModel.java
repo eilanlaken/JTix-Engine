@@ -207,7 +207,7 @@ public class AssetLoader3DModel implements AssetLoader<Model> {
         }
         material.transparent = transparent;
 
-        if (true) return material; // TODO: error here downwards.
+        //if (true) return material; // TODO: error here downwards.
         // in order to make sure a PBR material has all required uniforms, we check for missing attributes and "fill" them with default values
         /* make sure diffuse texture is available */
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");

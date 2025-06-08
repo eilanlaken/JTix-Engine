@@ -121,8 +121,8 @@ public class SceneRendering3D_Simplex_3 implements Scene {
 //        }
 
         for (int i = 0; i < model.meshes.length; i++) {
-            if (i != 1) continue;
-            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
+            //if (i != 0) continue;
+            Renderer3D.drawModel_tmp_6(model.meshes[i], model.materials[i], transform);
         }
         Renderer3D.end();
     }
