@@ -47,7 +47,7 @@ public class Renderer3D {
 
     private static boolean drawing       = false;
     private static Camera  currentCamera = null;
-    private static Shader  currentShader = defaultShaderPBR;
+    private static Shader  currentShader = null;
 
     // TODO: check if Renderer2D is currently rendering.
     public static void begin(Camera camera) {
@@ -63,30 +63,10 @@ public class Renderer3D {
 
         currentCamera = camera;
         drawing = true;
-        currentShader = defaultShaderPBR;
+        currentShader = null;
 
         // TODO (remove).
-        ShaderBinder.bind(currentShader);
-    }
-
-    public static void drawModel(Model model, Matrix4x4 transform) {
-        // for every mesh, create a render command
-        for (int i = 0; i < model.meshes.length; i++) {
-            RenderCommand renderCommand = renderCommandsPool.allocate();
-            renderCommand.mesh = model.meshes[i];
-            renderCommand.material = model.materials[i];
-            renderCommand.transform = transform;
-            renderCommand.shader = renderCommand.material.shader;
-            if (renderCommand.shader == null) {
-                renderCommand.shader = renderCommand.material.useLights ? defaultShaderPBR : defaultShaderUnlit;
-            }
-
-            if (renderCommand.material.transparent) {
-                renderCommandsTransparent.add(renderCommand);
-            } else {
-                renderCommandsOpaque.add(renderCommand);
-            }
-        }
+        //ShaderBinder.bind(currentShader);
     }
 
     @Deprecated public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
@@ -186,7 +166,6 @@ public class Renderer3D {
 
     @Deprecated public static void drawModel_tmp_6(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         ShaderBinder.bind(currentShader);
-        currentShader.bindUniform("u_transform", transform);
         currentShader.bindUniform("u_camera_combined", currentCamera.combined); // TODO: camera binding should not be here.
         currentShader.bindUniform("u_camera_position", currentCamera.position); // TODO: camera binding should not be here.
 
@@ -202,6 +181,8 @@ public class Renderer3D {
         currentShader.bindUniform("directionalLights[0].direction", lightDir);
         currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
+
+        currentShader.bindUniform("u_transform", transform);
 
         for (String uniform : material.materialAttributes.keySet()) {
             if (!currentShader.uniformExists(uniform)) continue;
@@ -466,12 +447,42 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
+    public static void drawModel(Model model, Matrix4x4 transform) {
+        // for every mesh, create a render command
+        for (int i = 0; i < model.meshes.length; i++) {
+            RenderCommand renderCommand = renderCommandsPool.allocate();
+            renderCommand.mesh = model.meshes[i];
+            renderCommand.material = model.materials[i];
+            renderCommand.transform = transform;
+            renderCommand.shader = renderCommand.material.shader;
+            if (renderCommand.shader == null) {
+                renderCommand.shader = renderCommand.material.useLights ? defaultShaderPBR : defaultShaderUnlit;
+            }
+
+            if (renderCommand.material.transparent) {
+                renderCommandsTransparent.add(renderCommand);
+            } else {
+                renderCommandsOpaque.add(renderCommand);
+            }
+        }
+    }
+
     public static void end() {
         if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
 
         // draw all opaque objects
+        // TODO: sort renderables by shader -> material index.
+        System.out.println(renderCommandsOpaque.size);
+        for (RenderCommand command : renderCommandsOpaque) {
+            Shader shader = command.shader;
+            ModelMesh mesh = command.mesh;
+            ModelMaterial material = command.material;
+            Matrix4x4 transform = command.transform;
+            drawMesh(shader, mesh, material, transform);
+        }
 
         // draw all transparent object
+        // TODO: sort renderables by camera z-depth -> shader -> material index
 
         drawing = false;
         renderCommandsPool.freeAll(renderCommandsOpaque);
@@ -480,30 +491,38 @@ public class Renderer3D {
         renderCommandsTransparent.clear();
     }
 
+    // TODO: problem here.
     private static void setShader(@NotNull Shader shader) {
-        if (currentShader == shader) return;
+        if (currentShader == shader) {
+            System.out.println("ok");
+            return;
+        } else {
+            System.out.println("noasdasdasd");
+        }
+
         ShaderBinder.bind(shader);
 
         // bind camera uniforms
         if (shader.uniformExists("u_camera_combined")) {
-            currentShader.bindUniform("u_camera_combined", currentCamera.combined);
+            shader.bindUniform("u_camera_combined", currentCamera.combined);
         }
         if (shader.uniformExists("u_camera_position")) {
-            currentShader.bindUniform("u_camera_position", currentCamera.position);
+            shader.bindUniform("u_camera_position", currentCamera.position);
         }
 
         // bind environment uniforms
         if (shader.uniformExists("directionalLights[0].direction")) {
-            currentShader.bindUniform("directionalLights[0].direction", lightDir);
+            shader.bindUniform("directionalLights[0].direction", lightDir);
         }
         if (shader.uniformExists("directionalLights[0].color")) {
-            currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
+            shader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
-            currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
+            shader.bindUniform("directionalLights[0].intensity", 0.2f);
         }
 
         currentShader = shader;
+
     }
 
     public static void drawMesh(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
@@ -517,9 +536,9 @@ public class Renderer3D {
         // TODO: bind skeletal animation, if present.
 
         /* bind material parameters */
-        for (String uniform : currentShader.uniformNames) {
+        for (String uniform : material.materialAttributes.keySet()) {
+            if (!currentShader.uniformExists(uniform)) continue;
             Object value = material.materialAttributes.get(uniform);
-            if (value == null) continue;
             currentShader.bindUniform(uniform, value);
         }
 
@@ -612,7 +631,7 @@ public class Renderer3D {
                 Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
     }
 
-    private static final class RenderCommand implements MemoryPool.Reset {
+    public static final class RenderCommand implements MemoryPool.Reset {
 
         public ModelMesh     mesh      = null;
         public ModelMaterial material  = null;

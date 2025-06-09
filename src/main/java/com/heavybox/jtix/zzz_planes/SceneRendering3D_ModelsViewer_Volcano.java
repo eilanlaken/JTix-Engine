@@ -12,26 +12,35 @@ import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_ModelsViewer_Scenes_7 implements Scene {
+public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
 
     private Camera camera;
 
     public Scene3D scene3D;
+    public Scene3D.Node volcanoLava;
 
-    public SceneRendering3D_ModelsViewer_Scenes_7() {
+    public Shader volcanoLavaShader;
+
+    public SceneRendering3D_ModelsViewer_Volcano() {
 
     }
 
     @Override
     public void setup() {
 
+        Assets.loadShader("volcano-lava-shader", "assets/game-shaders/map-1-volcano-lava-shader.vert", "assets/game-shaders/map-1-volcano-lava-shader.frag");
         Assets.loadScene("assets/game-models/map-1-mountain-volcano.fbx", "assets/game-textures");
         Assets.finishLoading();
 
         scene3D = Assets.get("assets/game-models/map-1-mountain-volcano.fbx");
 
+        volcanoLavaShader = Assets.get("volcano-lava-shader");
         System.out.println(scene3D);
         System.out.println(scene3D.allMaterials.length);
+
+        volcanoLava = scene3D.namedNodes.get("lava");
+        ModelMaterial lavaMaterial = volcanoLava.model.materials[0];
+        lavaMaterial.shader = volcanoLavaShader;
     }
 
     @Override
@@ -42,7 +51,7 @@ public class SceneRendering3D_ModelsViewer_Scenes_7 implements Scene {
     @Override
     public void start() {
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
-        camera.position.set(0, -40, 60);
+        camera.position.set(0, -540, 260);
 
         camera.lookAt(0,0,0);
 
@@ -95,18 +104,22 @@ public class SceneRendering3D_ModelsViewer_Scenes_7 implements Scene {
         transformHouse.idt();
         //transformHouse.rotateLocalAxisZ(30);
         Model modelHouse = nodeHouse.model;
+
+        Renderer3D.drawModel(modelHouse, transformHouse);
         for (int i = 0; i < modelHouse.meshes.length; i++) {
-                Renderer3D.drawModel_tmp_5(modelHouse.meshes[i], modelHouse.materials[i], transformHouse);
+                //Renderer3D.drawModel_tmp_6(modelHouse.meshes[i], modelHouse.materials[i], transformHouse);
         }
 
-        Scene3D.Node balloon = scene3D.namedNodes.get("lava");
-        Matrix4x4 transformBalloon = balloon.localTransform;
+        volcanoLava = scene3D.namedNodes.get("lava");
+        Matrix4x4 transformBalloon = volcanoLava.localTransform;
         Matrix4x4 t = new Matrix4x4(transformBalloon).mulLeft(transformHouse); // to apply the transform, multiply from the left
         // TODO: need to consider entire tree
-        Model model = balloon.model;
+        Model model = volcanoLava.model;
         for (int i = 0; i < model.meshes.length; i++) {
-            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], t);
+            //Renderer3D.drawModel_tmp_6(model.meshes[i], model.materials[i], t);
         }
+
+        Renderer3D.drawModel(volcanoLava.model, t);
 
 
         Renderer3D.end();
