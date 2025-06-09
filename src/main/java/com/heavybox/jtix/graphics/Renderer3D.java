@@ -203,17 +203,9 @@ public class Renderer3D {
         currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
 
-        if (material.name.equals("ASP-17ML")) {
-            //System.out.println("=====  " + material.name + " =======");
-        }
-
-        // bind custom material uniforms
-        for (String uniform : currentShader.uniformNames) {
-            //System.out.println(uniform);
+        for (String uniform : material.materialAttributes.keySet()) {
+            if (!currentShader.uniformExists(uniform)) continue;
             Object value = material.materialAttributes.get(uniform);
-            if (value == null) {
-                continue;
-            }
             currentShader.bindUniform(uniform, value);
         }
 
