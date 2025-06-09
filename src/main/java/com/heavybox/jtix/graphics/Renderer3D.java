@@ -108,12 +108,12 @@ public class Renderer3D {
         currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
 
-        System.out.println("=====  " + material.name + " =======");
+        //System.out.println("=====  " + material.name + " =======");
 
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
-        if (texture_diffuse == null) System.out.println("X diffuse map");
+        //if (texture_diffuse == null) System.out.println("X diffuse map");
         Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
-        if (color_diffuse == null) System.out.println("X diffuse color");
+        //if (color_diffuse == null) System.out.println("X diffuse color");
         if (texture_diffuse != null) {
             currentShader.bindUniform("u_texture_diffuse", texture_diffuse);
             currentShader.bindUniform("u_color_diffuse", Color.WHITE);
@@ -125,11 +125,11 @@ public class Renderer3D {
         }
 
         Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
-        if (texture_normalMap == null) System.out.println("X normal map");
+        //if (texture_normalMap == null) System.out.println("X normal map");
         currentShader.bindUniform("u_texture_normalMap", Objects.requireNonNullElse(texture_normalMap, normalMapTexture));
 
         Texture texture_metallicMap = (Texture) material.materialAttributes.get("u_texture_metalness");
-        if (texture_metallicMap == null) System.out.println("X metalness map");
+        //if (texture_metallicMap == null) System.out.println("X metalness map");
         Float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
         if (metallic == null) System.out.println("X metalness value");
         if (texture_metallicMap != null) {
@@ -141,9 +141,9 @@ public class Renderer3D {
         }
 
         Texture texture_roughnessMap = (Texture) material.materialAttributes.get("u_texture_roughness");
-        if (texture_roughnessMap == null) System.out.println("X roughness map");
+        //if (texture_roughnessMap == null) System.out.println("X roughness map");
         Float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
-        if (roughness == null) System.out.println("X roughness value");
+        //if (roughness == null) System.out.println("X roughness value");
         if (texture_roughnessMap != null) {
             currentShader.bindUniform("u_texture_roughness", texture_roughnessMap);
             currentShader.bindUniform("u_prop_roughness", 1);
@@ -203,12 +203,17 @@ public class Renderer3D {
         currentShader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         currentShader.bindUniform("directionalLights[0].intensity", 0.2f);
 
-        System.out.println("=====  " + material.name + " =======");
+        if (material.name.equals("ASP-17ML")) {
+            //System.out.println("=====  " + material.name + " =======");
+        }
 
         // bind custom material uniforms
         for (String uniform : currentShader.uniformNames) {
+            //System.out.println(uniform);
             Object value = material.materialAttributes.get(uniform);
-            if (value == null) continue;
+            if (value == null) {
+                continue;
+            }
             currentShader.bindUniform(uniform, value);
         }
 

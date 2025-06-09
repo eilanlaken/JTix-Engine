@@ -129,39 +129,7 @@ public class AssetLoader3DScene implements AssetLoader<Scene3D> {
         ModelMaterial[] allDifferentMaterials = new ModelMaterial[materialsData.length];
         for (int i = 0; i < allDifferentMaterials.length; i++) {
             MaterialData materialData = materialsData[i];
-            ModelMaterial modelMaterial = new ModelMaterial();
-
-            modelMaterial.name = materialData.name;
-            // add all the textures
-            for (MaterialDataTexture textureData : materialData.texturesData) {
-                Texture texture = Assets.get(textureData.path);
-                modelMaterial.materialAttributes.put(textureData.uniform, texture);
-            }
-            // add all the colors
-            for (MaterialDataColor colorData : materialData.colorsData) {
-                Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
-                modelMaterial.materialAttributes.put(colorData.uniform, color);
-            }
-            // add all the props (metallic, roughness etc.).
-            for (MaterialDataProp propData : materialData.propsData) {
-                String uniform = propData.uniform;
-                float value = propData.value;
-                modelMaterial.materialAttributes.put(uniform, value);
-            }
-
-            // determine if material is fully opaque or uses transparency
-            boolean transparent = false;
-            if (modelMaterial.materialAttributes.get("u_prop_opacity") != null) {
-                float opacityValue = (Float) modelMaterial.materialAttributes.get("u_prop_opacity");
-                if (opacityValue < 1.0f) transparent = true;
-            }
-            Texture opacityTexture = (Texture) modelMaterial.materialAttributes.get("u_texture_opacity");
-            if (opacityTexture != null) {
-                transparent = true;
-            }
-            modelMaterial.transparent = transparent;
-            // determine if material is fully opaque or uses transparency
-
+            ModelMaterial modelMaterial = convertMaterialDataToPBRModelMaterial(materialData);
             allDifferentMaterials[i] = modelMaterial;
         }
 
@@ -173,6 +141,86 @@ public class AssetLoader3DScene implements AssetLoader<Scene3D> {
         scene.namedNodes = getNamedNodesMap(scene.allNodes);
 
         return scene;
+    }
+
+    private ModelMaterial convertMaterialDataToPBRModelMaterial(final AssetLoader3DScene.MaterialData materialData) {
+        ModelMaterial material = new ModelMaterial();
+
+        material.name = materialData.name;
+        // add all the textures
+        for (AssetLoader3DScene.MaterialDataTexture textureData : materialData.texturesData) {
+            Texture texture = Assets.get(textureData.path);
+            material.materialAttributes.put(textureData.uniform, texture);
+        }
+        // add all the colors
+        for (AssetLoader3DScene.MaterialDataColor colorData : materialData.colorsData) {
+            Color color = new Color(colorData.r, colorData.g, colorData.b, colorData.a);
+            material.materialAttributes.put(colorData.uniform, color);
+        }
+        // add all the props (metallic, roughness etc.).
+        for (AssetLoader3DScene.MaterialDataProp propData : materialData.propsData) {
+            String uniform = propData.uniform;
+            float value = propData.value;
+            material.materialAttributes.put(uniform, value);
+        }
+
+        // determine if material is fully opaque or uses transparency
+        boolean transparent = false;
+        if (material.materialAttributes.get("u_prop_opacity") != null) {
+            float opacityValue = (Float) material.materialAttributes.get("u_prop_opacity");
+            if (opacityValue < 1.0f) transparent = true;
+        }
+        Texture opacityTexture = (Texture) material.materialAttributes.get("u_texture_opacity");
+        if (opacityTexture != null) {
+            transparent = true;
+        }
+        material.transparent = transparent;
+
+        //if (true) return material;
+        // in order to make sure a PBR material has all required uniforms, we check for missing attributes and "fill" them with default values
+        /* make sure diffuse texture is available */
+        Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");
+        Color color_diffuse = (Color) material.materialAttributes.get("u_color_diffuse");
+        if (texture_diffuse != null) {
+            material.materialAttributes.put("u_color_diffuse", Color.WHITE.clone());
+        } else if (color_diffuse != null) {
+            material.materialAttributes.put("u_texture_diffuse", Graphics.getTextureSingleWhitePixel());
+        }
+
+        /* make sure normal map value (texture) is available */
+        Texture texture_normalMap = (Texture) material.materialAttributes.get("u_texture_normalMap");
+        if (texture_normalMap == null) { // missing normal map, use default
+            material.materialAttributes.put("u_texture_normalMap", Graphics.getTextureSinglePixelNormalMap());
+        }
+
+        /* make sure metallic map (texture) is available */
+        Texture texture_metallicMap = (Texture) material.materialAttributes.get("u_texture_metalness");
+        Float metallic = (Float) material.materialAttributes.get("u_prop_metallic");
+        if (texture_metallicMap != null) {
+            material.materialAttributes.put("u_prop_metallic", 1);
+        } else if (metallic != null) {
+            material.materialAttributes.put("u_texture_metalness", Graphics.getTextureSingleWhitePixel());
+        }
+
+        /* make sure roughness value is available */
+        Texture texture_roughnessMap = (Texture) material.materialAttributes.get("u_texture_roughness");
+        Float roughness = (Float) material.materialAttributes.get("u_prop_roughness");
+        if (texture_roughnessMap != null) {
+            material.materialAttributes.put("u_prop_roughness", 1);
+        } else if (roughness != null) {
+            material.materialAttributes.put("u_texture_roughness", Graphics.getTextureSingleWhitePixel());
+        }
+
+        /* make sure opacity map is available */
+        Texture texture_opacity = (Texture) material.materialAttributes.get("u_texture_opacity");
+        Float opacity = (Float) material.materialAttributes.get("u_prop_opacity");
+        if (texture_opacity != null) {
+            material.materialAttributes.put("u_prop_opacity", 1);
+        } else if (opacity != null) {
+            material.materialAttributes.put("u_texture_opacity", Graphics.getTextureSingleWhitePixel());
+        }
+
+        return material;
     }
 
     private MaterialData processMaterial(final AIMaterial aiMaterial) {

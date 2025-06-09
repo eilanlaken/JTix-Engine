@@ -17,6 +17,7 @@ import java.util.Map;
 public class SceneRendering3D_Simplex_3 implements Scene {
 
     private Camera camera;
+    public Model modelCockpit;
 
     public Model model;
     public Matrix4x4 transform = new Matrix4x4();
@@ -30,11 +31,10 @@ public class SceneRendering3D_Simplex_3 implements Scene {
     public void setup() {
 
         Assets.loadModel("assets/models/plane_demo.fbx");
+        Assets.loadModel("assets/app-models/cockpit-template.fbx", "assets/app-models/textures");
         Assets.finishLoading();
-
+        modelCockpit = Assets.get("assets/app-models/cockpit-template.fbx");
         model = Assets.get("assets/models/plane_demo.fbx");
-        System.out.println(model.materials[1].materialAttributes.get("u_texture_baseColor"));
-        System.out.println(model.materials[1].materialAttributes.get("u_texture_diffuse"));
     }
 
     @Override
@@ -120,10 +120,16 @@ public class SceneRendering3D_Simplex_3 implements Scene {
 //            Renderer3D.drawModel_tmp_5(model.meshes[i], model.materials[i], transform);
 //        }
 
+        for (int i = 0; i < modelCockpit.meshes.length; i++) {
+            //if (i != 0) continue;
+            Renderer3D.drawModel_tmp_6(modelCockpit.meshes[i], modelCockpit.materials[i], new Matrix4x4().translateGlobalAxisXYZ(6,-3,3));
+        }
         for (int i = 0; i < model.meshes.length; i++) {
             //if (i != 0) continue;
             Renderer3D.drawModel_tmp_6(model.meshes[i], model.materials[i], transform);
         }
+
+
         Renderer3D.end();
     }
 
