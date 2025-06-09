@@ -51,10 +51,6 @@ public class SceneRendering3D_Simplex_3 implements Scene {
 
         camera.update();
 
-        for (Map.Entry<String, Object> entry : model.materials[0].materialAttributes.entrySet()) {
-            //System.out.println(entry.getKey() + " = " + entry.getValue());
-        }
-
     }
 
 

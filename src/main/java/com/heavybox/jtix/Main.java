@@ -69,7 +69,7 @@ public class Main {
         //settings.width = 1920;
         //settings.height = 1080;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_Simplex_3());
+        Application.launch(new SceneRendering3D_Basic_11());
         //Application.launch(new SceneRendering3D_Transparents_1());
         //Application.launch(new ScenePlanesGame_Mountains_2());
 
