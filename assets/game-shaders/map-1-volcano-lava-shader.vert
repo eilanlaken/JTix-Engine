@@ -60,5 +60,5 @@ void main()
         light_direction[i] = invTBN * -directionalLights[i].direction;
     }
 
-    uv = u_time + a_textCoords0;
+    uv = vec2(u_time, u_time) + a_textCoords0;
 }

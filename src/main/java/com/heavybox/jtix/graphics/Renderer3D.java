@@ -1,6 +1,7 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
@@ -54,12 +55,12 @@ public class Renderer3D {
         if (drawing) throw new GraphicsException("Cannot call begin() while drawing. Must call end()");
         if (camera == null) throw new GraphicsException("camera cannot be null when rendering using " + Renderer3D.class.getSimpleName() + ".begin(Camera camera).");
 
-        GL11.glColorMask(true, true, true, true); // enable color buffer writes
-        GL20.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        GL11.glColorMask(true, true, true, true); // enable color buffer writes
+//        GL20.glDepthMask(true);
+//        GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
+//        GL11.glEnable(GL11.GL_DEPTH_TEST);
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         currentCamera = camera;
         drawing = true;
@@ -470,9 +471,15 @@ public class Renderer3D {
     public static void end() {
         if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
 
-        // draw all opaque objects
+        GL11.glColorMask(true, true, true, true); // enable color buffer writes
+        GL20.glDepthMask(true);
+        GL11.glEnable(GL11.GL_CULL_FACE); // TODO: enable!
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        /* draw all opaque object */
         // TODO: sort renderables by shader -> material index.
-        System.out.println(renderCommandsOpaque.size);
         for (RenderCommand command : renderCommandsOpaque) {
             Shader shader = command.shader;
             ModelMesh mesh = command.mesh;
@@ -481,8 +488,29 @@ public class Renderer3D {
             drawMesh(shader, mesh, material, transform);
         }
 
-        // draw all transparent object
-        // TODO: sort renderables by camera z-depth -> shader -> material index
+        /* draw all transparent object */
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL20.glDepthMask(false);
+        // TODO: sort transparent by camera z-depth -> shader -> material index
+        Vector3 position_o1 = new Vector3();
+        Vector3 position_o2 = new Vector3();
+        Collections.sort(renderCommandsTransparent, (o1, o2) -> {
+            Matrix4x4 t1 = o1.transform;
+            Matrix4x4 t2 = o2.transform;
+            float d1 = currentCamera.position.dst2(t1.getTranslation(position_o1));
+            float d2 = currentCamera.position.dst2(t2.getTranslation(position_o2));
+            return Float.compare(d2, d1); // farthest first
+        });
+        for (RenderCommand command : renderCommandsTransparent) {
+            Shader shader = command.shader;
+            ModelMesh mesh = command.mesh;
+            ModelMaterial material = command.material;
+            Matrix4x4 transform = command.transform;
+            drawMesh(shader, mesh, material, transform);
+        }
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL20.glEnable(GL20.GL_DEPTH_TEST);
+        GL20.glDepthMask(true);
 
         drawing = false;
         renderCommandsPool.freeAll(renderCommandsOpaque);
@@ -493,16 +521,11 @@ public class Renderer3D {
 
     // TODO: problem here.
     private static void setShader(@NotNull Shader shader) {
-        if (currentShader == shader) {
-            System.out.println("ok");
-            return;
-        } else {
-            System.out.println("noasdasdasd");
-        }
+        if (currentShader == shader) return;
 
         ShaderBinder.bind(shader);
 
-        // bind camera uniforms
+        // TODO: bind all camera uniforms
         if (shader.uniformExists("u_camera_combined")) {
             shader.bindUniform("u_camera_combined", currentCamera.combined);
         }
@@ -510,7 +533,7 @@ public class Renderer3D {
             shader.bindUniform("u_camera_position", currentCamera.position);
         }
 
-        // bind environment uniforms
+        // TODO: bind environment uniforms
         if (shader.uniformExists("directionalLights[0].direction")) {
             shader.bindUniform("directionalLights[0].direction", lightDir);
         }
@@ -522,7 +545,6 @@ public class Renderer3D {
         }
 
         currentShader = shader;
-
     }
 
     public static void drawMesh(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {

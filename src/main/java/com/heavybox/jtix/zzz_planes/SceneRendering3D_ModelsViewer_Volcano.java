@@ -18,6 +18,8 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
 
     public Scene3D scene3D;
     public Scene3D.Node volcanoLava;
+    public ModelMaterial lavaMaterial;
+    public float time = 0;
 
     public Shader volcanoLavaShader;
 
@@ -39,7 +41,8 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
         System.out.println(scene3D.allMaterials.length);
 
         volcanoLava = scene3D.namedNodes.get("lava");
-        ModelMaterial lavaMaterial = volcanoLava.model.materials[0];
+        lavaMaterial = volcanoLava.model.materials[0];
+        lavaMaterial.materialAttributes.put("u_time", 0f);
         lavaMaterial.shader = volcanoLavaShader;
     }
 
@@ -92,6 +95,9 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             Renderer3D.lightDir.rotate(1f,1,0,0);
         }
+
+        time += Graphics.getDeltaTime() * 0.04f;
+        lavaMaterial.materialAttributes.put("u_time", time);
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1,0,0,1);
