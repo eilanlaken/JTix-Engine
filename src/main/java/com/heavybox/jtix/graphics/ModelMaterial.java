@@ -21,6 +21,10 @@ public class ModelMaterial implements MemoryResource {
             Object data = attribute.getValue();
             if (data instanceof MemoryResource) { // this will effectively delete all the textures.
                 MemoryResource resource = (MemoryResource) data;
+                // Skip the Graphics.java managed Textures. They are deleted only by the engine, after the application closes.
+                if (resource == Graphics.getTextureSingleWhitePixel()) continue;
+                if (resource == Graphics.getTextureSingleBlackPixel()) continue;
+                if (resource == Graphics.getTextureSinglePixelNormalMap()) continue;
                 resource.delete();
             }
         }
