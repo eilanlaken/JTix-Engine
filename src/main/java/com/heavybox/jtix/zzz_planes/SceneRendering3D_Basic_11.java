@@ -170,9 +170,9 @@ public class SceneRendering3D_Basic_11 implements Scene {
             Entity entity = entities.get(i);
             if (entity.model != modelCloud) continue;
 
-            camera.orientBillboard(entity.transform);
+            //camera.orientBillboard(entity.transform);
             //entity.transform.rotateLocalAxis(camera.forward, 30);
-            orient(entity.transform);
+            orient2(entity.transform);
 
         }
 
@@ -188,7 +188,7 @@ public class SceneRendering3D_Basic_11 implements Scene {
             Renderer3D.drawModel_custom_unlit_shader(modelSkybox.meshes[i], modelSkybox.materials[i], transformSkybox);
         }
         for (RenderUnit renderUnit : rendrables_opaque) {
-            Renderer3D.drawModel_tmp_6(renderUnit.mesh, renderUnit.material, renderUnit.transform);
+            //Renderer3D.drawModel_tmp_6(renderUnit.mesh, renderUnit.material, renderUnit.transform);
         }
 
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -222,6 +222,19 @@ public class SceneRendering3D_Basic_11 implements Scene {
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
         Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation);
         transform.setToTranslationRotationScaling(position, q_rotation, scale);
+    }
+
+    // TODO: THIS IS BETTER! just by negating the target_orientation
+    private void orient2(Matrix4x4 transform) {
+        Vector3 scale = transform.getScale(new Vector3());
+        Vector3 position = transform.getTranslation(new Vector3());
+        Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
+        Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation.negate());
+        transform.setToTranslationRotationScaling(position, q_rotation, scale);
+
+        float angle = transform.getRotation(new Quaternion()).getAngleAroundDeg(0,0,1);
+        //camera.orientBillboard(transform);
+        //transform.rotateLocalAxis(target_orientation, angle);
     }
 
     private float speed = 1;
