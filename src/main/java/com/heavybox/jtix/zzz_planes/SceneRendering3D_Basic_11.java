@@ -172,7 +172,7 @@ public class SceneRendering3D_Basic_11 implements Scene {
 
             //camera.orientBillboard(entity.transform);
             //entity.transform.rotateLocalAxis(camera.forward, 30);
-            orient2(entity.transform);
+            orient3(entity.transform);
 
         }
 
@@ -231,6 +231,28 @@ public class SceneRendering3D_Basic_11 implements Scene {
         Vector3 target_orientation = new Vector3(camera.position).sub(position).nor();
         Quaternion q_rotation = new Quaternion().setFromSourceToTarget(new Vector3(0,0,1), target_orientation.negate());
         transform.setToTranslationRotationScaling(position, q_rotation, scale);
+
+        float angle = transform.getRotation(new Quaternion()).getAngleAroundDeg(0,0,1);
+        //camera.orientBillboard(transform);
+        //transform.rotateLocalAxis(target_orientation, angle);
+    }
+
+    private void orient3(Matrix4x4 transform) {
+        Vector3 cloudForward = transform.getBasisZ(new Vector3());
+        Vector3 scale = transform.getScale(new Vector3());
+        Vector3 position = transform.getTranslation(new Vector3());
+        Vector3 target_orientation_1 = new Vector3(camera.position).sub(position).nor();
+        Vector3 target_orientation_2 = new Vector3(camera.position).sub(position).nor().negate();
+
+        float d1 = cloudForward.dot(target_orientation_1);
+        float d2 = cloudForward.dot(target_orientation_2);
+        Quaternion rotation = new Quaternion();
+        if (d1 >= d2) {
+            rotation.setFromSourceToTarget(new Vector3(0,0,1), target_orientation_1);
+        } else {
+            rotation.setFromSourceToTarget(new Vector3(0,0,1), target_orientation_2);
+        }
+        transform.setToTranslationRotationScaling(position, rotation, scale);
 
         float angle = transform.getRotation(new Quaternion()).getAngleAroundDeg(0,0,1);
         //camera.orientBillboard(transform);
