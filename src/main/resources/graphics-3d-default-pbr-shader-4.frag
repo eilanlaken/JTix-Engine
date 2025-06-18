@@ -25,8 +25,8 @@ in vec3 vertex_to_light[NUM_POINT_LIGHTS];
 in vec3 light_direction[NUM_DIRECTIONAL_LIGHTS];
 
 // uniforms - lights
-uniform PointLight pointLights[NUM_POINT_LIGHTS];
-uniform DirectionalLight directionalLights[NUM_DIRECTIONAL_LIGHTS];
+uniform PointLight pointLights[NUM_POINT_LIGHTS]; // TODO change to a u_pointLights prefix convension
+uniform DirectionalLight directionalLights[NUM_DIRECTIONAL_LIGHTS]; // TODO change to a u_directionalLights prefix convension
 
 // uniforms - PBR material
 uniform sampler2D u_texture_diffuse;

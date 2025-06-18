@@ -18,10 +18,12 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
 
     public Scene3D scene3D;
     public Scene3D.Node volcanoLava;
+    public Scene3D.Node volcanoMountain;
     public ModelMaterial lavaMaterial;
     public float time = 0;
 
     public Shader volcanoLavaShader;
+    public Shader volcanoMountainShader;
 
     public SceneRendering3D_ModelsViewer_Volcano() {
 
@@ -30,15 +32,37 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
     @Override
     public void setup() {
 
+        Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/terrain-snow.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+
         Assets.loadShader("volcano-lava-shader", "assets/game-shaders/map-1-volcano-lava-shader.vert", "assets/game-shaders/map-1-volcano-lava-shader.frag");
+
+        String mountainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/mountain-shader.vert");
+        String mountainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/mountain-shader.frag");
+        volcanoMountainShader = new Shader(mountainVertexShaderSrc, mountainFragmentShaderSrc);
+
         Assets.loadScene("assets/game-models/map-1-mountain-volcano.fbx", "assets/game-textures");
         Assets.finishLoading();
 
         scene3D = Assets.get("assets/game-models/map-1-mountain-volcano.fbx");
 
         volcanoLavaShader = Assets.get("volcano-lava-shader");
-        System.out.println(scene3D);
-        System.out.println(scene3D.allMaterials.length);
+
+        volcanoMountain = scene3D.namedNodes.get("volcano");
+        ModelMaterial volcanoMountainMaterial = volcanoMountain.model.materials[0];
+
+        Texture terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
+        Texture terrainGrass = Assets.get("assets/app-textures/terrain-grass.jpg");
+        Texture terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
+        Texture terrainWater = Assets.get("assets/app-textures/terrain-water.jpg");
+        Texture terrainSnow = Assets.get("assets/app-textures/terrain-snow.jpg");
+        volcanoMountainMaterial.materialAttributes.put("u_texture_grass", terrainStone);
+        volcanoMountainMaterial.materialAttributes.put("u_texture_stone", terrainStone);
+        volcanoMountainMaterial.materialAttributes.put("u_texture_snow", terrainSnow);
+        volcanoMountainMaterial.shader = volcanoMountainShader;
 
         volcanoLava = scene3D.namedNodes.get("lava");
         lavaMaterial = volcanoLava.model.materials[0];
@@ -111,7 +135,6 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
         //transformHouse.rotateLocalAxisZ(30);
         Model modelHouse = nodeHouse.model;
 
-        Renderer3D.drawModel(modelHouse, transformHouse);
         for (int i = 0; i < modelHouse.meshes.length; i++) {
                 //Renderer3D.drawModel_tmp_6(modelHouse.meshes[i], modelHouse.materials[i], transformHouse);
         }
@@ -126,7 +149,9 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
         }
 
         Renderer3D.drawModel(volcanoLava.model, t);
-
+        Renderer3D.drawModel(modelHouse, transformHouse);
+        if (volcanoMountainShader.getUniformValue("u_texture_grass") != null)
+        System.out.println(volcanoMountainShader.getUniformValue("u_texture_grass").getClass().getSimpleName());
 
         Renderer3D.end();
     }

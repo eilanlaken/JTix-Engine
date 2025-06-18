@@ -65,9 +65,6 @@ public class Renderer3D {
         currentCamera = camera;
         drawing = true;
         currentShader = null;
-
-        // TODO (remove).
-        //ShaderBinder.bind(currentShader);
     }
 
     @Deprecated public static void drawModel_tmp_5(ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {

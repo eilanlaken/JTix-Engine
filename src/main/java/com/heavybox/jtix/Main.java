@@ -2,8 +2,10 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
+import com.heavybox.jtix.tools.ToolsTextureManipulator;
 import com.heavybox.jtix.zzz_planes.*;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Main {
@@ -62,13 +64,18 @@ public class Main {
 //        Application.launch(new ScreenLoading());
 
 //        ToolCloudAtlasGenerator.run();
+
+//        BufferedImage[][] tiles = ToolsTextureManipulator.slice("assets/game-maps/map_volcano.jpg", 12, 12);
+//        ToolsTextureManipulator.save(tiles[0][1], "assets/game-maps/tile.jpg");
+//
 //        if (true) return;
 
         ApplicationSettings settings = new ApplicationSettings();
         //settings.width = 1920;
         //settings.height = 1080;
         Application.init(settings); // can init with options.
-        Application.launch(new SceneRendering3D_Basic_11());
+        //Application.launch(new SceneRendering3D_NewClouds());
+        Application.launch(new SceneRendering3D_ModelsViewer_Volcano());
         //Application.launch(new SceneRendering3D_Transparents_1());
         //Application.launch(new ScenePlanesGame_Mountains_2());
 

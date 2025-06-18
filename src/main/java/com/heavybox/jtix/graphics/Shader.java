@@ -203,6 +203,13 @@ public class Shader implements MemoryResource {
         return uniformLocations.get(name, -1);
     }
 
+    public Object getUniformValue(final String name) {
+        final int location = uniformLocations.get(name, -1);
+        if (location == -1) return null;
+
+        return uniformsCache.get(location);
+    }
+
     public void bindUniform(final String name, final Object value) {
         if (value == null) throw new GraphicsException("Trying to bind null value to a uniform variable.");
         final int location = uniformLocations.get(name, -1);
