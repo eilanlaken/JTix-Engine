@@ -2,7 +2,6 @@ package com.heavybox.jtix.zzz_planes;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
-import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -26,13 +25,17 @@ public class ScenePlanesGame_Mountains_3 implements Scene {
     public Texture terrainWater;
     public Matrix4x4 transform_terrain = new Matrix4x4();
 
-
-    private final Array<TerrainToken> tokens = new Array<>(false, 10);
-
     public Model mountain_1;
     public Model mountain_2;
     public Shader mountainShader;
 
+    public Scene3D volcano;
+    public Scene3D.Node nodeVolcanoLava;
+    public Scene3D.Node nodeVolcanoMountain;
+    public ModelMaterial lavaMaterial;
+    public float time = 0;
+    public Shader volcanoLavaShader;
+    public Shader volcanoMountainShader;
 
     public ScenePlanesGame_Mountains_3() {
 
@@ -49,10 +52,13 @@ public class ScenePlanesGame_Mountains_3 implements Scene {
         String mountainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/mountain-shader.frag");
         this.mountainShader = new Shader(mountainVertexShaderSrc, mountainFragmentShaderSrc);
 
-        // load fields
-        for (String fieldsPath : Constants.MODELS_FILE_PATH_FIELDS) {
-            Assets.loadModel(fieldsPath, Constants.MODELS_TEXTURES_PATH);
-        }
+        String lavaVertexShaderSrc = Assets.getFileContent("assets/game-shaders/map-1-volcano-lava-shader.vert");
+        String lavaFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/map-1-volcano-lava-shader.frag");
+        volcanoLavaShader = new Shader(lavaVertexShaderSrc, lavaFragmentShaderSrc);
+
+        String volcanoVertexShaderSrc = Assets.getFileContent("assets/game-shaders/volcano-shader.vert");
+        String volcanoFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/volcano-shader.frag");
+        volcanoMountainShader = new Shader(volcanoVertexShaderSrc, volcanoFragmentShaderSrc);
 
         // load terrain
         Assets.loadModel("assets/models/terrain-block.fbx");
@@ -66,6 +72,10 @@ public class ScenePlanesGame_Mountains_3 implements Scene {
         Assets.loadTexture("assets/app-textures/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-snow.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.finishLoading();
+
+        Assets.loadScene("assets/game-models/map-1-mountain-volcano.fbx", "assets/game-textures");
+        Assets.finishLoading();
+
 
         terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
         terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
@@ -96,6 +106,19 @@ public class ScenePlanesGame_Mountains_3 implements Scene {
         mountain_2.materials[0].materialAttributes.put("u_texture_snow", terrainSnow);
         mountain_2.materials[0].shader = mountainShader;
 
+        volcano = Assets.get("assets/game-models/map-1-mountain-volcano.fbx");
+
+        nodeVolcanoMountain = volcano.namedNodes.get("volcano");
+        ModelMaterial volcanoMountainMaterial = nodeVolcanoMountain.model.materials[0];
+        volcanoMountainMaterial.materialAttributes.put("u_texture_grass", terrainGrass);
+        volcanoMountainMaterial.materialAttributes.put("u_texture_stone", terrainStone);
+        volcanoMountainMaterial.materialAttributes.put("u_texture_snow", terrainSnow);
+        volcanoMountainMaterial.shader = volcanoMountainShader;
+
+        nodeVolcanoLava = volcano.namedNodes.get("lava");
+        lavaMaterial = nodeVolcanoLava.model.materials[0];
+        lavaMaterial.materialAttributes.put("u_time", 0f);
+        lavaMaterial.shader = volcanoLavaShader;
     }
 
     @Override
@@ -151,30 +174,27 @@ public class ScenePlanesGame_Mountains_3 implements Scene {
             Renderer3D.lightDir.rotate(1f,1,0,0);
         }
 
-        //update_gameplay();
+        Matrix4x4 transformVolcano = nodeVolcanoMountain.localTransform;
+        transformVolcano.idt();
+        Matrix4x4 transformLava = new Matrix4x4(nodeVolcanoLava.localTransform).mulLeft(transformVolcano); // to apply the transform, multiply from the left
+        time += Graphics.getDeltaTime() * 0.04f;
+        lavaMaterial.materialAttributes.put("u_time", time);
 
         Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
 
         Renderer3D.begin(camera);
-        //System.out.println("----");
-        for (int i = 0; i < terrain.meshes.length; i++) {
-            //Renderer3D.drawModel_custom_shader_2(terrainShader, terrain.meshes[i], terrain.materials[i], transform_terrain);
-        }
 
-        for (int i = 0; i < mountain_1.meshes.length; i++) {
-            //Renderer3D.drawModel_custom_shader_2(mountainShader, mountain_1.meshes[i], mountain_1.materials[i], new Matrix4x4().translateGlobalAxisXYZ(512+255,0,0));
-        }
-
-        for (int i = 0; i < mountain_2.meshes.length; i++) {
-            //Renderer3D.drawModel_custom_shader_2(mountainShader, mountain_2.meshes[i], mountain_2.materials[i], new Matrix4x4().translateGlobalAxisXYZ(512+255,1024,0));
-        }
 
         // TODO: lights
         Renderer3D.drawModel(mountain_1, new Matrix4x4().translateGlobalAxisXYZ(512+255,0,0));
         Renderer3D.drawModel(mountain_2, new Matrix4x4().translateGlobalAxisXYZ(512+255,1024,0));
         Renderer3D.drawModel(terrain, transform_terrain);
+
+        // volcano
+        Renderer3D.drawModel(nodeVolcanoMountain.model, transformVolcano);
+        Renderer3D.drawModel(nodeVolcanoLava.model, transformLava);
 
         Renderer3D.end();
     }
