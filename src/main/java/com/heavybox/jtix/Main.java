@@ -66,8 +66,10 @@ public class Main {
 //        ToolCloudAtlasGenerator.run();
 
 //        BufferedImage[][] tiles = ToolsTextureManipulator.slice("assets/game-maps/map_volcano.jpg", 12, 12);
-//        ToolsTextureManipulator.save(tiles[0][1], "assets/game-maps/tile.jpg");
-//
+//        ToolsTextureManipulator.save(tiles[3][8], "assets/game-maps/tile[3][8].jpg");
+//        ToolsTextureManipulator.save(tiles[3][9], "assets/game-maps/tile[3][9].jpg");
+//        ToolsTextureManipulator.save(tiles[4][8], "assets/game-maps/tile[4][8].jpg");
+//        ToolsTextureManipulator.save(tiles[4][9], "assets/game-maps/tile[4][9].jpg");
 //        if (true) return;
 
         ApplicationSettings settings = new ApplicationSettings();
@@ -75,7 +77,8 @@ public class Main {
         //settings.height = 1080;
         Application.init(settings); // can init with options.
         //Application.launch(new SceneRendering3D_NewClouds());
-        Application.launch(new SceneRendering3D_ModelsViewer_Volcano());
+        //Application.launch(new SceneRendering3D_ModelsViewer_Volcano());
+        Application.launch(new ScenePlanesGame_Mountains_3());
         //Application.launch(new SceneRendering3D_Transparents_1());
         //Application.launch(new ScenePlanesGame_Mountains_2());
 

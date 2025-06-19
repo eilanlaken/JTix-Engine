@@ -16,14 +16,28 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
 
     private Camera camera;
 
-    public Scene3D scene3D;
+    public Scene3D volcano;
     public Scene3D.Node volcanoLava;
     public Scene3D.Node volcanoMountain;
     public ModelMaterial lavaMaterial;
     public float time = 0;
-
     public Shader volcanoLavaShader;
     public Shader volcanoMountainShader;
+
+    public Model terrain;
+    public Shader terrainShader;
+    public Texture terrainBlendMap;
+    public Texture terrainHeightMap;
+    public Texture terrainEarth;
+    public Texture terrainSnow;
+    public Texture terrainGrass;
+    public Texture terrainStone;
+    public Texture terrainWater;
+
+    public Matrix4x4 transform_terrain_1 = new Matrix4x4().translateGlobalAxisXYZ(-256,256,0);
+    public Matrix4x4 transform_terrain_2 = new Matrix4x4();
+    public Matrix4x4 transform_terrain_3 = new Matrix4x4();
+    public Matrix4x4 transform_terrain_4 = new Matrix4x4();
 
     public SceneRendering3D_ModelsViewer_Volcano() {
 
@@ -32,6 +46,14 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
     @Override
     public void setup() {
 
+        String terrainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/terrain-shader.vert");
+        String terrainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/terrain-shader.frag");
+        this.terrainShader = new Shader(terrainVertexShaderSrc, terrainFragmentShaderSrc);
+
+        // TODO: move to game-textures
+        Assets.loadTexture("assets/game-maps/tile[3][8].jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/blendmap-all-earth.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/heightmap-sea-level.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -45,29 +67,42 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
         volcanoMountainShader = new Shader(mountainVertexShaderSrc, mountainFragmentShaderSrc);
 
         Assets.loadScene("assets/game-models/map-1-mountain-volcano.fbx", "assets/game-textures");
+        Assets.loadModel("assets/game-models/terrain-block.fbx");
+
         Assets.finishLoading();
 
-        scene3D = Assets.get("assets/game-models/map-1-mountain-volcano.fbx");
+        volcano = Assets.get("assets/game-models/map-1-mountain-volcano.fbx");
 
         volcanoLavaShader = Assets.get("volcano-lava-shader");
 
-        volcanoMountain = scene3D.namedNodes.get("volcano");
+        volcanoMountain = volcano.namedNodes.get("volcano");
         ModelMaterial volcanoMountainMaterial = volcanoMountain.model.materials[0];
 
+        terrainBlendMap = Assets.get("assets/game-maps/blendmap-all-earth.png");
+        terrainHeightMap = Assets.get("assets/app-textures/heightmap-sea-level.png");
         Texture terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
         Texture terrainGrass = Assets.get("assets/app-textures/terrain-grass.jpg");
         Texture terrainStone = Assets.get("assets/app-textures/terrain-stone.jpg");
         Texture terrainWater = Assets.get("assets/app-textures/terrain-water.jpg");
         Texture terrainSnow = Assets.get("assets/app-textures/terrain-snow.jpg");
-        volcanoMountainMaterial.materialAttributes.put("u_texture_grass", terrainStone);
+        volcanoMountainMaterial.materialAttributes.put("u_texture_grass", terrainGrass);
         volcanoMountainMaterial.materialAttributes.put("u_texture_stone", terrainStone);
         volcanoMountainMaterial.materialAttributes.put("u_texture_snow", terrainSnow);
         volcanoMountainMaterial.shader = volcanoMountainShader;
 
-        volcanoLava = scene3D.namedNodes.get("lava");
+        volcanoLava = volcano.namedNodes.get("lava");
         lavaMaterial = volcanoLava.model.materials[0];
         lavaMaterial.materialAttributes.put("u_time", 0f);
         lavaMaterial.shader = volcanoLavaShader;
+
+        terrain = Assets.get("assets/game-models/terrain-block.fbx");
+        terrain.materials[0].materialAttributes.put("u_texture_background", terrainStone);
+        terrain.materials[0].materialAttributes.put("u_texture_red", terrainEarth);
+        terrain.materials[0].materialAttributes.put("u_texture_green", terrainGrass);
+        terrain.materials[0].materialAttributes.put("u_texture_blue", terrainWater);
+        terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
+        terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
+        terrain.materials[0].shader = terrainShader;
     }
 
     @Override
@@ -129,30 +164,17 @@ public class SceneRendering3D_ModelsViewer_Volcano implements Scene {
         Renderer3D.begin(camera);
 
 
-        Scene3D.Node nodeHouse = scene3D.namedNodes.get("volcano");
+        Scene3D.Node nodeHouse = volcano.namedNodes.get("volcano");
         Matrix4x4 transformHouse = nodeHouse.localTransform;
         transformHouse.idt();
-        //transformHouse.rotateLocalAxisZ(30);
         Model modelHouse = nodeHouse.model;
-
-        for (int i = 0; i < modelHouse.meshes.length; i++) {
-                //Renderer3D.drawModel_tmp_6(modelHouse.meshes[i], modelHouse.materials[i], transformHouse);
-        }
-
-        volcanoLava = scene3D.namedNodes.get("lava");
+        volcanoLava = volcano.namedNodes.get("lava");
         Matrix4x4 transformBalloon = volcanoLava.localTransform;
         Matrix4x4 t = new Matrix4x4(transformBalloon).mulLeft(transformHouse); // to apply the transform, multiply from the left
-        // TODO: need to consider entire tree
-        Model model = volcanoLava.model;
-        for (int i = 0; i < model.meshes.length; i++) {
-            //Renderer3D.drawModel_tmp_6(model.meshes[i], model.materials[i], t);
-        }
 
         Renderer3D.drawModel(volcanoLava.model, t);
         Renderer3D.drawModel(modelHouse, transformHouse);
-        if (volcanoMountainShader.getUniformValue("u_texture_grass") != null)
-        System.out.println(volcanoMountainShader.getUniformValue("u_texture_grass").getClass().getSimpleName());
-
+        Renderer3D.drawModel(terrain, transform_terrain_1);
         Renderer3D.end();
     }
 

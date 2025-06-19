@@ -516,7 +516,6 @@ public class Renderer3D {
         renderCommandsTransparent.clear();
     }
 
-    // TODO: problem here.
     private static void setShader(@NotNull Shader shader) {
         if (currentShader == shader) return;
 
@@ -538,7 +537,7 @@ public class Renderer3D {
             shader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
-            shader.bindUniform("directionalLights[0].intensity", 0.2f);
+            shader.bindUniform("directionalLights[0].intensity", 1.2f);
         }
 
         currentShader = shader;
