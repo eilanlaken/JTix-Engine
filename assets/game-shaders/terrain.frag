@@ -15,23 +15,18 @@ in vec2 uv;
 in vec3 unit_vertex_to_camera;
 in vec3 world_vertex_position;
 in vec3 normal;
-in float vElavation;
-
 
 // uniforms - lights
 uniform DirectionalLight directionalLights[1];
 
 // uniforms - blend maps
-uniform vec4 uTroughColor;
-uniform vec4 uSurfaceColor;
-uniform vec4 uPeakColor;
+uniform sampler2D u_texture_background;
+uniform sampler2D u_texture_red;
+uniform sampler2D u_texture_green;
+uniform sampler2D u_texture_blue;
+uniform sampler2D u_texture_blend_map;
+uniform sampler2D u_texture_height_map;
 
-uniform float uPeakThreshold;
-uniform float uPeakTransition;
-uniform float uTroughThreshold;
-uniform float uTroughTransition;
-
-uniform float time;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -79,14 +74,15 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 
 void main()
 {
-    vec2 scaled_uv = (uv + vec2(time / 100, time / 100)) * 2.0;
-
-    float trough2surface = smoothstep(uTroughThreshold - uTroughTransition, uTroughThreshold + uTroughTransition, vElavation);
-    float surface2peak = smoothstep(uPeakThreshold - uPeakTransition, uPeakThreshold + uPeakTransition, vElavation);
-
-    vec3 mixedColor1 = mix(uTroughColor, uSurfaceColor, trough2surface).rgb;
-    vec3 mixedColor2 = mix(mixedColor1, uPeakColor.rgb, surface2peak).rgb;
-    vec3 albedo = mixedColor2;
+    vec4 blend_map_color = texture(u_texture_blend_map, uv);
+    float background_weight = 1 - (blend_map_color.r + blend_map_color.g + blend_map_color.b);
+    vec2 scaled_uv = uv * 2.0;
+    vec4 background_color = texture(u_texture_background, scaled_uv) * background_weight;
+    vec4 r_color = texture(u_texture_red, scaled_uv) * blend_map_color.r;
+    vec4 g_color = texture(u_texture_green, scaled_uv) * blend_map_color.g;
+    vec4 b_color = texture(u_texture_blue, scaled_uv) * blend_map_color.b;
+    vec4 total_color = background_color + r_color + g_color + b_color;
+    vec3 albedo = total_color.rgb;
 
     //vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
     vec3 N = normal;//normalize(vec3(0,0,1)); // always up for now, will be calculated from the vertex shader and passed as in variable
@@ -102,13 +98,14 @@ void main()
     // cook-torrance brdf
     vec3 L    = normalize(-directionalLights[0].direction);
     vec3 H    = normalize(V + L);
-    float NDF = distribution_GGX(N, H, 0.0);
-    float G   = geometry_smith(N, V, L, 0.0);
+    float NDF = distribution_GGX(N, H, 1.0);
+    float G   = geometry_smith(N, V, L, 1.0);
     vec3  F   = fresnel_schlick(max(dot(H, V), 0.0), F0);
 
     vec3 numerator    = NDF * G * F;
     float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
     vec3 specular     = numerator / denominator;
+    //total_specular += specular;
 
     vec3 kS = F;
     vec3 kD = vec3(1.0) - kS;
@@ -119,5 +116,11 @@ void main()
 
     vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
-    out_color = vec4(color, 1.0f);
+    //vec3 color = albedo;// + 0.2 * Lo;
+
+    // HDR tonemapping
+    //color = color / (color + vec3(0.05));
+    // gamma correct
+    //color = pow(color, vec3(1.0/2.2));
+    out_color = vec4(color, 1.0);
 }

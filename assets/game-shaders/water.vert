@@ -88,7 +88,7 @@ void main()
     gl_Position = u_camera_combined * vertex_position;
 
 
-    float eps = 0.001;
+    float eps = 1.0f/512.0f;
     vec3 p = vertex_position.xyz;
     vec3 px = vec3(p.x + eps, p.y, getElevation(vec2(p.x + eps,p.y)));
     vec3 py = vec3(p.x, p.y + eps, getElevation(vec2(p.x,p.y + eps)));
