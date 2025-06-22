@@ -119,5 +119,5 @@ void main()
 
     vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
-    out_color = vec4(color, 1.0f);
+    out_color = vec4(color, 0.8f);
 }

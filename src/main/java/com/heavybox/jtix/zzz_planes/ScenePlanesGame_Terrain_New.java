@@ -38,8 +38,8 @@ public class ScenePlanesGame_Terrain_New implements Scene {
     @Override
     public void setup() {
 
-        String terrainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/terrain-shader.vert");
-        String terrainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/terrain-shader.frag");
+        String terrainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/terrain.vert");
+        String terrainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/terrain.frag");
         this.terrainShader = new Shader(terrainVertexShaderSrc, terrainFragmentShaderSrc);
 
         String mountainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/mountain-shader.vert");
@@ -99,10 +99,9 @@ public class ScenePlanesGame_Terrain_New implements Scene {
         waterModel.materials[0].materialAttributes.put("uTroughThreshold", 0f);
         waterModel.materials[0].materialAttributes.put("uTroughTransition", 8f);
         waterModel.materials[0].materialAttributes.put("uPeakThreshold", 22);
-        //terrain.materials[0].materialAttributes.put("uPeakThreshold", 333);
         waterModel.materials[0].materialAttributes.put("uPeakTransition", 0.1f);
         waterModel.materials[0].shader = waterShader;
-
+        waterModel.materials[0].transparent = true;
     }
 
     @Override
@@ -162,13 +161,16 @@ public class ScenePlanesGame_Terrain_New implements Scene {
             Renderer3D.lightDir.rotate(1f,1,0,0);
         }
 
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
+            waterModel.materials[0].materialAttributes.put("uWavesSpeed", 0.0f);
+        }
+
         Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
 
         Renderer3D.begin(camera);
         Renderer3D.drawModel(terrain, transform_terrain);
-
         Renderer3D.drawModel(waterModel, transformWater);
         Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
         Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));

@@ -74,6 +74,7 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 
 void main()
 {
+    /* total color calculation */
     vec4 blend_map_color = texture(u_texture_blend_map, uv);
     float background_weight = 1 - (blend_map_color.r + blend_map_color.g + blend_map_color.b);
     vec2 scaled_uv = uv * 2.0;
@@ -84,43 +85,27 @@ void main()
     vec4 total_color = background_color + r_color + g_color + b_color;
     vec3 albedo = total_color.rgb;
 
-    //vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
-    vec3 N = normal;//normalize(vec3(0,0,1)); // always up for now, will be calculated from the vertex shader and passed as in variable
+    /* Directional light calculation */
+    vec3 N = normal;
     vec3 V = unit_vertex_to_camera;
     vec3 F0 = mix(vec3(0.04), albedo, 0.0);
-
     vec3 Lo = vec3(0.0);
-
-    // summation over all point light sources
-    // calculate per-box2DLight radiance
     vec3 radiance = directionalLights[0].intensity * directionalLights[0].color;
-
-    // cook-torrance brdf
     vec3 L    = normalize(-directionalLights[0].direction);
     vec3 H    = normalize(V + L);
     float NDF = distribution_GGX(N, H, 1.0);
     float G   = geometry_smith(N, V, L, 1.0);
     vec3  F   = fresnel_schlick(max(dot(H, V), 0.0), F0);
-
     vec3 numerator    = NDF * G * F;
     float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
     vec3 specular     = numerator / denominator;
-    //total_specular += specular;
-
     vec3 kS = F;
     vec3 kD = vec3(1.0) - kS;
     kD *= 1.0;
-    // add to outgoing radiance Lo
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-
-    vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
+    vec3 ambient = vec3(0.4) * albedo * 1;
     vec3 color = ambient + Lo;
-    //vec3 color = albedo;// + 0.2 * Lo;
 
-    // HDR tonemapping
-    //color = color / (color + vec3(0.05));
-    // gamma correct
-    //color = pow(color, vec3(1.0/2.2));
     out_color = vec4(color, 1.0);
 }

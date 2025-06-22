@@ -1,7 +1,7 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
 
-#define MAX_HEIGHT 25
+#define MAX_HEIGHT 55
 #define TILE_SIZE 256.0
 
 // attributes
@@ -20,7 +20,8 @@ out vec3 unit_vertex_to_camera;
 out vec2 uv;
 out vec3 normal;
 
-float getHeight(vec2 uv) {
+float getHeight(vec2 uv)
+{
     return (2.0 * texture(u_texture_height_map, uv).r - 1.0) * MAX_HEIGHT;
 }
 
