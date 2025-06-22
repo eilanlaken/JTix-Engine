@@ -87,19 +87,31 @@ void main()
     vertex_position.z += elavation;
     gl_Position = u_camera_combined * vertex_position;
 
-    float delta = 4.0315; // the dx,dy between the x and y coordinates on the mesh.
-    float hL = getHeight(a_position.x - delta, a_position.y);
-    float hR = getHeight(a_position.x + delta, a_position.y);
-    float hD = getHeight(a_position.x, a_position.y - delta);
-    float hU = getHeight(a_position.x, a_position.y + delta);
-    // deduce terrain normal
-    vec3 N;
-    N.x = hL - hR;
-    N.y = hD - hU;
-    N.z = 2.0;
-    N = normalize(N);
-    mat3 normal_matrix = mat3(transpose(inverse(u_transform)));
-    normal = vec3(normal_matrix * a_normal);
+
+    float eps = 0.001;
+    vec3 p = vertex_position.xyz;
+    vec3 px = vec3(p.x + eps, p.y, getElevation(vec2(p.x + eps,p.y)));
+    vec3 py = vec3(p.x, p.y + eps, getElevation(vec2(p.x,p.y + eps)));
+    vec3 tangent = normalize(px - p);
+    vec3 bitangent = normalize(py - p);
+    normal = cross(tangent, bitangent);
+//    vec3 tangent = normalize(vec3(eps, getElevation(vertex_position.x - eps, vertex_position.y) - elavation, 0.0));
+//    vec3 bitangent = normalize(vec3(0.0, getElevation(vertex_position.x, vertex_position.y - eps) - elavation, eps));
+//    vec3 objectNormal = normalize(cross(tangent, bitangent));
+
+//    float delta = 4.0315; // the dx,dy between the x and y coordinates on the mesh.
+//    float hL = getHeight(a_position.x - delta, a_position.y);
+//    float hR = getHeight(a_position.x + delta, a_position.y);
+//    float hD = getHeight(a_position.x, a_position.y - delta);
+//    float hU = getHeight(a_position.x, a_position.y + delta);
+//    // deduce terrain normal
+//    vec3 N;
+//    N.x = hL - hR;
+//    N.y = hD - hU;
+//    N.z = 2.0;
+//    N = normalize(N);
+    //mat3 normal_matrix = mat3(transpose(inverse(u_transform)));
+    //normal = vec3(normal_matrix * a_normal);
 
     unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
     world_vertex_position = vertex_position.xyz;

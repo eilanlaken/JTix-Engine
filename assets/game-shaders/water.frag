@@ -86,7 +86,7 @@ void main()
 
     vec3 mixedColor1 = mix(uTroughColor, uSurfaceColor, trough2surface).rgb;
     vec3 mixedColor2 = mix(mixedColor1, uPeakColor.rgb, surface2peak).rgb;
-    vec3 albedo = uSurfaceColor.rgb * (vElavation / 5.0f);
+    vec3 albedo = mixedColor2;
 
     //vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
     vec3 N = normal;//normalize(vec3(0,0,1)); // always up for now, will be calculated from the vertex shader and passed as in variable
@@ -109,7 +109,6 @@ void main()
     vec3 numerator    = NDF * G * F;
     float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
     vec3 specular     = numerator / denominator;
-    //total_specular += specular;
 
     vec3 kS = F;
     vec3 kD = vec3(1.0) - kS;
@@ -120,15 +119,7 @@ void main()
 
     vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
-    //vec3 color = albedo;// + 0.2 * Lo;
-
-    // HDR tonemapping
-    //color = color / (color + vec3(0.05));
-    // gamma correct
-    //color = color / (color + vec3(0.05));
-    //color = pow(color, vec3(1.0/2.2));
-
-    out_color = vec4(albedo, 1.0f);
+    out_color = vec4(color, 1.0f);
     //out_color = vec4(mixedColor2, 1.0f);
-    out_color = vec4(mixedColor2, 1.0f);
+    //out_color = vec4(mixedColor2, 1.0f);
 }
