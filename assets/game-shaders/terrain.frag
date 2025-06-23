@@ -20,6 +20,7 @@ in vec3 normal;
 uniform DirectionalLight directionalLights[1];
 
 // uniforms - blend maps
+uniform sampler2D u_texture_steep;
 uniform sampler2D u_texture_background;
 uniform sampler2D u_texture_red;
 uniform sampler2D u_texture_green;
@@ -83,7 +84,10 @@ void main()
     vec4 g_color = texture(u_texture_green, scaled_uv) * blend_map_color.g;
     vec4 b_color = texture(u_texture_blue, scaled_uv) * blend_map_color.b;
     vec4 total_color = background_color + r_color + g_color + b_color;
-    vec3 albedo = total_color.rgb;
+    float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
+    float smoothT = t * t * (3.0 - 2.0 * t);
+    //vec3 albedo = total_color.rgb * (t) + (1- t) * texture(u_texture_steep, uv).rgb;
+    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, uv).rgb, 1 - smoothT);
 
     /* Directional light calculation */
     vec3 N = normal;

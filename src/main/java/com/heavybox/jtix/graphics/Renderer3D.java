@@ -465,6 +465,23 @@ public class Renderer3D {
         }
     }
 
+    public static void drawModel(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
+        RenderCommand renderCommand = renderCommandsPool.allocate();
+        renderCommand.mesh = mesh;
+        renderCommand.material = material;
+        renderCommand.transform = transform;
+        renderCommand.shader = shader;
+        if (renderCommand.shader == null) {
+            renderCommand.shader = renderCommand.material.useLights ? defaultShaderPBR : defaultShaderUnlit;
+        }
+
+        if (renderCommand.material.transparent) {
+            renderCommandsTransparent.add(renderCommand);
+        } else {
+            renderCommandsOpaque.add(renderCommand);
+        }
+    }
+
     public static void end() {
         if (!drawing) throw new GraphicsException("Called " + Renderer3D.class.getSimpleName() + ".end() without calling " + Renderer3D.class.getSimpleName() + ".begin() first.");
 
