@@ -6,9 +6,11 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MathUtil;
 
 public class ScenePlanesGame_Terrain_New_2 implements Scene {
 
@@ -124,8 +126,9 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
     public void update() {
         float time = (float) waterModel.materials[0].materialAttributes.get("time");
         time += 1 * Graphics.getDeltaTime();
-        waterModel.materials[0].materialAttributes.put("time", time % 660);
-        System.out.println(time);
+        waterModel.materials[0].materialAttributes.put("time", time % 600);
+//        waterModel.materials[0].materialAttributes.put("time", 3 * MathUtils.sinRad(3 * time / (MathUtils.PI_TWO)));
+//        System.out.println(5 * MathUtils.sinRad(time / (MathUtils.PI_TWO)));
 
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);

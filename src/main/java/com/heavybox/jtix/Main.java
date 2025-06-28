@@ -78,7 +78,7 @@ public class Main {
         Application.init(settings); // can init with options.
         //Application.launch(new SceneRendering3D_NewClouds());
         //Application.launch(new SceneRendering3D_ModelsViewer_Volcano());
-        Application.launch(new ScenePlanesGame_Terrain_New_2());
+        Application.launch(new SceneRendering3D_ModelsViewer_Map_1());
         //Application.launch(new SceneRendering3D_Transparents_1());
         //Application.launch(new ScenePlanesGame_Mountains_2());
 
