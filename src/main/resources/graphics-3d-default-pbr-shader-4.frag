@@ -149,7 +149,8 @@ void main()
 
     // HDR tonemapping
     //color = unreal(color);
-    color = color / (color + vec3(0.05));
+    //color = color / (color + vec3(0.05));
+    color = color / (color + vec3(0.1));
     // gamma correct
     //color = pow(color, vec3(1.0/2.2));
 
