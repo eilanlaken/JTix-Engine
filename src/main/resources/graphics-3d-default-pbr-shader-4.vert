@@ -41,10 +41,13 @@ void main()
     vec4 vertex_position = u_transform * vec4(a_position, 1.0);
     gl_Position = u_camera_combined * vertex_position;
 
-    // above is accurate by taking into account non-uniform scaling, but far more expensinve.
-    mat3 normal_matrix = mat3(transpose(inverse(u_transform)));
-    vec3 T = normalize(vec3(normal_matrix * a_tangent));
-    vec3 N = normalize(vec3(normal_matrix * a_normal));
+    //    This one is accurate by taking into account non-uniform scaling, but far more expensinve.
+    //    mat3 normal_matrix = mat3(transpose(inverse(u_transform))); // should be uploaded as a uniform.
+    //    vec3 T = normalize(vec3(normal_matrix * a_tangent));
+    //    vec3 N = normalize(vec3(normal_matrix * a_normal));
+
+    vec3 T = normalize(vec3(u_transform * vec4(a_tangent, 0.0f)));
+    vec3 N = normalize(vec3(u_transform * vec4(a_normal, 0.0f)));
     T = normalize(T - dot(T, N) * N); // re-orthogonalize T with respect to N (grahm-schmidt)
     vec3 B = cross(N, T);
     mat3 TBN = mat3(T, B, N);
@@ -56,7 +59,7 @@ void main()
         vertex_to_light[i] = invTBN * (pointLights[i].position - vertex_position.xyz);
     }
     for (int i = 0; i < NUM_DIRECTIONAL_LIGHTS; i++) {
-        light_direction[i] = invTBN * -directionalLights[i].direction;
+        light_direction[i] = normalize(invTBN * -directionalLights[i].direction);
     }
 
     uv = a_textCoords0;

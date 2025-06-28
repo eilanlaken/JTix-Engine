@@ -43,9 +43,9 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
         camera.position.set(0, -100, 100);
         camera.lookAt(0,0,0);
         camera.update();
-
     }
 
+    float angleZ = 0;
 
     @Override
     public void update() {
@@ -79,6 +79,9 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             Renderer3D.lightDir.rotate(1f,1,0,0);
         }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            angleZ += 1;
+        }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
             currentNodeIndex--;
@@ -91,7 +94,7 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1,0,0,1);
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(node.model, new Matrix4x4());
+        Renderer3D.drawModel(node.model, new Matrix4x4().rotateGlobalAxisZ(angleZ));
         Renderer3D.end();
     }
 
