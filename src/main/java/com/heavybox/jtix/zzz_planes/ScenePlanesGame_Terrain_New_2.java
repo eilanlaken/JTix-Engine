@@ -52,8 +52,8 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
 
         // load terrain
         Assets.loadModel("assets/game-models/plane-grid-512.fbx");
-        Assets.loadTexture("assets/game-maps/terrain-blendmap-demo.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-blendmap-demo.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/app-textures/heightmap-test-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -63,8 +63,7 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
 
 
         terrainBlendMap = Assets.get("assets/game-maps/terrain-blendmap-demo.png");
-        terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
-
+        terrainHeightMap = Assets.get("assets/app-textures/heightmap-test-2.jpg");
         terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         terrainGrass = Assets.get("assets/game-maps/terrain-grass.jpg");
         terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
@@ -80,6 +79,8 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
         terrain.materials[0].shader = terrainShader;
+        terrain.materials[0].transparent = false;
+
 
         Assets.loadModel("assets/models/terrain-block.fbx");
         Assets.finishLoading();
@@ -91,7 +92,7 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
         waterModel.materials[0].materialAttributes.put("uSurfaceColor", Color.valueOf("#2a87a3"));
         waterModel.materials[0].materialAttributes.put("uPeakColor", Color.valueOf("#bbd8e0"));
         waterModel.materials[0].materialAttributes.put("uWavesAmplitude", 1.6f);
-        waterModel.materials[0].materialAttributes.put("uWavesSpeed", 0.3f);
+        waterModel.materials[0].materialAttributes.put("uWavesSpeed", 0.1f);
         waterModel.materials[0].materialAttributes.put("uWavesFrequency", 0.002f);
         waterModel.materials[0].materialAttributes.put("uWavesPersistence", 1);
         waterModel.materials[0].materialAttributes.put("uWavesLacunarity", 2.4f);
@@ -122,8 +123,9 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
     @Override
     public void update() {
         float time = (float) waterModel.materials[0].materialAttributes.get("time");
-        time += Graphics.getDeltaTime();
-        waterModel.materials[0].materialAttributes.put("time", time);
+        time += 1 * Graphics.getDeltaTime();
+        waterModel.materials[0].materialAttributes.put("time", time % 660);
+        System.out.println(time);
 
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);

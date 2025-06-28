@@ -79,11 +79,8 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 
 void main()
 {
-    vec2 scaled_uv = (uv + vec2(time / 100, time / 100)) * 2.0;
-
     float trough2surface = smoothstep(uTroughThreshold - uTroughTransition, uTroughThreshold + uTroughTransition, vElavation);
     float surface2peak = smoothstep(uPeakThreshold - uPeakTransition, uPeakThreshold + uPeakTransition, vElavation);
-
     vec3 mixedColor1 = mix(uTroughColor, uSurfaceColor, trough2surface).rgb;
     vec3 mixedColor2 = mix(mixedColor1, uPeakColor.rgb, surface2peak).rgb;
     vec3 albedo = mixedColor2;
@@ -119,5 +116,5 @@ void main()
 
     vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
-    out_color = vec4(color, 0.8f);
+    out_color = vec4(color, 1.0f);
 }

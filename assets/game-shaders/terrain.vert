@@ -1,7 +1,8 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
 
-#define MAX_HEIGHT 55
+#define MAX_HEIGHT 80
+#define MIN_HEIGHT -12
 #define TILE_SIZE 256.0
 
 // attributes
@@ -19,16 +20,18 @@ out vec3 world_vertex_position;
 out vec3 unit_vertex_to_camera;
 out vec2 uv;
 out vec3 normal;
+out float height;
 
 float getHeight(vec2 uv)
 {
-    return (2.0 * texture(u_texture_height_map, uv).r - 1.0) * MAX_HEIGHT;
+    //return (2.0 * texture(u_texture_height_map, uv).r - 1.0) * MAX_HEIGHT;
+    return mix(MIN_HEIGHT, MAX_HEIGHT, texture(u_texture_height_map, uv).r);
 }
 
 void main()
 {
     //float height = (2 * texture(u_texture_height_map, a_textCoords0).r - 1) * MAX_HEIGHT;
-    float height = getHeight(a_textCoords0);
+    height = getHeight(a_textCoords0);
     vec4 vertex_position =  u_transform * vec4(a_position.x, a_position.y, height, 1.0);
     gl_Position = u_camera_combined * vertex_position;
 

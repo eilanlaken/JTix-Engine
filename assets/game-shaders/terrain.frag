@@ -2,6 +2,8 @@
 #version 450
 
 #define PI 3.1415926538
+#define MAX_HEIGHT 80
+#define MIN_HEIGHT -8
 
 // structs defitions
 struct DirectionalLight {
@@ -15,6 +17,7 @@ in vec2 uv;
 in vec3 unit_vertex_to_camera;
 in vec3 world_vertex_position;
 in vec3 normal;
+in float height;
 
 // uniforms - lights
 uniform DirectionalLight directionalLights[1];
@@ -31,6 +34,13 @@ uniform sampler2D u_texture_height_map;
 
 // outputs
 layout (location = 0) out vec4 out_color;
+
+// TODO: maybe blend to water color, not alpha.
+float getAlpha()
+{
+    float alpha = smoothstep(MIN_HEIGHT, -5.0, height);
+    return alpha;
+}
 
 // functions
 float distribution_GGX(vec3 N, vec3 H, float roughness)
@@ -111,5 +121,6 @@ void main()
     vec3 ambient = vec3(0.4) * albedo * 1;
     vec3 color = ambient + Lo;
 
-    out_color = vec4(color, 1.0);
+    //float alpha = getAlpha();
+    out_color = vec4(color, 1.0f);
 }
