@@ -176,8 +176,8 @@ public class ScenePlanesGame_Terrain_New_2 implements Scene {
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
 
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(terrain, transform_terrain);
-        Renderer3D.drawModel(waterModel, transformWater);
+        Renderer3D.drawModel(terrain, new Matrix4x4(transform_terrain).translateGlobalAxisXYZ(0,0,-2f));
+        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
         Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
         Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
         Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));

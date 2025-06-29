@@ -94,7 +94,8 @@ void main()
 
     // summation over all point light sources
     // calculate per-box2DLight radiance
-    vec3 radiance = directionalLights[0].intensity * directionalLights[0].color;
+    float light_intensity_adjacment = 0.2f;
+    vec3 radiance = light_intensity_adjacment * directionalLights[0].intensity * directionalLights[0].color;
 
     // cook-torrance brdf
     vec3 L    = normalize(-directionalLights[0].direction);
@@ -116,5 +117,5 @@ void main()
 
     vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
-    out_color = vec4(color, 1.0f);
+    out_color = vec4(color, 0.8f);
 }

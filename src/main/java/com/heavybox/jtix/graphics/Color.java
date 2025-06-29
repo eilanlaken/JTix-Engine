@@ -9,7 +9,7 @@ public class Color implements Cloneable {
     public static final Color GRAY        = new Color(0x7f7f7fff);
     public static final Color DARK_GRAY   = new Color(0x3f3f3fff);
     public static final Color BLACK       = new Color(0, 0, 0, 1);
-    public static final Color CLEAR       = new Color(0, 0, 0, 0);
+    public static final Color CLEAR_BLACK = new Color(0, 0, 0, 0);
     public static final Color CLEAR_WHITE = new Color(1, 1, 1, 0);
     public static final Color BLUE        = new Color(0, 0, 1, 1);
     public static final Color NAVY        = new Color(0, 0, 0.5f, 1);

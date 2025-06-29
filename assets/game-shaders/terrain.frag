@@ -38,7 +38,8 @@ layout (location = 0) out vec4 out_color;
 // TODO: maybe blend to water color, not alpha.
 float getAlpha()
 {
-    float alpha = smoothstep(MIN_HEIGHT, -5.0, height);
+    //float alpha = smoothstep(MIN_HEIGHT, -5.0, height);
+    float alpha = smoothstep(MIN_HEIGHT, -6.0f, height);
     return alpha;
 }
 
@@ -89,11 +90,20 @@ void main()
     vec4 blend_map_color = texture(u_texture_blend_map, uv);
     float background_weight = 1 - (blend_map_color.r + blend_map_color.g + blend_map_color.b);
     vec2 scaled_uv = uv * 2.0;
-    vec4 background_color = texture(u_texture_background, scaled_uv) * background_weight;
-    vec4 r_color = texture(u_texture_red, scaled_uv) * blend_map_color.r;
-    vec4 g_color = texture(u_texture_green, scaled_uv) * blend_map_color.g;
-    vec4 b_color = texture(u_texture_blue, scaled_uv) * blend_map_color.b;
-    vec4 total_color = background_color + r_color + g_color + b_color;
+
+    // select one.
+
+    vec3 background_color = pow(texture(u_texture_background, scaled_uv).rgb, vec3(2.2)) * background_weight;
+    vec3 r_color = pow(texture(u_texture_red, scaled_uv).rgb, vec3(2.2)) * blend_map_color.r;
+    vec3 g_color = pow(texture(u_texture_green, scaled_uv).rgb, vec3(2.2)) * blend_map_color.g;
+    vec3 b_color = pow(texture(u_texture_blue, scaled_uv).rgb, vec3(2.2)) * blend_map_color.b;
+
+//    vec3 background_color = texture(u_texture_background, scaled_uv).rgb * background_weight;
+//    vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
+//    vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
+//    vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;
+
+    vec3 total_color = background_color + r_color + g_color + b_color;
     float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
     float smoothT = t * t * (3.0 - 2.0 * t);
     //vec3 albedo = total_color.rgb * (t) + (1- t) * texture(u_texture_steep, uv).rgb;
@@ -118,9 +128,9 @@ void main()
     kD *= 1.0;
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-    vec3 ambient = vec3(0.4) * albedo * 1;
+    vec3 ambient = vec3(0.4) * albedo;
     vec3 color = ambient + Lo;
 
-    //float alpha = getAlpha();
-    out_color = vec4(color, 1.0f);
+    float alpha = getAlpha();
+    out_color = vec4(color, alpha);
 }
