@@ -123,16 +123,13 @@ void main()
         vec3 numerator = NDF * G * F;
         float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
         vec3 specular = numerator / denominator;
-        //vec3 kS = F;
-        //vec3 kD = vec3(1.0) - kS;
-        //kD *= 1.0 - metalness;
         vec3 kD = mix(vec3(1.0) - F, vec3(0.0), metalness);
         float NdotL = max(dot(N, L), 0.0);
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     }
 
     // add ambient light
-    vec3 ambient = vec3(0.3) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
+    vec3 ambient = vec3(0.5) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
 
     // HDR tonemapping

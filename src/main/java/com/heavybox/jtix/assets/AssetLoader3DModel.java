@@ -175,7 +175,8 @@ public class AssetLoader3DModel implements AssetLoader<Model> {
         }
         material.transparent = transparent;
 
-        //if (true) return material;
+        // TODO: Change multiplication to addition in default PBR.
+        // TODO: So, 1 -> 0 and white -> black.
         // in order to make sure a PBR material has all required uniforms, we check for missing attributes and "fill" them with default values
         /* make sure diffuse texture is available */
         Texture texture_diffuse = (Texture) material.materialAttributes.get("u_texture_diffuse");

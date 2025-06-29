@@ -59,6 +59,7 @@ public final class Graphics {
 
     /* useful textures */
     private static Texture singleWhitePixel;
+    private static Texture singleTransparentPixel;
     private static Texture singleBlackPixel;
     private static Texture singleNormalMapPixel;
 
@@ -263,7 +264,23 @@ public final class Graphics {
         return singleWhitePixel;
     }
 
-    public static Texture getTextureSingleBlackPixel() {
+    public static Texture getTextureSingleTransparentPixel() {
+        if (singleTransparentPixel != null) return singleTransparentPixel;
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4);
+        buffer.put((byte) 0x00); // Red
+        buffer.put((byte) 0x00); // Green
+        buffer.put((byte) 0x00); // Blue
+        buffer.put((byte) 0x00); // Alpha (fully transparent)
+        buffer.flip();
+
+        singleTransparentPixel = new Texture(1, 1, buffer,
+                Texture.FilterMag.NEAREST, Texture.FilterMin.NEAREST,
+                Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, 1);
+        return singleTransparentPixel;
+    }
+
+    @Deprecated public static Texture getTextureSingleBlackPixel() {
         if (singleBlackPixel != null) return singleBlackPixel;
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(4);

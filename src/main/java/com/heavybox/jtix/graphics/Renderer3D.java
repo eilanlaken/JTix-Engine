@@ -554,7 +554,7 @@ public class Renderer3D {
             shader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
-            shader.bindUniform("directionalLights[0].intensity", 5f);
+            shader.bindUniform("directionalLights[0].intensity", 6);
         }
 
         currentShader = shader;
