@@ -26,10 +26,10 @@ public class SceneRendering3D_ModelsViewer_2 implements Scene {
     @Override
     public void setup() {
 
-        Assets.loadModel("assets/engine-tests/cube-metal-criss.fbx", "assets/engine-tests");
+        Assets.loadModel("assets/engine-tests/cube-wood.fbx", "assets/engine-tests");
         Assets.finishLoading();
 
-        model = Assets.get("assets/engine-tests/cube-metal-criss.fbx");
+        model = Assets.get("assets/engine-tests/cube-wood.fbx");
     }
 
     @Override

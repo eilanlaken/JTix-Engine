@@ -82,10 +82,7 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 //https://github.com/NCCA/NormalMapping/blob/main/shaders/NormalMapVert.glsl
 void main()
 {
-    vec3 albedo = u_color_diffuse.rgb * texture(u_texture_diffuse, uv).rgb;
-    albedo = pow(albedo, vec3(2.2));
-
-
+    vec3 albedo = u_color_diffuse.rgb * pow(texture(u_texture_diffuse, uv).rgb, vec3(2.2));
     float metalness = u_prop_metallic * texture(u_texture_metalness, uv).r;
     float roughness = u_prop_roughness * texture(u_texture_roughness, uv).g;
     float opacity = u_prop_opacity * texture(u_texture_opacity, uv).a;
@@ -135,13 +132,13 @@ void main()
     }
 
     // add ambient light
-    vec3 ambient = vec3(0.08) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
+    vec3 ambient = vec3(0.3) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
-    //color = color / (color + vec3(0.08));
-    vec3 gammaCorrected = pow(color, vec3(1.0 / 2.2)); // TODO: figure this out. Should you leave the gamma correction?
-    out_color = vec4(gammaCorrected, opacity);
+    //color = color / (color + vec3(1.0)); // TODO: this gives washed out results
+    //color = pow(color, vec3(1.0 / 2.2)); // TODO: figure this out. Should you leave the gamma correction?
+    out_color = vec4(color, opacity);
     //out_color = vec4(u_prop_metallic, u_prop_metallic, u_prop_metallic, 1.0);
     //out_color = vec4(roughness, roughness, roughness, 1.0);
 }
