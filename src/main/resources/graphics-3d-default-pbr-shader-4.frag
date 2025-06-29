@@ -83,6 +83,9 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 void main()
 {
     vec3 albedo = u_color_diffuse.rgb * texture(u_texture_diffuse, uv).rgb;
+    albedo = pow(albedo, vec3(2.2));
+
+
     float metalness = u_prop_metallic * texture(u_texture_metalness, uv).r;
     float roughness = u_prop_roughness * texture(u_texture_roughness, uv).g;
     float opacity = u_prop_opacity * texture(u_texture_opacity, uv).a;
@@ -123,20 +126,22 @@ void main()
         vec3 numerator = NDF * G * F;
         float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
         vec3 specular = numerator / denominator;
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - metalness;
+        //vec3 kS = F;
+        //vec3 kD = vec3(1.0) - kS;
+        //kD *= 1.0 - metalness;
+        vec3 kD = mix(vec3(1.0) - F, vec3(0.0), metalness);
         float NdotL = max(dot(N, L), 0.0);
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     }
 
     // add ambient light
-    vec3 ambient = vec3(0.03) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
+    vec3 ambient = vec3(0.08) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
-    color = color / (color + vec3(0.08));
-    out_color = vec4(color, opacity);
+    //color = color / (color + vec3(0.08));
+    vec3 gammaCorrected = pow(color, vec3(1.0 / 2.2)); // TODO: figure this out. Should you leave the gamma correction?
+    out_color = vec4(gammaCorrected, opacity);
     //out_color = vec4(u_prop_metallic, u_prop_metallic, u_prop_metallic, 1.0);
     //out_color = vec4(roughness, roughness, roughness, 1.0);
 }

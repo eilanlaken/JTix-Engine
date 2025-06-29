@@ -554,7 +554,7 @@ public class Renderer3D {
             shader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
-            shader.bindUniform("directionalLights[0].intensity", 0.8f);
+            shader.bindUniform("directionalLights[0].intensity", 0.6f);
         }
 
         currentShader = shader;
@@ -628,7 +628,7 @@ public class Renderer3D {
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
         } catch (Exception e) {
-            throw new RuntimeException("error creating default shader");
+            throw new RuntimeException("error creating default shader: " + e.getMessage());
         }
     }
 
