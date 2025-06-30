@@ -11,20 +11,21 @@ public class FrameBuffer implements MemoryResource {
 
     public final int width;
     public final int height;
-    private final int fbo;
+    private final int handle;
     private final int depthStencilRBO;
 
     private final Texture colorAttachment;
 
+    // TODO: customize constructor to support creation of HDR FrameBuffers, Bordered FrameBuffers etc.
     public FrameBuffer(int width, int height) {
         this.width = width;
         this.height = height;
         // Create FrameBuffer
-        fbo = GL30.glGenFramebuffers();
+        handle = GL30.glGenFramebuffers();
         FrameBufferBinder.bind(this);
         //GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
 
-        colorAttachment = new Texture(width, height);
+        colorAttachment = new Texture(width, height, GL30.GL_RGBA16F, GL30.GL_RGBA);
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, colorAttachment.getHandle(), 0);
 
         depthStencilRBO = GL30.glGenRenderbuffers();
@@ -37,11 +38,11 @@ public class FrameBuffer implements MemoryResource {
             throw new GraphicsException("Could not create FrameBuffer. Error: " + "TODO.");
         }
 
-        FrameBufferBinder.bind(null);
+        FrameBufferBinder.bind();
     }
 
-    public int getFbo() {
-        return fbo;
+    public int getHandle() {
+        return handle;
     }
 
     public Texture getColorAttachment() {
@@ -50,7 +51,7 @@ public class FrameBuffer implements MemoryResource {
 
     @Override
     public void delete() {
-        GL30.glDeleteFramebuffers(fbo);
+        GL30.glDeleteFramebuffers(handle);
         colorAttachment.delete();
         GL30.glDeleteRenderbuffers(depthStencilRBO);
     }

@@ -10,27 +10,43 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-// contact points polygon vs polygon:
-// https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_ModelsViewer_2 implements Scene {
+// TODO:
+/*
+Implement:
+- relative velocity field
+- rain drops
+- lightnings
+- HDR
+- bloom
+- explosions
+- God rays (radial blur)
+ */
+public class SceneRendering3D_VFX implements Scene {
 
     private Camera camera;
 
     public Model model;
     public int currentNodeIndex = 0;
     Renderer2D renderer2D = new Renderer2D();
+    FrameBuffer sceneFrameBuffer;
+    Shader postProcessingHDR;
 
-    public SceneRendering3D_ModelsViewer_2() {
+    public SceneRendering3D_VFX() {
 
     }
 
     @Override
     public void setup() {
 
+        String ppHDRVertex = Assets.getFileContent("assets/game-shaders/post-processing-HDR.vert");
+        String ppHDRFragment = Assets.getFileContent("assets/game-shaders/post-processing-HDR.frag");
+        postProcessingHDR = new Shader(ppHDRVertex, ppHDRFragment);
+
         Assets.loadModel("assets/engine-tests/cube-wood.fbx", "assets/engine-tests");
         Assets.finishLoading();
 
         model = Assets.get("assets/engine-tests/cube-wood.fbx");
+        sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
     }
 
     @Override
@@ -94,11 +110,21 @@ public class SceneRendering3D_ModelsViewer_2 implements Scene {
             currentNodeIndex++;
         }
 
+        FrameBufferBinder.bind(sceneFrameBuffer);
+        GL11.glClearColor(1,0,0,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(0.8f,0.8f,0.8f,1);
         Renderer3D.begin(camera);
         Renderer3D.drawModel(model, new Matrix4x4().rotateGlobalAxisZ(angleZ));
         Renderer3D.end();
+
+        FrameBufferBinder.bind();
+        GL11.glClearColor(1,0,0,1);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        renderer2D.begin();
+        renderer2D.setShader(postProcessingHDR);
+        renderer2D.drawTexture(sceneFrameBuffer.getColorAttachment(), 0,0,0,1,-1);
+        renderer2D.end();
+
 
         renderer2D.begin();
         p1x += vx;

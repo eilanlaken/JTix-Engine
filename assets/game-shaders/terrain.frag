@@ -132,5 +132,5 @@ void main()
     vec3 color = ambient + Lo;
 
     float alpha = getAlpha();
-    out_color = vec4(color, alpha);
+    out_color = vec4(color, 1.0);
 }
