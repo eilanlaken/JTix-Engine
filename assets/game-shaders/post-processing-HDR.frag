@@ -14,7 +14,6 @@ void main() {
     const float gamma = 2.2;
     vec3 hdrColor = texture(u_texture, uv).rgb;
     vec3 mapped = vec3(1.0) - exp(-hdrColor * 5.0f);
-    //mapped = pow(mapped, vec3(1.0 / gamma));
     out_color = vec4(mapped, 1.0);
 
 //    const float gamma = 2.2;
