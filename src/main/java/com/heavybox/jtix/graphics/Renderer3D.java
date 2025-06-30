@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 // (for complex models with multiple model parts, expect more).
 public class Renderer3D {
 
-    @Deprecated public static Vector3 lightDir = new Vector3(0,1,-1).nor(); // TODO: remove
+    @Deprecated public static Vector3 lightDir = new Vector3(0,0,-1).nor(); // TODO: remove
 
     // defaults
     private static final Texture whitePixelTexture  = Graphics.getTextureSingleWhitePixel();

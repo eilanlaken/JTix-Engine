@@ -66,6 +66,7 @@ public class SceneRendering3D_VFX implements Scene {
     float p1x = 0, p1y = 0;
     float p2x = 0, p2y = 0;
     float vx = 4, vy = 4;
+    Matrix4x4 boxTransform = new Matrix4x4();
 
     @Override
     public void update() {
@@ -97,10 +98,10 @@ public class SceneRendering3D_VFX implements Scene {
         camera.update();
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            Renderer3D.lightDir.rotate(1f,1,1,0);
+            Renderer3D.lightDir.rotate(1f,1,0,0);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            angleZ += 1;
+            boxTransform.translateGlobalAxisXYZ(0,0.1f,0);
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
@@ -114,7 +115,7 @@ public class SceneRendering3D_VFX implements Scene {
         GL11.glClearColor(1,0,0,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(model, new Matrix4x4().rotateGlobalAxisZ(angleZ));
+        Renderer3D.drawModel(model, boxTransform);
         Renderer3D.end();
 
         FrameBufferBinder.bind();

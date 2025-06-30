@@ -20,7 +20,6 @@ struct DirectionalLight {
 // inputs
 in vec2 uv;
 in vec3 unit_vertex_to_camera;
-in vec3 world_vertex_position;
 in vec3 vertex_to_light[NUM_POINT_LIGHTS];
 in vec3 light_direction[NUM_DIRECTIONAL_LIGHTS];
 
