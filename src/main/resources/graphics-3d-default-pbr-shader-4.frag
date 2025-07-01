@@ -81,7 +81,8 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
 //https://github.com/NCCA/NormalMapping/blob/main/shaders/NormalMapVert.glsl
 void main()
 {
-    vec3 albedo = u_color_diffuse.rgb * pow(texture(u_texture_diffuse, uv).rgb, vec3(2.2));
+    //vec3 albedo = u_color_diffuse.rgb * pow(texture(u_texture_diffuse, uv).rgb, vec3(2.2)); // Not getting good results with this. Too dark.
+    vec3 albedo = u_color_diffuse.rgb * texture(u_texture_diffuse, uv).rgb;
     float metalness = u_prop_metallic * texture(u_texture_metalness, uv).r;
     float roughness = u_prop_roughness * texture(u_texture_roughness, uv).g;
     float opacity = u_prop_opacity * texture(u_texture_opacity, uv).a;
@@ -128,7 +129,7 @@ void main()
     }
 
     // add ambient light
-    vec3 ambient = vec3(0.5) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
+    vec3 ambient = vec3(0.20) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
 
     // HDR tonemapping

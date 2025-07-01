@@ -25,7 +25,8 @@ public class SceneRendering3D_VFX implements Scene {
 
     private Camera camera;
 
-    public Model model;
+    public Model model_1;
+    public Model model_2;
     public int currentNodeIndex = 0;
     Renderer2D renderer2D = new Renderer2D();
     FrameBuffer sceneFrameBuffer;
@@ -42,10 +43,12 @@ public class SceneRendering3D_VFX implements Scene {
         String ppHDRFragment = Assets.getFileContent("assets/game-shaders/post-processing-HDR.frag");
         postProcessingHDR = new Shader(ppHDRVertex, ppHDRFragment);
 
+        Assets.loadModel("assets/engine-tests/cube-metal-criss.fbx", "assets/engine-tests");
         Assets.loadModel("assets/engine-tests/cube-wood.fbx", "assets/engine-tests");
         Assets.finishLoading();
 
-        model = Assets.get("assets/engine-tests/cube-wood.fbx");
+        model_1 = Assets.get("assets/engine-tests/cube-wood.fbx");
+        model_2 = Assets.get("assets/engine-tests/cube-metal-criss.fbx");
         sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
     }
 
@@ -98,10 +101,10 @@ public class SceneRendering3D_VFX implements Scene {
         camera.update();
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
-            Renderer3D.lightDir.rotate(1f,1,0,0);
+            boxTransform.rotateLocalAxis(1,1,1,2);
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
-            boxTransform.translateGlobalAxisXYZ(0,0.1f,0);
+            Renderer3D.lightDir.rotate(2,1,0,0);
         }
 
         if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
@@ -115,7 +118,8 @@ public class SceneRendering3D_VFX implements Scene {
         GL11.glClearColor(1,0,0,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(model, boxTransform);
+        Renderer3D.drawModel(model_1, boxTransform);
+        Renderer3D.drawModel(model_2, new Matrix4x4(boxTransform).translateGlobalAxisXYZ(-3,0,0));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

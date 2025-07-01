@@ -18,6 +18,9 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
 
     public Scene3D scene;
     public int currentNodeIndex = 0;
+    Renderer2D renderer2D = new Renderer2D();
+    FrameBuffer sceneFrameBuffer;
+    Shader postProcessingHDR;
 
     public SceneRendering3D_ModelsViewer_Map_1() {
 
@@ -25,11 +28,15 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
 
     @Override
     public void setup() {
+        String ppHDRVertex = Assets.getFileContent("assets/game-shaders/post-processing-HDR.vert");
+        String ppHDRFragment = Assets.getFileContent("assets/game-shaders/post-processing-HDR.frag");
+        postProcessingHDR = new Shader(ppHDRVertex, ppHDRFragment);
 
         Assets.loadScene("assets/game-models/MAP_1_new.fbx", "assets/game-textures");
         Assets.finishLoading();
 
         scene = Assets.get("assets/game-models/MAP_1_new.fbx");
+        sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
     }
 
     @Override
@@ -91,11 +98,20 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
         }
         Scene3D.Node node = scene.allNodes[currentNodeIndex];
 
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        FrameBufferBinder.bind(sceneFrameBuffer);
         GL11.glClearColor(1,0,0,1);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
         Renderer3D.drawModel(node.model, new Matrix4x4().rotateGlobalAxisZ(angleZ));
         Renderer3D.end();
+
+        FrameBufferBinder.bind();
+        GL11.glClearColor(1,0,0,1);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        renderer2D.begin();
+        //renderer2D.setShader(postProcessingHDR);
+        renderer2D.drawTexture(sceneFrameBuffer.getColorAttachment(), 0,0,0,1,-1);
+        renderer2D.end();
     }
 
 
