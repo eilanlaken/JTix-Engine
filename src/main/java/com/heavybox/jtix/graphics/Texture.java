@@ -200,6 +200,71 @@ public class Texture implements MemoryResource {
         STBImage.stbi_image_free(buffer);
     }
 
+    // TODO: test
+    public Texture(final String filepath, @Nullable FilterMag filterMag, @Nullable FilterMin filterMin, @Nullable Wrap sWrap, @Nullable Wrap tWrap, int anisotropy, boolean gammaCorrected) {
+        ByteBuffer buffer;
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer channelsBuffer = BufferUtils.createIntBuffer(1);
+        buffer = STBImage.stbi_load(filepath, widthBuffer, heightBuffer, channelsBuffer, 4);
+        if (buffer == null) throw new AssetsException("Failed to load a texture file. Check that the path is correct: " + filepath
+                + System.lineSeparator() + "STBImage error: "
+                + STBImage.stbi_failure_reason());
+        int width = widthBuffer.get();
+        int height = heightBuffer.get();
+        int channels = channelsBuffer.get();
+
+        int internalFormat = GL11.GL_RGBA, externalFormat = GL11.GL_RGBA; // some defaults.
+        if (channels == 1) {
+            internalFormat = externalFormat = GL11.GL_RED;
+        } else if (channels == 3) {
+            internalFormat = gammaCorrected ? GL30.GL_SRGB : GL11.GL_RGB;
+            externalFormat = GL11.GL_RGB;
+        } else if (channels == 4) {
+            internalFormat = gammaCorrected ? GL30.GL_SRGB_ALPHA : GL11.GL_RGBA;
+            externalFormat = GL11.GL_RGBA;
+        }
+
+
+        this.handle = GL11.glGenTextures();
+        this.slot = -1;
+
+        int maxTextureSize = Graphics.getMaxTextureSize();
+        if (width > maxTextureSize || height > maxTextureSize)
+            throw new IllegalStateException("Trying to create " + Texture.class + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+
+        this.width = width;
+        this.height = height;
+        this.invWidth = 1.0f / width;
+        this.invHeight = 1.0f / height;
+
+        this.filterMag = filterMag != null ? filterMag : FilterMag.NEAREST;
+        this.filterMin = filterMin != null ? filterMin : FilterMin.NEAREST_MIPMAP_NEAREST;
+        this.sWrap = sWrap != null ? sWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.tWrap = tWrap != null ? tWrap : Texture.Wrap.CLAMP_TO_EDGE;
+        this.anisotropy = MathUtils.nextPowerOf2i(MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy()));
+        this.biasLOD = 0;
+
+        TextureBinder.bind(this);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, internalFormat, width, height, 0, externalFormat, GL11.GL_UNSIGNED_BYTE, buffer);
+        if (this.filterMin == FilterMin.NEAREST_MIPMAP_LINEAR ||
+                this.filterMin == FilterMin.LINEAR_MIPMAP_LINEAR  ||
+                this.filterMin == FilterMin.LINEAR_MIPMAP_NEAREST ||
+                this.filterMin == FilterMin.NEAREST_MIPMAP_NEAREST) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            this.anisotropy = MathUtils.clampInt(anisotropy,1, Graphics.getMaxAnisotropy());
+            if (Graphics.isAnisotropicFilteringSupported()) GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+        } else {
+            this.anisotropy = 1;
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+            GL11.glTexParameteri(GL20.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
+        }
+
+        STBImage.stbi_image_free(buffer);
+    }
+
+    // TODO: test
     // TODO: use this all args constructor.
     public Texture(int width, int height, ByteBuffer bytes, FilterMag filterMag, FilterMin filterMin, Wrap sWrap, Wrap tWrap, int anisotropy, int internalFormat, int externalFormat) {
         this.handle = GL11.glGenTextures();
@@ -238,15 +303,14 @@ public class Texture implements MemoryResource {
         }
     }
 
-    void setSlot(final int slot) { this.slot = slot; }
-    int  getSlot() { return slot; }
-    int  getHandle() { return handle; }
+    void setSlot  (final int slot) { this.slot = slot; }
+    int  getSlot  ()               { return slot; }
+    int  getHandle()               { return handle; }
 
-    public int getAnisotropy() {
+    public int   getAnisotropy() {
         return anisotropy;
     }
-
-    public float getBiasLOD() {
+    public float getBiasLOD   () {
         return biasLOD;
     }
 
@@ -264,7 +328,6 @@ public class Texture implements MemoryResource {
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, this.biasLOD);
     }
 
-    // TODO: untested.
     public Color getPixelColor(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) throw new IndexOutOfBoundsException("Trying to read out of bounds pixel: (" + x + ", " + y + ") of " + Texture.class.getSimpleName() + " with dimensions: " + "(" + width + ", " + height + ")");
 
@@ -335,4 +398,23 @@ public class Texture implements MemoryResource {
         }
 
     }
+
+    // TODO: use this as input?
+    public enum Format {
+
+        RED(GL11.GL_RED),
+        RGB(GL11.GL_RGB),
+        RGBA(GL11.GL_RGBA),
+        SRGB(GL30.GL_SRGB),
+        SRGB_ALPHA(GL30.GL_SRGB_ALPHA),
+        ;
+
+        public final int glValue;
+
+        Format(int glValue) {
+            this.glValue = glValue;
+        }
+
+    }
+
 }

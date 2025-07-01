@@ -59,8 +59,8 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         Assets.loadTexture("assets/game-maps/terrain-blendmap-demo.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/heightmap-test-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        //Assets.loadTexture("assets/game-maps/terrain-grass-old.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        //Assets.loadTexture("assets/game-maps/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-bright.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -70,8 +70,8 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         terrainBlendMap = Assets.get("assets/game-maps/terrain-blendmap-demo.png");
         terrainHeightMap = Assets.get("assets/app-textures/heightmap-test-2.jpg");
         terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
-        //terrainGrass = Assets.get("assets/game-maps/terrain-grass-old.jpg");
-        terrainGrass = Assets.get("assets/game-maps/terrain-grass.jpg");
+        terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg");
+        //terrainGrass = Assets.get("assets/game-maps/terrain-grass.jpg");
         terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
         terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-bright.jpg"); // g
         terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-dark.jpg"); // b
@@ -198,10 +198,10 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
         Renderer3D.drawModel(terrain, new Matrix4x4(transform_terrain).translateGlobalAxisXYZ(0,0,-2f));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

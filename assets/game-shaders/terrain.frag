@@ -93,15 +93,15 @@ void main()
 
     // select one.
 
-    vec3 background_color = pow(texture(u_texture_background, scaled_uv).rgb, vec3(2.2)) * background_weight;
-    vec3 r_color = pow(texture(u_texture_red, scaled_uv).rgb, vec3(2.2)) * blend_map_color.r;
-    vec3 g_color = pow(texture(u_texture_green, scaled_uv).rgb, vec3(2.2)) * blend_map_color.g;
-    vec3 b_color = pow(texture(u_texture_blue, scaled_uv).rgb, vec3(2.2)) * blend_map_color.b;
+//    vec3 background_color = pow(texture(u_texture_background, scaled_uv).rgb, vec3(2.2)) * background_weight;
+//    vec3 r_color = pow(texture(u_texture_red, scaled_uv).rgb, vec3(2.2)) * blend_map_color.r;
+//    vec3 g_color = pow(texture(u_texture_green, scaled_uv).rgb, vec3(2.2)) * blend_map_color.g;
+//    vec3 b_color = pow(texture(u_texture_blue, scaled_uv).rgb, vec3(2.2)) * blend_map_color.b;
 
-//    vec3 background_color = texture(u_texture_background, scaled_uv).rgb * background_weight;
-//    vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
-//    vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
-//    vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;
+    vec3 background_color = texture(u_texture_background, scaled_uv).rgb * background_weight;
+    vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
+    vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
+    vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;
 
     vec3 total_color = background_color + r_color + g_color + b_color;
     float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
