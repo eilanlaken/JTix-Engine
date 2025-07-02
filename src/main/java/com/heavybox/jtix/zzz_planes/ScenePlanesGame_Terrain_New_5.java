@@ -10,7 +10,7 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-public class ScenePlanesGame_Terrain_New_4 implements Scene {
+public class ScenePlanesGame_Terrain_New_5 implements Scene {
 
     private Camera camera;
 
@@ -35,15 +35,15 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
     FrameBuffer sceneFrameBuffer;
     Shader postProcessingHDR;
 
-    public ScenePlanesGame_Terrain_New_4() {
+    public ScenePlanesGame_Terrain_New_5() {
 
     }
 
     @Override
     public void setup() {
 
-        String terrainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/terrain.vert");
-        String terrainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/terrain.frag");
+        String terrainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/terrain-2.vert");
+        String terrainFragmentShaderSrc = Assets.getFileContent("assets/game-shaders/terrain-2.frag");
         this.terrainShader = new Shader(terrainVertexShaderSrc, terrainFragmentShaderSrc);
 
         String mountainVertexShaderSrc = Assets.getFileContent("assets/game-shaders/mountain-shader.vert");
@@ -55,9 +55,9 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         this.waterShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
 
         // load terrain
-        Assets.loadModel("assets/game-models/plane-grid-512.fbx");
-        Assets.loadTexture("assets/game-maps/terrain-blendmap-demo.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/app-textures/heightmap-test-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadModel("assets/game-models/terrain-1km.fbx");
+        Assets.loadTexture("assets/game-maps/blendmap-512-test.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/heightmap-512-test.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/game-maps/terrain-grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -67,8 +67,8 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         Assets.finishLoading();
 
 
-        terrainBlendMap = Assets.get("assets/game-maps/terrain-blendmap-demo.png");
-        terrainHeightMap = Assets.get("assets/app-textures/heightmap-test-2.jpg");
+        terrainBlendMap = Assets.get("assets/game-maps/blendmap-512-test.jpg");
+        terrainHeightMap = Assets.get("assets/game-maps/heightmap-512-test.jpg");
         terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg");
         //terrainGrass = Assets.get("assets/game-maps/terrain-grass.jpg");
@@ -76,7 +76,7 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-bright.jpg"); // g
         terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-dark.jpg"); // b
 
-        terrain = Assets.get("assets/game-models/plane-grid-512.fbx");
+        terrain = Assets.get("assets/game-models/terrain-1km.fbx");
         terrain.materials[0].materialAttributes.put("u_texture_steep", terrainStone);
         terrain.materials[0].materialAttributes.put("u_texture_background", terrainGrass);
         terrain.materials[0].materialAttributes.put("u_texture_red", terrainRoad);
@@ -197,15 +197,16 @@ public class ScenePlanesGame_Terrain_New_4 implements Scene {
         GL11.glClearColor(1,0,0,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
+        Renderer3D.drawModel(terrain, new Matrix4x4(transform_terrain).translateGlobalAxisXYZ(0,0, -2f));
+
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
-                Renderer3D.drawModel(terrain, new Matrix4x4(transform_terrain).translateGlobalAxisXYZ(i * 512, j * 512, -2f));
             }
         }
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

@@ -3,7 +3,7 @@
 
 #define PI 3.1415926538
 #define MAX_HEIGHT 80
-#define MIN_HEIGHT -8
+#define MIN_HEIGHT -12
 
 // structs defitions
 struct DirectionalLight {
