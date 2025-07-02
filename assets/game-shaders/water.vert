@@ -2,8 +2,6 @@
 #version 450
 
 #define PI 3.1415926538
-#define MAX_HEIGHT 6
-#define TILE_SIZE 256.0
 
 // attributes
 layout(location = 0) in vec3 a_position;

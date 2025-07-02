@@ -64,8 +64,8 @@ public class ScenePlanesGame_Terrain_New_5 implements Scene {
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-bright.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadModel("assets/game-models/water-1km.fbx");
         Assets.finishLoading();
-
 
         terrainBlendMap = Assets.get("assets/game-maps/blendmap-512-test.jpg");
         terrainHeightMap = Assets.get("assets/game-maps/heightmap-512-test.jpg");
@@ -88,10 +88,9 @@ public class ScenePlanesGame_Terrain_New_5 implements Scene {
         terrain.materials[0].transparent = false;
 
 
-        Assets.loadModel("assets/models/terrain-block.fbx");
-        Assets.finishLoading();
 
-        waterModel = Assets.get("assets/models/terrain-block.fbx");
+
+        waterModel = Assets.get("assets/game-models/water-1km.fbx");
         waterModel.materials[0].materialAttributes.put("time", 0.0f);
         waterModel.materials[0].materialAttributes.put("uTroughColor", Color.valueOf("#186691"));
         //terrain.materials[0].materialAttributes.put("uSurfaceColor", Color.valueOf("#9bd8c0"));
@@ -103,7 +102,6 @@ public class ScenePlanesGame_Terrain_New_5 implements Scene {
         waterModel.materials[0].materialAttributes.put("uWavesPersistence", 1);
         waterModel.materials[0].materialAttributes.put("uWavesLacunarity", 2.4f);
         waterModel.materials[0].materialAttributes.put("uWavesIterations", 3);
-
         waterModel.materials[0].materialAttributes.put("uTroughThreshold", 0f);
         waterModel.materials[0].materialAttributes.put("uTroughTransition", 8f);
         waterModel.materials[0].materialAttributes.put("uPeakThreshold", 22);
@@ -203,7 +201,7 @@ public class ScenePlanesGame_Terrain_New_5 implements Scene {
             for (int j = 0; j < 16; j++) {
             }
         }
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
+        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
 //        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
 //        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
 //        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
