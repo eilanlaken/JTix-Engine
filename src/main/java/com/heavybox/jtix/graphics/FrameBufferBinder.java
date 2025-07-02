@@ -1,12 +1,16 @@
 package com.heavybox.jtix.graphics;
 
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
+import java.nio.IntBuffer;
 
 public class FrameBufferBinder {
 
     private static FrameBuffer boundFrameBuffer = null;
+    private static IntBuffer   bountAttachmentScreen = BufferUtils.createIntBuffer(1).put(GL30.GL_COLOR_ATTACHMENT0).flip();
 
     public static void bind() {
         bind(null);
@@ -20,12 +24,14 @@ public class FrameBufferBinder {
 
         if (frameBuffer == null) {
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+            GL30.glDrawBuffers(bountAttachmentScreen);
             boundFrameBuffer = null;
             GL20.glViewport(0, 0, Graphics.getWindowWidth(), Graphics.getWindowHeight());
             return;
         }
 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer.getHandle());
+        GL30.glDrawBuffers(frameBuffer.boundAttachments);
         boundFrameBuffer = frameBuffer;
         GL20.glViewport(0, 0, frameBuffer.width, frameBuffer.height);
     }

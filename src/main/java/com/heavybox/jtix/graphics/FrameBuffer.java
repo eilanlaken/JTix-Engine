@@ -1,8 +1,11 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.memory.MemoryResource;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+
+import java.nio.IntBuffer;
 
 // TODO: implement.
 // https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/glutils/FrameBuffer.java
@@ -14,19 +17,64 @@ public class FrameBuffer implements MemoryResource {
     private final int handle;
     private final int depthStencilRBO;
 
-    private final Texture colorAttachment;
+    private final Texture colorAttachment0;
+    private final Texture colorAttachment1;
+
+    final IntBuffer boundAttachments;
 
     // TODO: customize constructor to support creation of HDR FrameBuffers, Bordered FrameBuffers etc.
-    public FrameBuffer(int width, int height) {
+    @Deprecated public FrameBuffer(int width, int height) {
         this.width = width;
         this.height = height;
         // Create FrameBuffer
         handle = GL30.glGenFramebuffers();
+
+        this.boundAttachments = BufferUtils.createIntBuffer(1);
+        this.boundAttachments.put(GL30.GL_COLOR_ATTACHMENT0);
+        this.boundAttachments.flip();
+
         FrameBufferBinder.bind(this);
         //GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
 
-        colorAttachment = new Texture(width, height, GL30.GL_RGBA16F, GL30.GL_RGBA);
-        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, colorAttachment.getHandle(), 0);
+        colorAttachment0 = new Texture(width, height, GL30.GL_RGBA16F, GL30.GL_RGBA);
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, colorAttachment0.getHandle(), 0);
+        colorAttachment1 = null;
+
+
+
+        depthStencilRBO = GL30.glGenRenderbuffers();
+        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthStencilRBO);
+        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL30.GL_DEPTH24_STENCIL8, width, height);
+        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, depthStencilRBO);
+
+        // Check if framebuffer is complete
+        if (GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER) != GL30.GL_FRAMEBUFFER_COMPLETE) {
+            throw new GraphicsException("Could not create FrameBuffer. Error: " + "TODO.");
+        }
+
+        FrameBufferBinder.bind();
+    }
+
+    // TODO: standardize "all args" constructor.
+    @Deprecated public FrameBuffer(int width, int height, int colorAttachments) {
+        this.width = width;
+        this.height = height;
+        this.handle = GL30.glGenFramebuffers();
+
+        this.boundAttachments = BufferUtils.createIntBuffer(2);
+        this.boundAttachments.put(GL30.GL_COLOR_ATTACHMENT0);
+        this.boundAttachments.put(GL30.GL_COLOR_ATTACHMENT1);
+        this.boundAttachments.flip();
+
+        FrameBufferBinder.bind(this);
+
+        colorAttachment0 = new Texture(width, height, GL30.GL_RGBA16F, GL30.GL_RGBA);
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, colorAttachment0.getHandle(), 0);
+
+        colorAttachment1 = new Texture(width, height, GL30.GL_RGBA16F, GL30.GL_RGBA);
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT1, GL11.GL_TEXTURE_2D, colorAttachment1.getHandle(), 0);
+
+
 
         depthStencilRBO = GL30.glGenRenderbuffers();
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthStencilRBO);
@@ -45,14 +93,19 @@ public class FrameBuffer implements MemoryResource {
         return handle;
     }
 
-    public Texture getColorAttachment() {
-        return colorAttachment;
+    public Texture getColorAttachment0() {
+        return colorAttachment0;
+    }
+
+    public Texture getColorAttachment1() {
+        return colorAttachment1;
     }
 
     @Override
     public void delete() {
         GL30.glDeleteFramebuffers(handle);
-        colorAttachment.delete();
+        if (colorAttachment0 != null) colorAttachment0.delete();
+        if (colorAttachment1 != null) colorAttachment1.delete();
         GL30.glDeleteRenderbuffers(depthStencilRBO);
     }
 

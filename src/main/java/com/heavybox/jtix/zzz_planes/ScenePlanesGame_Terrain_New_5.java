@@ -212,7 +212,7 @@ public class ScenePlanesGame_Terrain_New_5 implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         renderer2D.begin();
         renderer2D.setShader(postProcessingHDR);
-        renderer2D.drawTexture(sceneFrameBuffer.getColorAttachment(), 0,0,0,1,-1);
+        renderer2D.drawTexture(sceneFrameBuffer.getColorAttachment0(), 0,0,0,1,-1);
         renderer2D.end();
     }
 

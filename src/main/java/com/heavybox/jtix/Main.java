@@ -2,10 +2,8 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
-import com.heavybox.jtix.tools.ToolsTextureManipulator;
 import com.heavybox.jtix.zzz_planes.*;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Main {
@@ -79,8 +77,8 @@ public class Main {
         //Application.launch(new SceneRendering3D_NewClouds());
         //Application.launch(new SceneRendering3D_ModelsViewer_Volcano());
         //Application.launch(new SceneRendering3D_ModelsViewer_Map_1());
-        Application.launch(new ScenePlanesGame_Terrain_New_5());
-        //Application.launch(new SceneRendering3D_VFX());
+        //Application.launch(new ScenePlanesGame_Terrain_New_5());
+        Application.launch(new SceneRendering3D_VFX_2());
 
         //Application.launch(new SceneRendering3D_Transparents_1());
         //Application.launch(new ScenePlanesGame_Mountains_2());

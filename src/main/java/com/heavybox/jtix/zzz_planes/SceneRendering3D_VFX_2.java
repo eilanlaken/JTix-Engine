@@ -8,7 +8,13 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.memory.MemoryUtils;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+
+import java.nio.IntBuffer;
 
 // TODO:
 /*
@@ -21,7 +27,7 @@ Implement:
 - explosions
 - God rays (radial blur)
  */
-public class SceneRendering3D_VFX implements Scene {
+public class SceneRendering3D_VFX_2 implements Scene {
 
     private Camera camera;
 
@@ -32,7 +38,7 @@ public class SceneRendering3D_VFX implements Scene {
     FrameBuffer sceneFrameBuffer;
     Shader postProcessingHDR;
 
-    public SceneRendering3D_VFX() {
+    public SceneRendering3D_VFX_2() {
 
     }
 
@@ -49,7 +55,7 @@ public class SceneRendering3D_VFX implements Scene {
 
         model_1 = Assets.get("assets/engine-tests/cube-wood.fbx");
         model_2 = Assets.get("assets/engine-tests/cube-metal-criss.fbx");
-        sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
+        sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight(), 2);
     }
 
     @Override
@@ -127,7 +133,7 @@ public class SceneRendering3D_VFX implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         renderer2D.begin();
         renderer2D.setShader(postProcessingHDR);
-        renderer2D.drawTexture(sceneFrameBuffer.getColorAttachment(), 0,0,0,1,-1);
+        renderer2D.drawTexture(sceneFrameBuffer.getColorAttachment1(), 0,0,0,1,-1);
         renderer2D.end();
 
 
