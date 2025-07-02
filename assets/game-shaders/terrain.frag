@@ -89,7 +89,7 @@ void main()
     /* total color calculation */
     vec4 blend_map_color = texture(u_texture_blend_map, uv);
     float background_weight = 1 - (blend_map_color.r + blend_map_color.g + blend_map_color.b);
-    vec2 scaled_uv = uv * 2.0;
+    vec2 scaled_uv = uv * 8.0;
 
     // select one.
 
@@ -107,7 +107,7 @@ void main()
     float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
     float smoothT = t * t * (3.0 - 2.0 * t);
     //vec3 albedo = total_color.rgb * (t) + (1- t) * texture(u_texture_steep, uv).rgb;
-    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, uv).rgb, 1 - smoothT);
+    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, scaled_uv).rgb, 1 - smoothT);
 
     /* Directional light calculation */
     vec3 N = normal;
