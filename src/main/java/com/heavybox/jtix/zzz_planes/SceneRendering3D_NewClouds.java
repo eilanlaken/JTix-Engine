@@ -13,10 +13,8 @@ import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
 
-// https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
-// https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
-// https://blog.uhawkvr.com/
-// https://www.youtube.com/watch?v=sNXj0RN09ps
+// cloud textures:
+// https://thewebdesignerpro.com/abovetheclouds.html
 public class SceneRendering3D_NewClouds implements Scene {
 
     private Camera camera;
@@ -176,6 +174,8 @@ public class SceneRendering3D_NewClouds implements Scene {
         for (Matrix4x4 cloud : clouds) {
             camera.orientBillboard(cloud);
             cloud.rotateLocalAxisZ(correctionF);
+
+            orient3(cloud);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

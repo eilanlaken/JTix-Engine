@@ -19,6 +19,7 @@ public final class Keyboard {
         GLFW.glfwSetKeyCallback(Application.getWindowHandle(), new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scanCode, int action, int mods) {
+                if (key < 0 || key >= keysCurrentState.length) return;
                 keysCurrentState[key] = action;
                 switch (action) {
                     case GLFW.GLFW_PRESS: {
