@@ -28,6 +28,7 @@ public class SceneRendering3D_NewClouds implements Scene {
     public Texture cloudAtlas;
     public Shader cloudShader;
     public Matrix4x4 transformCloud = new Matrix4x4();
+    public Matrix4x4[] clouds = new Matrix4x4[30];
     // models sky: skybox
     public Model modelSkybox;
     public Matrix4x4 transformSkybox = new Matrix4x4();
@@ -81,6 +82,11 @@ public class SceneRendering3D_NewClouds implements Scene {
         final float range = 0.26f * CLOUDS_COUNT;
         final float scale = 20.4f * (CLOUDS_COUNT / range);
         transformCloud.scale(scale,scale,scale);
+
+        for (int i = 0; i < clouds.length; i++) {
+            clouds[i] = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(- 30,30), MathUtils.randomUniformFloat(- 30,30), MathUtils.randomUniformFloat(- 30,30));
+            clouds[i].scale(scale, scale, scale);
+        }
 
         // setup skybox
         modelSkybox = Assets.get("assets/app-models/skybox_1.fbx");
@@ -165,14 +171,22 @@ public class SceneRendering3D_NewClouds implements Scene {
 
         // rendering system
 
-
+        update_gameplay();
         transformSkybox.setTranslation(camera.position);
         orient3(transformCloud);
+        for (Matrix4x4 cloud : clouds) {
+            camera.orientBillboard(cloud);
+
+            cloud.rotateLocalAxisZ(correction);
+        }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1,0,0,1);
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(modelCloud, transformCloud);
+
+        for (Matrix4x4 cloud : clouds) {
+            Renderer3D.drawModel(modelCloud, cloud);
+        }
         Renderer3D.drawModel(modelSkybox, transformSkybox);
         Renderer3D.end();
     }
@@ -268,14 +282,22 @@ public class SceneRendering3D_NewClouds implements Scene {
         camera.update();
     }
 
+    float correction = 0;
+
     private void update_gameplay() {
         float delta = Graphics.getDeltaTime();
         Vector3 velocity = new Vector3(camera.forward).scl(speed);
         camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) speed += delta * 20;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) speed -= delta * 20;
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) camera.rotateAroundForward(delta * -90);
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) camera.rotateAroundForward(delta * 90);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            camera.rotateAroundForward(delta * -90);
+            correction -= delta * 90;
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            camera.rotateAroundForward(delta * 90);
+            correction += delta * 90;
+        }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) camera.rotateAroundRight(delta * -90);
         if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) camera.rotateAroundRight(delta * 90);
     }
