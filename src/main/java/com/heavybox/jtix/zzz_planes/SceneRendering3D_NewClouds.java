@@ -3,7 +3,6 @@ package com.heavybox.jtix.zzz_planes;
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.collections.Array;
-import com.heavybox.jtix.collections.Collections;
 import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
@@ -13,7 +12,6 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fmain.js%3A86%2C52
 // https://codesandbox.io/p/sandbox/simondev-shader-clouds-p0slqy?file=%2Fshaders%2Foklab.glsl
@@ -51,7 +49,7 @@ public class SceneRendering3D_NewClouds implements Scene {
     public void setup() {
 
         // load sky: clouds
-        Assets.loadTexture("assets/game-textures/clouds_1.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-textures/cloud_1.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadModel("assets/app-models/plane.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/plane-2.fbx", "assets/app-models/textures");
         Assets.loadModel("assets/app-models/cockpit-template.fbx", "assets/app-models/textures");
@@ -70,7 +68,7 @@ public class SceneRendering3D_NewClouds implements Scene {
         // setup clouds
         modelCloud = Assets.get("assets/app-models/plane-2.fbx");
         modelCockpit = Assets.get("assets/app-models/cockpit-template.fbx");
-        cloudAtlas = Assets.get("assets/game-textures/clouds_1.png");
+        cloudAtlas = Assets.get("assets/game-textures/cloud_1.png");
         modelCloud.materials[0].materialAttributes.put("u_texture_atlas", cloudAtlas);
         modelCloud.materials[0].transparent = true;
         String vertexShaderSrc = Assets.getFileContent("assets/game-shaders/cloud-shader.vert");
@@ -83,9 +81,10 @@ public class SceneRendering3D_NewClouds implements Scene {
         final float scale = 20.4f * (CLOUDS_COUNT / range);
         transformCloud.scale(scale,scale,scale);
 
+        System.out.println(scale);
         for (int i = 0; i < clouds.length; i++) {
             clouds[i] = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(- 30,30), MathUtils.randomUniformFloat(- 30,30), MathUtils.randomUniformFloat(- 30,30));
-            clouds[i].scale(scale, scale, scale);
+            clouds[i].scale(55, 55, 55);
         }
 
         // setup skybox
@@ -115,7 +114,7 @@ public class SceneRendering3D_NewClouds implements Scene {
         for (int i = 0; i < CLOUDS_COUNT; i++) {
             Entity entity = new Entity();
             entity.transform = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(-range,range), MathUtils.randomUniformFloat(-range,range), 60 + MathUtils.randomUniformFloat(-range/4,range/4));
-            entity.transform.scale(scale,scale,scale);
+            entity.transform.scale(scale/5,scale/5,scale/5);
             entity.model = modelCloud;
             entities.add(entity);
         }
@@ -176,14 +175,12 @@ public class SceneRendering3D_NewClouds implements Scene {
         orient3(transformCloud);
         for (Matrix4x4 cloud : clouds) {
             camera.orientBillboard(cloud);
-
-            cloud.rotateLocalAxisZ(correction);
+            cloud.rotateLocalAxisZ(correctionF);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(1,0,0,1);
         Renderer3D.begin(camera);
-
         for (Matrix4x4 cloud : clouds) {
             Renderer3D.drawModel(modelCloud, cloud);
         }
@@ -282,7 +279,8 @@ public class SceneRendering3D_NewClouds implements Scene {
         camera.update();
     }
 
-    float correction = 0;
+    float correctionF = 0;
+    float correctionP = 0;
 
     private void update_gameplay() {
         float delta = Graphics.getDeltaTime();
@@ -292,14 +290,20 @@ public class SceneRendering3D_NewClouds implements Scene {
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) speed -= delta * 20;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
             camera.rotateAroundForward(delta * -90);
-            correction -= delta * 90;
+            correctionF -= delta * 90;
         }
         if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
             camera.rotateAroundForward(delta * 90);
-            correction += delta * 90;
+            correctionF += delta * 90;
         }
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) camera.rotateAroundRight(delta * -90);
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) camera.rotateAroundRight(delta * 90);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
+            camera.rotateAroundRight(delta * -90);
+            correctionP += delta * 90;
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+            camera.rotateAroundRight(delta * 90);
+            correctionP -= delta * 90;
+        }
     }
 
     public static class Entity {
