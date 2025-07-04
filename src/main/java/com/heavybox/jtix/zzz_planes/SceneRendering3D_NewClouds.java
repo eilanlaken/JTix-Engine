@@ -24,7 +24,7 @@ public class SceneRendering3D_NewClouds implements Scene {
     public Texture cloudAtlas;
     public Shader cloudShader;
     public Matrix4x4 transformCloud = new Matrix4x4();
-    public Matrix4x4[] clouds = new Matrix4x4[30];
+    public Matrix4x4[] clouds = new Matrix4x4[100];
     // models sky: skybox
     public Model modelSkybox;
     public Matrix4x4 transformSkybox = new Matrix4x4();
@@ -74,14 +74,14 @@ public class SceneRendering3D_NewClouds implements Scene {
         cloudShader = new Shader(vertexShaderSrc, fragmentShaderSrc);
         modelCloud.materials[0].shader = cloudShader;
 
-        final int CLOUDS_COUNT = 500;
+        final int CLOUDS_COUNT = 55;
         final float range = 0.26f * CLOUDS_COUNT;
         final float scale = 20.4f * (CLOUDS_COUNT / range);
         transformCloud.scale(scale,scale,scale);
 
         System.out.println(scale);
         for (int i = 0; i < clouds.length; i++) {
-            clouds[i] = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(- 30,30), MathUtils.randomUniformFloat(- 30,30), MathUtils.randomUniformFloat(- 30,30));
+            clouds[i] = new Matrix4x4().translateGlobalAxisXYZ(MathUtils.randomUniformFloat(- 100,100), MathUtils.randomUniformFloat(- 100,100), MathUtils.randomUniformFloat(- 100,100));
             clouds[i].scale(55, 55, 55);
         }
 
@@ -170,12 +170,9 @@ public class SceneRendering3D_NewClouds implements Scene {
 
         update_gameplay();
         transformSkybox.setTranslation(camera.position);
-        orient3(transformCloud);
         for (Matrix4x4 cloud : clouds) {
             camera.orientBillboard(cloud);
             cloud.rotateLocalAxisZ(correctionF);
-
-            orient3(cloud);
         }
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
