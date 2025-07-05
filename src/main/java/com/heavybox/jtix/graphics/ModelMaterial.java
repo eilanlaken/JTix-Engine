@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 // TODO: make clone()able
-public class ModelMaterial implements MemoryResource {
+public class ModelMaterial implements MemoryResource, Cloneable {
 
     public String name = null;
     public Shader shader = null;
@@ -28,6 +28,22 @@ public class ModelMaterial implements MemoryResource {
                 if (resource == Graphics.getTextureSinglePixelNormalMap()) continue;
                 resource.delete();
             }
+        }
+    }
+
+    // TODO: test
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        try {
+            // TODO: handle name
+            // TODO: handle materialIndex
+            // Shallow copy for shader, booleans, etc. (already handled by super.clone())
+            // Deep copy materialAttributes
+            ModelMaterial cloned = (ModelMaterial) super.clone();
+            cloned.materialAttributes = new HashMap<>(this.materialAttributes);
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Should never happen
         }
     }
 

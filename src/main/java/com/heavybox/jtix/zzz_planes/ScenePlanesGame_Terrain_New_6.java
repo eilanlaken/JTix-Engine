@@ -50,6 +50,7 @@ public class ScenePlanesGame_Terrain_New_6 implements Scene {
 
         // load terrain
         Assets.loadModel("assets/game-models/terrain-1km.fbx");
+        Assets.loadModel("assets/game-models/terrain-tile-256.fbx");
         Assets.loadTexture("assets/game-maps/map-1-blendmap.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/map-1-heightmap.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -70,6 +71,7 @@ public class ScenePlanesGame_Terrain_New_6 implements Scene {
         terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-bright.jpg"); // g
         terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-dark.jpg"); // b
 
+        terrain = Assets.get("assets/game-models/terrain-1km.fbx");
         terrain = Assets.get("assets/game-models/terrain-1km.fbx");
         terrain.materials[0].materialAttributes.put("u_texture_steep", terrainStone);
         terrain.materials[0].materialAttributes.put("u_texture_background", terrainGrass);
