@@ -1,7 +1,8 @@
-package com.heavybox.jtix;
+package com.heavybox.jtix.zzz_planes_tests;
 
 import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.graphics.Camera;
 import com.heavybox.jtix.graphics.Graphics;
 import com.heavybox.jtix.graphics.Model;
@@ -9,15 +10,15 @@ import com.heavybox.jtix.graphics.Renderer3D;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Quaternion;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.zzz_planes_tests.Path;
 import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_Matrix_Interpolations_Paths_Example implements Scene {
+public class SceneRendering3D_Trains_7 implements Scene {
 
     private Camera camera;
 
@@ -25,19 +26,14 @@ public class SceneRendering3D_Matrix_Interpolations_Paths_Example implements Sce
     public Matrix4x4 transform_train = new Matrix4x4();
     public Model model_tracks;
     float t = 0;
+    public Path path = new Path();
 
-    Path path = new Path();
+    public SceneRendering3D_Trains_7() {
+        //path.setToQuadraticBezier(new Vector3(0,0, 0), new Vector3(15,40,0), new Vector3(30,0,0));
+        //path.setToQuadraticBezier(p0, p1, p2, 0.03f);
+        path.setToTestPath();
 
-    public SceneRendering3D_Matrix_Interpolations_Paths_Example() {
-
-        path
-                .begin()
-                .connect(Path.ofBezierLinear(new Vector3(0,0, 0), new Vector3(20,0, 0), 10))
-                .connect(Path.ofBezierQuadratic(new Vector3(20,0, 0), new Vector3(20,-15, 0), new Vector3(10,-15, 0), 10))
-                .connect(Path.ofBezierQuadratic(new Vector3(10,-15, 0), new Vector3(0,-15, 0), new Vector3(0,0,0), 10))
-                .end(true);
-
-        transform_train.setTranslation(path.points.get(0));
+        transform_train.setTranslation(path.positions.get(0));
     }
 
     @Override
@@ -128,34 +124,19 @@ public class SceneRendering3D_Matrix_Interpolations_Paths_Example implements Sce
             System.out.println(t);
         }
 
-
-        if (Input.keyboard.isKeyPressed(Keyboard.Key.Q)) {
-
-            Matrix4x4 b = new Matrix4x4();
-            Vector3 position = new Vector3(4,4,0);
-            Vector3 direction = new Vector3(0,1,0).rotate(180, 0,0,1);
-            Vector3 up = Vector3.Z_UNIT;
-            Vector3 b1 = new Vector3(direction).crs(up);
-            b.setFromBasis(b1, direction, up, position);
-
-            Matrix4x4.interpolationPositionRotation(a, b, t, transform_train);
-            t += Graphics.getDeltaTime() / 10;
-            System.out.println(t);
-        }
-
         if (Input.keyboard.isKeyPressed(Keyboard.Key.D)) {
 
             Matrix4x4 source = new Matrix4x4();
-            Vector3 source_position = new Vector3(path.points.get(0));
-            Vector3 source_direction = path.dirs.get(0);
+            Vector3 source_position = new Vector3(path.positions.get(0));
+            Vector3 source_direction = path.directions.get(0);
             Vector3 source_up = Vector3.Z_UNIT;
             Vector3 b0 = new Vector3(source_direction).crs(source_up);
             source.setFromBasis(b0, source_direction, source_up, source_position);
 
 
             Matrix4x4 target = new Matrix4x4();
-            Vector3 position = new Vector3(path.points.get(1));
-            Vector3 direction = path.dirs.get(1);
+            Vector3 position = new Vector3(path.positions.get(1));
+            Vector3 direction = path.directions.get(1);
             Vector3 up = Vector3.Z_UNIT;
             Vector3 b1 = new Vector3(direction).crs(up);
             target.setFromBasis(b1, direction, up, position);
@@ -171,14 +152,15 @@ public class SceneRendering3D_Matrix_Interpolations_Paths_Example implements Sce
             Renderer3D.drawModel_tmp_5(model_train.meshes[i], model_train.materials[i], transform_train);
         }
 
-        for (int i = 0; i < path.points.size; i++) {
+        for (int i = 0; i < path.positions.size; i++) {
             Matrix4x4 transform = new Matrix4x4();
-            Vector3 position = path.points.get(i);
-            Vector3 direction = path.dirs.get(i);
+            Vector3 position = path.positions.get(i);
+            Vector3 direction = path.directions.get(i);
             Vector3 up = Vector3.Z_UNIT;
             Vector3 b1 = new Vector3(direction).crs(up);
 
             transform.setFromBasis(b1, direction, up, position);
+            //transform.setTranslation(position);
             for (int j = 0; j < model_tracks.meshes.length; j++) {
                 Renderer3D.drawModel_tmp_5(model_tracks.meshes[j], model_tracks.materials[j], transform);
             }
@@ -186,6 +168,123 @@ public class SceneRendering3D_Matrix_Interpolations_Paths_Example implements Sce
 
 
         Renderer3D.end();
+    }
+
+    class Path {
+
+        boolean closed = true;
+        public Array<Vector3> positions = new Array<>();
+        public Array<Vector3> directions = new Array<>();
+
+        // p1 = control point
+        public void setToQuadraticBezier(Vector3 p0, Vector3 p1, Vector3 p2, float step) {
+            positions.clear();
+            directions.clear();
+            final float TRACK_LENGTH = 3.50517f;
+            float t = 0f;
+            do {
+                Vector3 p = new Vector3();
+                p.x = (1 - t) * (1 - t) * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x;
+                p.y = (1 - t) * (1 - t) * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y;
+                t += step;
+                positions.add(p);
+
+//                Vector3 d = new Vector3();
+//                d.x = 2 * (1 - t) * (p1.x - p0.x) + 2 * t * (p2.x - p1.x);
+//                d.y = 2 * (1 - t) * (p1.y - p0.y) + 2 * t * (p2.y - p1.y);
+//                d.nor();
+//                directions.add(d);
+            } while (t <= 1.0f);
+        }
+
+        public void setToLine(Vector3 start, Vector3 end) {
+            positions.clear();
+
+        }
+
+        private void setToTestPath() {
+            positions.clear();
+            positions.add(new Vector3(-30, 0, 0));
+            positions.add(new Vector3(-15, 15, 0));
+            positions.add(new Vector3(15, 15, 0));
+            positions.add(new Vector3(30, 0, 0));
+            positions.add(new Vector3(30, -15, 0));
+            calculateDirs();
+        }
+
+        private void setToCircleClosed(Vector3 center, Vector3 up, float r, int n) {
+            closed = true;
+            positions.clear();
+
+            Vector3 z = new Vector3(up).nor();
+            Vector3 x = new Vector3();
+            if (Math.abs(z.dot(Vector3.X_UNIT)) < 0.99f) {
+                x.set(Vector3.X_UNIT).crs(z).nor();
+            } else {
+                x.set(Vector3.Y_UNIT).crs(z).nor();
+            }
+            Vector3 y = new Vector3(z).crs(x).nor();
+
+            // Generate points
+            for (int i = 0; i < n; i++) {
+                float angle = MathUtils.PI_TWO * i / n;
+                float cos = MathUtils.cosRad(angle);
+                float sin = MathUtils.sinRad(angle);
+
+                Vector3 point = new Vector3(center);
+                point.add(new Vector3(x).scl(cos * r));
+                point.add(new Vector3(y).scl(sin * r));
+
+                positions.add(point);
+            }
+            calculateDirs();
+        }
+
+        private void calculateDirs() {
+            directions.clear();
+            if (positions.size == 0) return;
+            if (positions.size == 1) return;
+            // assume closed path with > 3 vertices
+            for (int i = 0; i < positions.size; i++) {
+                Vector3 prev = positions.getCyclic(i - 1);
+                Vector3 current = positions.get(i);
+                Vector3 next = positions.getCyclic(i + 1);
+
+                Vector3 dir_prev = new Vector3(current).sub(prev).nor();
+                Vector3 dir_next = new Vector3(next).sub(current).nor();
+                Vector3 dir = new Vector3(dir_prev).add(dir_next).nor();
+                directions.add(dir);
+            }
+        }
+
+        public float approximateBezierLength(Vector3 p0, Vector3 p1, Vector3 p2) {
+
+            Vector3 v = new Vector3();
+            Vector3 w = new Vector3();
+
+            v.x = 2*(p1.x - p0.x);
+            v.y = 2*(p1.y - p0.y);
+            v.z = 2*(p1.z - p0.z);
+            w.x = p2.x - 2*p1.x + p0.x;
+            w.y = p2.y - 2*p1.y + p0.y;
+            w.z = p2.z - 2*p1.z + p0.z;
+
+            float uu = 4*(w.x*w.x + w.y*w.y + w.z*w.z);
+
+            if(uu < 0.00001) return (float) Math.sqrt((p2.x - p0.x)*(p2.x - p0.x) + (p2.y - p0.y)*(p2.y - p0.y) + (p2.z - p0.z)*(p2.z - p0.z));
+
+
+            float vv = 4*(v.x*w.x + v.y*w.y + v.z*w.z);
+            float ww = v.x*v.x + v.y*v.y + v.z*v.z;
+
+            float t1 = (float) (2*Math.sqrt(uu*(uu + vv + ww)));
+            float t2 = 2*uu+vv;
+            float t3 = vv*vv - 4*uu*ww;
+            float t4 = (float) (2*Math.sqrt(uu*ww));
+
+            return (float) ((t1*t2 - t3*Math.log(t2+t1) -(vv*t4 - t3*Math.log(vv+t4))) / (8*Math.pow(uu, 1.5)));
+        }
+
     }
 
 

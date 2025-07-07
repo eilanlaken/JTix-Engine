@@ -1,0 +1,115 @@
+package com.heavybox.jtix.zzz_planes_tests;
+
+import com.heavybox.jtix.application.Scene;
+import com.heavybox.jtix.assets.Assets;
+import com.heavybox.jtix.graphics.*;
+import com.heavybox.jtix.input.Input;
+import com.heavybox.jtix.input.Keyboard;
+import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.Matrix4x4;
+import com.heavybox.jtix.math.Vector3;
+import org.lwjgl.opengl.GL11;
+
+// contact points polygon vs polygon:
+// https://www.youtube.com/watch?v=5gDC1GU3Ivg
+public class SceneRendering3D_ModelsViewer_2 implements Scene {
+
+    private Camera camera;
+
+    public Model model;
+    public int currentNodeIndex = 0;
+    Renderer2D renderer2D = new Renderer2D();
+
+    public SceneRendering3D_ModelsViewer_2() {
+
+    }
+
+    @Override
+    public void setup() {
+
+        Assets.loadModel("assets/engine-tests/cube-wood.fbx", "assets/engine-tests");
+        Assets.finishLoading();
+
+        model = Assets.get("assets/engine-tests/cube-wood.fbx");
+    }
+
+    @Override
+    public void finish() {
+
+    }
+
+    @Override
+    public void start() {
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
+        camera.position.set(0, -5, 5);
+        camera.lookAt(0,0,0);
+        camera.update();
+    }
+
+    float angleZ = 0;
+    float p1x = 0, p1y = 0;
+    float p2x = 0, p2y = 0;
+    float vx = 4, vy = 4;
+
+    @Override
+    public void update() {
+        Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
+        camera.unProject(screen);
+
+        float scroll = Input.mouse.getVerticalScroll();
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.INSERT)) {
+            if (camera.mode == Camera.Mode.ORTHOGRAPHIC) camera.mode = Camera.Mode.PERSPECTIVE;
+            else camera.mode = Camera.Mode.ORTHOGRAPHIC;
+        }
+        if (Input.mouse.getVerticalScroll() != 0) {
+            if (camera.mode == Camera.Mode.PERSPECTIVE) camera.translateForward(scroll * 10);
+            else camera.zoom += 0.04f * scroll;
+        } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_SHIFT) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panHorizontal = Input.mouse.getXDelta();
+            float panVertical = Input.mouse.getYDelta();
+            camera.translateRight(-panHorizontal);
+            camera.translateUp(panVertical);
+        } else if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT_CONTROL) && Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panVertical = Input.mouse.getYDelta();
+            camera.translateForward(-panVertical);
+        } else if (Input.mouse.isButtonPressed(Mouse.Button.MIDDLE)) {
+            float panHorizontal = Input.mouse.getXDelta() * 0.2f;
+            float panVertical = Input.mouse.getYDelta() * 0.2f;
+            camera.rotateAroundAxis(panHorizontal * 2,0,0,1);
+            camera.rotateAroundRight(panVertical * 2);
+        }
+        camera.update();
+
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
+            Renderer3D.lightDir.rotate(1f,1,1,0);
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.W)) {
+            angleZ += 1;
+        }
+
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.Q)) {
+            currentNodeIndex--;
+        }
+        if (Input.keyboard.isKeyJustPressed(Keyboard.Key.E)) {
+            currentNodeIndex++;
+        }
+
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClearColor(0.8f,0.8f,0.8f,1);
+        Renderer3D.begin(camera);
+        Renderer3D.drawModel(model, new Matrix4x4().rotateGlobalAxisZ(angleZ));
+        Renderer3D.end();
+
+        renderer2D.begin();
+        p1x += vx;
+        p1y += vy;
+        p2x += 2 * vx;
+        p2y += 2 * vy;
+        // TODO: RELATIVE VELOCITY.
+        renderer2D.drawLineFilled(p1x,p1y, p2x,p2y,2f);
+        renderer2D.end();
+    }
+
+
+
+}

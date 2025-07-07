@@ -33,7 +33,7 @@ public class ModelMaterial implements MemoryResource, Cloneable {
 
     // TODO: test
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public ModelMaterial clone() {
         try {
             // TODO: handle name
             // TODO: handle materialIndex

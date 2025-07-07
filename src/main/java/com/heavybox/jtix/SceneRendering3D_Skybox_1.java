@@ -8,10 +8,8 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.zzz_planes.GameObjectAirplane;
+import com.heavybox.jtix.zzz_planes_tests.GameObjectAirplane;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Arrays;
 
 public class SceneRendering3D_Skybox_1 implements Scene {
 

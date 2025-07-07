@@ -1,9 +1,10 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
 
-#define MAX_HEIGHT 80
-#define MIN_HEIGHT -12
-#define TILE_SIZE 256.0
+#define MAX_HEIGHT 200
+#define MIN_HEIGHT -20
+//#define MIN_HEIGHT 0
+#define TILE_SIZE 512.0
 
 // attributes
 layout(location = 0) in vec3 a_position;
@@ -14,6 +15,9 @@ uniform mat4 u_transform;
 uniform vec3 u_camera_position;
 uniform mat4 u_camera_combined;
 uniform sampler2D u_texture_height_map;
+// TODO
+uniform int u_tile_index_row;
+uniform int u_tile_index_col;
 
 // outputs
 out vec3 world_vertex_position;
@@ -24,7 +28,6 @@ out float height;
 
 float getHeight(vec2 uv)
 {
-    //return (2.0 * texture(u_texture_height_map, uv).r - 1.0) * MAX_HEIGHT;
     return mix(MIN_HEIGHT, MAX_HEIGHT, texture(u_texture_height_map, uv).r);
 }
 

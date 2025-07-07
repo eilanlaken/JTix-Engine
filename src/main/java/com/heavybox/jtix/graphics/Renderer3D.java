@@ -560,6 +560,7 @@ public class Renderer3D {
         currentShader = shader;
     }
 
+    // TODO: make private
     public static void drawMesh(Shader shader, ModelMesh mesh, ModelMaterial material, Matrix4x4 transform) {
         setShader(shader);
 
