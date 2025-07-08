@@ -23,6 +23,7 @@ public class ScenePlanesGame_Terrain_New_9 implements Scene {
     public Texture terrainWheatDark;
     public Texture terrainGrass;
     public Texture terrainStone;
+    public Texture terrainWater;
     public Matrix4x4 transform_terrain = new Matrix4x4().translateGlobalAxisXYZ(0,0,0);
 
     public Model waterModel;
@@ -51,23 +52,26 @@ public class ScenePlanesGame_Terrain_New_9 implements Scene {
 
         // load terrain
         Assets.loadModel("assets/game-maps/terrain-tile-256x256.fbx");
-        Assets.loadTexture("assets/game-maps/terrain-blendmap-demo.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/map-1-heightmap.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/map-1-blendmap.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/heightmap-map-1.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-bright.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.finishLoading();
 
 
-        terrainBlendMap = Graphics.getTextureSingleBlackPixel();//Assets.get("assets/game-maps/terrain-blendmap-demo.png");
-        terrainHeightMap = Assets.get("assets/game-maps/map-1-heightmap.jpg");
+        //terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();//Assets.get("assets/game-maps/terrain-blendmap-demo.png");
+        terrainBlendMap = Assets.get("assets/game-maps/map-1-blendmap.png");
+        terrainHeightMap = Assets.get("assets/game-maps/heightmap-map-1.jpg");
         terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
-        terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg");
+        terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty
         terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
         terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-bright.jpg"); // g
         terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-dark.jpg"); // b
+        terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         terrain = Assets.get("assets/game-maps/terrain-tile-256x256.fbx");
         terrain.materials[0].materialAttributes.put("u_texture_steep", terrainStone);
@@ -75,6 +79,7 @@ public class ScenePlanesGame_Terrain_New_9 implements Scene {
         terrain.materials[0].materialAttributes.put("u_texture_red", terrainRoad);
         terrain.materials[0].materialAttributes.put("u_texture_green", terrainWheatBright);
         terrain.materials[0].materialAttributes.put("u_texture_blue", terrainWheatDark);
+        terrain.materials[0].materialAttributes.put("u_texture_alpha", terrainWater);
         terrain.materials[0].materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         terrain.materials[0].materialAttributes.put("u_texture_height_map", terrainHeightMap);
         terrain.materials[0].materialAttributes.put("u_tile_index_row", 4);
@@ -83,7 +88,8 @@ public class ScenePlanesGame_Terrain_New_9 implements Scene {
         terrain.materials[0].transparent = false;
 
         m = terrain.materials[0].clone();
-
+        m.materialAttributes.put("u_tile_index_row", 4);
+        m.materialAttributes.put("u_tile_index_col", 3);
         Assets.loadModel("assets/models/terrain-block.fbx"); // for the water.
         Assets.finishLoading();
 
@@ -196,14 +202,13 @@ public class ScenePlanesGame_Terrain_New_9 implements Scene {
 
             }
         }
-        //Renderer3D.drawModel(terrain, new Matrix4x4(transform_terrain).translateGlobalAxisXYZ(i * 512, j * 512, -2f));
         Renderer3D.drawModel(terrainShader, terrain.meshes[0], terrain.materials[0], new Matrix4x4());
-        //Renderer3D.drawModel(terrainShader, terrain.meshes[0], m, new Matrix4x4().translateGlobalAxisXYZ(-1024,0,0));
+        Renderer3D.drawModel(terrainShader, terrain.meshes[0], m, new Matrix4x4().translateGlobalAxisXYZ(-1024,0,0));
 
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
+        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
+        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
+        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
+        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

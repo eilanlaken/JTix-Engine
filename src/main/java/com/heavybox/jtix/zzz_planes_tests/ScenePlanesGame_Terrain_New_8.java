@@ -63,7 +63,7 @@ public class ScenePlanesGame_Terrain_New_8 implements Scene {
         Assets.finishLoading();
 
 
-        terrainBlendMap = Graphics.getTextureSingleBlackPixel();//Assets.get("assets/game-maps/terrain-blendmap-demo.png");
+        terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();//Assets.get("assets/game-maps/terrain-blendmap-demo.png");
         terrainHeightMap_1 = Assets.get("assets/game-maps/hm-1.jpg");
         terrainHeightMap_2 = Assets.get("assets/game-maps/hm-2.jpg");
         terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");

@@ -21,7 +21,7 @@ in vec3 world_vertex_position;
 in vec3 normal;
 in float height;
 
-// uniforms - lights
+// uniforms - environment
 uniform DirectionalLight directionalLights[1];
 
 // uniforms - blend maps
@@ -30,9 +30,12 @@ uniform sampler2D u_texture_background;
 uniform sampler2D u_texture_red;
 uniform sampler2D u_texture_green;
 uniform sampler2D u_texture_blue;
+uniform sampler2D u_texture_alpha;
 uniform sampler2D u_texture_blend_map;
 uniform sampler2D u_texture_height_map;
 
+// uniform - global variables
+uniform float u_time;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -104,12 +107,14 @@ void main()
     vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
     vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
     vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;
+    //vec3 a_color = texture(u_texture_alpha, scaled_uv).rgb * blend_map_color.a;
 
     vec3 total_color = background_color + r_color + g_color + b_color;
     float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
     float smoothT = t * t * (3.0 - 2.0 * t);
     //vec3 albedo = total_color.rgb * (t) + (1- t) * texture(u_texture_steep, uv).rgb;
     vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, scaled_uv).rgb, 1 - smoothT);
+    albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv + u_time * 0.025) / 2).rgb, 1.0 - blend_map_color.a); // TODO: make the water texture shift with time
 
     /* Directional light calculation */
     vec3 N = normal;
@@ -130,8 +135,8 @@ void main()
     kD *= 1.0;
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-    vec3 ambient = vec3(0.4) * albedo;
-    vec3 color = ambient + Lo;
+    vec3 ambient = vec3(0.9) * albedo;
+    vec3 color = ambient + Lo * 0.15;
 
     float alpha = getAlpha();
     out_color = vec4(color, 1.0);

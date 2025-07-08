@@ -23,8 +23,8 @@ public class ModelMaterial implements MemoryResource, Cloneable {
                 MemoryResource resource = (MemoryResource) data;
                 // Skip the Graphics.java managed Textures. They are deleted only by the engine, after the application closes.
                 if (resource == Graphics.getTextureSingleWhitePixel()) continue;
-                if (resource == Graphics.getTextureSingleTransparentPixel()) continue;
-                if (resource == Graphics.getTextureSingleBlackPixel()) continue;
+                if (resource == Graphics.getTextureSingleBlackPixelTransparent()) continue;
+                if (resource == Graphics.getTextureSingleBlackPixelOpaque()) continue;
                 if (resource == Graphics.getTextureSinglePixelNormalMap()) continue;
                 resource.delete();
             }

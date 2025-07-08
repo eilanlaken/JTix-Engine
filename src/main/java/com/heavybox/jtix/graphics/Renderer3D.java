@@ -6,7 +6,6 @@ import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryPool;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -36,7 +35,7 @@ public class Renderer3D {
 
     // defaults
     private static final Texture whitePixelTexture  = Graphics.getTextureSingleWhitePixel();
-    private static final Texture blackPixelTexture  = Graphics.getTextureSingleBlackPixel();
+    private static final Texture blackPixelTexture  = Graphics.getTextureSingleBlackPixelOpaque();
     private static final Texture normalMapTexture   = Graphics.getTextureSinglePixelNormalMap();
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
@@ -546,6 +545,7 @@ public class Renderer3D {
             shader.bindUniform("u_camera_position", currentCamera.position);
         }
 
+        // TODO: improve and refactor
         // TODO: bind environment uniforms
         if (shader.uniformExists("directionalLights[0].direction")) {
             shader.bindUniform("directionalLights[0].direction", lightDir);
@@ -555,6 +555,14 @@ public class Renderer3D {
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
             shader.bindUniform("directionalLights[0].intensity", 4);
+        }
+
+        // TODO: bind all global variables uniforms (u_time, u_delta_time)
+        if (shader.uniformExists("u_delta_time")) {
+            shader.bindUniform("u_delta_time", Graphics.getDeltaTime());
+        }
+        if (shader.uniformExists("u_time")) {
+            shader.bindUniform("u_time", Graphics.getElapsedTime());
         }
 
         currentShader = shader;

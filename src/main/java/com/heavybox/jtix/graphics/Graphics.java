@@ -29,6 +29,7 @@ public final class Graphics {
     private static boolean isContinuous      = true;
     private static long    lastFrameTime     = -1;
     private static float   deltaTime;
+    private static float   elapsedTime;
     private static boolean resetDeltaTime    = false;
     private static long    frameId           = 0;
     private static long    frameCounterStart = 0;
@@ -75,6 +76,7 @@ public final class Graphics {
             deltaTime = (time - lastFrameTime) / 1000000000.0f;
         }
         lastFrameTime = time;
+        elapsedTime += deltaTime;
 
         if (time - frameCounterStart >= 1000000000) {
             fps = frames;
@@ -109,6 +111,10 @@ public final class Graphics {
 
     public static float getDeltaTime() {
         return deltaTime;
+    }
+
+    public static float getElapsedTime() {
+        return elapsedTime;
     }
 
     public static int getIdleFps() {
@@ -264,7 +270,7 @@ public final class Graphics {
         return singleWhitePixel;
     }
 
-    public static Texture getTextureSingleTransparentPixel() {
+    public static Texture getTextureSingleBlackPixelTransparent() {
         if (singleTransparentPixel != null) return singleTransparentPixel;
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(4);
@@ -280,7 +286,7 @@ public final class Graphics {
         return singleTransparentPixel;
     }
 
-    @Deprecated public static Texture getTextureSingleBlackPixel() {
+    public static Texture getTextureSingleBlackPixelOpaque() {
         if (singleBlackPixel != null) return singleBlackPixel;
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(4);
