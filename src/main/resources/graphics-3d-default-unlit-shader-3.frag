@@ -16,7 +16,5 @@ void main()
 {
     vec4 albedo = u_color_diffuse * texture(u_texture_diffuse, uv);
     float opacity = albedo.a * u_prop_opacity * texture(u_texture_opacity, uv).r;
-    //if (albedo.a < 0.001) discard;
-    //out_color = vec4(albedo.rgb, 1.0);
     out_color = vec4(albedo.rgb, opacity);
 }
