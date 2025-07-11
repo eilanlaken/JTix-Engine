@@ -1,4 +1,4 @@
 package com.heavybox.jtix.zzz_project;
 
-public class GameObjectTerrainBlock {
+public class GameObjectTerrainLandBlock {
 }
