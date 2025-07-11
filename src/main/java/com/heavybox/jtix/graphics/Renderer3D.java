@@ -548,13 +548,14 @@ public class Renderer3D {
         // TODO: improve and refactor
         // TODO: bind environment uniforms
         if (shader.uniformExists("directionalLights[0].direction")) {
+            lightDir.nor();
             shader.bindUniform("directionalLights[0].direction", lightDir);
         }
         if (shader.uniformExists("directionalLights[0].color")) {
             shader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
-            shader.bindUniform("directionalLights[0].intensity", 4);
+            shader.bindUniform("directionalLights[0].intensity", 1);
         }
 
         // TODO: bind all global variables uniforms (u_time, u_delta_time)

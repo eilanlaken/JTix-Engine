@@ -71,19 +71,12 @@ public class Main {
 //        if (true) return;
 
         ApplicationSettings settings = new ApplicationSettings();
-        //settings.width = 1920;
-        //settings.height = 1080;
         Application.init(settings); // can init with options.
-        //Application.launch(new SceneRendering3D_NewClouds());
-        //Application.launch(new SceneRendering3D_ModelsViewer_Volcano());
         Application.launch(new SceneRendering3D_Airplanes_1());
-        //Application.launch(new ScenePlanesGame_Terrain_New_6());
         //Application.launch(new ScenePlanesGame_Terrain_New_9());
-        //Application.launch(new SceneRendering3D_VFX_2());
+        //Application.launch(new SceneRendering3D_VFX_1());
         //Application.launch(new SceneRendering3D_NewClouds());
 
-        //Application.launch(new SceneRendering3D_Transparents_1());
-        //Application.launch(new ScenePlanesGame_Mountains_2());
 
     }
 

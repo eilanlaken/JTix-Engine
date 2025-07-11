@@ -22,6 +22,8 @@ public class SceneRendering3D_Airplanes_1 implements Scene {
     FrameBuffer sceneFrameBuffer;
     Shader postProcessingHDR;
 
+    int materialIndex = 0;
+
     public SceneRendering3D_Airplanes_1() {
 
     }
@@ -50,6 +52,10 @@ public class SceneRendering3D_Airplanes_1 implements Scene {
         camera.position.set(0, -20, 20);
         camera.lookAt(0,0,0);
         camera.update();
+
+        for (ModelMaterial material : scene.allMaterials) {
+            //System.out.println(material);
+        }
     }
 
     float angleZ = 0;

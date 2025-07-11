@@ -49,8 +49,8 @@ public class ModelMaterial implements MemoryResource, Cloneable {
 
     @Override
     public String toString() {
-        return "ModelMaterial{" +
-                "materialAttributes=" + materialAttributes +
+        return name + ": ModelMaterial{" +
+                materialAttributes +
                 '}';
     }
 }
