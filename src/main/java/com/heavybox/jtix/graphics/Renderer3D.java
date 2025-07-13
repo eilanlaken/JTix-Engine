@@ -40,6 +40,8 @@ public class Renderer3D {
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     public static final Shader defaultShaderWireframeLines = createWireframeLinesShader(); // TODO: change back to private
     public static final Shader   defaultShaderWireframePoints    = createWireframePointsShader(); // TODO: change back to private
+    // TODO: make normals rendering shader using geometry
+    // TODO: make bounding box rendering using geometry
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
 
     private static final MemoryPool<RenderCommand> renderCommandsPool        = new MemoryPool<>(RenderCommand.class, 5);
@@ -141,7 +143,7 @@ public class Renderer3D {
             currentShader.bindUniform("u_prop_opacity", opacity);
         }
 
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
@@ -189,7 +191,7 @@ public class Renderer3D {
             currentShader.bindUniform(uniform, value);
         }
 
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
@@ -252,7 +254,7 @@ public class Renderer3D {
         //currentShader.bindUniform("u_prop_metallic", 1f);
         //currentShader.bindUniform("u_prop_roughness", 1);
 
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
@@ -320,7 +322,7 @@ public class Renderer3D {
         //currentShader.bindUniform("u_prop_metallic", 1f);
         //currentShader.bindUniform("u_prop_roughness", 1);
 
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
@@ -369,7 +371,7 @@ public class Renderer3D {
         }
         shader.bindUniform("u_frame", index % 64);
 
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
@@ -424,7 +426,7 @@ public class Renderer3D {
             defaultShaderUnlit.bindUniform("u_prop_opacity",1);
         }
 
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn vbos on based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {
@@ -591,7 +593,7 @@ public class Renderer3D {
         }
 
         /* the actual draw call */
-        GL30.glBindVertexArray(mesh.vaoId);
+        GL30.glBindVertexArray(mesh.vertexArrayObjectId);
         {
             // turn on VBOs based on the shader and mesh
             for (VertexAttribute attribute : VertexAttribute.values()) {

@@ -136,8 +136,8 @@ void main()
     kD *= 1.0;
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-    vec3 ambient = vec3(0.9) * albedo;
-    vec3 color = ambient + Lo * 0.15;
+    vec3 ambient = vec3(0.7) * albedo;
+    vec3 color = ambient + Lo * 0.3;
 
     float alpha = getAlpha();
     out_color = vec4(color, 1.0);

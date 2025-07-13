@@ -114,7 +114,7 @@ public class SceneRendering3D_Physics_3D_1 implements Scene {
         Renderer3D.begin(camera);
         //Renderer3D.drawModel(node.model, new Matrix4x4().rotateGlobalAxisZ(angleZ));
         for (int i = 0; i < node.model.meshes.length; i++) {
-            Renderer3D.drawModel(Renderer3D.defaultShaderWireframePoints, node.model.meshes[i], node.model.materials[i], new Matrix4x4().rotateGlobalAxisZ(angleZ));
+            Renderer3D.drawModel(Renderer3D.defaultShaderWireframeLines, node.model.meshes[i], node.model.materials[i], new Matrix4x4().rotateGlobalAxisZ(angleZ));
         }
         Renderer3D.end();
 

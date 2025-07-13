@@ -53,4 +53,12 @@ public class ModelMaterial implements MemoryResource, Cloneable {
                 materialAttributes +
                 '}';
     }
+
+    // TODO
+    public static ModelMaterial createPBRMaterial() {
+        ModelMaterial material = new ModelMaterial();
+        material.materialAttributes.put("u_texture_normalMap", Graphics.getTextureSinglePixelNormalMap()); // TODO
+        return material;
+    }
+
 }

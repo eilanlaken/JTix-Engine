@@ -1,10 +1,10 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
 
-#define MAX_HEIGHT 200
+#define MAX_HEIGHT 400
 #define MIN_HEIGHT -20
 #define MAP_SIZE 4096.0
-#define TILE_SIZE 512.0
+#define TILE_SIZE 256.0
 
 // attributes
 layout(location = 0) in vec3 a_position;
@@ -15,7 +15,6 @@ uniform mat4 u_transform;
 uniform vec3 u_camera_position;
 uniform mat4 u_camera_combined;
 uniform sampler2D u_texture_height_map;
-// TODO
 uniform int u_tile_index_row;
 uniform int u_tile_index_col;
 
