@@ -38,7 +38,8 @@ public class Renderer3D {
     private static final Texture blackPixelTexture  = Graphics.getTextureSingleBlackPixelOpaque();
     private static final Texture normalMapTexture   = Graphics.getTextureSinglePixelNormalMap();
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
-    public static final Shader   defaultShaderWireframe    = createWireframeShader(); // TODO: change back to private
+    public static final Shader defaultShaderWireframeLines = createWireframeLinesShader(); // TODO: change back to private
+    public static final Shader   defaultShaderWireframePoints    = createWireframePointsShader(); // TODO: change back to private
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
 
     private static final MemoryPool<RenderCommand> renderCommandsPool        = new MemoryPool<>(RenderCommand.class, 5);
@@ -644,12 +645,28 @@ public class Renderer3D {
         }
     }
 
-    private static Shader createWireframeShader() {
-        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-lines-shader.vert");
+    private static Shader createWireframeLinesShader() {
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-shader.vert");
              BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
              InputStream geometryShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-lines-shader.geom");
              BufferedReader geometryShaderBufferedReader = new BufferedReader(new InputStreamReader(geometryShaderInputStream, StandardCharsets.UTF_8));
-             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-lines-shader.frag");
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-shader.frag");
+             BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
+            String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String geometryShader = geometryShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return new Shader(vertexShader, geometryShader, fragmentShader);
+        } catch (Exception e) {
+            throw new RuntimeException("error creating default shader: " + e.getMessage());
+        }
+    }
+
+    private static Shader createWireframePointsShader() {
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-shader.vert");
+             BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
+             InputStream geometryShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-points-shader.geom");
+             BufferedReader geometryShaderBufferedReader = new BufferedReader(new InputStreamReader(geometryShaderInputStream, StandardCharsets.UTF_8));
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-shader.frag");
              BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             String geometryShader = geometryShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
