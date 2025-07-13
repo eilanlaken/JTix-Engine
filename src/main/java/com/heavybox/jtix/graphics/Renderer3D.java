@@ -38,6 +38,7 @@ public class Renderer3D {
     private static final Texture blackPixelTexture  = Graphics.getTextureSingleBlackPixelOpaque();
     private static final Texture normalMapTexture   = Graphics.getTextureSinglePixelNormalMap();
     private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
+    public static final Shader   defaultShaderWireframe    = createWireframeShader(); // TODO: change back to private
     private static final Shader  defaultShaderUnlit = createDefaultUnlitShader();
 
     private static final MemoryPool<RenderCommand> renderCommandsPool        = new MemoryPool<>(RenderCommand.class, 5);
@@ -444,6 +445,7 @@ public class Renderer3D {
         GL30.glBindVertexArray(0);
     }
 
+    // TODO: add support for wireframes
     public static void drawModel(Model model, Matrix4x4 transform) {
         // for every mesh, create a render command
         for (int i = 0; i < model.meshes.length; i++) {
@@ -637,6 +639,22 @@ public class Renderer3D {
             String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             return new Shader(vertexShader, fragmentShader);
+        } catch (Exception e) {
+            throw new RuntimeException("error creating default shader: " + e.getMessage());
+        }
+    }
+
+    private static Shader createWireframeShader() {
+        try (InputStream vertexShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-lines-shader.vert");
+             BufferedReader vertexShaderBufferedReader = new BufferedReader(new InputStreamReader(vertexShaderInputStream, StandardCharsets.UTF_8));
+             InputStream geometryShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-lines-shader.geom");
+             BufferedReader geometryShaderBufferedReader = new BufferedReader(new InputStreamReader(geometryShaderInputStream, StandardCharsets.UTF_8));
+             InputStream fragmentShaderInputStream = Renderer2D.class.getClassLoader().getResourceAsStream("graphics-3d-wireframe-lines-shader.frag");
+             BufferedReader fragmentShaderBufferedReader = new BufferedReader(new InputStreamReader(fragmentShaderInputStream, StandardCharsets.UTF_8))) {
+            String vertexShader = vertexShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String geometryShader = geometryShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            String fragmentShader = fragmentShaderBufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+            return new Shader(vertexShader, geometryShader, fragmentShader);
         } catch (Exception e) {
             throw new RuntimeException("error creating default shader: " + e.getMessage());
         }

@@ -585,6 +585,12 @@
             <artifactId>opencv</artifactId>
             <version>4.9.0-0</version>
         </dependency>
+        <!-- bullet physics TODO: remove after implementing physics 3d -->
+        <dependency>
+            <groupId>cz.advel.jbullet</groupId>
+            <artifactId>jbullet</artifactId>
+            <version>20101010-1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

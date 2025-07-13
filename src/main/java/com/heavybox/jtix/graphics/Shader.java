@@ -5,6 +5,7 @@ import com.heavybox.jtix.math.*;
 import com.heavybox.jtix.memory.MemoryResource;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL32;
 
 import java.nio.IntBuffer;
 import java.util.*;
@@ -19,9 +20,11 @@ public class Shader implements MemoryResource {
     private boolean deleted = false;
 
     public final String vertexShaderSource;
+    public final String geometryShaderSource;
     public final String fragmentShaderSource;
     public final int    program;
     public final int    vertexShaderId;
+    public final int    geometryShaderId;
     public final int    fragmentShaderId;
     public final int    vertexAttributesBitmask;
 
@@ -34,14 +37,14 @@ public class Shader implements MemoryResource {
     public final String[]             attributeNames;
     public final String[]             uniformNames;
 
-    // TODO: maybe remove uniform caching?
     private final HashMap<Integer, Object> uniformsCache;
 
-    public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
+    public Shader(final String vertexShaderSource, final String geometryShaderSource, final String fragmentShaderSource) {
         if (vertexShaderSource == null)   throw new GraphicsException("Vertex shader cannot be null.");
         if (fragmentShaderSource == null) throw new GraphicsException("Fragment shader cannot be null.");
         /* pre-process shader code */
         this.vertexShaderSource = vertexShaderSource;//preprocessVertexShader(vertexShaderSource);
+        this.geometryShaderSource = geometryShaderSource;//preprocessVertexShader(vertexShaderSource);
         this.fragmentShaderSource = fragmentShaderSource;//preprocessFragmentShader(fragmentShaderSource);
         /* attributes */
         this.attributeLocations = new MapObjectInt<>();
@@ -58,12 +61,150 @@ public class Shader implements MemoryResource {
         /* create vertex shader */
         this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         if (vertexShaderId == 0) throw new GraphicsException("Error creating vertex shader.");
-
         GL20.glShaderSource(vertexShaderId, this.vertexShaderSource);
         GL20.glCompileShader(vertexShaderId);
         if (GL20.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0)
             throw new RuntimeException("Error compiling vertex shader: " + GL20.glGetShaderInfoLog(vertexShaderId, 1024));
         GL20.glAttachShader(program, vertexShaderId);
+
+        /* optional: create geometry shader */
+        if (geometryShaderSource != null) {
+            this.geometryShaderId = GL20.glCreateShader(GL32.GL_GEOMETRY_SHADER);
+            if (geometryShaderId == 0)
+                throw new RuntimeException("Error creating geometry shader.");
+            GL20.glShaderSource(geometryShaderId, this.geometryShaderSource);
+            GL20.glCompileShader(geometryShaderId);
+            if (GL20.glGetShaderi(geometryShaderId, GL20.GL_COMPILE_STATUS) == 0)
+                throw new RuntimeException("Error compiling geometry shader: " + GL20.glGetShaderInfoLog(geometryShaderId, 1024));
+            GL20.glAttachShader(program, geometryShaderId);
+        } else {
+            this.geometryShaderId = -1; // no geometry shader.
+        }
+
+        /* create fragment shader */
+        this.fragmentShaderId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+        if (fragmentShaderId == 0)
+            throw new RuntimeException("Error creating fragment shader.");
+        GL20.glShaderSource(fragmentShaderId, this.fragmentShaderSource);
+        GL20.glCompileShader(fragmentShaderId);
+        if (GL20.glGetShaderi(fragmentShaderId, GL20.GL_COMPILE_STATUS) == 0)
+            throw new RuntimeException("Error compiling fragment shader: " + GL20.glGetShaderInfoLog(fragmentShaderId, 1024));
+        GL20.glAttachShader(program, fragmentShaderId);
+
+        /* set attribute locations to what's expected using the standard */
+        for (VertexAttribute attribute : VertexAttribute.values()) {
+            GL20.glBindAttribLocation(program, attribute.glslLocation, attribute.glslVariableName);
+        }
+
+        /* link program */
+        GL20.glLinkProgram(program);
+        if (GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == 0)
+            throw new GraphicsException("Error linking shader code: " + GL20.glGetProgramInfoLog(program, 1024));
+        GL20.glDetachShader(program, vertexShaderId);
+        if (geometryShaderId != -1) GL20.glDetachShader(program, geometryShaderId);
+        GL20.glDetachShader(program, fragmentShaderId);
+
+        /* validate program */
+        GL20.glValidateProgram(program);
+        if (GL20.glGetProgrami(program, GL20.GL_VALIDATE_STATUS) == 0)
+            throw new GraphicsException("Could not validate shader code: " + GL20.glGetProgramInfoLog(program, 1024));
+
+        /* register attributes */
+        IntBuffer params_attributes = BufferUtils.createIntBuffer(1);
+        IntBuffer type_attributes = BufferUtils.createIntBuffer(1);
+        GL20.glGetProgramiv(this.program, GL20.GL_ACTIVE_ATTRIBUTES, params_attributes);
+        int numAttributes = params_attributes.get(0);
+        this.attributeNames = new String[numAttributes];
+        for(int i = 0; i < numAttributes; ++i) {
+            params_attributes.clear();
+            params_attributes.put(0, 1);
+            type_attributes.clear();
+            String name = GL20.glGetActiveAttrib(this.program, i, params_attributes, type_attributes);
+            int location = GL20.glGetAttribLocation(this.program, name);
+            this.attributeLocations.put(name, location);
+            this.attributeTypes.put(name, type_attributes.get(0));
+            this.attributeSizes.put(name, params_attributes.get(0));
+            this.attributeNames[i] = name;
+        }
+        this.vertexAttributesBitmask = VertexAttribute.getShaderBitmask(attributeNames);
+
+        /* register uniforms */
+        IntBuffer params_uniforms = BufferUtils.createIntBuffer(1);
+        IntBuffer type_uniforms = BufferUtils.createIntBuffer(1);
+        GL20.glGetProgramiv(this.program, GL20.GL_ACTIVE_UNIFORMS, params_uniforms);
+        int uniformSymbolsCount = params_uniforms.get(0);
+        for (int i = 0; i < uniformSymbolsCount; i++) {
+            params_uniforms.clear();
+            params_uniforms.put(0, 1);
+            type_uniforms.clear();
+            String name = GL20.glGetActiveUniform(this.program, i, params_uniforms, type_uniforms);
+            int size = params_uniforms.get(0);
+            final int location = GL20.glGetUniformLocation(this.program, name);
+            this.uniformSizes.put(name, size);
+            this.uniformTypes.put(name, type_uniforms.get(0));
+            this.uniformLocations.put(name, location);
+            if (size > 1) { // array of uniforms.
+                String prefix = name.replaceAll("\\[.*?]", "");;
+                for (int k = 1; k < size; k++) {
+                    String nextName = prefix + "[" + k + "]";
+                    this.uniformSizes.put(nextName, size);
+                    this.uniformTypes.put(nextName, type_uniforms.get(0));
+                    this.uniformLocations.put(nextName, location + k);
+                }
+            }
+        }
+        this.uniformNames = new String[uniformLocations.size];
+        int i = 0;
+        for (MapObjectInt.Entry<String> entry : uniformLocations) {
+            this.uniformNames[i] = entry.key;
+            i++;
+        }
+        /* instantiate cache */
+        this.uniformsCache = new HashMap<>();
+
+        /* validation */
+        /* validate: limit the allowed max sampled textures */
+        final int maxSampledTextures = Graphics.getMaxFragmentShaderTextureUnits();
+        int sampledTextures = 0;
+        for (MapObjectInt.Entry<String> uniform : uniformTypes.entries()) {
+            int type = uniform.value;
+            if (type == GL20.GL_SAMPLER_2D) sampledTextures++;
+        }
+        if (sampledTextures > maxSampledTextures) throw new GraphicsException("Error: shader code trying to sample " + sampledTextures + ". The allowed maximum on this hardware is " + maxSampledTextures);
+    }
+
+    // TODO: simply call the all args constructor
+    public Shader(final String vertexShaderSource, final String fragmentShaderSource) {
+        if (vertexShaderSource == null)   throw new GraphicsException("Vertex shader cannot be null.");
+        if (fragmentShaderSource == null) throw new GraphicsException("Fragment shader cannot be null.");
+        /* pre-process shader code */
+        this.vertexShaderSource = vertexShaderSource;//preprocessVertexShader(vertexShaderSource);
+        this.geometryShaderSource = null;
+        this.fragmentShaderSource = fragmentShaderSource;//preprocessFragmentShader(fragmentShaderSource);
+        /* attributes */
+        this.attributeLocations = new MapObjectInt<>();
+        this.attributeTypes = new MapObjectInt<>();
+        this.attributeSizes = new MapObjectInt<>();
+        /* uniforms */
+        this.uniformLocations = new MapObjectInt<>();
+        this.uniformTypes = new MapObjectInt<>();
+        this.uniformSizes = new MapObjectInt<>();
+        /* create shader */
+        this.program = GL20.glCreateProgram();
+        if (program == 0) throw new GraphicsException("Could not create shader");
+
+        /* create vertex shader */
+        this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+        if (vertexShaderId == 0) throw new GraphicsException("Error creating vertex shader.");
+        GL20.glShaderSource(vertexShaderId, this.vertexShaderSource);
+        GL20.glCompileShader(vertexShaderId);
+        if (GL20.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0)
+            throw new RuntimeException("Error compiling vertex shader: " + GL20.glGetShaderInfoLog(vertexShaderId, 1024));
+        GL20.glAttachShader(program, vertexShaderId);
+
+        /* skip creation of geometry shader */
+        this.geometryShaderId = -1;
+
         /* create fragment shader */
         this.fragmentShaderId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
         if (fragmentShaderId == 0)
@@ -336,6 +477,7 @@ public class Shader implements MemoryResource {
         if (deleted) return;
         GL20.glUseProgram(0);
         GL20.glDeleteProgram(vertexShaderId);
+        if (geometryShaderId != -1) GL20.glDeleteProgram(geometryShaderId);
         GL20.glDeleteProgram(fragmentShaderId);
         GL20.glDeleteProgram(program);
         deleted = true;
