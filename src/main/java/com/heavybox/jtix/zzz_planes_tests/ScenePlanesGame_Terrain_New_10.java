@@ -204,12 +204,15 @@ public class ScenePlanesGame_Terrain_New_10 implements Scene {
         }
         //Renderer3D.drawModel(terrainShader, terrain.meshes[0], terrain.materials[0], new Matrix4x4());
         Renderer3D.drawModel(terrainShader, terrain.meshes[0], terrain.materials[0], new Matrix4x4());
-        Renderer3D.drawModel(terrainShader, terrain.meshes[0], m, new Matrix4x4().translateGlobalAxisXYZ(-1024,0,0));
+        Renderer3D.drawModel(terrainShader, terrain.meshes[0], m, new Matrix4x4().translateGlobalAxisXYZ(-1000,0,0));
 
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
-        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
+
+        Renderer3D.drawMesh(waterShader, terrain.meshes[0], waterModel.materials[0], new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
+
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
+//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

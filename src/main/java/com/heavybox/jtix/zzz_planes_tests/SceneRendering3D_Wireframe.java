@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 // contact points polygon vs polygon:
 // https://www.youtube.com/watch?v=5gDC1GU3Ivg
-public class SceneRendering3D_Physics_3D_1 implements Scene {
+public class SceneRendering3D_Wireframe implements Scene {
 
     private Camera camera;
 
@@ -28,7 +28,7 @@ public class SceneRendering3D_Physics_3D_1 implements Scene {
     private DynamicsWorld world;
     private Array<RigidBody> bodies = new Array<>();
 
-    public SceneRendering3D_Physics_3D_1() {
+    public SceneRendering3D_Wireframe() {
 
     }
 

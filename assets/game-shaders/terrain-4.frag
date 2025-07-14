@@ -114,7 +114,7 @@ void main()
     float smoothT = t * t * (3.0 - 2.0 * t);
     //vec3 albedo = total_color.rgb * (t) + (1- t) * texture(u_texture_steep, scaled_uv).rgb;
     vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, scaled_uv).rgb, 1 - smoothT);
-    albedo = mix(total_color.rgb, albedo, 0.8);
+    albedo = mix(total_color.rgb, albedo, 0.65);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv + u_time * 0.025) / 2).rgb, 1.0 - blend_map_color.a); // TODO: make the water texture shift with time
 
     /* Directional light calculation */

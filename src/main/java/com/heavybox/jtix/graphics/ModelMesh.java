@@ -1,6 +1,7 @@
 package com.heavybox.jtix.graphics;
 
 import com.heavybox.jtix.collections.Array;
+import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.memory.MemoryUtils;
@@ -116,44 +117,42 @@ public class ModelMesh implements MemoryResource {
         float segment_width = width / gridX;
         float segment_height = height / gridY;
 
-        int[] indices = new int[1];
-		float[] positions = new float[1];
-		float[] normals = new float[1];
-		float[] tangents = new float[1];
-		float[] biTangents = new float[1];
-		float[] uvs = new float[1];
+        ArrayFloat positions = new ArrayFloat(true,gridX1 * gridY1 * 3);
+        ArrayFloat normals = new ArrayFloat(true,gridX1 * gridY1 * 3);
+        ArrayFloat tangents = new ArrayFloat(true,gridX1 * gridY1 * 3);
+        ArrayFloat biTangents = new ArrayFloat(true,gridX1 * gridY1 * 3);
+        ArrayFloat uvs = new ArrayFloat(true,gridX1 * gridY1 * 2);
+        ArrayInt indices = new ArrayInt(true, gridX * gridY * 6);
 
         // set vertex array buffer
-        for (int iy = 0; iy < gridY1; iy ++ ) {
+        for (int iy = 0; iy < gridY1; iy++) {
 			float y = iy * segment_height - height_half;
-            for (int ix = 0; ix < gridX1; ix ++ ) {
-
+            for (int ix = 0; ix < gridX1; ix++) {
 				float x = ix * segment_width - width_half;
-
-                //vertices.push( x, - y, 0 );
-                //normals.push( 0, 0, 1 );
-                //tangents.push( 1, 0, 0 );
-                //biTangents.push( 0, 1, 0 );
-                //uvs.push( ix / gridX );
-                //uvs.push( 1 - ( iy / gridY ) );
+                positions.add(x, -y, 0);
+                normals.add(0, 0, 1);
+                tangents.add(1, 0, 0);
+                biTangents.add(0, 1, 0);
+                uvs.add(ix / (float) gridX);
+                uvs.add(1 - (iy / (float) gridY));
             }
         }
 
         // set element array buffer (indices)
-        for (int iy = 0; iy < gridY; iy ++ ) {
-            for (int ix = 0; ix < gridX; ix ++ ) {
+        for (int iy = 0; iy < gridY; iy++) {
+            for (int ix = 0; ix < gridX; ix++) {
 				int a = ix + gridX1 * iy;
-                int b = ix + gridX1 * ( iy + 1 );
-                int c = ( ix + 1 ) + gridX1 * ( iy + 1 );
-                int d = ( ix + 1 ) + gridX1 * iy;
-                //indices.push( a, b, d );
-                //indices.push( b, c, d );
+                int b = ix + gridX1 * (iy + 1);
+                int c = (ix + 1) + gridX1 * (iy + 1);
+                int d = (ix + 1) + gridX1 * iy;
+                indices.add(a, b, d);
+                indices.add(b, c, d);
             }
         }
 
         float radius = (float) Math.sqrt(width_half * width_half + height_half * height_half);
         // TODO: remove biTangents.
-        return new ModelMesh(positions, uvs, null, normals, tangents, biTangents, indices, radius);
+        return new ModelMesh(positions.items, uvs.items, null, normals.items, tangents.items, biTangents.items, indices.items, radius);
     }
 
 }

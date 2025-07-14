@@ -1,15 +1,18 @@
 #version 330
 
 layout (triangles) in;
-layout (line_strip, max_vertices=3) out;
+layout (line_strip, max_vertices = 6) out;
 
 void main(void)
 {
-    int i;
-    for (i = 0; i < gl_in.length(); i++)
+    for (int i = 0; i < 3; i++)
     {
-        gl_Position = gl_in[i].gl_Position; // pass through
+        gl_Position = gl_in[i].gl_Position;
         EmitVertex();
+
+        gl_Position = gl_in[(i + 1) % 3].gl_Position;
+        EmitVertex();
+
+        EndPrimitive();
     }
-    EndPrimitive();
 }
