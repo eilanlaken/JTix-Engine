@@ -24,10 +24,12 @@ public class SceneRendering3D_Primitives implements Scene {
     Shader postProcessingHDR;
 
     ModelMesh plane;
+    ModelMesh cube;
     ModelMaterial material;
 
     public SceneRendering3D_Primitives() {
         plane = ModelMesh.createPlane(5,5,25,25);
+        cube = ModelMesh.createCube(2,3,6);
         material = ModelMaterial.createPBRMaterial();
     }
 
@@ -37,7 +39,7 @@ public class SceneRendering3D_Primitives implements Scene {
         String ppHDRFragment = Assets.getFileContent("assets/game-shaders/post-processing-HDR.frag");
         postProcessingHDR = new Shader(ppHDRVertex, ppHDRFragment);
 
-        Assets.loadScene("assets/game-models/airplane_1.fbx", "assets/game-textures");
+        Assets.loadScene("assets/engine-tests/cube-123.fbx", "assets/game-textures");
         Assets.finishLoading();
 
         sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight());
@@ -103,6 +105,7 @@ public class SceneRendering3D_Primitives implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
         Renderer3D.drawModel(Renderer3D.defaultShaderWireframeLines, plane, material, new Matrix4x4());
+        Renderer3D.drawModel(Renderer3D.defaultShaderWireframeLines, cube, material, new Matrix4x4());
         Renderer3D.end();
 
         FrameBufferBinder.bind();

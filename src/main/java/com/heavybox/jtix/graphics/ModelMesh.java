@@ -3,6 +3,8 @@ package com.heavybox.jtix.graphics;
 import com.heavybox.jtix.collections.Array;
 import com.heavybox.jtix.collections.ArrayFloat;
 import com.heavybox.jtix.collections.ArrayInt;
+import com.heavybox.jtix.math.MathUtils;
+import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.memory.MemoryResource;
 import com.heavybox.jtix.memory.MemoryUtils;
 import org.lwjgl.opengl.GL11;
@@ -12,7 +14,10 @@ import org.lwjgl.opengl.GL30;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
+// primitives:
+// https://github.com/mrdoob/three.js/tree/dev/src/geometries
 public class ModelMesh implements MemoryResource {
 
     public int     vertexArrayObjectId;
@@ -23,6 +28,13 @@ public class ModelMesh implements MemoryResource {
     public int[]   vertexBufferObjects;
 
     public ModelMesh(float[] positions, float[] uvs, @Deprecated float[] colors, float[] normals, float[] tangents, @Deprecated float[] biTangents, int[] indices, float boundingSphereRadius) {
+        System.out.println("pos " + Arrays.toString(positions));
+        System.out.println("uvs " + Arrays.toString(uvs));
+        System.out.println("normals " + Arrays.toString(normals));
+        System.out.println("tangents " + Arrays.toString(tangents));
+        System.out.println("biTangents " + Arrays.toString(biTangents));
+        System.out.println("indices " + Arrays.toString(indices));
+
         Array<VertexAttribute> attributesCollector = new Array<>();
         ArrayInt vbosCollector = new ArrayInt();
         this.vertexCount = indices != null ? indices.length : positions.length / 3;
@@ -97,14 +109,8 @@ public class ModelMesh implements MemoryResource {
         }
     }
 
-    // https://github.com/mrdoob/three.js/tree/dev/src/geometries
-
-    public static ModelMesh createCube(float sizeX, float sizeY, float sizeZ) {
-        return null;
-    }
 
     public static ModelMesh createPlane(float width, float height, int subdivisionsWidth, int subdivisionsHeight) {
-
         float width_half = width / 2.0f;
         float height_half = height / 2.0f;
 
@@ -153,6 +159,26 @@ public class ModelMesh implements MemoryResource {
         float radius = (float) Math.sqrt(width_half * width_half + height_half * height_half);
         // TODO: remove biTangents.
         return new ModelMesh(positions.items, uvs.items, null, normals.items, tangents.items, biTangents.items, indices.items, radius);
+    }
+
+    /* CREATE A 3D CUBE */
+
+    // hard-coded : totally fine.
+    public static ModelMesh createCube(float sizeX, float sizeY, float sizeZ) {
+        float xh = sizeX / 2;
+        float yh = sizeY / 2;
+        float zh = sizeZ / 2;
+
+        float radius = (float) Math.sqrt(xh * xh + yh * yh + zh * zh);
+
+        float[] positions = {-xh, -yh, zh, -xh, yh, -zh, -xh, -yh, -zh, -xh, yh, zh, xh, yh, -zh, -xh, yh, -zh, xh, yh, zh, xh, -yh, -zh, xh, yh, -zh, xh, -yh, zh, -xh, -yh, -zh, xh, -yh, -zh, xh, yh, -zh, -xh, -yh, -zh, -xh, yh, -zh, -xh, yh, zh, xh, -yh, zh, xh, yh, zh, -xh, -yh, zh, -xh, yh, zh, -xh, yh, -zh, -xh, yh, zh, xh, yh, zh, xh, yh, -zh, xh, yh, zh, xh, -yh, zh, xh, -yh, -zh, xh, -yh, zh, -xh, -yh, zh, -xh, -yh, -zh, xh, yh, -zh, xh, -yh, -zh, -xh, -yh, -zh, -xh, yh, zh, -xh, -yh, zh, xh, -yh, zh};
+        float[] uvs = {0.625f, 1.0f, 0.375f, 0.75f, 0.375f, 1.0f, 0.625f, 0.75f, 0.375f, 0.5f, 0.375f, 0.75f, 0.625f, 0.5f, 0.375f, 0.25f, 0.375f, 0.5f, 0.625f, 0.25f, 0.375f, 0.0f, 0.375f, 0.25f, 0.375f, 0.5f, 0.125f, 0.25f, 0.125f, 0.5f, 0.875f, 0.5f, 0.625f, 0.25f, 0.625f, 0.5f, 0.625f, 1.0f, 0.625f, 0.75f, 0.375f, 0.75f, 0.625f, 0.75f, 0.625f, 0.5f, 0.375f, 0.5f, 0.625f, 0.5f, 0.625f, 0.25f, 0.375f, 0.25f, 0.625f, 0.25f, 0.625f, 0.0f, 0.375f, 0.0f, 0.375f, 0.5f, 0.375f, 0.25f, 0.125f, 0.25f, 0.875f, 0.5f, 0.875f, 0.25f, 0.625f, 0.25f};
+        float[] normals = {-1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+        float[] tangents = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f};
+        float[] biTangents = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f};
+        int[] indices = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+
+        return new ModelMesh(positions, uvs, null, normals, tangents, biTangents, indices, radius);
     }
 
 }
