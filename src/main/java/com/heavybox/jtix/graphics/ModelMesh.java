@@ -28,13 +28,6 @@ public class ModelMesh implements MemoryResource {
     public int[]   vertexBufferObjects;
 
     public ModelMesh(float[] positions, float[] uvs, @Deprecated float[] colors, float[] normals, float[] tangents, @Deprecated float[] biTangents, int[] indices, float boundingSphereRadius) {
-        System.out.println("pos " + Arrays.toString(positions));
-        System.out.println("uvs " + Arrays.toString(uvs));
-        System.out.println("normals " + Arrays.toString(normals));
-        System.out.println("tangents " + Arrays.toString(tangents));
-        System.out.println("biTangents " + Arrays.toString(biTangents));
-        System.out.println("indices " + Arrays.toString(indices));
-
         Array<VertexAttribute> attributesCollector = new Array<>();
         ArrayInt vbosCollector = new ArrayInt();
         this.vertexCount = indices != null ? indices.length : positions.length / 3;

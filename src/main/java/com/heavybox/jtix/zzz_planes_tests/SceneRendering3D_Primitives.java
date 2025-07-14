@@ -105,7 +105,7 @@ public class SceneRendering3D_Primitives implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
         Renderer3D.drawModel(Renderer3D.defaultShaderWireframeLines, plane, material, new Matrix4x4());
-        Renderer3D.drawModel(Renderer3D.defaultShaderWireframeLines, cube, material, new Matrix4x4());
+        Renderer3D.drawModel(null, cube, material, new Matrix4x4());
         Renderer3D.end();
 
         FrameBufferBinder.bind();
