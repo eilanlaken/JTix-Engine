@@ -3,7 +3,7 @@
 
 #define MAX_HEIGHT 400
 #define MIN_HEIGHT -20
-#define MAP_SIZE 4096.0
+#define MAP_SIZE 2048.0
 #define TILE_SIZE 256.0
 
 // attributes

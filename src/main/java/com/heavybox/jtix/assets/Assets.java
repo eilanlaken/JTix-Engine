@@ -150,11 +150,24 @@ public final class Assets {
         load(Scene3D.class, filepath, options, false);
     }
 
+    // TODO: add geometry shader option
     public synchronized static void loadShader(final String name,
                                   final String vertexShaderFilepath,
                                   final String fragmentShaderFilepath) {
         final HashMap<String, Object> options = new HashMap<>();
         options.put("vertexShaderFilepath", vertexShaderFilepath);
+        options.put("fragmentShaderFilepath", fragmentShaderFilepath);
+        load(Shader.class, name, options,false);
+    }
+
+    // TODO: add geometry shader option
+    public synchronized static void loadShader(final String name,
+                                               final String vertexShaderFilepath,
+                                               final String geometryShaderFilepath,
+                                               final String fragmentShaderFilepath) {
+        final HashMap<String, Object> options = new HashMap<>();
+        options.put("vertexShaderFilepath", vertexShaderFilepath);
+        options.put("geometryShaderFilepath", geometryShaderFilepath);
         options.put("fragmentShaderFilepath", fragmentShaderFilepath);
         load(Shader.class, name, options,false);
     }
