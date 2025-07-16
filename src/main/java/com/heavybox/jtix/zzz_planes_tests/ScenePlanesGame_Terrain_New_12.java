@@ -16,12 +16,18 @@ public class ScenePlanesGame_Terrain_New_12 implements Scene {
 
     private Camera camera;
 
+    private GameObjectTerrainLandBlock[][] terrain = new GameObjectTerrainLandBlock[8][8];
+    private GameObjectTerrainWaterBlock[][] water = new GameObjectTerrainWaterBlock[8][8];
+
     private GameObjectTerrainLandBlock a, b;
     private GameObjectTerrainWaterBlock w1;
 
     Renderer2D renderer2D = new Renderer2D();
     FrameBuffer sceneFrameBuffer;
     Shader postProcessingHDR;
+
+    public Scene3D scene;
+
 
     public ScenePlanesGame_Terrain_New_12() {
 
@@ -30,10 +36,28 @@ public class ScenePlanesGame_Terrain_New_12 implements Scene {
     @Override
     public void setup() {
 
-        a = new GameObjectTerrainLandBlock(5, 2);
-        b = new GameObjectTerrainLandBlock(6, 2);
-        w1 = new GameObjectTerrainWaterBlock(0,0);
+        Assets.loadScene("assets/game-maps/map-1.fbx", "assets/game-textures");
+        Assets.finishLoading();
 
+        scene = Assets.get("assets/game-maps/map-1.fbx");
+
+
+        for (int i = 0; i < terrain.length; i++) {
+            for (int j = 0; j < terrain[0].length; j++) {
+                terrain[i][j] = new GameObjectTerrainLandBlock(i,j);
+            }
+        }
+
+        for (int i = 0; i < water.length; i++) {
+            for (int j = 0; j < water[0].length; j++) {
+                water[i][j] = new GameObjectTerrainWaterBlock(i,j);
+            }
+        }
+//
+//        a = new GameObjectTerrainLandBlock(5, 2);
+//        b = new GameObjectTerrainLandBlock(6, 2);
+//        w1 = new GameObjectTerrainWaterBlock(0,0);
+//
 
 
 
@@ -60,7 +84,7 @@ public class ScenePlanesGame_Terrain_New_12 implements Scene {
     @Override
     public void update() {
         float delta = Graphics.getDeltaTime();
-        w1.update(delta);
+        //w1.update(delta);
 
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
@@ -102,26 +126,29 @@ public class ScenePlanesGame_Terrain_New_12 implements Scene {
 
         Color sky = Color.valueOf("#87CEEB");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glClearColor(sky.r,sky.g,sky.b,1);
 
         FrameBufferBinder.bind(sceneFrameBuffer);
-        GL11.glClearColor(0,0,0,1);
+        GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
 
+        for (int i = 0; i < terrain.length; i++) {
+            for (int j = 0; j < terrain[0].length; j++) {
+                terrain[i][j].render();
             }
         }
-        //Renderer3D.drawModel(terrainShader, terrain.meshes[0], terrain.materials[0], new Matrix4x4());
-        a.render();
-        w1.render();
-        //Renderer3D.drawMesh(waterShader, terrain.meshes[0], waterModel.materials[0], new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
 
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,0,0));
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,0,0));
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(0,512,0));
-//        Renderer3D.drawModel(waterModel, new Matrix4x4(transformWater).translateGlobalAxisXYZ(512,512,0));
+        for (int i = 0; i < water.length; i++) {
+            for (int j = 0; j < water[0].length; j++) {
+                water[i][j].update(delta);
+                water[i][j].render();
+            }
+        }
+
+        Scene3D.Node node = scene.namedNodes.get("Cube.607");
+        Renderer3D.drawModel(node.model, new Matrix4x4().translateGlobalAxisXYZ(0,0, 50));
+
+
         Renderer3D.end();
 
         FrameBufferBinder.bind();

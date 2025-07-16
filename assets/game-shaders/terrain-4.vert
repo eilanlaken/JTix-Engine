@@ -1,7 +1,7 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
 
-#define MAX_HEIGHT 400
+#define MAX_HEIGHT 1000
 #define MIN_HEIGHT -20
 #define MAP_SIZE 2048.0
 #define TILE_SIZE 256.0
@@ -29,6 +29,18 @@ out float height;
 float getHeight(vec2 uv)
 {
     return mix(MIN_HEIGHT, MAX_HEIGHT, texture(u_texture_height_map, uv).r);
+}
+
+vec2 rotateUV(vec2 uv, float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    uv -= vec2(0.5, 0.5);
+    uv = vec2(
+    uv.x * c - uv.y * s,
+    uv.x * s + uv.y * c
+    );
+    uv += vec2(0.5, 0.5);
+    return uv;
 }
 
 void main()
@@ -67,5 +79,9 @@ void main()
 
     unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
     world_vertex_position = vertex_position.xyz;
+
+    int index = u_tile_index_row * u_tile_index_col;
+
     uv_colors = a_textCoords0;
+    uv_colors = rotateUV(uv_colors, index * 8);
 }

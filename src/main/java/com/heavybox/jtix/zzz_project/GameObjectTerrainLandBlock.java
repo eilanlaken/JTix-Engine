@@ -12,8 +12,11 @@ public class GameObjectTerrainLandBlock extends GameObject {
 
 
     public GameObjectTerrainLandBlock(int index_i, int index_j) {
+        super();
         this.index_i = index_i;
         this.index_j = index_j;
+
+        transform.translateGlobalAxisXYZ(-3500 + index_j * 1000,3500 - index_i * 1000,0);
 
         // load everything if not loaded
         Assets.loadShader("terrain-shader", "assets/game-shaders/terrain-4.vert","assets/game-shaders/terrain-4.frag");
@@ -25,8 +28,8 @@ public class GameObjectTerrainLandBlock extends GameObject {
         Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-wheat-bright.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-wheat-dark.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-wheat-new-bright.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-wheat-new.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.finishLoading();
 
         shader = Assets.get("terrain-shader");
@@ -35,8 +38,8 @@ public class GameObjectTerrainLandBlock extends GameObject {
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty
         Texture terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
-        Texture terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-bright.jpg"); // g
-        Texture terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-dark.jpg"); // b
+        Texture terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-new-bright.jpg"); // g
+        Texture terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-new.jpg"); // b
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         Model model = Assets.get("assets/game-maps/terrain-tile-257.fbx");
