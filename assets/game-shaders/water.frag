@@ -128,7 +128,7 @@ void main()
     vec3 color = ambient + Lo;
 
     float dist = distance(world_vertex_position, u_camera_position);
-    float fogFactor = clamp((3000.0 - dist) / (3000.0 - 2000.0), 0.0, 1.0);
+    float fogFactor = clamp((4000.0 - dist) / (4000.0 - 2000.0), 0.0, 1.0);
     vec3 finalColor = mix(vec3(0.52,0.80,0.92), color, fogFactor);
 
     out_color = vec4(finalColor, 0.8f);
