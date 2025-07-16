@@ -32,6 +32,7 @@ uniform float uTroughThreshold;
 uniform float uTroughTransition;
 
 uniform float time;
+uniform vec3 u_camera_position;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -126,6 +127,10 @@ void main()
     vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
 
-    //out_color = vec4(color, 0.8f);
-    out_color = vec4(color, 1);
+    float dist = distance(world_vertex_position, u_camera_position);
+    float fogFactor = clamp((3000.0 - dist) / (3000.0 - 2000.0), 0.0, 1.0);
+    vec3 finalColor = mix(vec3(0.52,0.80,0.92), color, fogFactor);
+
+    out_color = vec4(finalColor, 0.8f);
+    //out_color = vec4(color, 1);
 }

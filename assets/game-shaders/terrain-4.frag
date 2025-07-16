@@ -2,7 +2,6 @@
 #version 450
 
 #define PI 3.1415926538
-#define MAX_HEIGHT 200
 #define MIN_HEIGHT -20
 
 // structs defitions
@@ -36,6 +35,7 @@ uniform sampler2D u_texture_height_map;
 
 // uniform - global variables
 uniform float u_time;
+uniform vec3 u_camera_position;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -44,7 +44,7 @@ layout (location = 0) out vec4 out_color;
 float getAlpha()
 {
     //float alpha = smoothstep(MIN_HEIGHT, -5.0, height);
-    float alpha = smoothstep(MIN_HEIGHT, -6.0f, height);
+    float alpha = smoothstep(MIN_HEIGHT, 20, height);
     return alpha;
 }
 
@@ -139,6 +139,12 @@ void main()
     vec3 ambient = vec3(0.7) * albedo;
     vec3 color = ambient + Lo * 0.7;
 
+    // fog calculation
+    // TODO: this is an environmental effect
+    float dist = distance(world_vertex_position, u_camera_position);
+    float fogFactor = clamp((3000.0 - dist) / (3000.0 - 2000.0), 0.0, 1.0);
+    vec3 finalColor = mix(vec3(0.52,0.80,0.92), color, fogFactor);
+
     float alpha = getAlpha();
-    out_color = vec4(color, 1.0);
+    out_color = vec4(finalColor, 1.0);
 }
