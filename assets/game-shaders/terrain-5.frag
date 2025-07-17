@@ -2,7 +2,7 @@
 #version 450
 
 #define PI 3.1415926538
-#define MIN_HEIGHT -20
+#define MIN_HEIGHT -256.0
 
 // structs defitions
 struct DirectionalLight {
@@ -146,5 +146,5 @@ void main()
     vec3 finalColor = mix(vec3(0.52,0.80,0.92), color, fogFactor);
 
     float alpha = getAlpha();
-    out_color = vec4(color, alpha); // TODO: add fog
+    out_color = vec4(color, 1.0); // TODO: add fog
 }

@@ -1,29 +1,29 @@
 package com.heavybox.jtix.zzz_project;
 
+import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.*;
 
-public class GameObjectTerrainLandBlock extends GameObject {
+public class GameObjectTerrainTile extends GameObject {
 
     private Shader shader;
-    private ModelMesh mesh;
+    private ModelMesh meshLOD0;
     private ModelMaterial material;
-    private int index_i, index_j;
+    private Scene3D scene;
 
 
-    public GameObjectTerrainLandBlock(int index_i, int index_j) {
+    public GameObjectTerrainTile(int index_i, int index_j) {
         super();
-        this.index_i = index_i;
-        this.index_j = index_j;
 
-        transform.translateGlobalAxisXYZ(-3500 + index_j * 1000,3500 - index_i * 1000,0);
+
 
         // load everything if not loaded
-        Assets.loadShader("terrain-shader", "assets/game-shaders/terrain-4.vert","assets/game-shaders/terrain-4.frag");
+        Assets.loadShader("terrain-shader", "assets/game-shaders/terrain-5.vert","assets/game-shaders/terrain-5.frag");
 
-        Assets.loadModel("assets/game-maps/terrain-tile-257.fbx");
+        Assets.loadScene("assets/game-maps/terrain-blocks.fbx", "assets/game-textures");
+
         Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/heightmap-sample-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/heightmap-256.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -33,8 +33,8 @@ public class GameObjectTerrainLandBlock extends GameObject {
         Assets.finishLoading();
 
         shader = Assets.get("terrain-shader");
-        Texture terrainBlendMap = Assets.get("assets/game-maps/terrain-blendmap-2048.png");
-        Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-sample-2.jpg");
+        Texture terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();
+        Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-256.jpg");
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty
         Texture terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
@@ -42,11 +42,11 @@ public class GameObjectTerrainLandBlock extends GameObject {
         Texture terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-new.jpg"); // b
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
-        Model model = Assets.get("assets/game-maps/terrain-tile-257.fbx");
+        scene = Assets.get("assets/game-maps/terrain-blocks.fbx");
+        Scene3D.Node node = scene.namedNodes.get("terrain-LOD2");
+        meshLOD0 = node.model.meshes[0];
 
-        mesh = model.meshes[0];
-
-        material = model.materials[0].clone();
+        material = node.model.materials[0].clone();
         material.materialAttributes.put("u_texture_steep", terrainStone);
         material.materialAttributes.put("u_texture_background", terrainGrass);
         material.materialAttributes.put("u_texture_red", terrainRoad);
@@ -64,8 +64,13 @@ public class GameObjectTerrainLandBlock extends GameObject {
     }
 
     @Override
+    public void update(float delta) {
+        // switch lod
+    }
+
+    @Override
     public void render() {
-        Renderer3D.drawModel(shader, mesh, material, transform);
+        Renderer3D.drawModel(shader, meshLOD0, material, transform);
     }
 
 }

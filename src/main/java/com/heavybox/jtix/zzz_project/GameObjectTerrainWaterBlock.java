@@ -9,13 +9,9 @@ public class GameObjectTerrainWaterBlock extends GameObject {
     private ModelMesh mesh;
     private ModelMaterial material;
 
-    private int index_i;
-    private int index_j;
     private float time = 0;
 
     public GameObjectTerrainWaterBlock(int index_i, int index_j) {
-        this.index_i = index_i;
-        this.index_j = index_j;
         transform.translateGlobalAxisXYZ(-3500 + index_j * 1000,3500 - index_i * 1000,20);
 
         // load everything if not loaded

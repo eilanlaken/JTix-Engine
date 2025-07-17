@@ -131,6 +131,6 @@ void main()
     float fogFactor = clamp((4000.0 - dist) / (4000.0 - 2000.0), 0.0, 1.0);
     vec3 finalColor = mix(vec3(0.52,0.80,0.92), color, fogFactor);
 
-    out_color = vec4(finalColor, 0.8f);
+    out_color = vec4(color, 0.8f); // TODO: add back fog
     //out_color = vec4(color, 1);
 }

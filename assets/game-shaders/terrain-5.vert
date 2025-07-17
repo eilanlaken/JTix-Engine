@@ -1,0 +1,81 @@
+// https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
+#version 450
+
+#define MAX_HEIGHT 500.0
+#define MIN_HEIGHT -500.0
+//#define MAP_SIZE 4096
+#define MAP_SIZE 256
+#define TILE_SIZE 256
+
+// attributes
+layout(location = 0) in vec3 a_position;
+layout(location = 2) in vec2 a_textCoords0;
+
+// uniforms
+uniform mat4 u_transform;
+uniform vec3 u_camera_position;
+uniform mat4 u_camera_combined;
+uniform sampler2D u_texture_height_map;
+uniform int u_tile_index_row;
+uniform int u_tile_index_col;
+
+// outputs
+out vec3 world_vertex_position;
+out vec3 unit_vertex_to_camera;
+out vec2 uv_geometry;
+out vec2 uv_colors;
+out vec3 normal;
+out float height;
+
+float getHeight(vec2 uv)
+{
+    return mix(MIN_HEIGHT, MAX_HEIGHT, texture(u_texture_height_map, uv).r);
+}
+
+vec2 rotateUV(vec2 uv, float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
+    uv -= vec2(0.5, 0.5);
+    uv = vec2(
+    uv.x * c - uv.y * s,
+    uv.x * s + uv.y * c
+    );
+    uv += vec2(0.5, 0.5);
+    return uv;
+}
+
+void main()
+{
+    // TODO
+    const int tiles_per_row = MAP_SIZE / TILE_SIZE;
+    const float tile_size = 1.0 / float(tiles_per_row);
+    vec2 offset_uv = vec2(float(u_tile_index_col), float(u_tile_index_row)) * tile_size;
+    //uv_geometry = a_textCoords0 * tile_size + offset_uv;
+    uv_geometry = a_textCoords0;
+
+
+    height = getHeight(uv_geometry);
+    vec4 vertex_position =  u_transform * vec4(a_position.x, a_position.y, height, 1.0);
+    gl_Position = u_camera_combined * vertex_position;
+
+    vec3 offset = vec3(1.0 / TILE_SIZE, 1.0 / TILE_SIZE, 0);
+    float hL = getHeight(uv_geometry - offset.xz);
+    float hR = getHeight(uv_geometry + offset.xz);
+    float hD = getHeight(uv_geometry - offset.zy);
+    float hU = getHeight(uv_geometry + offset.zy);
+
+    // deduce terrain normal
+    vec3 N;
+    N.x = hL - hR;
+    N.y = hD - hU;
+    N.z = 2.0;
+    normal = normalize(N);
+
+    unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
+    world_vertex_position = vertex_position.xyz;
+
+    int index = u_tile_index_row * u_tile_index_col;
+
+    uv_colors = a_textCoords0;
+    uv_colors = rotateUV(uv_colors, index * 8);
+}
