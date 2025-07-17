@@ -122,7 +122,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
 //            }
 //        }
 
-        for (int i = 0; i < 32 * 32; i++) {
+        for (int i = 0; i < 64 * 64; i++) {
             tile.update(delta);
             tile.render();
         }
