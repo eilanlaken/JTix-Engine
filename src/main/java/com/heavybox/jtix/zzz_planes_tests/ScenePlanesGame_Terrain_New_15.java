@@ -9,6 +9,7 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainLandBlock;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
+import com.heavybox.jtix.zzz_project.GameObjectTerrainWater;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainWaterBlock;
 import org.lwjgl.opengl.GL11;
 
@@ -19,6 +20,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
     //private GameObjectTerrainTile[][] terrain = new GameObjectTerrainTile[8][8];
 
     GameObjectTerrainTile tile;
+    GameObjectTerrainWater water;
 
     Renderer2D renderer2D = new Renderer2D();
     FrameBuffer sceneFrameBuffer;
@@ -37,6 +39,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
     @Override
     public void setup() {
         tile = new GameObjectTerrainTile(0,0);
+        water = new GameObjectTerrainWater(0,0);
 //        for (int i = 0; i < terrain.length; i++) {
 //            for (int j = 0; j < terrain[0].length; j++) {
 //                terrain[i][j] = new GameObjectTerrainLandBlock(i,j);
@@ -126,6 +129,8 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
             tile.update(delta);
             tile.render();
         }
+        water.update(delta);
+        water.render();
 
 
         Renderer3D.end();
