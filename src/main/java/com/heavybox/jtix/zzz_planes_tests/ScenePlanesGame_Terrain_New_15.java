@@ -12,6 +12,7 @@ import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainWater;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainWaterBlock;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 public class ScenePlanesGame_Terrain_New_15 implements Scene {
 
@@ -60,7 +61,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
 
     @Override
     public void start() {
-        Graphics.setTargetFps(1000);
+        Graphics.setTargetFps(120);
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
         camera.position.set(0, -550, 250);
         camera.lookAt(0,0,0);
@@ -72,6 +73,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
     public void update() {
         float delta = Graphics.getDeltaTime();
         System.out.println(Graphics.getFps());
+        //System.out.println(Graphics.getMaxShaderAttributes());
         update_gameplay();
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
         camera.unProject(screen);
@@ -125,12 +127,12 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
 //            }
 //        }
 
-        for (int i = 0; i < 64 * 64; i++) {
-            tile.update(delta);
-            tile.render();
-        }
+
+        tile.update(delta);
+        tile.render();
+
         water.update(delta);
-        water.render();
+        //water.render();
 
 
         Renderer3D.end();

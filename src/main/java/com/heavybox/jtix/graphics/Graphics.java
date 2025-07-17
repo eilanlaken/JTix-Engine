@@ -230,6 +230,10 @@ public final class Graphics {
         return intBuffer.get(0);
     }
 
+    public static int getMaxShaderAttributes() {
+        return GL11.glGetInteger(GL20.GL_MAX_VERTEX_ATTRIBS);
+    }
+
     public static int getMaxAnisotropy() {
         if (maxAnisotropy > 0) return maxAnisotropy;
 
