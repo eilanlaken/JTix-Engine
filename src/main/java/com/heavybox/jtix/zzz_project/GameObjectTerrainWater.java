@@ -23,8 +23,8 @@ public class GameObjectTerrainWater extends GameObject {
         shader = Assets.get("water-shader");
 
         scene = Assets.get("assets/game-maps/terrain-blocks-2km.fbx");
-        //Scene3D.Node node = scene.namedNodes.get("water");
-        Scene3D.Node node = scene.namedNodes.get("LOD-0");
+        Scene3D.Node node = scene.namedNodes.get("water");
+        //Scene3D.Node node = scene.namedNodes.get("LOD-0");
         mesh = node.model.meshes[0];
 
         material = node.model.materials[0].clone();

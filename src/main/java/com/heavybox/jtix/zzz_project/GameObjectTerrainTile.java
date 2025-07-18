@@ -23,7 +23,7 @@ public class GameObjectTerrainTile extends GameObject {
         Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
 
         Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/heightmap-256.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/heightmap-128.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -34,7 +34,7 @@ public class GameObjectTerrainTile extends GameObject {
 
         shader = Assets.get("terrain-shader");
         Texture terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();
-        Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-256.jpg");
+        Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-128.jpg");
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty
         Texture terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
@@ -43,7 +43,7 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         scene = Assets.get("assets/game-maps/terrain-blocks-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("LOD-2");
+        Scene3D.Node node = scene.namedNodes.get("LOD-0");
         //Scene3D.Node node = scene.namedNodes.get("water");
         meshLOD0 = node.model.meshes[0];
 

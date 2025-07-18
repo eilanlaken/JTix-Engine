@@ -4,8 +4,8 @@
 #define MAX_HEIGHT 1000.0
 #define MIN_HEIGHT -1000.0
 //#define MAP_SIZE 4096
-#define MAP_SIZE 256
-#define TILE_SIZE 256
+#define MAP_SIZE 128
+#define TILE_SIZE 128
 
 // attributes
 layout(location = 0) in vec3 a_position;

@@ -2,7 +2,8 @@
 #version 450
 
 #define PI 3.1415926538
-#define MIN_HEIGHT -256.0
+#define MAX_HEIGHT 1000.0
+#define MIN_HEIGHT -1000.0
 
 // structs defitions
 struct DirectionalLight {
