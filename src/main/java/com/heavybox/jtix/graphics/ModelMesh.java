@@ -50,24 +50,6 @@ public class ModelMesh implements MemoryResource {
         this.vertexBufferObjects = vbosCollector.pack();
     }
 
-    @Deprecated public ModelMesh(float[] positions) {
-        if (positions.length % 3 != 0) throw new GraphicsException("Positions array must be a flat array of 3d vectors: [x0,y0,z0, x1,y1,z1, ...]. Size must be divisible by 3.");
-        this.vertexCount = positions.length / 3;
-
-        // store positions in vbo
-        // TODO: modify to support different model with different vbos.
-        this.vertexArrayObjectId = GL30.glGenVertexArrays();
-        GL30.glBindVertexArray(this.vertexArrayObjectId); // bind
-        int vboID = GL15.glGenBuffers();
-
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-        FloatBuffer buffer = MemoryUtils.store(positions);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-        GL30.glBindVertexArray(0); // unbind
-    }
-
     private void storeIndicesBuffer(int[] indices, ArrayInt vbosCollector) {
         if (indices == null) return;
         int vbo = GL15.glGenBuffers();

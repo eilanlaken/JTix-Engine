@@ -4,7 +4,7 @@
 #define MAX_HEIGHT 1000.0
 #define MIN_HEIGHT -1000.0
 //#define MAP_SIZE 4096
-#define MAP_SIZE 128
+#define MAP_SIZE 8192
 #define TILE_SIZE 128
 
 // attributes
@@ -50,15 +50,15 @@ void main()
     const int tiles_per_row = MAP_SIZE / TILE_SIZE;
     const float tile_size = 1.0 / float(tiles_per_row);
     vec2 offset_uv = vec2(float(u_tile_index_col), float(u_tile_index_row)) * tile_size;
-    //uv_geometry = a_textCoords0 * tile_size + offset_uv;
-    uv_geometry = a_textCoords0;
+    uv_geometry = a_textCoords0 * tile_size + offset_uv;
+    //uv_geometry = a_textCoords0;
 
 
     height = getHeight(uv_geometry);
     vec4 vertex_position =  u_transform * vec4(a_position.x, a_position.y, height, 1.0);
     gl_Position = u_camera_combined * vertex_position;
 
-    vec3 offset = vec3(1.0 / TILE_SIZE, 1.0 / TILE_SIZE, 0);
+    vec3 offset = vec3(1.0 / MAP_SIZE, 1.0 / MAP_SIZE, 0);
     float hL = getHeight(uv_geometry - offset.xz);
     float hR = getHeight(uv_geometry + offset.xz);
     float hD = getHeight(uv_geometry - offset.zy);

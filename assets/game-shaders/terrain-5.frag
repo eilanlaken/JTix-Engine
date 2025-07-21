@@ -95,14 +95,12 @@ void main()
     /* total color calculation */
     vec4 blend_map_color = texture(u_texture_blend_map, uv_geometry);
     float background_weight = 1 - (blend_map_color.r + blend_map_color.g + blend_map_color.b);
+
     vec2 scaled_uv = uv_colors * 4.0;
-
-    // select one.
-
-//    vec3 background_color = pow(texture(u_texture_background, scaled_uv).rgb, vec3(2.2)) * background_weight;
-//    vec3 r_color = pow(texture(u_texture_red, scaled_uv).rgb, vec3(2.2)) * blend_map_color.r;
-//    vec3 g_color = pow(texture(u_texture_green, scaled_uv).rgb, vec3(2.2)) * blend_map_color.g;
-//    vec3 b_color = pow(texture(u_texture_blue, scaled_uv).rgb, vec3(2.2)) * blend_map_color.b;
+    float a1 = 512.0;
+    float p1 = a1 * 4;
+    vec2 steep_uv = uv_colors * 2;
+    //steep_uv = (4.0 * a1 / p1) * abs(mod(scaled_uv, p1) - p1 * 0.5);
 
     vec3 background_color = texture(u_texture_background, scaled_uv * 2).rgb * background_weight;
     vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
@@ -114,7 +112,7 @@ void main()
     float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
     float smoothT = t * t * (3.0 - 2.0 * t);
     //vec3 albedo = total_color.rgb * (t) + (1- t) * texture(u_texture_steep, scaled_uv).rgb;
-    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, uv_colors * 2).rgb, 1 - smoothT);
+    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, steep_uv).rgb, 1 - smoothT);
     albedo = mix(total_color.rgb, albedo, 0.65);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv * 2 + u_time * 0.05) / 2).rgb, 1.0 - blend_map_color.a); // TODO: make the water texture shift with time
 

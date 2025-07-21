@@ -39,7 +39,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
 
     @Override
     public void setup() {
-        tile = new GameObjectTerrainTile(0,0);
+        tile = new GameObjectTerrainTile(2,5);
         water = new GameObjectTerrainWater(0,0);
 //        for (int i = 0; i < terrain.length; i++) {
 //            for (int j = 0; j < terrain[0].length; j++) {
@@ -72,7 +72,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
     @Override
     public void update() {
         float delta = Graphics.getDeltaTime();
-        System.out.println(Graphics.getFps());
+        System.out.println(camera.position.z);
         //System.out.println(Graphics.getMaxShaderAttributes());
         update_gameplay();
         Vector3 screen = new Vector3(Input.mouse.getX(), Input.mouse.getY(), 0);
