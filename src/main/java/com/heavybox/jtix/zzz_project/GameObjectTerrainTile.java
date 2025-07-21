@@ -20,7 +20,8 @@ public class GameObjectTerrainTile extends GameObject {
         // terrain shader
         Assets.loadShader("terrain-shader", "assets/game-shaders/terrain-5.vert","assets/game-shaders/terrain-5.frag");
         // terrain models
-        Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
+        //Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
+        Assets.loadScene("assets/game-maps/terrain-blocks-LODs-2km.fbx", "assets/game-textures");
         // terrain topology
         Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/heightmap-128.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
@@ -50,8 +51,8 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-new.jpg"); // b
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
-        scene = Assets.get("assets/game-maps/terrain-blocks-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("LOD-0");
+        scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
+        Scene3D.Node node = scene.namedNodes.get("LOD_0");
         //Scene3D.Node node = scene.namedNodes.get("water");
         meshLOD0 = node.model.meshes[0];
 
