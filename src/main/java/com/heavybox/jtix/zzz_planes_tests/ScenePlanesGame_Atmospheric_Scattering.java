@@ -26,8 +26,9 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
     FrameBuffer sceneFrameBuffer;
     Shader postProcessingHDR;
 
-    ModelMesh box = ModelMesh.createCubeInverted(2,4,6);
-    ModelMaterial material = ModelMaterial.createPBRMaterial();
+    ModelMesh box = ModelMesh.createCubeInverted(40000,40000,40000);
+    Shader skyShader;
+    ModelMaterial skyMaterial;
 
     public ScenePlanesGame_Atmospheric_Scattering() {
 
@@ -35,8 +36,20 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
 
     @Override
     public void setup() {
-        Assets.loadModel("assets/engine-tests/cube-inverted-123.fbx");
-        Assets.finishLoading();
+
+        String skyVertex = Assets.getFileContent("assets/game-shaders/sky.vert");
+        String skyFragment = Assets.getFileContent("assets/game-shaders/sky.frag");
+        skyShader = new Shader(skyVertex, skyFragment);
+
+        skyMaterial = ModelMaterial.create();
+        skyMaterial.materialAttributes.put("turbidity", 2f);
+        skyMaterial.materialAttributes.put("rayleigh", 1f);
+        skyMaterial.materialAttributes.put("mieCoefficient", 0.005f);
+        skyMaterial.materialAttributes.put("mieDirectionalG", 0.8f);
+        skyMaterial.materialAttributes.put("sunPosition", new Vector3()); // (0, 0, 0) by default
+        skyMaterial.materialAttributes.put("up", new Vector3(0, 0, 1));
+        skyMaterial.shader = skyShader;
+
 
         String ppHDRVertex = Assets.getFileContent("assets/game-shaders/post-processing-HDR.vert");
         String ppHDRFragment = Assets.getFileContent("assets/game-shaders/post-processing-HDR.frag");
@@ -52,7 +65,7 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
     @Override
     public void start() {
         Graphics.setTargetFps(120);
-        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 10000, 75);
+        camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 400000, 75);
         camera.position.set(0, -0, 0);
         camera.lookAt(0,0,0);
         camera.update();
@@ -106,7 +119,7 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(null, box, material, new Matrix4x4());
+        Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
         Renderer3D.end();
 
         FrameBufferBinder.bind();

@@ -73,4 +73,8 @@ public class ModelMaterial implements MemoryResource, Cloneable {
         return material;
     }
 
+    public static ModelMaterial create() {
+        return new ModelMaterial();
+    }
+
 }
