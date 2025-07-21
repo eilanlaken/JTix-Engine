@@ -8,14 +8,15 @@ import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
-import com.heavybox.jtix.zzz_project.GameObjectTerrainWater;
 import org.lwjgl.opengl.GL11;
 
 // TODO:
 // see here:
 // https://github.com/ebruneton/precomputed_atmospheric_scattering
-public class ScenePlanesGame_Atmospheric_Scaterring implements Scene {
+// https://threejs.org/examples/?q=sky#webgl_shaders_sky
+// https://github.com/mrdoob/three.js/blob/master/examples/webgl_shaders_sky.html
+// https://github.com/mrdoob/three.js/blob/master/examples/jsm/objects/Sky.js
+public class ScenePlanesGame_Depth_Buffer_rendering implements Scene {
 
     private Camera camera;
 
@@ -26,7 +27,7 @@ public class ScenePlanesGame_Atmospheric_Scaterring implements Scene {
     ModelMesh box = ModelMesh.createCube(2,20,2);
     ModelMaterial material = ModelMaterial.createPBRMaterial();
 
-    public ScenePlanesGame_Atmospheric_Scaterring() {
+    public ScenePlanesGame_Depth_Buffer_rendering() {
 
     }
 

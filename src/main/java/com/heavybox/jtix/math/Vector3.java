@@ -82,20 +82,23 @@ public class Vector3 implements MemoryPool.Reset {
         return this.set(vector.x, vector.y, z);
     }
 
-      // TODO
-//    /** Sets the components from the given spherical coordinate
-//     * @param azimuthalAngle The angle between x-axis in radians [0, 2pi]
-//     * @param polarAngle The angle between z-axis in radians [0, pi]
-//     * @return This vector for chaining */
-//    public Vector3 setFromSpherical (float azimuthalAngle, float polarAngle) {
-//        float cosPolar = MathUtils.cos(polarAngle);
-//        float sinPolar = MathUtils.sin(polarAngle);
-//
-//        float cosAzim = MathUtils.cos(azimuthalAngle);
-//        float sinAzim = MathUtils.sin(azimuthalAngle);
-//
-//        return this.set(cosAzim * sinPolar, sinAzim * sinPolar, cosPolar);
-//    }
+    /** Sets the components from the given spherical coordinate
+     * @param azimuthalRad The angle between x-axis in radians [0, 2pi]
+     * @param polarRad The angle between z-axis in radians [0, pi]
+     * @return This vector for chaining */
+    public Vector3 setFromSphericalRad(float radius, float azimuthalRad, float polarRad) {
+        float cosPolar = MathUtils.cosRad(polarRad);
+        float sinPolar = MathUtils.sinRad(polarRad);
+
+        float cosAzim = MathUtils.cosRad(azimuthalRad);
+        float sinAzim = MathUtils.sinRad(azimuthalRad);
+
+        return this.set(radius * cosAzim * sinPolar, radius * sinAzim * sinPolar, radius * cosPolar);
+    }
+
+    public Vector3 setFromSphericalDeg(float radius, float azimuthalDeg, float polarDeg) {
+        return setFromSphericalRad(radius, azimuthalDeg * MathUtils.degreesToRadians, polarDeg * MathUtils.degreesToRadians);
+    }
 
       // TODO
 //    public Vector3 setToRandomDirection () {

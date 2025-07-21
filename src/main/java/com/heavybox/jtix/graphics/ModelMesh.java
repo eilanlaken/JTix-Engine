@@ -156,4 +156,21 @@ public class ModelMesh implements MemoryResource {
         return new ModelMesh(positions, uvs, null, normals, tangents, biTangents, indices, radius);
     }
 
+    public static ModelMesh createCubeInverted(float sizeX, float sizeY, float sizeZ) {
+        float xh = sizeX / 2;
+        float yh = sizeY / 2;
+        float zh = sizeZ / 2;
+
+        float radius = (float) Math.sqrt(xh * xh + yh * yh + zh * zh);
+
+        float[] positions = {-xh, yh, -zh, -xh, -yh, zh, -xh, -yh, -zh, xh, yh, -zh, -xh, yh, zh, -xh, yh, -zh, xh, -yh, -zh, xh, yh, zh, xh, yh, -zh, -xh, -yh, -zh, xh, -yh, zh, xh, -yh, -zh, -xh, -yh, -zh, xh, yh, -zh, -xh, yh, -zh, xh, -yh, zh, -xh, yh, zh, xh, yh, zh, -xh, yh, -zh, -xh, yh, zh, -xh, -yh, zh, xh, yh, -zh, xh, yh, zh, -xh, yh, zh, xh, -yh, -zh, xh, -yh, zh, xh, yh, zh, -xh, -yh, -zh, -xh, -yh, zh, xh, -yh, zh, -xh, -yh, -zh, xh, -yh, -zh, xh, yh, -zh, xh, -yh, zh, -xh, -yh, zh, -xh, yh, zh};
+        float[] uvs = {0.375f, 0.75f, 0.625f, 1.0f, 0.375f, 1.0f, 0.375f, 0.5f, 0.625f, 0.75f, 0.375f, 0.75f, 0.375f, 0.25f, 0.625f, 0.5f, 0.375f, 0.5f, 0.375f, 0.0f, 0.625f, 0.25f, 0.375f, 0.25f, 0.125f, 0.25f, 0.375f, 0.5f, 0.125f, 0.5f, 0.625f, 0.25f, 0.875f, 0.5f, 0.625f, 0.5f, 0.375f, 0.75f, 0.625f, 0.75f, 0.625f, 1.0f, 0.375f, 0.5f, 0.625f, 0.5f, 0.625f, 0.75f, 0.375f, 0.25f, 0.625f, 0.25f, 0.625f, 0.5f, 0.375f, 0.0f, 0.625f, 0.0f, 0.625f, 0.25f, 0.125f, 0.25f, 0.375f, 0.25f, 0.375f, 0.5f, 0.625f, 0.25f, 0.875f, 0.25f, 0.875f, 0.5f};
+        float[] normals = {1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f};
+        float[] tangents = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f};
+        float[] biTangents = {0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f};
+        int[] indices = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+
+        return new ModelMesh(positions, uvs, null, normals, tangents, biTangents, indices, radius);
+    }
+
 }
