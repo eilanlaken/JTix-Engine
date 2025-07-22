@@ -86,6 +86,7 @@ public class Vector3 implements MemoryPool.Reset {
      * @param azimuthalRad The angle between x-axis in radians [0, 2pi]
      * @param polarRad The angle between z-axis in radians [0, pi]
      * @return This vector for chaining */
+    // TODO: copy from THREE js
     public Vector3 setFromSphericalRad(float radius, float azimuthalRad, float polarRad) {
         float cosPolar = MathUtils.cosRad(polarRad);
         float sinPolar = MathUtils.sinRad(polarRad);
@@ -96,8 +97,8 @@ public class Vector3 implements MemoryPool.Reset {
         return this.set(radius * cosAzim * sinPolar, radius * sinAzim * sinPolar, radius * cosPolar);
     }
 
-    public Vector3 setFromSphericalDeg(float radius, float azimuthalDeg, float polarDeg) {
-        return setFromSphericalRad(radius, azimuthalDeg * MathUtils.degreesToRadians, polarDeg * MathUtils.degreesToRadians);
+    public Vector3 setFromSphericalDeg(float radius, float phiDeg, float thetaDeg) {
+        return setFromSphericalRad(radius, phiDeg * MathUtils.degreesToRadians, thetaDeg * MathUtils.degreesToRadians);
     }
 
       // TODO

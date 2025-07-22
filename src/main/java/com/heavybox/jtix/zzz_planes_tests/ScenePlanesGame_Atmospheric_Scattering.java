@@ -6,6 +6,7 @@ import com.heavybox.jtix.graphics.*;
 import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
+import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import org.lwjgl.opengl.GL11;
@@ -42,11 +43,17 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
         skyShader = new Shader(skyVertex, skyFragment);
 
         skyMaterial = ModelMaterial.create();
-        skyMaterial.materialAttributes.put("turbidity", 2f);
-        skyMaterial.materialAttributes.put("rayleigh", 1f);
-        skyMaterial.materialAttributes.put("mieCoefficient", 0.005f);
+        skyMaterial.materialAttributes.put("turbidity", 0.02f);
+        skyMaterial.materialAttributes.put("rayleigh", 2f);
+        skyMaterial.materialAttributes.put("mieCoefficient", 0.1f);
         skyMaterial.materialAttributes.put("mieDirectionalG", 0.8f);
-        skyMaterial.materialAttributes.put("sunPosition", new Vector3()); // (0, 0, 0) by default
+
+
+        float phi = (90 - 1) * MathUtils.degreesToRadians;
+		float theta = 180 * MathUtils.degreesToRadians;
+        Vector3 sun = new Vector3().setFromSphericalRad( 1, theta, phi );
+
+        skyMaterial.materialAttributes.put("sunPosition", sun); // (0, 0, 0) by default
         skyMaterial.materialAttributes.put("up", new Vector3(0, 0, 1));
         skyMaterial.shader = skyShader;
 
@@ -66,11 +73,39 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
     public void start() {
         Graphics.setTargetFps(120);
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 400000, 75);
-        camera.position.set(0, -0, 0);
-        camera.lookAt(0,0,0);
+        camera.position.set(0, -3, 0);
+        camera.lookAt(0,-1,0);
         camera.update();
     }
 
+    // gameplay
+    float correctionF = 0;
+    float correctionP = 0;
+    private float speed = 1;
+
+    private void update_gameplay() {
+        float delta = Graphics.getDeltaTime();
+        Vector3 velocity = new Vector3(camera.forward).scl(speed);
+        camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) speed += delta * 700;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) speed -= delta * 70;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            camera.rotateAroundForward(delta * -90);
+            correctionF -= delta * 90;
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            camera.rotateAroundForward(delta * 90);
+            correctionF += delta * 90;
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.UP)) {
+            camera.rotateAroundRight(delta * -90);
+            correctionP += delta * 90;
+        }
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+            camera.rotateAroundRight(delta * 90);
+            correctionP -= delta * 90;
+        }
+    }
 
     @Override
     public void update() {
@@ -108,6 +143,8 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
             camera.rotateAroundRight(panVertical * 5);
         }
         camera.update();
+        update_gameplay();
+
 
         if (Input.keyboard.isKeyPressed(Keyboard.Key.F)) {
             Renderer3D.lightDir.rotate(1f,1,0,0);

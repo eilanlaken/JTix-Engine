@@ -5,6 +5,7 @@ layout(location = 0) in vec3 a_position;
 
 uniform mat4 u_transform;
 uniform mat4 u_camera_combined;
+uniform vec3 u_camera_position;
 
 
 uniform vec3 sunPosition;
@@ -55,10 +56,10 @@ vec3 totalMie( float T ) {
 
 void main() {
 
-    vec4 worldPosition = u_transform * vec4( a_position, 1.0 );
+    vec4 worldPosition = u_transform * vec4( a_position + u_camera_position, 1.0 );
     vWorldPosition = worldPosition.xyz;
 
-    gl_Position = u_camera_combined * vec4( a_position, 1.0 );
+    gl_Position = u_camera_combined * vec4( a_position + u_camera_position, 1.0 );
     //gl_Position.z = gl_Position.w; // set z to camera.far
 
     vSunDirection = normalize( sunPosition );
