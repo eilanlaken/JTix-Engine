@@ -17,6 +17,14 @@ class MathUtilsTest {
     }
 
     @Test
+    void testFloor() {
+        Assertions.assertEquals(Math.floor(1.05f), MathUtils.floor(1.05f));
+        Assertions.assertEquals(Math.floor(0.05f), MathUtils.floor(0.05f));
+        Assertions.assertEquals(Math.floor(4.82f), MathUtils.floor(4.82f));
+        Assertions.assertEquals(Math.floor(-1.05f), MathUtils.floor(-1.05f));
+    }
+
+    @Test
     void getAreaTriangle() {
         Assertions.assertEquals(0.5f, MathUtils.getAreaTriangle(0.0f,0.0f,1.0f,0.0f,0.0f,1.0f), MathUtils.FLOAT_ROUNDING_ERROR);
         Assertions.assertEquals(0.5f, MathUtils.getAreaTriangle(1.0f,0.0f,0.0f,1.0f,1.0f,1.0f), MathUtils.FLOAT_ROUNDING_ERROR);

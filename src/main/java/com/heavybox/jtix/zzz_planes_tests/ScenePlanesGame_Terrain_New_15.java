@@ -39,7 +39,7 @@ public class ScenePlanesGame_Terrain_New_15 implements Scene {
 
     @Override
     public void setup() {
-        tile = new GameObjectTerrainTile(2,5);
+        tile = new GameObjectTerrainTile(3,2);
         water = new GameObjectTerrainWater(0,0);
 //        for (int i = 0; i < terrain.length; i++) {
 //            for (int j = 0; j < terrain[0].length; j++) {

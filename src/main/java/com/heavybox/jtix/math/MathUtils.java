@@ -364,6 +364,12 @@ public final class MathUtils {
         return Math.min(a, MathUtils.min(b, c, d));
     }
 
+    // TODO: write unit tests
+    public static int floor(float x) {
+        int xi = (int) x;
+        return x < xi ? xi - 1 : xi;
+    }
+
     // [x1, x2] and [x3, x4] are intervals.
     public static float intervalsOverlap(float a_min, float a_max, float b_min, float b_max) {
         if (a_min > a_max) {
@@ -711,6 +717,17 @@ public final class MathUtils {
 
     public static float lerp(float step, float a, float b) {
         return a + step * (b - a);
+    }
+
+    public static float smoothstep(float edge0, float edge1, float x) {
+        x = clampFloat((x - edge0) / (edge1 - edge0), 0f, 1f);
+        return x * x * (3 - 2 * x);
+    }
+
+    // Smootherstep: 6x^5 - 15x^4 + 10x^3
+    public static float smootherstep(float edge0, float edge1, float x) {
+        x = clampFloat((x - edge0) / (edge1 - edge0), 0f, 1f);
+        return x * x * x * (x * (x * 6 - 15) + 10);
     }
 
     private static class Sin {

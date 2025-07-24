@@ -9,9 +9,8 @@ import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
+import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Arrays;
 
 // TODO:
 // see here:
@@ -19,9 +18,18 @@ import java.util.Arrays;
 // https://threejs.org/examples/?q=sky#webgl_shaders_sky
 // https://github.com/mrdoob/three.js/blob/master/examples/webgl_shaders_sky.html
 // https://github.com/mrdoob/three.js/blob/master/examples/jsm/objects/Sky.js
+
+// TERRAIN:
+// https://tangrams.github.io/heightmapper/#6.04167/-19.436/350.455
 public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
 
     private Camera camera;
+
+    GameObjectTerrainTile tile_1;
+    GameObjectTerrainTile tile_2;
+    GameObjectTerrainTile tile_3;
+    GameObjectTerrainTile tile_4;
+
 
     Renderer2D renderer2D = new Renderer2D();
     FrameBuffer sceneFrameBuffer;
@@ -37,19 +45,38 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
 
     @Override
     public void setup() {
+        for (int i = 0; i < 64; i++) {
+            for (int j = 0; j < 64; j++) {
+
+            }
+        }
+        tile_1 = new GameObjectTerrainTile(2,0);
+        tile_2 = new GameObjectTerrainTile(2,1);
+        tile_3 = new GameObjectTerrainTile(3,0);
+        tile_4 = new GameObjectTerrainTile(3,1);
+
 
         String skyVertex = Assets.getFileContent("assets/game-shaders/sky.vert");
         String skyFragment = Assets.getFileContent("assets/game-shaders/sky.frag");
         skyShader = new Shader(skyVertex, skyFragment);
 
         skyMaterial = ModelMaterial.create();
+        // low
         skyMaterial.materialAttributes.put("turbidity", 0.02f);
         skyMaterial.materialAttributes.put("rayleigh", 2f);
         skyMaterial.materialAttributes.put("mieCoefficient", 0.1f);
         skyMaterial.materialAttributes.put("mieDirectionalG", 0.8f);
 
+        // heigh
+//        skyMaterial.materialAttributes.put("turbidity", 0.002f);
+//        skyMaterial.materialAttributes.put("rayleigh", 0.1f);
+//        skyMaterial.materialAttributes.put("mieCoefficient", 0.1f);
+//        skyMaterial.materialAttributes.put("mieDirectionalG", 0.8f);
 
-        float phi = (90 - 1) * MathUtils.degreesToRadians;
+        float phi = (90 - 2) * MathUtils.degreesToRadians;
+
+
+
 		float theta = 180 * MathUtils.degreesToRadians;
         Vector3 sun = new Vector3().setFromSphericalRad( 1, theta, phi );
 
@@ -157,6 +184,10 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
         Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
+        Renderer3D.drawModel(tile_1.shader, tile_1.mesh, tile_1.material, tile_1.transform);
+        Renderer3D.drawModel(tile_2.shader, tile_2.mesh, tile_2.material, new Matrix4x4().translateGlobalAxisXYZ(2000,0,0));
+        Renderer3D.drawModel(tile_3.shader, tile_3.mesh, tile_3.material, new Matrix4x4().translateGlobalAxisXYZ(0,-2000,0));
+        Renderer3D.drawModel(tile_4.shader, tile_4.mesh, tile_4.material, new Matrix4x4().translateGlobalAxisXYZ(2000,-2000,0));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

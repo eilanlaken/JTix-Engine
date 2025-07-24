@@ -1,21 +1,23 @@
 package com.heavybox.jtix.zzz_project;
 
-import com.heavybox.jtix.application.Scene;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.*;
 
 public class GameObjectTerrainTile extends GameObject {
 
-    private Shader shader;
-    private ModelMesh meshLOD0;
-    private ModelMaterial material;
-    private Scene3D scene;
+    public static final float TILE_SIZE_METERS = 2000;
+    public static final int TOTAL_TILES = 64;
+
+    public Shader shader;
+    public ModelMesh mesh;
+    public ModelMaterial material;
+    public Scene3D scene;
 
 
     public GameObjectTerrainTile(int index_i, int index_j) {
         super();
 
-
+        //transform.translateGlobalAxisXYZ(-32 * TILE_SIZE_METERS - TILE_SIZE_METERS / 2 + index_j * TILE_SIZE_METERS,32 * TILE_SIZE_METERS - TILE_SIZE_METERS / 2 - index_i * TILE_SIZE_METERS, 0);
 
         // terrain shader
         Assets.loadShader("terrain-shader", "assets/game-shaders/terrain-5.vert","assets/game-shaders/terrain-5.frag");
@@ -23,25 +25,23 @@ public class GameObjectTerrainTile extends GameObject {
         //Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
         Assets.loadScene("assets/game-maps/terrain-blocks-LODs-2km.fbx", "assets/game-textures");
         // terrain topology
-        Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/heightmap-128.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
-
-        Assets.loadTexture("assets/game-maps/blendmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
+        //Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
+        //Assets.loadTexture("assets/game-maps/blendmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/heightmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
 
         // terrain colors
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-road.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-water.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-wheat-new-bright.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-wheat-new.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-road.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-water.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-wheat-new-bright.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-wheat-new.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         // wait
         Assets.finishLoading();
 
         shader = Assets.get("terrain-shader");
-        //Texture terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();
-        Texture terrainBlendMap = Assets.get("assets/game-maps/blendmap-8k.jpg");
+        Texture terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();
+        //Texture terrainBlendMap = Assets.get("assets/game-maps/blendmap-8k.jpg");
         Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-8k.jpg");
 
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
@@ -54,7 +54,7 @@ public class GameObjectTerrainTile extends GameObject {
         scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
         Scene3D.Node node = scene.namedNodes.get("LOD_0");
         //Scene3D.Node node = scene.namedNodes.get("water");
-        meshLOD0 = node.model.meshes[0];
+        mesh = node.model.meshes[0];
 
         material = node.model.materials[0].clone();
         material.materialAttributes.put("u_texture_steep", terrainStone);
@@ -80,7 +80,7 @@ public class GameObjectTerrainTile extends GameObject {
 
     @Override
     public void render() {
-        Renderer3D.drawModel(shader, meshLOD0, material, transform);
+        Renderer3D.drawModel(shader, mesh, material, transform);
     }
 
 }

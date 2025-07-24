@@ -2,6 +2,7 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
+import com.heavybox.jtix.tools.ToolsTextureGenerator;
 import com.heavybox.jtix.zzz_planes_tests.*;
 
 import java.io.IOException;
@@ -69,6 +70,9 @@ public class Main {
 //        ToolsTextureManipulator.save(tiles[4][8], "assets/game-maps/tile[4][8].jpg");
 //        ToolsTextureManipulator.save(tiles[4][9], "assets/game-maps/tile[4][9].jpg");
 //        if (true) return;
+
+        //ToolsTextureGenerator.generateTextureNoiseSimplex(512, 512, "assets/generated", "perlin", true);
+        //if (true) return;;
 
         ApplicationSettings settings = new ApplicationSettings();
         Application.init(settings); // can init with options.
