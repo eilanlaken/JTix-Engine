@@ -21,9 +21,11 @@ import org.lwjgl.opengl.GL11;
 
 // TERRAIN:
 // https://tangrams.github.io/heightmapper/#6.04167/-19.436/350.455
-public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
+public class ScenePlanesGame_Terrain_16 implements Scene {
 
     private Camera camera;
+
+    GameObjectTerrainTile[][] tiles = new GameObjectTerrainTile[64][64];
 
     GameObjectTerrainTile tile_1;
     GameObjectTerrainTile tile_2;
@@ -39,7 +41,7 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
     Shader skyShader;
     ModelMaterial skyMaterial;
 
-    public ScenePlanesGame_Atmospheric_Scattering() {
+    public ScenePlanesGame_Terrain_16() {
 
     }
 
@@ -100,7 +102,7 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
     public void start() {
         Graphics.setTargetFps(120);
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 400000, 75);
-        camera.position.set(0, -3, 0);
+        camera.position.set(0, -800, 0);
         camera.lookAt(0,-1,0);
         camera.update();
     }
@@ -113,6 +115,7 @@ public class ScenePlanesGame_Atmospheric_Scattering implements Scene {
     private void update_gameplay() {
         float delta = Graphics.getDeltaTime();
         Vector3 velocity = new Vector3(camera.forward).scl(speed);
+        System.out.println(speed);
         camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) speed += delta * 700;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) speed -= delta * 70;

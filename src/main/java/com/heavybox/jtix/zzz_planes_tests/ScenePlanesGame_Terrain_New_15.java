@@ -7,10 +7,8 @@ import com.heavybox.jtix.input.Input;
 import com.heavybox.jtix.input.Keyboard;
 import com.heavybox.jtix.input.Mouse;
 import com.heavybox.jtix.math.Vector3;
-import com.heavybox.jtix.zzz_project.GameObjectTerrainLandBlock;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainWater;
-import com.heavybox.jtix.zzz_project.GameObjectTerrainWaterBlock;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 

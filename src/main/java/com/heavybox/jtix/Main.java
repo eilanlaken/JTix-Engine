@@ -2,7 +2,6 @@ package com.heavybox.jtix;
 
 import com.heavybox.jtix.application.Application;
 import com.heavybox.jtix.application.ApplicationSettings;
-import com.heavybox.jtix.tools.ToolsTextureGenerator;
 import com.heavybox.jtix.zzz_planes_tests.*;
 
 import java.io.IOException;
@@ -82,7 +81,8 @@ public class Main {
         //Application.launch(new ScenePlanesGame_Terrain_New_9());
         //Application.launch(new SceneRendering3D_VFX_1());
         //Application.launch(new SceneRendering3D_NewClouds());
-        Application.launch(new ScenePlanesGame_Atmospheric_Scattering());
+        //Application.launch(new ScenePlanesGame_Terrain_New_10());
+        Application.launch(new ScenePlanesGame_Terrain_17());
 
 
     }

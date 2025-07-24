@@ -10,9 +10,9 @@ struct DirectionalLight {
     float intensity;
 };
 
+// inputs
 in float closeMask;
 in float middleMask;
-// inputs
 in vec2 uv;
 in vec2 uv_geometry;
 in vec2 uv_colors;
@@ -113,21 +113,16 @@ void main()
     vec2 steep_uv = uv_colors * 2;
     //steep_uv = (4.0 * a1 / p1) * abs(mod(scaled_uv, p1) - p1 * 0.5);
 
-    //vec3 background_color = texture(u_texture_background, uv_colors * 2).rgb * background_weight;
     vec3 background_color = get_background_color() * background_weight;
-    //background_color = vec3(middleMask, middleMask, middleMask);// TODO: remove
     vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
     vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
     vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;
-    //vec3 a_color = texture(u_texture_alpha, scaled_uv).rgb * blend_map_color.a;
 
     vec3 total_color = background_color + r_color + g_color + b_color;
 
-    float steepness = 1.0 - abs(normal.z); // 0 = flat, 1 = vertical
-    steepness = clamp(steepness, 0.0, 1.0);
-    //float smoothT = steepness * steepness * (3.0 - 2.0 * steepness);
-    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, steep_uv).rgb, steepness);
-    //albedo = mix(total_color.rgb, albedo, 0.65);
+    float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
+    float smoothT = t * t * (3.0 - 2.0 * t);
+    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, steep_uv).rgb, 1 - smoothT);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv * 2 + u_time * 0.05) / 2).rgb, 1.0 - blend_map_color.a); // mix with water
 
     /* Directional light calculation */

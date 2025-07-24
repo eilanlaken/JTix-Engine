@@ -1,8 +1,9 @@
 // https://learnopengl.com/code_viewer_gh.php?code=src/6.pbr/1.2.lighting_textured/1.2.pbr.vs
 #version 450
 
+//#define MAX_HEIGHT 1900.0
 #define MAX_HEIGHT 1900.0
-#define MIN_HEIGHT -100.0
+#define MIN_HEIGHT -20.0
 //#define MAP_SIZE 4096
 #define MAP_SIZE 8192 // TODO: remove, this is accepted as a uniform for flexibility.
 #define TILE_SIZE 128
@@ -28,6 +29,8 @@ out vec2 uv_geometry;
 out vec2 uv_colors;
 out vec3 normal;
 out float height;
+out float closeMask;
+out float middleMask;
 
 float getHeight(vec2 uv)
 {
@@ -45,9 +48,6 @@ vec2 rotateUV(vec2 uv, float angle) {
     uv += vec2(0.5, 0.5);
     return uv;
 }
-
-out float closeMask;
-out float middleMask;
 
 void main()
 {
