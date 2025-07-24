@@ -66,7 +66,7 @@ public final class ToolsTextureGenerator {
     public static void generateTextureNoiseSimplex(int width, int height, final String directory, final String outputName, boolean overrideExistingFile) throws IOException {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-        float scale = 0.05f;
+        float scale = 0.1f;
         float persistence = 0.5f;
         int octaves = 1;
         int lacunarity = 2;

@@ -364,7 +364,6 @@ public final class MathUtils {
         return Math.min(a, MathUtils.min(b, c, d));
     }
 
-    // TODO: write unit tests
     public static int floor(float x) {
         int xi = (int) x;
         return x < xi ? xi - 1 : xi;
