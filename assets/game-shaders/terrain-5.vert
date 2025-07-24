@@ -4,7 +4,7 @@
 #define MAX_HEIGHT 1900.0
 #define MIN_HEIGHT -100.0
 //#define MAP_SIZE 4096
-#define MAP_SIZE 8192
+#define MAP_SIZE 8192 // TODO: remove, this is accepted as a uniform for flexibility.
 #define TILE_SIZE 128
 
 // attributes
@@ -16,6 +16,8 @@ uniform mat4 u_transform;
 uniform vec3 u_camera_position;
 uniform mat4 u_camera_combined;
 uniform sampler2D u_texture_height_map;
+uniform int u_mapSize;
+uniform float u_mapSizeInv;
 uniform int u_tile_index_row;
 uniform int u_tile_index_col;
 
@@ -44,10 +46,13 @@ vec2 rotateUV(vec2 uv, float angle) {
     return uv;
 }
 
+out float closeMask;
+out float middleMask;
+
 void main()
 {
     // TODO
-    const int tiles_per_row = MAP_SIZE / TILE_SIZE;
+    const int tiles_per_row = u_mapSize / TILE_SIZE;
     const float tile_size = 1.0 / float(tiles_per_row);
     vec2 offset_uv = vec2(float(u_tile_index_col), float(u_tile_index_row)) * tile_size;
     uv_geometry = a_textCoords0 * tile_size + offset_uv;
@@ -58,7 +63,7 @@ void main()
     vec4 vertex_position =  u_transform * vec4(a_position.x, a_position.y, height, 1.0);
     gl_Position = u_camera_combined * vertex_position;
 
-    vec3 offset = vec3(1.0 / MAP_SIZE, 1.0 / MAP_SIZE, 0);
+    vec3 offset = vec3(u_mapSizeInv, u_mapSizeInv, 0);
     float hL = getHeight(uv_geometry - offset.xz);
     float hR = getHeight(uv_geometry + offset.xz);
     float hD = getHeight(uv_geometry - offset.zy);
@@ -78,4 +83,13 @@ void main()
 
     uv_colors = a_textCoords0;
     uv_colors = rotateUV(uv_colors, index * 8);
+
+    const float closeDistance = 300.0;
+    const float closeBlendAmount = 50.0;
+    const float middleDistance = 650.0;
+    const float middleBlendAmount = 50.0;
+    float distance_to_camera = length(world_vertex_position - u_camera_position);
+    closeMask = smoothstep(closeDistance + closeBlendAmount, closeDistance, distance_to_camera);
+    middleMask = smoothstep(middleDistance + middleBlendAmount, middleDistance, distance_to_camera);
 }
+

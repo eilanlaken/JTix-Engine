@@ -3,6 +3,7 @@ package com.heavybox.jtix.zzz_project;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.*;
 
+@Deprecated
 public class GameObjectTerrainLandBlock extends GameObject {
 
     private Shader shader;

@@ -10,6 +10,8 @@ struct DirectionalLight {
     float intensity;
 };
 
+in float closeMask;
+in float middleMask;
 // inputs
 in vec2 uv;
 in vec2 uv_geometry;
@@ -35,6 +37,10 @@ uniform sampler2D u_texture_height_map;
 // uniform - global variables
 uniform float u_time;
 uniform vec3 u_camera_position;
+
+const float close_uv_scale = 8;
+const float middle_uv_scale = 4;
+const float far_uv_scale = 1;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -88,6 +94,13 @@ vec3 fresnel_schlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
+vec3 get_background_color() {
+    vec3 final = texture(u_texture_background, uv_colors * far_uv_scale).rgb;
+    final = mix(final, texture(u_texture_background, uv_colors * middle_uv_scale).rgb, middleMask);
+    final = mix(final, texture(u_texture_background, uv_colors * close_uv_scale).rgb, closeMask);
+    return final;
+}
+
 void main()
 {
     /* total color calculation */
@@ -100,7 +113,9 @@ void main()
     vec2 steep_uv = uv_colors * 2;
     //steep_uv = (4.0 * a1 / p1) * abs(mod(scaled_uv, p1) - p1 * 0.5);
 
-    vec3 background_color = texture(u_texture_background, uv_colors * 2).rgb * background_weight;
+    //vec3 background_color = texture(u_texture_background, uv_colors * 2).rgb * background_weight;
+    vec3 background_color = get_background_color() * background_weight;
+    //background_color = vec3(middleMask, middleMask, middleMask);// TODO: remove
     vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
     vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
     vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;

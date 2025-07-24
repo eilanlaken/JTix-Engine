@@ -65,6 +65,11 @@ public class GameObjectTerrainTile extends GameObject {
         material.materialAttributes.put("u_texture_alpha", terrainWater);
         material.materialAttributes.put("u_texture_blend_map", terrainBlendMap);
         material.materialAttributes.put("u_texture_height_map", terrainHeightMap);
+
+        material.materialAttributes.put("u_mapSize", terrainHeightMap.height);
+        material.materialAttributes.put("u_mapSizeInv", terrainHeightMap.invHeight);
+
+
         material.materialAttributes.put("u_tile_index_row", index_i);
         material.materialAttributes.put("u_tile_index_col", index_j);
         material.transparent = false;
