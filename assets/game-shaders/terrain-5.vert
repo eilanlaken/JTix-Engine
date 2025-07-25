@@ -2,7 +2,7 @@
 #version 450
 
 //#define MAX_HEIGHT 1900.0
-#define MAX_HEIGHT 1900.0
+#define MAX_HEIGHT 1800.0
 #define MIN_HEIGHT -20.0
 //#define MAP_SIZE 4096
 #define MAP_SIZE 8192 // TODO: remove, this is accepted as a uniform for flexibility.

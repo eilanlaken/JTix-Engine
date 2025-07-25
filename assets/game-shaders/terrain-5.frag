@@ -122,7 +122,9 @@ void main()
 
     float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
     float smoothT = t * t * (3.0 - 2.0 * t);
-    vec3 albedo = mix(total_color.rgb, texture(u_texture_steep, steep_uv).rgb, 1 - smoothT);
+
+    vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
+    vec3 albedo = mix(total_color.rgb, rock_color, 1 - smoothT);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv * 2 + u_time * 0.05) / 2).rgb, 1.0 - blend_map_color.a); // mix with water
 
     /* Directional light calculation */

@@ -176,7 +176,7 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
-        Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
+        //Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
                 Renderer3D.drawModel(tiles[i][j].shader, tiles[i][j].mesh, tiles[i][j].material, tiles[i][j].transform);
