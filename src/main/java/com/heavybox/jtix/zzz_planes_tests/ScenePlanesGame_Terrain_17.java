@@ -10,6 +10,7 @@ import com.heavybox.jtix.math.MathUtils;
 import com.heavybox.jtix.math.Matrix4x4;
 import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
+import com.heavybox.jtix.zzz_project.GameObjectTerrainWater;
 import org.lwjgl.opengl.GL11;
 
 // TODO:
@@ -26,6 +27,7 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
     private Camera camera;
 
     GameObjectTerrainTile[][] tiles = new GameObjectTerrainTile[64][64];
+    GameObjectTerrainWater[][] water = new GameObjectTerrainWater[64][64];
 
     Renderer2D renderer2D = new Renderer2D();
     FrameBuffer sceneFrameBuffer;
@@ -44,6 +46,7 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
                 tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000);
+                water[i][j] = new GameObjectTerrainWater(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000);
             }
         }
 
@@ -179,6 +182,8 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
         //Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
+                //water[i][j].update(delta);
+                //Renderer3D.drawModel(water[i][j].shader, water[i][j].mesh, water[i][j].material, water[i][j].transform);
                 Renderer3D.drawModel(tiles[i][j].shader, tiles[i][j].mesh, tiles[i][j].material, tiles[i][j].transform);
             }
         }

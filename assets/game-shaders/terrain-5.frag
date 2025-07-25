@@ -108,23 +108,27 @@ void main()
     float background_weight = 1 - (blend_map_color.r + blend_map_color.g + blend_map_color.b);
 
     vec2 scaled_uv = uv_colors * 4.0;
-    float a1 = 512.0;
-    float p1 = a1 * 4;
     vec2 steep_uv = uv_colors * 2;
     //steep_uv = (4.0 * a1 / p1) * abs(mod(scaled_uv, p1) - p1 * 0.5);
 
+    // calculate terrain blendmap colors
     vec3 background_color = get_background_color() * background_weight;
     vec3 r_color = texture(u_texture_red, scaled_uv).rgb * blend_map_color.r;
     vec3 g_color = texture(u_texture_green, scaled_uv).rgb * blend_map_color.g;
     vec3 b_color = texture(u_texture_blue, scaled_uv).rgb * blend_map_color.b;
 
+    // steepness
+    float t = clamp(normal.z, 0.0, 1.0); // 1 on flat ground, 0 on vertical
+    //float smoothT = t; // linear
+    //float smoothT = t * t * (3.0 - 2.0 * t); // smoothstep
+    float smoothT = t * t * t * (t * (t * 6.0 - 15.0) + 10.0); // smootherstep
+    float bias = 0.25; // 0 = no bias, 1 = full total_color
+    float s = clamp(smoothT + bias * (1.0 - smoothT), 0.0, 1.0);
+
+    //vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
+    vec3 rock_color = texture(u_texture_steep, uv_colors).rgb;
     vec3 total_color = background_color + r_color + g_color + b_color;
-
-    float t = clamp(normal.z, 0.0, 1.0); // 0 on flat ground, 1 on vertical
-    float smoothT = t * t * (3.0 - 2.0 * t);
-
-    vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
-    vec3 albedo = mix(total_color.rgb, rock_color, 1 - smoothT);
+    vec3 albedo = mix(rock_color, total_color.rgb, s);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv * 2 + u_time * 0.05) / 2).rgb, 1.0 - blend_map_color.a); // mix with water
 
     /* Directional light calculation */
