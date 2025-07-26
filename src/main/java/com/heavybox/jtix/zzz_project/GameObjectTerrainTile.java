@@ -29,7 +29,7 @@ public class GameObjectTerrainTile extends GameObject {
 
         // terrain colors
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-grass-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-water.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-new-bright.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -43,7 +43,7 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-8k.jpg");
 
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
-        Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty
+        Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-2.jpg"); // empty
         Texture terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
         Texture terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-new-bright.jpg"); // g
         Texture terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-new.jpg"); // b
@@ -93,6 +93,8 @@ public class GameObjectTerrainTile extends GameObject {
         // terrain colors
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-grass-dark.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        //Assets.loadTexture("assets/game-maps/terrain-grass-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        //Assets.loadTexture("assets/game-maps/terrain-grass-3.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-road.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-water.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/terrain-wheat-new-bright.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -107,6 +109,8 @@ public class GameObjectTerrainTile extends GameObject {
 
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty
+        //Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-2.jpg"); // empty
+        //Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-3.jpg"); // empty
         Texture terrainRoad = Assets.get("assets/game-maps/terrain-road.jpg"); // r
         Texture terrainWheatBright = Assets.get("assets/game-maps/terrain-wheat-new-bright.jpg"); // g
         Texture terrainWheatDark = Assets.get("assets/game-maps/terrain-wheat-new.jpg"); // b

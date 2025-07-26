@@ -38,11 +38,11 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
     ModelMaterial skyMaterial;
 
     public ScenePlanesGame_Terrain_17() {
-
     }
 
     @Override
     public void setup() {
+
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
                 tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000);
@@ -93,7 +93,7 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
 
     @Override
     public void start() {
-        Graphics.setTargetFps(120);
+        Graphics.setTargetFps(60);
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 400000, 75);
         camera.position.set(0, -800, 0);
         camera.lookAt(0,-1,0);

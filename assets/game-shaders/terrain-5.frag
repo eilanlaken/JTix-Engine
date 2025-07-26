@@ -121,6 +121,7 @@ void main()
     float t = clamp(normal.z, 0.0, 1.0); // 1 on flat ground, 0 on vertical
     //float smoothT = t; // linear
     //float smoothT = t * t * (3.0 - 2.0 * t); // smoothstep
+    float steepness = 1 - smoothstep(0.23, 0.0, t);
     float smoothT = t * t * t * (t * (t * 6.0 - 15.0) + 10.0); // smootherstep
     float bias = 0.25; // 0 = no bias, 1 = full total_color
     float s = clamp(smoothT + bias * (1.0 - smoothT), 0.0, 1.0);
@@ -128,7 +129,7 @@ void main()
     //vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
     vec3 rock_color = texture(u_texture_steep, uv_colors).rgb;
     vec3 total_color = background_color + r_color + g_color + b_color;
-    vec3 albedo = mix(rock_color, total_color.rgb, s);
+    vec3 albedo = mix(rock_color, total_color.rgb, steepness);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv * 2 + u_time * 0.05) / 2).rgb, 1.0 - blend_map_color.a); // mix with water
 
     /* Directional light calculation */
