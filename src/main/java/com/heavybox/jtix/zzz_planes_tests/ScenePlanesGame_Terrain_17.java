@@ -46,6 +46,7 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
 
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
+                // tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 1000 + 500 + j * 1000, 32 * 1000 - 500 - i * 1000);
                 tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000);
                 water[i][j] = new GameObjectTerrainWater(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000);
             }
@@ -96,8 +97,8 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
     public void start() {
         Graphics.setTargetFps(60);
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 400000, 75);
-        camera.position.set(0, -800, 0);
-        camera.lookAt(0,-1,0);
+        camera.position.set(0, -800, 1000);
+        camera.lookAt(0,-1,1000);
         camera.update();
     }
 
@@ -109,8 +110,10 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
     private void update_gameplay() {
         float delta = Graphics.getDeltaTime();
         Vector3 velocity = new Vector3(camera.forward).scl(speed);
-        System.out.println(Graphics.getFps());
+        System.out.println(velocity.len());
         camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.KEY_1)) speed = 343;
+        if (Input.keyboard.isKeyPressed(Keyboard.Key.KEY_2)) speed = 343 * 2;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.A)) speed += delta * 500;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.Z)) speed -= delta * 500;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
