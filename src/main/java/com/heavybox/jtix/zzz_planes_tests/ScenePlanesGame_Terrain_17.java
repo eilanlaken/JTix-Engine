@@ -28,6 +28,7 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
 
     GameObjectTerrainTile[][] tiles = new GameObjectTerrainTile[64][64];
     GameObjectTerrainWater[][] water = new GameObjectTerrainWater[64][64];
+    GameObjectTerrainWater w = new GameObjectTerrainWater(0,0);
 
     Renderer2D renderer2D = new Renderer2D();
     FrameBuffer sceneFrameBuffer;
@@ -179,7 +180,8 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         Renderer3D.begin(camera);
-        //Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
+        Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
+        w.update(delta);
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
                 //water[i][j].update(delta);
@@ -187,6 +189,9 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
                 Renderer3D.drawModel(tiles[i][j].shader, tiles[i][j].mesh, tiles[i][j].material, tiles[i][j].transform);
             }
         }
+        Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(1000,0,50));
+        Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(3000,0,50));
+
         Renderer3D.end();
 
         FrameBufferBinder.bind();

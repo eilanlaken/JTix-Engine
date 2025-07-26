@@ -15,24 +15,25 @@ public class GameObjectTerrainWater extends GameObject {
     public GameObjectTerrainWater(int index_i, int index_j) {
         // load everything if not loaded
         // load water shader
-        Assets.loadShader("water-shader", "assets/game-shaders/water.vert","assets/game-shaders/water.frag");
+        Assets.loadShader("water-shader", "assets/game-shaders/water-2.vert","assets/game-shaders/water-2.frag");
         // load model
-        Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
+        Assets.loadScene("assets/game-maps/terrain-blocks-LODs-2km.fbx", "assets/game-textures");
         Assets.finishLoading();
 
         shader = Assets.get("water-shader");
 
-        scene = Assets.get("assets/game-maps/terrain-blocks-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("water");
-        //Scene3D.Node node = scene.namedNodes.get("LOD_1");
-        //mesh = node.model.meshes[0];
+        scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
+        Scene3D.Node node;
+        node = scene.namedNodes.get("square");
+        node = scene.namedNodes.get("LOD_0");
+        mesh = node.model.meshes[0];
 
         material = node.model.materials[0].clone();
         material.materialAttributes.put("time", 0.0f);
         material.materialAttributes.put("uTroughColor", Color.valueOf("#186691"));
         material.materialAttributes.put("uSurfaceColor", Color.valueOf("#2a87a3"));
         material.materialAttributes.put("uPeakColor", Color.valueOf("#bbd8e0"));
-        material.materialAttributes.put("uWavesAmplitude", 1.6f);
+        material.materialAttributes.put("uWavesAmplitude", 2.0f);
         material.materialAttributes.put("uWavesSpeed", 0.4f);
         material.materialAttributes.put("uWavesFrequency", 0.002f);
         material.materialAttributes.put("uWavesPersistence", 5);
@@ -42,6 +43,8 @@ public class GameObjectTerrainWater extends GameObject {
         material.materialAttributes.put("uTroughTransition", 8f);
         material.materialAttributes.put("uPeakThreshold", 22);
         material.materialAttributes.put("uPeakTransition", 0.1f);
+//        material.materialAttributes.put("uPeakThreshold", 8); // TODO: this will make the colors show
+//        material.materialAttributes.put("uPeakTransition", 3f);
         material.transparent = false;
     }
 
@@ -49,7 +52,7 @@ public class GameObjectTerrainWater extends GameObject {
         transform.translateGlobalAxisXYZ(x, y, 0);
         // load everything if not loaded
         // load water shader
-        Assets.loadShader("water-shader", "assets/game-shaders/water.vert","assets/game-shaders/water.frag");
+        Assets.loadShader("water-shader", "assets/game-shaders/water.vert-2","assets/game-shaders/water-2.frag");
         // load model
         Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
         Assets.finishLoading();

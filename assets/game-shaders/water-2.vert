@@ -57,14 +57,21 @@ float snoise(vec2 v)
     return 130.0 * dot(m, g);
 }
 
-float getElevation(vec2 p)
+float getElevation(vec3 p)
 {
     float a = 1.0f;
     float f = uWavesFrequency;
     float total = 0.0f;
+
+    float dist = length(u_camera_position - p);
+    float maxDist = 4200.0;
+    float attenuation = smoothstep(maxDist, 0.0, dist);
+    attenuation = mix(0.1, 1.0, attenuation); // remap to [0.5,1.0]
+    float amp = uWavesAmplitude * attenuation;
+
     for (int i = 0; i < uWavesIterations; i++)
     {
-        total += uWavesAmplitude * snoise(f * p.xy + uWavesSpeed * time);
+        total += amp * snoise(f * p.xy + uWavesSpeed * time);
         a *= uWavesPersistence;
         f *= uWavesLacunarity;
     }
@@ -75,14 +82,14 @@ float getElevation(vec2 p)
 void main()
 {
     vec4 vertex_position =  u_transform * vec4(a_position, 1.0);
-    float elavation = getElevation(vertex_position.xy);
+    float elavation = getElevation(vertex_position.xyz);
     vertex_position.z += elavation;
     gl_Position = u_camera_combined * vertex_position;
 
     float eps = 1.0f/512.0f;
     vec3 p = vertex_position.xyz;
-    vec3 px = vec3(p.x + eps, p.y, getElevation(vec2(p.x + eps,p.y)));
-    vec3 py = vec3(p.x, p.y + eps, getElevation(vec2(p.x,p.y + eps)));
+    vec3 px = vec3(p.x + eps, p.y, getElevation(vec3(p.x + eps,p.y, 0)));
+    vec3 py = vec3(p.x, p.y + eps, getElevation(vec3(p.x,p.y + eps, 0)));
     vec3 tangent = normalize(px - p);
     vec3 bitangent = normalize(py - p);
     normal = cross(tangent, bitangent);
