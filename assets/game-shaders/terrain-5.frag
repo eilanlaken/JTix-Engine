@@ -45,6 +45,17 @@ const float far_uv_scale = 1;
 // outputs
 layout (location = 0) out vec4 out_color;
 
+vec3 triplanar_texture(sampler2D p_sampler) {
+    vec3 p_weights = abs(normal);
+    p_weights /= (p_weights.x + p_weights.y + p_weights.z);
+    vec3 p_triplanar_pos = world_vertex_position * 0.001; // scale controls texture tiling
+    vec3 samp=vec3(0.0);
+    samp+= texture(p_sampler,p_triplanar_pos.xy).rgb * p_weights.z;
+    samp+= texture(p_sampler,p_triplanar_pos.xz).rgb * p_weights.y;
+    samp+= texture(p_sampler,p_triplanar_pos.zy * vec2(-1.0,1.0)).rgb * p_weights.x;
+    return samp;
+}
+
 // TODO: maybe blend to water color, not alpha.
 float getAlpha()
 {
@@ -125,7 +136,8 @@ void main()
     float steepness = 1 - smoothstep(0.2, 0.0, t);
 
     //vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
-    vec3 rock_color = texture(u_texture_steep, uv_colors).rgb;
+    //vec3 rock_color = texture(u_texture_steep, uv_colors).rgb;
+    vec3 rock_color = triplanar_texture(u_texture_steep);
     vec3 total_color = background_color + r_color + g_color + b_color;
     vec3 albedo = mix(rock_color, total_color.rgb, steepness);
     albedo = mix(albedo, texture(u_texture_alpha, (scaled_uv * 2 + u_time * 0.05) / 2).rgb, 1.0 - blend_map_color.a); // mix with water
