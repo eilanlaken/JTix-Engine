@@ -94,8 +94,7 @@ void main()
     vec3 mixedColor2 = mix(mixedColor1, uPeakColor.rgb, surface2peak).rgb;
     vec3 albedo = mixedColor2;
 
-    //vec3 N = normalize(texture(u_texture_normalMap, uv).rgb * 2.0 - 1.0);
-    vec3 N = normal;//normalize(vec3(0,0,1)); // always up for now, will be calculated from the vertex shader and passed as in variable
+    vec3 N = normal;
     vec3 V = unit_vertex_to_camera;
     vec3 F0 = mix(vec3(0.04), albedo, 0.0);
 
@@ -103,7 +102,7 @@ void main()
 
     // summation over all point light sources
     // calculate per-box2DLight radiance
-    float light_intensity_adjacment = 0.2f;
+    float light_intensity_adjacment = 0.4;
     vec3 radiance = light_intensity_adjacment * directionalLights[0].intensity * directionalLights[0].color;
 
     // cook-torrance brdf
@@ -124,7 +123,7 @@ void main()
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 
-    vec3 ambient = vec3(0.4) * albedo * 1; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
+    vec3 ambient = vec3(0.4) * albedo; // replace 1 with u_ao // TODO: replace 0.1 with ambient light source.
     vec3 color = ambient + Lo;
 
     float dist = distance(world_vertex_position, u_camera_position);

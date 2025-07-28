@@ -86,13 +86,28 @@ void main()
     vertex_position.z += elavation;
     gl_Position = u_camera_combined * vertex_position;
 
-    float eps = 1.0f/512.0f;
+//    float eps = 1.0f / 2000.0f;
+//    vec3 p = vertex_position.xyz;
+//    vec3 px = vec3(p.x + eps, p.y, getElevation(vec3(p.x + eps,p.y, 0)));
+//    vec3 py = vec3(p.x, p.y + eps, getElevation(vec3(p.x,p.y + eps, 0)));
+//    vec3 tangent = normalize(px - p);
+//    vec3 bitangent = normalize(py - p);
+//    normal = cross(tangent, bitangent);
+
+    float eps = 1.0f / 2000.0f;
     vec3 p = vertex_position.xyz;
-    vec3 px = vec3(p.x + eps, p.y, getElevation(vec3(p.x + eps,p.y, 0)));
-    vec3 py = vec3(p.x, p.y + eps, getElevation(vec3(p.x,p.y + eps, 0)));
-    vec3 tangent = normalize(px - p);
-    vec3 bitangent = normalize(py - p);
-    normal = cross(tangent, bitangent);
+    vec3 offset = vec3(eps, eps, 0);
+    float hL = getElevation(p - offset.xzz);
+    float hR = getElevation(p + offset.xzz);
+    float hD = getElevation(p - offset.zyz);
+    float hU = getElevation(p + offset.zyz);
+
+    // deduce terrain normal
+    vec3 N;
+    N.x = hL - hR;
+    N.y = hD - hU;
+    N.z = 2.0;
+    normal = normalize(N);
 
     unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
     world_vertex_position = vertex_position.xyz;

@@ -192,8 +192,8 @@ public class ScenePlanesGame_Terrain_17 implements Scene {
                 Renderer3D.drawModel(tiles[i][j].shader, tiles[i][j].mesh, tiles[i][j].material, tiles[i][j].transform);
             }
         }
-        Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(1000,0,50));
-        Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(3000,0,50));
+        Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(1000,0,0));
+        Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(3000,0,0));
 
         Renderer3D.end();
 

@@ -161,8 +161,10 @@ void main()
     kD *= 1.0;
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-    vec3 ambient = vec3(0.7) * albedo;
+    vec3 ambient = vec3(0.8) * albedo;
     vec3 color = ambient + Lo * 0.7;
+    ambient = vec3(0.7) * albedo;
+    color = ambient + Lo * 0.8;
 
     // fog calculation
     // TODO: this is an environmental effect

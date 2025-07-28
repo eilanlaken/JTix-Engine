@@ -88,7 +88,7 @@ public class GameObjectTerrainTile extends GameObject {
         // terrain topology
         //Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/game-maps/blendmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/heightmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/heightmap-2-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
 
         // terrain colors
         Assets.loadTexture("assets/game-maps/terrain-stone.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -105,7 +105,7 @@ public class GameObjectTerrainTile extends GameObject {
         shader = Assets.get("terrain-shader");
         Texture terrainBlendMap = Graphics.getTextureSingleBlackPixelOpaque();
         //Texture terrainBlendMap = Assets.get("assets/game-maps/blendmap-8k.jpg");
-        Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-8k.jpg");
+        Texture terrainHeightMap = Assets.get("assets/game-maps/heightmap-2-8k.jpg");
 
         Texture terrainStone = Assets.get("assets/game-maps/terrain-stone.jpg");
         Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-dark.jpg"); // empty

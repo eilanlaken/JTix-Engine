@@ -2,8 +2,10 @@
 #version 450
 
 //#define MAX_HEIGHT 1800.0
-#define MAX_HEIGHT 2800.0
-#define MIN_HEIGHT -20.0
+//#define MAX_HEIGHT 1800.0
+//#define MIN_HEIGHT -20.0
+#define MAX_HEIGHT 3000.0
+#define MIN_HEIGHT -100.0
 //#define MAP_SIZE 4096
 #define MAP_SIZE 8192 // TODO: remove, this is accepted as a uniform for flexibility.
 #define TILE_SIZE 128
