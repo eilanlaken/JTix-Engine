@@ -10,6 +10,7 @@ import org.lwjgl.stb.STBImage;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 // TODO: refactor into a base class and a specific class: Texture + Texture2D
 // TODO: unify texture constructors.
@@ -240,6 +241,54 @@ public class Texture implements MemoryResource {
         }
     }
 
+    // 16 bit images
+    // TODO: placeholder for now.
+    public Texture(final String filepath, Precision precision, boolean generateMipMaps) {
+        this.handle = GL11.glGenTextures();
+        this.slot = -1;
+
+        ShortBuffer buffer;
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer channelsBuffer = BufferUtils.createIntBuffer(1);
+        buffer = STBImage.stbi_load_16(filepath, widthBuffer, heightBuffer, channelsBuffer, 1);
+        if (buffer == null) throw new AssetsException("Failed to load a texture file. Check that the path is correct: " + filepath
+                + System.lineSeparator() + "STBImage error: "
+                + STBImage.stbi_failure_reason());
+        width = widthBuffer.get();
+        height = heightBuffer.get();
+        int maxTextureSize = Graphics.getMaxTextureSize();
+        if (width > maxTextureSize || height > maxTextureSize) throw new AssetsException("Trying to load texture " + filepath + " with resolution (" + width + "," + height + ") greater than allowed on your GPU: " + maxTextureSize);
+
+        this.invWidth = 1.0f / width;
+        this.invHeight = 1.0f / height;
+
+        // defaults
+        this.filterMag = FilterMag.NEAREST;
+        this.filterMin = FilterMin.NEAREST;
+        this.sWrap = Texture.Wrap.CLAMP_TO_EDGE;
+        this.tWrap = Texture.Wrap.CLAMP_TO_EDGE;
+        this.biasLOD = 0;
+
+        TextureBinder.bind(this);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_R16, width, height, 0, GL30.GL_RED, GL11.GL_UNSIGNED_SHORT, buffer);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL33.GL_TEXTURE_SWIZZLE_R, GL11.GL_RED);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL33.GL_TEXTURE_SWIZZLE_G, GL11.GL_RED);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL33.GL_TEXTURE_SWIZZLE_B, GL11.GL_RED);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL33.GL_TEXTURE_SWIZZLE_A, GL11.GL_ONE);
+
+        if (generateMipMaps) {
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            this.anisotropy = MathUtils.clampInt(anisotropy, 1, Graphics.getMaxAnisotropy());
+            if (Graphics.isAnisotropicFilteringSupported())
+                GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+        } else {
+            this.anisotropy = 1;
+        }
+        STBImage.stbi_image_free(buffer);
+    }
+
     void setSlot  (final int slot) { this.slot = slot; }
     int  getSlot  ()               { return slot; }
     int  getHandle()               { return handle; }
@@ -274,6 +323,14 @@ public class Texture implements MemoryResource {
         TextureBinder.unbind(this);
         GL11.glDeleteTextures(handle);
         handle = -1;
+    }
+
+    public enum Precision {
+
+        BITS_8,
+        BITS_16,
+        BITS_32,
+
     }
 
     public enum FilterMag {

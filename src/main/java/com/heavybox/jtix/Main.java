@@ -82,7 +82,7 @@ public class Main {
         //Application.launch(new SceneRendering3D_VFX_1());
         //Application.launch(new SceneRendering3D_NewClouds());
         //Application.launch(new ScenePlanesGame_Terrain_New_10());
-        Application.launch(new ScenePlanesGame_Terrain_17());
+        Application.launch(new ScenePlanesGame_Terrain_18());
 
 
     }

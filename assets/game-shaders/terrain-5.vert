@@ -4,7 +4,8 @@
 //#define MAX_HEIGHT 1800.0
 //#define MAX_HEIGHT 1800.0
 //#define MIN_HEIGHT -20.0
-#define MAX_HEIGHT 3000.0
+//#define MAX_HEIGHT 5000.0
+#define MAX_HEIGHT 1500.0
 #define MIN_HEIGHT -100.0
 //#define MAP_SIZE 4096
 #define MAP_SIZE 8192 // TODO: remove, this is accepted as a uniform for flexibility.
@@ -51,6 +52,21 @@ vec2 rotateUV(vec2 uv, float angle) {
     return uv;
 }
 
+vec3 getNormal(vec2 uv) {
+    vec3 offset = vec3(u_mapSizeInv, u_mapSizeInv, 0);
+    float hL = getHeight(uv_geometry - offset.xz);
+    float hR = getHeight(uv_geometry + offset.xz);
+    float hD = getHeight(uv_geometry - offset.zy);
+    float hU = getHeight(uv_geometry + offset.zy);
+
+    // deduce terrain normal
+    vec3 N;
+    N.x = hL - hR;
+    N.y = hD - hU;
+    N.z = 2.0; // TODO: this should be 2.0  exaggarting the z value reduces some of the artifacts.
+    return normalize(N);
+}
+
 void main()
 {
     // TODO
@@ -65,24 +81,12 @@ void main()
     vec4 vertex_position =  u_transform * vec4(a_position.x, a_position.y, height, 1.0);
     gl_Position = u_camera_combined * vertex_position;
 
-    vec3 offset = vec3(u_mapSizeInv, u_mapSizeInv, 0);
-    float hL = getHeight(uv_geometry - offset.xz);
-    float hR = getHeight(uv_geometry + offset.xz);
-    float hD = getHeight(uv_geometry - offset.zy);
-    float hU = getHeight(uv_geometry + offset.zy);
-
-    // deduce terrain normal
-    vec3 N;
-    N.x = hL - hR;
-    N.y = hD - hU;
-    N.z = 2.0;
-    normal = normalize(N);
+    normal = getNormal(uv_geometry);
 
     unit_vertex_to_camera = normalize(u_camera_position - vertex_position.xyz);
     world_vertex_position = vertex_position.xyz;
 
     int index = u_tile_index_row * u_tile_index_col;
-
     uv_colors = a_textCoords0;
     uv_colors = rotateUV(uv_colors, index * 8);
 

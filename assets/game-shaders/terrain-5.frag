@@ -38,9 +38,9 @@ uniform sampler2D u_texture_height_map;
 uniform float u_time;
 uniform vec3 u_camera_position;
 
-const float close_uv_scale = 8;
-const float middle_uv_scale = 4;
-const float far_uv_scale = 1;
+const float close_uv_scale = 16;
+const float middle_uv_scale = 8;
+const float far_uv_scale = 4;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -48,7 +48,7 @@ layout (location = 0) out vec4 out_color;
 vec3 triplanar_texture(sampler2D p_sampler) {
     vec3 p_weights = abs(normal);
     p_weights /= (p_weights.x + p_weights.y + p_weights.z);
-    vec3 p_triplanar_pos = world_vertex_position * 0.001; // scale controls texture tiling
+    vec3 p_triplanar_pos = world_vertex_position * 0.0015; // scale controls texture tiling
     vec3 samp=vec3(0.0);
     samp+= texture(p_sampler,p_triplanar_pos.xy).rgb * p_weights.z;
     samp+= texture(p_sampler,p_triplanar_pos.xz).rgb * p_weights.y;
@@ -135,6 +135,7 @@ void main()
     float smoothT = t * t * t * (t * (t * 6.0 - 15.0) + 10.0); // smootherstep
     float steepness = 1 - smoothstep(0.2, 0.0, t);
 
+
     //vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
     //vec3 rock_color = texture(u_texture_steep, uv_colors).rgb;
     vec3 rock_color = triplanar_texture(u_texture_steep);
@@ -161,10 +162,10 @@ void main()
     kD *= 1.0;
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-    vec3 ambient = vec3(0.8) * albedo;
+    vec3 ambient = vec3(0.9) * albedo;
     vec3 color = ambient + Lo * 0.7;
     ambient = vec3(0.7) * albedo;
-    color = ambient + Lo * 0.8;
+    color = ambient + Lo * 1;
 
     // fog calculation
     // TODO: this is an environmental effect
