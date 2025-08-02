@@ -12,6 +12,7 @@ import com.heavybox.jtix.math.Vector3;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainTile;
 import com.heavybox.jtix.zzz_project.GameObjectTerrainWater;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 // TODO:
 // see here:
@@ -42,6 +43,10 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
 
     Texture heightmap;
 
+    ModelMesh infiniteWaterPlaneMesh;
+    ModelMaterial infiniteWaterPlaneMaterial;
+    Shader waterShader;
+
     public ScenePlanesGame_Terrain_18() {
     }
 
@@ -58,31 +63,24 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
             }
         }
 
-
+        // TODO: move to own class.
         String skyVertex = Assets.getFileContent("assets/game-shaders/sky.vert");
         String skyFragment = Assets.getFileContent("assets/game-shaders/sky.frag");
         skyShader = new Shader(skyVertex, skyFragment);
-
         skyMaterial = ModelMaterial.create();
         // low
         skyMaterial.materialAttributes.put("turbidity", 0.02f);
         skyMaterial.materialAttributes.put("rayleigh", 2f);
         skyMaterial.materialAttributes.put("mieCoefficient", 0.1f);
         skyMaterial.materialAttributes.put("mieDirectionalG", 0.8f);
-
-        // heigh
+        // high
 //        skyMaterial.materialAttributes.put("turbidity", 0.002f);
 //        skyMaterial.materialAttributes.put("rayleigh", 0.1f);
 //        skyMaterial.materialAttributes.put("mieCoefficient", 0.1f);
 //        skyMaterial.materialAttributes.put("mieDirectionalG", 0.8f);
-
         float phi = (90 - 2) * MathUtils.degreesToRadians;
-
-
-
 		float theta = 180 * MathUtils.degreesToRadians;
         Vector3 sun = new Vector3().setFromSphericalRad( 1, theta, phi );
-
         skyMaterial.materialAttributes.put("sunPosition", sun); // (0, 0, 0) by default
         skyMaterial.materialAttributes.put("up", new Vector3(0, 0, 1));
         skyMaterial.shader = skyShader;
@@ -92,6 +90,27 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
         String ppHDRFragment = Assets.getFileContent("assets/game-shaders/post-processing-HDR.frag");
         postProcessingHDR = new Shader(ppHDRVertex, ppHDRFragment);
         sceneFrameBuffer = new FrameBuffer(Graphics.getWindowWidth(), Graphics.getWindowHeight(), true);
+
+        infiniteWaterPlaneMesh = ModelMesh.createPlane(2,2,1,1);
+        String waterVertexShader = Assets.getFileContent("assets/game-shaders/water-plane.vert");
+        String waterFragmentShader = Assets.getFileContent("assets/game-shaders/water-plane.frag");
+        waterShader = new Shader(waterVertexShader, waterFragmentShader);
+        infiniteWaterPlaneMaterial = ModelMaterial.createPBRMaterial();
+        //infiniteWaterPlaneMaterial.materialAttributes.put("u_color_diffuse", Color.valueOf("#186691"));
+        infiniteWaterPlaneMaterial.materialAttributes.put("time", 0.0f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uTroughColor", Color.valueOf("#186691"));
+        infiniteWaterPlaneMaterial.materialAttributes.put("uSurfaceColor", Color.valueOf("#2a87a3"));
+        infiniteWaterPlaneMaterial.materialAttributes.put("uPeakColor", Color.valueOf("#bbd8e0"));
+        infiniteWaterPlaneMaterial.materialAttributes.put("uWavesAmplitude", 0f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uWavesSpeed", 0.2f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uWavesFrequency", 0.002f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uWavesPersistence", 1);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uWavesLacunarity", 4.4f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uWavesIterations", 2);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uTroughThreshold", 0f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uTroughTransition", 8f);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uPeakThreshold", 22);
+        infiniteWaterPlaneMaterial.materialAttributes.put("uPeakTransition", 0.1f);
     }
 
     @Override
@@ -103,7 +122,7 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
     public void start() {
         Graphics.setTargetFps(60);
         camera = new Camera(Camera.Mode.PERSPECTIVE, Graphics.getWindowWidth(), Graphics.getWindowHeight(), 1, 1, 400000, 75);
-        camera.position.set(0, -800, 1000);
+        camera.position.set(0, -800, 2000);
         camera.lookAt(0,-1,1000);
         camera.update();
     }
@@ -116,7 +135,6 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
     private void update_gameplay() {
         float delta = Graphics.getDeltaTime();
         Vector3 velocity = new Vector3(camera.forward).scl(speed);
-        System.out.println(speed);
         camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);
         if (Input.keyboard.isKeyPressed(Keyboard.Key.KEY_1)) speed = 343;
         if (Input.keyboard.isKeyPressed(Keyboard.Key.KEY_2)) speed = 343 * 2;
@@ -188,19 +206,23 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
         FrameBufferBinder.bind(sceneFrameBuffer);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+        Renderer3D.begin(camera);
+        GL11.glDepthMask(false); // don't write depth
+        Renderer3D.drawMesh(waterShader, infiniteWaterPlaneMesh, infiniteWaterPlaneMaterial, new Matrix4x4().translateGlobalAxisXYZ(camera.position.x, camera.position.y, -400));
+        GL11.glDepthMask(true); // don't write depth
+        Renderer3D.end();
+
         Renderer3D.begin(camera);
         //Renderer3D.drawModel(skyShader, box, skyMaterial, new Matrix4x4());
-        w.update(delta);
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
-                //water[i][j].update(delta);
-                //Renderer3D.drawModel(water[i][j].shader, water[i][j].mesh, water[i][j].material, water[i][j].transform);
+                water[i][j].update(delta);
+                Renderer3D.drawModel(water[i][j].shader, water[i][j].mesh, water[i][j].material, water[i][j].transform);
                 Renderer3D.drawModel(tiles[i][j].shader, tiles[i][j].mesh, tiles[i][j].material, tiles[i][j].transform);
             }
         }
-        //Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(1000,0,0));
-        //Renderer3D.drawModel(w.shader, w.mesh, w.material, new Matrix4x4().translateGlobalAxisXYZ(3000,0,0));
-
+        //Renderer3D.drawModel(waterShader, infiniteWaterPlaneMesh, infiniteWaterPlaneMaterial, new Matrix4x4().translateGlobalAxisXYZ(camera.position.x, camera.position.y, -400));
         Renderer3D.end();
 
         FrameBufferBinder.bind();

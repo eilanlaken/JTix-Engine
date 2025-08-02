@@ -158,6 +158,7 @@ public class GameObjectTerrainTile extends GameObject {
 
         // terrain colors
         Assets.loadTexture("assets/game-maps/cliff_side_diff_4k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
+        //Assets.loadTexture("assets/game-maps/layered-rock2-albedo.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/wispy-grass-meadow_albedo.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/game-maps/terrain-grass-2.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/game-maps/terrain-grass-3.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR_MIPMAP_LINEAR, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
@@ -174,6 +175,7 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainHeightMap = heightmap;
 
         Texture terrainStone = Assets.get("assets/game-maps/cliff_side_diff_4k.jpg");
+        //Texture terrainStone = Assets.get("assets/game-maps/layered-rock2-albedo.png");
         Texture terrainGrass = Assets.get("assets/game-maps/wispy-grass-meadow_albedo.png"); // empty
         //Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-2.jpg"); // empty
         //Texture terrainGrass = Assets.get("assets/game-maps/terrain-grass-3.jpg"); // empty
@@ -183,7 +185,7 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("LOD_0");
+        Scene3D.Node node = scene.namedNodes.get("LOD_2");
         //Scene3D.Node node = scene.namedNodes.get("water");
         mesh = node.model.meshes[0];
 

@@ -3,6 +3,8 @@ package com.heavybox.jtix.zzz_project;
 import com.heavybox.jtix.assets.Assets;
 import com.heavybox.jtix.graphics.*;
 
+// infinite water plane:
+// https://asliceofrendering.com/scene%20helper/2020/01/05/InfiniteGrid/
 public class GameObjectTerrainWater extends GameObject {
 
     public Shader shader;
@@ -52,7 +54,7 @@ public class GameObjectTerrainWater extends GameObject {
         transform.translateGlobalAxisXYZ(x, y, 0);
         // load everything if not loaded
         // load water shader
-        Assets.loadShader("water-shader", "assets/game-shaders/water.vert-2","assets/game-shaders/water-2.frag");
+        Assets.loadShader("water-shader", "assets/game-shaders/water-2.vert","assets/game-shaders/water-2.frag");
         // load model
         Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
         Assets.finishLoading();
@@ -60,8 +62,10 @@ public class GameObjectTerrainWater extends GameObject {
         shader = Assets.get("water-shader");
 
         scene = Assets.get("assets/game-maps/terrain-blocks-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("water");
-        //Scene3D.Node node = scene.namedNodes.get("LOD-0");
+        Scene3D.Node node;
+        node = scene.namedNodes.get("LOD-0");
+        node = scene.namedNodes.get("square");
+        node = scene.namedNodes.get("water");
         mesh = node.model.meshes[0];
 
         material = node.model.materials[0].clone();
@@ -69,7 +73,7 @@ public class GameObjectTerrainWater extends GameObject {
         material.materialAttributes.put("uTroughColor", Color.valueOf("#186691"));
         material.materialAttributes.put("uSurfaceColor", Color.valueOf("#2a87a3"));
         material.materialAttributes.put("uPeakColor", Color.valueOf("#bbd8e0"));
-        material.materialAttributes.put("uWavesAmplitude", 1.1f);
+        material.materialAttributes.put("uWavesAmplitude", 2.1f);
         material.materialAttributes.put("uWavesSpeed", 0.2f);
         material.materialAttributes.put("uWavesFrequency", 0.002f);
         material.materialAttributes.put("uWavesPersistence", 1);

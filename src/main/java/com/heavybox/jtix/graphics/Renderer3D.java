@@ -546,8 +546,20 @@ public class Renderer3D {
         if (shader.uniformExists("u_camera_combined")) {
             shader.bindUniform("u_camera_combined", currentCamera.combined);
         }
+        if (shader.uniformExists("u_camera_projection")) {
+            shader.bindUniform("u_camera_projection", currentCamera.projection);
+        }
+        if (shader.uniformExists("u_camera_view")) {
+            shader.bindUniform("u_camera_view", currentCamera.view);
+        }
         if (shader.uniformExists("u_camera_position")) {
             shader.bindUniform("u_camera_position", currentCamera.position);
+        }
+        if (shader.uniformExists("u_camera_near")) {
+            shader.bindUniform("u_camera_near", currentCamera.near);
+        }
+        if (shader.uniformExists("u_camera_far")) {
+            shader.bindUniform("u_camera_far", currentCamera.far);
         }
 
         // TODO: improve and refactor
