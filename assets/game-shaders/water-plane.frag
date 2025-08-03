@@ -150,9 +150,9 @@ void main()
     float dist2 = length(worldPos - u_camera_position); // pass cameraPos as uniform
 
     // fade alpha based on distance
-    float alpha = clamp(1.0 - (dist2 / 1000000), 0.0, 1.0);
+    float alpha = clamp(1.0 - (dist2 / 500000), 0.0, 1.0);
 
-    out_color = vec4(0.0, 0.0, 1.0, 1.0 * float(t > 0) * alpha);
+    out_color = vec4(0.0196, 0.1882, 0.2784 , 1.0 * float(t > 0) * alpha);
     //out_color.a *= fading;
     //out_color = vec4(1.0,0,0, 1);
 }

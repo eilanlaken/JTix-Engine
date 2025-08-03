@@ -206,9 +206,10 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
         FrameBufferBinder.bind(sceneFrameBuffer);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
+        System.out.println(speed);
         Renderer3D.begin(camera);
         GL11.glDepthMask(false); // don't write depth
+        Renderer3D.drawMesh(skyShader, box, skyMaterial, new Matrix4x4());
         Renderer3D.drawMesh(waterShader, infiniteWaterPlaneMesh, infiniteWaterPlaneMaterial, new Matrix4x4().translateGlobalAxisXYZ(camera.position.x, camera.position.y, -400));
         GL11.glDepthMask(true); // don't write depth
         Renderer3D.end();

@@ -185,7 +185,7 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("LOD_2");
+        Scene3D.Node node = scene.namedNodes.get("LOD_0");
         //Scene3D.Node node = scene.namedNodes.get("water");
         mesh = node.model.meshes[0];
 

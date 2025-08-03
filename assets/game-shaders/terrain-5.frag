@@ -38,9 +38,9 @@ uniform sampler2D u_texture_height_map;
 uniform float u_time;
 uniform vec3 u_camera_position;
 
-const float close_uv_scale = 16;
-const float middle_uv_scale = 8;
-const float far_uv_scale = 4;
+const float close_uv_scale = 32;
+const float middle_uv_scale = 16;
+const float far_uv_scale = 8;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -163,9 +163,9 @@ void main()
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     vec3 ambient = vec3(0.9) * albedo;
-    vec3 color = ambient + Lo * 0.7;
-    ambient = vec3(0.7) * albedo;
-    color = ambient + Lo * 1;
+    vec3 color = ambient + Lo * 1;
+//    ambient = vec3(0.7) * albedo;
+//    color = ambient + Lo * 1;
 
     // fog calculation
     // TODO: this is an environmental effect
