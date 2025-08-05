@@ -38,9 +38,9 @@ uniform sampler2D u_texture_height_map;
 uniform float u_time;
 uniform vec3 u_camera_position;
 
-const float close_uv_scale = 32;
-const float middle_uv_scale = 16;
-const float far_uv_scale = 8;
+const float close_uv_scale = 64;
+const float middle_uv_scale = 32;
+const float far_uv_scale = 16;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -61,7 +61,8 @@ float getAlpha()
 {
     //float alpha = smoothstep(MIN_HEIGHT, -5.0, height);
     float alpha = smoothstep(4, 20, height);
-    return alpha;
+    if (height < 0) return 0;
+    return 1;
 }
 
 // functions
@@ -133,7 +134,7 @@ void main()
     //float smoothT = t; // linear
     //float smoothT = t * t * (3.0 - 2.0 * t); // smoothstep
     float smoothT = t * t * t * (t * (t * 6.0 - 15.0) + 10.0); // smootherstep
-    float steepness = 1 - smoothstep(0.2, 0.0, t);
+    float steepness = 1 - smoothstep(0.15, 0.0, t); // grass bias
 
 
     //vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
@@ -162,7 +163,7 @@ void main()
     kD *= 1.0;
     float NdotL = max(dot(N, L), 0.0);
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
-    vec3 ambient = vec3(0.9) * albedo;
+    vec3 ambient = vec3(0.85) * albedo;
     vec3 color = ambient + Lo * 1;
 //    ambient = vec3(0.7) * albedo;
 //    color = ambient + Lo * 1;
@@ -174,5 +175,5 @@ void main()
     vec3 finalColor = mix(vec3(0.52,0.80,0.92), color, fogFactor);
 
     float alpha = getAlpha();
-    out_color = vec4(color, 1.0); // TODO: add fog
+    out_color = vec4(color, alpha); // TODO: add fog
 }

@@ -75,7 +75,7 @@ public class FrameBuffer implements MemoryResource {
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, colorAttachment0.getHandle(), 0);
         colorAttachment1 = null;
 
-        depthAttachment = new Texture(width, height, GL14.GL_DEPTH_COMPONENT24, GL11.GL_DEPTH_COMPONENT);
+        depthAttachment = new Texture(width, height, GL30.GL_DEPTH_COMPONENT32F, GL11.GL_DEPTH_COMPONENT);
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthAttachment.getHandle(), 0);
 
 

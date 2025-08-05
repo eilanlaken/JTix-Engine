@@ -37,7 +37,7 @@ public class Renderer3D {
     private static final Texture whitePixelTexture  = Graphics.getTextureSingleWhitePixel();
     private static final Texture blackPixelTexture  = Graphics.getTextureSingleBlackPixelOpaque();
     private static final Texture normalMapTexture   = Graphics.getTextureSinglePixelNormalMap();
-    private static final Shader  defaultShaderPBR   = createDefaultPBRShader();
+    public static final Shader  defaultShaderPBR   = createDefaultPBRShader();
     public static final Shader defaultShaderWireframeLines = createWireframeLinesShader(); // TODO: change back to private
     public static final Shader   defaultShaderWireframePoints    = createWireframePointsShader(); // TODO: change back to private
     // TODO: make normals rendering shader using geometry
@@ -288,7 +288,7 @@ public class Renderer3D {
 
             shader.bindUniform("directionalLight.direction", lightDir);
             shader.bindUniform("directionalLight.color", new Vector3(1,1f,1f));
-            shader.bindUniform("directionalLight.intensity", 1.2f);
+            shader.bindUniform("directionalLight.intensity", 1.8f);
         } catch (Exception e) {
             //System.out.println(e.getMessage());
         }
@@ -572,7 +572,7 @@ public class Renderer3D {
             shader.bindUniform("directionalLights[0].color", new Vector3(1f,1f,1.0f));
         }
         if (shader.uniformExists("directionalLights[0].intensity")) {
-            shader.bindUniform("directionalLights[0].intensity", 1);
+            shader.bindUniform("directionalLights[0].intensity", 1.6f);
         }
 
         // TODO: bind all global variables uniforms (u_time, u_delta_time)

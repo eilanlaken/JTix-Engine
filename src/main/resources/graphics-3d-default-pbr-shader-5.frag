@@ -131,7 +131,7 @@ void main()
     }
 
     // add ambient light
-    vec3 color = vec3(0.40) * albedo + Lo; // ambient light + calculated light
+    vec3 color = vec3(0.80) * albedo + Lo; // ambient light + calculated light
 
     // HDR tonemapping
     //color = color / (color + vec3(1.0)); // TODO: this gives washed out results

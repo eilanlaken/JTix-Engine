@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL20;
 // https://threejs.org/examples/?q=sky#webgl_shaders_sky
 // https://github.com/mrdoob/three.js/blob/master/examples/webgl_shaders_sky.html
 // https://github.com/mrdoob/three.js/blob/master/examples/jsm/objects/Sky.js
-
+// (2370.7236,42757.953,246.12471)
 // TERRAIN:
 // https://tangrams.github.io/heightmapper/#6.04167/-19.436/350.455
 
@@ -206,7 +206,7 @@ public class ScenePlanesGame_Terrain_18 implements Scene {
         FrameBufferBinder.bind(sceneFrameBuffer);
         GL11.glClearColor(sky.r,sky.g,sky.b,1);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        System.out.println(speed);
+        System.out.println(camera.position);
         Renderer3D.begin(camera);
         GL11.glDepthMask(false); // don't write depth
         Renderer3D.drawMesh(skyShader, box, skyMaterial, new Matrix4x4());

@@ -97,6 +97,7 @@ public class SceneRendering3D_ModelsViewer_Map_1 implements Scene {
             currentNodeIndex++;
         }
         Scene3D.Node node = scene.allNodes[currentNodeIndex];
+        System.out.println(node.name);
 
         FrameBufferBinder.bind(sceneFrameBuffer);
         GL11.glClearColor(1,0,0,1);

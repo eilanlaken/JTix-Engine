@@ -67,7 +67,7 @@ public class ScenePlanesGame_Mountains_4 implements Scene {
         Assets.loadTexture("assets/app-textures/blendmap-test.png", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/heightmap-test.jpg", null, null, Texture.Wrap.REPEAT, Texture.Wrap.REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-earth.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
-        Assets.loadTexture("assets/game-maps/grass.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
+        Assets.loadTexture("assets/game-maps/terrain-grass-2.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/game-maps/rock.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-water.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
         Assets.loadTexture("assets/app-textures/terrain-snow.jpg", null, null, Texture.Wrap.MIRRORED_REPEAT, Texture.Wrap.MIRRORED_REPEAT, Graphics.getMaxAnisotropy());
@@ -80,7 +80,7 @@ public class ScenePlanesGame_Mountains_4 implements Scene {
         terrainBlendMap = Assets.get("assets/app-textures/blendmap-test.png");
         terrainHeightMap = Assets.get("assets/app-textures/heightmap-test.jpg");
         terrainEarth = Assets.get("assets/app-textures/terrain-earth.jpg");
-        terrainGrass = Assets.get("assets/game-maps/grass.jpg");
+        terrainGrass = Assets.get("assets/game-maps/terrain-grass-2.jpg");
         terrainStone = Assets.get("assets/game-maps/rock.jpg");
         terrainWater = Assets.get("assets/app-textures/terrain-water.jpg");
         terrainSnow = Assets.get("assets/app-textures/terrain-snow.jpg");
