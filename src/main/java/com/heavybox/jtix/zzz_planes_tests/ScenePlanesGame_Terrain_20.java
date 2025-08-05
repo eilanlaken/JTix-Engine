@@ -61,7 +61,7 @@ public class ScenePlanesGame_Terrain_20 implements Scene {
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
                 // tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 1000 + 500 + j * 1000, 32 * 1000 - 500 - i * 1000);
-                tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000, heightmap);
+                tiles[i][j] = new GameObjectTerrainTile(i,j, -32 * 1000 + 500 + j * 1000, 32 * 1000 - 500 - i * 1000, heightmap);
                 water[i][j] = new GameObjectTerrainWater(i,j, -32 * 2000 + 1000 + j * 2000, 32 * 2000 - 1000 - i * 2000);
             }
         }
@@ -136,6 +136,7 @@ public class ScenePlanesGame_Terrain_20 implements Scene {
     private float speed = 1;
 
     private void update_gameplay() {
+        System.out.println(speed);
         float delta = Graphics.getDeltaTime();
         Vector3 velocity = new Vector3(camera.forward).scl(speed);
         camera.position.add(delta * velocity.x, delta * velocity.y, delta * velocity.z);

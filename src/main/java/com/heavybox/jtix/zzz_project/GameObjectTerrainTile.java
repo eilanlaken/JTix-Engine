@@ -85,6 +85,7 @@ public class GameObjectTerrainTile extends GameObject {
         // terrain models
         //Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
         Assets.loadScene("assets/game-maps/terrain-blocks-LODs-2km.fbx", "assets/game-textures");
+        Assets.loadScene("assets/game-maps/terrain-blocks-lods.fbx", "assets/game-textures");
         // terrain topology
         //Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/game-maps/blendmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
@@ -117,7 +118,8 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("LOD_0");
+        scene = Assets.get("assets/game-maps/terrain-blocks-lods.fbx");
+        Scene3D.Node node = scene.namedNodes.get("grid_LOD_0");
         //Scene3D.Node node = scene.namedNodes.get("water");
         mesh = node.model.meshes[0];
 
@@ -152,6 +154,8 @@ public class GameObjectTerrainTile extends GameObject {
         // terrain models
         //Assets.loadScene("assets/game-maps/terrain-blocks-2km.fbx", "assets/game-textures");
         Assets.loadScene("assets/game-maps/terrain-blocks-LODs-2km.fbx", "assets/game-textures");
+        Assets.loadScene("assets/game-maps/terrain-blocks-lods.fbx", "assets/game-textures");
+
         // terrain topology
         //Assets.loadTexture("assets/game-maps/terrain-blendmap-2048.png", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
         //Assets.loadTexture("assets/game-maps/blendmap-8k.jpg", Texture.FilterMag.LINEAR, Texture.FilterMin.LINEAR, Texture.Wrap.CLAMP_TO_EDGE, Texture.Wrap.CLAMP_TO_EDGE, Graphics.getMaxAnisotropy());
@@ -186,7 +190,8 @@ public class GameObjectTerrainTile extends GameObject {
         Texture terrainWater = Assets.get("assets/game-maps/terrain-water.jpg"); // a
 
         scene = Assets.get("assets/game-maps/terrain-blocks-LODs-2km.fbx");
-        Scene3D.Node node = scene.namedNodes.get("LOD_0");
+        scene = Assets.get("assets/game-maps/terrain-blocks-lods.fbx");
+        Scene3D.Node node = scene.namedNodes.get("grid_LOD_0");
         //Scene3D.Node node = scene.namedNodes.get("water");
         mesh = node.model.meshes[0];
 

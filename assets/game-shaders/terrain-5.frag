@@ -38,9 +38,9 @@ uniform sampler2D u_texture_height_map;
 uniform float u_time;
 uniform vec3 u_camera_position;
 
-const float close_uv_scale = 64;
-const float middle_uv_scale = 32;
-const float far_uv_scale = 16;
+const float close_uv_scale = 55; // TODO: was 64
+const float middle_uv_scale = 16;
+const float far_uv_scale = 8;
 
 // outputs
 layout (location = 0) out vec4 out_color;
@@ -49,7 +49,7 @@ vec3 triplanar_texture(sampler2D p_sampler) {
     vec3 p_weights = abs(normal);
     p_weights /= (p_weights.x + p_weights.y + p_weights.z);
     vec3 p_triplanar_pos = world_vertex_position * 0.0015; // scale controls texture tiling
-    vec3 samp=vec3(0.0);
+    vec3 samp= vec3(0.0);
     samp+= texture(p_sampler,p_triplanar_pos.xy).rgb * p_weights.z;
     samp+= texture(p_sampler,p_triplanar_pos.xz).rgb * p_weights.y;
     samp+= texture(p_sampler,p_triplanar_pos.zy * vec2(-1.0,1.0)).rgb * p_weights.x;
@@ -134,7 +134,7 @@ void main()
     //float smoothT = t; // linear
     //float smoothT = t * t * (3.0 - 2.0 * t); // smoothstep
     float smoothT = t * t * t * (t * (t * 6.0 - 15.0) + 10.0); // smootherstep
-    float steepness = 1 - smoothstep(0.15, 0.0, t); // grass bias
+    float steepness = 1 - smoothstep(0.3, 0.0, t); // grass bias
 
 
     //vec3 rock_color = mix(texture(u_texture_steep, steep_uv).rgb, texture(u_texture_steep, steep_uv.yx * 2).rgb, 0.5);
